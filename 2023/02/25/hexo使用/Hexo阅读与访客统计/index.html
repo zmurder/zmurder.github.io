@@ -26,14 +26,10 @@
 <meta property="og:site_name" content="Zyd的博客">
 <meta property="og:description" content="说明使用Hexo 和Next主题，添加访客与阅读统计 网络有很多博客的统计方法 最方便的就是不蒜子 next主题的较高级的版本内置不蒜子 打开next主题配置文件\themes\next_config.yml，搜索找到busuanzi_count，把enable设置为true 12345678910# Show Views &#x2F; Visitors of the website &#x2F; page with">
 <meta property="og:locale">
-<meta property="og:image" content="http://example.com/Hexo%E9%98%85%E8%AF%BB%E4%B8%8E%E8%AE%BF%E5%AE%A2%E7%BB%9F%E8%AE%A1.assets/image-20230225171920711.png">
-<meta property="og:image" content="http://example.com/Hexo%E9%98%85%E8%AF%BB%E4%B8%8E%E8%AE%BF%E5%AE%A2%E7%BB%9F%E8%AE%A1.assets/image-20230225171939110.png">
-<meta property="og:image" content="http://example.com/Hexo%E9%98%85%E8%AF%BB%E4%B8%8E%E8%AE%BF%E5%AE%A2%E7%BB%9F%E8%AE%A1.assets/image-20230225172113893.png">
 <meta property="article:published_time" content="2023-02-25T09:12:17.076Z">
 <meta property="article:modified_time" content="2023-02-25T09:33:12.946Z">
 <meta property="article:author" content="zhaoyd">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="http://example.com/Hexo%E9%98%85%E8%AF%BB%E4%B8%8E%E8%AE%BF%E5%AE%A2%E7%BB%9F%E8%AE%A1.assets/image-20230225171920711.png">
 
 
 <link rel="canonical" href="http://example.com/2023/02/25/hexo%E4%BD%BF%E7%94%A8/Hexo%E9%98%85%E8%AF%BB%E4%B8%8E%E8%AE%BF%E5%AE%A2%E7%BB%9F%E8%AE%A1/">
@@ -228,19 +224,16 @@
 <p><strong>网络有很多博客的统计方法 最方便的就是不蒜子 next主题的较高级的版本内置不蒜子</strong></p>
 <p>打开next主题配置文件\themes\next_config.yml，搜索找到<strong>busuanzi_count</strong>，把enable设置为true</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Show Views / Visitors of the website / page with busuanzi.</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">For more information: http://ibruce.info/2015/04/04/busuanzi/</span></span><br><span class="line">busuanzi_count:</span><br><span class="line">  enable: true</span><br><span class="line">  total_visitors: true</span><br><span class="line">  total_visitors_icon: fa fa-user</span><br><span class="line">  total_views: true</span><br><span class="line">  total_views_icon: fa fa-eye</span><br><span class="line">  post_views: true</span><br><span class="line">  post_views_icon: far fa-eye</span><br></pre></td></tr></table></figure>
-
 <p>同样是在next主题配置文件\themes\next_config.yml下，搜索<strong>footer</strong>，在它底下添加counter，设值为true</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">统计</span></span><br><span class="line">counter: true</span><br></pre></td></tr></table></figure>
-
 <p>显示效果如下</p>
 <p>文章阅读数</p>
-<p><img src="/Hexo%E9%98%85%E8%AF%BB%E4%B8%8E%E8%AE%BF%E5%AE%A2%E7%BB%9F%E8%AE%A1.assets/image-20230225171920711.png" alt="image-20230225171920711"></p>
+
 <p>网站访问数</p>
-<p><img src="/Hexo%E9%98%85%E8%AF%BB%E4%B8%8E%E8%AE%BF%E5%AE%A2%E7%BB%9F%E8%AE%A1.assets/image-20230225171939110.png" alt="image-20230225171939110"></p>
+
 <p>这里看到本地的数字很大，不要紧，部署的显示是正常的。</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
 
-<p><img src="/Hexo%E9%98%85%E8%AF%BB%E4%B8%8E%E8%AE%BF%E5%AE%A2%E7%BB%9F%E8%AE%A1.assets/image-20230225172113893.png" alt="image-20230225172113893"></p>
 
     </div>
 

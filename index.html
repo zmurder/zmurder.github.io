@@ -119,13 +119,13 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">3</span>
+          <span class="site-state-item-count">4</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-count">4</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
@@ -155,6 +155,105 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/25/hexo%E4%BD%BF%E7%94%A8/Hexo%E9%98%85%E8%AF%BB%E4%B8%8E%E8%AE%BF%E5%AE%A2%E7%BB%9F%E8%AE%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhaoyd">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zyd的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | Zyd的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2023/02/25/hexo%E4%BD%BF%E7%94%A8/Hexo%E9%98%85%E8%AF%BB%E4%B8%8E%E8%AE%BF%E5%AE%A2%E7%BB%9F%E8%AE%A1/" class="post-title-link" itemprop="url">Hexo阅读与访客统计</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2023-02-25 17:12:17 / 修改时间：17:24:06" itemprop="dateCreated datePublished" datetime="2023-02-25T17:12:17+08:00">2023-02-25</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/hexo%E4%BD%BF%E7%94%A8/" itemprop="url" rel="index"><span itemprop="name">hexo使用</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/hexo%E4%BD%BF%E7%94%A8/hexo%E4%BD%BF%E7%94%A8/" itemprop="url" rel="index"><span itemprop="name">hexo使用</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><p>使用Hexo 和Next主题，添加访客与阅读统计</p>
+<p><strong>网络有很多博客的统计方法 最方便的就是不蒜子 next主题的较高级的版本内置不蒜子</strong></p>
+<p>打开next主题配置文件\themes\next_config.yml，搜索找到<strong>busuanzi_count</strong>，把enable设置为true</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Show Views / Visitors of the website / page with busuanzi.</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">For more information: http://ibruce.info/2015/04/04/busuanzi/</span></span><br><span class="line">busuanzi_count:</span><br><span class="line">  enable: true</span><br><span class="line">  total_visitors: true</span><br><span class="line">  total_visitors_icon: fa fa-user</span><br><span class="line">  total_views: true</span><br><span class="line">  total_views_icon: fa fa-eye</span><br><span class="line">  post_views: true</span><br><span class="line">  post_views_icon: far fa-eye</span><br></pre></td></tr></table></figure>
+
+<p>同样是在next主题配置文件\themes\next_config.yml下，搜索<strong>footer</strong>，在它底下添加counter，设值为true</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">#</span><span class="language-bash">统计</span></span><br><span class="line">counter: true</span><br></pre></td></tr></table></figure>
+
+<p>显示效果如下</p>
+<p>文章阅读数</p>
+<p><img src="/Hexo%E9%98%85%E8%AF%BB%E4%B8%8E%E8%AE%BF%E5%AE%A2%E7%BB%9F%E8%AE%A1.assets/image-20230225171920711.png" alt="image-20230225171920711"></p>
+<p>网站访问数</p>
+<p><img src="/Hexo%E9%98%85%E8%AF%BB%E4%B8%8E%E8%AE%BF%E5%AE%A2%E7%BB%9F%E8%AE%A1.assets/image-20230225171939110.png" alt="image-20230225171939110"></p>
+<p>这里看到本地的数字很大，不要紧，部署的显示是正常的。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+
+<p><img src="/Hexo%E9%98%85%E8%AF%BB%E4%B8%8E%E8%AE%BF%E5%AE%A2%E7%BB%9F%E8%AE%A1.assets/image-20230225172113893.png" alt="image-20230225172113893"></p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
     <link itemprop="mainEntityOfPage" href="http://example.com/2023/02/25/hexo%E4%BD%BF%E7%94%A8/Hexo%E7%9A%84%E6%A0%87%E7%AD%BE%E4%B8%8E%E5%88%86%E7%B1%BB/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -173,7 +272,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/25/hexo%E4%BD%BF%E7%94%A8/Hexo%E7%9A%84%E6%A0%87%E7%AD%BE%E4%B8%8E%E5%88%86%E7%B1%BB/" class="post-title-link" itemprop="url">未命名</a>
+          <a href="/2023/02/25/hexo%E4%BD%BF%E7%94%A8/Hexo%E7%9A%84%E6%A0%87%E7%AD%BE%E4%B8%8E%E5%88%86%E7%B1%BB/" class="post-title-link" itemprop="url">Hexo的标签与分类</a>
         </h2>
 
         <div class="post-meta-container">
@@ -194,6 +293,10 @@
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
           <a href="/categories/hexo%E4%BD%BF%E7%94%A8/" itemprop="url" rel="index"><span itemprop="name">hexo使用</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/hexo%E4%BD%BF%E7%94%A8/hexo%E4%BD%BF%E7%94%A8/" itemprop="url" rel="index"><span itemprop="name">hexo使用</span></a>
         </span>
     </span>
 
@@ -301,7 +404,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/11/GPU/%E6%9D%82/" class="post-title-link" itemprop="url">未命名</a>
+          <a href="/2023/02/11/GPU/%E6%9D%82/" class="post-title-link" itemprop="url">杂</a>
         </h2>
 
         <div class="post-meta-container">
@@ -328,6 +431,10 @@
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
           <a href="/categories/GPU/" itemprop="url" rel="index"><span itemprop="name">GPU</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/GPU/GPU/" itemprop="url" rel="index"><span itemprop="name">GPU</span></a>
         </span>
     </span>
 
@@ -475,7 +582,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2023/02/11/hello-world/" class="post-title-link" itemprop="url">未命名</a>
+          <a href="/2023/02/11/hello-world/" class="post-title-link" itemprop="url">hello-world</a>
         </h2>
 
         <div class="post-meta-container">

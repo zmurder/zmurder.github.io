@@ -106,11 +106,18 @@ deploy:
   repository: git@github.com:zmurder/zmurder.github.io.git
   branch: master
 
-# Generate categories from directory-tree
-# Dependencies: https://github.com/xu-song/hexo-auto-category
-# depth: the depth of directory-tree you want to generate, should > 0
-auto_category:
- enable: false
- depth:
+# # Generate categories from directory-tree
+# # Dependencies: https://github.com/xu-song/hexo-auto-category
+# # depth: the depth of directory-tree you want to generate, should > 0
+# auto_category:
+#  enable: false
+#  depth:
 
-tags: GPU, TensorRT
+tags: Typora, GPU, Tensorrt, Plugin, Hexo
+
+
+excerpt:
+  depth: 2
+  excerpt_excludes: []
+  more_excludes: []
+  hideWholePostExcerpts: true

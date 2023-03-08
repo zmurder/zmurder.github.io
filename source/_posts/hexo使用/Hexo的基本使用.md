@@ -1,3 +1,4 @@
+
 # 说明
 
 开始使用Hexo搭建博客，搭建的教程参考网上的，这篇主要是说明一下使用过程的细节
@@ -162,7 +163,7 @@ auto_category:
 1.3.2.1 安装
 
 ```shell
-npm install hexo-enhancer –save
+npm install hexo-enhancer -–save
 ```
 
 `_config.yml` 配置的标签可以是这样的:

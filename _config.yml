@@ -14,7 +14,12 @@ timezone: ''
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
 url: http://example.com
-permalink: :year/:month/:day/:title/
+# permalink: :year/:month/:day/:title/
+# permalink: :year/:abbrlink.html
+permalink: :title/
+# permalink: :year/:abbrlink 
+# permalink: posts/:abbrlink.html 
+# permalink: :year/:month/:day/:abbrlink.html 
 permalink_defaults:
 pretty_urls:
   trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
@@ -106,14 +111,14 @@ deploy:
   repository: git@github.com:zmurder/zmurder.github.io.git
   branch: master
 
-# # Generate categories from directory-tree
-# # Dependencies: https://github.com/xu-song/hexo-auto-category
-# # depth: the depth of directory-tree you want to generate, should > 0
-# auto_category:
-#  enable: false
-#  depth:
+# Generate categories from directory-tree
+# Dependencies: https://github.com/xu-song/hexo-auto-category
+# depth: the depth of directory-tree you want to generate, should > 0
+auto_category:
+ enable: false
+ depth:
 
-tags: Typora, GPU, Tensorrt, Plugin, Hexo
+tags: Typora, GPU, Tensorrt, Plugin, Hexo, git, protobuf, cmake, zmq
 
 
 excerpt:

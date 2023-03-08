@@ -661,7 +661,7 @@ comments:
   style: tabs
   # Choose a comment system to be displayed by default.
   # Available values: disqus | disqusjs | changyan | livere | gitalk | utterances
-  active:
+  active: gitalk
   # Setting `true` means remembering the comment system selected by the visitor.
   storage: true
   # Lazyload all comment systems.
@@ -710,14 +710,18 @@ livere_uid: # <your_uid>
 # For more information: https://gitalk.github.io
 gitalk:
   enable: true
-  github_id: cf2343f27b6c29efe0bc # GitHub repo owner
-  repo: # Repository name to store issues
-  client_id: # GitHub Application Client ID
-  client_secret: 226615e9df3e24acbc15022d90826ff0c7e9b571 # GitHub Application Client Secret
-  admin_user: # GitHub repo owner and collaborators, only these guys can initialize gitHub issues
+  github_id: zmurder # GitHub repo owner
+  repo: zmurder.github.io / # Repository name to store issues
+  client_id: cf2343f27b6c29efe0bc # GitHub Application Client ID
+  client_secret: 3268a1fa92706c7358d5421f88f76a0f7ada3188  # GitHub Application Client Secret
+  admin_user: zmurder # GitHub repo owner and collaborators, only these guys can initialize gitHub issues
   distraction_free_mode: true # Facebook-like distraction free mode
   # When the official proxy is not available, you can change it to your own proxy address
-  proxy: https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token # This is official proxy address
+  proxy: https://vercel.prohibitorum.top/github_access_token
+  # https://strong-caramel-969805.netlify.app/github_access_token
+  #  https://vercel.prohibitorum.top/github_access_token
+  # https://soft-sun-c382.zmurder.workers.dev/?/https://github.com/login/oauth/access_token
+  # https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token # This is official proxy address
   # Gitalk's display language depends on user's browser or system environment
   # If you want everyone visiting your site to see a uniform language, you can set a force language value
   # Available values: en | es-ES | fr | ru | zh-CN | zh-TW

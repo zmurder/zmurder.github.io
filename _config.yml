@@ -108,7 +108,7 @@ theme: next
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
   type: git
-  repository: git@github.com:zmurder/zmurder.github.io.git
+  repository: https://github.com/zmurder/zmurder.github.io.git
   branch: master
 
 # Generate categories from directory-tree

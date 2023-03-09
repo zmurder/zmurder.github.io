@@ -1,0 +1,961 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="1 基础1.1 获取例子">
+<meta property="og:type" content="article">
+<meta property="og:title" content="zeromq">
+<meta property="og:url" content="http://example.com/zeromq/zeromq/index.html">
+<meta property="og:site_name" content="Zyd的博客">
+<meta property="og:description" content="1 基础1.1 获取例子">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220406121230539.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220406172708249.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220428133149325.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220428133209134.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220406173955368.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220408163716724.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220408163257248.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220408163659225.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220412180123514.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220428134439438.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220428134456939.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220506170806028.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220506171026650.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220510122245491.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220510122413153.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220510122440521.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220510122707822.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220510122953479.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220517104913385.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220517163810383.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220517112206986.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220517140640687.png">
+<meta property="og:image" content="http://example.com/zeromq/zeromq/image-20220517142034213.png">
+<meta property="article:published_time" content="2023-03-09T01:25:23.719Z">
+<meta property="article:modified_time" content="2023-03-09T01:25:23.719Z">
+<meta property="article:author" content="zhaoyd">
+<meta property="article:tag" content="GPU">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="protobuf">
+<meta property="article:tag" content="zmq">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/zeromq/zeromq/image-20220406121230539.png">
+
+
+<link rel="canonical" href="http://example.com/zeromq/zeromq/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/zeromq/zeromq/","path":"zeromq/zeromq/","title":"zeromq"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>zeromq | Zyd的博客</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Zyd的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%9F%BA%E7%A1%80"><span class="nav-number">1.</span> <span class="nav-text">1 基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-%E8%8E%B7%E5%8F%96%E4%BE%8B%E5%AD%90"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 获取例子</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E8%AF%B7%E6%B1%82%E5%BA%94%E7%AD%94-Request-Reply"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 请求应答 Request-Reply</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-%E5%AD%97%E7%AC%A6%E4%B8%B2"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 字符串</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-%E6%B6%88%E6%81%AF%E5%88%86%E5%8F%91pub-sub"><span class="nav-number">1.4.</span> <span class="nav-text">1.4 消息分发pub-sub</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-%E5%88%86%E8%80%8C%E6%B2%BB%E4%B9%8B-push-pull"><span class="nav-number">1.5.</span> <span class="nav-text">1.5 分而治之 push-pull</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-ZeroMQ%E7%BC%96%E7%A8%8B"><span class="nav-number">1.6.</span> <span class="nav-text">1.6 ZeroMQ编程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-1-%E6%AD%A3%E7%A1%AE%E7%90%86%E8%A7%A3Contex"><span class="nav-number">1.6.1.</span> <span class="nav-text">1.6.1 正确理解Contex</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-6-2-%E9%80%80%E5%87%BA%E5%89%8D%E6%B8%85%E7%90%86"><span class="nav-number">1.6.2.</span> <span class="nav-text">1.6.2 退出前清理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-7-%E4%B8%BA%E4%BB%80%E4%B9%88%E6%88%91%E4%BB%AC%E9%9C%80%E8%A6%81ZeroMQ"><span class="nav-number">1.7.</span> <span class="nav-text">1.7 为什么我们需要ZeroMQ</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%A5%97%E6%8E%A5%E5%AD%97%E5%92%8C%E6%A8%A1%E5%BC%8F-Sockets-and-Patterns"><span class="nav-number">2.</span> <span class="nav-text">2 套接字和模式 Sockets and Patterns</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-The-Socket-API"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 The Socket API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-1-%E5%B0%86%E5%A5%97%E6%8E%A5%E5%AD%97%E6%8F%92%E5%85%A5%E5%88%B0%E6%8B%93%E6%89%91"><span class="nav-number">2.1.1.</span> <span class="nav-text">2.1.1 将套接字插入到拓扑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-2-%E5%8F%91%E9%80%81%E5%92%8C%E6%8E%A5%E6%94%B6%E6%B6%88%E6%81%AF"><span class="nav-number">2.1.2.</span> <span class="nav-text">2.1.2 发送和接收消息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-3-%E5%8D%95%E6%92%AD%E4%BC%A0%E8%BE%93"><span class="nav-number">2.1.3.</span> <span class="nav-text">2.1.3 单播传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-4-ZeroMQ-%E4%B8%8D%E6%98%AF%E4%B8%AD%E7%AB%8B%E7%9A%84%E8%BD%BD%E4%BD%93"><span class="nav-number">2.1.4.</span> <span class="nav-text">2.1.4 ZeroMQ 不是中立的载体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-5-I-O-Threads"><span class="nav-number">2.1.5.</span> <span class="nav-text">2.1.5 I&#x2F;O Threads</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E6%B6%88%E6%81%AF%E4%BC%A0%E9%80%92%E6%A8%A1%E5%BC%8F-Messaging-Patterns"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 消息传递模式 Messaging Patterns</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1-%E4%BD%BF%E7%94%A8%E6%B6%88%E6%81%AF%EF%BC%88Working-with-Messages%EF%BC%89"><span class="nav-number">2.2.1.</span> <span class="nav-text">2.2.1 使用消息（Working with Messages）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2-%E5%A4%84%E7%90%86%E5%A4%9A%E4%B8%AASockets-Handling-Multiple-Sockets"><span class="nav-number">2.2.2.</span> <span class="nav-text">2.2.2 处理多个Sockets(Handling Multiple Sockets)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-3-%E5%A4%9A%E9%83%A8%E5%88%86%E6%B6%88%E6%81%AF-Multipart-Messages"><span class="nav-number">2.2.3.</span> <span class="nav-text">2.2.3 多部分消息(Multipart Messages)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-4-%E4%B8%AD%E4%BB%8B%E5%92%8C%E4%BB%A3%E7%90%86-Intermediaries-and-Proxies"><span class="nav-number">2.2.4.</span> <span class="nav-text">2.2.4 中介和代理 Intermediaries and Proxies</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-5-%E5%8A%A8%E6%80%81%E5%8F%91%E7%8E%B0-The-Dynamic-Discovery-Problem"><span class="nav-number">2.2.5.</span> <span class="nav-text">2.2.5 动态发现 The Dynamic Discovery Problem</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-6-%E5%85%B1%E4%BA%AB%E9%98%9F%E5%88%97Shared-Queue-DEALER-and-ROUTER-sockets"><span class="nav-number">2.2.6.</span> <span class="nav-text">2.2.6 共享队列Shared Queue (DEALER and ROUTER sockets)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-7-ZeroMQ%E7%9A%84%E5%86%85%E7%BD%AE%E4%BB%A3%E7%90%86%E5%87%BD%E6%95%B0-ZeroMQ%E2%80%99s-Built-In-Proxy-Function"><span class="nav-number">2.2.7.</span> <span class="nav-text">2.2.7 ZeroMQ的内置代理函数 ZeroMQ’s Built-In Proxy Function</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-8-%E4%BC%A0%E8%BE%93%E6%A1%A5%E6%8E%A5-Transport-Bridging"><span class="nav-number">2.2.8.</span> <span class="nav-text">2.2.8 传输桥接 Transport Bridging</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E5%A4%84%E7%90%86%E9%94%99%E8%AF%AF"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 处理错误</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81%E5%8F%91%E5%B8%83%E8%AE%A2%E9%98%85%E6%A8%A1%E5%BC%8F"><span class="nav-number">3.</span> <span class="nav-text">一、发布订阅模式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%80%9CPUB-SUB%E2%80%9D%E5%A5%97%E6%8E%A5%E5%AD%97%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.1.</span> <span class="nav-text">“PUB-SUB”套接字类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ZMQ-PUB"><span class="nav-number">3.1.1.</span> <span class="nav-text">ZMQ_PUB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZMQ-SUB"><span class="nav-number">3.1.2.</span> <span class="nav-text">ZMQ_SUB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#pub-sub%E7%A4%BA%E4%BE%8B"><span class="nav-number">3.1.3.</span> <span class="nav-text">pub-sub示例</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E2%80%9CXPUB-XSUB%E2%80%9D%E5%A5%97%E6%8E%A5%E5%AD%97%E7%B1%BB%E5%9E%8B"><span class="nav-number">3.2.</span> <span class="nav-text">“XPUB-XSUB”套接字类型</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#ZMQ-XPUB"><span class="nav-number">3.2.1.</span> <span class="nav-text">ZMQ_XPUB</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ZMQ-XSUB"><span class="nav-number">3.2.2.</span> <span class="nav-text">ZMQ_XSUB</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#XSUB%E3%80%81XPUB%E5%BA%94%E7%94%A8%E4%B9%8B%E2%80%9C%E4%BB%A3%E7%90%86%E2%80%9D"><span class="nav-number">3.3.</span> <span class="nav-text">XSUB、XPUB应用之“代理”</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%90%86%E7%A4%BA%E4%BE%8B1"><span class="nav-number">3.3.1.</span> <span class="nav-text">代理示例1</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%A3%E7%90%86%E7%A4%BA%E4%BE%8B2"><span class="nav-number">3.3.2.</span> <span class="nav-text">代理示例2</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%A4%BA%E4%BE%8B1%E5%92%8C2%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">3.3.3.</span> <span class="nav-text">示例1和2的区别</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E7%A7%8D%E4%BB%A3%E7%90%86"><span class="nav-number">3.4.</span> <span class="nav-text">三种代理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#tips"><span class="nav-number">4.</span> <span class="nav-text">tips</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-number">5.</span> <span class="nav-text">附录</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">zhaoyd</p>
+  <div class="site-description" itemprop="description">记录技术成长路程</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">5</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">8</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/zeromq/zeromq/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="zhaoyd">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Zyd的博客">
+      <meta itemprop="description" content="记录技术成长路程">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="zeromq | Zyd的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          zeromq
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-03-09 09:25:23" itemprop="dateCreated datePublished" datetime="2023-03-09T09:25:23+08:00">2023-03-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/zeromq/" itemprop="url" rel="index"><span itemprop="name">zeromq</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-基础"><a href="#1-基础" class="headerlink" title="1 基础"></a>1 基础</h1><h2 id="1-1-获取例子"><a href="#1-1-获取例子" class="headerlink" title="1.1 获取例子"></a>1.1 获取例子</h2><p>这些例子存在于一个公共的GitHub库中。获取所有示例的最简单方法是克隆这个存储库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone --depth=1 https://github.com/imatix/zguide.git</span><br></pre></td></tr></table></figure>
+<p>浏览examples子目录。你会通过语言找到例子。</p>
+<h2 id="1-2-请求应答-Request-Reply"><a href="#1-2-请求应答-Request-Reply" class="headerlink" title="1.2 请求应答 Request-Reply"></a>1.2 请求应答 Request-Reply</h2><p>从Hello  World的例子开始。我们将创建一个客户机和一个服务器。客户端向服务器发送“Hello”，服务器以“World”作为响应。这是C语言的服务器，它在端口5555上打开一个ZeroMQ scoket，读取请求，然后用“World”对每个请求进行响应:</p>
+<img src="/zeromq/zeromq/image-20220406121230539.png" class="" title="image-20220406121230539">
+<p>REQ-REP套接字对是<strong>同步的</strong>。客户机在循环中发出zmq_send()然后zmq_recv()，在循环中(或者只需要执行一次)。执行任何其他序列(例如，在一行中发送两条消息)都会导致send或recv调用返回的代码为-1。类似地，服务按这个顺序发出zmq_recv()然后zmq_send()。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  Hello World server</span></span><br><span class="line"><span class="comment">//hwserver.c</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;zmq.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span> <span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//  Socket to talk to clients</span></span><br><span class="line">    <span class="type">void</span> *context = zmq_ctx_new ();</span><br><span class="line">    <span class="type">void</span> *responder = zmq_socket (context, ZMQ_REP);</span><br><span class="line">    <span class="type">int</span> rc = zmq_bind (responder, <span class="string">&quot;tcp://*:5555&quot;</span>);</span><br><span class="line">    assert (rc == <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="type">char</span> buffer [<span class="number">10</span>];</span><br><span class="line">        zmq_recv (responder, buffer, <span class="number">10</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="built_in">printf</span> (<span class="string">&quot;Received Hello\n&quot;</span>);</span><br><span class="line">        sleep (<span class="number">1</span>);          <span class="comment">//  Do some &#x27;work&#x27;</span></span><br><span class="line">        zmq_send (responder, <span class="string">&quot;World&quot;</span>, <span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  Hello World client</span></span><br><span class="line"><span class="comment">//hwclient.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;zmq.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span> <span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span> (<span class="string">&quot;Connecting to hello world server...\n&quot;</span>);</span><br><span class="line">    <span class="type">void</span> *context = zmq_ctx_new ();</span><br><span class="line">    <span class="type">void</span> *requester = zmq_socket (context, ZMQ_REQ);</span><br><span class="line">    zmq_connect (requester, <span class="string">&quot;tcp://localhost:5555&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> request_nbr;</span><br><span class="line">    <span class="keyword">for</span> (request_nbr = <span class="number">0</span>; request_nbr != <span class="number">10</span>; request_nbr++) &#123;</span><br><span class="line">        <span class="type">char</span> buffer [<span class="number">10</span>];</span><br><span class="line">        <span class="built_in">printf</span> (<span class="string">&quot;Sending Hello %d...\n&quot;</span>, request_nbr);</span><br><span class="line">        zmq_send (requester, <span class="string">&quot;Hello&quot;</span>, <span class="number">5</span>, <span class="number">0</span>);</span><br><span class="line">        zmq_recv (requester, buffer, <span class="number">10</span>, <span class="number">0</span>);</span><br><span class="line">        <span class="built_in">printf</span> (<span class="string">&quot;Received World %d\n&quot;</span>, request_nbr);</span><br><span class="line">    &#125;</span><br><span class="line">    zmq_close (requester);</span><br><span class="line">    zmq_ctx_destroy (context);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>上面的代码如果杀死服务器(Ctrl-C)并重新启动它，客户端将无法正常恢复（杀死客户端重启客户端可以恢复）。</strong>创建一个可靠的请求应答参考后面。</p>
+<ul>
+<li>分析：<ul>
+<li>server和client的启动顺序无关，都可以运行。</li>
+<li>client 先调用send，后调用recv。server先调用recv，后调用send。</li>
+<li>杀掉client，再启动。server无影响</li>
+<li>杀掉server，再启动。client不能通信。原因不详</li>
+</ul>
+</li>
+</ul>
+<h2 id="1-3-字符串"><a href="#1-3-字符串" class="headerlink" title="1.3 字符串"></a>1.3 字符串</h2><p>除了以字节为单位的大小外，ZeroMQ对您发送的数据一无所知。这意味着您要负责安全地格式化它，以便应用程序能够读取它。为对象和复杂数据类型执行此操作是专门库(如 Protocol Buffers.)的工作。但即使是字符串，你也要小心。</p>
+<p>在C语言和其他一些语言中，字符串以空字节结束。我们可以发送一个字符串，如“HELLO”与额外的空字节:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zmq_send (requester, <span class="string">&quot;Hello&quot;</span>, <span class="number">6</span>, <span class="number">0</span>);<span class="comment">//需要包含5个字符和一个结束符</span></span><br></pre></td></tr></table></figure>
+<p>但是，如果您从另一种语言发送一个字符串，它可能不会包含那个空字节。例如，当我们用Python发送相同的字符串时，我们这样做:</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">socket.send (<span class="string">&quot;Hello&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>会发送一个长度和对应的字符如下图</p>
+<img src="/zeromq/zeromq/image-20220406172708249.png" class="" title="image-20220406172708249">
+<p>实际的抓包如下图</p>
+<img src="/zeromq/zeromq/image-20220428133149325.png" class="" title="image-20220428133149325">
+<img src="/zeromq/zeromq/image-20220428133209134.png" class="" title="image-20220428133209134">
+<p>如果您从C程序中读取这段代码，您将得到一个看起来像字符串的东西，并且可能意外地表现得像字符串(如果幸运的话，这5个字节后面跟着一个无辜的潜伏的null)，但是它不是一个正确的字符串。当您的客户机和服务器不同意字符串格式时，您将得到奇怪的结果。</p>
+<p>当您在C语言中从ZeroMQ接收字符串数据时，您不能简单地相信它已经安全终止。每次读取字符串时，都应该为额外的字节分配一个带空间的新缓冲区，复制字符串，并使用null正确地终止它。</p>
+<p>因此，让我们建立一个规则，即ZeroMQ字符串是指定长度的，并且在传输时不带null。在最简单的情况下(在我们的示例中我们将这样做)，ZeroMQ字符串整洁地映射到ZeroMQ消息框架，它看起来像上面的图—长度和一些字节。</p>
+<p>在C语言中，我们需要做的是接收一个ZeroMQ字符串并将其作为一个有效的C字符串发送给应用程序:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  Receive ZeroMQ string from socket and convert into C string</span></span><br><span class="line"><span class="comment">//  Chops string at 255 chars, if it&#x27;s longer</span></span><br><span class="line"><span class="type">static</span> <span class="type">char</span> *</span><br><span class="line"><span class="title function_">s_recv</span> <span class="params">(<span class="type">void</span> *socket)</span> &#123;</span><br><span class="line">    <span class="type">char</span> buffer [<span class="number">256</span>];</span><br><span class="line">    <span class="type">int</span> size = zmq_recv (socket, buffer, <span class="number">255</span>, <span class="number">0</span>);</span><br><span class="line">    <span class="keyword">if</span> (size == <span class="number">-1</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">    <span class="keyword">if</span> (size &gt; <span class="number">255</span>)</span><br><span class="line">        size = <span class="number">255</span>;</span><br><span class="line">    buffer [size] = \<span class="number">0</span>;</span><br><span class="line">    <span class="comment">/* use strndup(buffer, sizeof(buffer)-1) in *nix */</span></span><br><span class="line">    <span class="keyword">return</span> strdup (buffer);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>让我们编写一个类似的s send函数，以正确的ZeroMQ格式发送字符串，并将其打包成一个我们可以重用的头文件。就是zhelers .h，它让我们可以用C语言编写更漂亮、更短的ZeroMQ应用程序。</p>
+<h2 id="1-4-消息分发pub-sub"><a href="#1-4-消息分发pub-sub" class="headerlink" title="1.4 消息分发pub-sub"></a>1.4 消息分发pub-sub</h2><p>第二个经典模式是单向数据分发，在这种模式中，服务器将更新推送到一组客户机。让我们看一个示例，它推出了包含邮政编码、温度和相对湿度的天气更新。</p>
+<p>这种更新流没有开始也没有结束，就像一个永远不会结束的广播。</p>
+<img src="/zeromq/zeromq/image-20220406173955368.png" class="" title="image-20220406173955368">
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  Weather update server</span></span><br><span class="line"><span class="comment">//  Binds PUB socket to tcp://*:5556</span></span><br><span class="line"><span class="comment">//  Publishes random weather updates</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;zhelpers.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span> <span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//  Prepare our context and publisher</span></span><br><span class="line">    <span class="type">void</span> *context = zmq_ctx_new ();</span><br><span class="line">    <span class="type">void</span> *publisher = zmq_socket (context, ZMQ_PUB);</span><br><span class="line">    <span class="type">int</span> rc = zmq_bind (publisher, <span class="string">&quot;tcp://*:5556&quot;</span>);</span><br><span class="line">    assert (rc == <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  Initialize random number generator</span></span><br><span class="line">    srandom ((<span class="type">unsigned</span>) time (<span class="literal">NULL</span>));</span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">//  Get values that will fool the boss</span></span><br><span class="line">        <span class="type">int</span> zipcode, temperature, relhumidity;</span><br><span class="line">        zipcode     = randof (<span class="number">100000</span>);</span><br><span class="line">        temperature = randof (<span class="number">215</span>) - <span class="number">80</span>;</span><br><span class="line">        relhumidity = randof (<span class="number">50</span>) + <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//  Send message to all subscribers</span></span><br><span class="line">        <span class="type">char</span> update [<span class="number">20</span>];</span><br><span class="line">        <span class="built_in">sprintf</span> (update, <span class="string">&quot;%05d %d %d&quot;</span>, zipcode, temperature, relhumidity);</span><br><span class="line">        s_send (publisher, update);</span><br><span class="line">    &#125;</span><br><span class="line">    zmq_close (publisher);</span><br><span class="line">    zmq_ctx_destroy (context);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  Weather update client</span></span><br><span class="line"><span class="comment">//  Connects SUB socket to tcp://localhost:5556</span></span><br><span class="line"><span class="comment">//  Collects weather updates and finds avg temp in zipcode</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;zhelpers.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span> <span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv [])</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//  Socket to talk to server</span></span><br><span class="line">    <span class="built_in">printf</span> (<span class="string">&quot;Collecting updates from weather server...\n&quot;</span>);</span><br><span class="line">    <span class="type">void</span> *context = zmq_ctx_new ();</span><br><span class="line">    <span class="type">void</span> *subscriber = zmq_socket (context, ZMQ_SUB);</span><br><span class="line">    <span class="type">int</span> rc = zmq_connect (subscriber, <span class="string">&quot;tcp://localhost:5556&quot;</span>);</span><br><span class="line">    assert (rc == <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  Subscribe to zipcode, default is NYC, 10001</span></span><br><span class="line">    <span class="type">const</span> <span class="type">char</span> *filter = (argc &gt; <span class="number">1</span>)? argv [<span class="number">1</span>]: <span class="string">&quot;10001 &quot;</span>;</span><br><span class="line">    rc = zmq_setsockopt (subscriber, ZMQ_SUBSCRIBE,</span><br><span class="line">                         filter, <span class="built_in">strlen</span> (filter));</span><br><span class="line">    assert (rc == <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  Process 100 updates</span></span><br><span class="line">    <span class="type">int</span> update_nbr;</span><br><span class="line">    <span class="type">long</span> total_temp = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (update_nbr = <span class="number">0</span>; update_nbr &lt; <span class="number">100</span>; update_nbr++) &#123;</span><br><span class="line">        <span class="type">char</span> *<span class="built_in">string</span> = s_recv (subscriber);</span><br><span class="line"></span><br><span class="line">        <span class="type">int</span> zipcode, temperature, relhumidity;</span><br><span class="line">        <span class="built_in">sscanf</span> (<span class="built_in">string</span>, <span class="string">&quot;%d %d %d&quot;</span>,</span><br><span class="line">            &amp;zipcode, &amp;temperature, &amp;relhumidity);</span><br><span class="line">        total_temp += temperature;</span><br><span class="line">        <span class="built_in">free</span> (<span class="built_in">string</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span> (<span class="string">&quot;Average temperature for zipcode &#x27;%s&#x27; was %dF\n&quot;</span>,</span><br><span class="line">        filter, (<span class="type">int</span>) (total_temp / update_nbr));</span><br><span class="line"></span><br><span class="line">    zmq_close (subscriber);</span><br><span class="line">    zmq_ctx_destroy (context);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">time wuclient</span></span><br><span class="line">Collecting updates from weather server...</span><br><span class="line">Average temperature for zipcode &#x27;10001 &#x27; was 28F</span><br><span class="line"></span><br><span class="line">real    0m4.470s</span><br><span class="line">user    0m0.000s</span><br><span class="line">sys     0m0.008s</span><br></pre></td></tr></table></figure>
+<p>注意，当您使用 SUB socket 时，必须使用zmq_setsockopt()和SUBSCRIBE设置订阅，如下面的代码所示。如果不设置任何订阅，就不会收到任何消息。这是初学者常犯的错误。<strong>订阅者可以设置许多订阅，这些订阅被添加到一起。</strong>也就是说，如果更新匹配任何订阅，订阅方将接收更新。<strong>订阅者还可以取消特定的订阅</strong>。订阅通常是，但不一定是可打印的字符串。请参阅zmq_setsockopt()了解其工作原理。</p>
+<p><strong>PUB-SUB socket （双方的意思）是异步的</strong>。客户机在循环中执行zmq_recv()(或者它只需要一次)。试图向 SUB socket发送消息将导致错误（<strong>单向的只能收不能发</strong>）。类似地，服务在需要的时候执行zmq_send()，但是不能在PUB scoket上执行zmq_recv()（<strong>单向的只能发不能收</strong>）。</p>
+<p><strong>在理论上，对于ZeroMQ套接字，哪端调用connect哪端bind并不重要。但是，在实践中存在一些没有说明的差异，稍后我将介绍这些差异。现在，PUB调用bind，SUB调用connect。</strong></p>
+<p>关于PUB-SUB套接字，还有一件更重要的事情需要了解:您不能准确地知道订阅者何时开始获取消息。即使启动订阅者、等待一段时间后再启动发布服务器，订阅者也将始终错<strong>过发布服务器发送的第一个消息</strong>。这是因为当订阅者连接到发布者时(这个过程花费的时间很少，但不为零)，发布者可能已经在发送消息了。</p>
+<p>这种“慢速加入者”症状经常出现在很多人身上，我们将对此进行详细解释。记住ZeroMQ执行异步I/O，即，在后台。假设有两个节点按如下顺序执行此操作:</p>
+<ul>
+<li>订阅者连接到端点并接收和计数消息。</li>
+<li>发布者绑定到端点并立即发送1,000条消息。</li>
+</ul>
+<p>那么订阅者很可能不会收到任何东西。假设建立一个连接需要5毫秒，并且相同的链接每秒可以处理1M条消息。在订阅者连接到发布者的5毫秒期间，发布者只需要1毫秒就可以发送那些1000条消息</p>
+<p>关于发布-订阅(pub-sub)模式的一些要点</p>
+<ul>
+<li><strong>订阅服务器可以连接到多个发布服务器，每次使用一个connect调用。</strong>然后，数据将到达并交错(“公平排队”)，这样就不会有一个发布者淹没其他发布者。</li>
+<li>如果发布者没有连接的订阅者，那么它将删除所有消息。</li>
+<li><strong>如果您正在使用TCP，而订阅服务器很慢，则消息将在发布服务器上排队</strong>。稍后，我们将研究如何使用“高水位标记(high-water mark)”来保护publishers 不受此影响。</li>
+<li>从ZeroMQ v3.x，当使用连接的协议(tcp://或ipc://)时，<strong>过滤发生在发布端</strong>。 使用epgm://协议，过滤发生在订阅方。在ZeroMQ v2.x，所有过滤都发生在订阅端。</li>
+</ul>
+<h2 id="1-5-分而治之-push-pull"><a href="#1-5-分而治之-push-pull" class="headerlink" title="1.5 分而治之 push-pull"></a>1.5 分而治之 push-pull</h2><img src="/zeromq/zeromq/image-20220408163716724.png" class="" title="image-20220408163716724">
+<p>典型的并行处理模型。我们有:</p>
+<ul>
+<li><p>ventilator用于产生许多可并行完成的任务</p>
+</li>
+<li><p>workers处理其中一个任务</p>
+</li>
+<li><p>sink从worker进程收集结果</p>
+</li>
+</ul>
+<p>在现实中，workers 在超级快的机器上运行，可能使用gpu(图形处理单元)来做艰难的计算。ventilator 会生成100个任务，每个任务都有一条消息告诉worker睡眠几毫秒。</p>
+<p>代码分别如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//taskvent.c</span></span><br><span class="line"><span class="comment">//  Task ventilator</span></span><br><span class="line"><span class="comment">//  Binds PUSH socket to tcp://localhost:5557</span></span><br><span class="line"><span class="comment">//  Sends batch of tasks to workers via that socket</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;zhelpers.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span> <span class="params">(<span class="type">void</span>)</span> </span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">void</span> *context = zmq_ctx_new ();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  Socket to send messages on</span></span><br><span class="line">    <span class="type">void</span> *sender = zmq_socket (context, ZMQ_PUSH);</span><br><span class="line">    zmq_bind (sender, <span class="string">&quot;tcp://*:5557&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  Socket to send start of batch message on</span></span><br><span class="line">    <span class="type">void</span> *sink = zmq_socket (context, ZMQ_PUSH);</span><br><span class="line">    zmq_connect (sink, <span class="string">&quot;tcp://localhost:5558&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span> (<span class="string">&quot;Press Enter when the workers are ready: &quot;</span>);</span><br><span class="line">    getchar ();</span><br><span class="line">    <span class="built_in">printf</span> (<span class="string">&quot;Sending tasks to workers...\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  The first message is &quot;0&quot; and signals start of batch</span></span><br><span class="line">    s_send (sink, <span class="string">&quot;0&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  Initialize random number generator</span></span><br><span class="line">    srandom ((<span class="type">unsigned</span>) time (<span class="literal">NULL</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  Send 100 tasks</span></span><br><span class="line">    <span class="type">int</span> task_nbr;</span><br><span class="line">    <span class="type">int</span> total_msec = <span class="number">0</span>;     <span class="comment">//  Total expected cost in msecs</span></span><br><span class="line">    <span class="keyword">for</span> (task_nbr = <span class="number">0</span>; task_nbr &lt; <span class="number">100</span>; task_nbr++) &#123;</span><br><span class="line">        <span class="type">int</span> workload;</span><br><span class="line">        <span class="comment">//  Random workload from 1 to 100msecs</span></span><br><span class="line">        workload = randof (<span class="number">100</span>) + <span class="number">1</span>;</span><br><span class="line">        total_msec += workload;</span><br><span class="line">        <span class="type">char</span> <span class="built_in">string</span> [<span class="number">10</span>];</span><br><span class="line">        <span class="built_in">sprintf</span> (<span class="built_in">string</span>, <span class="string">&quot;%d&quot;</span>, workload);</span><br><span class="line">        s_send (sender, <span class="built_in">string</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="built_in">printf</span> (<span class="string">&quot;Total expected cost: %d msec\n&quot;</span>, total_msec);</span><br><span class="line"></span><br><span class="line">    zmq_close (sink);</span><br><span class="line">    zmq_close (sender);</span><br><span class="line">    zmq_ctx_destroy (context);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//taskwork.c</span></span><br><span class="line"><span class="comment">//  Task worker</span></span><br><span class="line"><span class="comment">//  Connects PULL socket to tcp://localhost:5557</span></span><br><span class="line"><span class="comment">//  Collects workloads from ventilator via that socket</span></span><br><span class="line"><span class="comment">//  Connects PUSH socket to tcp://localhost:5558</span></span><br><span class="line"><span class="comment">//  Sends results to sink via that socket</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;zhelpers.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span> <span class="params">(<span class="type">void</span>)</span> </span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//  Socket to receive messages on</span></span><br><span class="line">    <span class="type">void</span> *context = zmq_ctx_new ();</span><br><span class="line">    <span class="type">void</span> *receiver = zmq_socket (context, ZMQ_PULL);</span><br><span class="line">    zmq_connect (receiver, <span class="string">&quot;tcp://localhost:5557&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  Socket to send messages to</span></span><br><span class="line">    <span class="type">void</span> *sender = zmq_socket (context, ZMQ_PUSH);</span><br><span class="line">    zmq_connect (sender, <span class="string">&quot;tcp://localhost:5558&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  Process tasks forever</span></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="type">char</span> *<span class="built_in">string</span> = s_recv (receiver);</span><br><span class="line">        <span class="built_in">printf</span> (<span class="string">&quot;%s.&quot;</span>, <span class="built_in">string</span>);     <span class="comment">//  Show progress</span></span><br><span class="line">        fflush (<span class="built_in">stdout</span>);</span><br><span class="line">        s_sleep (atoi (<span class="built_in">string</span>));    <span class="comment">//  Do the work</span></span><br><span class="line">        <span class="built_in">free</span> (<span class="built_in">string</span>);</span><br><span class="line">        s_send (sender, <span class="string">&quot;&quot;</span>);        <span class="comment">//  Send results to sink</span></span><br><span class="line">    &#125;</span><br><span class="line">    zmq_close (receiver);</span><br><span class="line">    zmq_close (sender);</span><br><span class="line">    zmq_ctx_destroy (context);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//tasksink.c</span></span><br><span class="line"><span class="comment">//  Task sink</span></span><br><span class="line"><span class="comment">//  Binds PULL socket to tcp://localhost:5558</span></span><br><span class="line"><span class="comment">//  Collects results from workers via that socket</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;zhelpers.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">//  Prepare our context and socket</span></span><br><span class="line">  <span class="type">void</span>* context  = zmq_ctx_new();</span><br><span class="line">  <span class="type">void</span>* receiver = zmq_socket(context, ZMQ_PULL);</span><br><span class="line">  zmq_bind(receiver, <span class="string">&quot;tcp://*:5558&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">//  Wait for start of batch</span></span><br><span class="line">  <span class="type">char</span>* <span class="built_in">string</span> = s_recv(receiver);</span><br><span class="line">  <span class="built_in">free</span>(<span class="built_in">string</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">//  Start our clock now</span></span><br><span class="line">  <span class="type">int64_t</span> start_time = s_clock();</span><br><span class="line"></span><br><span class="line">  <span class="comment">//  Process 100 confirmations</span></span><br><span class="line">  <span class="type">int</span> task_nbr;</span><br><span class="line">  <span class="keyword">for</span> (task_nbr = <span class="number">0</span>; task_nbr &lt; <span class="number">100</span>; task_nbr++)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="type">char</span>* <span class="built_in">string</span> = s_recv(receiver);</span><br><span class="line">    <span class="built_in">free</span>(<span class="built_in">string</span>);</span><br><span class="line">    <span class="keyword">if</span> (task_nbr % <span class="number">10</span> == <span class="number">0</span>)</span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">&quot;:&quot;</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">      <span class="built_in">printf</span>(<span class="string">&quot;.&quot;</span>);</span><br><span class="line">    fflush(<span class="built_in">stdout</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="comment">//  Calculate and report duration of batch</span></span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Total elapsed time: %d msec\n&quot;</span>, (<span class="type">int</span>)(s_clock() - start_time));</span><br><span class="line"></span><br><span class="line">  zmq_close(receiver);</span><br><span class="line">  zmq_ctx_destroy(context);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>不同数量worker时，100个任务的运行时间如下</p>
+<ul>
+<li>1 worker: total elapsed time: 5034 msecs.</li>
+<li>2 workers: total elapsed time: 2421 msecs.</li>
+<li>4 workers: total elapsed time: 1018 msecs.</li>
+</ul>
+<img src="/zeromq/zeromq/image-20220408163257248.png" class="" title="image-20220408163257248">
+<p>分析：</p>
+<ul>
+<li>worker可以任意添加</li>
+<li><strong>PUSH和PULL没有要求谁是bind谁是connect（其他类似PUB-SUB也没要求，根据需要，稳定的一端就是bind，动态接入的一端调用connect）</strong></li>
+<li><strong>worker的处理需要同步</strong>，例如启动5个worker之后再进行启动100个任务的分配，如果没有同步当一组worker连接到ventilator 时，第一个成功连接的worker将在短时间内获得大量信息，而其他worker也在连接。所以在ventilator中等待用户输入，表示worker准备就绪，开始分配任务</li>
+<li>ventilator 的PUSH socket 将任务分配给worker(假设他们在批处理开始输出之前都连接好了)。这就是所谓的“<strong>负载平衡</strong>”</li>
+<li>sink的PULL均匀地收集worker的结果。这叫做“<strong>公平排队”</strong>。</li>
+</ul>
+<img src="/zeromq/zeromq/image-20220408163659225.png" class="" title="image-20220408163659225">
+<p>如果您正在使用 PUSH 和 PULL，而您的一个worker获得的消息比其他worker多得多，这是因为这个PULL socket连接得比其他worker更快，并且在其他worker设法连接之前捕获了大量消息。如果您想要适当的负载平衡，您可能需要查看Advanced Request-Reply Patterns中的负载平衡模式。</p>
+<h2 id="1-6-ZeroMQ编程"><a href="#1-6-ZeroMQ编程" class="headerlink" title="1.6 ZeroMQ编程"></a>1.6 ZeroMQ编程</h2><h3 id="1-6-1-正确理解Contex"><a href="#1-6-1-正确理解Contex" class="headerlink" title="1.6.1 正确理解Contex"></a>1.6.1 正确理解Contex</h3><p>应该在程序中创建和使用一个contex。contex（上下文）是单个进程中所有套接字的容器，并作为inproc套接字的传输，inproc是连接一个进程中线程的最快方式。</p>
+<p>如果在运行时，一个程序有两个上下文，它们就像独立的ZeroMQ实例。需要注意在进程开始时调用zmq ctx new()，在进程结束时调用zmq ctx destroy()。</p>
+<h3 id="1-6-2-退出前清理"><a href="#1-6-2-退出前清理" class="headerlink" title="1.6.2 退出前清理"></a>1.6.2 退出前清理</h3><p>当您在Python之类的语言中使用ZeroMQ时，会自动释放一些内容。但是在使用C语言时，必须小心地释放对象，否则会导致内存泄漏、应用程序不稳定。</p>
+<p>内存泄漏是一回事，但是ZeroMQ对如何退出应用程序非常挑剔。原因是技术性的和痛苦的，但是结果是，<strong>如果您打开任何sockets ，zmq_ctx_destroy()函数将永远挂起。即使关闭所有sockets ，默认情况下，如果有挂起连接或发送，zmq_ctx_destroy()将永远等待</strong>，除非在关闭这些sockets 之前将这些sockets 的逗留时间设置为零。</p>
+<p>我们需要注意的ZeroMQ对象是 messages, sockets, 和 contexts。</p>
+<ul>
+<li>在可以的情况下使用zmq send()和zmq recv()，因为它避免了使用zmq msg t对象。</li>
+<li>如果你打开和关闭了很多套接字，这可能意味着你需要重新设计你的应用程序。在某些情况下，除非销毁上下文，否则套接字句柄不会被释放。</li>
+<li>退出程序时，关闭套接字，然后调用zmq ctx destroy()。销毁上下文。</li>
+</ul>
+<p>这至少是C开发的情况。在具有自动对象销毁的语言中，离开作用域时将销毁套接字和上下文。<br> 如果使用异常，则必须在类似“final”块的地方进行清理，这与任何资源都是一样的。</p>
+<p>如果你在做多线程的工作，它会变得比这更复杂。我们将在下一章中讨论多线程，但是由于有些人会不顾警告，在安全地行走前先尝试运行，下面是在多线程ZeroMQ应用程序中实现干净退出的多线程的ZeroMQ指南。</p>
+<ul>
+<li>首先，<strong>不要尝试从多个线程使用同一个socket</strong>，（估计是线程不不安全，会竞争出错）。</li>
+<li>接下来，您需要关闭具有正在进行的请求的每个socket。正确的方法是设置一个较低的逗留值(1秒)，然后关闭socket。如果您的语言绑定在销毁context时没有自动为您完成此任务，我建议发送一个补丁。</li>
+<li>最后，销毁context。这将导致任何阻塞接收或轮询或发送附加线程(即,共享context)返回一个错误。捕获该错误，然后设置逗留，关闭该线程中的socket，然后退出。<strong>不要销毁相同的Context两次</strong>。<strong>主线程中的zmq_ctx_destroy将阻塞，直到它所知道的所有socket都安全关闭为止</strong>。</li>
+</ul>
+<h2 id="1-7-为什么我们需要ZeroMQ"><a href="#1-7-为什么我们需要ZeroMQ" class="headerlink" title="1.7 为什么我们需要ZeroMQ"></a>1.7 为什么我们需要ZeroMQ</h2><p>让我们看看在开始使用原始TCP连接各个部分时所面临的典型问题。任何可重用的消息层都需要解决所有或大部分问题:</p>
+<ul>
+<li>我们如何处理I/O?我们的应用程序是阻塞还是在后台处理I/O ?这是一个关键的设计决策。阻塞I/O会创建伸缩性不好的体系结构。但是后台I/O很难正确地执行。</li>
+<li>我们如何处理动态组件，即，暂时消失的碎片?我们是否将组件正式划分为“客户端”和“服务器”，并要求服务器不能消失?如果我们想把服务器连接到服务器呢?我们是否每隔几秒钟就尝试重新连接?</li>
+<li>我们如何在网络上表示消息?我们如何设置数据的框架，使其易于读写，不受缓冲区溢出的影响，对小消息有效，但对于那些戴着派对帽子跳舞的猫的大型视频来说，这已经足够了吗?</li>
+<li>我们如何处理无法立即交付的消息?特别是，如果我们正在等待一个组件重新联机?我们是丢弃消息，将它们放入数据库，还是放入内存队列?</li>
+<li>我们在哪里存储消息队列?如果从队列读取的组件非常慢，导致我们的队列增加，会发生什么?那么我们的策略是什么呢?</li>
+<li>我们如何处理丢失的消息?我们是等待新数据、请求重发，还是构建某种确保消息不会丢失的可靠性层?如果这个层本身崩溃了呢?</li>
+<li>如果我们需要使用不同的网络传输怎么办?比如说，多播而不是TCP单播?还是IPv6 ?我们是否需要重写应用程序，还是在某个层中抽象传输?</li>
+<li>我们如何路由消息?我们可以向多个对等点发送相同的消息吗?我们可以将回复发送回原始请求者吗?</li>
+<li>我们如何为另一种语言编写API ?我们是重新实现一个线级协议，还是重新打包一个库?如果是前者，如何保证栈的高效稳定?如果是后者，我们如何保证互操作性?</li>
+<li>我们如何表示数据，以便在不同的体系结构之间读取数据?我们是否对数据类型强制执行特定的编码?这是消息传递系统的工作，而不是更高一层的工作。</li>
+<li>我们如何处理网络错误?我们是等待并重试，默不作声地忽略它们，还是中止?</li>
+</ul>
+<p>这就是ZeroMQ:一个高效的、可嵌入的库，它解决了应用程序需要在不花费太多成本的情况下在网络上保持良好弹性的大部分问题。</p>
+<ul>
+<li>它在后台线程中异步处理I/O。这些线程使用无锁数据结构与应用程序线程通信，因此并发ZeroMQ应用程序不需要锁、信号量或其他等待状态。</li>
+<li>组件可以动态进出，<strong>ZeroMQ将自动重新连接</strong>。这意味着您可以以任何顺序启动组件。您可以创建“面向服务的体系结构”(service-oriented architecture, soa)，其中服务可以随时加入和离开网络。</li>
+<li>它在需要时自动对消息进行排队。它很聪明地做到了这一点，在对消息进行排队之前，尽可能地将消息推送到接收端。</li>
+<li><strong>它有办法处理过满的队列(称为“高水位”)。当队列已满时，ZeroMQ会根据您正在执行的消息类型(所谓的“模式”)自动阻塞发送者或丢弃消息</strong>。</li>
+<li>它允许您的应用程序<strong>通过任意传输相互通信:TCP、多播、进程内、进程间</strong>。您不需要更改代码来使用不同的传输。</li>
+<li>它使用依赖于消息传递模式的不同策略安全地处理慢速/阻塞的readers 。</li>
+<li>它<strong>允许您使用各种模式路由消息</strong>，比如请求-应答和发布-订阅。这些模式是取决于你如何创建拓扑结构的，即网络的结构。</li>
+<li>它允许您创建代理来通过一个调用对消息进行排队、转发或捕获。代理可以降低网络的互连复杂性。</li>
+<li>它通过在网络上使用一个简单的框架，完全按照发送的方式传递整个消息。如果您写了一条10k的消息，您将收到一条10k的消息。</li>
+<li>它不将任何格式强加于消息。它们的大小从0到G。当您想要表示数据时，您可以在顶部选择一些其他产品，例如msgpack、谷歌的protobuf等。</li>
+<li>它通过在有意义的情况下自动重试来智能地处理网络错误。</li>
+</ul>
+<h1 id="2-套接字和模式-Sockets-and-Patterns"><a href="#2-套接字和模式-Sockets-and-Patterns" class="headerlink" title="2 套接字和模式 Sockets and Patterns"></a>2 套接字和模式 Sockets and Patterns</h1><h2 id="2-1-The-Socket-API"><a href="#2-1-The-Socket-API" class="headerlink" title="2.1 The Socket API"></a>2.1 The Socket API</h2><ul>
+<li>创建和销毁套接字，它们一起形成套接字生命的循环(参见zmq socket()， zmq close())。</li>
+<li>通过设置选项来配置套接字，并在必要时检查它们(参见zmq setsockopt()， zmq getsockopt()))。</li>
+<li>通过创建和网络拓扑之间的ZeroMQ连接(参见zmq bind()， zmq connect())，将套接字插入网络拓扑。</li>
+<li>通过在套接字上写入和接收消息来传输数据(参见zmq msg send()， zmq msg recv())。</li>
+</ul>
+<h3 id="2-1-1-将套接字插入到拓扑"><a href="#2-1-1-将套接字插入到拓扑" class="headerlink" title="2.1.1 将套接字插入到拓扑"></a>2.1.1 将套接字插入到拓扑</h3><p>要在两个节点之间创建连接，可以在一个节点中使用zmq_bind()，在另一个节点中使用zmq_connect()。<strong>一般来说，执行zmq_bind()的节点是一个“服务器”，位于一个已知的网络地址上，执行zmq_connect()的节点是一个“客户机”，具有未知或任意的网络地址</strong>。因此，我们说“将socket 绑定到端点”和“将socket 连接到端点”，端点就是那个已知的网络地址。</p>
+<p>ZeroMQ连接与传统的TCP连接有些不同。主要的显著差异是：</p>
+<ul>
+<li>它们通过任意传输(inproc、ipc、tcp、pgm或epgm)。请参见zmq inproc()、zmq ipc()、zmq tcp()、zmq pgm()、zmq epgm()。</li>
+<li>一个将socket可能有许多传出和传入连接。.</li>
+<li>没有’ zmq_accept ‘()方法。当socket绑定到端点时，它将自动开始接受连接</li>
+<li>网络连接本身发生在后台，如果网络连接中断，ZeroMQ将自动重新连接(例如，如果peer 消失，然后返回)。</li>
+<li>您的应用程序代码不能直接使用这些连接;它们被封装在socket下面。</li>
+</ul>
+<p>许多架构遵循某种客户/服务器模型，服务器是最静态的组件，客户端是最动态的组件(来来去去)。有时寻址问题：服务器对客户端可见，但不一定反之亦然。因此，很明显，这是哪个节点应该正在进行zmq_bind（）（服务器），哪个节点应该执行zmq_connect（）（客户端）。它还取决于您使用的套接字种类，具有异常网络架构的一些例外。</p>
+<p>现在，假设在启动服务器之前先启动客户机。在传统的网络中，我们会看到一个大大的红色失败标志。但是ZeroMQ让我们任意地开始和停止。<strong>只要客户机节点执行zmq_connect()，连接就存在，该节点就可以开始向socket写入消息。在某个阶段(希望是在消息排队太多而开始被丢弃或客户机阻塞之前)，服务器会启动，执行zmq_bind()，然后ZeroMQ开始传递消息</strong>。<br><strong>一个服务器节点可以绑定到许多端点(即协议和地址的组合)，并且它可以使用一个socket来实现这一点。这意味着它将接受跨不同传输的连接</strong>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">zmq_bind (socket, <span class="string">&quot;tcp://*:5555&quot;</span>);</span><br><span class="line">zmq_bind (socket, <span class="string">&quot;tcp://*:9999&quot;</span>);</span><br><span class="line">zmq_bind (socket, <span class="string">&quot;inproc://somename&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>虽然ZeroMQ试图对哪边bind和哪边connect保持中立，但还是有区别的。稍后我们将更详细地看到这些。其结果是，您通常应该将“服务器”视为拓扑的静态部分，它绑定到或多或少固定的端点，而将“客户机”视为动态部分，它们来来去去并连接到这些端点。然后，围绕这个模型设计应用程序。它“正常工作”的可能性要大得多。</p>
+<h3 id="2-1-2-发送和接收消息"><a href="#2-1-2-发送和接收消息" class="headerlink" title="2.1.2 发送和接收消息"></a>2.1.2 发送和接收消息</h3><p>要发送和接收消息，可以使用zmq_msg_send()和zmq_msg_recv()方法。这些名称都是传统的，但是ZeroMQ的I/O模型与传统的TCP模型有很大的不同，您需要时间来理解它。</p>
+<img src="/zeromq/zeromq/image-20220412180123514.png" class="" title="image-20220412180123514">
+<p>让我们来看看TCP sockets和ZeroMQ sockets在处理数据方面的主要区别:</p>
+<ul>
+<li><strong>ZeroMQ套接字像UDP一样携带消息，而不像TCP那样携带字节流</strong>。<strong>ZeroMQ消息是长度指定的二进制数据。</strong>我们很快就会讲到信息;它们的设计是针对性能进行优化的，因此有点棘手。</li>
+<li>ZeroMQ套接字在后台线程中执行I/O。这意味着消息到达本地输入队列并从本地输出队列发送，无论您的应用程序在忙什么。</li>
+<li>根据socket类型，<strong>ZeroMQ sockets具有内置的1对n路由行为</strong>。</li>
+<li>zmq_send()方法实际上并不将消息发送到socket connection(s)。它对消息进行排队，以便I/O线程可以异步发送消息。它不会阻塞，除非在某些异常情况下。因此，<strong>当zmq_send()返回到应用程序时，不一定要发送消息</strong>。</li>
+</ul>
+<h3 id="2-1-3-单播传输"><a href="#2-1-3-单播传输" class="headerlink" title="2.1.3 单播传输"></a>2.1.3 单播传输</h3><p>ZeroMQ提供了<strong>一组单播传输(inproc、ipc、tcp)和组播传输(epgm、pgm)</strong>。多播是一种先进的技术，我们将在后面介绍。不要甚至开始使用它，除非你知道你的扇出比例将使1对n单播不可能。</p>
+<ul>
+<li>tcp：<strong>对于大多数常见的情况，使用tcp</strong>，这是一个断开连接的tcp传输。它有弹性，便于携带，对于大多数情况都足够快。我们称此为断开连接，因为ZeroMQ的tcp传输在连接之前不需要端点的存在。客户端和服务器可以在任何时候连接和绑定，可以切换和返回，并且对应用程序保持透明。</li>
+<li>ipc：进程间ipc传输也是断开连接式（disconnected ）的，就像tcp一样。它有一个限制:它还不能在Windows上运行。按照惯例，我们使用带有“.ipc”扩展名，以避免与其他文件名的潜在冲突。<strong>在UNIX系统上，如果使用ipc端点，则需要使用适当的权限创建这些端点，否则在不同用户id下运行的进程之间可能无法共享这些端点。</strong>您还必须确保所有进程都可以访问这些文件，例如，在相同的工作目录中运行。</li>
+<li>inproc：<strong>线程间传输(inproc)是一种连接（connected ）的信号传输。它比tcp或ipc快得多。与tcp和ipc相比，这种传输有一个特定的限制:服务器必须在任何客户机发出连接之前发出绑定</strong>。这是在Zeromq v4.0和更高版本中修复的</li>
+</ul>
+<h3 id="2-1-4-ZeroMQ-不是中立的载体"><a href="#2-1-4-ZeroMQ-不是中立的载体" class="headerlink" title="2.1.4 ZeroMQ 不是中立的载体"></a>2.1.4 ZeroMQ 不是中立的载体</h3><p>Zeromq不是中性载体：它对其使用的传输协议施加了框架。这种框架与现有协议不兼容，。例如，比较HTTP请求和Zeromq请求,都是依赖TCP/IP。不能使用zmq实现一个HTTP服务。</p>
+<img src="/zeromq/zeromq/image-20220428134439438.png" class="" title="image-20220428134439438">
+<p>HTTP请求使用CR-LF作为最简单的帧分隔符，而ZeroMQ使用长度指定的帧。因此，您可以使用ZeroMQ编写类似http的协议，例如使用请求-应答套接字模式。但它不是HTTP。</p>
+<img src="/zeromq/zeromq/image-20220428134456939.png" class="" title="image-20220428134456939">
+<h3 id="2-1-5-I-O-Threads"><a href="#2-1-5-I-O-Threads" class="headerlink" title="2.1.5 I/O Threads"></a>2.1.5 I/O Threads</h3><p>我们说过ZeroMQ在后台线程中执行I/O。一个I/O线程(适用于所有类型socket)对于除最极端的应用程序之外的所有应用程序都是足够的。当您创建一个新的context时，它从一个I/O线程开始。一般的经验法则是，每秒允许1千兆字节（gigabyte ，1GB?）的数据进出一个I/O线程。要增加I/O线程的数量，请在创建任何socket之前使zmq_ctx_set()调用:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> io_threads = <span class="number">4</span>;</span><br><span class="line"><span class="type">void</span> *context = zmq_ctx_new ();</span><br><span class="line">zmq_ctx_set (context, ZMQ_IO_THREADS, io_threads);</span><br><span class="line">assert (zmq_ctx_get (context, ZMQ_IO_THREADS) == io_threads);</span><br></pre></td></tr></table></figure>
+<p>我们已经看到一个套接字可以同时处理几十个，甚至数千个连接。这对如何编写应用程序有根本性的影响。传统的网络应用程序在每个远程连接上有一个进程或一个线程，该进程或线程处理一个套接字。ZeroMQ允许您将整个结构分解为单个进程，然后根据伸缩性的需要将其分解。</p>
+<p>如果您仅将Zeromq用于线程间通信（即，没有外部套接字I/O的多线程应用程序），则可以将I/O线程设置为零。但是，这并不是一个重大的优化，也没什么卵用。</p>
+<h2 id="2-2-消息传递模式-Messaging-Patterns"><a href="#2-2-消息传递模式-Messaging-Patterns" class="headerlink" title="2.2 消息传递模式 Messaging Patterns"></a>2.2 消息传递模式 Messaging Patterns</h2><p><strong>内置的核心Zeromq模式是：</strong></p>
+<ul>
+<li>Request-reply： 它将一组客户机连接到一组服务。这是一个远程过程调用和任务分发模式。</li>
+<li>Pub-sub：它将一组发布者连接到一组订阅者。这是一个数据发布模式。</li>
+<li>Pipeline：它以扇出/扇入模式连接节点，该模式可以有多个步骤和循环。这是一个并行的任务分发和收集模式</li>
+<li>Exclusive pair：只连接两个sockets 。这是一个用于连接进程中的两个线程的模式，不要与“普通”sockets 对混淆。</li>
+</ul>
+<p>有效的绑定如下（您还将看到对XPUB和XSUB套接字的引用，(它们类似于PUB和SUB的原始版本)。）</p>
+<ul>
+<li>PUB and SUB</li>
+<li>REQ and REP</li>
+<li>REQ and ROUTER (take care, REQ inserts an extra null frame)</li>
+<li>DEALER and REP (take care, REP assumes a null frame)</li>
+<li>DEALER and ROUTER</li>
+<li>DEALER and DEALER</li>
+<li>ROUTER and ROUTER</li>
+<li>PUSH and PULL</li>
+<li>PAIR and PAIR</li>
+</ul>
+<h3 id="2-2-1-使用消息（Working-with-Messages）"><a href="#2-2-1-使用消息（Working-with-Messages）" class="headerlink" title="2.2.1 使用消息（Working with Messages）"></a>2.2.1 使用消息（Working with Messages）</h3><p>实际上，libzmq核心库有两个api来发送和接收消息。zmq send()和zmq  recv()方法是简单的一行程序。但zmq  recv()不擅长处理任意消息大小:<strong>它会将消息截断为您提供的任何缓冲区大小（也就是和缓冲区大小有关）</strong>。因此有了第二个与zmq msg  t结构一起工作的API，它具有更丰富但更困难的API</p>
+<ul>
+<li>初始化消息: <code>zmq_msg_init()</code>, <code>zmq_msg_init_size()</code>, <code>zmq_msg_init_data()</code>.</li>
+<li>发送和接收消息: <code>zmq_msg_send()</code>, <code>zmq_msg_recv()</code>.</li>
+<li>释放消息: <code>zmq_msg_close()</code>.</li>
+<li>访问消息内容: <code>zmq_msg_data()</code>, <code>zmq_msg_size()</code>, <code>zmq_msg_more()</code>.</li>
+<li>使用消息属性: <code>zmq_msg_get()</code>, <code>zmq_msg_set()</code>.</li>
+<li>操作消息: <code>zmq_msg_copy()</code>, <code>zmq_msg_move()</code>.</li>
+</ul>
+<p>在网络上，ZeroMQ消息是适合内存的从0开始的任何大小的二进制。可以使用protobuf、msgpack、JSON或自定义实现自己的序列化。</p>
+<p>在内存中，ZeroMQ消息是zmq_msg_t结构(或类，取决于您的语言)。下面是在C语言中使用ZeroMQ消息的基本规则:</p>
+<ul>
+<li>创建并传递zmq_msg_t对象，而不是数据块。</li>
+<li>要读取消息，可以使用zmq_msg_init()创建一个空消息，然后将其传递给zmq_msg_recv()。</li>
+<li>要从新数据中编写一条消息，可以使用zmq_msg_init_size()创建一条消息，同时分配某个大小的数据块。然后使用memcpy填充数据，并将消息传递给zmq_msg_send()。</li>
+<li>要释放(而不是销毁)消息，可以调用zmq_msg_close()。这将删除引用，最终ZeroMQ将销毁消息。</li>
+<li>要访问消息内容，可以使用zmq_msg_data()。要知道消息包含多少数据，可以使用zmq_msg_size()。</li>
+<li>不要使用zmq_msg_move()、zmq_msg_copy()或zmq_msg_init_data()，除非您阅读了手册页并确切地知道为什么需要这些。</li>
+<li>您传递一个消息后zmq_msg_send(),ØMQ将clear 这个消息。同时将大小设置为零。您不能两次发送相同的消息，并且不能在发送消息后访问消息数据。</li>
+<li>如果您使用zmq_send()和zmq_recv()，而不是消息结构，这些规则将不适用。</li>
+</ul>
+<p>如果您希望多次发送相同的消息，并且消息大小相当，那么创建第二个消息，使用zmq_msg_init()初始化它，然后使用zmq_msg_copy()创建第一个消息的副本。这不是复制数据，而是复制引用。然后可以发送消息两次(如果创建了更多副本，则可以发送两次或多次)，并且只有在发送或关闭最后一个副本时才最终销毁消息。</p>
+<p>ZeroMQ还支持多部分消息，它允许您作为单个在线消息发送或接收帧列表。这在实际应用中被广泛使用，我们将在本章后面的第三章—高级请求-应答模式中看到它。</p>
+<p>帧（Frames）在ZeroMQ参考手册页面中也称为消息部件)是ZeroMQ消息的基本线格式。帧是指定长度的数据块。长度向上可以为零。</p>
+<p>最初，ZeroMQ消息是一个帧，就像UDP一样。稍后，我们使用多部分消息对此进行了扩展，这些消息非常简单，就是一系列帧，其中“more”位设置为1，然后是一个位设置为0的帧。然后ZeroMQ API允许您编写带有“more”标志的消息，当您读取消息时，它允许您检查是否有“more”</p>
+<ul>
+<li>消息可以是一个或多个部分。</li>
+<li>这些部分也被称为“帧”。</li>
+<li>每个部分都是zmq_msg_t对象。</li>
+<li>可以在底层API中分别发送和接收每个部分。</li>
+<li>高级api提供包装器来发送整个多部分消息。</li>
+<li>您可以发送零长度的消息</li>
+<li>ZeroMQ保证交付消息的所有部分(一个或多个)，或者一个也不交付。</li>
+<li>ZeroMQ不会立即发送消息(单个或多个部分)，而是在稍后某个不确定的时间。</li>
+<li>消息(单个或多个部分)必须装入内存。如果您想发送任意大小的文件，应该将它们分成几部分，并将每一部分作为单独的单部分消息发送。使用多部分数据不会减少内存消耗。</li>
+<li>当接收到消息结束时，必须调用zmq msg close()，当作用域关闭时不会自动销毁对象。发送消息后不能调用此方法。</li>
+</ul>
+<h3 id="2-2-2-处理多个Sockets-Handling-Multiple-Sockets"><a href="#2-2-2-处理多个Sockets-Handling-Multiple-Sockets" class="headerlink" title="2.2.2 处理多个Sockets(Handling Multiple Sockets)"></a>2.2.2 处理多个Sockets(Handling Multiple Sockets)</h3><p>在到目前为止的所有例子中，大多数例子的主循环是:</p>
+<ul>
+<li>1.等待套接字上的消息。</li>
+<li>2.过程信息。</li>
+<li>3.重复。</li>
+</ul>
+<p>如果我们想同时读取多个端点呢?最简单的方法是将一个socket连接到所有端点，并让ZeroMQ为我们执行扇入。</p>
+<p>要同时读取多个sockets，可以使用zmq_poll()。</p>
+<p>下面是一个使用非阻塞读取从两个sockets读取的简单示例，这种方法的代价是第一个消息上的一些额外延迟。在亚毫秒延迟至关重要的应用程序中。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//msreader: Multiple socket reader in C</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//  Reading from multiple sockets</span></span><br><span class="line"><span class="comment">//  This version uses a simple recv loop</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;zhelpers.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span> <span class="params">(<span class="type">void</span>)</span> </span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//  Connect to task ventilator</span></span><br><span class="line">    <span class="type">void</span> *context = zmq_ctx_new ();</span><br><span class="line">    <span class="type">void</span> *receiver = zmq_socket (context, ZMQ_PULL);</span><br><span class="line">    zmq_connect (receiver, <span class="string">&quot;tcp://localhost:5557&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  Connect to weather server</span></span><br><span class="line">    <span class="type">void</span> *subscriber = zmq_socket (context, ZMQ_SUB);</span><br><span class="line">    zmq_connect (subscriber, <span class="string">&quot;tcp://localhost:5556&quot;</span>);</span><br><span class="line">    zmq_setsockopt (subscriber, ZMQ_SUBSCRIBE, <span class="string">&quot;10001 &quot;</span>, <span class="number">6</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  Process messages from both sockets</span></span><br><span class="line">    <span class="comment">//  We prioritize traffic from the task ventilator</span></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="type">char</span> msg [<span class="number">256</span>];</span><br><span class="line">        <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="type">int</span> size = zmq_recv (receiver, msg, <span class="number">255</span>, ZMQ_DONTWAIT);</span><br><span class="line">            <span class="keyword">if</span> (size != <span class="number">-1</span>) &#123;</span><br><span class="line">                <span class="comment">//  Process task</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">            <span class="type">int</span> size = zmq_recv (subscriber, msg, <span class="number">255</span>, ZMQ_DONTWAIT);</span><br><span class="line">            <span class="keyword">if</span> (size != <span class="number">-1</span>) &#123;</span><br><span class="line">                <span class="comment">//  Process weather update</span></span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span></span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//  No activity, so sleep for 1 msec</span></span><br><span class="line">        s_sleep (<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    zmq_close (receiver);</span><br><span class="line">    zmq_close (subscriber);</span><br><span class="line">    zmq_ctx_destroy (context);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>您可以通过先读取一个套接字，然后读取第二个套接字来公平地对待套接字，而不是像上面中所做的那样对它们进行优先级排序。使用zmq_poll():</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">mspoller: Multiple socket poller in C</span><br><span class="line"></span><br><span class="line"><span class="comment">//  Reading from multiple sockets</span></span><br><span class="line"><span class="comment">//  This version uses zmq_poll()</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;zhelpers.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span> <span class="params">(<span class="type">void</span>)</span> </span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//  Connect to task ventilator</span></span><br><span class="line">    <span class="type">void</span> *context = zmq_ctx_new ();</span><br><span class="line">    <span class="type">void</span> *receiver = zmq_socket (context, ZMQ_PULL);</span><br><span class="line">    zmq_connect (receiver, <span class="string">&quot;tcp://localhost:5557&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  Connect to weather server</span></span><br><span class="line">    <span class="type">void</span> *subscriber = zmq_socket (context, ZMQ_SUB);</span><br><span class="line">    zmq_connect (subscriber, <span class="string">&quot;tcp://localhost:5556&quot;</span>);</span><br><span class="line">    zmq_setsockopt (subscriber, ZMQ_SUBSCRIBE, <span class="string">&quot;10001 &quot;</span>, <span class="number">6</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">zmq_pollitem_t</span> items [] = &#123;</span><br><span class="line">        &#123; receiver,   <span class="number">0</span>, ZMQ_POLLIN, <span class="number">0</span> &#125;,</span><br><span class="line">        &#123; subscriber, <span class="number">0</span>, ZMQ_POLLIN, <span class="number">0</span> &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">//  Process messages from both sockets</span></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="type">char</span> msg [<span class="number">256</span>];</span><br><span class="line"></span><br><span class="line">        zmq_poll (items, <span class="number">2</span>, <span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">if</span> (items [<span class="number">0</span>].revents &amp; ZMQ_POLLIN) &#123;</span><br><span class="line">            <span class="type">int</span> size = zmq_recv (receiver, msg, <span class="number">255</span>, <span class="number">0</span>);</span><br><span class="line">            <span class="keyword">if</span> (size != <span class="number">-1</span>) &#123;</span><br><span class="line">                <span class="comment">//  Process task</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (items [<span class="number">1</span>].revents &amp; ZMQ_POLLIN) &#123;</span><br><span class="line">            <span class="type">int</span> size = zmq_recv (subscriber, msg, <span class="number">255</span>, <span class="number">0</span>);</span><br><span class="line">            <span class="keyword">if</span> (size != <span class="number">-1</span>) &#123;</span><br><span class="line">                <span class="comment">//  Process weather update</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    zmq_close (subscriber);</span><br><span class="line">    zmq_ctx_destroy (context);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="2-2-3-多部分消息-Multipart-Messages"><a href="#2-2-3-多部分消息-Multipart-Messages" class="headerlink" title="2.2.3 多部分消息(Multipart Messages)"></a>2.2.3 多部分消息(Multipart Messages)</h3><p>ZeroMQ允许我们用几个帧（frame）组成一个消息（message）</p>
+<p>当您处理多部分消息时，每个部分都是一个zmq msg项。例如，如果你发送一个包含五个部分的消息，你必须构造、发送和销毁五个zmq msg项。</p>
+<p>下面是我们如何在多部分消息中发送帧(我们将每一帧接收到一个消息对象)</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">zmq_msg_send (&amp;message, socket, ZMQ_SNDMORE);</span><br><span class="line">...</span><br><span class="line">zmq_msg_send (&amp;message, socket, ZMQ_SNDMORE);</span><br><span class="line">...</span><br><span class="line">zmq_msg_send (&amp;message, socket, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<p>下面是我们如何接收和处理消息中的所有部分，无论是单个部分还是多个部分</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">    <span class="type">zmq_msg_t</span> message;</span><br><span class="line">    zmq_msg_init (&amp;message);</span><br><span class="line">    zmq_msg_recv (&amp;message, socket, <span class="number">0</span>);</span><br><span class="line">    <span class="comment">//  Process the message frame</span></span><br><span class="line">    ...</span><br><span class="line">    zmq_msg_close (&amp;message);</span><br><span class="line">    <span class="keyword">if</span> (!zmq_msg_more (&amp;message))</span><br><span class="line">        <span class="keyword">break</span>;      <span class="comment">//  Last message frame</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>当您发送一个多部分消息时，第一部分(以及所有后续部分)只有在您发送最后一部分时才实际通过网络发送</strong>。</li>
+<li>如果您正在使用zmq_poll()，当您接收到消息的第一部分时，其他部分也都已经到达。</li>
+<li>您将接收到消息的所有部分，或者完全不接收。</li>
+<li>消息的每个部分都是一个单独的zmq_msg项。</li>
+<li>无论是否选中more属性，都将接收消息的所有部分。</li>
+<li>发送时，ZeroMQ将消息帧在内存中排队，直到最后一个消息帧被接收，然后将它们全部发送出去。</li>
+<li>除了关闭套接字外，无法取消部分发送的消息。</li>
+</ul>
+<h3 id="2-2-4-中介和代理-Intermediaries-and-Proxies"><a href="#2-2-4-中介和代理-Intermediaries-and-Proxies" class="headerlink" title="2.2.4 中介和代理 Intermediaries and Proxies"></a>2.2.4 中介和代理 Intermediaries and Proxies</h3><p>在ZeroMQ中，我们根据上下文将这些代理、队列、转发器、设备或代理称为代理。</p>
+<h3 id="2-2-5-动态发现-The-Dynamic-Discovery-Problem"><a href="#2-2-5-动态发现-The-Dynamic-Discovery-Problem" class="headerlink" title="2.2.5 动态发现 The Dynamic Discovery Problem"></a>2.2.5 动态发现 The Dynamic Discovery Problem</h3><p>动态发现有几种解决方案。最简单的方法是通过硬编码(或配置)网络体系结构来完全避免这种情况，以便手工完成发现。也就是说，当您添加一个新片段时，您将重新配置网络以了解它。例如下面图12-小规模的Pub-Sub网络</p>
+<img src="/zeromq/zeromq/image-20220506170806028.png" class="" title="image-20220506170806028">
+<p>在实践中，这会导致越来越脆弱和笨拙的架构。假设你有一个出版商和100个订阅者。通过在每个订阅者中配置发布者端点，可以将每个订阅者连接到发布者。那也是件很轻松的事。用户是动态的;出版商是静态的。现在假设你添加了更多的出版商。突然，事情变得不那么容易了。如果你继续将每个订阅者与每个发布者联系起来，避免动态发现的成本就会越来越高。</p>
+<img src="/zeromq/zeromq/image-20220506171026650.png" class="" title="image-20220506171026650">
+<p>对此有很多答案，但最简单的答案是添加中介;也就是说，网络中所有其他节点都连接到的一个静态点。在传统的消息传递中，这是消息代理的工作。ZeroMQ没有提供这样的消息代理，但是它让我们可以很容易地构建中介。</p>
+<p>您可能想知道，如果所有网络最终都变得足够大，需要中介体，那么为什么不为所有应用程序设置一个message broker呢?对于初学者来说，这是一个公平的妥协。只要始终使用星型拓扑结构，忘记性能，事情就会正常工作。然而，消息代理是贪婪的;作为中央中介人，它们变得太复杂、太有状态，最终成为一个问题。</p>
+<p>最好将中介看作简单的无状态消息交换机。一个很好的类比是HTTP代理;它在那里，但没有任何特殊的作用。在我们的示例中，添加一个 pub-sub代理解决了动态发现问题。我们在网络的“中间”设置代理。代理打开一个XSUB套接字、一个XPUB套接字，并将每个套接字绑定到已知的IP地址和端口。然后，所有其他进程都连接到代理，而不是彼此连接。添加更多订阅者或发布者变得很简单。</p>
+<img src="/zeromq/zeromq/image-20220510122245491.png" class="" title="image-20220510122245491">
+<p>我们需要XPUB和XSUB套接字，因为ZeroMQ从订阅者到发布者执行订阅转发。XSUB和XPUB与SUB和PUB完全一样，只是它们将订阅公开为特殊消息。代理必须通过从XPUB套接字读取这些订阅消息并将其写入XSUB套接字，从而将这些订阅消息从订阅方转发到发布方。这是XSUB和XPUB的主要用例。</p>
+<h3 id="2-2-6-共享队列Shared-Queue-DEALER-and-ROUTER-sockets"><a href="#2-2-6-共享队列Shared-Queue-DEALER-and-ROUTER-sockets" class="headerlink" title="2.2.6 共享队列Shared Queue (DEALER and ROUTER sockets)"></a>2.2.6 共享队列Shared Queue (DEALER and ROUTER sockets)</h3><p>在Hello World客户机/服务器应用程序中，我们有一个客户机与一个服务通信。然而，在实际情况中，我们通常需要允许多个服务和多个客户机。这让我们可以扩展服务的功能(许多线程、进程或节点，而不是一个)。唯一的限制是服务必须是无状态的，所有状态都在请求中，或者在一些共享存储(如数据库)中。</p>
+<img src="/zeromq/zeromq/image-20220510122413153.png" class="" title="image-20220510122413153">
+<p>有两种方法可以将多个客户机连接到多个服务器。蛮力方法是将每个客户端套接字连接到多个服务端点。<strong>一个客户端套接字可以连接到多个服务套接字，然后REQ套接字将在这些服务之间分发请求</strong>。如上图15，假设您将一个客户端套接字连接到三个服务端点;客户机请求R1、R2、R3、R4。<strong>R1和R4进入服务A，R2转到B，R3转到服务C。并不是所有的服务都收到R1、R2、R3、R4。</strong>详细可以参考测试代码1-reqrep/2文件夹。</p>
+<p>这种设计可以让您更便宜地添加更多的客户端。您还可以添加更多的服务。每个客户端将其请求分发给服务。但是每个客户机都必须知道服务拓扑。如果您有100个客户机，然后决定再添加3个服务，那么您需要重新配置并重新启动100个客户机，以便客户机了解这3个新服务。</p>
+<p>理想情况下，我们应该能够在任何时候添加和删除服务或客户机，而不需要触及拓扑的任何其他部分。</p>
+<p>因此，我们将编写一个小消息队列代理来提供这种灵活性。代理绑定到两个端点，一个用于客户机的前端，一个用于服务的后端。然后，它使用zmq_poll()监视这两个sockets 的活动，当它有一些活动时，它在它的两个sockets 之间传递消息。它实际上并不明确地管理任何队列—zeromq在每个sockets 上自动管理队列。</p>
+<p>当您使用REQ与REP对话时，您将得到一个严格同步的请求-应答对话框。客户端发送一个请求。服务读取请求并发送响应。然后客户端读取应答。如果客户机或服务尝试执行其他操作(例如，在不等待响应的情况下连续发送两个请求)，它们将得到一个错误。</p>
+<p>但是我们的代理必须是非阻塞的。显然，我们可以使用zmq_poll()来等待两个socket上的活动，但是不能使用REP和REQ。</p>
+<img src="/zeromq/zeromq/image-20220510122440521.png" class="" title="image-20220510122440521">
+<p>幸运的是，<strong>有两个名为DEALER和ROUTER的socket允许您执行非阻塞的请求-响应</strong>。在高级请求-应答模式中，您将看到DEALER和ROUTER套接字如何让您构建各种异步请求-应答流。现在，我们只需要看看DEALER 和ROUTER 如何让我们扩展REQ-REP跨一个中介，也就是我们的小broker。<br>在这个简单的扩展请求-应答模式中，REQ与ROUTER 对话，而DEALER 与REP对话。在DEALER 与ROUTER 之间，我们必须有代码(就像我们的broker一样)将消息从一个socket 中提取出来，并将它们推送到另一个socket 中。<br>request-reply broker绑定到两个端点，一个用于clients 连接(前端socket)，另一个用于workers 连接(后端)。要测试此broker，您需要更改workers ，以便他们连接到后端socket。这是一个client ，如图17</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//rrclient: Request-reply client in C</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//  Hello World client</span></span><br><span class="line"><span class="comment">//  Connects REQ socket to tcp://localhost:5559</span></span><br><span class="line"><span class="comment">//  Sends &quot;Hello&quot; to server, expects &quot;World&quot; back</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;zhelpers.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span> <span class="params">(<span class="type">void</span>)</span> </span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">void</span> *context = zmq_ctx_new ();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  Socket to talk to server</span></span><br><span class="line">    <span class="type">void</span> *requester = zmq_socket (context, ZMQ_REQ);</span><br><span class="line">    zmq_connect (requester, <span class="string">&quot;tcp://localhost:5559&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> request_nbr;</span><br><span class="line">    <span class="keyword">for</span> (request_nbr = <span class="number">0</span>; request_nbr != <span class="number">10</span>; request_nbr++) &#123;</span><br><span class="line">        s_send (requester, <span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">        <span class="type">char</span> *<span class="built_in">string</span> = s_recv (requester);</span><br><span class="line">        <span class="built_in">printf</span> (<span class="string">&quot;Received reply %d [%s]\n&quot;</span>, request_nbr, <span class="built_in">string</span>);</span><br><span class="line">        <span class="built_in">free</span> (<span class="built_in">string</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    zmq_close (requester);</span><br><span class="line">    zmq_ctx_destroy (context);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>Here is the worker:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//rrworker: Request-reply worker in C</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//  Hello World worker</span></span><br><span class="line"><span class="comment">//  Connects REP socket to tcp://localhost:5560</span></span><br><span class="line"><span class="comment">//  Expects &quot;Hello&quot; from client, replies with &quot;World&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;zhelpers.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span> <span class="params">(<span class="type">void</span>)</span> </span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">void</span> *context = zmq_ctx_new ();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  Socket to talk to clients</span></span><br><span class="line">    <span class="type">void</span> *responder = zmq_socket (context, ZMQ_REP);</span><br><span class="line">    zmq_connect (responder, <span class="string">&quot;tcp://localhost:5560&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="comment">//  Wait for next request from client</span></span><br><span class="line">        <span class="type">char</span> *<span class="built_in">string</span> = s_recv (responder);</span><br><span class="line">        <span class="built_in">printf</span> (<span class="string">&quot;Received request: [%s]\n&quot;</span>, <span class="built_in">string</span>);</span><br><span class="line">        <span class="built_in">free</span> (<span class="built_in">string</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//  Do some &#x27;work&#x27;</span></span><br><span class="line">        sleep (<span class="number">1</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//  Send reply back to client</span></span><br><span class="line">        s_send (responder, <span class="string">&quot;World&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//  We never get here, but clean up anyhow</span></span><br><span class="line">    zmq_close (responder);</span><br><span class="line">    zmq_ctx_destroy (context);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这是代理，它可以正确地处理多部分消息:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//rrbroker: Request-reply broker in C</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//  Simple request-reply broker</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;zhelpers.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span> <span class="params">(<span class="type">void</span>)</span> </span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">//  Prepare our context and sockets</span></span><br><span class="line">    <span class="type">void</span> *context = zmq_ctx_new ();</span><br><span class="line">    <span class="type">void</span> *frontend = zmq_socket (context, ZMQ_ROUTER);</span><br><span class="line">    <span class="type">void</span> *backend  = zmq_socket (context, ZMQ_DEALER);</span><br><span class="line">    zmq_bind (frontend, <span class="string">&quot;tcp://*:5559&quot;</span>);</span><br><span class="line">    zmq_bind (backend,  <span class="string">&quot;tcp://*:5560&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  Initialize poll set</span></span><br><span class="line">    <span class="type">zmq_pollitem_t</span> items [] = &#123;</span><br><span class="line">        &#123; frontend, <span class="number">0</span>, ZMQ_POLLIN, <span class="number">0</span> &#125;,</span><br><span class="line">        &#123; backend,  <span class="number">0</span>, ZMQ_POLLIN, <span class="number">0</span> &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">    <span class="comment">//  Switch messages between sockets</span></span><br><span class="line">    <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">        <span class="type">zmq_msg_t</span> message;</span><br><span class="line">        zmq_poll (items, <span class="number">2</span>, <span class="number">-1</span>);</span><br><span class="line">        <span class="keyword">if</span> (items [<span class="number">0</span>].revents &amp; ZMQ_POLLIN) &#123;</span><br><span class="line">            <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">                <span class="comment">//  Process all parts of the message</span></span><br><span class="line">                zmq_msg_init (&amp;message);</span><br><span class="line">                zmq_msg_recv (&amp;message, frontend, <span class="number">0</span>);</span><br><span class="line">                <span class="type">int</span> more = zmq_msg_more (&amp;message);</span><br><span class="line">                zmq_msg_send (&amp;message, backend, more? ZMQ_SNDMORE: <span class="number">0</span>);</span><br><span class="line">                zmq_msg_close (&amp;message);</span><br><span class="line">                <span class="keyword">if</span> (!more)</span><br><span class="line">                    <span class="keyword">break</span>;      <span class="comment">//  Last message part</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span> (items [<span class="number">1</span>].revents &amp; ZMQ_POLLIN) &#123;</span><br><span class="line">            <span class="keyword">while</span> (<span class="number">1</span>) &#123;</span><br><span class="line">                <span class="comment">//  Process all parts of the message</span></span><br><span class="line">                zmq_msg_init (&amp;message);</span><br><span class="line">                zmq_msg_recv (&amp;message, backend, <span class="number">0</span>);</span><br><span class="line">                <span class="type">int</span> more = zmq_msg_more (&amp;message);</span><br><span class="line">                zmq_msg_send (&amp;message, frontend, more? ZMQ_SNDMORE: <span class="number">0</span>);</span><br><span class="line">                zmq_msg_close (&amp;message);</span><br><span class="line">                <span class="keyword">if</span> (!more)</span><br><span class="line">                    <span class="keyword">break</span>;      <span class="comment">//  Last message part</span></span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">//  We never get here, but clean up anyhow</span></span><br><span class="line">    zmq_close (frontend);</span><br><span class="line">    zmq_close (backend);</span><br><span class="line">    zmq_ctx_destroy (context);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<img src="/zeromq/zeromq/image-20220510122707822.png" class="" title="image-20220510122707822">
+<p>使用请求-应答代理可以使客户机/服务器体系结构更容易伸缩，因为客户机看不到worker，而worker也看不到客户机。唯一的静态节点是中间的代理。</p>
+<h3 id="2-2-7-ZeroMQ的内置代理函数-ZeroMQ’s-Built-In-Proxy-Function"><a href="#2-2-7-ZeroMQ的内置代理函数-ZeroMQ’s-Built-In-Proxy-Function" class="headerlink" title="2.2.7 ZeroMQ的内置代理函数 ZeroMQ’s Built-In Proxy Function"></a>2.2.7 ZeroMQ的内置代理函数 ZeroMQ’s Built-In Proxy Function</h3><p>原来，上一节的rrbroker中的核心循环非常有用，并且可以重用。它让我们可以毫不费力地构建pub-sub转发器和共享队列以及其他小型中介。ZeroMQ将其封装在一个方法中，<code>zmq_proxy()</code>:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">zmq_proxy (frontend, backend, capture);</span><br></pre></td></tr></table></figure>
+<p>必须正确地连接、绑定和配置这两个(或者三个sockets，如果我们想捕获数据的话)。当我们调用zmq_proxy方法时，就像启动rrbroker的主循环一样。让我们重写 request-reply broker来调用zmq_proxy，并将其重新标记为一个听起来很昂贵的“消息队列”(人们已经为执行更少的代码向house收费):</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">msgqueue: Message <span class="built_in">queue</span> broker in C</span><br><span class="line"></span><br><span class="line"><span class="comment">//  Simple message queuing broker</span></span><br><span class="line"><span class="comment">//  Same as request-reply broker but using shared queue proxy</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;zhelpers.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span> <span class="params">(<span class="type">void</span>)</span> </span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">void</span> *context = zmq_ctx_new ();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  Socket facing clients</span></span><br><span class="line">    <span class="type">void</span> *frontend = zmq_socket (context, ZMQ_ROUTER);</span><br><span class="line">    <span class="type">int</span> rc = zmq_bind (frontend, <span class="string">&quot;tcp://*:5559&quot;</span>);</span><br><span class="line">    assert (rc == <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  Socket facing services</span></span><br><span class="line">    <span class="type">void</span> *backend = zmq_socket (context, ZMQ_DEALER);</span><br><span class="line">    rc = zmq_bind (backend, <span class="string">&quot;tcp://*:5560&quot;</span>);</span><br><span class="line">    assert (rc == <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  Start the proxy</span></span><br><span class="line">    zmq_proxy (frontend, backend, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  We never get here...</span></span><br><span class="line">    zmq_close (frontend);</span><br><span class="line">    zmq_close (backend);</span><br><span class="line">    zmq_ctx_destroy (context);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="2-2-8-传输桥接-Transport-Bridging"><a href="#2-2-8-传输桥接-Transport-Bridging" class="headerlink" title="2.2.8 传输桥接 Transport Bridging"></a>2.2.8 传输桥接 Transport Bridging</h3><p>ZeroMQ用户经常会问，“我如何将我的ZeroMQ网络与技术X连接起来?”其中X是其他网络或消息传递技术。</p>
+<img src="/zeromq/zeromq/image-20220510122953479.png" class="" title="image-20220510122953479">
+<p>答案很简单，就是建一座桥。桥接是一个小应用程序，它在一个socket上讲一个协议，并在另一个套接字上转换成 to/from第二个协议。协议解释器，如果你喜欢的话。ZeroMQ中常见的桥接问题是桥接两个传输或网络。<br>例如，我们将编写一个小代理，它位于发布者和一组订阅者之间，连接两个网络。前端socket (SUB)面向气象服务器所在的内部网络，后端(PUB)面向外部网络上的订阅者。它订阅前端socket 上的天气服务，并在后端socket 上重新发布数据。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//wuproxy: Weather update proxy in C</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//  Weather proxy device</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;zhelpers.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span> <span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">void</span> *context = zmq_ctx_new ();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  This is where the weather server sits</span></span><br><span class="line">    <span class="type">void</span> *frontend = zmq_socket (context, ZMQ_XSUB);</span><br><span class="line">    zmq_connect (frontend, <span class="string">&quot;tcp://192.168.55.210:5556&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  This is our public endpoint for subscribers</span></span><br><span class="line">    <span class="type">void</span> *backend = zmq_socket (context, ZMQ_XPUB);</span><br><span class="line">    zmq_bind (backend, <span class="string">&quot;tcp://10.1.1.0:8100&quot;</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//  Run the proxy until the user interrupts us</span></span><br><span class="line">    zmq_proxy (frontend, backend, <span class="literal">NULL</span>);</span><br><span class="line">    </span><br><span class="line">    zmq_close (frontend);</span><br><span class="line">    zmq_close (backend);</span><br><span class="line">    zmq_ctx_destroy (context);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>它看起来与前面的代理示例非常相似，但关键部分是前端和后端sockets 位于两个不同的网络上。例如，我们可以使用这个模型将组播网络(pgm传输)连接到tcp publisher。</strong></p>
+<h2 id="2-3-处理错误"><a href="#2-3-处理错误" class="headerlink" title="2.3 处理错误"></a>2.3 处理错误</h2><p>上面的C示例中都没有错误处理。有一些简单的规则，从POSIX约定开始:</p>
+<ul>
+<li>如果创建对象的方法失败，则返回NULL。</li>
+<li>处理数据的方法可能返回已处理的字节数，或在出现错误或故障时返回-1。</li>
+<li>其他方法在成功时返回0，在错误或失败时返回-1。</li>
+<li>错误代码在errno或zmq_errno()中提供。</li>
+<li>zmq_strerror()提供了用于日志记录的描述性错误文本。</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> *context = zmq_ctx_new ();</span><br><span class="line">assert (context);</span><br><span class="line"><span class="type">void</span> *socket = zmq_socket (context, ZMQ_REP);</span><br><span class="line">assert (socket);</span><br><span class="line"><span class="type">int</span> rc = zmq_bind (socket, <span class="string">&quot;tcp://*:5555&quot;</span>);</span><br><span class="line"><span class="keyword">if</span> (rc == <span class="number">-1</span>) &#123;</span><br><span class="line">    <span class="built_in">printf</span> (<span class="string">&quot;E: bind failed: %s\n&quot;</span>, strerror (errno));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>有两个主要的例外情况，你应该作为非致命的处理:</p>
+<ul>
+<li>当您的代码接收到带有ZMQ_DONTWAIT选项的消息并且没有等待的数据时，ZeroMQ将返回-1并再次将errno设置为EAGAIN。</li>
+<li>当一个线程调用zmq_ctx_destroy()，而其他线程仍在执行阻塞工作时，zmq_ctx_destroy()调用关闭上下文，所有阻塞调用都以-1退出，errno设置为ETERM。</li>
+</ul>
+<h1 id="一、发布订阅模式"><a href="#一、发布订阅模式" class="headerlink" title="一、发布订阅模式"></a>一、发布订阅模式</h1><p><strong>在发布-订阅模式中，</strong>有一个发布者用来发送消息，该模式中有很多订阅者会接收发布者发布的消息</p>
+<p><strong>“发布-订阅”模型支持的套接字类型有4种：</strong></p>
+<ul>
+<li><strong>ZMQ_PUB</strong></li>
+<li><strong>ZMQ_SUB</strong></li>
+<li><strong>ZMQ_XPUB</strong></li>
+<li><strong>ZMQ_XSUB</strong></li>
+</ul>
+<h2 id="“PUB-SUB”套接字类型"><a href="#“PUB-SUB”套接字类型" class="headerlink" title="“PUB-SUB”套接字类型"></a>“PUB-SUB”套接字类型</h2><p>PUB就是发布者，SUB就是订阅者</p>
+<img src="/zeromq/zeromq/image-20220517104913385.png" class="" title="image-20220517104913385">
+<h3 id="ZMQ-PUB"><a href="#ZMQ-PUB" class="headerlink" title="ZMQ_PUB"></a><strong>ZMQ_PUB</strong></h3><ul>
+<li>发布者使用类型为ZMQ_PUB的套接字来分发数据。发送的消息以扇出方式分发给所有连接的对等方</li>
+<li>在ZMQ_PUB类型的套接字上不能执行zmq_msg_recv()等接收数据的函数</li>
+<li>当ZMQ_PUB套接字由于已达到订阅者的高水位标记而进入静音状态时，将发送给有问题的订阅者的任何消息都将被丢弃，直到静音状态结束为止。关于“高水位标记”请参阅：</li>
+<li>对于该套接字类型，zmq_msg_send()函数将永远不会阻塞 </li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>ZMQ_PUB特性摘要</strong></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>兼容的对等套接字</td>
+<td>ZMQ_SUB、ZMQ_XSUB</td>
+</tr>
+<tr>
+<td>方向</td>
+<td>单向</td>
+</tr>
+<tr>
+<td>发送/接收模式</td>
+<td>仅发送</td>
+</tr>
+<tr>
+<td>入网路由策略</td>
+<td>不适用（N/A）</td>
+</tr>
+<tr>
+<td>外发路由策略</td>
+<td>扇出（Fan out）</td>
+</tr>
+<tr>
+<td>静音状态下的操作</td>
+<td>丢弃</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="ZMQ-SUB"><a href="#ZMQ-SUB" class="headerlink" title="ZMQ_SUB"></a>ZMQ_SUB</h3><ul>
+<li>订阅者使用ZMQ_SUB类型的套接字来订阅发布者分发的数据</li>
+<li>ZMQ_SUB套接字创建完成之后，ZMQ_SUB套接字未订阅任何消息，请使用<strong>zmq_setsockopt()的ZMQ_SUBSCRIBE选项指定要订阅的消息</strong></li>
+<li>在ZMQ_PUB类型的套接字上不能执行zmq_msg_recv()等接收数据的函数</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>ZMQ_SUB特性摘要</strong></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>兼容的对等套接字</td>
+<td>ZMQ_PUB、ZMQ_XPUB</td>
+</tr>
+<tr>
+<td>方向</td>
+<td>单向</td>
+</tr>
+<tr>
+<td>发送/接收模式</td>
+<td>仅接收</td>
+</tr>
+<tr>
+<td>入网路由策略</td>
+<td>公平排队</td>
+</tr>
+<tr>
+<td>外发路由策略</td>
+<td>不适用（N/A）</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="pub-sub示例"><a href="#pub-sub示例" class="headerlink" title="pub-sub示例"></a>pub-sub示例</h3><ul>
+<li><p><strong>发布者：</strong>类似于一个天气更新服务器，向订阅者发送天气更新，内容包括邮政编码、温度、湿度等信息</p>
+</li>
+<li><p><strong>订阅者：</strong>它监听发布者更新的数据流，过滤只接收与特定邮政编码是8的天气信息。</p>
+<p><strong>发布者代码</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @Copyright:  Copyright(C) 2018-2028 YTCK All rights reserved.</span></span><br><span class="line"><span class="comment"> * @Description:</span></span><br><span class="line"><span class="comment"> * @Date: 2022-03-22 16:10:34</span></span><br><span class="line"><span class="comment"> * @Author: YingYongJiCheng</span></span><br><span class="line"><span class="comment"> * @LastEditors: YingYongJiCheng</span></span><br><span class="line"><span class="comment"> * @LastEditTime: 2022-05-17 11:06:55</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">// wuserver.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;zmq.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 随机生成0...num-1的随机数</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> randof(num) (int)((float)(num)*random() / (RAND_MAX + 1.0))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 将string消息格式化为zmq_meg_t对象, 然后发往socket套接字上</span></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">s_send</span><span class="params">(<span class="type">void</span>* socket, <span class="type">char</span>* <span class="built_in">string</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 1.初始化上下文</span></span><br><span class="line">  <span class="type">void</span>* context = zmq_ctx_new();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 2.创建、绑定套接字</span></span><br><span class="line">  <span class="type">void</span>* publisher = zmq_socket(context, ZMQ_PUB);</span><br><span class="line">  assert(publisher != <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 此处我们将发布者绑定到一个tcp节点上和一个ipc节点上, 但是本案例我们只使用tcp, ipc那个只是演示说明zmq的套接字可以绑定到多个节点上</span></span><br><span class="line">  <span class="type">int</span> rc = zmq_bind(publisher, <span class="string">&quot;tcp://*:5555&quot;</span>);</span><br><span class="line">  assert(rc == <span class="number">0</span>);</span><br><span class="line">  rc = zmq_bind(publisher, <span class="string">&quot;ipc://weather.ipc&quot;</span>);</span><br><span class="line">  assert(rc == <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 3.初始化随机数发生器</span></span><br><span class="line">  srandom((<span class="type">unsigned</span>)time(<span class="literal">NULL</span>));</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 4.循环发送数据</span></span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 5.随机生成邮政编码、温度、适度</span></span><br><span class="line">    <span class="type">int</span> zipcode, temperature, relhumidity;</span><br><span class="line">    zipcode     = randof(<span class="number">10</span>);</span><br><span class="line">    temperature = randof(<span class="number">215</span>) - <span class="number">80</span>;</span><br><span class="line">    relhumidity = randof(<span class="number">50</span>) + <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 6.将消息发送给所有的订阅者</span></span><br><span class="line">    <span class="type">char</span> update[<span class="number">20</span>];</span><br><span class="line">    <span class="built_in">sprintf</span>(update, <span class="string">&quot;%d %d %d&quot;</span>, zipcode, temperature, relhumidity);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;send %s\n&quot;</span>, update);</span><br><span class="line">    rc = s_send(publisher, update);</span><br><span class="line">    assert(rc);</span><br><span class="line"></span><br><span class="line">    sleep(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 7.关闭套接字、销毁上下文</span></span><br><span class="line">  zmq_close(publisher);</span><br><span class="line">  zmq_ctx_destroy(context);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">s_send</span><span class="params">(<span class="type">void</span>* socket, <span class="type">char</span>* <span class="built_in">string</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 初始化一个zmq_msg_t对象, 分配的大小为string的大小</span></span><br><span class="line">  <span class="type">zmq_msg_t</span> msg;</span><br><span class="line">  zmq_msg_init_size(&amp;msg, <span class="built_in">strlen</span>(<span class="built_in">string</span>));</span><br><span class="line">  <span class="built_in">memcpy</span>(zmq_msg_data(&amp;msg), <span class="built_in">string</span>, <span class="built_in">strlen</span>(<span class="built_in">string</span>));</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发送数据</span></span><br><span class="line">  <span class="type">int</span> rc = zmq_msg_send(&amp;msg, socket, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 关闭zmq_msg_t对象</span></span><br><span class="line">  zmq_msg_close(&amp;msg);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> rc;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>订阅者代码</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @Copyright:  Copyright(C) 2018-2028 YTCK All rights reserved.</span></span><br><span class="line"><span class="comment"> * @Description:</span></span><br><span class="line"><span class="comment"> * @Date: 2022-03-22 16:46:11</span></span><br><span class="line"><span class="comment"> * @Author: YingYongJiCheng</span></span><br><span class="line"><span class="comment"> * @LastEditors: YingYongJiCheng</span></span><br><span class="line"><span class="comment"> * @LastEditTime: 2022-05-17 16:36:28</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">// wuclient.c</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;zmq.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 从socket接收数据, 并将数据返回</span></span><br><span class="line"><span class="type">char</span>* <span class="title function_">s_recv</span><span class="params">(<span class="type">void</span>* socket)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 1.初始化上下文</span></span><br><span class="line">  <span class="type">void</span>* context = zmq_ctx_new();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 2.创建套接字、连接发布者</span></span><br><span class="line">  <span class="type">void</span>* subscriber = zmq_socket(context, ZMQ_SUB);</span><br><span class="line">  assert(subscriber != <span class="literal">NULL</span>);</span><br><span class="line">  <span class="type">int</span> rc = zmq_connect(subscriber, <span class="string">&quot;tcp://localhost:5555&quot;</span>);</span><br><span class="line">  assert(rc == <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 3.因为自己是订阅者, 因此需要使用设置过滤器, 显式指定自己是否需要接收什么类型的消息</span></span><br><span class="line">  <span class="comment">//   程序运行时可以输入参数, 参数代表邮政编码, 如果参数为空, 那么就过滤10001的消息</span></span><br><span class="line">  <span class="comment">// char *filter = (argc &gt; 1) ? argv[1] : &quot;10001&quot;;</span></span><br><span class="line">  <span class="type">char</span>* filter = <span class="string">&quot;8&quot;</span>;</span><br><span class="line">  rc           = zmq_setsockopt(subscriber, ZMQ_SUBSCRIBE, filter, <span class="built_in">strlen</span>(filter));</span><br><span class="line">  filter       = <span class="string">&quot;5&quot;</span>;</span><br><span class="line">  rc           = zmq_setsockopt(subscriber, ZMQ_SUBSCRIBE, filter, <span class="built_in">strlen</span>(filter));</span><br><span class="line"></span><br><span class="line">  <span class="comment">// rc = zmq_setsockopt(subscriber, ZMQ_SUBSCRIBE, &quot;&quot;, 0);</span></span><br><span class="line"></span><br><span class="line">  assert(rc == <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 4.从发布者那里接收消息, 接收10条自己想要的数据</span></span><br><span class="line">  <span class="type">int</span>  update_nbr;</span><br><span class="line">  <span class="type">long</span> total_temp = <span class="number">0</span>;</span><br><span class="line">  <span class="comment">// for (update_nbr = 0; update_nbr &lt; 10; update_nbr++)</span></span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 5.接收数据</span></span><br><span class="line">    <span class="type">char</span>* <span class="built_in">string</span> = s_recv(subscriber);</span><br><span class="line">    assert(<span class="built_in">string</span> != <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 6.将数据中的邮政编码、温度、适度分别存储变量中</span></span><br><span class="line">    <span class="type">int</span> zipcode, temperature, relhumidity;</span><br><span class="line">    <span class="built_in">sscanf</span>(<span class="built_in">string</span>, <span class="string">&quot;%d %d %d&quot;</span>, &amp;zipcode, &amp;temperature, &amp;relhumidity);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, <span class="built_in">string</span>);</span><br><span class="line">    total_temp += temperature;</span><br><span class="line">    <span class="built_in">free</span>(<span class="built_in">string</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 7.接收完成之后, 打印一下平均温度</span></span><br><span class="line">  <span class="comment">// printf(&quot;Average tempature for zipcode &#x27;%s&#x27; was %dF\n&quot;, filter, (int)(total_temp / update_nbr));</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 8.关闭套接字、销毁上下文</span></span><br><span class="line">  zmq_close(subscriber);</span><br><span class="line">  zmq_ctx_destroy(context);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">char</span>* <span class="title function_">s_recv</span><span class="params">(<span class="type">void</span>* socket)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 创建zmq_msg_t对象接收数据</span></span><br><span class="line">  <span class="type">zmq_msg_t</span> msg;</span><br><span class="line">  zmq_msg_init(&amp;msg);</span><br><span class="line">  <span class="type">int</span> size = zmq_msg_recv(&amp;msg, socket, <span class="number">0</span>);</span><br><span class="line">  <span class="keyword">if</span> (size == <span class="number">-1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 将zmq_msg_t对象中的数据保存到字符串中</span></span><br><span class="line">  <span class="type">char</span>* <span class="built_in">string</span> = (<span class="type">char</span>*)<span class="built_in">malloc</span>(size + <span class="number">1</span>);</span><br><span class="line">  <span class="built_in">memcpy</span>(<span class="built_in">string</span>, zmq_msg_data(&amp;msg), size);</span><br><span class="line"></span><br><span class="line">  zmq_msg_close(&amp;msg);</span><br><span class="line">  <span class="built_in">string</span>[size] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>编译</strong></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">g++ -o pub1 pub_1.cpp -L /opt/libs-x64/zeromq/zeromq-4.2.2/lib/ -lzmq -I /opt/libs-x64/zeromq/zeromq-4.2.2/include</span><br><span class="line">g++ -o sub1 sub_1.cpp -L /opt/libs-x64/zeromq/zeromq-4.2.2/lib/ -lzmq -I /opt/libs-x64/zeromq/zeromq-4.2.2/include</span><br></pre></td></tr></table></figure>
+<p><strong>运行结果</strong></p>
+<p>发布者发送了大量数据，但是接收者只过滤接收邮政编码是8和5的数据</p>
+<img src="/zeromq/zeromq/image-20220517163810383.png" class="" title="image-20220517163810383">
+</li>
+</ul>
+<h2 id="“XPUB-XSUB”套接字类型"><a href="#“XPUB-XSUB”套接字类型" class="headerlink" title="“XPUB-XSUB”套接字类型"></a>“XPUB-XSUB”套接字类型</h2><ul>
+<li>“XPUB-XSUB”套接字类型与“PUB-SUB”套接字类型相同，<strong>也是属于发布-订阅</strong></li>
+<li>在“PUB-SUB”中，订阅者通过zmq_connect()向发布者发起订阅；但是“XPUB-XSUB”套接字类型<strong>允许订阅者通过发送一条订阅信息到发布者来完成订阅</strong></li>
+</ul>
+<h3 id="ZMQ-XPUB"><a href="#ZMQ-XPUB" class="headerlink" title="ZMQ_XPUB"></a>ZMQ_XPUB</h3><ul>
+<li><strong>用法与ZMQ_PUB大部分相同</strong></li>
+<li><strong>自己理解主要用于代理。也可以是用xpub发送xsub接收。但是没有必要。</strong></li>
+<li><strong>但是有一点与ZMQ_PUB不同：</strong>ZMQ_XPUB(自己)的订阅方可以向自己发送一个订阅信息来进行订阅。订阅消息是字节1（用于订阅）或字节0（用于取消订阅），后跟订阅主体。也接收不带子/取消订阅前缀的消息，但对订阅状态没有影响</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>ZMQ_XPUB特性摘要</strong></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>兼容的对等套接字</td>
+<td>ZMQ_SUB、ZMQ_XSUB</td>
+</tr>
+<tr>
+<td>方向</td>
+<td>单向</td>
+</tr>
+<tr>
+<td>发送/接收模式</td>
+<td>发送消息，接收订阅</td>
+</tr>
+<tr>
+<td>入网路由策略</td>
+<td>不适用（N/A）</td>
+</tr>
+<tr>
+<td>外发路由策略</td>
+<td>扇出（Fan out）</td>
+</tr>
+<tr>
+<td>静音状态下的操作</td>
+<td>丢弃</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="ZMQ-XSUB"><a href="#ZMQ-XSUB" class="headerlink" title="ZMQ_XSUB"></a>ZMQ_XSUB</h3><ul>
+<li><strong>用法与ZMQ_SUB大部分相同</strong></li>
+<li><strong>但是有一点与ZMQ_SUB不同：</strong>自己可以向发布者发送一条订阅信息来进行订阅。订阅消息是字节1（用于订阅）或字节0（用于取消订阅），后跟订阅主体。也接收不带子/取消订阅前缀的消息，但对订阅状态没有影响（TODO 0和1不明白）可以参考 <a target="_blank" rel="noopener" href="https://blog.csdn.net/lianshaohua/article/details/108776728和https://blog.csdn.net/lianshaohua/article/details/109511469">https://blog.csdn.net/lianshaohua/article/details/108776728和https://blog.csdn.net/lianshaohua/article/details/109511469</a></li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>ZMQ_XSUB特性摘要</strong></th>
+<th></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>兼容的对等套接字</td>
+<td>ZMQ_PUB、ZMQ_XPUB</td>
+</tr>
+<tr>
+<td>方向</td>
+<td>单向</td>
+</tr>
+<tr>
+<td>发送/接收模式</td>
+<td>接收消息，发送订阅</td>
+</tr>
+<tr>
+<td>入网路由策略</td>
+<td>公平排队</td>
+</tr>
+<tr>
+<td>外发路由策略</td>
+<td>不适用（N/A）</td>
+</tr>
+<tr>
+<td>静音状态下的操作</td>
+<td>丢弃</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="XSUB、XPUB应用之“代理”"><a href="#XSUB、XPUB应用之“代理”" class="headerlink" title="XSUB、XPUB应用之“代理”"></a>XSUB、XPUB应用之“代理”</h2><ul>
+<li><p>动态发现问题：在设计大型的分布式体系结构时，会遇到的问题之一是——“发现”。也就是说，部件如何认识对象，以及部件增减或减少时，如何更新这些消息，因此，我们称之为“动态发现”</p>
+</li>
+<li><p>动态发现解决方案①：</p>
+<p>简单的方式是通过硬编码（或配置）的网络架构来完全避免，一般通过手工操作。但是这种方案导致体系结构变得脆弱和笨重。例如一个系统有一个发布者和一百个订阅者，你需要对每一个订阅者配置发布者端点来让每个订阅者连接到发布者服务器。订阅者是动态的，发布者是静态的，如果你又新增了新的发布者，那么就需要再配置这一百个订阅者，工作量相当的大</p>
+</li>
+<li><p>动态发现解决方案②：通过中间层（代理）来实现，这种方法比较推荐</p>
+<ul>
+<li>在“发布-订阅”模型中，我们可以在中间增加一个新的代理节点，该节点绑定了XSUB套接字和XPUB套接字，发布者连接到XSUB中，订阅者连接到XPUB中。这样一来添加或者删除发布者或订阅者节点就变得微不足道了</li>
+<li>对于代理节点，其需要执行订阅转发：SUB套接字需要将自己的订阅信息作为特殊消息发送到代理的XPUB端点上，代理转发这些订阅消息到XSUB上，然后XSUB再将消息发送到PUB，从而最终完成SUB到PUB的订阅</li>
+<li>当完成订阅之后，PUB直接发送消息，SUB可以直接收到，不需要代理进行转发 （TODO 不明白，应该是还有转发吧）</li>
+</ul>
+<img src="/zeromq/zeromq/image-20220517112206986.png" class="" title="image-20220517112206986">
+</li>
+</ul>
+<h3 id="代理示例1"><a href="#代理示例1" class="headerlink" title="代理示例1"></a>代理示例1</h3><p>下面代码不使用zmq提供的代理接口实现，就像上面的图</p>
+<p><strong>发布者1</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @Copyright:  Copyright(C) 2018-2028 YTCK All rights reserved.</span></span><br><span class="line"><span class="comment"> * @Description:</span></span><br><span class="line"><span class="comment"> * @Date: 2022-03-22 16:10:34</span></span><br><span class="line"><span class="comment"> * @Author: YingYongJiCheng</span></span><br><span class="line"><span class="comment"> * @LastEditors: YingYongJiCheng</span></span><br><span class="line"><span class="comment"> * @LastEditTime: 2022-05-17 11:30:05</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">// pub1.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;zmq.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 随机生成0...num-1的随机数</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> randof(num) (int)((float)(num)*random() / (RAND_MAX + 1.0))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 将string消息格式化为zmq_meg_t对象, 然后发往socket套接字上</span></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">s_send</span><span class="params">(<span class="type">void</span>* socket, <span class="type">char</span>* <span class="built_in">string</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 1.初始化上下文</span></span><br><span class="line">  <span class="type">void</span>* context = zmq_ctx_new();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 2.创建、绑定套接字</span></span><br><span class="line">  <span class="type">void</span>* publisher = zmq_socket(context, ZMQ_PUB);</span><br><span class="line">  assert(publisher != <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 此处我们将发布者绑定到一个tcp节点上和一个ipc节点上, 但是本案例我们只使用tcp, ipc那个只是演示说明zmq的套接字可以绑定到多个节点上</span></span><br><span class="line">  <span class="type">int</span> rc = zmq_connect(publisher, <span class="string">&quot;tcp://localhost:5555&quot;</span>);</span><br><span class="line">  assert(rc == <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 3.初始化随机数发生器</span></span><br><span class="line">  srandom((<span class="type">unsigned</span>)time(<span class="literal">NULL</span>));</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 4.循环发送数据</span></span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 5.随机生成邮政编码、温度、适度</span></span><br><span class="line">    <span class="type">int</span> zipcode, temperature, relhumidity;</span><br><span class="line">    zipcode     = randof(<span class="number">100000</span>);</span><br><span class="line">    temperature = randof(<span class="number">215</span>) - <span class="number">80</span>;</span><br><span class="line">    relhumidity = randof(<span class="number">50</span>) + <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 6.将消息发送给所有的订阅者</span></span><br><span class="line">    <span class="type">char</span> update[<span class="number">20</span>];</span><br><span class="line">    <span class="built_in">sprintf</span>(update, <span class="string">&quot;puber%d %05d %d %d&quot;</span>, <span class="number">1</span>, zipcode, temperature, relhumidity);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;send %s\n&quot;</span>, update);</span><br><span class="line">    rc = s_send(publisher, update);</span><br><span class="line">    assert(rc);</span><br><span class="line"></span><br><span class="line">    sleep(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 7.关闭套接字、销毁上下文</span></span><br><span class="line">  zmq_close(publisher);</span><br><span class="line">  zmq_ctx_destroy(context);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">s_send</span><span class="params">(<span class="type">void</span>* socket, <span class="type">char</span>* <span class="built_in">string</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 初始化一个zmq_msg_t对象, 分配的大小为string的大小</span></span><br><span class="line">  <span class="type">zmq_msg_t</span> msg;</span><br><span class="line">  zmq_msg_init_size(&amp;msg, <span class="built_in">strlen</span>(<span class="built_in">string</span>));</span><br><span class="line">  <span class="built_in">memcpy</span>(zmq_msg_data(&amp;msg), <span class="built_in">string</span>, <span class="built_in">strlen</span>(<span class="built_in">string</span>));</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发送数据</span></span><br><span class="line">  <span class="type">int</span> rc = zmq_msg_send(&amp;msg, socket, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 关闭zmq_msg_t对象</span></span><br><span class="line">  zmq_msg_close(&amp;msg);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> rc;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>发布者2和发布者1几乎一致，就是发送的数据不同</p>
+<p><strong>发布者2</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @Copyright:  Copyright(C) 2018-2028 YTCK All rights reserved.</span></span><br><span class="line"><span class="comment"> * @Description:</span></span><br><span class="line"><span class="comment"> * @Date: 2022-03-22 16:10:34</span></span><br><span class="line"><span class="comment"> * @Author: YingYongJiCheng</span></span><br><span class="line"><span class="comment"> * @LastEditors: YingYongJiCheng</span></span><br><span class="line"><span class="comment"> * @LastEditTime: 2022-05-17 11:30:10</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">// pub2.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;zmq.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 随机生成0...num-1的随机数</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> randof(num) (int)((float)(num)*random() / (RAND_MAX + 1.0))</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 将string消息格式化为zmq_meg_t对象, 然后发往socket套接字上</span></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">s_send</span><span class="params">(<span class="type">void</span>* socket, <span class="type">char</span>* <span class="built_in">string</span>)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 1.初始化上下文</span></span><br><span class="line">  <span class="type">void</span>* context = zmq_ctx_new();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 2.创建、绑定套接字</span></span><br><span class="line">  <span class="type">void</span>* publisher = zmq_socket(context, ZMQ_PUB);</span><br><span class="line">  assert(publisher != <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 此处我们将发布者绑定到一个tcp节点上和一个ipc节点上, 但是本案例我们只使用tcp, ipc那个只是演示说明zmq的套接字可以绑定到多个节点上</span></span><br><span class="line">  <span class="type">int</span> rc = zmq_connect(publisher, <span class="string">&quot;tcp://localhost:5555&quot;</span>);</span><br><span class="line">  assert(rc == <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 3.初始化随机数发生器</span></span><br><span class="line">  srandom((<span class="type">unsigned</span>)time(<span class="literal">NULL</span>));</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 4.循环发送数据</span></span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 5.随机生成邮政编码、温度、适度</span></span><br><span class="line">    <span class="type">int</span> zipcode, temperature, relhumidity;</span><br><span class="line">    zipcode     = randof(<span class="number">100000</span>);</span><br><span class="line">    temperature = randof(<span class="number">215</span>) - <span class="number">80</span>;</span><br><span class="line">    relhumidity = randof(<span class="number">50</span>) + <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 6.将消息发送给所有的订阅者</span></span><br><span class="line">    <span class="type">char</span> update[<span class="number">20</span>];</span><br><span class="line">    <span class="built_in">sprintf</span>(update, <span class="string">&quot;puber%d %05d %d %d&quot;</span>, <span class="number">2</span>, zipcode, temperature, relhumidity);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;send %s\n&quot;</span>, update);</span><br><span class="line">    rc = s_send(publisher, update);</span><br><span class="line">    assert(rc);</span><br><span class="line"></span><br><span class="line">    sleep(<span class="number">1</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 7.关闭套接字、销毁上下文</span></span><br><span class="line">  zmq_close(publisher);</span><br><span class="line">  zmq_ctx_destroy(context);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">int</span> <span class="title function_">s_send</span><span class="params">(<span class="type">void</span>* socket, <span class="type">char</span>* <span class="built_in">string</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 初始化一个zmq_msg_t对象, 分配的大小为string的大小</span></span><br><span class="line">  <span class="type">zmq_msg_t</span> msg;</span><br><span class="line">  zmq_msg_init_size(&amp;msg, <span class="built_in">strlen</span>(<span class="built_in">string</span>));</span><br><span class="line">  <span class="built_in">memcpy</span>(zmq_msg_data(&amp;msg), <span class="built_in">string</span>, <span class="built_in">strlen</span>(<span class="built_in">string</span>));</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 发送数据</span></span><br><span class="line">  <span class="type">int</span> rc = zmq_msg_send(&amp;msg, socket, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 关闭zmq_msg_t对象</span></span><br><span class="line">  zmq_msg_close(&amp;msg);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> rc;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>订阅者1</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * @Copyright:  Copyright(C) 2018-2028 YTCK All rights reserved.</span></span><br><span class="line"><span class="comment"> * @Description:</span></span><br><span class="line"><span class="comment"> * @Date: 2022-03-22 16:46:11</span></span><br><span class="line"><span class="comment"> * @Author: YingYongJiCheng</span></span><br><span class="line"><span class="comment"> * @LastEditors: YingYongJiCheng</span></span><br><span class="line"><span class="comment"> * @LastEditTime: 2022-05-17 11:04:55</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">// sub1.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;zmq.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 从socket接收数据, 并将数据返回</span></span><br><span class="line"><span class="type">char</span>* <span class="title function_">s_recv</span><span class="params">(<span class="type">void</span>* socket)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span>* argv[])</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 1.初始化上下文</span></span><br><span class="line">  <span class="type">void</span>* context = zmq_ctx_new();</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 2.创建套接字、连接发布者</span></span><br><span class="line">  <span class="type">void</span>* subscriber = zmq_socket(context, ZMQ_SUB);</span><br><span class="line">  assert(subscriber != <span class="literal">NULL</span>);</span><br><span class="line">  <span class="type">int</span> rc = zmq_connect(subscriber, <span class="string">&quot;tcp://localhost:5556&quot;</span>);</span><br><span class="line">  assert(rc == <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 3.因为自己是订阅者, 因此需要使用设置过滤器, 显式指定自己是否需要接收什么类型的消息</span></span><br><span class="line">  <span class="comment">//   程序运行时可以输入参数, 参数代表邮政编码, 如果参数为空, 那么就过滤10001的消息</span></span><br><span class="line">  <span class="comment">// char *filter = (argc &gt; 1) ? argv[1] : &quot;10001&quot;;</span></span><br><span class="line">  <span class="comment">// char* filter = &quot;10001&quot;;</span></span><br><span class="line">  <span class="comment">// rc           = zmq_setsockopt(subscriber, ZMQ_SUBSCRIBE, filter, strlen(filter));</span></span><br><span class="line">  rc = zmq_setsockopt(subscriber, ZMQ_SUBSCRIBE, <span class="string">&quot;&quot;</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  assert(rc == <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 4.从发布者那里接收消息, 接收10条自己想要的数据</span></span><br><span class="line">  <span class="type">int</span>  update_nbr;</span><br><span class="line">  <span class="type">long</span> total_temp = <span class="number">0</span>;</span><br><span class="line">  <span class="comment">// for (update_nbr = 0; update_nbr &lt; 10; update_nbr++)</span></span><br><span class="line">  <span class="keyword">while</span> (<span class="number">1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="comment">// 5.接收数据</span></span><br><span class="line">    <span class="type">char</span>* <span class="built_in">string</span> = s_recv(subscriber);</span><br><span class="line">    assert(<span class="built_in">string</span> != <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s\n&quot;</span>, <span class="built_in">string</span>);</span><br><span class="line">    <span class="comment">// total_temp += temperature;</span></span><br><span class="line">    <span class="built_in">free</span>(<span class="built_in">string</span>);</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 7.接收完成之后, 打印一下平均温度</span></span><br><span class="line">  <span class="comment">// printf(&quot;Average tempature for zipcode &#x27;%s&#x27; was %dF\n&quot;, filter, (int)(total_temp / update_nbr));</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// 8.关闭套接字、销毁上下文</span></span><br><span class="line">  zmq_close(subscriber);</span><br><span class="line">  zmq_ctx_destroy(context);</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">char</span>* <span class="title function_">s_recv</span><span class="params">(<span class="type">void</span>* socket)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="comment">// 创建zmq_msg_t对象接收数据</span></span><br><span class="line">  <span class="type">zmq_msg_t</span> msg;</span><br><span class="line">  zmq_msg_init(&amp;msg);</span><br><span class="line">  <span class="type">int</span> size = zmq_msg_recv(&amp;msg, socket, <span class="number">0</span>);</span><br><span class="line">  <span class="keyword">if</span> (size == <span class="number">-1</span>)</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">NULL</span>;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 将zmq_msg_t对象中的数据保存到字符串中</span></span><br><span class="line">  <span class="type">char</span>* <span class="built_in">string</span> = (<span class="type">char</span>*)<span class="built_in">malloc</span>(size + <span class="number">1</span>);</span><br><span class="line">  <span class="built_in">memcpy</span>(<span class="built_in">string</span>, zmq_msg_data(&amp;msg), size);</span><br><span class="line"></span><br><span class="line">  zmq_msg_close(&amp;msg);</span><br><span class="line">  <span class="built_in">string</span>[size] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">string</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>订阅者2和订阅者1一模一样。</p>
+<p><strong>运行结果</strong></p>
+<p>pub1和pub2 经过borker代理后将消息发给了sub1和sub2.从日志看sub1和sub2都收到了pub1和pub2的数据。</p>
+<img src="/zeromq/zeromq/image-20220517140640687.png" class="" title="image-20220517140640687">
+<h3 id="代理示例2"><a href="#代理示例2" class="headerlink" title="代理示例2"></a>代理示例2</h3><p>使用zmq提供的内置代理函数zmq_proxy实现代码1的功能</p>
+<p>发布者和订阅者代码一致。只是修改代理的代码如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//proxy.cpp</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;assert.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;time.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;zmq.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="type">void</span>* context = zmq_ctx_new();</span><br><span class="line"></span><br><span class="line">  <span class="comment">//  This is where the weather server sits</span></span><br><span class="line">  <span class="type">void</span>* frontend = zmq_socket(context, ZMQ_XSUB);</span><br><span class="line">  zmq_bind(frontend, <span class="string">&quot;tcp://*:5555&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">//  This is our public endpoint for subscribers</span></span><br><span class="line">  <span class="type">void</span>* backend = zmq_socket(context, ZMQ_XPUB);</span><br><span class="line">  zmq_bind(backend, <span class="string">&quot;tcp://*:5556&quot;</span>);</span><br><span class="line"></span><br><span class="line">  <span class="comment">//  Run the proxy until the user interrupts us</span></span><br><span class="line">  zmq_proxy(frontend, backend, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">  zmq_close(frontend);</span><br><span class="line">  zmq_close(backend);</span><br><span class="line">  zmq_ctx_destroy(context);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p><strong>运行结果</strong></p>
+<p>和示例1一样，pub1和pub2 经过proxy代理后将消息发给了sub1和sub2.从日志看sub1和sub2都收到了pub1和pub2的数据。</p>
+<img src="/zeromq/zeromq/image-20220517142034213.png" class="" title="image-20220517142034213">
+<h3 id="示例1和2的区别"><a href="#示例1和2的区别" class="headerlink" title="示例1和2的区别"></a>示例1和2的区别</h3><ul>
+<li>示例1自己编写代理，示例2使用zmq内置代理</li>
+<li>都可以实现代理功能，内置代理更加简单</li>
+<li>自己编写代理可以在代理一层处理数据。内置代理不能（貌似没有必要）</li>
+<li>就像2.2.8节里面说的，内置代理可以实现桥街传输（也就是两个不同的网络，没有测试过示例1可否连接两个网络。感觉可以）<strong>内置代理与代理1示例非常相似，但关键部分是前端和后端sockets 位于两个不同的网络上。例如，我们可以使用这个模型将组播网络(pgm传输)连接到tcp publisher。</strong></li>
+<li><strong>总结：需要代理就用内置代理，简单可靠。</strong></li>
+</ul>
+<h2 id="三种代理"><a href="#三种代理" class="headerlink" title="三种代理"></a>三种代理</h2><p>参考网址：<a target="_blank" rel="noopener" href="https://blog.csdn.net/w_y_x_y/article/details/101106862">https://blog.csdn.net/w_y_x_y/article/details/101106862</a></p>
+<p><strong>场景一</strong></p>
+<pre><code>一天，派大星来蟹堡王餐厅买蟹堡吃。
+派大星：嗨，章鱼哥，我想要跟海绵宝宝要一个巨无霸蟹黄堡。
+章鱼哥：好的，派大星。（扭头转向厨房）海绵宝宝，派大星想要一个巨无霸蟹黄堡！
+海绵宝宝：我准备好了！我准备好了！美味蟹黄堡马上就好～
+</code></pre><p>在这个场景中，章鱼哥是broker。</p>
+<p><strong>场景二</strong></p>
+<pre><code>又一天，派大星来蟹堡王餐厅买蟹堡吃。
+派大星：嗨，章鱼哥，我想要跟你要一个巨无霸蟹黄堡。
+章鱼哥：好的，派大星。（扭头转向厨房）海绵宝宝，我想要一个巨无霸蟹黄堡！
+海绵宝宝：我准备好了！我准备好了！美味蟹黄堡马上就好～
+</code></pre><p>在这个场景中，章鱼哥是proxy。</p>
+<p><strong>场景三</strong></p>
+<pre><code>这一天，派大星在蟹堡王餐厅吃蟹堡，突然它觉得不够辣。
+派大星：嗨，章鱼哥，能给我的蟹黄堡加点辣酱吗？
+章鱼哥：好的，派大星。（章鱼哥伸出它长长的手到厨房里拿辣酱，给派大星的蟹黄堡加了很多辣酱）好了，派大星，你的辣酱蟹黄堡。
+海绵宝宝：。。。 。。。
+过了一会，派大星觉得有点渴。
+派大星：嗨，章鱼哥，能给我的一杯海盐味的可乐吗？
+章鱼哥：好的，派大星。（章鱼哥从柜台旁边的可乐箱里拿了一瓶海盐味的可乐给派大星）好了，派大星，你的海盐味可乐。
+海绵宝宝：。。。 。。。
+又过了一会，派大星觉得还是有点饿。
+派大星：嗨，章鱼哥，我想再要一个美味蟹黄堡。
+章鱼哥：哦，派大星，下班时间到了，我拒绝为你服务。
+海绵宝宝：。。。我好闲啊。。。
+</code></pre><p>在这个场景中，章鱼哥是agent。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>三种代理</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Broker</td>
+<td>Broker是一个独立主体，但没有自主决策能力，只负责订约过程。因此它也被称为中介性代理。</td>
+</tr>
+<tr>
+<td>Proxy</td>
+<td>Proxy对于客户端来说是服务端，对于服务端来说是客户端，它使客户端和服务端之间的交互是透明的，因此它也被称为透传性代理。</td>
+</tr>
+<tr>
+<td>Agent</td>
+<td>Agent是一个独立主体，负责完成任务但不负责执行任务，Agent具有一定的自主决策能力，如对服务请求的选择。因此它也被称为自主性代理／智能代理。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="tips"><a href="#tips" class="headerlink" title="tips"></a>tips</h1><ol>
+<li>关于bind和connect：例如pub和sub示例1，并不是pub必须调用bind，sub一定调用connect。实际是根据那一端是服务端（也就是单独的），那一端是客户端（多数的）来决定的。总是服务端调用bind，客户端调用connnect。</li>
+</ol>
+<h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><p>比较新的中文参考</p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_34854320/article/details/112983028">https://blog.csdn.net/weixin_34854320/article/details/112983028</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/neooelric/p/9020872.html">https://www.cnblogs.com/neooelric/p/9020872.html</a></p>
+<p>较旧的中文参考就是zmq中文目录下的内容</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/dongyusheng/csdn-code/">https://github.com/dongyusheng/csdn-code/</a></p>
+<p><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41453285/category_9981784.html">https://blog.csdn.net/qq_41453285/category_9981784.html</a></p>
+<p>官方说明：<a target="_blank" rel="noopener" href="https://zguide.zeromq.org/docs/chapter1/">https://zguide.zeromq.org/docs/chapter1/</a></p>
+<p>官方API：<a target="_blank" rel="noopener" href="http://api.zeromq.org/">http://api.zeromq.org/</a></p>
+<p>博客 <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_41453285/article/details/106865539">https://blog.csdn.net/qq_41453285/article/details/106865539</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/GPU/" rel="tag"># GPU</a>
+              <a href="/tags/git/" rel="tag"># git</a>
+              <a href="/tags/protobuf/" rel="tag"># protobuf</a>
+              <a href="/tags/zmq/" rel="tag"># zmq</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/git/git/" rel="prev" title="git">
+                  <i class="fa fa-chevron-left"></i> git
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/protobuf/protobuf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="next" title="protobuf学习笔记">
+                  protobuf学习笔记 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">zhaoyd</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"22746fc589e964d76806707ec048cf01"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

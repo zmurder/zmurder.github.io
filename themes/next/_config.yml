@@ -711,13 +711,14 @@ livere_uid: # <your_uid>
 gitalk:
   enable: true
   github_id: zmurder # GitHub repo owner
-  repo: zmurder.github.io / # Repository name to store issues
+  repo: zmurder.github.io
+  # Repository name to store issues
   client_id: cf2343f27b6c29efe0bc # GitHub Application Client ID
   client_secret: 3268a1fa92706c7358d5421f88f76a0f7ada3188  # GitHub Application Client Secret
   admin_user: zmurder # GitHub repo owner and collaborators, only these guys can initialize gitHub issues
   distraction_free_mode: true # Facebook-like distraction free mode
   # When the official proxy is not available, you can change it to your own proxy address
-  proxy: https://vercel.prohibitorum.top/github_access_token
+  proxy: https://strong-caramel-969805.netlify.app/github_access_token
   # https://strong-caramel-969805.netlify.app/github_access_token
   #  https://vercel.prohibitorum.top/github_access_token
   # https://soft-sun-c382.zmurder.workers.dev/?/https://github.com/login/oauth/access_token

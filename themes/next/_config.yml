@@ -99,6 +99,8 @@ menu:
   about: /about/ || fa fa-user
   tags: /tags/ || fa fa-tags
   categories: /categories/ || fa fa-th
+  # hexo: /categories/hexo/ || fa fa-archive
+  # program: /categories/编程/cmake/ || fa fa-code
   # archives: /archives/ || fa fa-archive
   # schedule: /schedule/ || fa fa-calendar
   # sitemap: /sitemap.xml || fa fa-sitemap

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="Nvidia diver是最基础的跟硬件直接交互的底层软件，cuda依赖于driver，cuDNN依赖于cuda，tensorRT最终模型的推理加速依赖于前面这些基础的加速环境。 搜索显卡">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ubuntu下的GPU环境配置">
+<meta property="og:url" content="http://example.com/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="Nvidia diver是最基础的跟硬件直接交互的底层软件，cuda依赖于driver，cuDNN依赖于cuda，tensorRT最终模型的推理加速依赖于前面这些基础的加速环境。 搜索显卡">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20220905145910202.png">
+<meta property="og:image" content="http://example.com/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20220905150820507.png">
+<meta property="og:image" content="http://example.com/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20220905150902890.png">
+<meta property="og:image" content="http://example.com/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20220905150946443.png">
+<meta property="og:image" content="http://example.com/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20220905151246979.png">
+<meta property="og:image" content="http://example.com/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20220905152752889.png">
+<meta property="og:image" content="http://example.com/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20220905151422900.png">
+<meta property="og:image" content="http://example.com/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20220905154420841.png">
+<meta property="og:image" content="http://example.com/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20220905153547803.png">
+<meta property="og:image" content="http://example.com/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20220905154205792.png">
+<meta property="article:published_time" content="2023-03-10T09:43:06.091Z">
+<meta property="article:modified_time" content="2022-10-12T07:52:49.090Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="GPU">
+<meta property="article:tag" content="Tensorrt">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20220905145910202.png">
+
+
+<link rel="canonical" href="http://example.com/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/","path":"GPU/ubuntu下的GPU环境配置/","title":"ubuntu下的GPU环境配置"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ubuntu下的GPU环境配置 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-GPU%E9%A9%B1%E5%8A%A8%E5%AE%89%E8%A3%85"><span class="nav-text">1 GPU驱动安装</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%80%EF%BC%9Aubuntu%E4%BB%93%E5%BA%93%E5%AE%89%E8%A3%85"><span class="nav-text">方法一：ubuntu仓库安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%BA%8C%EF%BC%9A%E8%8B%B1%E4%BC%9F%E8%BE%BE%E5%AE%98%E7%BD%91%E5%AE%89%E8%A3%85"><span class="nav-text">方法二：英伟达官网安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E4%B8%89%EF%BC%9A%E9%99%84%E5%8A%A0%E9%A9%B1%E5%8A%A8%E5%AE%89%E8%A3%85%E6%96%B9%E6%B3%95"><span class="nav-text">方法三：附加驱动安装方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%B9%E6%B3%95%E5%9B%9B%EF%BC%9Appa%E4%BB%93%E5%BA%93%E5%AE%89%E8%A3%85"><span class="nav-text">方法四：ppa仓库安装</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E7%8E%AF%E5%A2%83"><span class="nav-text">2 深度学习环境</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-cuda%E5%AE%89%E8%A3%85"><span class="nav-text">2.1 cuda安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-1-%E4%B8%8B%E8%BD%BDcuda"><span class="nav-text">2.1.1 下载cuda</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-2-%E8%AE%BE%E7%BD%AE%E6%9D%83%E9%99%90"><span class="nav-text">2.1.2 设置权限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-3-%E9%85%8D%E7%BD%AE%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-text">2.1.3 配置环境变量</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-cuDNN%E5%AE%89%E8%A3%85"><span class="nav-text">2.2 cuDNN安装</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1-cuDNN%E4%B8%8B%E8%BD%BD"><span class="nav-text">2.2.1 cuDNN下载</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2-cudNN%E5%AE%89%E8%A3%85"><span class="nav-text">2.2.2 cudNN安装</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TensorRT%E5%AE%89%E8%A3%85"><span class="nav-text">TensorRT安装</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">23</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">7</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ubuntu下的GPU环境配置 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ubuntu下的GPU环境配置
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-03-10 17:43:06" itemprop="dateCreated datePublished" datetime="2023-03-10T17:43:06+08:00">2023-03-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-10-12 15:52:49" itemprop="dateModified" datetime="2022-10-12T15:52:49+08:00">2022-10-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/GPU/" itemprop="url" rel="index"><span itemprop="name">GPU</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>Nvidia diver是最基础的跟硬件直接交互的底层软件，cuda依赖于driver，cuDNN依赖于cuda，tensorRT最终模型的推理加速依赖于前面这些基础的加速环境。</p>
+<p>搜索显卡</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lspci | grep VGA     # 查看集成显卡</span><br><span class="line">lspci | grep NVIDIA  # 查看NVIDIA显卡</span><br></pre></td></tr></table></figure>
+<h1 id="1-GPU驱动安装"><a href="#1-GPU驱动安装" class="headerlink" title="1 GPU驱动安装"></a>1 GPU驱动安装</h1><p>ubuntu显卡驱动安装有四中方法：</p>
+<ul>
+<li>通过ubuntu仓库安装</li>
+<li>在英伟达官网选择相应版本的驱动安装</li>
+<li>在ubuntu软件和更新界面的附加驱动中安装</li>
+<li>-添加ppa源安装</li>
+</ul>
+<h2 id="方法一：ubuntu仓库安装"><a href="#方法一：ubuntu仓库安装" class="headerlink" title="方法一：ubuntu仓库安装"></a>方法一：ubuntu仓库安装</h2><p>只需要一条指令即可安装成功，成功安装后需要重启</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo ubuntu-drivers autoinstall</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvidia-smi  <span class="comment">#若出现电脑GPU信息则成功</span></span><br></pre></td></tr></table></figure>
+<h2 id="方法二：英伟达官网安装"><a href="#方法二：英伟达官网安装" class="headerlink" title="方法二：英伟达官网安装"></a>方法二：英伟达官网安装</h2><p>首先进入<a target="_blank" rel="noopener" href="https://www.nvidia.com/Download/index.aspx?lang=en-us">英伟达官网</a></p>
+<h2 id="方法三：附加驱动安装方法"><a href="#方法三：附加驱动安装方法" class="headerlink" title="方法三：附加驱动安装方法"></a>方法三：附加驱动安装方法</h2><p>更新软件源</p>
+<img src="/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20220905145910202.png" class="" title="image-20220905145910202">
+<p> 在其他站点中选择清华源，更新后终端执行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get upgrade</span><br></pre></td></tr></table></figure>
+<p>安装驱动：菜单栏选择附加驱动，会进行自动搜索，选择一个版本的专有驱动，点击应用更改，更改后重启即可，</p>
+<h2 id="方法四：ppa仓库安装"><a href="#方法四：ppa仓库安装" class="headerlink" title="方法四：ppa仓库安装"></a>方法四：ppa仓库安装</h2><p>（1）首先禁用nouveau</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gedit /etc/modprobe.d/blacklist.conf</span><br></pre></td></tr></table></figure>
+<p>在最后一行添加</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">blacklist nouveau</span><br><span class="line">options nouveau modeset=0 <span class="comment">#禁用nouveau第三方驱动 本质就是禁用集显</span></span><br></pre></td></tr></table></figure>
+<p>（2）执行以下指令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get remove --purge nvidia*</span><br><span class="line">sudo update -initramfs -u # 更新内核 这个最好不要随便执行，先跳过</span><br><span class="line">sudo add-apt-repository ppa:graphics-drivers/ppa # 添加ppa源</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install nvidia-driver-450 # 这里版本可以根据自己需求来</span><br><span class="line">sudo apt-get install mesa-common-dev</span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get upgrade</span><br><span class="line">nvidia-smi # 用于确认是否安装成功</span><br><span class="line">sudo sed -i &quot;s/ppa\.launchpad\.net/lanuchpad.moruy.cn/g&quot; /etc/apt/sources.list.d/*.list #ppa加速</span><br></pre></td></tr></table></figure>
+<h1 id="2-深度学习环境"><a href="#2-深度学习环境" class="headerlink" title="2 深度学习环境"></a>2 深度学习环境</h1><h2 id="2-1-cuda安装"><a href="#2-1-cuda安装" class="headerlink" title="2.1 cuda安装"></a>2.1 cuda安装</h2><h3 id="2-1-1-下载cuda"><a href="#2-1-1-下载cuda" class="headerlink" title="2.1.1 下载cuda"></a>2.1.1 下载cuda</h3><p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-toolkit-archive">下载链接</a></p>
+<p>这里下载的是11.4.0</p>
+<img src="/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20220905150820507.png" class="" title="image-20220905150820507">
+<p>按照官方的提示下载并运行run文件</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">wget https://developer.download.nvidia.com/compute/cuda/11.4.0/local_installers/cuda_11.4.0_470.42.01_linux.runsudo sh cuda_11.4.0_470.42.01_linux.run</span><br></pre></td></tr></table></figure>
+<p>按装出现下面提示，输入accept</p>
+<img src="/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20220905150902890.png" class="" title="image-20220905150902890">
+<p>由于上面已经安装过显卡的驱动了。这里把驱动安装取消（空格键）其他都选择上</p>
+<img src="/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20220905150946443.png" class="" title="image-20220905150946443">
+<img src="/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20220905151246979.png" class="" title="image-20220905151246979">
+<h3 id="2-1-2-设置权限"><a href="#2-1-2-设置权限" class="headerlink" title="2.1.2 设置权限"></a>2.1.2 设置权限</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">chmod</span> -R 755 /usr/local/cuda-11.4</span><br></pre></td></tr></table></figure>
+<p>安装完成后会有一个连接文件<code>/usr/local/cuda</code> 指向真正的<code>/usr/local/cuda-11.4</code></p>
+<img src="/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20220905152752889.png" class="" title="image-20220905152752889">
+<h3 id="2-1-3-配置环境变量"><a href="#2-1-3-配置环境变量" class="headerlink" title="2.1.3 配置环境变量"></a>2.1.3 配置环境变量</h3><p>可以在~/.bashrc中加入环境变量</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">export CUDA_HOME=/usr/local/cuda</span><br><span class="line">export PATH=$CUDA_HOME/bin:$PATH</span><br><span class="line">export LD_LIBRARY_PATH=$CUDA_HOME/lib64:$LD_LIBRARY_PATH</span><br></pre></td></tr></table></figure>
+<p>2.1.4 验证安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc -V</span><br></pre></td></tr></table></figure>
+<img src="/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20220905151422900.png" class="" title="image-20220905151422900">
+<p>版本信息</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /usr/local/cuda/version.json</span><br></pre></td></tr></table></figure>
+<img src="/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20220905154420841.png" class="" title="image-20220905154420841">
+<h2 id="2-2-cuDNN安装"><a href="#2-2-cuDNN安装" class="headerlink" title="2.2 cuDNN安装"></a>2.2 cuDNN安装</h2><h3 id="2-2-1-cuDNN下载"><a href="#2-2-1-cuDNN下载" class="headerlink" title="2.2.1 cuDNN下载"></a>2.2.1 cuDNN下载</h3><p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/rdp/cudnn-archive">下载地址</a></p>
+<p>这里选择的是cudnn-linux-x86_64-8.4.0.27_cuda11.6-archive.tar.xz</p>
+<img src="/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20220905153547803.png" class="" title="image-20220905153547803">
+<h3 id="2-2-2-cudNN安装"><a href="#2-2-2-cudNN安装" class="headerlink" title="2.2.2 cudNN安装"></a>2.2.2 cudNN安装</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf cudnn-linux-x86_64-8.4.0.27_cuda11.6-archive.tar.xz </span><br><span class="line">cd cudnn-linux-x86_64-8.4.0.27_cuda11.6-archive</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">sudo cp include/cudnn*.h /usr/local/cuda-11.4/include </span><br><span class="line">sudo cp -P lib/libcudnn* /usr/local/cuda-11.4/lib64 </span><br><span class="line">sudo chmod a+r /usr/local/cuda-11.4/include/cudnn*.h /usr/local/cuda-11.4/lib64/libcudnn*</span><br><span class="line">sudo chmod -R 755 /usr/local/cuda-11.4</span><br></pre></td></tr></table></figure>
+<p>2.2.3 cuDNN版本查看</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /usr/local/cuda/include/cudnn_version.h </span><br></pre></td></tr></table></figure>
+<img src="/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/image-20220905154205792.png" class="" title="image-20220905154205792">
+<h1 id="TensorRT安装"><a href="#TensorRT安装" class="headerlink" title="TensorRT安装"></a>TensorRT安装</h1><p>EA 版本代表抢先体验（在正式发布之前）。<br>GA 代表通用性。 表示稳定版，经过全面测试。</p>
+<h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/lixushi/article/details/118575942">显卡驱动安装</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html#ubuntu-installation">cuda安装官方</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/cudnn/install-guide/index.html#prerequisites">cudnn安装官方</a></p>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/540588163#:~:text=Nvidia%20diver%E6%98%AF%E6%9C%80%E5%9F%BA%E7%A1%80%E7%9A%84%E8%B7%9F%E7%A1%AC%E4%BB%B6%E7%9B%B4%E6%8E%A5%E4%BA%A4%E4%BA%92%E7%9A%84%E5%BA%95%E5%B1%82%E8%BD%AF%E4%BB%B6%EF%BC%8Ccuda%E4%BE%9D%E8%B5%96%E4%BA%8Edriver%EF%BC%8CcuDNN%E4%BE%9D%E8%B5%96%E4%BA%8Ecuda%EF%BC%8CtensorRT%E6%9C%80%E7%BB%88%E6%A8%A1%E5%9E%8B%E7%9A%84%E6%8E%A8%E7%90%86%E5%8A%A0%E9%80%9F%E4%BE%9D%E8%B5%96%E4%BA%8E%E5%89%8D%E9%9D%A2%E8%BF%99%E4%BA%9B%E5%9F%BA%E7%A1%80%E7%9A%84%E5%8A%A0%E9%80%9F%E7%8E%AF%E5%A2%83%E3%80%82%20%E6%88%91%E4%BB%AC%E8%BF%99%E9%87%8C%E5%AE%89%E8%A3%85driver,%28460.106.00%29%2Bcuda%20%2811.2.0%29%2BcuDNN%20%288.4.0%29%2BTensorRT%20%288.2.1.8%29%E3%80%82">博客</a></p>
+<p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-gpus">算力查询</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" title="ubuntu下的GPU环境配置">http://example.com/GPU/ubuntu下的GPU环境配置/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+              <a href="/tags/Tensorrt/" rel="tag"><i class="fa fa-tag"></i> Tensorrt</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/zeromq/4%20ZMQ%E8%AF%B7%E6%B1%82-%E5%BA%94%E7%AD%94%E6%A8%A1%E5%BC%8F/" rel="prev" title="4 ZMQ请求-应答模式">
+                  <i class="fa fa-chevron-left"></i> 4 ZMQ请求-应答模式
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/" rel="next" title="GPU架构与算力">
+                  GPU架构与算力 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"9bb698e8e577447764a5adf4241b4107"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

@@ -19,12 +19,12 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Pisces","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="1 GPU架构与算力算力查询">
+    <meta name="description" content="1 GPU架构与算力1.1 计算能力含义">
 <meta property="og:type" content="article">
 <meta property="og:title" content="GPU架构与算力">
 <meta property="og:url" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/index.html">
 <meta property="og:site_name" content="奔跑的IC">
-<meta property="og:description" content="1 GPU架构与算力算力查询">
+<meta property="og:description" content="1 GPU架构与算力1.1 计算能力含义">
 <meta property="og:locale">
 <meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-342976d22f13815fbdae5f79c46039ef_r.jpg">
 <meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-70492c96b9a553aec66eae5a44fcd77e_r.jpg">
@@ -45,8 +45,8 @@
 <meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-eb596de1da67c6e2eb3f0bc78f0d687b_r.jpg">
 <meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-ab9a493303f4902b1dace22df0fb652d_r.jpg">
 <meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-cd6cc236eb80311b5a3c551250ccf870_r.jpg">
-<meta property="article:published_time" content="2023-03-10T09:47:15.442Z">
-<meta property="article:modified_time" content="2023-03-10T09:46:55.130Z">
+<meta property="article:published_time" content="2023-03-11T05:04:28.522Z">
+<meta property="article:modified_time" content="2023-03-11T05:04:28.522Z">
 <meta property="article:author" content="奔跑的IC">
 <meta property="article:tag" content="GPU">
 <meta name="twitter:card" content="summary">
@@ -132,7 +132,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B"><span class="nav-text">1 GPU架构与算力</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Fermi-cards-CUDA-3-2-until-CUDA-8"><span class="nav-text">Fermi cards (CUDA 3.2 until CUDA 8)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kepler-cards-CUDA-5-until-CUDA-10"><span class="nav-text">Kepler cards (CUDA 5 until CUDA 10)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Maxwell-cards-CUDA-6-until-CUDA-11"><span class="nav-text">Maxwell cards (CUDA 6 until CUDA 11)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pascal-CUDA-8-and-later"><span class="nav-text">Pascal (CUDA 8 and later)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Volta-CUDA-9-and-later"><span class="nav-text">Volta (CUDA 9 and later)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Turing-CUDA-10-and-later"><span class="nav-text">Turing (CUDA 10 and later)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ampere-CUDA-11-1-and-later"><span class="nav-text">Ampere (CUDA 11.1 and later)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lovelace-CUDA-11-8-and-later"><span class="nav-text">Lovelace (CUDA 11.8 and later)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hopper-CUDA-12-and-later"><span class="nav-text">Hopper (CUDA 12 and later)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-Tesla-%E6%9E%B6%E6%9E%84"><span class="nav-text">1.1 Tesla 架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Fermi%E6%9E%B6%E6%9E%84"><span class="nav-text">1.2 Fermi架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-Kepler%E6%9E%B6%E6%9E%84"><span class="nav-text">1.3 Kepler架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-Maxwell%E6%9E%B6%E6%9E%84"><span class="nav-text">1.4 Maxwell架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-Pascal%E6%9E%B6%E6%9E%84"><span class="nav-text">1.5 Pascal架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-Volta%E6%9E%B6%E6%9E%84"><span class="nav-text">1.6 Volta架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-7-Turing%E6%9E%B6%E6%9E%84"><span class="nav-text">1.7 Turing架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-8-Ampere%E6%9E%B6%E6%9E%84"><span class="nav-text">1.8 Ampere架构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-text">附录</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B"><span class="nav-text">1 GPU架构与算力</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-%E8%AE%A1%E7%AE%97%E8%83%BD%E5%8A%9B%E5%90%AB%E4%B9%89"><span class="nav-text">1.1 计算能力含义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E4%B8%8D%E5%90%8C%E6%98%BE%E5%8D%A1%E7%9A%84%E8%AE%A1%E7%AE%97%E8%83%BD%E5%8A%9B"><span class="nav-text">1.2 不同显卡的计算能力</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-%E7%BC%96%E8%AF%91%E7%9A%84%E7%AE%97%E5%8A%9B%E9%80%89%E9%A1%B9"><span class="nav-text">1.3 编译的算力选项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Fermi-cards-CUDA-3-2-until-CUDA-8"><span class="nav-text">Fermi cards (CUDA 3.2 until CUDA 8)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kepler-cards-CUDA-5-until-CUDA-10"><span class="nav-text">Kepler cards (CUDA 5 until CUDA 10)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Maxwell-cards-CUDA-6-until-CUDA-11"><span class="nav-text">Maxwell cards (CUDA 6 until CUDA 11)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pascal-CUDA-8-and-later"><span class="nav-text">Pascal (CUDA 8 and later)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Volta-CUDA-9-and-later"><span class="nav-text">Volta (CUDA 9 and later)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Turing-CUDA-10-and-later"><span class="nav-text">Turing (CUDA 10 and later)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ampere-CUDA-11-1-and-later"><span class="nav-text">Ampere (CUDA 11.1 and later)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lovelace-CUDA-11-8-and-later"><span class="nav-text">Lovelace (CUDA 11.8 and later)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hopper-CUDA-12-and-later"><span class="nav-text">Hopper (CUDA 12 and later)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-GPU%E6%9E%B6%E6%9E%84"><span class="nav-text">2 GPU架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-Tesla-%E6%9E%B6%E6%9E%84"><span class="nav-text">2.1 Tesla 架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-Fermi%E6%9E%B6%E6%9E%84"><span class="nav-text">2.2 Fermi架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-Kepler%E6%9E%B6%E6%9E%84"><span class="nav-text">2.3 Kepler架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-Maxwell%E6%9E%B6%E6%9E%84"><span class="nav-text">2.4 Maxwell架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-Pascal%E6%9E%B6%E6%9E%84"><span class="nav-text">2.5 Pascal架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-6-Volta%E6%9E%B6%E6%9E%84"><span class="nav-text">2.6 Volta架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-7-Turing%E6%9E%B6%E6%9E%84"><span class="nav-text">2.7 Turing架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-8-Ampere%E6%9E%B6%E6%9E%84"><span class="nav-text">2.8 Ampere架构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-text">附录</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -216,9 +216,8 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2023-03-10 17:47:15 / 修改时间：17:46:55" itemprop="dateCreated datePublished" datetime="2023-03-10T17:47:15+08:00">2023-03-10</time>
+      <time title="创建时间：2023-03-11 13:04:28" itemprop="dateCreated datePublished" datetime="2023-03-11T13:04:28+08:00">2023-03-11</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -247,7 +246,28 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="1-GPU架构与算力"><a href="#1-GPU架构与算力" class="headerlink" title="1 GPU架构与算力"></a>1 GPU架构与算力</h1><p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-gpus">算力查询</a></p>
+        <h1 id="1-GPU架构与算力"><a href="#1-GPU架构与算力" class="headerlink" title="1 GPU架构与算力"></a>1 GPU架构与算力</h1><h2 id="1-1-计算能力含义"><a href="#1-1-计算能力含义" class="headerlink" title="1.1 计算能力含义"></a>1.1 计算能力含义</h2><p>参考：<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#compute-capability">2.6. Compute Capability</a></p>
+<p>计算能力不是描述GPU设备计算能力强弱的绝对指标，他是相对的。准确的说他是一个架构的版本号。也不是指cuda软件平台的版本号（如cuda7.0，cuda8.0等）</p>
+<p>如TX1，版本号为5.3，实际上指的是：</p>
+<ul>
+<li>5:SM的主版本号，指maxwell架构</li>
+<li>3:SM的次版本号，拥有一些在该架构前提下的一些优化特性</li>
+</ul>
+
+<p> 如上所述计算能力的含义应该解释清楚了。那么这些版本号代表了什么呢？</p>
+<p> 每一种计算能力都拥有着不同的特点，主版本号和次版本号在硬件细节上究竟有着什么不同呢？</p>
+<p> 如下图所示，在浮点运算能力上的区别如下：</p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#arithmetic-instructions">5.4.1. Arithmetic Instructions</a></p>
+
+<h2 id="1-2-不同显卡的计算能力"><a href="#1-2-不同显卡的计算能力" class="headerlink" title="1.2 不同显卡的计算能力"></a>1.2 不同显卡的计算能力</h2><p>参考：<a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-gpus">https://developer.nvidia.com/cuda-gpus</a></p>
+
+<h2 id="1-3-编译的算力选项"><a href="#1-3-编译的算力选项" class="headerlink" title="1.3 编译的算力选项"></a>1.3 编译的算力选项</h2><p>对于编译并行计算程序（用nvcc编译）需要制定SM</p>
+<p>对于opencv这种提供GPU版本的库，在编译的时候需要指定SM的版本</p>
+<p>参考 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/ampere-compatibility-guide/index.html#building-ampere-compatible-apps-using-cuda-11-0">https://docs.nvidia.com/cuda/ampere-compatibility-guide/index.html#building-ampere-compatible-apps-using-cuda-11-0</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#binary-compatibility">3.1.2. Binary Compatibility</a></p>
+
+
+<p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-gpus">算力查询</a></p>
 <div class="table-container">
 <table>
 <thead>
@@ -344,7 +364,7 @@
 <li><strong>SM90 or <code>SM_90, compute_90</code></strong> –<br>NVIDIA H100 (GH100)</li>
 <li><strong>SM90a or <code>SM_90a, compute_90a</code></strong> – (for PTX ISA version 8.0) – adds acceleration for features like wgmma and setmaxnreg</li>
 </ul>
-<h2 id="1-1-Tesla-架构"><a href="#1-1-Tesla-架构" class="headerlink" title="1.1 Tesla 架构"></a>1.1 Tesla 架构</h2><p>Tesla 架构的资料在官网也没找到多少，不过这是英伟达第一个实现<strong>统一着色器模型</strong>的微架构。</p>
+<h1 id="2-GPU架构"><a href="#2-GPU架构" class="headerlink" title="2 GPU架构"></a>2 GPU架构</h1><h2 id="2-1-Tesla-架构"><a href="#2-1-Tesla-架构" class="headerlink" title="2.1 Tesla 架构"></a>2.1 Tesla 架构</h2><p>Tesla 架构的资料在官网也没找到多少，不过这是英伟达第一个实现<strong>统一着色器模型</strong>的微架构。</p>
 <img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-342976d22f13815fbdae5f79c46039ef_r.jpg" class="" title="img">
 <p>经典型号是<strong>G80</strong>，在Fermi架构白皮书的开篇部分有对G80的简要介绍：</p>
 <ul>
@@ -356,7 +376,7 @@
 </ul>
 <img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-70492c96b9a553aec66eae5a44fcd77e_r.jpg" class="" title="img">
 <p>G80 显卡</p>
-<h2 id="1-2-Fermi架构"><a href="#1-2-Fermi架构" class="headerlink" title="1.2 Fermi架构"></a>1.2 Fermi架构</h2><p>Fermi 架构是NVIDIA GPU 架构自初代 G80 以来最重大的飞跃。</p>
+<h2 id="2-2-Fermi架构"><a href="#2-2-Fermi架构" class="headerlink" title="2.2 Fermi架构"></a>2.2 Fermi架构</h2><p>Fermi 架构是NVIDIA GPU 架构自初代 G80 以来最重大的飞跃。</p>
 <p>NVIDIA的GPU研发团队从G80和GT200两个型号上汲取经验，采用全新的设计方法来创建世界上第一个计算 GPU。在这个过程中，专注于提高以下关键领域：</p>
 <ul>
 <li><strong>提高双精度性能</strong>——虽然单精度浮点性能大约是桌面 CPU 性能的十倍，但一些 GPU 计算应用程序也需要更高的双精度性能。</li>
@@ -425,7 +445,7 @@
 <img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-ac9d6be077b4fbda03a321eadd1473de_r.jpg" class="" title="img">
 <p>CUDA 内核</p>
 <p>SM（Streaming Multiprocessors）是GPU架构中非常重要的部分，GPU硬件的并行性就是由SM决定的。</p>
-<h2 id="1-3-Kepler架构"><a href="#1-3-Kepler架构" class="headerlink" title="1.3 Kepler架构"></a>1.3 Kepler架构</h2><img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-8130651bd394205a5f9fb9c736085b96_r.jpg" class="" title="img">
+<h2 id="2-3-Kepler架构"><a href="#2-3-Kepler架构" class="headerlink" title="2.3 Kepler架构"></a>2.3 Kepler架构</h2><img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-8130651bd394205a5f9fb9c736085b96_r.jpg" class="" title="img">
 <p>Kepler架构的思路是：减少SM单元数(在这一代中叫SMX单元)，增加每组SM单元中的CUDA内核数。在Kepler架构中，每个SM单元的CUDA内核数由Fermi架构的32个激增至192个。</p>
 <img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-356bed204d9265bc863d51fb9566322e_r.jpg" class="" title="img">
 <p>在每个SMX中：</p>
@@ -436,7 +456,7 @@
 <li>32 个 LD/ST Unit </li>
 <li>32 个 SFU  </li>
 </ul>
-<h2 id="1-4-Maxwell架构"><a href="#1-4-Maxwell架构" class="headerlink" title="1.4 Maxwell架构"></a>1.4 Maxwell架构</h2><p>Maxwell架构的SM单元和Kepler架构相比，又有很大变化，这一代的SM单元更像是把4个Fermi 架构的SM单元，按照2x2的方式排列在一起，这一代称为SMM单元：</p>
+<h2 id="2-4-Maxwell架构"><a href="#2-4-Maxwell架构" class="headerlink" title="2.4 Maxwell架构"></a>2.4 Maxwell架构</h2><p>Maxwell架构的SM单元和Kepler架构相比，又有很大变化，这一代的SM单元更像是把4个Fermi 架构的SM单元，按照2x2的方式排列在一起，这一代称为SMM单元：</p>
 <img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-a27341fb67e8440c3d8c6b96676a48f2_r.jpg" class="" title="img">
 <img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-3cd6ea7b8bfd5830760e022393da0b1a_r.jpg" class="" title="img">
 <p>SMM 使用基于象限的设计，具有四个 32 核处理块(processing blocks)，每个处理块都有一个专用的 warp 调度程序，能够在每个时钟分派两条指令。 </p>
@@ -457,7 +477,7 @@
 <blockquote>
 <p>参考：<br><a target="_blank" rel="noopener" href="https://developer.nvidia.com/blog/maxwell-most-advanced-cuda-gpu-ever-made/">Maxwell: The Most Advanced CUDA GPU Ever Made | NVIDIA Developer Blog</a></p>
 </blockquote>
-<h2 id="1-5-Pascal架构"><a href="#1-5-Pascal架构" class="headerlink" title="1.5 Pascal架构"></a><strong>1.5 Pascal架构</strong></h2><img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-db3b0bf04555903a73091ca59b106590_r.jpg" class="" title="img">
+<h2 id="2-5-Pascal架构"><a href="#2-5-Pascal架构" class="headerlink" title="2.5 Pascal架构"></a><strong>2.5 Pascal架构</strong></h2><img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-db3b0bf04555903a73091ca59b106590_r.jpg" class="" title="img">
 <p>pascal架构的GP100核心</p>
 <p>这里有一个新概念：<strong>核心</strong></p>
 <p>NVIDIA不同的架构会有几种不同的核心，Pascal架构有GP100、GP102两种大核心：</p>
@@ -482,7 +502,7 @@
 </ul>
 <p>CUDA内核总数从Maxwell时代的每组SM单元128个减少到了每组64个，这一代最大的特点是又把DP双精度运算单元加回来了。</p>
 <p>制程工艺升级到了16nm，性能大幅提升，功耗却不增加。</p>
-<h2 id="1-6-Volta架构"><a href="#1-6-Volta架构" class="headerlink" title="1.6 Volta架构"></a><strong>1.6 Volta架构</strong></h2><img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-05dcf828cc7c523dd019ef10e02cdcd0_r.jpg" class="" title="img">
+<h2 id="2-6-Volta架构"><a href="#2-6-Volta架构" class="headerlink" title="2.6 Volta架构"></a><strong>2.6 Volta架构</strong></h2><img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-05dcf828cc7c523dd019ef10e02cdcd0_r.jpg" class="" title="img">
 <p>Volta架构的GV100核心</p>
 <img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-ab5cc1ac8a897332cdb9d6565cf9c7af_r.jpg" class="" title="img">
 <p>GV100核心的SM单元</p>
@@ -500,7 +520,7 @@
 <p><strong>一个CUDA 内核在每个时钟周期里只能为一个线程执行一条浮点或整数指令</strong>。</p>
 <p>但是从Volta架构开始，将一个CUDA 内核拆分为两部分：FP32 和 INT32，好处是在同一个时钟周期里，可以同时执行浮点和整数指令，提高计算速度。</p>
 <p>Volta架构在传统的单双精度计算之外还增加了专用的<strong>Tensor Core</strong>张量单元，用于深度学习、AI运算等。</p>
-<h2 id="1-7-Turing架构"><a href="#1-7-Turing架构" class="headerlink" title="1.7 Turing架构"></a><strong>1.7 Turing架构</strong></h2><img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-ad35c378dd647c7321e3e86439c1fafc_r.jpg" class="" title="img">
+<h2 id="2-7-Turing架构"><a href="#2-7-Turing架构" class="headerlink" title="2.7 Turing架构"></a><strong>2.7 Turing架构</strong></h2><img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-ad35c378dd647c7321e3e86439c1fafc_r.jpg" class="" title="img">
 <p>Turing架构的TU102核心</p>
 <p>Turing架构目前一共有三种核心：</p>
 <ul>
@@ -520,7 +540,7 @@
 <li>4 个 SFU</li>
 </ul>
 <p>这一代架构去掉了对FP64的支持。</p>
-<h2 id="1-8-Ampere架构"><a href="#1-8-Ampere架构" class="headerlink" title="1.8 Ampere架构"></a><strong>1.8 Ampere架构</strong></h2><img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-eb596de1da67c6e2eb3f0bc78f0d687b_r.jpg" class="" title="img">
+<h2 id="2-8-Ampere架构"><a href="#2-8-Ampere架构" class="headerlink" title="2.8 Ampere架构"></a><strong>2.8 Ampere架构</strong></h2><img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-eb596de1da67c6e2eb3f0bc78f0d687b_r.jpg" class="" title="img">
 <p>Ampere架构的GA102核心</p>
 <img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-ab9a493303f4902b1dace22df0fb652d_r.jpg" class="" title="img">
 <p>GA102核心的SM单元</p>
@@ -571,11 +591,14 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="prev" title="ubuntu下的GPU环境配置">
-                  <i class="fa fa-chevron-left"></i> ubuntu下的GPU环境配置
+                <a href="/zeromq/4%20ZMQ%E8%AF%B7%E6%B1%82-%E5%BA%94%E7%AD%94%E6%A8%A1%E5%BC%8F/" rel="prev" title="4 ZMQ请求-应答模式">
+                  <i class="fa fa-chevron-left"></i> 4 ZMQ请求-应答模式
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="next" title="ubuntu下的GPU环境配置">
+                  ubuntu下的GPU环境配置 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>

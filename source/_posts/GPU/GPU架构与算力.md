@@ -1,5 +1,48 @@
 # 1 GPU架构与算力
 
+## 1.1 计算能力含义
+
+参考：[2.6. Compute Capability](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#compute-capability)
+
+计算能力不是描述GPU设备计算能力强弱的绝对指标，他是相对的。准确的说他是一个架构的版本号。也不是指cuda软件平台的版本号（如cuda7.0，cuda8.0等）
+
+如TX1，版本号为5.3，实际上指的是：
+
+* 5:SM的主版本号，指maxwell架构
+* 3:SM的次版本号，拥有一些在该架构前提下的一些优化特性
+
+![image-20220322103223619](GPU架构与算力/image-20220322103223619.png)
+
+ 如上所述计算能力的含义应该解释清楚了。那么这些版本号代表了什么呢？
+
+ 每一种计算能力都拥有着不同的特点，主版本号和次版本号在硬件细节上究竟有着什么不同呢？
+
+ 如下图所示，在浮点运算能力上的区别如下：
+
+[5.4.1. Arithmetic Instructions](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#arithmetic-instructions)
+
+![image-20220322103419779](GPU架构与算力/image-20220322103419779.png)
+
+## 1.2 不同显卡的计算能力
+
+参考：https://developer.nvidia.com/cuda-gpus
+
+![image-20220322103530846](GPU架构与算力/image-20220322103530846.png)
+
+## 1.3 编译的算力选项
+
+对于编译并行计算程序（用nvcc编译）需要制定SM
+
+对于opencv这种提供GPU版本的库，在编译的时候需要指定SM的版本
+
+参考 https://docs.nvidia.com/cuda/ampere-compatibility-guide/index.html#building-ampere-compatible-apps-using-cuda-11-0
+
+[3.1.2. Binary Compatibility](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#binary-compatibility)
+
+![image-20220322111440381](GPU架构与算力/image-20220322111440381.png)
+
+![image-20220322111347373](GPU架构与算力/image-20220322111347373.png)
+
 [算力查询](https://developer.nvidia.com/cuda-gpus)
 
 | Fermi | Kepler | Maxwell | Pascal | Volta | Turing | Ampere              | Ada (Lovelace) | [Hopper](https://www.nvidia.com/en-us/data-center/hopper-architecture/) |
@@ -90,7 +133,9 @@ Deprecated from CUDA 11.
   NVIDIA H100 (GH100)
 - **SM90a or `SM_90a, compute_90a`** – (for PTX ISA version 8.0) – adds acceleration for features like wgmma and setmaxnreg
 
-## 1.1 Tesla 架构
+# 2 GPU架构
+
+## 2.1 Tesla 架构
 
 Tesla 架构的资料在官网也没找到多少，不过这是英伟达第一个实现**统一着色器模型**的微架构。
 
@@ -110,7 +155,7 @@ Tesla 架构的资料在官网也没找到多少，不过这是英伟达第一�
 
 G80 显卡
 
-## 1.2 Fermi架构
+## 2.2 Fermi架构
 
 Fermi 架构是NVIDIA GPU 架构自初代 G80 以来最重大的飞跃。
 
@@ -212,7 +257,7 @@ SM（Streaming Multiprocessors）是GPU架构中非常重要的部分，GPU硬�
 
 
 
-## 1.3 Kepler架构
+## 2.3 Kepler架构
 
 ![img](GPU架构与算力/v2-8130651bd394205a5f9fb9c736085b96_r.jpg)
 
@@ -232,7 +277,7 @@ Kepler架构的思路是：减少SM单元数(在这一代中叫SMX单元)，增�
 - 32 个 LD/ST Unit 
 - 32 个 SFU  
 
-## 1.4 Maxwell架构
+## 2.4 Maxwell架构
 
 Maxwell架构的SM单元和Kepler架构相比，又有很大变化，这一代的SM单元更像是把4个Fermi 架构的SM单元，按照2x2的方式排列在一起，这一代称为SMM单元：
 
@@ -265,7 +310,7 @@ CUDA内核总数 从Kpler时代的每组SM单元192个减少到了每组128个�
 > 参考：
 > [Maxwell: The Most Advanced CUDA GPU Ever Made | NVIDIA Developer Blog](https://developer.nvidia.com/blog/maxwell-most-advanced-cuda-gpu-ever-made/)
 
-## **1.5 Pascal架构**
+## **2.5 Pascal架构**
 
 ![img](GPU架构与算力/v2-db3b0bf04555903a73091ca59b106590_r.jpg)
 
@@ -302,7 +347,7 @@ CUDA内核总数从Maxwell时代的每组SM单元128个减少到了每组64个�
 
 
 
-## **1.6 Volta架构**
+## **2.6 Volta架构**
 
 ![img](GPU架构与算力/v2-05dcf828cc7c523dd019ef10e02cdcd0_r.jpg)
 
@@ -336,7 +381,7 @@ Volta架构在传统的单双精度计算之外还增加了专用的**Tensor Cor
 
 
 
-## **1.7 Turing架构**
+## **2.7 Turing架构**
 
 ![img](GPU架构与算力/v2-ad35c378dd647c7321e3e86439c1fafc_r.jpg)
 
@@ -365,7 +410,7 @@ TU102核心的SM单元
 
 这一代架构去掉了对FP64的支持。
 
-## **1.8 Ampere架构**
+## **2.8 Ampere架构**
 
 ![img](GPU架构与算力/v2-eb596de1da67c6e2eb3f0bc78f0d687b_r.jpg)
 

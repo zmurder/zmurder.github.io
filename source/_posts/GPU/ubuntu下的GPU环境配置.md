@@ -1,16 +1,14 @@
 Nvidia diver是最基础的跟硬件直接交互的底层软件，cuda依赖于driver，cuDNN依赖于cuda，tensorRT最终模型的推理加速依赖于前面这些基础的加速环境。
 
-
-
 搜索显卡
-
+下面指令分别是查看集成显卡和查看NVIDIA显卡
 ```shell
- lspci | grep VGA     # 查看集成显卡
- lspci | grep NVIDIA  # 查看NVIDIA显卡
+ lspci | grep VGA 
+ lspci | grep NVIDIA
 ```
 
 # 1 GPU驱动安装
-
+------
 ubuntu显卡驱动安装有四中方法：
 
 - 通过ubuntu仓库安装
@@ -18,7 +16,7 @@ ubuntu显卡驱动安装有四中方法：
 - 在ubuntu软件和更新界面的附加驱动中安装
 - -添加ppa源安装
 
-## 方法一：ubuntu仓库安装
+## 1.1 ubuntu仓库安装
 
 只需要一条指令即可安装成功，成功安装后需要重启
 
@@ -30,7 +28,7 @@ sudo ubuntu-drivers autoinstall
 nvidia-smi  #若出现电脑GPU信息则成功
 ```
 
-## 方法二：离线驱动安装
+## 1.2 离线驱动安装
 
 首先进入[英伟达官网](https://www.nvidia.com/Download/index.aspx?lang=en-us)
 
@@ -44,7 +42,7 @@ nvidia-smi  #若出现电脑GPU信息则成功
 
 
 
-## 方法三：附加驱动安装方法
+## 1.3 附加驱动安装方法
 
 更新软件源
 
@@ -59,7 +57,7 @@ sudo apt-get upgrade
 
 安装驱动：菜单栏选择附加驱动，会进行自动搜索，选择一个版本的专有驱动，点击应用更改，更改后重启即可，
 
-## 方法四：ppa仓库安装
+## 1.4 ppa仓库安装
 
 （1）首先禁用nouveau
 

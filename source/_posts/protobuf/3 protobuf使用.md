@@ -58,7 +58,7 @@ message AddressBook {
   
   ```
 
-  ![image-20220327222818195](3 protobuf C++开发/image-20220327222818195.png)
+  ![image-20220327222818195](3 protobuf使用/image-20220327222818195.png)
 
 * package 声明：这有助于防止不同项目之间的命名冲突。在 C++ 中，生成的类将放在与包名匹配的 namespace （命名空间）中。例如定一个类
 

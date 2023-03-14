@@ -42,8 +42,8 @@
 <meta property="og:image" content="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8BmAP%E8%AE%A1%E7%AE%97/image-20230314151508289.png">
 <meta property="og:image" content="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8BmAP%E8%AE%A1%E7%AE%97/image-20230314151531463.png">
 <meta property="og:image" content="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8BmAP%E8%AE%A1%E7%AE%97/image-20230314151551445.png">
-<meta property="article:published_time" content="2023-03-14T11:17:03.078Z">
-<meta property="article:modified_time" content="2023-03-14T10:00:19.957Z">
+<meta property="article:published_time" content="2023-03-14T11:32:45.983Z">
+<meta property="article:modified_time" content="2023-03-14T11:34:35.206Z">
 <meta property="article:author" content="奔跑的IC">
 <meta property="article:tag" content="git">
 <meta name="twitter:card" content="summary">
@@ -155,7 +155,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -215,7 +215,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2023-03-14 19:17:03 / 修改时间：18:00:19" itemprop="dateCreated datePublished" datetime="2023-03-14T19:17:03+08:00">2023-03-14</time>
+      <time title="创建时间：2023-03-14 19:32:45 / 修改时间：19:34:35" itemprop="dateCreated datePublished" datetime="2023-03-14T19:32:45+08:00">2023-03-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -278,28 +278,262 @@
 <p><strong>举例</strong></p>
 <p>假设现在数据集中一共有5张图片</p>
 <ul>
-<li><p>第1张图片中有2个A类别的gt，有三个A类别的预测框，score分别为(0.3, 0.5,  0.9)，按照上述计算TP的方法(按score从大到小的顺序匹配)发现score为0.3和0.9的与gt相匹配，则将这两个记为TP。建立用于计算PR曲线的数组metric和记录A类别gt总数的变量n_gt，向数组中加入(0.3, 1), (0.5, 0), (0.9,  1)三组数据（每组数据的第一个代表预测框的score，第二个代表这个预测框是否是TP），并将n_gt+=2；使用相同的方法计算接下来的几张图片</p>
-<p>| GT 实际框个数        | 2                                                            |<br>| —————————— | —————————————————————————————— |<br>| detection 预测框个数 | 3                                                            |<br>| score 预测的score    | (0.3, 0.5,  0.9)；其中0.9和0.3的是TP                         |<br>| 记录数组metric       | (0.3, 1), (0.5, 0), (0.9,  1) ； 第一个代表预测框的score，第二个代表这个预测框是否是TP |<br>| n_gt                 | n_gt+=2                                                      |</p>
-</li>
-<li><p>第2张图片中没有A类别的物体(gt数量为0)，则n_gt+=0，但有一个关于A类别的预测框，score为0.45，则向metric中加入(0.45,  0)；</p>
-<p>| GT 实际框个数        | 0                                                            |<br>| —————————— | —————————————————————————————— |<br>| detection 预测框个数 | 1                                                            |<br>| score 预测的score    | (0.45)                                                       |<br>| 记录数组metric       | (0.45,0) ； 第一个代表预测框的score，第二个代表这个预测框是否是TP |<br>| n_gt                 | n_gt+=0                                                      |</p>
-</li>
-<li><p>第3张图片中有1个A类别的物体，但没有预测框，则n_gt+=1；</p>
-<p>| GT 实际框个数        | 1       |<br>| —————————— | ———- |<br>| detection 预测框个数 | 0       |<br>| score 预测的score    |         |<br>| 记录数组metric       |         |<br>| n_gt                 | n_gt+=1 |</p>
-</li>
-<li><p>第4张图片中有3个A类别的物体，有5个预测框，其中有3个与gt相匹配，最终n_gt+=3，metric中加入(0.85, 1), (0.8, 1), (0.7, 1), (0.35, 0), (0.1, 0)；</p>
-<p>| GT 实际框个数        | 3                                                  |<br>| —————————— | ————————————————————————— |<br>| detection 预测框个数 | 5                                                  |<br>| score 预测的score    | 0.85,0.8,0.7,0.35,0.1                              |<br>| 记录数组metric       | (0.85, 1), (0.8, 1), (0.7, 1), (0.35, 0), (0.1, 0) |<br>| n_gt                 | n_gt+=3                                            |</p>
-</li>
-<li><p>第5张图片中没有A类别的物体，也没有A类别的预测框。</p>
-<p>| GT 实际框个数        | 0       |<br>| —————————— | ———- |<br>| detection 预测框个数 | 0       |<br>| score 预测的score    |         |<br>| 记录数组metric       |         |<br>| n_gt                 | n_gt+=0 |</p>
-</li>
-<li><p>汇总</p>
-<p>| GT 实际框个数        | 6                                                            |<br>| —————————— | —————————————————————————————— |<br>| detection 预测框个数 | 9                                                            |<br>| score 预测的score    | 0.9, 0.85, 0.8, 0.7, 0.5, 0.45, 0.35, 0.3, 0.1,              |<br>| 记录数组metric       | (0.9, 1), (0.85, 1), (0.8, 1), (0.7, 1), (0.5, 0), (0.45, 0), (0.35, 0), (0.3, 1), (0.1, 0) ;共9个预测框，也就是可以得到9组PR值 |<br>| n_gt                 | n_gt=6                                                       |</p>
-</li>
-<li><p>计算PR值</p>
-<p>| score阈值 | TP   | Precision = TP/ all detection                 | Recall = TP/GT |<br>| ————- | —— | ——————————————————————- | ——————— |<br>| 0         | 5    | 5/9                                           | 5/6            |<br>| 0.1       | 5    | 5/8（依次去掉最后一个metric，因为没有到阈值） | 5/6            |<br>| 0.3       | 4    | 4/7（依次去掉最后一个metric，因为没有到阈值） | 4/6            |<br>| 0.35      | 4    | 4/6                                           | 4/6            |<br>| 0.45      | 4    | 4/5                                           | 4/6            |<br>| 0.5       | 4    | 4/4                                           | 4/6            |<br>| 0.7       | 3    | 3/3                                           | 3/6            |<br>| 0.8       | 2    | 2/2                                           | 2/6            |<br>| 0.85      | 1    | 1/1                                           | 1/6            |</p>
-</li>
+<li>第1张图片中有2个A类别的gt，有三个A类别的预测框，score分别为(0.3, 0.5,  0.9)，按照上述计算TP的方法(按score从大到小的顺序匹配)发现score为0.3和0.9的与gt相匹配，则将这两个记为TP。建立用于计算PR曲线的数组metric和记录A类别gt总数的变量n_gt，向数组中加入(0.3, 1), (0.5, 0), (0.9,  1)三组数据（每组数据的第一个代表预测框的score，第二个代表这个预测框是否是TP），并将n_gt+=2；使用相同的方法计算接下来的几张图片</li>
 </ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>GT 实际框个数</th>
+<th>2</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>detection 预测框个数</td>
+<td>3</td>
+</tr>
+<tr>
+<td>score 预测的score</td>
+<td>(0.3, 0.5,  0.9)；其中0.9和0.3的是TP</td>
+</tr>
+<tr>
+<td>记录数组metric</td>
+<td>(0.3, 1), (0.5, 0), (0.9,  1) ； 第一个代表预测框的score，第二个代表这个预测框是否是TP</td>
+</tr>
+<tr>
+<td>n_gt</td>
+<td>n_gt+=2</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>第2张图片中没有A类别的物体(gt数量为0)，则n_gt+=0，但有一个关于A类别的预测框，score为0.45，则向metric中加入(0.45,  0)；</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>GT 实际框个数</th>
+<th>0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>detection 预测框个数</td>
+<td>1</td>
+</tr>
+<tr>
+<td>score 预测的score</td>
+<td>(0.45)</td>
+</tr>
+<tr>
+<td>记录数组metric</td>
+<td>(0.45,0) ； 第一个代表预测框的score，第二个代表这个预测框是否是TP</td>
+</tr>
+<tr>
+<td>n_gt</td>
+<td>n_gt+=0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>第3张图片中有1个A类别的物体，但没有预测框，则n_gt+=1；</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>GT 实际框个数</th>
+<th>1</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>detection 预测框个数</td>
+<td>0</td>
+</tr>
+<tr>
+<td>score 预测的score</td>
+<td></td>
+</tr>
+<tr>
+<td>记录数组metric</td>
+<td></td>
+</tr>
+<tr>
+<td>n_gt</td>
+<td>n_gt+=1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>第4张图片中有3个A类别的物体，有5个预测框，其中有3个与gt相匹配，最终n_gt+=3，metric中加入(0.85, 1), (0.8, 1), (0.7, 1), (0.35, 0), (0.1, 0)；</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>GT 实际框个数</th>
+<th>3</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>detection 预测框个数</td>
+<td>5</td>
+</tr>
+<tr>
+<td>score 预测的score</td>
+<td>0.85,0.8,0.7,0.35,0.1</td>
+</tr>
+<tr>
+<td>记录数组metric</td>
+<td>(0.85, 1), (0.8, 1), (0.7, 1), (0.35, 0), (0.1, 0)</td>
+</tr>
+<tr>
+<td>n_gt</td>
+<td>n_gt+=3</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>第5张图片中没有A类别的物体，也没有A类别的预测框。</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>GT 实际框个数</th>
+<th>0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>detection 预测框个数</td>
+<td>0</td>
+</tr>
+<tr>
+<td>score 预测的score</td>
+<td></td>
+</tr>
+<tr>
+<td>记录数组metric</td>
+<td></td>
+</tr>
+<tr>
+<td>n_gt</td>
+<td>n_gt+=0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>汇总</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>GT 实际框个数</th>
+<th>6</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>detection 预测框个数</td>
+<td>9</td>
+</tr>
+<tr>
+<td>score 预测的score</td>
+<td>0.9, 0.85, 0.8, 0.7, 0.5, 0.45, 0.35, 0.3, 0.1,</td>
+</tr>
+<tr>
+<td>记录数组metric</td>
+<td>(0.9, 1), (0.85, 1), (0.8, 1), (0.7, 1), (0.5, 0), (0.45, 0), (0.35, 0), (0.3, 1), (0.1, 0) ;共9个预测框，也就是可以得到9组PR值</td>
+</tr>
+<tr>
+<td>n_gt</td>
+<td>n_gt=6</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>计算PR值</li>
+</ul>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>score阈值</th>
+<th>TP</th>
+<th>Precision = TP/ all detection</th>
+<th>Recall = TP/GT</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>5</td>
+<td>5/9</td>
+<td>5/6</td>
+</tr>
+<tr>
+<td>0.1</td>
+<td>5</td>
+<td>5/8（依次去掉最后一个metric，因为没有到阈值）</td>
+<td>5/6</td>
+</tr>
+<tr>
+<td>0.3</td>
+<td>4</td>
+<td>4/7（依次去掉最后一个metric，因为没有到阈值）</td>
+<td>4/6</td>
+</tr>
+<tr>
+<td>0.35</td>
+<td>4</td>
+<td>4/6</td>
+<td>4/6</td>
+</tr>
+<tr>
+<td>0.45</td>
+<td>4</td>
+<td>4/5</td>
+<td>4/6</td>
+</tr>
+<tr>
+<td>0.5</td>
+<td>4</td>
+<td>4/4</td>
+<td>4/6</td>
+</tr>
+<tr>
+<td>0.7</td>
+<td>3</td>
+<td>3/3</td>
+<td>3/6</td>
+</tr>
+<tr>
+<td>0.8</td>
+<td>2</td>
+<td>2/2</td>
+<td>2/6</td>
+</tr>
+<tr>
+<td>0.85</td>
+<td>1</td>
+<td>1/1</td>
+<td>1/6</td>
+</tr>
+</tbody>
+</table>
+</div>
 <h1 id="3-AP-Average-Precision"><a href="#3-AP-Average-Precision" class="headerlink" title="3 AP Average Precision"></a>3 AP Average Precision</h1><p>顾名思义AP就是平均精准度，简单来说就是对PR曲线上的Precision值求均值。PR曲线围成的面积。在实际应用中，我们并不直接对该PR曲线进行计算，对于AP的计算有不同的方式</p>
 <h2 id="3-1-11-point-interpolation"><a href="#3-1-11-point-interpolation" class="headerlink" title="3.1 11-point interpolation"></a>3.1 11-point interpolation</h2><p>Pascal VOC 2008中设置IoU的阈值为0.5，如果一个目标被重复检测，则置信度最高的为正样本，另一个为负样本。在平滑处理的PR曲线上，取横轴0-1的10等分点（包括断点共11个点）的Precision的值，计算其平均值为最终AP的值。</p>
 <img src="/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8BmAP%E8%AE%A1%E7%AE%97/image-20230314144502212.png" class="" title="image-20230314144502212">

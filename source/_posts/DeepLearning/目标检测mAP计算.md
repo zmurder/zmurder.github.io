@@ -42,6 +42,8 @@ score threshold：人工设定的score或confidence的阈值，对于某一类�
 
 ## 2.6 TP FP FN TN
 
+把缩写分为两个部分，第一个字母（F,T）和第二个字母（P,N）。首先搞清楚第二个字母，即它是你认为该样本的归属应该是怎样（Positive or Negative）；第一个字母即是对你的判断进行的评价（False or  True）。第一个字母表示你的预测值是否正确，第二个字母表示你的预测值是什么。这里也许中文可能会有不好理解的地方，所以我想用英文来描述，可能更清晰：第一个字母：Is your judgement right(true) or not(false)?第二个字母：What's your judgement  about the sample?；
+
 * **True Positive (TP)**: A correct detection. Detection with IOU ≥ *threshold*。针对所有经过score threshold筛选出的预测框，针对一个预测框来讲，如果边界框位置大小与某个GT非常相似（检测框与GT的IoU ≥ IoU threshold），那么我们就认为这个框就是一个正确的检测结果，并将其与该GT配对，TP即为这类检测框的数量。注意，在实际预测中，经常出现多个预测框和同一个GT的IoU都大于阈值，这时通常只将这些预测框中score最大的算作TP，其它算作FP。
 * **False Positive (FP)**: A wrong detection. Detection with IOU < *threshold*。
 * 边界框位置大小不达标（检测框与GT的IoU < IoU threshold）又或者这个预测框是多余的预测框（即这个框对应的GT的已经存在一个TP与之对应）的数量。在计算的时候，一般将检测出的所有边界框数量减去所有预测正确边界框的数量，也就是所有经过score threshold筛选出的预测框除去TP，剩下的边界框的数量就是FP。

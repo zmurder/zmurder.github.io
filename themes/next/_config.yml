@@ -95,10 +95,11 @@ open_graph:
 # Value before `||` delimiter is the target link, value after `||` delimiter is the name of Font Awesome icon.
 # External url should start with http:// or https://
 menu:
-  home: / || fa fa-home
+  categories: /categories/ || fa fa-th
+  home: / || fa fa-reorder
   about: /about/ || fa fa-user
   tags: /tags/ || fa fa-tags
-  categories: /categories/ || fa fa-th
+  
   # hexo: /categories/hexo/ || fa fa-archive
   # program: /categories/编程/cmake/ || fa fa-code
   # archives: /archives/ || fa fa-archive

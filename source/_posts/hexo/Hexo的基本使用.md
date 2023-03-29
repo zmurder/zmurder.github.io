@@ -320,3 +320,37 @@ custom_file_path:
 效果如下
 
 ![image-20230225195205007](Hexo的基本使用/image-20230225195205007.png)
+
+# 4 字体与颜色
+
+先看效果
+
+![image-20230329112926676](Hexo的基本使用/image-20230329112926676.png)
+
+原本的menu的背景是灰色，字体也很小，看着不清楚。因此修改一下
+
+背景颜色在
+
+themes/next/source/css/_variables/Mist.styl中，修改为自己喜欢的颜色，我这里修改的是`bule`
+
+```c
+$content-bg-color        = $blue;
+```
+
+字体大小在
+
+themes/next/source/css/_common/outline/header/menu.styl,`font-size:`修改为自己希望的
+
+```c
+  a {
+    border-bottom: 0;
+    display: block;
+    font-size: $font-size-large;
+    transition: border-color $transition-ease;
+
+    &:hover, &.menu-item-active {
+      background: var(--menu-item-bg-color);
+    }
+  }
+```
+

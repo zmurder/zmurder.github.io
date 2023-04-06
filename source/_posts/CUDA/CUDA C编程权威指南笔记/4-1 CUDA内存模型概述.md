@@ -261,7 +261,7 @@ nvcc -O2 -arch=sm_61 globalVariable.cu -o globalVariable
 运行结果
 
 ```shell
-huolin@huolin:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南练习code/chapter04$ ./globalVariable 
+zmurder@zmurder:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南练习code/chapter04$ ./globalVariable 
 Host:   copied 3.140000 to the global variable
 Device: the value of the global variable is 3.140000
 Host:   the value changed by the kernel to 5.140000

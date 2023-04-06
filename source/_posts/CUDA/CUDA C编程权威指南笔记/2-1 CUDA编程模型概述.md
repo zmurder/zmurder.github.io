@@ -148,7 +148,7 @@ blockDim.z
 
 #### 2.1.3.1 网格和线程块的维度
 
-通常，一个线程格会被组织成线程块的二维数组形式，一个线程块会被组织成线程的三维数组形式。*也就是grid一般是二维的，block一般是三维的。**
+通常，一个线程格会被组织成线程块的二维数组形式，一个线程块会被组织成线程的三维数组形式。**也就是grid一般是二维的，block一般是三维的。**
 线程格和线程块均使用3个dim3类型的无符号整型字段，而未使用的字段将被初始化为1且忽略不计。
 在CUDA程序中有两组不同的网格和块变量：手动定义的dim3数据类型和预定义的uint3数据类型。在主机端，作为内核调用的一部分，你可以使用dim3数据类型定义一个网格和块的维度。当执行核函数时，CUDA运行时会生成相应的内置预初始化的网格、块和线程变量，它们在核函数内均可被访问到且为unit3类型。**手动定义的dim3类型的网格和块变量仅在主机端可见，而unit3类型的内置预初始化的网格和块变量仅在设备端可见**。
 
@@ -208,9 +208,9 @@ int main(int argc, char **argv)
 编译运行：
 
 ```shell
-huolin@huolin:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南练习code/chapter02$ make
+zmurder@zmurder:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南练习code/chapter02$ make
 nvcc -O2 -arch=sm_61 -o checkDimension checkDimension.cu
-huolin@huolin:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南练习code/chapter02$ ./checkDimension 
+zmurder@zmurder:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南练习code/chapter02$ ./checkDimension 
 grid.x 2 grid.y 1 grid.z 1
 block.x 3 block.y 1 block.z 1
 threadIdx:(0, 0, 0),blockIdx:(1, 0, 0),blockDim:(3, 1, 1),gridDim:(2, 1, 1)
@@ -219,7 +219,7 @@ threadIdx:(2, 0, 0),blockIdx:(1, 0, 0),blockDim:(3, 1, 1),gridDim:(2, 1, 1)
 threadIdx:(0, 0, 0),blockIdx:(0, 0, 0),blockDim:(3, 1, 1),gridDim:(2, 1, 1)
 threadIdx:(1, 0, 0),blockIdx:(0, 0, 0),blockDim:(3, 1, 1),gridDim:(2, 1, 1)
 threadIdx:(2, 0, 0),blockIdx:(0, 0, 0),blockDim:(3, 1, 1),gridDim:(2, 1, 1)
-huolin@huolin:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南练习code/chapter02$
+zmurder@zmurder:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南练习code/chapter02$
 ```
 
 #### 2.1.3.2 从主机端和设备端访问网格/块变量
@@ -477,13 +477,13 @@ int main(int argc, char **argv)
 运行结果如下：
 
 ```shell
-huolin@huolin:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南练习code/chapter02$ ./sumArraysOnGPU-small-case 
+zmurder@zmurder:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南练习code/chapter02$ ./sumArraysOnGPU-small-case 
 ./sumArraysOnGPU-small-case Starting...
 Vector size 32
 Execution configure <<<1, 32>>>
 Arrays match.
 
-huolin@huolin:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南练习code/chapter02$ 
+zmurder@zmurder:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南练习code/chapter02$ 
 ```
 
 ## 

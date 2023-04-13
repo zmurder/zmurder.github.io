@@ -808,6 +808,35 @@ target_link_libraries(<target>
 target_link_libraries(main hello)
 ```
 
+1. **PRIVATE**
+2. **INTERFACE**
+3. **PUBLIC**
+
+这三个关键字的主要作用是指定的是目标文件依赖项的使用范围（scope），所以可以专门了解一下。
+
+假设某个项目中存在两个动态链接库：动态链接库`liball.so`、动态链接库`libsub.so`。
+
+对于**PRIVATE**关键字，使用的情形为：`liball.so`**使用**了`libsub.so`，但是`liball.so`并**不对外暴露**`libsub.so`的接口：
+
+```cmake
+target_link_libraries(all PRIVATE sub)
+target_include_directories(all PRIVATE sub)
+```
+
+对于**INTERFACE**关键字，使用的情形为：`liball.so`**没有使用**`libsub.so`，但是`liball.so`**对外暴露**`libsub.so`的接口，也就是`liball.so`的头文件包含了`libsub.so`的头文件，在其它目标使用`liball.so`的功能的时候，可能必须要使用`libsub.so`的功能：
+
+```cmake
+target_link_libraries(all INTERFACE sub)
+target_include_directories(all INTERFACE sub)
+```
+
+对于**PUBLIC**关键字（**PUBLIC=PRIVATE+INTERFACE**），使用的情形为：`liball.so`**使用**了`libsub.so`，并且`liball.so`**对外暴露**了`libsub.so`的接口：
+
+```Cmake
+target_link_libraries(all PUBLIC sub)
+target_include_directories(all PUBLIC sub)
+```
+
 ## 6.16 include_directories
 
 ```cmake

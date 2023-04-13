@@ -17,11 +17,11 @@ int main(void)
 
 ```cmake
 # CMake 最低版本号要求
-CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
+cmake_minimum_required (VERSION 2.8)
 # #项目名称 任意
-PROJECT (Demo1)
+project (Demo1)
 # 指定生成目标 Demo1
-ADD_EXECUTABLE(Demo1 hello.c)
+add_executable(Demo1 hello.c)
 ```
 
 编辑后文件结构如下
@@ -84,12 +84,12 @@ aux_source_directory(<dir> <variable>)
 
 ```cmake
 #cmake最低版本需求，不加入此行会受到警告信息
-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
-PROJECT(HELLO) #项目名称 任意
+cmake_minimum_required(VERSION 2.6)
+project(HELLO) #项目名称 任意
 #把当前目录(.)下所有源代码文件和头文件加入变量SRC_LIST
-AUX_SOURCE_DIRECTORY(. SRC_LIST)
+aux_source_directory(. SRC_LIST)
 #生成可执行程序 hello
-ADD_EXECUTABLE(Demo2 ${SRC_LIST})
+add_executable(Demo2 ${SRC_LIST})
 ```
 
 这样，CMake 会将当前目录所有源文件的文件名赋值给变量 DIR_SRCS ，再指示变量 DIR_SRCS 中的源文件需要编译成一个名称为 Demo2 的可执行文件。
@@ -119,28 +119,28 @@ ADD_EXECUTABLE(Demo2 ${SRC_LIST})
 
 ```cmake
 # CMake 最低版本号要求
-CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
+cmake_minimum_required (VERSION 2.8)
 # 项目信息
-PROJECT (Demo3)
+project (Demo3)
 # 指定头文件目录
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/src)
+include_directories(${project_SOURCE_DIR}/src)
 # 查找当前目录下的所有源文件
 # 并将名称保存到 DIR_SRCS 变量
-AUX_SOURCE_DIRECTORY(. DIR_SRCS)
+aux_source_directory(. DIR_SRCS)
 # 添加 src 子目录
-ADD_SUBDIRECTORY(src)
+add_subdirectory(src)
 # 指定生成目标
-ADD_EXECUTABLE(Demo ${DIR_SRCS})
+add_executable(Demo ${DIR_SRCS})
 # 添加链接库
-TARGET_LINK_LIBRARIES(Demo fun)
+target_link_libraries(Demo fun)
 ```
 
 该文件添加了下面的内容: 
 
-* INCLUDE_DIRECTORIES 添加头文件路径
+* include_directories 添加头文件路径
 
-* 使用命令 ADD_SUBDIRECTORY 指明本项目包含一个子目录 src，这样 src 目录下的  CMakeLists.txt 文件和源代码也会被处理 。
-* 使用命令 TARGET_LINK_LIBRARIES 指明可执行文件 Demo  需要连接一个名为 fun 的链接库 。
+* 使用命令 add_subdirectory 指明本项目包含一个子目录 src，这样 src 目录下的  CMakeLists.txt 文件和源代码也会被处理，也就是会调用src下的CMakeList.txt进行编译 。
+* 使用命令 target_link_libraries 指明可执行文件 Demo  需要连接一个名为 fun 的链接库 。
 
 子目录src下的CMakeLists.txt如下
 
@@ -202,7 +202,7 @@ add_library(testlib SHARED ${SOURCES})
 上面的变化
 
 * `file`指令，这里的作用和`aux_source_directory`类似
-* `add_library`而不是`ADD_EXECUTABLE`生成库文件，而不是可执行文件，`SHARED`参数是表明生成动态库，如果是需要生成静态库就是`STATIC`
+* `add_library`而不是`add_executable`生成库文件，而不是可执行文件，`SHARED`参数是表明生成动态库，如果是需要生成静态库就是`STATIC`
 
 编译如下
 
@@ -229,21 +229,21 @@ add_library(testlib SHARED ${SOURCES})
 
 ```cmake
 # CMake 最低版本号要求
-CMAKE_MINIMUM_REQUIRED (VERSION 2.8)
+cmake_minimum_required (VERSION 2.8)
 # 项目信息
-PROJECT (Demo3)
+project (Demo3)
 # 指定头文件目录
-INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/lib)
+include_directories(${project_SOURCE_DIR}/lib)
 #添加共享库搜索路径
-link_directories(${PROJECT_SOURCE_DIR}/lib)
+link_directories(${project_SOURCE_DIR}/lib)
 # 查找当前目录下的所有源文件
 # 并将名称保存到 DIR_SRCS 变量
-AUX_SOURCE_DIRECTORY(. DIR_SRCS)
+aux_source_directory(. DIR_SRCS)
 
 # 指定生成目标
-ADD_EXECUTABLE(Demo ${DIR_SRCS})
+add_executable(Demo ${DIR_SRCS})
 # 添加链接库
-TARGET_LINK_LIBRARIES(Demo testlib)
+target_link_libraries(Demo testlib)
 ```
 
 编译如下

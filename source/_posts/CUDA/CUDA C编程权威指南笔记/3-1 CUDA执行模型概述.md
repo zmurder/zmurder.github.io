@@ -81,13 +81,35 @@ Fermi架构是第一个完整的GPU计算架构。
 | Warp allocation granularity                        | 2     |
 | Shared Memory Per Block (bytes) (CUDA runtime use) | 0     |
 
+## 3.1.3 Kepler架构
+
+kepler架构的最突出的一个特点就是内核可以启动内核了，这使得我们可以使用GPU完成简单的递归操作，流程如下。
+![img](3-1 CUDA执行模型概述/3_8.png)
+
+## 3.1.4 配置文件驱动优化
+
+CUDA提供了两个主要的性能分析工具：nvvp，独立的可视化分析器；nvprof，命令行分析器。
+
+nvvp是可视化分析器，它可以可视化并优化CUDA程序的性能。
+
+nvprof在命令行上收集和显示分析数据。
+
+主要使用nvprof来提高内核性能。本书还介绍了如何选择合适的计数器和指标，并使用命令行中的nvprof来收集分析数据，以便用于设计优化策略。你还将会学习如何使用不同的计数器和指标，从多个角度分析内核。
+有3种常见的限制内核性能的因素：
+
+* 存储带宽
+* 计算资源
+* 指令和内存延迟
+
 # 附录：
 
-## SP
+## GPU硬件架构
+
+### SP
 
 **SP（streaming processor）：**最基本的处理单元，也称为CUDA core。最后具体的指令和任务都是在SP上处理的。GPU进行并行计算，也就是很多个SP同时做处理。
 
-## SM
+### SM
 
 **SM（streaming multiprocessor）：** **多个SP加上其他的一些资源组成一个SM，也叫GPU大核，其他资源如：warp scheduler，register，shared memory等**。SM可以看做GPU的心脏（对比CPU核心），register和shared memory是SM的稀缺资源。CUDA将这些资源分配给所有驻留在SM中的threads。因此，这些有限的资源就使每个SM中active  warps有非常严格的限制，也就限制了并行能力。如下图是一个SM的基本组成，其中每个绿色小块代表一个SP。
 
@@ -95,4 +117,17 @@ Fermi架构是第一个完整的GPU计算架构。
 
 每个SM包含的SP数量依据GPU架构而不同，Fermi架构GF100是32个，GF10X是48个，Kepler架构都是192个，Maxwell都是128个。**当一个kernel启动后，thread会被分配到很多SM中执行。大量的thread可能会被分配到不同的SM，但是同一个block中的thread必然在同一个SM中并行执行。**
 
-## Warp
+### Warp
+
+多处理器multiprocessor以32个并行线程(称为warp)为一组来创建、管理、调度和执行线程。
+
+warp中所有threads并行的执行相同的指令。由SM的硬件warp scheduler负责调度。目前每个warp包含32个threads。从一个执行上下文切换到另一个执行上下文没有任何成本，并且在每次指令发出时，warp调度器warp scheduler都会选择一个具有准备执行下一条指令的线程的warp (warp的活动线程the [active threads](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#simt-architecture-notes) of the warp)，并向这些线程发出指令。
+
+参与当前指令的warp线程称为活动*active*线程，而不在当前指令上的线程称为非活动线程*inactive* (disabled)。
+
+所以在分配grid和blocksize时的基本概念是
+
+- 保证block中thread数目是32的倍数。这是因为同一个block必须在一个SM内，而SM的Warp调度是32个线程一组进行的。
+- 避免block太小：每个blcok最少128或256个thread。
+- 根据kernel需要的资源调整block，多做实验来挖掘最佳配置。
+- 保证block的数目远大于SM的数目。

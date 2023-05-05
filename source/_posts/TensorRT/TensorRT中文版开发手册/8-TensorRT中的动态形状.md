@@ -1,6 +1,6 @@
 # 在TensorRT中使用动态形状(Dynamic Shapes)
 
-![](8.TensorRT中的动态形状/rdp.jpg)
+![](8-TensorRT中的动态形状/rdp.jpg)
 
 [点击此处加入NVIDIA开发者计划](https://developer.nvidia.com/zh-cn/developer-program)
 
@@ -149,7 +149,7 @@ config.add_optimization_profile(profile)
 
 考虑一个具有四个输入、一个输出、在`IBuilderConfig`中具有三个优化配置文件的网络。该引擎有 `15` 个绑定，每个优化配置文件有 `5 `个，在概念上组织为一个表：
 
-![](8.TensorRT中的动态形状/opt-profile.png)
+![](8-TensorRT中的动态形状/opt-profile.png)
 
 
 

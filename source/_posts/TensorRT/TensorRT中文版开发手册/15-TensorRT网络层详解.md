@@ -1,5 +1,5 @@
 # TensorRT网络层详解
-![](15.TensorRT网络层详解/rdp.jpg)
+![](15-TensorRT网络层详解/rdp.jpg)
 
 [点击此处加入NVIDIA开发者计划](https://developer.nvidia.com/zh-cn/developer-program)
 
@@ -840,7 +840,7 @@ TensorRT 通常通过`kFLOAT`或`kHALF`对`kINT8`执行归约。 `kINT8`值显�
 
 在默认（单向）配置中，RNNv2 层应用G ，如下图所示：
 
-![](15.TensorRT网络层详解/rnnv2.png)
+![](15-TensorRT网络层详解/rnnv2.png)
 
 G'是 G 的变体。
 进入方框的箭头是函数输入，离开方框的箭头是函数输出。
@@ -858,7 +858,7 @@ G'是 G 的变体。
 
 Bidirectional RNNs (BiRNNs):  可以配置为双向的。在这种情况下，每个子层由一个“前向”层和一个“后向”层组成。前向层使用从0到T的$x_i$迭代应用G ，后向层使用从T到0的$x_i$迭代应用G ，如下图所示：
 
-![](15.TensorRT网络层详解/bidirectionanl%20RNNs.png)
+![](15-TensorRT网络层详解/bidirectionanl%20RNNs.png)
 
 
 上图中的黑条表示串联。完全隐藏状态$h_t$由前向隐藏状态$h_{tf}$和后向隐藏状态$h_{tb}$的串联定义:
@@ -985,7 +985,7 @@ $B = (A * scale + shift)^{power}$
 
 **ScaleMode::kCHANNEL channel-wise transformation**
 
-![image-20230505154642579](15.TensorRT网络层详解/image-20230505154642579.png)
+![image-20230505154642579](15-TensorRT网络层详解/image-20230505154642579.png)
 
 **ScaleMode::kELEMENTWISE element-wise transformation**
 
@@ -1145,7 +1145,7 @@ ISliceLayer实现了Slice 操作的五种变体。
 
 给定一个输入n维张量A ，Slice 层生成一个输出张量B ，其中包含从A中提取的元素。让我们将 a 、 b 、 s 、 o 、 d 、 f分别表示为A中的元素坐标、 B中的元素坐标、步幅、起始偏移量、 A中每个维度的范围和要填充的常数值。步幅可以是正数、负数或零。 A和B的对应映射为：
 
-![](15.TensorRT网络层详解/islice-equation.png)
+![](15-TensorRT网络层详解/islice-equation.png)
 
 
 其中: $x_i = b_i * s_i + o_i$

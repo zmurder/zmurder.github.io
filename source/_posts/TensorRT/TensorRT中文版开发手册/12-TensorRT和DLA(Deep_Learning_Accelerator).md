@@ -1,7 +1,7 @@
 # TensorRT和DLA(Deep Learning Accelerator)
 
 
-![](12.TensorRT和DLA(Deep_Learning_Accelerator)/rdp.jpg)
+![](12-TensorRT和DLA(Deep_Learning_Accelerator)/rdp.jpg)
 
 [点击此处加入NVIDIA开发者计划](https://developer.nvidia.com/zh-cn/developer-program)
 

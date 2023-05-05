@@ -1,6 +1,6 @@
 # TensorRT的命令行程序
 
-![](17.TensorRT的命令行程序/rdp.jpg)
+![](17-TensorRT的命令行程序/rdp.jpg)
 
 [点击此处加入NVIDIA开发者计划](https://developer.nvidia.com/zh-cn/developer-program)
 
@@ -70,7 +70,7 @@ enqueue batch 0
 
 图 1. 在 `Nsight` 系统下运行的正常`trtexec`的性能指标（`ShuffleNet`，`BS=16`，best，TitanRTX@1200MHz）
 
-![](17.TensorRT的命令行程序/trtexec.png)
+![](17-TensorRT的命令行程序/trtexec.png)
 
 
 将`--dumpProfile`标志添加到`trtexec`以显示每层性能配置文件，这使用户可以了解网络中的哪些层在 GPU 执行中花费的时间最多。每层性能分析也适用于作为 CUDA 图启动推理（需要 `CUDA 11.1` 及更高版本）。此外，使用`--profilingVerbosity=detailed`标志构建引擎并添加`--dumpLayerInfo`标志以显示详细的引擎信息，包括每层详细信息和绑定信息。这可以让你了解引擎中每一层对应的操作及其参数。

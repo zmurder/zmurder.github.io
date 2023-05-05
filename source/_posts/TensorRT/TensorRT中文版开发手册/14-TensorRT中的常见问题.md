@@ -1,5 +1,5 @@
 # TensorRT中的常见问题
-![](14.TensorRT中的常见问题/rdp.jpg)
+![](14-TensorRT中的常见问题/rdp.jpg)
 
 [点击此处加入NVIDIA开发者计划](https://developer.nvidia.com/zh-cn/developer-program)
 

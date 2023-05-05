@@ -1,6 +1,6 @@
 # TensorRT的数据格式定义详解
 
-![](16.TensorRT的数据格式定义详解/rdp.jpg)
+![](16-TensorRT的数据格式定义详解/rdp.jpg)
 
 [点击此处加入NVIDIA开发者计划](https://developer.nvidia.com/zh-cn/developer-program)
 
@@ -18,11 +18,11 @@ TensorRT 支持不同的数据格式。有两个方面需要考虑：数据类�
 
 图1. CHW的布局格式：图像分为HxW矩阵，每个通道一个，矩阵按顺序存储；通道的所有值都是连续存储的。
 
-![](16.TensorRT的数据格式定义详解/fig1.png)
+![](16-TensorRT的数据格式定义详解/fig1.png)
 
 图2. HWC的布局格式：图像存储为单个HxW矩阵，其值实际上是 C 元组，每个通道都有一个值；一个点（像素）的所有值都是连续存储的。
 
-![](16.TensorRT的数据格式定义详解/fig2.png)
+![](16-TensorRT的数据格式定义详解/fig2.png)
 
 
 为了实现更快的计算，定义了更多格式以将通道值打包在一起并使用降低的精度。因此，TensorRT 还支持`NC / 2HW2`和`NHWC8`等格式。
@@ -31,13 +31,13 @@ TensorRT 支持不同的数据格式。有两个方面需要考虑：数据类�
 
 图 3. 一对通道值在每个HxW矩阵中打包在一起。结果是一种格式，其中`[C/2] HxW`矩阵的值是两个连续通道的值对
 
-![](16.TensorRT的数据格式定义详解/fig3.png)
+![](16-TensorRT的数据格式定义详解/fig3.png)
 
 
 在`NHWC8 ( TensorFormat::kHWC8 )` 中， HxW矩阵的条目包括所有通道的值（参见图 4 ）。此外，这些值被打包在`⌈ C/8 ⌉` 8 元组中，并且C向上舍入到最接近的 8 倍数。
 
 图 4. 在这种`NHWC8`格式中， HxW矩阵的条目包括所有通道的值。
-![](16.TensorRT的数据格式定义详解/fig4.png)
+![](16-TensorRT的数据格式定义详解/fig4.png)
 
 其他TensorFormat遵循与前面提到的`TensorFormat::kCHW2`和`TensorFormat::kHWC8`类似的规则。
 

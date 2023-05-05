@@ -1,6 +1,6 @@
 # TensorRT的Python接口解析
 
-![](4.TensorRT的Python接口解析/rdp.jpg)
+![](4-TensorRT的Python接口解析/rdp.jpg)
 
 [点此链接加入NVIDIA开发者计划](https://developer.nvidia.com/zh-cn/developer-program)
 

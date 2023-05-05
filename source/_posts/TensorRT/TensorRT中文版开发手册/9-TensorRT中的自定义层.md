@@ -1,6 +1,6 @@
 # TensorRT中的自定义层
 
-![](9.TensorRT中的自定义层/rdp.jpg)
+![](9-TensorRT中的自定义层/rdp.jpg)
 
 [点击此处加入NVIDIA开发者计划](https://developer.nvidia.com/zh-cn/developer-program)
 

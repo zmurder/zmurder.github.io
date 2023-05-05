@@ -275,7 +275,7 @@ Q/DQ 层控制网络的计算和数据精度。 `IQuantizeLayer`实例通过量�
 
 下图. 可量化的`AveragePool`层（蓝色）与 `DQ` 层和 `Q` 层融合。所有三层都被量化的`AveragePool`层（绿色）替换。
 
-![](7.TensorRT中的INT8/q-dq.png)
+![](7-TensorRT中的INT8/q-dq.png)
 
 在网络优化期间，TensorRT 在称为 `Q/DQ` 传播的过程中移动 `Q/DQ` 层。传播的目标是最大化以低精度处理的图的比例。因此，TensorRT 向后传播 Q 节点（以便尽可能早地进行量化）和向前传播 DQ 节点（以便尽可能晚地进行去量化）。 Q-layers 可以与 `commute-with-Quantization` 层交换位置，DQ-layers 可以与 `commute-with-Dequantization` 层交换位置。
 
@@ -287,7 +287,7 @@ Similarly, a layer Op commutes with dequantization if $Op (DQ (x) ) ==DQ (Op (x)
 
 下图描述 DQ 前向传播和 Q 后向传播的插图。
 
-![](7.TensorRT中的INT8/q-dq-propagation.png)
+![](7-TensorRT中的INT8/q-dq-propagation.png)
 
 **注意：**
 
@@ -327,37 +327,37 @@ Q/DQ 层在网络中的放置会影响性能和准确性。由于量化引入的
 
 下图 TensorRT 如何融合卷积层的两个示例。在左边，只有输入被量化。在右边，输入和输出都被量化了。
 
-![](7.TensorRT中的INT8/q-dq-placement1.png)
+![](7-TensorRT中的INT8/q-dq-placement1.png)
 
 默认情况下，不量化加权运算的输出。保留更高精度的去量化输出有时很有用。例如，如果线性运算后面跟着一个激活函数（SiLU，下图中），它需要更高的精度输入才能产生可接受的精度。
 
-![](7.TensorRT中的INT8/q-dq-placement2.png)
+![](7-TensorRT中的INT8/q-dq-placement2.png)
 
 不要在训练框架中模拟批量归一化和 ReLU 融合，因为 TensorRT 优化保证保留这些操作的算术语义。
 
-![](7.TensorRT中的INT8/q-dq-placement3.png)
+![](7-TensorRT中的INT8/q-dq-placement3.png)
 
 TensorRT 可以在加权层之后融合element-wise addition，这对于像 ResNet 和 EfficientNet 这样具有跳跃连接的模型很有用。element-wise addition层的第一个输入的精度决定了融合输出的精度。
 
 比如下图中，$x_f^1$的精度是浮点数，所以融合卷积的输出仅限于浮点数，后面的Q层不能和卷积融合。
 
-![](7.TensorRT中的INT8/q-dq-placement4.png)
+![](7-TensorRT中的INT8/q-dq-placement4.png)
 
 
 相比之下，当$x_f^1$量化为 INT8 时，如下图所示，融合卷积的输出也是 INT8，尾部的 Q 层与卷积融合。
 
-![](7.TensorRT中的INT8/q-dq-placement5.png)
+![](7-TensorRT中的INT8/q-dq-placement5.png)
 
 为了获得额外的性能，请尝试使用 Q/DQ 量化不交换的层。目前，具有 INT8 输入的非加权层也需要 INT8 输出，因此对输入和输出都进行量化。
 
-![](7.TensorRT中的INT8/q-dq-placement6.png)
+![](7-TensorRT中的INT8/q-dq-placement6.png)
 
 
 如果 TensorRT 无法将操作与周围的 Q/DQ 层融合，则性能可能会降低，因此在添加 Q/DQ 节点时要保守，并牢记准确性和 TensorRT 性能进行试验。
 
 下图是额外 Q/DQ 操作可能导致的次优融合示例（突出显示的浅绿色背景矩形）。
 
-![](7.TensorRT中的INT8/sub-optimal.png)
+![](7-TensorRT中的INT8/sub-optimal.png)
 
 
 对激活使用逐张量量化；和每个通道的权重量化。这种配置已经被经验证明可以带来最佳的量化精度。
@@ -369,7 +369,7 @@ TensorRT 执行的一些 Q/DQ 图重写优化比较两个或多个 Q/DQ 层之�
 
 下比较 Q1 和 Q2 的尺度是否相等的示例，如果相等，则允许它们向后传播。如果使用 Q1 和 Q2 的新值对引擎进行改装，使得`Q1 != Q2` ，则异常中止改装过程。
 
-![](7.TensorRT中的INT8/q-dq-limitations.png)
+![](7-TensorRT中的INT8/q-dq-limitations.png)
 
 ### 7.4.6. QAT Networks Using TensorFlow
 

@@ -1,6 +1,6 @@
 # TensorRT的最佳性能实践
 
-![](13.TensorRT的最佳性能实践/rdp.jpg)
+![](13-TensorRT的最佳性能实践/rdp.jpg)
 
 [点击此处加入NVIDIA开发者计划](https://developer.nvidia.com/zh-cn/developer-program)
 
@@ -98,9 +98,9 @@ Nsight Systems 可以通过多种方式配置，以仅报告程序执行的一�
 
 例如，以下屏幕截图来自 Nsight Systems。
 
-![](13.TensorRT的最佳性能实践/layer-exe.png)
+![](13-TensorRT的最佳性能实践/layer-exe.png)
 
-![](13.TensorRT的最佳性能实践/kernels-gpu.png)
+![](13-TensorRT的最佳性能实践/kernels-gpu.png)
 
 
 **控制 NVTX 跟踪中的详细程度**

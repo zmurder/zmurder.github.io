@@ -1,6 +1,6 @@
 # TensorRT中的循环
 
-![](10.TensorRT中的循环/rdp.jpg)
+![](10-TensorRT中的循环/rdp.jpg)
 
 [点击此处加入NVIDIA开发者计划](https://developer.nvidia.com/zh-cn/developer-program)
 
@@ -20,7 +20,7 @@ NVIDIA TensorRT 支持循环结构，这对于循环网络很有用。 TensorRT 
 
 下图描绘了循环的结构和边界处的数据流。循环不变张量可以直接在循环内部使用，例如 FooLayer 所示。
 
-![](10.TensorRT中的循环/loop.png)
+![](10-TensorRT中的循环/loop.png)
 
 一个循环可以有多个I`IteratorLayer` 、 `IRecurrenceLayer`和`ILoopOutputLayer` ，并且最多可以有两个`ITripLimitLayer` ，如后面所述。没有`ILoopOutputLayer`的循环没有输出，并由 TensorRT 优化。
 

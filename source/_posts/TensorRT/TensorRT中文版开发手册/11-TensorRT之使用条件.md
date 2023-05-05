@@ -1,6 +1,6 @@
 # TensorRT之条件控制
 
-![](11.TensorRT之使用条件/rdp.jpg)
+![](11-TensorRT之使用条件/rdp.jpg)
 
 [点击此处加入NVIDIA开发者计划](https://developer.nvidia.com/zh-cn/developer-program)
 
@@ -62,7 +62,7 @@ IIfConditionalOutputLayer* outputLayer = simpleIf->addOutput(
 
 下图提供了 if 条件抽象模型的图形表示。绿色矩形表示条件的内部，仅限于NVIDIA TensorRT 支持矩阵中的Layers [For Flow-Control Constructs](https://docs.nvidia.com/deeplearning/tensorrt/support-matrix/index.html#layers-flow-control-constructs)部分中列出的层类型。
 
-![](11.TensorRT之使用条件/conditional_abstract_model.png)
+![](11-TensorRT之使用条件/conditional_abstract_model.png)
 
 
 ## 11.2. Conditional Execution
@@ -76,7 +76,7 @@ IIfConditionalOutputLayer* outputLayer = simpleIf->addOutput(
 
 下面的三个图表描述了`IIfConditionalInputLayer`放置的选择如何控制执行调度。
 
-![](11.TensorRT之使用条件/conditional_lazy_eager_execution.png)
+![](11-TensorRT之使用条件/conditional_lazy_eager_execution.png)
 
 在图 A 中，真分支由 3 层（T1、T2、T3）组成。当条件评估为true时，这些层会延迟执行。
 

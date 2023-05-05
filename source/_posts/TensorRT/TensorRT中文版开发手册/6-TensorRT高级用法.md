@@ -1,6 +1,6 @@
-# 6.TensorRT 进阶用法
+# 6-TensorRT 进阶用法
 
-![](6.TensorRT高级用法/rdp.jpg)
+![](6-TensorRT高级用法/rdp.jpg)
 
 [点击此处加入NVIDIA开发者计划](https://developer.nvidia.com/zh-cn/developer-program)
 ## 6.1. The Timing Cache

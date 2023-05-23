@@ -105,9 +105,11 @@ nvprof在命令行上收集和显示分析数据。
 
 ## GPU硬件架构
 
-### SP
+### SP（CUDA Core）
 
-**SP（streaming processor）：**最基本的处理单元，也称为CUDA core。最后具体的指令和任务都是在SP上处理的。GPU进行并行计算，也就是很多个SP同时做处理。
+**SP（streaming processor）：**最基本的处理单元，也称为CUDA core。最后具体的指令和任务都是在SP上处理的。GPU进行并行计算，也就是很多个SP同时做处理。下面这个图是CUDA Core的结构： 
+ ![这里写图片描述](3-1 CUDA执行模型概述/70.png) 
+ 包括控制单元Dispatch Port、Operand Collector，以及浮点计算单元FP Unit、整数计算单元Int Unit，另外还包括计算结果队列。当然还有Compare、Logic、Branch等。相当于微型CPU。
 
 ### SM
 
@@ -116,6 +118,10 @@ nvprof在命令行上收集和显示分析数据。
 ![img](3-1 CUDA执行模型概述/v2-e51fe81b6f8808158b58e895cc4d3e09_r.jpg)
 
 每个SM包含的SP数量依据GPU架构而不同，Fermi架构GF100是32个，GF10X是48个，Kepler架构都是192个，Maxwell都是128个。**当一个kernel启动后，thread会被分配到很多SM中执行。大量的thread可能会被分配到不同的SM，但是同一个block中的thread必然在同一个SM中并行执行。**
+
+要注意的是CUDA Core是Single Precision的，也就是计算float单精度的。双精度Double Precision是那个黄色的模块。所以上面一个SM里边有32个DP Unit，有64个CUDA Core，所以单精度双精度单元数量比是2:1。LD/ST 是load store unit，用来内存操作的。SFU是Special function unit，用来做cuda的intrinsic function的，类似于__cos()这种。
+
+无论是图形渲染还是cuda编程，最基本的程序并行结构称为thread，这是程序员可以控制的最细粒度的并行单位。**每一个thread在运算单元上就对应一个sp**，所以新闻里常常会笼统的把sp数量等同于thread的并行数量，从而量化不同GPU的性能。多个thread组合起来称为一个block，数量是程序员可以设定的。在同一个block内的thread之间可以相互通信，因为他们可以共用同一个SM内的shared memory(共享储内存)，每一个thread还拥有各自独占的register(寄存器)和local memory(本地储存器)，这几种储存器都是整个GPU中距离运算单元距离最近，速度最快的储存器资源。但是跨block的线程通信不能通过SM内部的储存器，只能通过距离很远，访问时间长达几百个周期的global memory(全局内存，就是指显存)来实现，这个速度实在太慢了，所以cuda程序会尽量避免使用global memory。
 
 ### Warp
 

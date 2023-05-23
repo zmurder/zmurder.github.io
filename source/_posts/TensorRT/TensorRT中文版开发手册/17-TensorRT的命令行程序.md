@@ -72,8 +72,63 @@ enqueue batch 0
 
 ![](17-TensorRT的命令行程序/trtexec.png)
 
-
 将`--dumpProfile`标志添加到`trtexec`以显示每层性能配置文件，这使用户可以了解网络中的哪些层在 GPU 执行中花费的时间最多。每层性能分析也适用于作为 CUDA 图启动推理（需要 `CUDA 11.1` 及更高版本）。此外，使用`--profilingVerbosity=detailed`标志构建引擎并添加`--dumpLayerInfo`标志以显示详细的引擎信息，包括每层详细信息和绑定信息。这可以让你了解引擎中每一层对应的操作及其参数。
+
+下面是网上看到的另一个解释作为补充：
+
+使用TensorRT进行模型转换及部署主要涉及以下几个性能指标：
+
+![img](https:////upload-images.jianshu.io/upload_images/19610152-8723d92399f96678.png?imageMogr2/auto-orient/strip|imageView2/2/w/1147/format/webp)
+
+性能统计指标
+
+1. Throughput 吞吐量
+
+> 单位：qps, QPS, Queries Per Second 表示每秒能够相应的查询次数
+>  由查询次数除以主机Walltime总和得到。如果该值明显低于GPU计算时间的倒数，说明GPU可能由于主机侧的开销或数据传输导致其未能充分利用
+>  the observed throughput computed by dividing the number of queries by the Total Host Walltime. If this is significantly lower than the reciprocal of GPU Compute Time, the GPU may be under-utilized because of host-side overheads or data transfers.
+
+1. Latency
+
+> 该值由 H2D 延迟, GPU 计算时间, 和 D2H 延迟相加得到，是推断单个查询的延迟。
+>  the summation of H2D Latency, GPU Compute Time, and D2H Latency. This is the latency to infer a single query.
+
+1. End-to-End Host Latency 主机侧端到端延迟
+
+> 单次查询的H2D被调用，到D2H完成所用的耗时，其包括等待之前查询完成所需时间。
+>  the duration from when the H2D of a query is called to when the D2H of the same query is completed, which includes the latency to wait for the completion of the previous query. This is the latency of a query if multiple queries are enqueued consecutively.
+
+1. Enqueue Time 查询排队时间
+
+> 主机侧进行单次查询排队延迟。如果该值大于GPU计算时间，说明GPU可能没有被充分利用
+>  the host latency to enqueue a query. If this is longer than GPU Compute Time, the GPU may be under-utilized.
+
+1. H2D Latency、Host to Device 延迟
+
+> 将单次查询的输入张量传输至设备侧引起的延时
+>  the latency for host-to-device data transfers for input tensors of a single query.
+
+1. GPU Compute Time、GPU计算时间
+
+> 单次查询执行核函数引起的延时，用来衡量GPU用来完成计算（执行核函数）所需的时间
+>  the GPU latency to execute the kernels for a query.
+
+1. D2H Latency、Device to Host 延迟
+
+> 将单次查询的输出张量传输至主机侧引起的延时
+>  the latency for device-to-host data transfers for output tensors of a single query.
+
+1. Total Host Walltime、主机Walltime[[1\]](#fn1)总和
+
+> 主机侧首个查询开始排队到最后一个查询完成的Walltime总和
+>  the host walltime from when the first query (after warmups) is enqueued to when the last query is completed.
+
+1. Total GPU Compute Time、GPU计算时间总和
+
+> 所有查询的GPU耗时的总和。如果该值显著低于Total Host Walltime，说明GPU可能由于主机侧的开销和数据传输导致GPU没有被充分利用。
+>  the summation of the GPU Compute Time of all the queries. If this is significantly shorter than Total Host Walltime, the GPU may be under-utilized because of host-side overheads or data transfers.
+
+
 
 ### A.3.1.2. Serialized Engine Generation
 

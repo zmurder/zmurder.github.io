@@ -88,6 +88,10 @@ int main(void) {
 
 ![image-20230110095342675](Nsight Systems基础/image-20230110095342675.png)
 
+
+
+
+
 ![image-20230110100027783](Nsight Systems基础/image-20230110100027783.png)
 
 ![image-20230110100633727](Nsight Systems基础/image-20230110100633727.png)

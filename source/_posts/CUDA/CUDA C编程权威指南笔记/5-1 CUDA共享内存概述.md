@@ -278,8 +278,6 @@ if (threadID % 2 == 0) {
 
 ### 5.1.5.3 内存栅栏
 
-### 内存栅栏
-
 内存栅栏能保证栅栏前的内核内存写操作对栅栏后的其他线程都是可见的，有以下三种栅栏：块，网格，系统。
 
 这一部分不是很理解，后期可以参考官网理解一下[7.5. Memory Fence Functions](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#memory-fence-functions)。大概意思是`__threadfence`一般用于block间有竞争且竞争成功后要用到其它block的前面的全局写的结果的场合而block内还是直接用`__syncthreads`。官方的例子用的是`void __threadfence();`

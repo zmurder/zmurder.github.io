@@ -300,6 +300,39 @@ __global__ void kernel_name(argument list);
 
 `__device__`和`__host__`限定符可以一齐使用，这样函数可以同时在主机和设备端进行编译。
 
+需要注意的一点是传递给核函数的参数。
+
+当我们调用核函数时，需要将参数传入核函数。
+
+* 若参数是在Device端申请的数组（GPU的内存），直接像C++函数那样传入指针名就行，
+* 如果是在Host端动态申请的变量（CPU的内存），不能把指针作为参数传递进去
+* 可以将CPU值传递到核函数。
+
+```C
+
+
+__global__ void sumArraysOnGPU(float *A, float *B, float *C, const int N)
+{
+    int i = threadIdx.x;
+
+    if (i < N) C[i] = A[i] + B[i];
+}
+
+int nElem = 1 << 5;
+// malloc device global memory
+float *d_A, *d_B, *d_C;
+CHECK(cudaMalloc((float**)&d_A, nBytes));
+CHECK(cudaMalloc((float**)&d_B, nBytes));
+CHECK(cudaMalloc((float**)&d_C, nBytes));
+sumArraysOnGPU<<<grid, block>>>(d_A, d_B, d_C, nElem);//正确，这里d_A，d_B，d_C都是GPU的内存空间的指针，nElem是CPU到GPU的值传递
+
+
+float * h_A = (float *)malloc(nBytes);
+sumArraysOnGPU<<<grid, block>>>(h_A, d_B, d_C, nElem);//错误，因为h_A是CPU的内存指针，GPU不能使用。
+```
+
+CUDA 内核的所有参数都是按值传递的，并且这些参数由主机通过 API 复制到 GPU 上的专用内存参数缓冲区中。目前，这个缓冲区存储在常量内存中，每个内核启动的参数限制为 4kb -- 参见 [here](http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#function-parameters)
+
 ### 2.1.6 验证核函数
 
 首先，你可以在Fermi及更高版本的设备端的核函数中使用printf函数。

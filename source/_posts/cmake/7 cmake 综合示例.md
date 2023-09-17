@@ -33,9 +33,38 @@ zyd@zyd:~/WorkSpace/zyd/note/cuda/code/chapter01$ tree -L 1
 
 ## 2 文件内容
 
-编译使用的是脚本`build.sh`因此先看一下这个文件
+### 2.1 hello.cu
 
-### 2.1 build.sh
+```cuda
+#include "../common/common.h"
+#include <stdio.h>
+
+/*
+ * A simple introduction to programming in CUDA. This program prints "Hello
+ * World from GPU! from 10 CUDA threads running on the GPU.
+ */
+
+__global__ void helloFromGPU()
+{
+    printf("Hello World from GPU!\n");
+}
+
+int main(int argc, char **argv)
+{
+    printf("Hello World from CPU!\n");
+
+    helloFromGPU<<<1, 10>>>();
+    CHECK(cudaDeviceReset());
+    return 0;
+}
+
+
+
+```
+
+### 2.2 build.sh
+
+编译使用的是脚本`build.sh`因此先看一下这个文件
 
 ```shell
 #!/bin/bash
@@ -74,7 +103,7 @@ fi
 
 上面脚本在Build目录下调用了`cmake ..`，因此下一步查看文件`CMakeLists.txt`
 
-### 2.2 CMakeLists.txt
+### 2.3 CMakeLists.txt
 
 ```cmake
 # CMake 最低版本号要求
@@ -128,7 +157,7 @@ add_executable(${PROJECT_NAME} ${DIR_SRCS})
 
 因为需要编译为两个平台，一个交叉编译一个本地PC编译，在`build.sh`中指定了cmake参数`-DCMAKE_TOOLCHAIN_FILE`来配置工具链。下面就看一下两个工具链的配置文件arm_qnx_toolchain.cmake和x86_toolchain.cmake
 
-### 2.3 arm_qnx_toolchain.cmake
+### 2.4 arm_qnx_toolchain.cmake
 
 先看一下交叉编译工具链的配置，参考[cmake-toolchains(7)](https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html#id8)
 
@@ -229,7 +258,7 @@ set(CMAKE_CUDA_HOST_COMPILER "${QNX_HOST}/usr/bin/aarch64-unknown-nto-qnx7.1.0-g
   
   ```
 
-### 2.3 x86_toolchain.cmake
+### 2.5 x86_toolchain.cmake
 
 这个相对与交叉编译工具链的比较简单
 
@@ -314,7 +343,61 @@ Scanning dependencies of target helloX86
 [100%] Built target helloX86
 ```
 
-## 4 与GPT的对话
+## 4 cuda和c++混合编译
+
+修改上面的hello.cu，分为一个main.cpp和hello.cu 。在一个文件夹内。cmake文件都不需要修改，只修改源码部分如下
+
+```shell
+.
+├── arm_qnx_toolchain.cmake
+├── Build
+├── build.sh
+├── CMakeLists.txt
+├── hello.cu
+├── main.cpp
+├── Makefile_back
+└── x86_toolchain.cmake
+
+1 directory, 7 files
+
+```
+
+main.cpp
+
+```C
+#include <iostream>
+
+void helloCPU() {
+    std::cout << "Hello from CPU!" << std::endl;
+}
+
+extern void helloFromGPU();
+
+int main() {
+    helloCPU();
+    helloFromGPU();
+    return 0;
+}
+```
+
+hello.cu
+
+```cuda
+#include <iostream>
+
+__global__ void helloGPU() {
+    printf("Hello from GPU!\n");
+}
+
+void helloFromGPU() {
+    helloGPU<<<1, 10>>>();
+    cudaDeviceSynchronize();
+}
+```
+
+
+
+## 5 与GPT的对话
 
 cmake的值令比较多，但是之间的相互关系没弄太明白。还是问了GPT才有一个比较直观的了解。
 

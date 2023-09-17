@@ -250,6 +250,63 @@ target_link_libraries(Demo testlib)
 
 ![image-20220629145748184](2 cmake简单示例/image-20220629145748184.png)
 
+### 2.4.1 库的相互依赖
+
+当生成可执行程序依赖一个静态库，而这个静态库又依赖一个动态库时，你需要在两个 CMakeLists.txt 文件中进行相应的配置。
+
+首先，我们来看生成静态库的 CMakeLists.txt 文件：
+
+```
+cmake_minimum_required(VERSION 3.12)
+project(MyStaticLibrary)
+
+# 添加需要编译的源文件
+add_library(MyStaticLibrary STATIC
+    src/library.cpp
+)
+
+# 指定头文件的搜索路径
+target_include_directories(MyStaticLibrary PUBLIC include)
+
+# 如果静态库依赖于动态库，可以使用target_link_libraries命令链接动态库
+target_link_libraries(MyStaticLibrary PRIVATE other_library)
+
+# 指定安装规则（可选）
+install(TARGETS MyStaticLibrary
+    ARCHIVE DESTINATION lib
+)
+```
+
+在这个示例中，假设你的源文件位于 `src` 目录中，头文件位于 `include` 目录中。静态库将被安装到 `lib` 目录下。注意，使用 `target_link_libraries` 命令将动态库链接到静态库时，使用 `PRIVATE` 关键字表示该依赖关系仅适用于静态库本身，而不会传递给依赖于该静态库的其他目标。
+
+接下来，我们来看生成可执行程序的 CMakeLists.txt 文件：
+
+```
+cmake_minimum_required(VERSION 3.12)
+project(MyExecutable)
+
+# 添加需要编译的源文件
+add_executable(MyExecutable
+    src/main.cpp
+)
+
+# 指定头文件的搜索路径
+target_include_directories(MyExecutable PRIVATE include)
+
+# 如果可执行程序依赖于静态库，使用target_link_libraries命令链接静态库
+target_link_libraries(MyExecutable PRIVATE MyStaticLibrary)
+
+# 如果静态库依赖于动态库，还需要将动态库链接到可执行程序
+target_link_libraries(MyExecutable PRIVATE other_dynamic_library)
+
+# 指定安装规则（可选）
+install(TARGETS MyExecutable
+    RUNTIME DESTINATION bin
+)
+```
+
+在这个示例中，假设你的主程序源文件位于 `src` 目录中，头文件位于 `include` 目录中。可执行程序将被安装到 `bin` 目录下。注意，使用 `target_link_libraries` 命令将静态库链接到可执行程序时，使用 `PRIVATE` 关键字表示该依赖关系仅适用于可执行程序本身，而不会传递给其他目标。
+
 ## 2.5 交叉编译 
 
 交叉编译官方说明 https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html#variables-and-properties

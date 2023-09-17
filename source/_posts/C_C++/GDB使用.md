@@ -891,6 +891,41 @@ which its expression is valid.
 - **set scheduler-locking step**，当单步执行某一线程时，其他线程不会执行，同时保证在调试过程中当前线程不会发生改变。但如果在该模式下执行 **continue、until、finish** 命令，则其他线程也会执行；
 - **show scheduler-locking**，查看线程锁定状态；
 
-## 7. 参考文档
+## 7 .gdbinit
+
+`.gdbinit`是一个GDB初始化脚本文件，它可以包含在用户主目录或当前工作目录中，用于在启动GDB时自动加载指令和设置。
+
+`.gdbinit`文件在启动GDB时会自动加载，并执行其中的指令。这样，你不必每次手动输入相同的指令，可以方便地自定义GDB的行为。
+
+要使用`.gdbinit`文件，只需按照以下步骤进行操作：
+
+1. 创建一个文本文件，并将其命名为`.gdbinit`。请注意，文件名以点开头，并且没有文件扩展名。
+2. 编辑`.gdbinit`文件，添加你希望在GDB启动时自动执行的指令和设置。每条指令占据一行。
+3. 保存`.gdbinit`文件。
+
+以下是一个简单的示例，演示如何在`.gdbinit`中设置断点和显示变量的值：
+
+```
+# 设置断点
+break main
+
+# 当断点被命中时显示变量的值
+display variable_name
+```
+
+在上述示例中，`.gdbinit`文件设置了一个断点在主函数（`main`）处，然后使用`display`命令来显示名为`variable_name`的变量的值。
+
+
+
+`.gdbinit`文件可以放置在用户主目录或当前工作目录中。当启动GDB时，它会自动在这些位置进行搜索和加载。
+
+1. 用户主目录：将`.gdbinit`文件放置在用户主目录下（Windows系统中通常是`C:\Users\用户名`，Linux和macOS系统中通常是`/home/用户名`）。
+2. 当前工作目录：将`.gdbinit`文件放置在你希望执行GDB命令的当前工作目录中。
+
+GDB会首先在用户主目录中搜索并加载`.gdbinit`文件，如果找到了就会执行其中的指令。如果在用户主目录中没有找到`.gdbinit`文件，GDB会继续在当前工作目录中搜索并加载。
+
+如果你在用户主目录和当前工作目录中都有一个`.gdbinit`文件，GDB会加载并执行两个文件中的指令，其中当前工作目录中的`.gdbinit`文件的指令优先于用户主目录中的。
+
+## 附录
 
 [官方参考文档](http://www.gnu.org/software/gdb/documentation/) 

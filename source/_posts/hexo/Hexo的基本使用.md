@@ -354,3 +354,11 @@ themes/next/source/css/_common/outline/header/menu.styl,`font-size:`修改为自
   }
 ```
 
+# 5 文章排序
+
+默认情况下Hexo文章是按照创建时间排序的。但是比如我的文章希望是按照名称排序的，那么就需要进行修改了。
+
+我这边修改的是分类标签下的文章排序，如下图，原本是`-date`修改为了`-title`。
+
+![image-20231015175213732](Hexo的基本使用/image-20231015175213732.png)
+

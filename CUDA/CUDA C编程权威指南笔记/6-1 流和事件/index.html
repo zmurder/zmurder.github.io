@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="第6章 流和并发一般来说，在CUDA C编程中有两个级别的并发：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="6-1 流和事件">
+<meta property="og:url" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="第6章 流和并发一般来说，在CUDA C编程中有两个级别的并发：">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/image-20230130160534260.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/image-20230130161144193.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/image-20230130161318536.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/6-4.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/image-20230131173929839.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/image-20230131174621149.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/image-20230131175845309.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/image-20230131180500425.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/image-20230131180416463.png">
+<meta property="article:published_time" content="2023-04-11T13:35:11.347Z">
+<meta property="article:modified_time" content="2023-04-11T13:35:11.347Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="GPU">
+<meta property="article:tag" content="Tensorrt">
+<meta property="article:tag" content="Plugin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/image-20230130160534260.png">
+
+
+<link rel="canonical" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/","path":"CUDA/CUDA C编程权威指南笔记/6-1 流和事件/","title":"6-1 流和事件"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>6-1 流和事件 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AC%AC6%E7%AB%A0-%E6%B5%81%E5%92%8C%E5%B9%B6%E5%8F%91"><span class="nav-text">第6章 流和并发</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6%E6%A6%82%E8%BF%B0"><span class="nav-text">6.1 流和事件概述</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-1-CUDA%E6%B5%81"><span class="nav-text">6.1.1 CUDA流</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-2-%E6%B5%81%E8%B0%83%E5%BA%A6"><span class="nav-text">6.1.2 流调度</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#6-1-2-1-%E8%99%9A%E5%81%87%E7%9A%84%E4%BE%9D%E8%B5%96%E5%85%B3%E7%B3%BB"><span class="nav-text">6.1.2.1 虚假的依赖关系</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-1-2-2-Hyper-Q%E6%8A%80%E6%9C%AF"><span class="nav-text">6.1.2.2 Hyper-Q技术</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-3-%E6%B5%81%E7%9A%84%E4%BC%98%E5%85%88%E7%BA%A7"><span class="nav-text">6.1.3 流的优先级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-4-CUDA%E4%BA%8B%E4%BB%B6"><span class="nav-text">6.1.4 CUDA事件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#6-1-4-1-%E5%88%9B%E5%BB%BA%E5%92%8C%E9%94%80%E6%AF%81"><span class="nav-text">6.1.4.1 创建和销毁</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-1-4-2-%E8%AE%B0%E5%BD%95%E4%BA%8B%E4%BB%B6%E5%92%8C%E8%AE%A1%E7%AE%97%E8%BF%90%E8%A1%8C%E6%97%B6%E9%97%B4"><span class="nav-text">6.1.4.2 记录事件和计算运行时间</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-5-%E6%B5%81%E5%90%8C%E6%AD%A5"><span class="nav-text">6.1.5 流同步</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#6-1-5-1-%E9%98%BB%E5%A1%9E%E6%B5%81%E5%92%8C%E9%9D%9E%E9%98%BB%E5%A1%9E%E6%B5%81"><span class="nav-text">6.1.5.1 阻塞流和非阻塞流</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-1-5-2-%E9%9A%90%E5%BC%8F%E5%90%8C%E6%AD%A5"><span class="nav-text">6.1.5.2 隐式同步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-1-5-3-%E6%98%BE%E5%BC%8F%E5%90%8C%E6%AD%A5"><span class="nav-text">6.1.5.3 显式同步</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-1-5-4-%E5%8F%AF%E9%85%8D%E7%BD%AE%E4%BA%8B%E4%BB%B6"><span class="nav-text">6.1.5.4 可配置事件</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-6-%E5%AE%9E%E8%B7%B5"><span class="nav-text">6.1.6 实践</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="6-1 流和事件 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          6-1 流和事件
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2023-04-11 21:35:11" itemprop="dateCreated datePublished" datetime="2023-04-11T21:35:11+08:00">2023-04-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="第6章-流和并发"><a href="#第6章-流和并发" class="headerlink" title="第6章 流和并发"></a>第6章 流和并发</h1><p>一般来说，在CUDA C编程中有两个级别的并发：</p>
+<ul>
+<li>内核级并发</li>
+<li>网格级并发</li>
+</ul>
+<p>到目前为止，你的关注点可能仅限于内核级的并发，在此级别的并发中，单一的任务或内核被GPU的多个线程并行执行。前面几章已经介绍了提升内核性能的几种方法，它们分别是从编程模型、执行模型和内存模型的角度进行介绍的。</p>
+<p>在网格级并发中，多个内核在同一设备上同时执行，这往往会让设备利用率更好。如何使用CUDA流实现网格级的并发。</p>
+<h2 id="6-1-流和事件概述"><a href="#6-1-流和事件概述" class="headerlink" title="6.1 流和事件概述"></a>6.1 流和事件概述</h2><p>CUDA流是一系列异步的CUDA操作，这些操作按照主机代码确定的顺序在设备上执行。流能封装这些操作，保持操作的顺序，允许操作在流中排队，并使它们在先前的所有操作之后执行，并且可以查询排队操作的状态。这些操作包括在主机与设备间进行数据传输，内核启动以及大多数由主机发起但由设备处理的其他命令。流中操作的执行相对于主机总是异步的。CUDA运行时决定何时可以在设备上执行操作。我们的任务是使用CUDA的API来确保一个异步操作在运行结果被使用之前可以完成。<strong>在同一个CUDA流中的操作有严格的执行顺序，而在不同CUDA流中的操作在执行顺序上不受限制。使用多个流同时启动多个内核，可以实现网格级并发</strong>。</p>
+<p>因为所有在CUDA流中排队的操作都是异步的，所以在主机与设备系统中可以重叠执行其他操作。在同一时间内将流中排队的操作与其他有用的操作一起执行，可以隐藏执行那些操作的开销。</p>
+<p>CUDA编程的一个典型模式是以下形式：</p>
+<ul>
+<li>将输入数据从主机移到设备上。</li>
+<li>在设备上执行一个内核。</li>
+<li>将结果从设备移回主机中。</li>
+</ul>
+<p>在许多情况下，执行内核比传输数据耗时更多。在这些情况下，可以完全隐藏CPU和GPU之间的通信延迟。通过将内核执行和数据传输调度到不同的流中，这些操作可以重叠，程序的总运行时间将被缩短。流在CUDA的API调用粒度上可实现流水线或双缓冲技术。</p>
+<p>CUDA的API函数一般可以分为同步或异步。具有同步行为的函数会阻塞主机端线程，直到它们完成。具有异步行为的函数被调用后，会立即将控制权归还给主机。异步函数和流是在CUDA中构建网格级并发的两个基本支柱。<br>从软件的角度来看，<strong>CUDA操作在不同的流中并发运行；而从硬件上来看，不一定总是如此。根据PCIe总线争用或每个SM资源的可用性，完成不同的CUDA流可能仍然需要互相等待</strong>。</p>
+<h3 id="6-1-1-CUDA流"><a href="#6-1-1-CUDA流" class="headerlink" title="6.1.1 CUDA流"></a>6.1.1 CUDA流</h3><p>所有的CUDA操作（包括内核和数据传输）都在一个流中显式或隐式地运行。流分为<br>两种类型：</p>
+<ul>
+<li>隐式声明的流（空流）</li>
+<li>显式声明的流（非空流）</li>
+</ul>
+<p>如果没有显式地指定一个流，那么内核启动和数据传输将默认使用空流。</p>
+<p>非空流可以被显式地创建和管理。<strong>如果想要重叠不同的CUDA操作，必须使用非空流</strong>。基于流的异步的内核启动和数据传输支持以下类型的粗粒度并发：</p>
+<ul>
+<li>重叠主机计算和设备计算</li>
+<li>重叠主机计算和主机与设备间的数据传输</li>
+<li>重叠主机与设备间的数据传输和设备计算</li>
+<li>并发设备计算</li>
+</ul>
+<p>CUDA编程和普通的C++不同的就是，我们有两个“可运算的设备”也就是CPU和GPU这两个东西，这种情况下，他们之间的同步并不是每一步指令都互相通信执行进度的，设备不知道主机在干啥，主机也不是完全知道设备在干啥。但是数据传输是同步的，也就是主机要等设备接收完数据才干别的，也就是说你爸给你寄了一袋大米，然后老人家啥也不做，拨通电话跟你保持通话不停的问你收到了么？直到你回答收到了，这就是同步的。内核启动就是异步的，你爸爸又要给你钱花，去银行给你汇了五百块钱，银行说第二天到账，他就可以回家该干嘛干嘛了，而不需要在银行等一晚，第二天你收到了，打个电话说一声就行了，这就是异步的。异步操作，可以重叠主机计算和设备计算。<br>前面用的cudaMemcpy就是个同步操作，我们还提到过隐式同步——从设备复制结果数据回主机，要等设备执行完。当然数据传输有异步版本：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaMemcpyAsync</span><span class="params">(<span class="type">void</span>* dst, <span class="type">const</span> <span class="type">void</span>* src, <span class="type">size_t</span> count,cudaMemcpyKind kind, cudaStream_t stream = <span class="number">0</span>)</span>;</span><br></pre></td></tr></table></figure>
+<p>值得注意的就是最后一个参数，stream表示流，一般情况设置为默认流，这个函数和主机是异步的，执行后控制权立刻归还主机，当然我们需要声明一个非空流：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaStreamCreate</span><span class="params">(cudaStream_t* pStream)</span>;</span><br></pre></td></tr></table></figure>
+<p>这样我们就有一个可以被管理的流了，这段代码是创建了一个流，有C++经验的人能看出来，这个是为一个流分配必要资源的函数，给流命名声明流的操作应该是：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaStream_t a;</span><br></pre></td></tr></table></figure>
+<p>定义了一个叫a的流，但是这个流没法用，相当于只有了名字，资源还是要用cudaStreamCreate分配的</p>
+<p>在使用异步CUDA函数时，常见的疑惑在于，它们可能会从先前启动的异步操作中返回错误代码。因此返回错误的API调用并不一定是产生错误的那个调用。</p>
+<p><strong>当执行异步数据传输时，必须使用固定（或非分页的）主机内存。</strong></p>
+<p><strong>当执行异步数据传输时，必须使用固定（或非分页的）主机内存。</strong></p>
+<p><strong>当执行异步数据传输时，必须使用固定（或非分页的）主机内存。</strong></p>
+<p>可以使用cuda-MallocHost函数或cudaHostAlloc函数分配固定内存：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaMallocHost</span><span class="params">(<span class="type">void</span> **ptr, <span class="type">size_t</span> size)</span>;</span><br><span class="line">cudaError_t <span class="title function_">cudaHostAlloc</span><span class="params">(<span class="type">void</span> **pHost, <span class="type">size_t</span> size, <span class="type">unsigned</span> <span class="type">int</span> flags)</span>;</span><br></pre></td></tr></table></figure>
+<p>在非空流中执行内核需要在启动核函数的时候加入一个附加的启动配置：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kernel_name&lt;&lt;&lt;grid, block, sharedMemSize, stream&gt;&gt;&gt;(argument <span class="built_in">list</span>);</span><br></pre></td></tr></table></figure>
+<p>stream参数就是附加的参数，使用目标流的名字作为参数，比如想把核函数加入到a流中，那么这个stream就变成a。前面我们为一个流分配资源，当然后面就要回收资源，回收方式：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaStreamDestroy</span><span class="params">(cudaStream_t stream)</span>;</span><br></pre></td></tr></table></figure>
+<p>在一个流中，当cudaStreamDestroy函数被调用时，如果该流中仍有未完成的工作，cudaStreamDestroy函数将立即返回，当流中所有的工作都已完成时，与流相关的资源将被自动释放。</p>
+<p>因为所有的CUDA流操作都是异步的，所以CUDA的API提供了两个函数来检查流中所有操作是否都已经完成：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaStreamSynchronize</span><span class="params">(cudaStream_t stream)</span>;</span><br><span class="line">cudaError_t <span class="title function_">cudaStreamQuery</span><span class="params">(cudaStream_t stream)</span>;</span><br></pre></td></tr></table></figure>
+<p>cudaStreamSynchronize强制阻塞主机，直到在给定流中所有的操作都完成了。cudaStreamQuery会检查流中所有操作是否都已经完成，但在它们完成前不会阻塞主机。当所有操作都完成时cudaStreamQuery函数会返回cudaSuccess，当一个或多个操作仍在执行或等待执行时返回cudaErrorNotReady。</p>
+<p>下面这段示例代码就是典型多个流中调度CUDA操作的常见模式：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nStreams; i++) &#123;</span><br><span class="line">    <span class="type">int</span> offset = i * bytesPerStream;</span><br><span class="line">    cudaMemcpyAsync(&amp;d_a[offset], &amp;a[offset], bytePerStream, streams[i]);</span><br><span class="line">    kernel&lt;&lt;grid, block, <span class="number">0</span>, streams[i]&gt;&gt;(&amp;d_a[offset]);</span><br><span class="line">    cudaMemcpyAsync(&amp;a[offset], &amp;d_a[offset], bytesPerStream, streams[i]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nStreams; i++) &#123;</span><br><span class="line">    cudaStreamSynchronize(streams[i]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>图6-1所示为一个简单的时间轴，展示了使用3个流（上面代码的nStream=3）的CUDA操作。数据传输和内核计算都是均匀分布在3个并发流中的。<br>在图6-1中，<strong>数据传输操作虽然分布在不同的流中，但是并没有并发执行。这是由一个共享资源导致的：PCIe总线</strong>。虽然从编程模型的角度来看这些操作是独立的，但是因为它们共享一个相同的硬件资源，所以它们的执行必须是串行的。<strong>具有双工PCIe总线的设备可以重叠两个数据传输，但它们必须在不同的流中以及不同的方向上</strong>。在图6-1中可以观察到，在一个流中从主机到设备的数据传输与另一个流中从设备到主机的数据传输是重叠的。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/image-20230130160534260.png" class="" title="image-20230130160534260">
+<p>并发内核的最大数量是依赖设备而确定的。Fermi设备支持16路并发，Kepler设备支持32路并发。设备上可用的计算资源进一步限制了并发内核的数量，如共享内存和寄存器。在本章后面的例子中将会探索这些局限性。</p>
+<h3 id="6-1-2-流调度"><a href="#6-1-2-流调度" class="headerlink" title="6.1.2 流调度"></a>6.1.2 流调度</h3><p>从概念上讲，所有的流可以同时运行。但是，当将流映射到物理硬件时并不总是这样的。本节将说明如何通过硬件调度多个CUDA流内的并发内核操作。</p>
+<h4 id="6-1-2-1-虚假的依赖关系"><a href="#6-1-2-1-虚假的依赖关系" class="headerlink" title="6.1.2.1 虚假的依赖关系"></a>6.1.2.1 虚假的依赖关系</h4><p>这一部分和6.1.2.2 Hyper-Q技术了解一下就可以了，现在貌似不用关心。</p>
+<p>虽然Fermi GPU支持16路并发，即多达16个网格同时执行，但是所有的流最终是被多路复用到单一的硬件工作队列中的。当选择一个网格执行时，在队列前面的任务由CUDA运行时调度。运行时检查任务的依赖关系，如果仍有任务在执行，那么将等待该任务依赖的任务执行完。最后，当所有依赖关系都执行结束时，新任务被调度到可用的SM中。这种单一流水线可能会导致虚假的依赖关系。如图6-2所示，最终只有带圆圈的任务对被并行执行，因为在启动其他网格前，运行时将会被阻塞。在工作队列中，一个被阻塞的操作会将队列中该操作后面的所有操作都阻塞，即使它们属于不同的流。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/image-20230130161144193.png" class="" title="image-20230130161144193">
+<p>按照顺序会这样执行：</p>
+<ol>
+<li>执行A，同时检查B是否有依赖关系，当然此时B依赖于A而A没执行完，所以整个队列阻塞</li>
+<li>A执行完成后执行B，同时检查C，发现依赖，等待</li>
+<li>B执行完后，执行C同时检查，发现P没有依赖，如果此时硬件有多于资源P开始执行</li>
+<li>P执行时检查Q，发现Q依赖P，所以等待</li>
+</ol>
+<p>这种一个队列的模式，会产生一种，虽然P依赖B的感觉，虽然不依赖，但是B不执行完，P没办法执行，而所谓并行，只有一个依赖链的头和尾有可能并行，也就是红圈中任务可能并行，而我们的编程模型中设想的并不是这样的。</p>
+<h4 id="6-1-2-2-Hyper-Q技术"><a href="#6-1-2-2-Hyper-Q技术" class="headerlink" title="6.1.2.2 Hyper-Q技术"></a>6.1.2.2 Hyper-Q技术</h4><p>Kepler GPU家族中的Hyper-Q技术，使用多个硬件工作队列，从而减少了虚假的依赖关系。32个硬件工作队列同时执行多个流，这就可以实现所有流的并发，最小化虚假依赖：</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/image-20230130161318536.png" class="" title="image-20230130161318536">
+<h3 id="6-1-3-流的优先级"><a href="#6-1-3-流的优先级" class="headerlink" title="6.1.3 流的优先级"></a>6.1.3 流的优先级</h3><p>3.5以上的设备可以给流优先级，也就是优先级高的（数字上更小的，类似于C++运算符优先级）<br>优先级只影响核函数，不影响数据传输，高优先级的流可以占用低优先级的工作。<br>下面函数创建一个有指定优先级的流</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaStreamCreateWithPriority</span><span class="params">(cudaStream_t* pStream, <span class="type">unsigned</span> <span class="type">int</span> flags,<span class="type">int</span> priority)</span>;</span><br></pre></td></tr></table></figure>
+<p>不同的设备有不同的优先级等级，下面函数可以查询当前设备的优先级分布情况：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaDeviceGetStreamPriorityRange</span><span class="params">(<span class="type">int</span> *leastPriority, <span class="type">int</span> *greatestPriority)</span>;</span><br></pre></td></tr></table></figure>
+<p>leastPriority表示最低优先级（整数，远离0）<br>greatestPriority表示最高优先级（整数，数字较接近0）<br>如果设备不支持优先级返回0</p>
+<h3 id="6-1-4-CUDA事件"><a href="#6-1-4-CUDA事件" class="headerlink" title="6.1.4 CUDA事件"></a>6.1.4 CUDA事件</h3><p>事件的本质就是一个标记，它与其所在的流内的特定点相关联。可以使用时间来执行以下两个基本任务：</p>
+<ul>
+<li>同步流执行</li>
+<li>监控设备的进展</li>
+</ul>
+<p>流中的任意点都可以通过API插入事件以及查询事件完成的函数，只有事件所在流中其之前的操作都完成后才能触发事件完成。默认流中设置事件，那么其前面的所有操作都完成时，事件才出发完成。</p>
+<h4 id="6-1-4-1-创建和销毁"><a href="#6-1-4-1-创建和销毁" class="headerlink" title="6.1.4.1 创建和销毁"></a>6.1.4.1 创建和销毁</h4><p>事件的声明如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaEvent_t event;</span><br></pre></td></tr></table></figure>
+<p>同样声明完后要分配资源：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t cudaEventCreate(cudaEvent_t* event);</span><br></pre></td></tr></table></figure>
+<p>回收事件的资源</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t cudaEventDestroy(cudaEvent_t event);</span><br></pre></td></tr></table></figure>
+<p>如果回收指令执行的时候事件还没有完成，那么回收指令立即完成，当事件完成后，资源马上被回收。</p>
+<h4 id="6-1-4-2-记录事件和计算运行时间"><a href="#6-1-4-2-记录事件和计算运行时间" class="headerlink" title="6.1.4.2 记录事件和计算运行时间"></a>6.1.4.2 记录事件和计算运行时间</h4><p>事件的一个主要用途就是记录事件之间的时间间隔。<br>事件通过下面指令添加到CUDA流：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaEventRecord</span><span class="params">(cudaEvent_t event, cudaStream_t stream = <span class="number">0</span>)</span>;</span><br></pre></td></tr></table></figure>
+<p>在流中的事件主要作用就是等待前面的操作完成，或者测试指定流中操作完成情况，下面和流类似的事件测试指令（是否出发完成）会阻塞主机线程知道事件被完成。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaEventSynchronize</span><span class="params">(cudaEvent_t event)</span>;</span><br></pre></td></tr></table></figure>
+<p>同样，也有异步版本：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaEventQuery</span><span class="params">(cudaEvent_t event)</span>;</span><br></pre></td></tr></table></figure>
+<p>这个不会阻塞主机线程，而是直接返回结果和stream版本的cudaStreamQuery类似。<br>另一个函数用在事件上的是记录两个事件之间的时间间隔：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaEventElapsedTime</span><span class="params">(<span class="type">float</span>* ms, cudaEvent_t start, cudaEvent_t stop)</span>;</span><br></pre></td></tr></table></figure>
+<p>这个函数记录两个事件start和stop之间的时间间隔，单位毫秒，两个事件不一定是同一个流中。这个时间间隔可能会比实际大一些，因为cudaEventRecord这个函数是异步的，所以加入时间完全不可控，不能保证两个事件之间的间隔刚好是两个事件之间的。<br>一段简单的记录事件时间间隔的代码</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// create two events</span></span><br><span class="line">cudaEvent_t start, stop;</span><br><span class="line">cudaEventCreate(&amp;start);</span><br><span class="line">cudaEventCreate(&amp;stop);</span><br><span class="line"><span class="comment">// record start event on the default stream</span></span><br><span class="line">cudaEventRecord(start);</span><br><span class="line"><span class="comment">// execute kernel</span></span><br><span class="line">kernel&lt;&lt;&lt;grid, block&gt;&gt;&gt;(arguments);</span><br><span class="line"><span class="comment">// record stop event on the default stream</span></span><br><span class="line">cudaEventRecord(stop);</span><br><span class="line"><span class="comment">// wait until the stop event completes</span></span><br><span class="line">cudaEventSynchronize(stop);</span><br><span class="line"><span class="comment">// calculate the elapsed time between two events</span></span><br><span class="line"><span class="type">float</span> time;</span><br><span class="line">cudaEventElapsedTime(&amp;time, start, stop);</span><br><span class="line"><span class="comment">// clean up the two events</span></span><br><span class="line">cudaEventDestroy(start);</span><br><span class="line">cudaEventDestroy(stop);</span><br></pre></td></tr></table></figure>
+<p>这段代码显示，我们的事件被插入到空流中，设置两个事件作为标记，然后记录他们之间的时间间隔。<br>cudaEventRecord是异步的，所以间隔不准，这是特别要注意的。</p>
+<h3 id="6-1-5-流同步"><a href="#6-1-5-流同步" class="headerlink" title="6.1.5 流同步"></a>6.1.5 流同步</h3><p>流分成阻塞流和非阻塞流，在非空流中所有操作都是非阻塞的，所以流启动以后，主机还要完成自己的任务，有时候就可能需要同步主机和流之间的进度，或者同步流和流之间的进度。<br>从主机的角度，CUDA操作可以分为两类：</p>
+<ul>
+<li>内存相关操作</li>
+<li>内核启动</li>
+</ul>
+<p>对于主机来说，<strong>内核启动总是异步的</strong>。许多内存操作本质上是同步的（如cudaMemcpy），但是CUDA运行时也为内存操作的执行提供了异步函数。</p>
+<p>前面我们提到了流的两种类型：</p>
+<ul>
+<li>异步流（非空流）</li>
+<li>同步流（空流/默认流）</li>
+</ul>
+<p><strong>没有显式声明的流式默认同步流，程序员声明的流都是异步流，异步流通常不会阻塞主机，同步流中部分操作会造成阻塞，主机等待，什么都不做，直到某操作完成</strong>。<br><strong>非空流并不都是非阻塞的</strong>，其也可以分为两种类型：</p>
+<ul>
+<li>阻塞流</li>
+<li>非阻塞流</li>
+</ul>
+<p>虽然正常来讲，非空流都是异步操作，不存在阻塞主机的情况，但是有时候可能被空流中的操作阻塞。如果一个非空流被声明为非阻塞的，那么没人能阻塞他，如果声明为阻塞流，则会被空流阻塞。</p>
+<h4 id="6-1-5-1-阻塞流和非阻塞流"><a href="#6-1-5-1-阻塞流和非阻塞流" class="headerlink" title="6.1.5.1 阻塞流和非阻塞流"></a>6.1.5.1 阻塞流和非阻塞流</h4><p>cudaStreamCreate创建的是阻塞流，意味着里面有些操作会被阻塞，直到空流中默写操作完成。<br>空流不需要显式声明，而是隐式的，他是阻塞的，跟所有阻塞流同步。<br>下面这个过程很重要：<br>当操作A发布到空流中，A执行之前，CUDA会等待A之前的全部操作都发布到阻塞流中，所有发布到阻塞流中的操作都会挂起，等待，直到在此操作指令之前的操作都完成，才开始执行。<br>有点复杂，因为这涉及到代码编写的过程和执行的过程，两个过程混在一起说，肯定有点乱，我们来个例子压压惊就好了：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">kernel_1&lt;&lt;&lt;<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, stream_1&gt;&gt;&gt;();</span><br><span class="line">kernel_2&lt;&lt;&lt;<span class="number">1</span>, <span class="number">1</span>&gt;&gt;&gt;();</span><br><span class="line">kernel_3&lt;&lt;&lt;<span class="number">1</span>, <span class="number">1</span>, <span class="number">0</span>, stream_2&gt;&gt;&gt;();</span><br></pre></td></tr></table></figure>
+<p>上面这段代码，有三个流，两个有名字的，一个空流，我们认为stream_1和stream_2是阻塞流，空流是阻塞的，这三个核函数都在阻塞流上执行，具体过程是，kernel_1被启动，控制权返回主机，然后启动kernel_2，但是此时kernel_2 不会并不会马山执行，他会等到kernel_1执行完毕，同理启动完kernel_2  控制权立刻返回给主机，主机继续启动kernel_3,这时候kernel_3  也要等待，直到kernel_2执行完，但是从主机的角度，这三个核都是异步的，启动后控制权马上还给主机。<br>然后我们就想创建一个非阻塞流，因为我们默认创建的是阻塞版本：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaStreamCreateWithFlags</span><span class="params">(cudaStream_t* pStream, <span class="type">unsigned</span> <span class="type">int</span> flags)</span>;</span><br></pre></td></tr></table></figure>
+<p>第二个参数就是选择阻塞还是非阻塞版本：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cudaStreamDefault;<span class="comment">// 默认阻塞流</span></span><br><span class="line">cudaStreamNonBlocking: <span class="comment">//非阻塞流，对空流的阻塞行为失效。</span></span><br></pre></td></tr></table></figure>
+<p>如果前面的stream_1和stream_2声明为非阻塞的，那么上面的调用方法的结果是三个核函数同时执行。</p>
+<h4 id="6-1-5-2-隐式同步"><a href="#6-1-5-2-隐式同步" class="headerlink" title="6.1.5.2 隐式同步"></a>6.1.5.2 隐式同步</h4><p>前面几章核函数计时的时候，我们说过要同步，并且提到过cudaMemcpy 可以隐式同步，也介绍了</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cudaDeviceSynchronize;</span><br><span class="line">cudaStreamSynchronize;</span><br><span class="line">cudaEventSynchronize;</span><br></pre></td></tr></table></figure>
+<p>这几个也是同步指令，可以用来同步不同的对象，这些是显式的调用的；与上面的隐式不同。<br>隐式同步的指令其最原始的函数功能并不是同步，所以同步效果是隐式的，这个我们需要非常注意，忽略隐式同步会造成性能下降。所谓同步就是阻塞的意思，被忽视的隐式同步就是被忽略的阻塞，隐式操作常出现在内存操作上，比如：</p>
+<ul>
+<li>锁页主机内存分布</li>
+<li>设备内存分配</li>
+<li>设备内存初始化</li>
+<li>同一设备两地址之间的内存复制</li>
+<li>一级缓存，共享内存配置修改</li>
+</ul>
+<p>这些操作都要时刻小心，因为他们带来的阻塞非常不容易察觉，导致性能的下降。</p>
+<h4 id="6-1-5-3-显式同步"><a href="#6-1-5-3-显式同步" class="headerlink" title="6.1.5.3 显式同步"></a>6.1.5.3 显式同步</h4><p>显式同步相比就更加光明磊落了，因为一条指令就一个作用，没啥副作用，常见的同步有：</p>
+<ul>
+<li>同步设备</li>
+<li>同步流</li>
+<li>同步流中的事件</li>
+<li>使用事件跨流同步</li>
+</ul>
+<p>下面的函数就可以阻塞主机线程，直到设备完成所有操作：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaDeviceSynchronize</span><span class="params">(<span class="type">void</span>)</span>;</span><br></pre></td></tr></table></figure>
+<p>这个函数我们前面常用，但是尽量少用，这个会拖慢效率。<br>然后是流版本的，我们可以同步流，使用下面两个函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaStreamSynchronize</span><span class="params">(cudaStream_t stream)</span>;</span><br><span class="line">cudaError_t <span class="title function_">cudaStreamQuery</span><span class="params">(cudaStream_t stream)</span>;</span><br></pre></td></tr></table></figure>
+<p>这两个函数，第一个是同步流的，阻塞主机直到完成，第二个可以完成非阻塞流测试。也就是测试一下这个流是否完成。<br>我们提到事件，事件的作用就是在流中设定一些标记用来同步，和检查是否执行到关键点位（事件位置），也是用类似的函数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaEventSynchronize</span><span class="params">(cudaEvent_t event)</span>;</span><br><span class="line">cudaError_t <span class="title function_">cudaEventQuery</span><span class="params">(cudaEvent_t event)</span>;</span><br></pre></td></tr></table></figure>
+<p>这两个函数的性质和上面的非常类似。<br>事件提供了一个流之间同步的方法：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaStreamWaitEvent</span><span class="params">(cudaStream_t stream, cudaEvent_t event)</span>;</span><br></pre></td></tr></table></figure>
+<p>这条命令的含义是，指定的流要等待指定的事件，事件完成后流才能继续，这个事件可以在这个流中，也可以不在，当在不同的流的时候，这个就是实现了跨流同步。<br>如下图</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/6-4.png" class="" title="6-4">
+<h4 id="6-1-5-4-可配置事件"><a href="#6-1-5-4-可配置事件" class="headerlink" title="6.1.5.4 可配置事件"></a>6.1.5.4 可配置事件</h4><p>CDUA提供了一种控制事件行为和性能的函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaEventCreateWithFlags</span><span class="params">(cudaEvent_t* event, <span class="type">unsigned</span> <span class="type">int</span> flags)</span>;</span><br></pre></td></tr></table></figure>
+<p>其中参数是：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cudaEventDefault</span><br><span class="line">cudaEventBlockingSync</span><br><span class="line">cudaEventDisableTiming</span><br><span class="line">cudaEventInterprocess</span><br></pre></td></tr></table></figure>
+<p>其中cudaEventBlockingSync指定使用cudaEventSynchronize同步会造成阻塞调用线程。<strong>cudaEventSynchronize默认是使用cpu周期不断重复查询事件状态，而当指定了事件是cudaEventBlockingSync的时候，会将查询放在另一个线程中，而原始线程继续执行，直到事件满足条件，才会通知原始线程，这样可以减少CPU的浪费，但是由于通讯的时间，会造成一定的延迟</strong>。<br>cudaEventDisableTiming表示事件不用于计时，可以减少系统不必要的开支也能提升cudaStreamWaitEvent和cudaEventQuery的效率<br>cudaEventInterprocess表明可能被用于进程之间的事件</p>
+<h3 id="6-1-6-实践"><a href="#6-1-6-实践" class="headerlink" title="6.1.6 实践"></a>6.1.6 实践</h3><p>下面针对自己的一些测试说明一下：</p>
+<p>因为有一个模型更新了，导致CPU占用升高了不少，为了查原因在PC上进行测试。</p>
+<p>测试环境是PC（在origin上测试查看top，CPU占用没有变化，可能在origin上cudaStreamSynchronize本身就是block的不占用CPU）</p>
+<p>模型更新后测试分为两个部分：</p>
+<ul>
+<li><p>kernel中（当前的例子是模型的plugin中）添加了event的相关操作。</p>
+</li>
+<li><p>在模型推理后修改原cudaStreamSynchronize为cudaEventSynchronize。</p>
+</li>
+</ul>
+<p>下面图片只是说明了在kernel中使用event前后的修改部分。模型推理同理</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/image-20230131173929839.png" class="" title="image-20230131173929839">
+<p>下图是修改前的kernel的cpu占用：</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/image-20230131174621149.png" class="" title="image-20230131174621149">
+<p>灰色：CPU使用率</p>
+<p>橙色：tensorrt的调用（这里是enqueue 模型的推理）</p>
+<p>黄色：模型的网络</p>
+<p>红色：调用的CUDA的API</p>
+<p>可以看出CPU占用高的两个API分别是<code>cudaMemsetAsync</code> 和<code>cudaStreamSynchronize</code>，因此需要从这两个函数着手处理。</p>
+<ol>
+<li>针对<code>cudaMemsetAsync</code>这里使用了event模式来处理，如上上图</li>
+<li>针对<code>cudaStreamSynchronize</code>也同样使用event模式来处理。结果如下图，可以看出CPU大大降低（测试发现设置<code>cudaError_t cudaRet = cudaSetDeviceFlags(cudaDeviceScheduleBlockingSync);</code>会有相同的效果（针对下图的最后一个红框））</li>
+</ol>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/image-20230131175845309.png" class="" title="image-20230131175845309">
+<p><strong>这里将主要的函数列出：</strong></p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__EVENT.html">https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__EVENT.html</a></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">__host__  cudaError_t <span class="title function_">cudaSetDeviceFlags</span> <span class="params">(  <span class="type">unsigned</span> <span class="type">int</span>  flags )</span></span><br><span class="line">__host__ ​ __device__ ​cudaError_t <span class="title function_">cudaEventCreateWithFlags</span> <span class="params">( cudaEvent_t* event, <span class="type">unsigned</span> <span class="type">int</span>  flags )</span> </span><br></pre></td></tr></table></figure>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/image-20230131180500425.png" class="" title="image-20230131180500425">
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/image-20230131180416463.png" class="" title="image-20230131180416463">
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/" title="6-1 流和事件">http://example.com/CUDA/CUDA C编程权威指南笔记/6-1 流和事件/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+              <a href="/tags/Tensorrt/" rel="tag"><i class="fa fa-tag"></i> Tensorrt</a>
+              <a href="/tags/Plugin/" rel="tag"><i class="fa fa-tag"></i> Plugin</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="prev" title="4-2 内存管理">
+                  <i class="fa fa-chevron-left"></i> 4-2 内存管理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/CUDA/Nsight/Nsight%20Systems%E5%9F%BA%E7%A1%80/" rel="next" title="Nsight Systems基础">
+                  Nsight Systems基础 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1828fddad2cbf3115384531d68946139"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

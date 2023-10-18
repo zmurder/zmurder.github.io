@@ -722,3 +722,69 @@ target_link_libraries(MyCudaExecutable CUDA::cudart)
 1. 当您只使用CUDA编程模型而没有主机端的C/C++代码时，您可以将`CMAKE_CUDA_HOST_COMPILER`设置为nvcc的路径。
 
 总之，`CMAKE_CUDA_HOST_COMPILER`的设置取决于您的需求和所使用的工具链。
+
+### 关于 CMAKE_CUDA_FLAGS
+
+`CMAKE_CUDA_FLAGS` 用于设置 NVIDIA CUDA 编译器（通常是 `nvcc`）的编译选项，它会影响 `nvcc` 命令的行为。这些选项被传递给 `nvcc` 编译器，以控制 CUDA 源代码的编译和链接行为。详细编译选项参考[NVCC Command Options](https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html#nvcc-command-options)
+
+`CMAKE_CUDA_FLAGS` 变量用于设置 NVIDIA CUDA 编译器 `nvcc` 的编译选项。以下是一些常见选项及其含义，以及一个示例：
+
+1. **-arch=sm_xx**：这个选项指定目标 GPU 的架构版本，其中 `xx` 是特定架构的版本号。例如，`-arch=sm_61` 表示目标 GPU 架构是 Compute Capability 6.1。
+2. **-O[0-3]**：设置优化级别。`-O0` 表示没有优化，`-O3` 表示最高级别的优化。
+3. **-g**：生成调试信息，以便使用调试器进行 CUDA 代码的调试。
+4. **-G**：生成 GPU 代码的调试信息，用于在 GPU 代码中进行调试。
+5. **-Xcompiler**：用于传递额外的编译器选项，这些选项将传递给主机 C/C++ 编译器。
+6. **-Xptxas**：传递给 ptxas 汇编器的选项，可以影响 PTX 代码生成。
+7. **-Xlinker**：用于传递给链接器的选项，用于配置链接过程。
+8. **-lineinfo**：生成 GPU 代码中的行号信息，以用于调试。
+9. **-Xcudafe**：传递给 cudafe（CUDA 前端编译器）的选项，可以影响 CUDA 源代码的处理。
+10. **-rdc=true/false**：启用或禁用 CUDA 动态并行性。设置为 `true` 允许动态并行性，`false` 禁用它。
+11. **-Werror**：将编译警告视为错误，强制开发人员修复所有警告。
+12. **-lineinfo**： 为设备代码生成行号信息。在使用Nsight Compute时非常有用
+13. **-default-stream**：`--default-stream` {`legacy`|`null`|`per-thread`} (`per-thread`) 。比较常用`--default-stream per-thread `
+
+示例 `CMAKE_CUDA_FLAGS` 设置：
+
+```
+cmake
+# 设置 CUDA 架构为 Compute Capability 7.0
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -arch=sm_70")
+
+# 启用最高级别优化
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -O3")
+
+# 生成调试信息
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -g")
+
+# 将额外编译器选项传递给主机编译器
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -Xcompiler -fopenmp")
+
+# 生成 GPU 代码的调试信息
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -G")
+
+# 传递给链接器的选项
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -Xlinker -L/path/to/custom/lib")
+
+# 生成 GPU 代码中的行号信息
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -lineinfo")
+
+# 传递给 cudafe 的选项
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -Xcudafe --diag_suppress=esa_on_defaulted_function_ignored")
+
+# 启用 CUDA 动态并行性
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -rdc=true")
+
+# 将编译警告视为错误
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -Werror")
+
+# 设置编译选项 源代码反汇编视图用于在源代码和汇编指令级别显示内核的分析结果。为了能够查看内核源代码，您需要使用-lineinfo选项编译代码。如果不使用此编译器选项，则只显示反汇编视图。
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -lineinfo")
+
+set(CMAKE_CUDA_FLAGS "${CMAKE_CUDA_FLAGS} -G -g --default-stream per-thread")
+```
+
+
+
+# 附录：
+
+* [NVCC Command Options](https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html#nvcc-command-options)

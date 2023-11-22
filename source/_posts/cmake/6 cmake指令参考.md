@@ -741,7 +741,7 @@ option (USE_MYMATH "Use provided math implementation" ON)指令
   cmake --build .
   ```
 
-* CMake脚本接收option
+* CMake脚本接收option，上面的`-DTEST_DEBUG=ON`会覆盖下面`option`的默认值`OFF`，也就是修改`TEST_DEBUG`为`ON`。
   cmake 脚本定义TEST_DEBUG 默认关闭OFF
 
   ```cmake

@@ -493,15 +493,143 @@ TODO 有的下面有cu cpp h文件 但是有的只有cpp和h文件，不知道�
 1. 调用IPluginCreator::createPlugin()返回一个类型为IPluginV2的插件对象。
 2. 在反序列化期间，TensorRT从插件注册表中查找插件创建者并调用IPluginCreator::deserializePlugin()。
 
-## 3.2 PluginCreator代码分析
+### 3.1.1 build  engine时
+
+1. initLibNvInferPlugins 调用 addPluginCreator 注册plugin ;调用一次
+
+   * addPluginCreator 里面参照官方模板调用
+
+     IPluginCreator::setPluginNamespace 
+     IPluginCreator::getPluginNamespace 
+     IPluginCreator::getPluginName 
+     IPluginCreator::getPluginVersion 
+
+   * IPluginCreator::getFieldNames
+
+   * IPluginCreator::createPlugin：里面new了一个`IPluginV2` ;调用一次
+
+   * Plugin::getNbOutputs;调用多次
+
+   * Plugin::getOutputDataType;调用多次
+
+   * Plugin::clone：里面new了一个`IPluginV2`和上面的不同;调用多次
+
+   * Plugin::destroy 
+
+   * 析构IPluginV2
+
+   * Plugin::getOutputDataType;调用多次
+
+   * Plugin::getOutputDimensions;调用多次
+
+   * readCalibrationCache
+
+   * Plugin::supportsFormatCombination
+
+   * Plugin::clone 
+
+   * Plugin::setPluginNamespace
+
+   * Plugin::configurePlugin
+
+   * Plugin::getWorkspaceSize 
+
+   * Plugin::destroy 
+
+   * 析构IPluginV2
+
+   * Plugin::initialize 
+
+   * Plugin::destroy
+
+   * 析构IPluginV2
+
+   * Plugin::getPluginType 
+
+   * Plugin::getPluginVersion 
+
+   * Plugin::getPluginNamespace 
+
+   * Plugin::getSerializationSize 
+
+   * Plugin::serialize 
+
+   * Plugin::getSerializationSize 
+
+   * Plugin::getPluginType 
+
+   * Plugin::getPluginVersion 
+
+   * Plugin::getPluginNamespace 
+
+   * Plugin::getSerializationSize 
+
+   * Plugin::serialize 
+
+   * Plugin::getSerializationSize 
+
+   * Plugin::terminate 
+
+   * Plugin::destroy 
+
+   * ~Plugin 
+
+   * Plugin::destroy 
+
+   * ~Plugin
+
+### 3.1.2 加载和推理  engine时
+
+1. initLibNvInferPlugins 调用 addPluginCreator 注册plugin ;调用一次
+
+   * addPluginCreator 里面参照官方模板调用
+
+     IPluginCreator::setPluginNamespace 
+     IPluginCreator::getPluginNamespace 
+     IPluginCreator::getPluginName 
+     IPluginCreator::getPluginVersion 
+
+2. 应该是deserializeCudaEngine调用了deserializePlugin;调用一次
+
+   * deserializePlugin里面new了一个`IPluginV2`. It should return the plugin object to be used for                                    inference。还调用了setPluginNamespace
+
+3. initialize:  TensorRT 引擎构建过程中被调用;调用一次
+
+4. clone: 每次创建包含此插件层的新构建器、网络或引擎时都会调用此函数。它必须返回一个具有正确参数的新插件对象。new了一个`IPluginV2`,和上面的deserializePlugin调用的不是一个new;调用一次
+
+5. attachToContext;调用一次
+
+6. configurePlugin;调用一次
+
+7. enqueue;推理一次调用一次。频繁的调用。
+
+   
+
+## 3.2 PluginCreator
 
 功能比较简单，套用参考的结构就行。
 
+IPluginCreator 类中的以下方法用于从插件注册表查找并创建适当的插件：
+
+### 3.2.1 getPluginName
+
+这将返回插件名称，并且应与 `IPluginExt::getPluginType `的返回值匹配。
+
+### 3.2.2 getPluginVersion
+
+返回插件版本。对于所有内部 TensorRT 插件，该值默认为 1。
+
+### 3.2.3 getFieldNames
+
+要成功创建插件，需要了解插件的所有字段参数。此方法返回 PluginFieldCollection 结构，其中填充了 PluginField 条目以反映字段名称和 PluginFieldType（数据应指向 nullptr）。
+
 从上面的描述可以看出PluginCreator最重要的两个函数就是
 
-* `createPlugin`
+### 3.2.3 createPlugin
 
-  其中new了一个`IPluginV2`这个例子中就是`AddScalarPlugin`
+此方法用于使用 PluginFieldCollection 参数创建插件。应填充 PluginField 条目的数据字段以指向每个插件字段条目的实际数据。（从模型读取参数）
+
+其中new了一个`IPluginV2`这个例子中就是`AddScalarPlugin`
 
 * `deserializePlugin`
 
@@ -512,6 +640,14 @@ TODO 有的下面有cu cpp h文件 但是有的只有cpp和h文件，不知道�
   ```c++
   REGISTER_TENSORRT_PLUGIN(AddScalarPluginCreator);//注册Creator
   ```
+
+### 3.2.4 deserializePlugin
+
+该方法由 TensorRT 引擎根据插件名称和版本在内部调用。它应该返回用于推理的插件对象。当TensorRT引擎被销毁时，在此函数中创建的插件对象也会被TensorRT引擎销毁。
+
+### 3.2.5 set/getPluginNamespace
+
+该方法用于设置该创建者实例所属的命名空间（默认可以是“”）。
 
 
 
@@ -928,7 +1064,7 @@ MyCustomPlugin::~MyCustomPlugin()
 
 这玩意儿干嘛的，顾名思义，就是克隆嘛，将这个`plugin`对象克隆一份给TensorRT的builder、network或者engine。
 
-（创建多个 context ，可以与源对象共享本 engine 的资源）
+（创建多个 context ，可以与源对象共享本 engine 的资源）克隆通常发生在 TensorRT 引擎构建时，引擎需要在不同的执行上下文（execution context）中使用相同的插件。为了确保插件的正确性和一致性，TensorRT 会调用插件的 `clone` 函数来创建一个插件的副本，该副本将在不同的执行上下文中使用。
 
 ```c++
 IPluginV2DynamicExt *AddScalarPlugin::clone() const noexcept
@@ -1046,7 +1182,7 @@ bool AddScalarPlugin::supportsFormatCombination(int32_t pos, const PluginTensorD
 
 ### 3.3.7 **configurePlugin**
 
-* 在推理前将调用该成员函数
+* 在推理前将调用该成员函数。在创建执行引擎时被调用。这个函数的目的是配置插件，为其提供有关网络、TensorRT 构建配置等信息。
 * Dynamic Shape 模式中，每当输入数据形状发生变化（调用 context.set_binding_shape）时，该成员函数被调用
 * 构建期调用时 in/out 张量形状中含有 -1
 * 运行期调用时 in/out 张量形状为真实绑定的形状
@@ -1193,6 +1329,8 @@ void AddScalarPlugin::serialize(void *buffer) const noexcept
 ### 3.3.15 **attachToContext**
 
 （申请使用 context 独占的 cudnn 或 cublas 资源）
+
+创建执行上下文（execution context）时被调用。这个函数的目的是将插件附加（attach）到执行上下文，以便在推理时使用。
 
 如果这个op使用到了一些其他东西，例如`cublas handle`，可以直接借助TensorRT内部提供的`cublas handle`:
 

@@ -29,12 +29,12 @@ Tensor是算子中的数据，包括输入数据与输出数据，TensorDesc（T
 
 表1-1  TensorDesc属性解释
 
-| 属性                   | 定义                                                         |
-| ---------------------- | ------------------------------------------------------------ |
-| 名称（name）           | 用于对Tensor进行索引，不同Tensor的name需要保持唯一。         |
+| 属性                   | 定义                                                                                                                                                                                                                                       |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 名称（name）           | 用于对Tensor进行索引，不同Tensor的name需要保持唯一。                                                                                                                                                                                       |
 | 形状（shape）          | Tensor的形状，比如（10,）或者（1024，1024）或者（2，3，4）等。详细介绍请参见[ 形状（shape）](https://support.huawei.com/enterprise/zh/doc/EDOC1100180768/9dd5739#section1546519496196)。 默认值：无 形式：(i1, i2,…in)，其中i1到in均为正整数 |
-| 数据类型（dtype）      | 功能描述：指定Tensor对象的数据类型。 默认值：无 取值范围：float16, float32, int8, int16, int32, uint8, uint16, bool。 |
-| 数据排布格式（format） | 详细请参见[ 数据排布格式（format）](https://support.huawei.com/enterprise/zh/doc/EDOC1100180768/9dd5739#section125241018101614)。 |
+| 数据类型（dtype）      | 功能描述：指定Tensor对象的数据类型。 默认值：无 取值范围：float16, float32, int8, int16, int32, uint8, uint16, bool。                                                                                                                      |
+| 数据排布格式（format） | 详细请参见[ 数据排布格式（format）](https://support.huawei.com/enterprise/zh/doc/EDOC1100180768/9dd5739#section125241018101614)。                                                                                                             |
 
 ### 1.1.4 **数据排布格式（Format）**
 
@@ -46,8 +46,6 @@ Tensor是算子中的数据，包括输入数据与输出数据，TensorDesc（T
 
 图1-2  NCHW和NHWC
 ![img](TensorRT-plugin/download-16632326579123.png)
-
-
 
 ### 1.1.5 **形状（Shape）**
 
@@ -144,13 +142,13 @@ NVIDIA TensorRT 支持多种类型的层，其功能不断扩展；但是，在�
 
 Table 3. Base classes, ordered from least expressive to most expressive
 
-|                                                              | Introduced in TensorRT version? | Mixed input/output formats/types | Dynamic shapes? | Supports implicit/explicit batch mode? |
-| ------------------------------------------------------------ | ------------------------------- | -------------------------------- | --------------- | -------------------------------------- |
-| [IPluginV2Ext](https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_plugin_v2_ext.html) | 5.1                             | Limited                          | No              | Implicit batch mode only               |
-| [IPluginV2IOExt](https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_plugin_v2_i_o_ext.html) | 6.0.1                           | General                          | No              | Implicit batch mode only               |
+|                                                                                                                                | Introduced in TensorRT version? | Mixed input/output formats/types | Dynamic shapes? | Supports implicit/explicit batch mode? |
+| ------------------------------------------------------------------------------------------------------------------------------ | ------------------------------- | -------------------------------- | --------------- | -------------------------------------- |
+| [IPluginV2Ext](https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_plugin_v2_ext.html)                | 5.1                             | Limited                          | No              | Implicit batch mode only               |
+| [IPluginV2IOExt](https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_plugin_v2_i_o_ext.html)          | 6.0.1                           | General                          | No              | Implicit batch mode only               |
 | [IPluginV2DynamicExt](https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_plugin_v2_dynamic_ext.html) | 6.0.1                           | General                          | Yes             | Explicit batch mode only               |
 
-为了在网络中使用插件，您必须首先将其注册到 TensorRT 的`PluginRegistry` （ [C++](https://docs.nvidia.com/deeplearning/tensorrt/api/c_api/classnvinfer1_1_1_i_plugin_registry.html) 、 [Python](https://docs.nvidia.com/deeplearning/tensorrt/api/python_api/infer/Plugin/IPluginRegistry.html) ）。不是直接注册插件，而是为插件注册一个工厂类的实例，派生自`PluginCreator` ( [C++](https://docs.nvidia.com/deeplearning/tensorrt/api/c_api/classnvinfer1_1_1_i_plugin_creator.html) , [Python](https://docs.nvidia.com/deeplearning/tensorrt/api/python_api/infer/Plugin/IPluginCreator.html) )。插件创建者类还提供有关插件的其他信息：它的名称、版本和插件字段参数。
+为了在网络中使用插件，您必须首先将其注册到 TensorRT 的 `PluginRegistry` （ [C++](https://docs.nvidia.com/deeplearning/tensorrt/api/c_api/classnvinfer1_1_1_i_plugin_registry.html) 、 [Python](https://docs.nvidia.com/deeplearning/tensorrt/api/python_api/infer/Plugin/IPluginRegistry.html) ）。不是直接注册插件，而是为插件注册一个工厂类的实例，派生自 `PluginCreator` ( [C++](https://docs.nvidia.com/deeplearning/tensorrt/api/c_api/classnvinfer1_1_1_i_plugin_creator.html) , [Python](https://docs.nvidia.com/deeplearning/tensorrt/api/python_api/infer/Plugin/IPluginCreator.html) )。插件创建者类还提供有关插件的其他信息：它的名称、版本和插件字段参数。
 
 您可以通过两种方式注册注册表：
 
@@ -159,7 +157,7 @@ Table 3. Base classes, ordered from least expressive to most expressive
 
 注意：
 
-- 要在应用程序中使用 TensorRT 插件，必须加载`libnvinfer_plugin.so`库，并且必须通过在应用程序代码中调用`initLibNvInferPlugins`来注册所有插件。
+- 要在应用程序中使用 TensorRT 插件，必须加载 `libnvinfer_plugin.so`库，并且必须通过在应用程序代码中调用 `initLibNvInferPlugins`来注册所有插件。
 - 如果您有自己的插件库，则可以包含一个类似的入口点，以便在唯一命名空间下的注册表中注册所有插件。这确保了在构建期间跨不同插件库的插件名称没有冲突。
 
 调用iPluginCreator :: createplugin（）返回Ipluginv2类型的插件对象。您可以使用AddPluginv2（）将插件添加到Tensorrt网络中，该网络可以使用给定的插件创建网络层。
@@ -241,9 +239,9 @@ DimsExprs BarPlugin::getOutputDimensions(int outputIndex,
 }
 ```
 
-`supportsFormatCombination`的覆盖必须指示是否允许格式组合。接口将输入/输出统一索引为“`connections`”，从第一个输入的 0 开始，然后依次为其余输入，然后为输出编号。在示例中，输入是`connections` 0 和 1，输出是`connections` 2 和 3。
+`supportsFormatCombination`的覆盖必须指示是否允许格式组合。接口将输入/输出统一索引为“`connections`”，从第一个输入的 0 开始，然后依次为其余输入，然后为输出编号。在示例中，输入是 `connections` 0 和 1，输出是 `connections` 2 和 3。
 
-TensorRT 使用`supportsFormatCombination`来询问给定的格式/类型组合是否适用于连接，给定的格式/类型用于索引较少的连接。因此，覆盖可以假设较少索引的连接已经过审查，并专注于与索引`pos`的连接。
+TensorRT 使用 `supportsFormatCombination`来询问给定的格式/类型组合是否适用于连接，给定的格式/类型用于索引较少的连接。因此，覆盖可以假设较少索引的连接已经过审查，并专注于与索引 `pos`的连接。
 
 ```c++
 bool BarPlugin::supportsFormatCombination(int pos, const PluginTensorDesc* inOut, int nbInputs, int nbOutputs) override
@@ -265,11 +263,11 @@ bool BarPlugin::supportsFormatCombination(int pos, const PluginTensorDesc* inOut
 }
 ```
 
-这里的局部变量`in`和`out`允许通过输入或输出编号而不是连接编号检查`inOut` 。
+这里的局部变量 `in`和 `out`允许通过输入或输出编号而不是连接编号检查 `inOut` 。
 
-重要提示：覆盖检查索引小于`pos`的连接的格式/类型，但绝不能检查索引大于`pos`的连接的格式/类型。该示例使用case 3来检查连接 3 和连接 0，而不是使用case 0来检查连接 0 和连接 3。
+重要提示：覆盖检查索引小于 `pos`的连接的格式/类型，但绝不能检查索引大于 `pos`的连接的格式/类型。该示例使用case 3来检查连接 3 和连接 0，而不是使用case 0来检查连接 0 和连接 3。
 
-TensorRT 使用`configurePlugin`在运行时设置插件。这个插件不需要`configurePlugin`来做任何事情，所以它是一个空操作：
+TensorRT 使用 `configurePlugin`在运行时设置插件。这个插件不需要 `configurePlugin`来做任何事情，所以它是一个空操作：
 
 ```c++
 void BarPlugin::configurePlugin(
@@ -279,9 +277,9 @@ void BarPlugin::configurePlugin(
 }
 ```
 
-如果插件需要知道它可能遇到的最小或最大尺寸，它可以检查字段`DynamicPluginTensorDesc::min`或`DynamicPluginTensorDesc::max`的任何输入或输出。格式和构建时维度信息可以在`DynamicPluginTensorDesc::desc`中找到。任何运行时维度都显示为 `-1`。实际维度提供给`BarPlugin::enqueue` 。
+如果插件需要知道它可能遇到的最小或最大尺寸，它可以检查字段 `DynamicPluginTensorDesc::min`或 `DynamicPluginTensorDesc::max`的任何输入或输出。格式和构建时维度信息可以在 `DynamicPluginTensorDesc::desc`中找到。任何运行时维度都显示为 `-1`。实际维度提供给 `BarPlugin::enqueue` 。
 
-最后，重写`BarPlugin::enqueue`必须完成这项工作。由于形状是动态的，因此 `enqueue` 会收到一个`PluginTensorDesc` ，它描述了每个输入和输出的实际尺寸、类型和格式。
+最后，重写 `BarPlugin::enqueue`必须完成这项工作。由于形状是动态的，因此 `enqueue` 会收到一个 `PluginTensorDesc` ，它描述了每个输入和输出的实际尺寸、类型和格式。
 
 ### 2.1.2 示例：使用C ++添加INT8 I/O支持的自定义层
 
@@ -300,7 +298,7 @@ class PoolPlugin : public IPluginV2IOExt
 - configurePlugin
 - enqueue
 
-`supportsFormatCombination`的重载必须指示允许哪个 INT8 I/O 组合。此接口的用法类似于示例2.2。在本例中，支持的 I/O 张量格式为线性 `CHW`，数据类型为` FP32`、`FP16` 或 `INT8`，但 I/O 张量必须具有相同的数据类型。
+`supportsFormatCombination`的重载必须指示允许哪个 INT8 I/O 组合。此接口的用法类似于示例2.2。在本例中，支持的 I/O 张量格式为线性 `CHW`，数据类型为 ` FP32`、`FP16` 或 `INT8`，但 I/O 张量必须具有相同的数据类型。
 
 ```c++
 bool PoolPlugin::supportsFormatCombination(int pos, const PluginTensorDesc* inOut, int nbInputs, int nbOutputs) const override
@@ -319,7 +317,7 @@ bool PoolPlugin::supportsFormatCombination(int pos, const PluginTensorDesc* inOu
 - 如果不支持 FP32 I/O 变体或未使用 INT8 校准，则必须明确设置所有必需的 INT8 I/O 张量尺度。
 - 校准无法确定插件内部张量的动态范围。对量化数据进行操作的插件必须为内部张量计算自己的动态范围。
 
-TensorRT 调用`configurePlugin`方法通过`PluginTensorDesc`将信息传递给插件，这些信息存储为成员变量，序列化和反序列化。
+TensorRT 调用 `configurePlugin`方法通过 `PluginTensorDesc`将信息传递给插件，这些信息存储为成员变量，序列化和反序列化。
 
 ```c++
 void PoolPlugin::configurePlugin(const PluginTensorDesc* in, int nbInput, const PluginTensorDesc* out, int nbOutput)
@@ -337,7 +335,7 @@ void PoolPlugin::configurePlugin(const PluginTensorDesc* in, int nbInput, const 
 
 每个张量的int8 i/o量表可以从publIntenSordesc :: scale获得。
 
- 最后，重写`UffPoolPluginV2::enqueue`必须完成这项工作。它包括一组核心算法，可在运行时通过使用实际批量大小、输入、输出、cuDNN 流和配置的信息来执行自定义层。
+ 最后，重写 `UffPoolPluginV2::enqueue`必须完成这项工作。它包括一组核心算法，可在运行时通过使用实际批量大小、输入、输出、cuDNN 流和配置的信息来执行自定义层。
 
 ```C++
 int PoolPlugin::enqueue(int batchSize, const void* const* inputs, void** outputs, void* workspace, cudaStream_t stream)
@@ -382,11 +380,11 @@ ONNX解析器**自动尝试将无法识别的节点作为插件导入**。如果
 - NCHW单精度 (FP32)、半精度 (FP16) 和整型 (INT32) 张量
 - NC / 2HW2和NHWC8半精度 (FP16) 张量
 
-格式由`PluginFormatType`枚举。
+格式由 `PluginFormatType`枚举。
 
 **`getWorkspaceSize`**
 
-除了输入和输出张量之外，不计算所有数据并且需要内存空间的插件可以使用`getWorkspaceSize`方法指定额外的内存需求，该方法由构建器调用以确定和预分配暂存空间。
+除了输入和输出张量之外，不计算所有数据并且需要内存空间的插件可以使用 `getWorkspaceSize`方法指定额外的内存需求，该方法由构建器调用以确定和预分配暂存空间。
 
 在构建和推理期间，可能会多次配置和执行插件层。在构建时，为了发现最佳配置，层被配置、初始化、执行和终止。为插件选择最佳格式后，再次配置插件，然后在推理应用程序的生命周期内初始化一次并执行多次，最后在引擎销毁时终止。
 
@@ -424,15 +422,15 @@ ONNX解析器**自动尝试将无法识别的节点作为插件导入**。如果
 
 **`canBroadcastInputAcrossBatch`**
 
-对每个输入调用此方法，其张量在批次中进行语义广播。如果`canBroadcastInputAcrossBatch`返回true （意味着插件可以支持广播），则 TensorRT 不会复制输入张量。插件应该在批处理中共享一个副本。如果它返回false ，则 TensorRT 会复制输入张量，使其看起来像一个非广播张量。
+对每个输入调用此方法，其张量在批次中进行语义广播。如果 `canBroadcastInputAcrossBatch`返回true （意味着插件可以支持广播），则 TensorRT 不会复制输入张量。插件应该在批处理中共享一个副本。如果它返回false ，则 TensorRT 会复制输入张量，使其看起来像一个非广播张量。
 
 **`isOutputBroadcastAcrossBatch`**
 
 这为每个输出索引调用。该插件应在给定索引处返回 true 输出，并在整个批次中广播。
 
-**`IPluginV2IOExt`** 这由构建器在`initialize()`之前调用。它为层提供了基于 I/O PluginTensorDesc和最大批量大小进行算法选择的机会。
+**`IPluginV2IOExt`** 这由构建器在 `initialize()`之前调用。它为层提供了基于 I/O PluginTensorDesc和最大批量大小进行算法选择的机会。
 
-注意：基于`IPluginV2`的插件在引擎级别共享，而不是在执行上下文级别共享，因此这些可能被多个线程同时使用的插件需要以线程安全的方式管理它们的资源。创建`ExecutionContext`时会克隆基于`IPluginV2Ext`和派生接口的插件，因此这不是必需的。
+注意：基于 `IPluginV2`的插件在引擎级别共享，而不是在执行上下文级别共享，因此这些可能被多个线程同时使用的插件需要以线程安全的方式管理它们的资源。创建 `ExecutionContext`时会克隆基于 `IPluginV2Ext`和派生接口的插件，因此这不是必需的。
 
 ### 2.4.2. IPluginCreator API描述
 
@@ -442,19 +440,19 @@ ONNX解析器**自动尝试将无法识别的节点作为插件导入**。如果
 
 这将返回插件名称，并且应该与IPluginExt::getPluginType的返回值匹配。
 
-**`getPluginVersion`** 
+**`getPluginVersion`**
 
 返回插件版本。对于所有内部 TensorRT 插件，默认为1 。
 
-**`getFieldNames`** 
+**`getFieldNames`**
 
-要成功创建插件，需要了解插件的所有字段参数。此方法返回`PluginFieldCollection`结构，其中填充了`PluginField`条目以反映字段名称和`PluginFieldType` （数据应指向`nullptr` ）。
+要成功创建插件，需要了解插件的所有字段参数。此方法返回 `PluginFieldCollection`结构，其中填充了 `PluginField`条目以反映字段名称和 `PluginFieldType` （数据应指向 `nullptr` ）。
 
 **`createPlugin`**
 
-此方法用于使用`PluginFieldCollection`参数创建插件。应填充`PluginField`条目的数据字段以指向每个插件字段条目的实际数据。
+此方法用于使用 `PluginFieldCollection`参数创建插件。应填充 `PluginField`条目的数据字段以指向每个插件字段条目的实际数据。
 
-注意：传递给`createPlugin`函数的数据应该由调用者分配，并在程序被销毁时最终由调用者释放。 `createPlugin`函数返回的插件对象的所有权被传递给调用者，并且也必须被销毁。
+注意：传递给 `createPlugin`函数的数据应该由调用者分配，并在程序被销毁时最终由调用者释放。 `createPlugin`函数返回的插件对象的所有权被传递给调用者，并且也必须被销毁。
 
 **`deserializePlugin`**
 
@@ -464,15 +462,15 @@ ONNX解析器**自动尝试将无法识别的节点作为插件导入**。如果
 
 # 3 Plugin编写流程
 
-[博客参考](https://zhuanlan.zhihu.com/p/297002406) 
+[博客参考](https://zhuanlan.zhihu.com/p/297002406)
 
-上面的博客参考了官方的Plugin对应的，这个例子的文件在我本机的`/home/huolin/github/TensorRT/plugin/normalizePlugin/` 路经下
+上面的博客参考了官方的Plugin对应的，这个例子的文件在我本机的 `/home/huolin/github/TensorRT/plugin/normalizePlugin/` 路经下
 
 TODO 有的下面有cu cpp h文件 但是有的只有cpp和h文件，不知道为什么
 
 ![image-20220915170932921](TensorRT-plugin/image-20220915170932921.png)
 
-官方的例子有些变化，有点头大，这里就以下面的例子为参考 
+官方的例子有些变化，有点头大，这里就以下面的例子为参考
 
 就是开源的文档trt-samples-for-hackathon-cn-master/cookbook/05-Plugin
 
@@ -488,7 +486,7 @@ TODO 有的下面有cu cpp h文件 但是有的只有cpp和h文件，不知道�
 
 ![image-20220915191025034](TensorRT-plugin/image-20220915191025034.png)
 
-## 3.1 调用关系 
+## 3.1 调用关系
 
 1. 调用IPluginCreator::createPlugin()返回一个类型为IPluginV2的插件对象。
 2. 在反序列化期间，TensorRT从插件注册表中查找插件创建者并调用IPluginCreator::deserializePlugin()。
@@ -499,83 +497,46 @@ TODO 有的下面有cu cpp h文件 但是有的只有cpp和h文件，不知道�
 
    * addPluginCreator 里面参照官方模板调用
 
-     IPluginCreator::setPluginNamespace 
-     IPluginCreator::getPluginNamespace 
-     IPluginCreator::getPluginName 
-     IPluginCreator::getPluginVersion 
-
+     IPluginCreator::setPluginNamespace
+     IPluginCreator::getPluginNamespace
+     IPluginCreator::getPluginName
+     IPluginCreator::getPluginVersion
    * IPluginCreator::getFieldNames
-
-   * IPluginCreator::createPlugin：里面new了一个`IPluginV2` ;调用一次
-
+   * IPluginCreator::createPlugin：里面new了一个 `IPluginV2` ;调用一次
    * Plugin::getNbOutputs;调用多次
-
    * Plugin::getOutputDataType;调用多次
-
-   * Plugin::clone：里面new了一个`IPluginV2`和上面的不同;调用多次
-
-   * Plugin::destroy 
-
-   * 析构IPluginV2
-
-   * Plugin::getOutputDataType;调用多次
-
-   * Plugin::getOutputDimensions;调用多次
-
-   * readCalibrationCache
-
-   * Plugin::supportsFormatCombination
-
-   * Plugin::clone 
-
-   * Plugin::setPluginNamespace
-
-   * Plugin::configurePlugin
-
-   * Plugin::getWorkspaceSize 
-
-   * Plugin::destroy 
-
-   * 析构IPluginV2
-
-   * Plugin::initialize 
-
+   * Plugin::clone：里面new了一个 `IPluginV2`和上面的不同;调用多次
    * Plugin::destroy
-
    * 析构IPluginV2
-
-   * Plugin::getPluginType 
-
-   * Plugin::getPluginVersion 
-
-   * Plugin::getPluginNamespace 
-
-   * Plugin::getSerializationSize 
-
-   * Plugin::serialize 
-
-   * Plugin::getSerializationSize 
-
-   * Plugin::getPluginType 
-
-   * Plugin::getPluginVersion 
-
-   * Plugin::getPluginNamespace 
-
-   * Plugin::getSerializationSize 
-
-   * Plugin::serialize 
-
-   * Plugin::getSerializationSize 
-
-   * Plugin::terminate 
-
-   * Plugin::destroy 
-
-   * ~Plugin 
-
-   * Plugin::destroy 
-
+   * Plugin::getOutputDataType;调用多次
+   * Plugin::getOutputDimensions;调用多次
+   * readCalibrationCache
+   * Plugin::supportsFormatCombination
+   * Plugin::clone
+   * Plugin::setPluginNamespace
+   * Plugin::configurePlugin
+   * Plugin::getWorkspaceSize
+   * Plugin::destroy
+   * 析构IPluginV2
+   * Plugin::initialize
+   * Plugin::destroy
+   * 析构IPluginV2
+   * Plugin::getPluginType
+   * Plugin::getPluginVersion
+   * Plugin::getPluginNamespace
+   * Plugin::getSerializationSize
+   * Plugin::serialize
+   * Plugin::getSerializationSize
+   * Plugin::getPluginType
+   * Plugin::getPluginVersion
+   * Plugin::getPluginNamespace
+   * Plugin::getSerializationSize
+   * Plugin::serialize
+   * Plugin::getSerializationSize
+   * Plugin::terminate
+   * Plugin::destroy
+   * ~Plugin
+   * Plugin::destroy
    * ~Plugin
 
 ### 3.1.2 加载和推理  engine时
@@ -584,26 +545,18 @@ TODO 有的下面有cu cpp h文件 但是有的只有cpp和h文件，不知道�
 
    * addPluginCreator 里面参照官方模板调用
 
-     IPluginCreator::setPluginNamespace 
-     IPluginCreator::getPluginNamespace 
-     IPluginCreator::getPluginName 
-     IPluginCreator::getPluginVersion 
-
+     IPluginCreator::setPluginNamespace
+     IPluginCreator::getPluginNamespace
+     IPluginCreator::getPluginName
+     IPluginCreator::getPluginVersion
 2. 应该是deserializeCudaEngine调用了deserializePlugin;调用一次
 
-   * deserializePlugin里面new了一个`IPluginV2`. It should return the plugin object to be used for                                    inference。还调用了setPluginNamespace
-
+   * deserializePlugin里面new了一个 `IPluginV2`. It should return the plugin object to be used for                                    inference。还调用了setPluginNamespace
 3. initialize:  TensorRT 引擎构建过程中被调用;调用一次
-
-4. clone: 每次创建包含此插件层的新构建器、网络或引擎时都会调用此函数。它必须返回一个具有正确参数的新插件对象。new了一个`IPluginV2`,和上面的deserializePlugin调用的不是一个new;调用一次
-
+4. clone: 每次创建包含此插件层的新构建器、网络或引擎时都会调用此函数。它必须返回一个具有正确参数的新插件对象。new了一个 `IPluginV2`,和上面的deserializePlugin调用的不是一个new;调用一次
 5. attachToContext;调用一次
-
 6. configurePlugin;调用一次
-
 7. enqueue;推理一次调用一次。频繁的调用。
-
-   
 
 ## 3.2 PluginCreator
 
@@ -629,12 +582,11 @@ IPluginCreator 类中的以下方法用于从插件注册表查找并创建适�
 
 此方法用于使用 PluginFieldCollection 参数创建插件。应填充 PluginField 条目的数据字段以指向每个插件字段条目的实际数据。（从模型读取参数）
 
-其中new了一个`IPluginV2`这个例子中就是`AddScalarPlugin`
+其中new了一个 `IPluginV2`这个例子中就是 `AddScalarPlugin`
 
 * `deserializePlugin`
 
-  其中new了一个`IPluginV2`这个例子中就是`AddScalarPlugin`，但是**构造函数不同**
-
+  其中new了一个 `IPluginV2`这个例子中就是 `AddScalarPlugin`，但是**构造函数不同**
 * 还有一个重要的注册宏REGISTER_TENSORRT_PLUGIN 用于注册PluginCreator
 
   ```c++
@@ -648,9 +600,6 @@ IPluginCreator 类中的以下方法用于从插件注册表查找并创建适�
 ### 3.2.5 set/getPluginNamespace
 
 该方法用于设置该创建者实例所属的命名空间（默认可以是“”）。
-
-
-
 
 提取PluginCreator相关的代码
 
@@ -823,8 +772,6 @@ public:
     int32_t              enqueue(const PluginTensorDesc *inputDesc, const PluginTensorDesc *outputDesc, const void *const *inputs, void *const *outputs, void *workspace, cudaStream_t stream) noexcept override;
 };
 ```
-
-
 
 cpp文件
 
@@ -1035,11 +982,11 @@ void AddScalarPlugin::detachFromContext() noexcept
 
 构造函数一般设置为三个。
 
-第一个用于在parse阶段，`PluginCreator`用于创建该插件时调用的构造函数，需要传递权重信息以及参数。对应上面Create的`createPlugin`函数
+第一个用于在parse阶段，`PluginCreator`用于创建该插件时调用的构造函数，需要传递权重信息以及参数。对应上面Create的 `createPlugin`函数
 
-第二个用于在`clone`阶段，复制这个plugin时会用到的构造函数。这个例子没有
+第二个用于在 `clone`阶段，复制这个plugin时会用到的构造函数。这个例子没有
 
-第三个用于在`deserialize`阶段，用于将序列化好的权重和参数传入该plugin并创建。对应上面Create的`deserializePlugin`
+第三个用于在 `deserialize`阶段，用于将序列化好的权重和参数传入该plugin并创建。对应上面Create的 `deserializePlugin`
 
 这里的两个构造函数就是
 
@@ -1049,7 +996,7 @@ AddScalarPlugin(const std::string &name, const void *buffer, size_t length);
 
 ```
 
-析构函数则需要执行`terminate`，`terminate`函数就是释放这个op之前开辟的一些显存空间:但是这里没有
+析构函数则需要执行 `terminate`，`terminate`函数就是释放这个op之前开辟的一些显存空间:但是这里没有
 
 例如
 
@@ -1062,7 +1009,7 @@ MyCustomPlugin::~MyCustomPlugin()
 
 ### 3.3.2 clone
 
-这玩意儿干嘛的，顾名思义，就是克隆嘛，将这个`plugin`对象克隆一份给TensorRT的builder、network或者engine。
+这玩意儿干嘛的，顾名思义，就是克隆嘛，将这个 `plugin`对象克隆一份给TensorRT的builder、network或者engine。
 
 （创建多个 context ，可以与源对象共享本 engine 的资源）克隆通常发生在 TensorRT 引擎构建时，引擎需要在不同的执行上下文（execution context）中使用相同的插件。为了确保插件的正确性和一致性，TensorRT 会调用插件的 `clone` 函数来创建一个插件的副本，该副本将在不同的执行上下文中使用。
 
@@ -1078,7 +1025,7 @@ IPluginV2DynamicExt *AddScalarPlugin::clone() const noexcept
 
 ### 3.3.3 getNbOutputs
 
-插件op返回多少个Tensor，比如`AddScalarPlugin`这个操作只输出一个Tensor(也就是一个output)，所以直接`return 1`：
+插件op返回多少个Tensor，比如 `AddScalarPlugin`这个操作只输出一个Tensor(也就是一个output)，所以直接 `return 1`：
 
 ```c++
 int32_t AddScalarPlugin::getNbOutputs() const noexcept
@@ -1103,7 +1050,7 @@ DataType AddScalarPlugin::getOutputDataType(int32_t index, DataType const *input
 ### 3.3.5 **getOutputDimensions**
 
 * 向 TensorRT 报告每个输出张量的形状。
-* TensorRT支持Dynamic-shape的时候，batch这一维度必须是explicit的，也就是说，TensorRT处理的维度从以往的三维[3,-1,-1]变成了[1,3,-1,-1]。最新的onnx-tensorrt也必须设置explicit的batchsize，而且这个batch维度在`getOutputDimensions`中是可以获取到的。
+* TensorRT支持Dynamic-shape的时候，batch这一维度必须是explicit的，也就是说，TensorRT处理的维度从以往的三维[3,-1,-1]变成了[1,3,-1,-1]。最新的onnx-tensorrt也必须设置explicit的batchsize，而且这个batch维度在 `getOutputDimensions`中是可以获取到的。
 
 在旧版的IPluginV2类中，getOutputDimensions的定义如下：
 
@@ -1131,9 +1078,9 @@ DimsExprs AddScalarPlugin::getOutputDimensions(int32_t outputIndex, const DimsEx
 
 ### 3.3.6 **supportsFormatCombination**
 
-TensorRT调用此方法以判断pos索引的输入/输出是否支持`inOut[pos].format`和`inOut[pos].type`指定的格式/数据类型。
+TensorRT调用此方法以判断pos索引的输入/输出是否支持 `inOut[pos].format`和 `inOut[pos].type`指定的格式/数据类型。
 
-如果插件支持`inOut[pos]`处的格式/数据类型，则返回true。 如果`是否支持`取决于其他的输入/输出格式/数据类型，则插件可以使其结果取决于`inOut[0..pos-1]`中的格式/数据类型，该格式/数据类型将设置为插件支持的值。 这个函数不需要检查`inOut[pos + 1..nbInputs + nbOutputs-1]`，pos的决定必须仅基于`inOut[0..pos]`。
+如果插件支持 `inOut[pos]`处的格式/数据类型，则返回true。 如果 `是否支持`取决于其他的输入/输出格式/数据类型，则插件可以使其结果取决于 `inOut[0..pos-1]`中的格式/数据类型，该格式/数据类型将设置为插件支持的值。 这个函数不需要检查 `inOut[pos + 1..nbInputs + nbOutputs-1]`，pos的决定必须仅基于 `inOut[0..pos]`。
 
 ```c++
 bool AddScalarPlugin::supportsFormatCombination(int32_t pos, const PluginTensorDesc *inOut, int32_t nbInputs, int32_t nbOutputs) noexcept
@@ -1235,7 +1182,7 @@ size_t AddScalarPlugin::getWorkspaceSize(const PluginTensorDesc *inputs, int32_t
 * 可以根据输入张量的不同形状、数据类型等条件选择不同 kernel 执行计算
 * 不要在 enqueue 中使用 cudaMalloc* 等函数
 
-实际插件op的执行函数，我们自己实现的cuda操作就放到这里(当然C++写的op也可以放进来，不过因为是CPU执行，速度就比较慢了)，与往常一样接受输入`inputs`产生输出`outputs`，传给相应的指针就可以。
+实际插件op的执行函数，我们自己实现的cuda操作就放到这里(当然C++写的op也可以放进来，不过因为是CPU执行，速度就比较慢了)，与往常一样接受输入 `inputs`产生输出 `outputs`，传给相应的指针就可以。
 
 ```c++
 int32_t AddScalarPlugin::enqueue(const PluginTensorDesc *inputDesc, const PluginTensorDesc *outputDesc, const void *const *inputs, void *const *outputs, void *workspace, cudaStream_t stream) noexcept
@@ -1293,8 +1240,6 @@ void AddScalarPlugin::terminate() noexcept
 }
 ```
 
-
-
 ### 3.3.13 **getSerializationSize**
 
 （报告序列化需要的空间大小，单位 Byte）
@@ -1309,8 +1254,6 @@ size_t AddScalarPlugin::getSerializationSize() const noexcept
 }
 ```
 
-
-
 ### 3.3.14 serialize
 
 将Plugin 数据序列化到给定的 buffer 中
@@ -1324,15 +1267,13 @@ void AddScalarPlugin::serialize(void *buffer) const noexcept
 }
 ```
 
-
-
 ### 3.3.15 **attachToContext**
 
 （申请使用 context 独占的 cudnn 或 cublas 资源）
 
 创建执行上下文（execution context）时被调用。这个函数的目的是将插件附加（attach）到执行上下文，以便在推理时使用。
 
-如果这个op使用到了一些其他东西，例如`cublas handle`，可以直接借助TensorRT内部提供的`cublas handle`:
+如果这个op使用到了一些其他东西，例如 `cublas handle`，可以直接借助TensorRT内部提供的 `cublas handle`:
 
 ```c++
 void AddScalarPlugin::attachToContext(cudnnContext *contextCudnn, cublasContext *contextCublas, IGpuAllocator *gpuAllocator) noexcept
@@ -1350,7 +1291,7 @@ void AddScalarPlugin::attachToContext(cudnnContext *contextCudnn, cublasContext 
 
 ![image-20220916110508870](TensorRT-plugin/image-20220916110508870.png)
 
-### 3.4.1 头文件 
+### 3.4.1 头文件
 
 AddScalarPlugin.h
 
@@ -1757,9 +1698,9 @@ REGISTER_TENSORRT_PLUGIN(AddScalarPluginCreator);//静态注册
 
 engine的构建使用python代码编写了一个简单的网络，就一个输入层和一个插件层。
 
-engine的构建流程参考`TensorRT例子`教程。
+engine的构建流程参考 `TensorRT例子`教程。
 
-需要了解的就是里面调用了`create_plugin`也就是插件中PluginCreator的createPlugin
+需要了解的就是里面调用了 `create_plugin`也就是插件中PluginCreator的createPlugin
 
 ```python
 #
@@ -1902,10 +1843,6 @@ if __name__ == "__main__":
 
 ```
 
-
-
-
-
 ![image-20220916110619782](TensorRT-plugin/image-20220916110619782.png)
 
 # 4 官方例子
@@ -1925,8 +1862,6 @@ VGG16_faster_rcnn_final.caffemodel模型文件结构如下
 加载的faster_rcnn_test_iplugin.prototxt文件如下
 
 ![image-20220919133120820](TensorRT-plugin/image-20220919133120820.png)
-
-
 
 步骤如下：
 
@@ -1987,7 +1922,6 @@ for (int i = 0, volImg = INPUT_C*INPUT_H*INPUT_W; i < N; ++i)
 4个输出
 
 * bbox pred是高度、宽度和中心坐标的预测偏移量。
-
 * cls_prob问题是与每个边界框的每个对象类相关的概率。
 * rois是每个边界框的高度、宽度和中心坐标。
 * count不再使用了，不考虑（如果输出没有与nmsMaxOut对齐，count输出用于指定产生的NMS边界框的数量）
@@ -2024,7 +1958,6 @@ RPNROIPlugin有四个输入(bbox confidence、bbox offset、feature map和image 
 ### 4.1.8 数据准备
 
 1. 设置$TRT_DATADIR为数据存放的目录
-
 2. 下载[faster_rcnn_models.tgz](https://dl.dropboxusercontent.com/s/o6ii098bu51d139/faster_rcnn_models.tgz)数据集
 
    ```SHELL
@@ -2032,7 +1965,6 @@ RPNROIPlugin有四个输入(bbox confidence、bbox offset、feature map和image 
    mkdir -p $TRT_DATADIR/faster-rcnn
    wget --no-check-certificate https://dl.dropboxusercontent.com/s/o6ii098bu51d139/faster_rcnn_models.tgz?dl=0 -O $TRT_DATADIR/faster-rcnn/faster-rcnn.tgz
    ```
-
 3. 解压数据到data/faster-rcnn目录
 
    ```shell
@@ -2058,13 +1990,11 @@ RPNROIPlugin有四个输入(bbox confidence、bbox offset、feature map和image 
    $ make -j4
    $ cd ../../bin
    ```
-
 2. 运行
 
    ```shell
    ./sample_fasterRCNN --datadir=/usr/src/tensorrt/data/faster-rcnn
    ```
-
 3. 验证示例是否成功运行。如果示例成功运行，您应该会看到类似以下的输出
 
    ```shell
@@ -2088,16 +2018,11 @@ RPNROIPlugin有四个输入(bbox confidence、bbox offset、feature map和image 
 
    ![image-20220919114942792](TensorRT-plugin/image-20220919114942792.png)
 
-
-
 ### 4.1.10 理解的几个点：
 
 1. 模型的结构由faster_rcnn_test_iplugin.prototxt定义，不是由VGG16_faster_rcnn_final.caffemodel文件定义的。只是使用了VGG16_faster_rcnn_final.caffemodel中的训练过的参数。因为VGG16_faster_rcnn_final.caffemodel文件中有RPN和ROI层，这两层在faster_rcnn_test_iplugin.prototxt中定义为一个自定义层RPROI_TRT。
-
 2. 虽然有自定义的层，但是在samples/sampleFasterRCNN/sampleFasterRCNN.cpp中engine的编译方式和sampleMNIST相比什么变化。应该是调用parse时直接就解析了，包括解析了自定义层。**因为使用的时parser解析器来解析的，所以不需要调用addPluginV2函数（addPluginV2函数应该是自定义网络结构使用plugin时使用的）**
-
 3. 应该是编译成了动态库，在下面网络使用的时候调用了，库文件在/usr/lib/x86_64-linux-gnu/libnvinfer_plugin_static.a
-
 4. 为什么自定义层也能被解析？就是因为在文件中sampleFasterRCNN.cpp中在build和infer之前调用了注册。在faster_rcnn_test_iplugin.prototxt网路结构描述文件中有一层的名称（名称对应不上，应该是因为2.2节的原因才关联起来的）是这样也就使自定义插件和模型关联起来了。
 
    ```c++
@@ -2112,11 +2037,11 @@ RPNROIPlugin有四个输入(bbox confidence、bbox offset、feature map和image 
    {
        PluginCreatorRegistry::getInstance().addPluginCreator<CreatorType>(logger, libNamespace);//这里面注册
    }
-   
+
    } // namespace plugin
    } // namespace nvinfer1
    // New Plugin APIs
-   
+
    extern "C"
    {
        bool initLibNvInferPlugins(void* logger, const char* libNamespace)
@@ -2128,7 +2053,7 @@ RPNROIPlugin有四个输入(bbox confidence、bbox offset、feature map和image 
            return true;
        }
    } // extern "C"
-   
+
    ```
 
    ```c++
@@ -2137,18 +2062,18 @@ RPNROIPlugin有四个输入(bbox confidence、bbox offset、feature map和image 
        {
            // Make accesses to the plugin creator registry thread safe
            std::lock_guard<std::mutex> lock(mRegistryLock);
-   
+
            std::string errorMsg;
            std::string verboseMsg;
-   
+
            std::unique_ptr<CreatorType> pluginCreator{new CreatorType{}};
            pluginCreator->setPluginNamespace(libNamespace);
-   
+
            nvinfer1::plugin::gLogger = static_cast<nvinfer1::ILogger*>(logger);
            std::string pluginType = std::string{pluginCreator->getPluginNamespace()}
                + "::" + std::string{pluginCreator->getPluginName()} + " version "
                + std::string{pluginCreator->getPluginVersion()};
-   
+
            if (mRegistryList.find(pluginType) == mRegistryList.end())
            {
                bool status = getPluginRegistry()->registerCreator(*pluginCreator, libNamespace);//注册
@@ -2167,7 +2092,7 @@ RPNROIPlugin有四个输入(bbox confidence、bbox offset、feature map和image 
            {
                verboseMsg = "Plugin creator already registered - " + pluginType;
            }
-   
+
            if (logger)
            {
                if (!errorMsg.empty())
@@ -2182,14 +2107,12 @@ RPNROIPlugin有四个输入(bbox confidence、bbox offset、feature map和image 
        }
    ```
 
-   
-
    把我们自定义的crteator放在下面方便理解：plugin/nvFasterRCNN/nvFasterRCNNPlugin.cpp
 
    ```c++
    // Detach the plugin object from its execution context.
    void RPROIPlugin::detachFromContext() noexcept {}
-   
+
    RPROIPluginCreator::RPROIPluginCreator()
    {
        mPluginAttributes.clear();
@@ -2203,41 +2126,41 @@ RPNROIPlugin有四个输入(bbox confidence、bbox offset、feature map和image 
        mPluginAttributes.emplace_back(PluginField("iouThreshold", nullptr, PluginFieldType::kFLOAT32, 1));
        mPluginAttributes.emplace_back(PluginField("minBoxSize", nullptr, PluginFieldType::kFLOAT32, 1));
        mPluginAttributes.emplace_back(PluginField("spatialScale", nullptr, PluginFieldType::kFLOAT32, 1));
-   
+
        // TODO Do we need to pass the size attribute here for float arrarys, we
        // dont have that information at this point.
        mPluginAttributes.emplace_back(PluginField("anchorsRatios", nullptr, PluginFieldType::kFLOAT32, 1));
        mPluginAttributes.emplace_back(PluginField("anchorsScales", nullptr, PluginFieldType::kFLOAT32, 1));
-   
+
        mFC.nbFields = mPluginAttributes.size();
        mFC.fields = mPluginAttributes.data();
    }
-   
+
    RPROIPluginCreator::~RPROIPluginCreator()
    {
        // Free allocated memory (if any) here
    }
-   
+
    const char* RPROIPluginCreator::getPluginName() const noexcept
    {
        return RPROI_PLUGIN_NAME;
    }
-   
+
    const char* RPROIPluginCreator::getPluginVersion() const noexcept
    {
        return RPROI_PLUGIN_VERSION;
    }
-   
+
    const PluginFieldCollection* RPROIPluginCreator::getFieldNames() noexcept
    {
        return &mFC;
    }
-   
+
    IPluginV2Ext* RPROIPluginCreator::createPlugin(const char* name, const PluginFieldCollection* fc) noexcept
    {
        const PluginField* fields = fc->fields;
        int nbFields = fc->nbFields;
-   
+
        for (int i = 0; i < nbFields; ++i)
        {
            const char* attrName = fields[i].name;
@@ -2248,14 +2171,14 @@ RPNROIPlugin有四个输入(bbox confidence、bbox offset、feature map和image 
            }
    		.....
        }
-   
+
        // This object will be deleted when the network is destroyed, which will
        // call RPROIPlugin::terminate()
        RPROIPlugin* plugin = new RPROIPlugin(params, anchorsRatios.data(), anchorsScales.data());
        plugin->setPluginNamespace(mNamespace.c_str());
        return plugin;
    }
-   
+
    IPluginV2Ext* RPROIPluginCreator::deserializePlugin(const char* name, const void* serialData, size_t serialLength) noexcept
    {
        // This object will be deleted when the network is destroyed, which will
@@ -2266,12 +2189,11 @@ RPNROIPlugin有四个输入(bbox confidence、bbox offset、feature map和image 
    }
    ```
 
-
 ### 4.1.11 添加自定义的plugin，使trtexec可以识别
 
-如何将自己的`plugin`编译到库中，使得`trtexec`可以识别自定义层呢？
+如何将自己的 `plugin`编译到库中，使得 `trtexec`可以识别自定义层呢？
 
-参考编写一个自己的`plugin`代码比如上面4.1.10的`RPROIPlugin`层，然后添加到`initLibNvInferPlugins`函数中。编译成库，替代自带的库`libnvinfer_plugin.so`就可以了。
+参考编写一个自己的 `plugin`代码比如上面4.1.10的 `RPROIPlugin`层，然后添加到 `initLibNvInferPlugins`函数中。编译成库，替代自带的库 `libnvinfer_plugin.so`就可以了。
 
 # 5 官方库编译
 
@@ -2293,8 +2215,6 @@ git submodule update --init --recursive
 
 ### 5.1.1 PC端编译
 
-
-
 在源码目录内创建build目录，因为这里只是编译plugin因此将sameple和parsers都关闭了。
 
 ```shell
@@ -2315,8 +2235,6 @@ make -j$(nproc)
 /usr/lib/x86_64-linux-gnu/libnvinfer_plugin.so.8
 /usr/lib/x86_64-linux-gnu/libnvinfer_plugin_static.a
 ```
-
-
 
 ### 5.1.2 交叉编译
 
@@ -2343,7 +2261,7 @@ plugin和TensorRT如何结合起来呢？
 
 ![image-20220929191047186](TensorRT-plugin/image-20220929191047186.png)
 
-从上图可以看出调用了一个函数`initLibNvInferPlugins`这个函数就是2.1节中说到的动态注册的函数。官方有实现在 `plugin/api/InferPlugin.cpp`这里再一次贴出来源码方便理解。
+从上图可以看出调用了一个函数 `initLibNvInferPlugins`这个函数就是2.1节中说到的动态注册的函数。官方有实现在 `plugin/api/InferPlugin.cpp`这里再一次贴出来源码方便理解。
 
 ```c++
 #include "NvInfer.h"
@@ -2565,7 +2483,7 @@ initLibNvInferPlugins调用了一堆类似下面的函数，其中调用了各�
 
 参考官方博客[网址](https://developer.nvidia.com/blog/estimating-depth-beyond-2d-using-custom-layers-on-tensorrt-and-onnx-models/)
 
-onnx的parser的源码也有`parsers/onnx/builtin_op_importers.cpp`，如下图，可以看出来如果不是官方支持的原生plugin，那么就会运行到这里，也就是parser也调用了addPluginV2函数。这下就比较明了了。
+onnx的parser的源码也有 `parsers/onnx/builtin_op_importers.cpp`，如下图，可以看出来如果不是官方支持的原生plugin，那么就会运行到这里，也就是parser也调用了addPluginV2函数。这下就比较明了了。
 
 ![image-20220929193123478](TensorRT-plugin/image-20220929193123478.png)
 
@@ -2575,7 +2493,7 @@ onnx的parser的源码也有`parsers/onnx/builtin_op_importers.cpp`，如下图�
 
 1. 参考官方博客[网址](https://developer.nvidia.com/blog/estimating-depth-beyond-2d-using-custom-layers-on-tensorrt-and-onnx-models/)提到了我们的onnx模型中plugin的名称需要和我们编写的plugin名称一致。
 
-   下面图中是提到的ONNX模型，可以看出来名称是 `type`字段，也就是`GroupNormalizationPluginCreator`
+   下面图中是提到的ONNX模型，可以看出来名称是 `type`字段，也就是 `GroupNormalizationPluginCreator`
 
    ![The post-processed Group Normalization subgraph consists of only a single group normalization layer with scale and bias as inputs and custom plugin attributes.](TensorRT-plugin/post-processed-gn-layer-3.png)
 
@@ -2584,8 +2502,6 @@ onnx的parser的源码也有`parsers/onnx/builtin_op_importers.cpp`，如下图�
    ![image-20220929194124761](TensorRT-plugin/image-20220929194124761.png)
 
    ![image-20220929194013225](TensorRT-plugin/image-20220929194013225.png)
-
-   
 
 #### plugin参数
 
@@ -2596,8 +2512,6 @@ onnx的parser的源码也有`parsers/onnx/builtin_op_importers.cpp`，如下图�
 ```shell
 Attribute poolingH not found in plugin node
 ```
-
-
 
 ![image-20220929194516628](TensorRT-plugin/image-20220929194516628.png)
 
@@ -2655,7 +2569,7 @@ huolin@huolin:/media/zyd/work/model$
 
 ```
 
-上面的报错说明了原因就是`Static model does not take explicit shapes since the shape of inference tensors will be determined by the model itself`,说人话就是模型的输入是静态的，不能改变。从上面的图中看，模型的输入的确是blob1 [1,3,480,1088]和im_info [2,1,1,3]。batchsize指定为1和2.是固定的。
+上面的报错说明了原因就是 `Static model does not take explicit shapes since the shape of inference tensors will be determined by the model itself`,说人话就是模型的输入是静态的，不能改变。从上面的图中看，模型的输入的确是blob1 [1,3,480,1088]和im_info [2,1,1,3]。batchsize指定为1和2.是固定的。
 
 那么就需要修改一下onnx的模型了。
 
@@ -2696,20 +2610,13 @@ def apply(transform, infile, outfile):
 apply(change_input_dim, "new_crowd_612_0921_4cls_0926_15.onnx", "new_crowd_612_0921_4cls_0926_15_2.onnx")#这里是输入输出的onnx模型文件
 ```
 
-使用上面的脚本运行后我得到了新的onnx文件`new_crowd_612_0921_4cls_0926_15_2.onnx`,查看batchsize如下。可以看出来已经修改了
+使用上面的脚本运行后我得到了新的onnx文件 `new_crowd_612_0921_4cls_0926_15_2.onnx`,查看batchsize如下。可以看出来已经修改了
 
 分别是[1,3,480,1088]和[1,1,1,3]修改完成。
 
 ![image-20221014152058430](TensorRT-plugin/image-20221014152058430.png)
 
-
-
-
-
 [不使用库，使用源代码编译，识别自定义plugin的方式]: ./code/Bbox
-
-
-
 # 附录：
 
 Plugin官方API https://docs.nvidia.com/deeplearning/tensorrt/api/c_api/classnvinfer1_1_1_i_plugin_creator.html#a037a085fc7d0cee9c9a2789a4b83f66f
@@ -2723,12 +2630,12 @@ trtexec 使用 https://www.ccoderun.ca/programming/doxygen/tensorrt/md_TensorRT_
 博客参考：
 
 * 实现TensorRT自定义插件(plugin)自由 https://zhuanlan.zhihu.com/p/297002406
-* [三，如何使用tensorRT C%2B%2B API搭建网络/]( http://giantpandacv.com/project/%E9%83%A8%E7%BD%B2%E4%BC%98%E5%8C%96/AI%20%E9%83%A8%E7%BD%B2%E5%8F%8A%E5%85%B6%E5%AE%83%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/TensorRT/%E4%B8%89%EF%BC%8C%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8tensorRT%20C%2B%2B%20API%E6%90%AD%E5%BB%BA%E7%BD%91%E7%BB%9C/)
+* [三，如何使用tensorRT C%2B%2B API搭建网络/](http://giantpandacv.com/project/%E9%83%A8%E7%BD%B2%E4%BC%98%E5%8C%96/AI%20%E9%83%A8%E7%BD%B2%E5%8F%8A%E5%85%B6%E5%AE%83%E4%BC%98%E5%8C%96%E7%AE%97%E6%B3%95/TensorRT/%E4%B8%89%EF%BC%8C%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8tensorRT%20C%2B%2B%20API%E6%90%AD%E5%BB%BA%E7%BD%91%E7%BB%9C/)
 
 ## **RPN**
 
 全称是region proposal network作用是为第二阶段提供高质量的目标候选框，获得候选框的目的是为了给第二阶段提供优质的roi框
 
-## ROI 
+## ROI
 
 (**region of interest**)关注区域

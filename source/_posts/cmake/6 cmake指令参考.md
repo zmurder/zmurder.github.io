@@ -725,7 +725,9 @@ option(var "use var..." ON) # 实际也可以用cmake -Dvar=ON或者cmake -Dvar=
 option(<variable> "<help_text>" [value])
 ```
 
-提供一个用户可以选择的布尔选项
+提供一个用户可以选择的布尔选项.
+
+如果未提供初始 <value>，则布尔值 OFF 为默认值。如果 <variable> 已设置为普通变量或缓存变量，则该命令不执行任何操作。
 
 option (USE_MYMATH "Use provided math implementation" ON)指令
  给变量赋值 ON，代表真;OFF关键字则代表 假
@@ -737,7 +739,7 @@ option (USE_MYMATH "Use provided math implementation" ON)指令
   ```shell
   #!/bin/sh
   
-  cmake -DTEST_DEBUG=ON .
+  cmake -DTEST_DEBUG=ON .#或者是-DTEST_DEBUG=1
   cmake --build .
   ```
 
@@ -765,7 +767,16 @@ option (USE_MYMATH "Use provided math implementation" ON)指令
   #endif
   ```
 
-  
+
+* 关于上面的`if (TEST_DEBUG)`语句
+
+  ```cmake
+  if(<constant>)
+  ```
+
+  如果`constant`为 1、ON、YES、TRUE、Y 或非零数（包括浮点数），则为 True。
+
+  如果`constant`为 0、OFF、NO、FALSE、N、IGNORE、NOTFOUND、空字符串或以后缀 -NOTFOUND 结尾，则为 False
 
 ## 6.13 link_directories
 

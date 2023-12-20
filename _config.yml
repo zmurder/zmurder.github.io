@@ -125,7 +125,7 @@ auto_category:
  enable: false
  depth:
 
-tags: Typora, GPU, Tensorrt, Plugin, Hexo, git, protobuf, cmake, zmq , DeepLearning, C , C++
+tags: Typora, GPU, Tensorrt, Plugin, Hexo, git, protobuf, cmake, zmq , DeepLearning, C , C++,卷积神经网络
 
 
 excerpt:

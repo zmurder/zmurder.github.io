@@ -203,6 +203,8 @@ trtexec输出的结果有一段内容如下：
 * GPU Compute Time：执行查询内核的 GPU 延迟。
 * Total GPU Compute Time：所有查询的 GPU 计算时间总和。如果总计算时间明显短于Total Host Walltime，那么 GPU 可能因为主机端开销或数据传输而未得到充分利用。
 * Throughput：通过将查询数除以Total Host Walltime 计算得出的观察到的吞吐量。如果这明显低于 GPU Compute Time的倒数，则 GPU 可能由于主机端开销或数据传输而未得到充分利用。
+  * **Throughput** 是衡量模型整体性能的重要指标。它表示每秒可以处理的查询数越多，模型的性能就越好。
+  * **GPU Compute Time** 是衡量模型推理计算性能的重要指标。它表示模型在 GPU 上进行实际计算所花费的时间越短，模型的性能就越好。
 *  Enqueue Time:：将查询入队的主机延迟。如果这比 GPU 计算时间长，则 GPU 可能未得到充分利用。
 * H2D Latency：单个查询的输入张量的主机到设备数据传输的延迟。
 * D2H Latency：单个查询的输出张量的设备到主机数据传输的延迟。

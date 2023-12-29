@@ -191,6 +191,54 @@ enqueue batch 0
 
 有关如何构建此工具及其使用示例的详细信息，请参阅[GitHub：trtexec/README.md](https://github.com/NVIDIA/TensorRT/tree/main/samples/trtexec)文件。
 
+## trtexec输出概述
+
+trtexec输出的结果有一段内容如下：
+
+可以看出`Performance summary`的内容解释如下
+
+=== 性能指标说明 ===
+
+* Total Host Walltime：从第一个查询（预热后）排队到最后一个查询完成时的主机挂起时间。
+* GPU Compute Time：执行查询内核的 GPU 延迟。
+* Total GPU Compute Time：所有查询的 GPU 计算时间总和。如果总计算时间明显短于Total Host Walltime，那么 GPU 可能因为主机端开销或数据传输而未得到充分利用。
+* Throughput：通过将查询数除以Total Host Walltime 计算得出的观察到的吞吐量。如果这明显低于 GPU Compute Time的倒数，则 GPU 可能由于主机端开销或数据传输而未得到充分利用。
+*  Enqueue Time:：将查询入队的主机延迟。如果这比 GPU 计算时间长，则 GPU 可能未得到充分利用。
+* H2D Latency：单个查询的输入张量的主机到设备数据传输的延迟。
+* D2H Latency：单个查询的输出张量的设备到主机数据传输的延迟。
+* Latency：H2D Latency、GPU Compute Time和 D2H Latency的总和。这是推断单个查询的延迟。
+* End-to-End Host Latency：从调用查询的 H2D 到同一查询的 D2H 完成的持续时间，其中包括等待上一个查询完成的延迟。这是多个查询连续排队时查询的延迟。
+
+```bash
+[10/01/2019-00:03:33] [I] === Performance summary ===
+[10/01/2019-00:03:33] [I] Throughput: 90.9004 qps
+[10/01/2019-00:03:33] [I] Latency: min = 11.1738 ms, max = 11.6914 ms, mean = 11.2522 ms, median = 11.25 ms, percentile(99%) = 11.291 ms
+[10/01/2019-00:03:33] [I] End-to-End Host Latency: min = 11.1875 ms, max = 11.7305 ms, mean = 11.2657 ms, median = 11.2646 ms, percentile(99%) = 11.3057 ms
+[10/01/2019-00:03:33] [I] Enqueue Time: min = 10.8203 ms, max = 11.3086 ms, mean = 10.9017 ms, median = 10.9004 ms, percentile(99%) = 10.9365 ms
+[10/01/2019-00:03:33] [I] H2D Latency: min = 0.34375 ms, max = 0.445313 ms, mean = 0.412366 ms, median = 0.412109 ms, percentile(99%) = 0.417969 ms
+[10/01/2019-00:03:33] [I] GPU Compute Time: min = 10.4883 ms, max = 10.918 ms, mean = 10.5202 ms, median = 10.5195 ms, percentile(99%) = 10.5547 ms
+[10/01/2019-00:03:33] [I] D2H Latency: min = 0.28125 ms, max = 0.347656 ms, mean = 0.319619 ms, median = 0.320313 ms, percentile(99%) = 0.328125 ms
+[10/01/2019-00:03:33] [I] Total Host Walltime: 55.0053 s
+[10/01/2019-00:03:33] [I] Total GPU Compute Time: 52.6011 s
+[10/01/2019-00:03:33] [W] * Throughput may be bound by Enqueue Time rather than GPU Compute and the GPU may be under-utilized.
+[10/01/2019-00:03:33] [W]   If not already in use, --useCudaGraph (utilize CUDA graphs where possible) may increase the throughput.
+[10/01/2019-00:03:33] [I] Explanations of the performance metrics are printed in the verbose logs.
+[10/01/2019-00:03:33] [V] 
+[10/01/2019-00:03:33] [V] === Explanations of the performance metrics ===
+[10/01/2019-00:03:33] [V] Total Host Walltime: the host walltime from when the first query (after warmups) is enqueued to when the last query is completed.
+[10/01/2019-00:03:33] [V] GPU Compute Time: the GPU latency to execute the kernels for a query.
+[10/01/2019-00:03:33] [V] Total GPU Compute Time: the summation of the GPU Compute Time of all the queries. If this is significantly shorter than Total Host Walltime, the GPU may be under-utilized because of host-side overheads or data transfers.
+[10/01/2019-00:03:33] [V] Throughput: the observed throughput computed by dividing the number of queries by the Total Host Walltime. If this is significantly lower than the reciprocal of GPU Compute Time, the GPU may be under-utilized because of host-side overheads or data transfers.
+[10/01/2019-00:03:33] [V] Enqueue Time: the host latency to enqueue a query. If this is longer than GPU Compute Time, the GPU may be under-utilized.
+[10/01/2019-00:03:33] [V] H2D Latency: the latency for host-to-device data transfers for input tensors of a single query.
+[10/01/2019-00:03:33] [V] D2H Latency: the latency for device-to-host data transfers for output tensors of a single query.
+[10/01/2019-00:03:33] [V] Latency: the summation of H2D Latency, GPU Compute Time, and D2H Latency. This is the latency to infer a single query.
+[10/01/2019-00:03:33] [V] End-to-End Host Latency: the duration from when the H2D of a query is called to when the D2H of the same query is completed, which includes the latency to wait for the completion of the previous query. This is the latency of a query if multiple queries are enqueued consecutively.
+[10/01/2019-00:03:33] [I] 
+```
+
+
+
 
 
 

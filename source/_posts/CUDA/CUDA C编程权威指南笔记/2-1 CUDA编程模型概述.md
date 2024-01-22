@@ -290,9 +290,36 @@ cudaError_t cudaDeviceSynchronize(void);
 
 核函数是在设备端执行的代码。在核函数中，需要为一个线程规定要进行的计算以及要进行的数据访问。当核函数被调用时，**许多不同的CUDA线程并行执行同一个计算任务**。以下是用`__global__`声明定义核函数：
 
+**声明核函数**
+
 ```C
 __global__ void kernel_name(argument list);
 ```
+
+**host 调用核函数**：
+
+```C
+kernel_name<<<gridDim，blockDim，sharedMemorySize，stream>>>(args…)
+```
+
+* stream 是流，在进行异步管理的时候可以控制它。
+* sharedMemorySize 是共享内存的大小
+* gridDim 和 blockDim 用于告诉核函数该启动多少个线程，二者都是内置变量，其变量类型是 dim3
+  启动的总线程数量 nthreads = gridDim.x * gridDim.y * gridDim.z * blockDim.x * blockDim.y * blockDim.z
+  gridDim 和 blockDim 都是有约束的，可以通过 runtime API 或者 deviceQuery 进行查询。
+
+
+
+* **调用核函数是传值**的，不能传引用，可以传递类、结构体等，核函数可以是模板，**返回值必须是 void**
+* 核函数的执行，是异步的，也就是立即返回的
+* 线程 layout 主要用到 blockDim、gridDim
+* 核函数内访问线程索引主要用到 threadIdx、blockIdx、blockDim、gridDim 这些内置变量
+
+
+
+下图是orin上的gridhe block的限制
+
+![image-20240122180439563](2-1 CUDA编程模型概述/image-20240122180439563.png)
 
 核函数是在设备端执行的代码。在核函数中，需要为一个线程规定要进行的计算以及要进行的数据访问。当核函数被调用时，许多不同的CUDA线程并行执行同一个计算任务。以下是用__global__声明定义核函数：
 

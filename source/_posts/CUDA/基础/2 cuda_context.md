@@ -166,7 +166,7 @@ int main(){
 
 运行结果如下
 
-![在这里插入图片描述](2-cuda_context/a66887be2bcb4cb088515fa5a9258952.png)
+![在这里插入图片描述](2 cuda_context/a66887be2bcb4cb088515fa5a9258952.png)
 
 ## 2.3 测试 cuda context
 
@@ -456,15 +456,15 @@ Measured time for Graph execution = 0.002897s
 
 可以看出多个cuda context整体的运行时间会长一点，使用nsys system分析结果如下（如果使用nsys的命令行可以传入参数--gpuctxsw=true）
 
-![image-20240122150953905](2-cuda_context/image-20240122150953905.png)
+![image-20240122150953905](2 cuda_context/image-20240122150953905.png)
 
 下图是多个cuda context的分析,可以看出cuda context切换需要时间，我这边测试是60us左右。
 
-![image-20240122151239479](2-cuda_context/image-20240122151239479.png)
+![image-20240122151239479](2 cuda_context/image-20240122151239479.png)
 
 下图是单个cuda context的分析
 
-![image-20240122151453400](2-cuda_context/image-20240122151453400.png)
+![image-20240122151453400](2 cuda_context/image-20240122151453400.png)
 
 # 附录：
 

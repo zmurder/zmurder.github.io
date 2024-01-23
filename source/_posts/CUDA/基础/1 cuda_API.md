@@ -6,9 +6,9 @@ CUDA 的 API 其实是可以分层次来理解的，这也造成了有时会出�
 
 CUDA API体系包括：CUDA函数库（CUDA Libraries），CUDA运行时API（CUDA Runtime API），CUDA驱动API（CUDA Driver API），结构图如下：
 
-![在这里插入图片描述](1-cuda_API/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQWRlbmlhbHp6,size_20,color_FFFFFF,t_70,g_se,x_16.png)
+![在这里插入图片描述](1 cuda_API/watermark,type_d3F5LXplbmhlaQ,shadow_50,text_Q1NETiBAQWRlbmlhbHp6,size_20,color_FFFFFF,t_70,g_se,x_16.png)
 
-![在这里插入图片描述](1-cuda_API/21388e1ca49a48a3b37a9e88408b5e55.png)
+![在这里插入图片描述](1 cuda_API/21388e1ca49a48a3b37a9e88408b5e55.png)
 
 **CUDA Driver API**
 

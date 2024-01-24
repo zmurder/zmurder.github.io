@@ -71,6 +71,136 @@ extern __shared__ int tile[];
 kernel<<<grid,block,isize*sizeof(int)>>>(...)
 ```
 
+**测试示例**
+
+```c
+#include <cuda_runtime.h>
+#include <stdio.h>
+
+#define checkRuntime(op)  __check_cuda_runtime((op), #op, __FILE__, __LINE__)
+
+bool __check_cuda_runtime(cudaError_t code, const char* op, const char* file, int line){
+    if(code != cudaSuccess){    
+        const char* err_name = cudaGetErrorName(code);    
+        const char* err_message = cudaGetErrorString(code);  
+        printf("runtime error %s:%d  %s failed. \n  code = %s, message = %s\n", file, line, op, err_name, err_message);   
+        return false;
+    }
+    return true;
+}
+
+
+//demo1 //
+/* 
+demo1 主要为了展示查看静态和动态共享变量的地址
+ */
+const size_t static_shared_memory_num_element = 6 * 1024; // 6KB
+__shared__ char static_shared_memory[static_shared_memory_num_element]; 
+__shared__ char static_shared_memory2[2]; 
+
+__global__ void demo1_kernel(){
+    extern __shared__ char dynamic_shared_memory[];      // 静态共享变量和动态共享变量在kernel函数内/外定义都行，没有限制
+    extern __shared__ char dynamic_shared_memory2[];
+    printf("static_shared_memory = %p\n",   static_shared_memory);   // 静态共享变量，定义几个地址随之叠加
+    printf("static_shared_memory2 = %p\n",  static_shared_memory2); 
+    printf("dynamic_shared_memory = %p\n",  dynamic_shared_memory);  // 动态共享变量，无论定义多少个，地址都一样
+    printf("dynamic_shared_memory2 = %p\n", dynamic_shared_memory2); 
+
+    if(blockIdx.x == 0 && threadIdx.x == 0) // 第一个thread
+        printf("Run kernel.\n");
+}
+
+/demo2//
+/* 
+demo2 主要是为了演示的是如何给 共享变量进行赋值
+ */
+// 定义共享变量，但是不能给初始值，必须由线程或者其他方式赋值
+__shared__ int shared_value1;
+
+__global__ void demo2_kernel(){
+    
+    __shared__ int shared_value2;
+    if(threadIdx.x == 0){
+
+        // 在线程索引为0的时候，为shared value赋初始值
+        if(blockIdx.x == 0){
+            shared_value1 = 123;
+            shared_value2 = 55;
+        }else{
+            shared_value1 = 331;
+            shared_value2 = 8;
+        }
+    }
+
+    // 等待block内的所有线程执行到这一步
+    __syncthreads();
+    
+    printf("%d.%d. shared_value1 = %d[%p], shared_value2 = %d[%p]\n", 
+        blockIdx.x, threadIdx.x,
+        shared_value1, &shared_value1, 
+        shared_value2, &shared_value2
+    );
+}
+
+void launch(){
+    
+    demo1_kernel<<<1, 1, 12, nullptr>>>();
+    demo2_kernel<<<2, 5, 0, nullptr>>>();
+}
+
+int main(){
+
+    cudaDeviceProp prop;
+    checkRuntime(cudaGetDeviceProperties(&prop, 0));
+    printf("prop.sharedMemPerBlock = %.2f KB\n", prop.sharedMemPerBlock / 1024.0f);
+
+    launch();
+    checkRuntime(cudaPeekAtLastError());
+    checkRuntime(cudaDeviceSynchronize());
+    printf("done\n");
+    return 0;
+}
+```
+
+运行结果如下：
+
+![在这里插入图片描述](5-1 CUDA共享内存概述/48ac7a5ea1d8497e92ac70d1888aea1a.png)
+
+在主函数中我们通过调用 cudaGetDeviceProperties 函数获取当前设备的属性，并打印出设备的共享内存的大小，一般为 48KB。
+
+上述示例代码依次展示了使用共享内存 （shared memory）的两个示例：demo1_kernel 和 demo2_kernel
+
+demo1_kernel：
+
+这个示例主要用于展示静态共享变量和动态共享变量的地址。在这个示例中，我们使用了两个静态共享变量和两个动态共享变量，二者在 kernel 函数内外定义都行，没有限制。我们启动的核函数只有一个线程块，每个线程块只有一个线程，因此只有一个线程会执行这个 kernel 函数，并打印对应的共享变量的地址。
+
+通过打印语句，**我们可以看到静态共享变量的地址会依次增加，而动态共享变量的地址始终是一样的。**
+
+第一个 block 对应的共享变量赋值为 123 和 55，第二个 block 对应的共享变量赋值为 331 和 8，**又由于共享内存（shared memory）是在块（block）级别上进行共享的**，因此第一个 block 中所有线程打印的共享变量结果为 123 和 55，第二个 block 中所有线程打印的共享变量结果为 331 和 8，这点可以从运行结果中看到。
+
+* 共享内存是片上内存，更靠近计算单元，因此比 globalMem 速度更快，通常可以充当缓存使用
+  * 数据先读入到 sharedMem，做各类计算时，使用 sharedMem 而非 globalMem
+
+* demo_kernel<<<1, 1, 12, nullptr>>>()；其中第三个参数 12，是指定动态共享内存 dynamic_shared_memory 的大小
+  * dynamic_shared_memory 变量必须使用 extern __shared__ 开头
+  * 并且定义为不确定大小的数组 []
+  * 12 的单位是 bytes，也就是可以安全存放 3 个 float
+  * 变量放在函数外面和里面是一样的
+  * 其指针由 cuda 调度器执行时赋值
+
+* static_shared_memory 作为静态分配的共享内存
+  * 不加 extern，以 __shared__ 开头
+  * 定义时需要明确数组的大小
+  * 静态分配的地址比动态分配的地址低
+* 动态共享变量，无论定义多少个，地址都一样
+* 静态共享变量，定义几个地址随之叠加
+* 如果配置的各类共享内存总和大于 sharedMemPerBlock，则核函数执行错误，Invalid argument
+  * 不同类型的静态共享变量定义，其内存划分并不一定是连续的
+  * 中间会有内存对齐策略，使得第一个和第二个变量之间可能存在间隙
+  * 因此你的变量之间如果存在空隙，可能小于全部大于的共享内存就会报错
+
+
+
 ## 5.1.3 共享内存存储体和访问模式
 
 优化内存性能时要度量的两个关键属性是：延迟和带宽。第4章解释了由不同的全局内存访问模式引起的延迟和带宽对核函数性能的影响。共享内存可以用来隐藏全局内存延迟和带宽对性能的影响。

@@ -32,6 +32,8 @@ up主教程给出了pytorch和tensorflow两个版本的实现，我暂时只记�
 
 # 2 LeNet网络模型model.py
 
+![image-20240126135125362](1 pytorch官方demo LeNet/image-20240126135125362.png)
+
 网络模型的结构在model.py中定义
 
 ```python

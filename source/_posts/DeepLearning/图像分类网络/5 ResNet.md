@@ -10,7 +10,6 @@ up主教程给出了pytorch和tensorflow两个版本的实现，我暂时只记�
 * up主的b站链接：https://space.bilibili.com/18161609/channel/index
 * up主将代码和ppt都放在了github：https://github.com/WZMIAOMIAO/deep-learning-for-image-processing\
 * up主的CSDN博客：https://blog.csdn.net/qq_37541097/article/details/103482003
-* 2 
 
 # 2  ResNet 详解
 

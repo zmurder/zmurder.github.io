@@ -39,7 +39,7 @@
 <meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/image-20230131180500425.png">
 <meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-1%20%E6%B5%81%E5%92%8C%E4%BA%8B%E4%BB%B6/image-20230131180416463.png">
 <meta property="article:published_time" content="2023-04-11T13:35:11.347Z">
-<meta property="article:modified_time" content="2023-04-11T13:35:11.347Z">
+<meta property="article:modified_time" content="2024-03-06T11:17:26.162Z">
 <meta property="article:author" content="奔跑的IC">
 <meta property="article:tag" content="C">
 <meta property="article:tag" content="C++">
@@ -171,18 +171,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-count">119</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -245,6 +245,13 @@
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-03-06 19:17:26" itemprop="dateModified" datetime="2024-03-06T19:17:26+08:00">2024-03-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
       <span class="post-meta-item-text">分类于</span>
@@ -281,6 +288,49 @@
 </ul>
 <p>到目前为止，你的关注点可能仅限于内核级的并发，在此级别的并发中，单一的任务或内核被GPU的多个线程并行执行。前面几章已经介绍了提升内核性能的几种方法，它们分别是从编程模型、执行模型和内存模型的角度进行介绍的。</p>
 <p>在网格级并发中，多个内核在同一设备上同时执行，这往往会让设备利用率更好。如何使用CUDA流实现网格级的并发。</p>
+<ol>
+<li><p><strong>关于流的知识点需要知道的是：</strong></p>
+</li>
+</ol>
+<ul>
+<li>流是一种基于 context 之上的任务管道(任务队列)抽象，一个 context 可以创建 n 个流</li>
+<li>流是异步控制的主要方式(CUDA 上高性能并发通过流来实现)</li>
+<li>nullptr 表示默认流，每个线程都是自己的默认流</li>
+<li><p>stream 是一个流句柄，可以当做是一个队列</p>
+<ul>
+<li>cuda 执行器从 stream 中一条条的读取并执行指令</li>
+<li>例如 cudaMemcpyAsyn 函数等同于向 stream 这个队列中加入一个 cudaMemcpy 指令并排队</li>
+<li>使用到了 stream 的函数，便立即向 stream 中加入指令后立即返回，并不会等待指令执行结束</li>
+<li>通过 cudaStreamSynchronize 函数，等待 stream 中所有指令执行完毕，也就是队列为空</li>
+</ul>
+</li>
+<li><p>还可以向 stream 中加入 Event，用以监控是否到达了某个检查点</p>
+<ul>
+<li>cudaEventCreate，创建事件</li>
+<li>cudaEventRecord，记录事件，即在 stream 中加入某个事件，当队列执行到该事件后，修改其状态</li>
+<li>cudaEventQuery，查询事件当前状态</li>
+<li>cudaEventElapsedTime，计算两个事件之前经历的时间间隔，若要统计某些核函数执行时间，请使用这个函数，能够得到最准确的统计</li>
+<li>cudaEventSynchronize，同步某个事件，等待事件到达</li>
+<li>cudaStreamWaitEvent，等待流的某个事件</li>
+</ul>
+</li>
+<li><p>默认流，对于 cudaMemcpy 等同步函数，其等价于执行了</p>
+<ul>
+<li>cudaMemcpyAsync(… 默认流) 加入队列</li>
+<li>cudaStreamSynchronize(默认流) 等待执行完成</li>
+<li>默认流与当前设备上下文类似，是与当前设备进行的关联</li>
+<li>因此，如果大量使用默认流，会导致性能低下</li>
+</ul>
+</li>
+</ul>
+<p><strong>对于流的使用，你需要注意的是：</strong></p>
+<ul>
+<li><p>指令发出后，流队列中储存的是指令参数（也就是指针或者形参），不能加入队列后立即释放参数指针，这会导致流队列执行该指令时指针失效而错误</p>
+</li>
+<li><p>应当在十分肯定流已经不需要这个指针后，才进行修改或者释放，否则会有非预期结果出现</p>
+<p>比如说当你在执行 cudaMemcpyAsync 后立马执行 delete [] memory_host 将 CPU 上数据释放，那其实复制这个过程是没有完成的，而你又将数据进行释放了，因此会产生一些预期外的结果，这点值得大家注意。因此，你需要确保流已经不需要这个指针后，才对其进行操作<br>举个更简单的例子：比如你给钱让男朋友买西瓜，他没有钱，他刚到店拿好西瓜，你把转的钱撤回去了。那么此时你无法预知他是否会跟店家闹起来矛盾，还是屁颠的回去。如果想得到预期结果，必须得让买完西瓜结束后再处理钱的事情</p>
+</li>
+</ul>
 <h2 id="6-1-流和事件概述"><a href="#6-1-流和事件概述" class="headerlink" title="6.1 流和事件概述"></a>6.1 流和事件概述</h2><p>CUDA流是一系列异步的CUDA操作，这些操作按照主机代码确定的顺序在设备上执行。流能封装这些操作，保持操作的顺序，允许操作在流中排队，并使它们在先前的所有操作之后执行，并且可以查询排队操作的状态。这些操作包括在主机与设备间进行数据传输，内核启动以及大多数由主机发起但由设备处理的其他命令。流中操作的执行相对于主机总是异步的。CUDA运行时决定何时可以在设备上执行操作。我们的任务是使用CUDA的API来确保一个异步操作在运行结果被使用之前可以完成。<strong>在同一个CUDA流中的操作有严格的执行顺序，而在不同CUDA流中的操作在执行顺序上不受限制。使用多个流同时启动多个内核，可以实现网格级并发</strong>。</p>
 <p>因为所有在CUDA流中排队的操作都是异步的，所以在主机与设备系统中可以重叠执行其他操作。在同一时间内将流中排队的操作与其他有用的操作一起执行，可以隐藏执行那些操作的开销。</p>
 <p>CUDA编程的一个典型模式是以下形式：</p>
@@ -354,7 +404,7 @@
 <li>同步流执行</li>
 <li>监控设备的进展</li>
 </ul>
-<p>流中的任意点都可以通过API插入事件以及查询事件完成的函数，只有事件所在流中其之前的操作都完成后才能触发事件完成。默认流中设置事件，那么其前面的所有操作都完成时，事件才出发完成。</p>
+<p>流中的任意点都可以通过API插入事件以及查询事件完成的函数，<strong>只有事件所在流中其之前的操作都完成后才能触发事件完成</strong>。默认流中设置事件，那么其前面的所有操作都完成时，事件才出发完成。</p>
 <h4 id="6-1-4-1-创建和销毁"><a href="#6-1-4-1-创建和销毁" class="headerlink" title="6.1.4.1 创建和销毁"></a>6.1.4.1 创建和销毁</h4><p>事件的声明如下：</p>
 <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaEvent_t event;</span><br></pre></td></tr></table></figure>
 <p>同样声明完后要分配资源：</p>
@@ -525,7 +575,7 @@
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -586,6 +636,12 @@
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">

@@ -30,7 +30,7 @@
 <meta property="og:description" content="7 cmake综合示例比较简单的例子在“2 cmake简单示例”中介绍过了。这里使用一个综合的例子实现以下功能：">
 <meta property="og:locale">
 <meta property="article:published_time" content="2023-10-15T08:35:17.662Z">
-<meta property="article:modified_time" content="2023-10-15T08:35:17.662Z">
+<meta property="article:modified_time" content="2024-03-06T11:17:26.835Z">
 <meta property="article:author" content="奔跑的IC">
 <meta property="article:tag" content="C">
 <meta property="article:tag" content="C++">
@@ -145,7 +145,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#7-cmake%E7%BB%BC%E5%90%88%E7%A4%BA%E4%BE%8B"><span class="nav-text">7 cmake综合示例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="nav-text">1 文件结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9"><span class="nav-text">2 文件内容</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-hello-cu"><span class="nav-text">2.1 hello.cu</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-build-sh"><span class="nav-text">2.2 build.sh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-CMakeLists-txt"><span class="nav-text">2.3 CMakeLists.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-arm-qnx-toolchain-cmake"><span class="nav-text">2.4 arm_qnx_toolchain.cmake</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-x86-toolchain-cmake"><span class="nav-text">2.5 x86_toolchain.cmake</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%BC%96%E8%AF%91"><span class="nav-text">3 编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-cuda%E5%92%8Cc-%E6%B7%B7%E5%90%88%E7%BC%96%E8%AF%91"><span class="nav-text">4 cuda和c++混合编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E4%B8%8EGPT%E7%9A%84%E5%AF%B9%E8%AF%9D"><span class="nav-text">5 与GPT的对话</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AAcuda-%E7%9A%84cmake%E6%96%87%E4%BB%B6"><span class="nav-text">编写一个cuda 的cmake文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E4%B8%BA%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E7%9A%84%E7%89%88%E6%9C%AC"><span class="nav-text">修改为交叉编译的版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E9%9C%80%E8%A6%81%E8%AE%BE%E5%AE%9A-CMAKE-CUDA-HOST-COMPILER-%E5%8F%82%E6%95%B0"><span class="nav-text">什么时候需要设定 CMAKE_CUDA_HOST_COMPILER 参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E4%BD%BF%E7%94%A8-find-package"><span class="nav-text">不使用 find_package</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%BA%9B-%E5%85%B6%E4%BB%96%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9%E5%92%8C%E9%85%8D%E7%BD%AE-%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="nav-text">添加一些 其他交叉编译选项和配置 的配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#find-package-%E5%92%8Cenable-language-%E7%94%A8%E5%93%AA%E4%B8%80%E4%B8%AA%EF%BC%9F"><span class="nav-text">find_package 和enable_language 用哪一个？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E6%97%B6-CMAKE-CUDA-HOST-COMPILER%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E8%AE%BE%E5%AE%9A%E4%B8%BAgcc-%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E8%AE%BE%E5%AE%9A%E4%B8%BAnvcc"><span class="nav-text">交叉编译时 CMAKE_CUDA_HOST_COMPILER什么时候设定为gcc 什么时候设定为nvcc</span></a></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#7-cmake%E7%BB%BC%E5%90%88%E7%A4%BA%E4%BE%8B"><span class="nav-text">7 cmake综合示例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%96%87%E4%BB%B6%E7%BB%93%E6%9E%84"><span class="nav-text">1 文件结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%96%87%E4%BB%B6%E5%86%85%E5%AE%B9"><span class="nav-text">2 文件内容</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-hello-cu"><span class="nav-text">2.1 hello.cu</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-build-sh"><span class="nav-text">2.2 build.sh</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-CMakeLists-txt"><span class="nav-text">2.3 CMakeLists.txt</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-arm-qnx-toolchain-cmake"><span class="nav-text">2.4 arm_qnx_toolchain.cmake</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-x86-toolchain-cmake"><span class="nav-text">2.5 x86_toolchain.cmake</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E7%BC%96%E8%AF%91"><span class="nav-text">3 编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-cuda%E5%92%8Cc-%E6%B7%B7%E5%90%88%E7%BC%96%E8%AF%91"><span class="nav-text">4 cuda和c++混合编译</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E4%B8%8EGPT%E7%9A%84%E5%AF%B9%E8%AF%9D"><span class="nav-text">5 与GPT的对话</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E5%86%99%E4%B8%80%E4%B8%AAcuda-%E7%9A%84cmake%E6%96%87%E4%BB%B6"><span class="nav-text">编写一个cuda 的cmake文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9%E4%B8%BA%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E7%9A%84%E7%89%88%E6%9C%AC"><span class="nav-text">修改为交叉编译的版本</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E9%9C%80%E8%A6%81%E8%AE%BE%E5%AE%9A-CMAKE-CUDA-HOST-COMPILER-%E5%8F%82%E6%95%B0"><span class="nav-text">什么时候需要设定 CMAKE_CUDA_HOST_COMPILER 参数</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8D%E4%BD%BF%E7%94%A8-find-package"><span class="nav-text">不使用 find_package</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B7%BB%E5%8A%A0%E4%B8%80%E4%BA%9B-%E5%85%B6%E4%BB%96%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E9%80%89%E9%A1%B9%E5%92%8C%E9%85%8D%E7%BD%AE-%E7%9A%84%E9%85%8D%E7%BD%AE"><span class="nav-text">添加一些 其他交叉编译选项和配置 的配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#find-package-%E5%92%8Cenable-language-%E7%94%A8%E5%93%AA%E4%B8%80%E4%B8%AA%EF%BC%9F"><span class="nav-text">find_package 和enable_language 用哪一个？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E6%97%B6-CMAKE-CUDA-HOST-COMPILER%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E8%AE%BE%E5%AE%9A%E4%B8%BAgcc-%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E8%AE%BE%E5%AE%9A%E4%B8%BAnvcc"><span class="nav-text">交叉编译时 CMAKE_CUDA_HOST_COMPILER什么时候设定为gcc 什么时候设定为nvcc</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%B3%E4%BA%8E-CMAKE-CUDA-FLAGS"><span class="nav-text">关于 CMAKE_CUDA_FLAGS</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -160,18 +160,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-count">119</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -231,6 +231,13 @@
       <span class="post-meta-item-text">发表于</span>
 
       <time title="创建时间：2023-10-15 16:35:17" itemprop="dateCreated datePublished" datetime="2023-10-15T16:35:17+08:00">2023-10-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-03-06 19:17:26" itemprop="dateModified" datetime="2024-03-06T19:17:26+08:00">2024-03-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -391,6 +398,28 @@
 <li>当您只使用CUDA编程模型而没有主机端的C/C++代码时，您可以将<code>CMAKE_CUDA_HOST_COMPILER</code>设置为nvcc的路径。</li>
 </ol>
 <p>总之，<code>CMAKE_CUDA_HOST_COMPILER</code>的设置取决于您的需求和所使用的工具链。</p>
+<h3 id="关于-CMAKE-CUDA-FLAGS"><a href="#关于-CMAKE-CUDA-FLAGS" class="headerlink" title="关于 CMAKE_CUDA_FLAGS"></a>关于 CMAKE_CUDA_FLAGS</h3><p><code>CMAKE_CUDA_FLAGS</code> 用于设置 NVIDIA CUDA 编译器（通常是 <code>nvcc</code>）的编译选项，它会影响 <code>nvcc</code> 命令的行为。这些选项被传递给 <code>nvcc</code> 编译器，以控制 CUDA 源代码的编译和链接行为。详细编译选项参考<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html#nvcc-command-options">NVCC Command Options</a></p>
+<p><code>CMAKE_CUDA_FLAGS</code> 变量用于设置 NVIDIA CUDA 编译器 <code>nvcc</code> 的编译选项。以下是一些常见选项及其含义，以及一个示例：</p>
+<ol>
+<li><strong>-arch=sm_xx</strong>：这个选项指定目标 GPU 的架构版本，其中 <code>xx</code> 是特定架构的版本号。例如，<code>-arch=sm_61</code> 表示目标 GPU 架构是 Compute Capability 6.1。</li>
+<li><strong>-O[0-3]</strong>：设置优化级别。<code>-O0</code> 表示没有优化，<code>-O3</code> 表示最高级别的优化。</li>
+<li><strong>-g</strong>：生成调试信息，以便使用调试器进行 CUDA 代码的调试。</li>
+<li><strong>-G</strong>：生成 GPU 代码的调试信息，用于在 GPU 代码中进行调试。</li>
+<li><strong>-Xcompiler</strong>：用于传递额外的编译器选项，这些选项将传递给主机 C/C++ 编译器。</li>
+<li><strong>-Xptxas</strong>：传递给 ptxas 汇编器的选项，可以影响 PTX 代码生成。</li>
+<li><strong>-Xlinker</strong>：用于传递给链接器的选项，用于配置链接过程。</li>
+<li><strong>-lineinfo</strong>：生成 GPU 代码中的行号信息，以用于调试。</li>
+<li><strong>-Xcudafe</strong>：传递给 cudafe（CUDA 前端编译器）的选项，可以影响 CUDA 源代码的处理。</li>
+<li><strong>-rdc=true/false</strong>：启用或禁用 CUDA 动态并行性。设置为 <code>true</code> 允许动态并行性，<code>false</code> 禁用它。</li>
+<li><strong>-Werror</strong>：将编译警告视为错误，强制开发人员修复所有警告。</li>
+<li><strong>-lineinfo</strong>： 为设备代码生成行号信息。在使用Nsight Compute时非常有用</li>
+<li><strong>-default-stream</strong>：<code>--default-stream</code> {<code>legacy</code>|<code>null</code>|<code>per-thread</code>} (<code>per-thread</code>) 。比较常用<code>--default-stream per-thread</code></li>
+</ol>
+<p>示例 <code>CMAKE_CUDA_FLAGS</code> 设置：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">cmake</span><br><span class="line"># 设置 CUDA 架构为 Compute Capability 7.0</span><br><span class="line">set(CMAKE_CUDA_FLAGS &quot;$&#123;CMAKE_CUDA_FLAGS&#125; -arch=sm_70&quot;)</span><br><span class="line"></span><br><span class="line"># 启用最高级别优化</span><br><span class="line">set(CMAKE_CUDA_FLAGS &quot;$&#123;CMAKE_CUDA_FLAGS&#125; -O3&quot;)</span><br><span class="line"></span><br><span class="line"># 生成调试信息</span><br><span class="line">set(CMAKE_CUDA_FLAGS &quot;$&#123;CMAKE_CUDA_FLAGS&#125; -g&quot;)</span><br><span class="line"></span><br><span class="line"># 将额外编译器选项传递给主机编译器</span><br><span class="line">set(CMAKE_CUDA_FLAGS &quot;$&#123;CMAKE_CUDA_FLAGS&#125; -Xcompiler -fopenmp&quot;)</span><br><span class="line"></span><br><span class="line"># 生成 GPU 代码的调试信息</span><br><span class="line">set(CMAKE_CUDA_FLAGS &quot;$&#123;CMAKE_CUDA_FLAGS&#125; -G&quot;)</span><br><span class="line"></span><br><span class="line"># 传递给链接器的选项</span><br><span class="line">set(CMAKE_CUDA_FLAGS &quot;$&#123;CMAKE_CUDA_FLAGS&#125; -Xlinker -L/path/to/custom/lib&quot;)</span><br><span class="line"></span><br><span class="line"># 生成 GPU 代码中的行号信息</span><br><span class="line">set(CMAKE_CUDA_FLAGS &quot;$&#123;CMAKE_CUDA_FLAGS&#125; -lineinfo&quot;)</span><br><span class="line"></span><br><span class="line"># 传递给 cudafe 的选项</span><br><span class="line">set(CMAKE_CUDA_FLAGS &quot;$&#123;CMAKE_CUDA_FLAGS&#125; -Xcudafe --diag_suppress=esa_on_defaulted_function_ignored&quot;)</span><br><span class="line"></span><br><span class="line"># 启用 CUDA 动态并行性</span><br><span class="line">set(CMAKE_CUDA_FLAGS &quot;$&#123;CMAKE_CUDA_FLAGS&#125; -rdc=true&quot;)</span><br><span class="line"></span><br><span class="line"># 将编译警告视为错误</span><br><span class="line">set(CMAKE_CUDA_FLAGS &quot;$&#123;CMAKE_CUDA_FLAGS&#125; -Werror&quot;)</span><br><span class="line"></span><br><span class="line"># 设置编译选项 源代码反汇编视图用于在源代码和汇编指令级别显示内核的分析结果。为了能够查看内核源代码，您需要使用-lineinfo选项编译代码。如果不使用此编译器选项，则只显示反汇编视图。</span><br><span class="line">set(CMAKE_CUDA_FLAGS &quot;$&#123;CMAKE_CUDA_FLAGS&#125; -lineinfo&quot;)</span><br><span class="line"></span><br><span class="line">set(CMAKE_CUDA_FLAGS &quot;$&#123;CMAKE_CUDA_FLAGS&#125; -G -g --default-stream per-thread&quot;)</span><br></pre></td></tr></table></figure>
+<h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-compiler-driver-nvcc/index.html#nvcc-command-options">NVCC Command Options</a></li>
+</ul>
 
     </div>
 
@@ -432,6 +461,9 @@
                 </a>
             </div>
             <div class="post-nav-item">
+                <a href="/operatingSystem/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/1%20%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%BC%AB%E6%B8%B8/" rel="next" title="1 计算机系统漫游">
+                  1 计算机系统漫游 <i class="fa fa-chevron-right"></i>
+                </a>
             </div>
           </div>
     </footer>
@@ -453,7 +485,7 @@
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -514,6 +546,12 @@
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">

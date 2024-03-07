@@ -153,18 +153,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-count">119</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -193,7 +193,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/GPU/nvidia-smi%E5%91%BD%E4%BB%A4/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/%E5%9F%BA%E7%A1%80/2%20cuda_context/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -211,7 +211,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/GPU/nvidia-smi%E5%91%BD%E4%BB%A4/" class="post-title-link" itemprop="url">nvidia-smi命令</a>
+          <a href="/CUDA/%E5%9F%BA%E7%A1%80/2%20cuda_context/" class="post-title-link" itemprop="url">2 cuda_context</a>
         </h2>
 
         <div class="post-meta-container">
@@ -222,7 +222,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-08-20 10:53:45" itemprop="dateCreated datePublished" datetime="2023-08-20T10:53:45+08:00">2023-08-20</time>
+      <time title="创建时间：2024-03-06 19:17:26" itemprop="dateCreated datePublished" datetime="2024-03-06T19:17:26+08:00">2024-03-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -230,7 +230,11 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/GPU/" itemprop="url" rel="index"><span itemprop="name">GPU</span></a>
+          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
         </span>
     </span>
 
@@ -244,10 +248,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="nvidia-smi-命令详解"><a href="#nvidia-smi-命令详解" class="headerlink" title="nvidia-smi 命令详解"></a>nvidia-smi 命令详解</h2><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2>
+          <h1 id="1-前言"><a href="#1-前言" class="headerlink" title="1 前言"></a>1 前言</h1><p>在上一篇文章《1-cuda_API》中降到<code>cuda Driver API</code>主要的一个作用就是管理<code>cuda Context</code>，那么这里讲解一下什么是<code>cuda Context</code></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/GPU/nvidia-smi%E5%91%BD%E4%BB%A4/#more" rel="contents">
+              <a class="btn" href="/CUDA/%E5%9F%BA%E7%A1%80/2%20cuda_context/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -278,7 +282,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/%E5%9F%BA%E7%A1%80/1%20cuda_API/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -296,7 +300,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/" class="post-title-link" itemprop="url">5-4 合并的全局内存访问</a>
+          <a href="/CUDA/%E5%9F%BA%E7%A1%80/1%20cuda_API/" class="post-title-link" itemprop="url">1 cuda_API</a>
         </h2>
 
         <div class="post-meta-container">
@@ -307,7 +311,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-08-20 10:53:45" itemprop="dateCreated datePublished" datetime="2023-08-20T10:53:45+08:00">2023-08-20</time>
+      <time title="创建时间：2024-03-06 19:17:26" itemprop="dateCreated datePublished" datetime="2024-03-06T19:17:26+08:00">2024-03-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -319,7 +323,7 @@
         </span>
           ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+          <a href="/categories/CUDA/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
         </span>
     </span>
 
@@ -333,10 +337,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="5-4-合并的全局内存访问"><a href="#5-4-合并的全局内存访问" class="headerlink" title="5.4 合并的全局内存访问"></a>5.4 合并的全局内存访问</h1><p>上一节介绍的是通过共享内存减少对全局内存的访问，这一部分是介绍使用共享内存避免对未合并的全局内存的访问。矩阵转置就是一个典型的例子：读操作被自然合并，但写操作是按照交叉访问的。在共享内存的帮助下，可以先在共享内存中进行转置操作，然后再对全局内存进行合并写操作。</p>
+          <h1 id="1-cuda-API简介"><a href="#1-cuda-API简介" class="headerlink" title="1 cuda API简介"></a>1 cuda API简介</h1><p>CUDA是由NVIDIA推出的通用并行计算架构，通过一些CUDA库提供了一系列API供应用程序调用。开发者可调用这些API充分利用GPU来处理图像，视频解码等。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/#more" rel="contents">
+              <a class="btn" href="/CUDA/%E5%9F%BA%E7%A1%80/1%20cuda_API/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -367,7 +371,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-3%20%E5%87%8F%E5%B0%91%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/9%20%E5%A4%9AGPU%E7%BC%96%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -385,7 +389,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-3%20%E5%87%8F%E5%B0%91%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/" class="post-title-link" itemprop="url">5-3 减少全局内存访问</a>
+          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/9%20%E5%A4%9AGPU%E7%BC%96%E7%A8%8B/" class="post-title-link" itemprop="url">9 多GPU编程</a>
         </h2>
 
         <div class="post-meta-container">
@@ -396,7 +400,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-08-20 10:53:45" itemprop="dateCreated datePublished" datetime="2023-08-20T10:53:45+08:00">2023-08-20</time>
+      <time title="创建时间：2024-03-06 19:17:26" itemprop="dateCreated datePublished" datetime="2024-03-06T19:17:26+08:00">2024-03-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -422,10 +426,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="5-3-减少全局内存访问"><a href="#5-3-减少全局内存访问" class="headerlink" title="5.3 减少全局内存访问"></a>5.3 减少全局内存访问</h1><p><strong>使用共享内存的主要原因之一是要缓存片上的数据，从而减少核函数中全局内存访问的次数。</strong></p>
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>我暂时还没有使用到多个GPU，因此先占位吧，等后面有机会再补充深入，这里只是一个大概的描述。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-3%20%E5%87%8F%E5%B0%91%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/#more" rel="contents">
+              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/9%20%E5%A4%9AGPU%E7%BC%96%E7%A8%8B/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -456,7 +460,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-2%20%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E7%9A%84%E6%95%B0%E6%8D%AE%E5%B8%83%E5%B1%80/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/8%20GPU%E5%8A%A0%E9%80%9F%E5%BA%93%E5%92%8COpenACC/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -474,7 +478,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-2%20%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E7%9A%84%E6%95%B0%E6%8D%AE%E5%B8%83%E5%B1%80/" class="post-title-link" itemprop="url">5-2 共享内存的数据布局</a>
+          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/8%20GPU%E5%8A%A0%E9%80%9F%E5%BA%93%E5%92%8COpenACC/" class="post-title-link" itemprop="url">8 GPU加速库和OpenACC</a>
         </h2>
 
         <div class="post-meta-container">
@@ -485,7 +489,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-08-20 10:53:45" itemprop="dateCreated datePublished" datetime="2023-08-20T10:53:45+08:00">2023-08-20</time>
+      <time title="创建时间：2024-03-06 19:17:26" itemprop="dateCreated datePublished" datetime="2024-03-06T19:17:26+08:00">2024-03-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -511,10 +515,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="5-2-共享内存的数据布局"><a href="#5-2-共享内存的数据布局" class="headerlink" title="5.2 共享内存的数据布局"></a>5.2 共享内存的数据布局</h1><p>这一节主要是介绍了共享内存的矩阵数组访问模式，按行和按列访问还有内存的填充，说白了就是如何索引到数据。</p>
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>和上一节一样，我没有使用过CUDA库，因此这里先占位，后期再补充。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-2%20%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E7%9A%84%E6%95%B0%E6%8D%AE%E5%B8%83%E5%B1%80/#more" rel="contents">
+              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/8%20GPU%E5%8A%A0%E9%80%9F%E5%BA%93%E5%92%8COpenACC/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -545,7 +549,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-6%20%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E6%80%BB%E7%BB%93/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/7%20%E8%B0%83%E6%95%B4%E6%8C%87%E4%BB%A4%E7%BA%A7%E5%8E%9F%E8%AF%AD/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -563,7 +567,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-6%20%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E6%80%BB%E7%BB%93/" class="post-title-link" itemprop="url">4-6 全局内存总结</a>
+          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/7%20%E8%B0%83%E6%95%B4%E6%8C%87%E4%BB%A4%E7%BA%A7%E5%8E%9F%E8%AF%AD/" class="post-title-link" itemprop="url">7 调整指令级原语</a>
         </h2>
 
         <div class="post-meta-container">
@@ -574,7 +578,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-08-20 10:53:45" itemprop="dateCreated datePublished" datetime="2023-08-20T10:53:45+08:00">2023-08-20</time>
+      <time title="创建时间：2024-03-06 19:17:26" itemprop="dateCreated datePublished" datetime="2024-03-06T19:17:26+08:00">2024-03-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -600,10 +604,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="4-6-全局内存总结"><a href="#4-6-全局内存总结" class="headerlink" title="4.6 全局内存总结"></a>4.6 全局内存总结</h1><p>全局内存是最大的、延迟最高的、最常用的内存。<strong>对全局内存的请求可以由32个字节或128个字节的事务来完成</strong>。记住这些特点和粒度对于调控应用程序中全局内存的使用是很重要的。</p>
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这一章讲的内容我暂时没有什么使用到，因此没有什么理解，除了原子操作。因此先给出一个看到的重点的大纲，需要的时候再补充吧。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-6%20%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E6%80%BB%E7%BB%93/#more" rel="contents">
+              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/7%20%E8%B0%83%E6%95%B4%E6%8C%87%E4%BB%A4%E7%BA%A7%E5%8E%9F%E8%AF%AD/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -634,7 +638,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-3%20%E9%87%8D%E5%8F%A0%E5%86%85%E6%A0%B8%E6%89%A7%E8%A1%8C%E5%92%8C%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -652,7 +656,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">5-1 CUDA共享内存概述</a>
+          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-3%20%E9%87%8D%E5%8F%A0%E5%86%85%E6%A0%B8%E6%89%A7%E8%A1%8C%E5%92%8C%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93/" class="post-title-link" itemprop="url">6-3 重叠内核执行和数据传输</a>
         </h2>
 
         <div class="post-meta-container">
@@ -663,7 +667,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-08-20 10:53:45" itemprop="dateCreated datePublished" datetime="2023-08-20T10:53:45+08:00">2023-08-20</time>
+      <time title="创建时间：2024-03-06 19:17:26" itemprop="dateCreated datePublished" datetime="2024-03-06T19:17:26+08:00">2024-03-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -689,10 +693,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="5-1-CUDA共享内存概述"><a href="#5-1-CUDA共享内存概述" class="headerlink" title="5.1 CUDA共享内存概述"></a>5.1 CUDA共享内存概述</h1><p>废话：</p>
+          <h1 id="6-3-重叠内核执行和数据传输"><a href="#6-3-重叠内核执行和数据传输" class="headerlink" title="6.3 重叠内核执行和数据传输"></a>6.3 重叠内核执行和数据传输</h1><p>在前一节中，已经介绍了如何在多个流中并发执行多个内核。在本节中，将学习如何并发执行内核和数据传输。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/#more" rel="contents">
+              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-3%20%E9%87%8D%E5%8F%A0%E5%86%85%E6%A0%B8%E6%89%A7%E8%A1%8C%E5%92%8C%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -723,7 +727,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-5%20%E4%BD%BF%E7%94%A8%E5%90%8C%E4%B8%80%E5%86%85%E5%AD%98%E7%9A%84%E7%9F%A9%E9%98%B5%E5%8A%A0%E6%B3%95/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-2%20%E5%B9%B6%E5%8F%91%E5%86%85%E6%A0%B8%E6%89%A7%E8%A1%8C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -741,7 +745,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-5%20%E4%BD%BF%E7%94%A8%E5%90%8C%E4%B8%80%E5%86%85%E5%AD%98%E7%9A%84%E7%9F%A9%E9%98%B5%E5%8A%A0%E6%B3%95/" class="post-title-link" itemprop="url">4-5 使用同一内存的矩阵加法</a>
+          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-2%20%E5%B9%B6%E5%8F%91%E5%86%85%E6%A0%B8%E6%89%A7%E8%A1%8C/" class="post-title-link" itemprop="url">6-2 并发内核执行</a>
         </h2>
 
         <div class="post-meta-container">
@@ -752,7 +756,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-08-20 10:53:45" itemprop="dateCreated datePublished" datetime="2023-08-20T10:53:45+08:00">2023-08-20</time>
+      <time title="创建时间：2024-03-06 19:17:26" itemprop="dateCreated datePublished" datetime="2024-03-06T19:17:26+08:00">2024-03-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -778,10 +782,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="4-5-使用统一内存的矩阵加法"><a href="#4-5-使用统一内存的矩阵加法" class="headerlink" title="4.5 使用统一内存的矩阵加法"></a>4.5 使用统一内存的矩阵加法</h1><p>为了简化主机和设备内存空间的管理，提高这个CUDA程序的可读性和易维护性，可以使用统一内存。但是<strong>代码简化换来的是性能的降低，性能优先的话还是慎用吧</strong>。</p>
+          <h1 id="6-2-并发内核执行"><a href="#6-2-并发内核执行" class="headerlink" title="6.2 并发内核执行"></a>6.2 并发内核执行</h1><p>这一节使用几个例子来说明上一节的流、事件、同步的概念。介绍并发内核的几个基本问题。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-5%20%E4%BD%BF%E7%94%A8%E5%90%8C%E4%B8%80%E5%86%85%E5%AD%98%E7%9A%84%E7%9F%A9%E9%98%B5%E5%8A%A0%E6%B3%95/#more" rel="contents">
+              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-2%20%E5%B9%B6%E5%8F%91%E5%86%85%E6%A0%B8%E6%89%A7%E8%A1%8C/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -812,7 +816,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/10-3%20CUDA%E8%B0%83%E8%AF%95/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -830,7 +834,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/" class="post-title-link" itemprop="url">4-4 核函数可达到的带宽</a>
+          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/10-3%20CUDA%E8%B0%83%E8%AF%95/" class="post-title-link" itemprop="url">10-3 CUDA调试</a>
         </h2>
 
         <div class="post-meta-container">
@@ -841,7 +845,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-08-20 10:53:45" itemprop="dateCreated datePublished" datetime="2023-08-20T10:53:45+08:00">2023-08-20</time>
+      <time title="创建时间：2024-03-06 19:17:26" itemprop="dateCreated datePublished" datetime="2024-03-06T19:17:26+08:00">2024-03-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -867,10 +871,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="4-4-核函数可达到的带宽"><a href="#4-4-核函数可达到的带宽" class="headerlink" title="4.4 核函数可达到的带宽"></a>4.4 核函数可达到的带宽</h1><p>在上一节中，你已经尝试使用两种方法来改进核函数的性能：</p>
+          <h1 id="10-3-CUDA调试"><a href="#10-3-CUDA调试" class="headerlink" title="10.3 CUDA调试"></a>10.3 CUDA调试</h1><p>分为两个部分，内核调试和内存调试。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/#more" rel="contents">
+              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/10-3%20CUDA%E8%B0%83%E8%AF%95/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -901,7 +905,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-3%20%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE%E6%A8%A1%E5%BC%8F/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/10-1%20CUDA%20C%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -919,7 +923,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-3%20%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE%E6%A8%A1%E5%BC%8F/" class="post-title-link" itemprop="url">4-3 内存访问模式</a>
+          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/10-1%20CUDA%20C%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B/" class="post-title-link" itemprop="url">10-1 CUDA C开发过程</a>
         </h2>
 
         <div class="post-meta-container">
@@ -930,7 +934,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-08-20 10:53:45" itemprop="dateCreated datePublished" datetime="2023-08-20T10:53:45+08:00">2023-08-20</time>
+      <time title="创建时间：2024-03-06 19:17:26" itemprop="dateCreated datePublished" datetime="2024-03-06T19:17:26+08:00">2024-03-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -956,10 +960,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="4-3-内存访问模式"><a href="#4-3-内存访问模式" class="headerlink" title="4.3 内存访问模式"></a>4.3 内存访问模式</h1><p>并且多数GPU应用程序容易受内存带宽的限制。因此，最大限度地利用全局内存带宽是调控核函数性能的基本</p>
+          <h1 id="10-1-CUDA-C的开发过程"><a href="#10-1-CUDA-C的开发过程" class="headerlink" title="10.1 CUDA C的开发过程"></a>10.1 CUDA C的开发过程</h1><p>了解GPU内存和执行模型抽象有助于更好地控制大规模并行GPU环境。这样，创建映射到抽象二维或三维网格的应用子域就变得很正常了，并且可以使核函数像串行一样表示。重点关注高级区域分解和内存层次结构存储管理的内容，就不会被创建和销毁线程的烦琐细节所妨碍了。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-3%20%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE%E6%A8%A1%E5%BC%8F/#more" rel="contents">
+              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/10-1%20CUDA%20C%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -990,7 +994,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-6%20%E5%8A%A8%E6%80%81%E5%B9%B6%E8%A1%8C/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/ADAS/ADAS%E6%9C%AF%E8%AF%AD/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -1008,7 +1012,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-6%20%E5%8A%A8%E6%80%81%E5%B9%B6%E8%A1%8C/" class="post-title-link" itemprop="url">3-6 动态并行</a>
+          <a href="/ADAS/ADAS%E6%9C%AF%E8%AF%AD/" class="post-title-link" itemprop="url">ADAS术语</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1019,7 +1023,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2023-08-20 10:53:45" itemprop="dateCreated datePublished" datetime="2023-08-20T10:53:45+08:00">2023-08-20</time>
+      <time title="创建时间：2024-03-06 19:17:26" itemprop="dateCreated datePublished" datetime="2024-03-06T19:17:26+08:00">2024-03-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1027,11 +1031,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+          <a href="/categories/ADAS/" itemprop="url" rel="index"><span itemprop="name">ADAS</span></a>
         </span>
     </span>
 
@@ -1045,10 +1045,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="3-6-动态并行"><a href="#3-6-动态并行" class="headerlink" title="3.6 动态并行"></a>3.6 动态并行</h1><p>本文作为第三章CUDA执行模型的最后一篇介绍动态并行，书中关于动态并行有一部分嵌套归约的例子，但是我认为，<strong>这个例子应该对我们用途不大，简单了解一下算了</strong>，首先它并不能降低代码复杂度，其次，其运行效率也没有提高，动态并行，相当于串行编程的中的递归调用，递归调用如果能转换成迭代循环，一般为了效率的时候是要转换成循环的，只有当效率不是那么重要，而更注重代码的简洁性的时候，我们才会使用，所以我们本文只介绍简单的一些基础知识，如果需要使用动态并行相关内容的同学，请查询文档或更专业的博客。<br>到目前为止，我们所有的内核都是在主机线程中调用的，那么我们肯定会想，是否我们可以在<strong>内核中调用内核</strong>，这个内核可以是别的内核，也可以是自己，那么我们就需要动态并行了，这个功能在早期的设备上是不支持的。<br>动态并行的好处之一就是能让复杂的内核变得有层次，坏处就是写出来的程序更复杂，因为并行行为本来就不好控制，去年我在没有系统的学习CUDA的时候写过一个400行左右的内核，用来训练人脸检测程序，确实比cpu块，但是从gpu的温度来判断，并没有很高的利用率（当时还不会使用性能检测工具这些，当时TensorFlow跑的时候GPU温度有80多，但是我写的就只有60多，所以我断定，gpu性能完全没发挥，但是那个程序还是运行了好久，可见磨刀不误砍柴工这句话是多么正确）<br>动态并行的另一个好处是等到执行的时候再配置创建多少个网格，多少个块，这样就可以动态的利用GPU硬件调度器和加载平衡器了，通过动态调整，来适应负载。并且在内核中启动内核可以减少一部分数据传输消耗。</p>
+          <h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h1><p>参考GB/T 39263-2020 道路车辆 先进驾驶辅助系统 (ADAS) 术语及定义整理方表格</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-6%20%E5%8A%A8%E6%80%81%E5%B9%B6%E8%A1%8C/#more" rel="contents">
+              <a class="btn" href="/ADAS/ADAS%E6%9C%AF%E8%AF%AD/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1072,7 +1072,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/9/">9</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/5/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/3/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/3/">3</a><span class="page-number current">4</span><a class="page-number" href="/page/5/">5</a><span class="space">&hellip;</span><a class="page-number" href="/page/12/">12</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/5/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>
@@ -1084,7 +1084,7 @@
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -1145,6 +1145,12 @@
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">

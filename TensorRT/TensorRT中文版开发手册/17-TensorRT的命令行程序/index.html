@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/17-TensorRT%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%A8%8B%E5%BA%8F/trtexec.png">
 <meta property="og:image" content="https://upload-images.jianshu.io/upload_images/19610152-8723d92399f96678.png?imageMogr2/auto-orient/strip|imageView2/2/w/1147/format/webp">
 <meta property="article:published_time" content="2023-08-20T02:53:45.620Z">
-<meta property="article:modified_time" content="2023-08-20T02:53:45.620Z">
+<meta property="article:modified_time" content="2024-03-06T11:17:26.832Z">
 <meta property="article:author" content="奔跑的IC">
 <meta property="article:tag" content="git">
 <meta property="article:tag" content="C">
@@ -150,7 +150,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TensorRT%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%A8%8B%E5%BA%8F"><span class="nav-text">TensorRT的命令行程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#A-3-1-trtexec"><span class="nav-text">A.3.1. trtexec</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-3-1-1-Benchmarking-Network"><span class="nav-text">A.3.1.1. Benchmarking Network</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-3-1-2-Serialized-Engine-Generation"><span class="nav-text">A.3.1.2. Serialized Engine Generation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-3-1-3-trtexec"><span class="nav-text">A.3.1.3. trtexec</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-3-1-4-%E5%B8%B8%E7%94%A8%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%A0%87%E5%BF%97"><span class="nav-text">A.3.1.4. 常用的命令行标志</span></a></li></ol></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TensorRT%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%A8%8B%E5%BA%8F"><span class="nav-text">TensorRT的命令行程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#A-3-1-trtexec"><span class="nav-text">A.3.1. trtexec</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-3-1-1-Benchmarking-Network"><span class="nav-text">A.3.1.1. Benchmarking Network</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-3-1-2-Serialized-Engine-Generation"><span class="nav-text">A.3.1.2. Serialized Engine Generation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-3-1-3-trtexec"><span class="nav-text">A.3.1.3. trtexec</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-3-1-4-%E5%B8%B8%E7%94%A8%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%A0%87%E5%BF%97"><span class="nav-text">A.3.1.4. 常用的命令行标志</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trtexec%E8%BE%93%E5%87%BA%E6%A6%82%E8%BF%B0"><span class="nav-text">trtexec输出概述</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -165,18 +165,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-count">119</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -236,6 +236,13 @@
       <span class="post-meta-item-text">发表于</span>
 
       <time title="创建时间：2023-08-20 10:53:45" itemprop="dateCreated datePublished" datetime="2023-08-20T10:53:45+08:00">2023-08-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-03-06 19:17:26" itemprop="dateModified" datetime="2024-03-06T19:17:26+08:00">2024-03-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -414,6 +421,25 @@
 </ul>
 <p>有关所有受支持的标志和详细说明，请参阅<code>trtexec --help</code> 。</p>
 <p>有关如何构建此工具及其使用示例的详细信息，请参阅<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/samples/trtexec">GitHub：trtexec/README.md</a>文件。</p>
+<h2 id="trtexec输出概述"><a href="#trtexec输出概述" class="headerlink" title="trtexec输出概述"></a>trtexec输出概述</h2><p>trtexec输出的结果有一段内容如下：</p>
+<p>可以看出<code>Performance summary</code>的内容解释如下</p>
+<p>=== 性能指标说明 ===</p>
+<ul>
+<li>Total Host Walltime：从第一个查询（预热后）排队到最后一个查询完成时的主机挂起时间。</li>
+<li>GPU Compute Time：执行查询内核的 GPU 延迟。</li>
+<li>Total GPU Compute Time：所有查询的 GPU 计算时间总和。如果总计算时间明显短于Total Host Walltime，那么 GPU 可能因为主机端开销或数据传输而未得到充分利用。</li>
+<li>Throughput：通过将查询数除以Total Host Walltime 计算得出的观察到的吞吐量。如果这明显低于 GPU Compute Time的倒数，则 GPU 可能由于主机端开销或数据传输而未得到充分利用。<ul>
+<li><strong>Throughput</strong> 是衡量模型整体性能的重要指标。它表示每秒可以处理的查询数越多，模型的性能就越好。</li>
+<li><strong>GPU Compute Time</strong> 是衡量模型推理计算性能的重要指标。它表示模型在 GPU 上进行实际计算所花费的时间越短，模型的性能就越好。</li>
+</ul>
+</li>
+<li>Enqueue Time:：将查询入队的主机延迟。如果这比 GPU 计算时间长，则 GPU 可能未得到充分利用。</li>
+<li>H2D Latency：单个查询的输入张量的主机到设备数据传输的延迟。</li>
+<li>D2H Latency：单个查询的输出张量的设备到主机数据传输的延迟。</li>
+<li>Latency：H2D Latency、GPU Compute Time和 D2H Latency的总和。这是推断单个查询的延迟。</li>
+<li>End-to-End Host Latency：从调用查询的 H2D 到同一查询的 D2H 完成的持续时间，其中包括等待上一个查询完成的延迟。这是多个查询连续排队时查询的延迟。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[10/01/2019-00:03:33] [I] === Performance summary ===</span><br><span class="line">[10/01/2019-00:03:33] [I] Throughput: 90.9004 qps</span><br><span class="line">[10/01/2019-00:03:33] [I] Latency: min = 11.1738 ms, max = 11.6914 ms, mean = 11.2522 ms, median = 11.25 ms, percentile(99%) = 11.291 ms</span><br><span class="line">[10/01/2019-00:03:33] [I] End-to-End Host Latency: min = 11.1875 ms, max = 11.7305 ms, mean = 11.2657 ms, median = 11.2646 ms, percentile(99%) = 11.3057 ms</span><br><span class="line">[10/01/2019-00:03:33] [I] Enqueue Time: min = 10.8203 ms, max = 11.3086 ms, mean = 10.9017 ms, median = 10.9004 ms, percentile(99%) = 10.9365 ms</span><br><span class="line">[10/01/2019-00:03:33] [I] H2D Latency: min = 0.34375 ms, max = 0.445313 ms, mean = 0.412366 ms, median = 0.412109 ms, percentile(99%) = 0.417969 ms</span><br><span class="line">[10/01/2019-00:03:33] [I] GPU Compute Time: min = 10.4883 ms, max = 10.918 ms, mean = 10.5202 ms, median = 10.5195 ms, percentile(99%) = 10.5547 ms</span><br><span class="line">[10/01/2019-00:03:33] [I] D2H Latency: min = 0.28125 ms, max = 0.347656 ms, mean = 0.319619 ms, median = 0.320313 ms, percentile(99%) = 0.328125 ms</span><br><span class="line">[10/01/2019-00:03:33] [I] Total Host Walltime: 55.0053 s</span><br><span class="line">[10/01/2019-00:03:33] [I] Total GPU Compute Time: 52.6011 s</span><br><span class="line">[10/01/2019-00:03:33] [W] * Throughput may be bound by Enqueue Time rather than GPU Compute and the GPU may be under-utilized.</span><br><span class="line">[10/01/2019-00:03:33] [W]   If not already <span class="keyword">in</span> use, --useCudaGraph (utilize CUDA graphs <span class="built_in">where</span> possible) may increase the throughput.</span><br><span class="line">[10/01/2019-00:03:33] [I] Explanations of the performance metrics are printed <span class="keyword">in</span> the verbose logs.</span><br><span class="line">[10/01/2019-00:03:33] [V] </span><br><span class="line">[10/01/2019-00:03:33] [V] === Explanations of the performance metrics ===</span><br><span class="line">[10/01/2019-00:03:33] [V] Total Host Walltime: the host walltime from when the first query (after warmups) is enqueued to when the last query is completed.</span><br><span class="line">[10/01/2019-00:03:33] [V] GPU Compute Time: the GPU latency to execute the kernels <span class="keyword">for</span> a query.</span><br><span class="line">[10/01/2019-00:03:33] [V] Total GPU Compute Time: the summation of the GPU Compute Time of all the queries. If this is significantly shorter than Total Host Walltime, the GPU may be under-utilized because of host-side overheads or data transfers.</span><br><span class="line">[10/01/2019-00:03:33] [V] Throughput: the observed throughput computed by dividing the number of queries by the Total Host Walltime. If this is significantly lower than the reciprocal of GPU Compute Time, the GPU may be under-utilized because of host-side overheads or data transfers.</span><br><span class="line">[10/01/2019-00:03:33] [V] Enqueue Time: the host latency to enqueue a query. If this is longer than GPU Compute Time, the GPU may be under-utilized.</span><br><span class="line">[10/01/2019-00:03:33] [V] H2D Latency: the latency <span class="keyword">for</span> host-to-device data transfers <span class="keyword">for</span> input tensors of a single query.</span><br><span class="line">[10/01/2019-00:03:33] [V] D2H Latency: the latency <span class="keyword">for</span> device-to-host data transfers <span class="keyword">for</span> output tensors of a single query.</span><br><span class="line">[10/01/2019-00:03:33] [V] Latency: the summation of H2D Latency, GPU Compute Time, and D2H Latency. This is the latency to infer a single query.</span><br><span class="line">[10/01/2019-00:03:33] [V] End-to-End Host Latency: the duration from when the H2D of a query is called to when the D2H of the same query is completed, <span class="built_in">which</span> includes the latency to <span class="built_in">wait</span> <span class="keyword">for</span> the completion of the previous query. This is the latency of a query <span class="keyword">if</span> multiple queries are enqueued consecutively.</span><br><span class="line">[10/01/2019-00:03:33] [I] </span><br></pre></td></tr></table></figure>
 
     </div>
 
@@ -480,7 +506,7 @@
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -541,6 +567,12 @@
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">

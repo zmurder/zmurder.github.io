@@ -30,6 +30,7 @@
 <meta property="og:description" content="5.1 CUDA共享内存概述废话：">
 <meta property="og:locale">
 <meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/image-20230520142958705.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/48ac7a5ea1d8497e92ac70d1888aea1a.png">
 <meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/5-2.png">
 <meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/5-3.png">
 <meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/5-4.png">
@@ -42,7 +43,7 @@
 <meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/image-20230523114736932.png">
 <meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/image-20230523133313913.png">
 <meta property="article:published_time" content="2023-08-20T02:53:45.565Z">
-<meta property="article:modified_time" content="2023-08-20T02:53:45.565Z">
+<meta property="article:modified_time" content="2024-03-06T11:17:26.159Z">
 <meta property="article:author" content="奔跑的IC">
 <meta property="article:tag" content="C">
 <meta property="article:tag" content="C++">
@@ -172,18 +173,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-count">119</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -243,6 +244,13 @@
       <span class="post-meta-item-text">发表于</span>
 
       <time title="创建时间：2023-08-20 10:53:45" itemprop="dateCreated datePublished" datetime="2023-08-20T10:53:45+08:00">2023-08-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-03-06 19:17:26" itemprop="dateModified" datetime="2024-03-06T19:17:26+08:00">2024-03-06</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -310,6 +318,47 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> __shared__ <span class="type">int</span> tile[];</span><br></pre></td></tr></table></figure>
 <p>因为这个数组的大小在编译时是未知的，所以在每个核函数被调用时，需要动态分配共享内存，将所需的大小按字节数作为三重括号内的第三个参数</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kernel&lt;&lt;&lt;grid,block,isize*<span class="title function_">sizeof</span><span class="params">(<span class="type">int</span>)</span>&gt;&gt;&gt;<span class="params">(...)</span></span><br></pre></td></tr></table></figure>
+<p><strong>测试示例</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cuda_runtime.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> checkRuntime(op)  __check_cuda_runtime((op), #op, __FILE__, __LINE__)</span></span><br><span class="line"></span><br><span class="line"><span class="type">bool</span> __check_cuda_runtime(cudaError_t code, <span class="type">const</span> <span class="type">char</span>* op, <span class="type">const</span> <span class="type">char</span>* file, <span class="type">int</span> line)&#123;</span><br><span class="line">    <span class="keyword">if</span>(code != cudaSuccess)&#123;    </span><br><span class="line">        <span class="type">const</span> <span class="type">char</span>* err_name = cudaGetErrorName(code);    </span><br><span class="line">        <span class="type">const</span> <span class="type">char</span>* err_message = cudaGetErrorString(code);  </span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;runtime error %s:%d  %s failed. \n  code = %s, message = %s\n&quot;</span>, file, line, op, err_name, err_message);   </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//demo1 //</span></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">demo1 主要为了展示查看静态和动态共享变量的地址</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">const</span> <span class="type">size_t</span> static_shared_memory_num_element = <span class="number">6</span> * <span class="number">1024</span>; <span class="comment">// 6KB</span></span><br><span class="line">__shared__ <span class="type">char</span> static_shared_memory[static_shared_memory_num_element]; </span><br><span class="line">__shared__ <span class="type">char</span> static_shared_memory2[<span class="number">2</span>]; </span><br><span class="line"></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">demo1_kernel</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="keyword">extern</span> __shared__ <span class="type">char</span> dynamic_shared_memory[];      <span class="comment">// 静态共享变量和动态共享变量在kernel函数内/外定义都行，没有限制</span></span><br><span class="line">    <span class="keyword">extern</span> __shared__ <span class="type">char</span> dynamic_shared_memory2[];</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;static_shared_memory = %p\n&quot;</span>,   static_shared_memory);   <span class="comment">// 静态共享变量，定义几个地址随之叠加</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;static_shared_memory2 = %p\n&quot;</span>,  static_shared_memory2); </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;dynamic_shared_memory = %p\n&quot;</span>,  dynamic_shared_memory);  <span class="comment">// 动态共享变量，无论定义多少个，地址都一样</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;dynamic_shared_memory2 = %p\n&quot;</span>, dynamic_shared_memory2); </span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(blockIdx.x == <span class="number">0</span> &amp;&amp; threadIdx.x == <span class="number">0</span>) <span class="comment">// 第一个thread</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Run kernel.\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/demo2<span class="comment">//</span></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">demo2 主要是为了演示的是如何给 共享变量进行赋值</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">// 定义共享变量，但是不能给初始值，必须由线程或者其他方式赋值</span></span><br><span class="line">__shared__ <span class="type">int</span> shared_value1;</span><br><span class="line"></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">demo2_kernel</span><span class="params">()</span>&#123;</span><br><span class="line">    </span><br><span class="line">    __shared__ <span class="type">int</span> shared_value2;</span><br><span class="line">    <span class="keyword">if</span>(threadIdx.x == <span class="number">0</span>)&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 在线程索引为0的时候，为shared value赋初始值</span></span><br><span class="line">        <span class="keyword">if</span>(blockIdx.x == <span class="number">0</span>)&#123;</span><br><span class="line">            shared_value1 = <span class="number">123</span>;</span><br><span class="line">            shared_value2 = <span class="number">55</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            shared_value1 = <span class="number">331</span>;</span><br><span class="line">            shared_value2 = <span class="number">8</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 等待block内的所有线程执行到这一步</span></span><br><span class="line">    __syncthreads();</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d.%d. shared_value1 = %d[%p], shared_value2 = %d[%p]\n&quot;</span>, </span><br><span class="line">        blockIdx.x, threadIdx.x,</span><br><span class="line">        shared_value1, &amp;shared_value1, </span><br><span class="line">        shared_value2, &amp;shared_value2</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">launch</span><span class="params">()</span>&#123;</span><br><span class="line">    </span><br><span class="line">    demo1_kernel&lt;&lt;&lt;<span class="number">1</span>, <span class="number">1</span>, <span class="number">12</span>, nullptr&gt;&gt;&gt;();</span><br><span class="line">    demo2_kernel&lt;&lt;&lt;<span class="number">2</span>, <span class="number">5</span>, <span class="number">0</span>, nullptr&gt;&gt;&gt;();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line"></span><br><span class="line">    cudaDeviceProp prop;</span><br><span class="line">    checkRuntime(cudaGetDeviceProperties(&amp;prop, <span class="number">0</span>));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;prop.sharedMemPerBlock = %.2f KB\n&quot;</span>, prop.sharedMemPerBlock / <span class="number">1024.0f</span>);</span><br><span class="line"></span><br><span class="line">    launch();</span><br><span class="line">    checkRuntime(cudaPeekAtLastError());</span><br><span class="line">    checkRuntime(cudaDeviceSynchronize());</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;done\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果如下：</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/48ac7a5ea1d8497e92ac70d1888aea1a.png" class="" title="在这里插入图片描述">
+<p>在主函数中我们通过调用 cudaGetDeviceProperties 函数获取当前设备的属性，并打印出设备的共享内存的大小，一般为 48KB。</p>
+<p>上述示例代码依次展示了使用共享内存 （shared memory）的两个示例：demo1_kernel 和 demo2_kernel</p>
+<p>demo1_kernel：</p>
+<p>这个示例主要用于展示静态共享变量和动态共享变量的地址。在这个示例中，我们使用了两个静态共享变量和两个动态共享变量，二者在 kernel 函数内外定义都行，没有限制。我们启动的核函数只有一个线程块，每个线程块只有一个线程，因此只有一个线程会执行这个 kernel 函数，并打印对应的共享变量的地址。</p>
+<p>通过打印语句，<strong>我们可以看到静态共享变量的地址会依次增加，而动态共享变量的地址始终是一样的。</strong></p>
+<p>第一个 block 对应的共享变量赋值为 123 和 55，第二个 block 对应的共享变量赋值为 331 和 8，<strong>又由于共享内存（shared memory）是在块（block）级别上进行共享的</strong>，因此第一个 block 中所有线程打印的共享变量结果为 123 和 55，第二个 block 中所有线程打印的共享变量结果为 331 和 8，这点可以从运行结果中看到。</p>
+<ul>
+<li><p>共享内存是片上内存，更靠近计算单元，因此比 globalMem 速度更快，通常可以充当缓存使用</p>
+<ul>
+<li>数据先读入到 sharedMem，做各类计算时，使用 sharedMem 而非 globalMem</li>
+</ul>
+</li>
+<li><p>demo_kernel&lt;&lt;<1, 1, 12, nullptr>&gt;&gt;()；其中第三个参数 12，是指定动态共享内存 dynamic_shared_memory 的大小</p>
+<ul>
+<li>dynamic<em>shared<em>memory 变量必须使用 extern __shared</em></em> 开头</li>
+<li>并且定义为不确定大小的数组 []</li>
+<li>12 的单位是 bytes，也就是可以安全存放 3 个 float</li>
+<li>变量放在函数外面和里面是一样的</li>
+<li>其指针由 cuda 调度器执行时赋值</li>
+</ul>
+</li>
+<li><p>static_shared_memory 作为静态分配的共享内存</p>
+<ul>
+<li>不加 extern，以 <strong>shared</strong> 开头</li>
+<li>定义时需要明确数组的大小</li>
+<li>静态分配的地址比动态分配的地址低</li>
+</ul>
+</li>
+<li>动态共享变量，无论定义多少个，地址都一样</li>
+<li>静态共享变量，定义几个地址随之叠加</li>
+<li>如果配置的各类共享内存总和大于 sharedMemPerBlock，则核函数执行错误，Invalid argument<ul>
+<li>不同类型的静态共享变量定义，其内存划分并不一定是连续的</li>
+<li>中间会有内存对齐策略，使得第一个和第二个变量之间可能存在间隙</li>
+<li>因此你的变量之间如果存在空隙，可能小于全部大于的共享内存就会报错</li>
+</ul>
+</li>
+</ul>
 <h2 id="5-1-3-共享内存存储体和访问模式"><a href="#5-1-3-共享内存存储体和访问模式" class="headerlink" title="5.1.3 共享内存存储体和访问模式"></a>5.1.3 共享内存存储体和访问模式</h2><p>优化内存性能时要度量的两个关键属性是：延迟和带宽。第4章解释了由不同的全局内存访问模式引起的延迟和带宽对核函数性能的影响。共享内存可以用来隐藏全局内存延迟和带宽对性能的影响。</p>
 <h3 id="5-1-3-1-内存存储体"><a href="#5-1-3-1-内存存储体" class="headerlink" title="5.1.3.1 内存存储体"></a>5.1.3.1 内存存储体</h3><p>为了获得高内存带宽，共享内存被分为32个同样大小的内存模型，它们被称为存储体，它们可以被同时访问。<strong>有32个存储体是因为一个线程束中有32个线程</strong>。共享内存是一个一维地址空间。</p>
 <p>如果通过线程束发布共享内存加载或存储操作，且在每个存储体<br>上只访问不多于一个的内存地址，那么该操作可由一个内存事务来完成。否则，该操作由多个内存事务来完成，这样就降低了内存带宽的利用率。</p>
@@ -488,7 +537,7 @@
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -549,6 +598,12 @@
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">

@@ -33,7 +33,7 @@
 <meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/image-20230307143504879.png">
 <meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/image-20230307153640765.png">
 <meta property="article:published_time" content="2023-04-11T13:35:11.343Z">
-<meta property="article:modified_time" content="2023-04-11T13:35:11.343Z">
+<meta property="article:modified_time" content="2024-03-06T11:17:26.158Z">
 <meta property="article:author" content="奔跑的IC">
 <meta property="article:tag" content="C">
 <meta property="article:tag" content="GPU">
@@ -162,18 +162,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">83</span>
+          <span class="site-state-item-count">119</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-count">24</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-count">13</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -236,6 +236,13 @@
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-03-06 19:17:26" itemprop="dateModified" datetime="2024-03-06T19:17:26+08:00">2024-03-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
       <span class="post-meta-item-text">分类于</span>
@@ -295,6 +302,7 @@
 <h3 id="4-2-3-固定内存"><a href="#4-2-3-固定内存" class="headerlink" title="4.2.3 固定内存"></a>4.2.3 固定内存</h3><p><strong>主机内存</strong>采用分页式管理(pageable)，通俗的说法就是操作系统把物理内存分成一些“页”，然后给一个应用程序一大块内存，但是这一大块内存可能在一些不连续的页上，应用只能看到虚拟的内存地址，而操作系统可能随时更换物理地址的页（从原始地址复制到另一个地址）但是应用是不会差觉得，但是从主机传输到设备上的时候，如果此时发生了页面移动，对于传输操作来说是致命的，所以在数据传输之前，CUDA驱动会锁定页面，或者直接分配固定的主机内存，将主机源数据复制到固定内存上，然后从固定内存传输数据到设备上：</p>
 <img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/image-20230307143504879.png" class="" title="image-20230307143504879">
 <p>上图左边是正常分配内存，传输过程是：锁页-复制到固定内存-复制到设备<br>右边时分配时就是固定内存，直接传输到设备上。</p>
+<p>你可以理解为 Page lock Memory 是 VIP 房间，锁定给你一个人用。而 Pageable Memory 是普通房间，在酒店房间不够的时候，选择性的把你的房间腾出来给其他人交换用(交换到硬盘上)，这就可以容纳更多人了。<strong>造成房间很多的假象，代价是性能降低</strong></p>
 <p>CUDA运行时允许你使用如下指令直接分配<strong>固定主机内存</strong>（注意不是分配GPU内存，是分配类似于malloc的主机内存）：</p>
 <figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaMallocHost</span><span class="params">(<span class="type">void</span> ** devPtr,<span class="type">size_t</span> count)</span></span><br></pre></td></tr></table></figure>
 <p>这个函数分配了count字节的主机内存，这些内存是页面锁定的并且对设备来说是可访问的。由于固定内存能被设备直接访问，所以它能用比可分页内存高得多的带宽进行读写。</p>
@@ -415,7 +423,7 @@
 
 <div class="copyright">
   &copy; 
-  <span itemprop="copyrightYear">2023</span>
+  <span itemprop="copyrightYear">2024</span>
   <span class="with-love">
     <i class="fa fa-heart"></i>
   </span>
@@ -476,6 +484,12 @@
   <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">

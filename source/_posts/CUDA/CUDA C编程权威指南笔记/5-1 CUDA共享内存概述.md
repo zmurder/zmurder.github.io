@@ -182,7 +182,7 @@ demo1_kernel：
   * 数据先读入到 sharedMem，做各类计算时，使用 sharedMem 而非 globalMem
 
 * demo_kernel<<<1, 1, 12, nullptr>>>()；其中第三个参数 12，是指定动态共享内存 dynamic_shared_memory 的大小
-  * dynamic_shared_memory 变量必须使用 extern __shared__ 开头
+  * dynamic_shared_memory 变量必须使用`extern __shared__` 开头
   * 并且定义为不确定大小的数组 []
   * 12 的单位是 bytes，也就是可以安全存放 3 个 float
   * 变量放在函数外面和里面是一样的

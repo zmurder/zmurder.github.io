@@ -494,3 +494,13 @@ int main(void)
 * 它通过在网络上使用一个简单的框架，完全按照发送的方式传递整个消息。如果您写了一条10k的消息，您将收到一条10k的消息。
 * 它不将任何格式强加于消息。它们的大小从0到G。当您想要表示数据时，您可以在顶部选择一些其他产品，例如msgpack、谷歌的protobuf等。
 * 它通过在有意义的情况下自动重试来智能地处理网络错误。
+
+
+
+# 附录
+
+* 官方文档：https://zguide.zeromq.org/docs/chapter1/
+* 官方API说明：https://libzmq.readthedocs.io/en/latest/
+* 官方c++示例代码：https://github.com/imatix/zguide.git
+* 官方python说明：https://zeromq.org/languages/python/
+* 官方python示例代码：https://github.com/zeromq/pyzmq/tree/HEAD/examples

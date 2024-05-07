@@ -1016,13 +1016,241 @@ Host github.com
     HostName github.com
     PreferredAuthentications publickey
     IdentityFile ~/.ssh/github_id-rsa
-  ​
+    
 # 配置文件参数
-# Host : Host可以看作是一个你要识别的模式，对识别的模式，进行配置对应的的主机名和ssh文件
-# HostName : 要登录主机的主机名
-# User : 登录名
+# Host : 就是一个简称
+# HostName : 要登录主机的主机名，就是网址
+# User : 用户
 # IdentityFile : 指明上面User对应的identityFile路径
 ```
+
+下面是一个具体的例子实现一台机器上管理多个 GitHub 账户
+
+### **1.** 生成 SSH 密钥
+
+在生成 SSH 密钥之前，我们可以检查一下我们是否有任何现有的 SSH 密钥：`ls -al ~/.ssh` 这将列出所有现有的公钥和私钥对，如果存在的话。
+
+如果 `~/.ssh/id_rsa` 是可用的，我们可以重新使用它，否则我们可以先通过运行以下代码来生成一个默认 `~/.ssh/id_rsa` 的密钥：
+
+```
+ssh-keygen -t rsa
+```
+
+对于保存密钥的位置，按回车键接受默认位置。一个私钥和公钥 `~/.ssh/id_rsa.pub` 将在默认的 SSH 位置 `~/.ssh/` 创建。
+
+让我们为我们的**个人账户使用这个默认的密钥对**。
+
+对于**工作账户**，我们将创建不同的 SSH 密钥。下面的代码将生成 SSH 密钥，并将标签为 “email@work_mail.com” 的公钥保存到 `~/.ssh/id_rsa_work_user1.pub` 中。
+
+```bash
+$ ssh-keygen -t rsa -C "email@work_mail.com" -f "id_rsa_work_user1"
+```
+
+到目前，我们创建了两个不同的密钥：id_rsa是默认的个人账户密钥，id_rsa_work_user1是工作账户密钥
+
+```bash
+~/.ssh/id_rsa
+~/.ssh/id_rsa_work_user1
+```
+
+### **2.** 将新的 SSH 密钥添加到相应的 GitHub 账户中
+
+我们已经准备好了 SSH 公钥，我们将要求 GitHub 账户信任我们创建的密钥。这是为了避免每次进行 Git 推送时都要输入用户名和密码的麻烦。
+
+**个人账户**
+
+复制公钥 `pbcopy < ~/.ssh/id_rsa.pub`，然后登录你的个人 GitHub 账户：
+
+- 转到 `Settings`
+- 在左边的菜单中选择 `SSH and GPG keys`
+- 点击 `New SSH key`，提供一个合适的标题，并将密钥粘贴在下面的方框中
+- 点击 `Add key` - 就完成了！
+
+对于**工作账户**，使用相应的公钥（`pbcopy < ~/.ssh/id_rsa_work_user1.pub`），在 GitHub 工作账户中重复上述步骤。
+
+### **3 .** 在 ssh-agent 上注册新的 SSH 密钥
+
+为了使用这些密钥，我们必须在我们机器上的 **ssh-agent** 上注册它们。使用 `eval "$(ssh-agent -s)"` 命令确保 ssh-agent 运行。像这样把密钥添加到 ssh-agent 中：
+
+```bash
+ssh-add ~/.ssh/id_rsa   # 个人账户
+ssh-add ~/.ssh/id_rsa_work_user1 # 工作账户
+```
+
+查看当前的密钥列表，查看是否添加成功        
+
+```bash
+ssh-add -l
+```
+
+让 ssh-agent 为不同的 SSH 主机使用各自的 SSH 密钥。
+
+这是最关键的部分，我们有两种不同的方法：
+
+使用 SSH 配置文件（第 4 步），以及在 ssh-agent 中每次只有一个有效的 SSH 密钥（第 5 步）。
+
+### 4. 创建 SSH 配置文件
+
+在这里，我们实际上是为不同的主机添加 SSH 配置规则，说明在哪个域名使用哪个身份文件。
+
+SSH 配置文件将在 **~/.ssh/config** 中。如果有的话，请编辑它，否则我们可以直接创建它。
+
+```bash
+$ cd ~/.ssh/
+$ touch config           // Creates the file if not exists
+$ code config            // Opens the file in VS code, use any editor
+```
+
+在 `~/.ssh/config` 文件中为相关的 GitHub 账号做类似于下面的配置项：
+
+```bash
+# Personal account, - the default config
+Host github.com
+   HostName github.com
+   User git
+   IdentityFile ~/.ssh/id_rsa
+   
+# Work account-1
+Host github.com-work_user1    
+   HostName github.com
+   User git
+   IdentityFile ~/.ssh/id_rsa_work_user1
+# 配置文件参数
+# Host : 是用来定义主机别名的关键字
+# HostName : 指定连接的远程主机的域名或IP地址。在这种情况下，连接的是GitHub的服务器。
+# User : 指定了用于SSH连接的用户名。在GitHub上，通常使用 git 用户名。
+# IdentityFile : 指定了用于身份验证的私钥文件的路径。
+```
+
+“work_user1” 是工作账户的 GitHub 用户 ID。
+
+“github.com-work_user1” 是用来区分多个 Git 账户的记号。你也可以使用 “work_user1.github.com”  记号。确保与你使用的主机名记号一致。当你克隆一个仓库或为本地仓库设置 remote origin 时，这一点很重要。
+
+上面的配置要求 ssh-agent：
+
+- 使用 **id_rsa** 作为任何使用 **@github.com** 的 Git URL 的密钥
+- 对任何使用 **@github.com-work_user1** 的 Git URL 使用 **id_rsa_work_user1** 密钥
+
+测试以确保Github识别密钥：
+
+```shell
+$ ssh -T github.com
+Hi work! You've successfully authenticated, but GitHub does not provide shell access.
+
+$ ssh -T github.com-work_user1
+Hi person! You've successfully authenticated, but GitHub does not provide shell access.
+```
+
+### **5.** 在 ssh-agent 中每次有一个活跃的 SSH 密钥
+
+这种方法不需要 SSH 配置规则。相反，我们手动确保在进行任何 Git 操作时，ssh-agent 中只有相关的密钥。
+
+`ssh-add -l` 会列出所有连接到 ssh-agent 的 SSH 密钥。把它们全部删除，然后添加你要用的那个密钥。
+
+如果是要推送到个人的 Git 账号：
+
+```bash
+$ ssh-add -D            //removes all ssh entries from the ssh-agent
+$ ssh-add ~/.ssh/id_rsa                 // Adds the relevant ssh key
+```
+
+现在 ssh-agent 已经有了映射到个人 GitHub 账户的密钥，我们可以向个人仓库进行 Git 推送。
+
+要推送到工作的 GitHub account-1，需要改变 SSH 密钥与 ssh-agent 的映射关系，删除现有的密钥，并添加与 GitHub 工作账号映射的 SSH 密钥。
+
+```bash
+$ ssh-add -D
+$ ssh-add ~/.ssh/id_rsa_work_user1
+```
+
+目前，ssh-agent 已经将密钥映射到了工作的 GitHub 账户，你可以将 Git 推送到工作仓库。不过这需要一点手动操作。
+
+### 为本地仓库设置 git remote url
+
+一旦我们克隆/创建了本地的 Git 仓库，确保 Git 配置的用户名和电子邮件正是你想要的。GitHub 会根据提交（commit）描述所附的电子邮件 ID 来识别任何提交的作者。
+
+要列出本地 Git 目录中的配置名称和电子邮件，请执行 `git config user.name` 和 `git config user.email`。如果没有找到，可以进行更新。
+
+```bash
+git config user.name "User 1"   // Updates git config user name
+git config user.email "user1@workMail.com"
+```
+
+### **6.** 克隆仓库
+
+注意：如果我们在本地已经有了仓库，那么请查看第 7 步。
+
+现在配置已经好了，我们可以继续克隆相应的仓库了。在克隆时，注意我们要使用在 SSH 配置中使用的主机名。
+
+仓库可以使用 Git 提供的 clone 命令来克隆：
+
+```
+git clone git@github.com:personal_account_name/repo_name.git
+```
+
+- 这个命令是克隆一个仓库，地址为 `git@github.com:personal_account_name/repo_name.git`。
+- `git@github.com` 是SSH协议下GitHub的标准主机别名。
+- `personal_account_name` 是你的GitHub个人账户的用户名。
+- `repo_name` 是你想要克隆的仓库的名称。
+- 这个命令会使用默认的SSH密钥文件（通常是 `~/.ssh/id_rsa`）来进行身份验证，因为在配置文件中没有指定与个人账户关联的特定密钥文件。
+
+工作仓库将需要用这个命令来进行修改：
+
+```bash
+git clone git@github.com-work_user1:work_user1/repo_name.git
+```
+
+- 这个命令是克隆一个仓库，地址为 `git@github.com-work_user1:work_user1/repo_name.git`。
+- `github.com-work_user1` 是在SSH配置文件中定义的自定义主机别名，用于与工作账户关联。
+- `work_user1` 是工作账户的用户名。
+- `repo_name` 是你想要克隆的仓库的名称。
+- 这个命令会使用配置文件中与 `github.com-work_user1` 主机别名关联的特定SSH密钥文件（`~/.ssh/id_rsa_work_user1`）来进行身份验证。因为在配置文件中明确指定了使用工作账户的身份验证信息。
+
+这个变化取决于 SSH 配置中定义的主机名。@ 和 : 之间的字符串应该与我们在 SSH 配置文件中给出的内容相匹配。
+
+### **7.** 对于本地存在的版本库
+
+**如果我们有已经克隆的仓库：**
+
+列出该仓库的 Git remote，`git remote -v`
+
+检查该 URL 是否与我们要使用的 GitHub 主机相匹配，否则就更新 remote origin URL。
+
+```bash
+git remote set-url origin git@github.com-work_user1:worker_user1/repo_name.git
+```
+
+确保 @ 和 : 之间的字符串与我们在 SSH 配置中给出的主机一致。
+
+- `git remote set-url origin`：这部分告诉Git，我们要修改名为 `origin` 的远程仓库的URL。在Git中，`origin` 是默认用来指代你最初克隆或添加的远程仓库的别名。它是一个常用的标识符，但你也可以使用其他名字。
+- `git@github.com-work_user1:worker_user1/repo_name.git`：这是新的远程仓库的URL。
+  - `git@github.com-work_user1` 是在SSH配置文件中定义的自定义主机别名，用于与工作账户关联。这与上一个例子中的自定义主机别名 
+  - `worker_user1` 是工作账户的用户名。
+  - `repo_name` 是你想要连接的仓库的名称。
+
+**如果你要在本地创建一个新的仓库：**
+
+在项目文件夹中初始化 Git `git init`。
+
+在 GitHub 账户中创建新的仓库，然后将其作为 Git remote 添加给本地仓库。
+
+```bash
+git remote add origin git@github.com-work_user1:work_user1/repo_name.git 
+```
+
+确保 @ 和 : 之间的字符串与我们在 SSH 配置中给出的主机相匹配。
+
+推送初始提交到 GitHub 仓库：
+
+```bash
+git add .
+git commit -m "Initial commit"
+git push -u origin master
+```
+
+我们完成了！
+
+依据正确的主机，添加或更新的本地 Git 目录的 Git remote，选择正确的 SSH 密钥来验证我们的身份。有了以上这些，我们的 `git` 操作应该可以无缝运行了。
 
 # 远程分支
 
@@ -1815,3 +2043,7 @@ git merge dev
 # 附录
 
 参考：E:\zyd\共用\电子书\git\progit_v2.1.52重点参考.pdf
+
+[如何用 SSH 密钥在一台机器上管理多个 GitHub 账户](https://www.freecodecamp.org/chinese/news/manage-multiple-github-accounts-the-ssh-way/)
+
+[如何在一台电脑上管理/切换多个github账户](https://segmentfault.com/a/1190000015055133)

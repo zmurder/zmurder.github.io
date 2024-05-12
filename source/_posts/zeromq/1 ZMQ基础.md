@@ -495,6 +495,76 @@ int main(void)
 * 它不将任何格式强加于消息。它们的大小从0到G。当您想要表示数据时，您可以在顶部选择一些其他产品，例如msgpack、谷歌的protobuf等。
 * 它通过在有意义的情况下自动重试来智能地处理网络错误。
 
+## 1.8 错误处理
+
+这里有一些简单的规则，首先是POSIX的约定：
+
+* 如果创建对象的方法失败，它们就会返回NULL
+* 处理数据的方法可以返回处理的字节数。如果发生错误则返回-1
+* 其他方法返回0表示成功，返回-1表示错误或失败
+* 错误代码在errno或zmq_errno()中提供
+* 描述错误的文字记录是由zmq_strerror()提供的
+
+### 1.8.1 errrno全局变量
+
+只要有一个函数中有错误发生，全局变量errno就被设置为一个指明该错误类型的正值
+
+### 1.8.2 zmq_errno()函数
+
+```cpp
+int zmq_errno(void);
+```
+
+API参考手册：http://api.zeromq.org/master:zmq-errno
+功能：为调用线程检索当前errno的值，也就是返回上面的errno全局变量
+描述说明：
+
+* 该函数一般用于非POSIX系统上无法直接获取errno值的应用程序。具体来说，在Win32系统上，用户可以调用该函数来获取errno的值
+* 没有遇到检索errno正确值问题的用户不应该使用此函数，而应该直接访问errno变量
+
+返回值：
+
+* 成功：返回调用线程的errno变量的值
+* 失败：不会有失败的情况
+
+### 1.8.3 zmq_strerror()函数
+
+```cpp
+const char *zmq_strerror (int errnum);
+```
+
+API参考手册：http://api.zeromq.org/master:zmq-strerror
+功能：获取ØMQ错误消息的字符串表现形式
+描述说明：
+
+* zmq_strerror()函数将返回一个指针，该指针指向errnum参数指定的错误编号对应的错误消息字符串
+* 由于ØMQ定义了操作系统定义的错误号以外的其他错误号，因此ØMQ的应用程序应该优先使用这个函数而不是标准的strerror()函数
+
+参数：错误编码
+返回值：
+
+* 成功：返回一个指向错误消息字符串的指针
+* 失败：不会有失败的情况
+
+演示案例：
+
+```c
+// 无法初始化上下文时打印错误字符串
+void *ctx = zmq_ctx_new(1, 1, 0);
+if (!ctx) 
+{
+    printf ("Error occurred during zmq_ctx_new(): %s\n", zmq_strerror (errno));
+    abort (); 
+}
+```
+
+### 1.8.4 两个非致命的错误
+
+下面是两个特殊的错误，是非致命的：
+
+* 将一个线程使用`ZMQ_DONTWAIT`选项调用`zmq_msg_recv()`并且没有等待数据时，ØMQ将返回-1，并将errno设置为EAGAIN
+* 当一个线程调用`zmq_ctx_destroy()`而其他线程正在做阻塞工作时，`zmq_ctx_destroy()`调用关闭该上下文，所有的阻塞调用都用-1退出，并将`errno`设置为`ETERM`
+
 
 
 # 附录

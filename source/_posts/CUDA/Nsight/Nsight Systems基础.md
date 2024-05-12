@@ -1,4 +1,4 @@
-# 综述
+# 1 综述
 
 ![image-20230110093017190](Nsight Systems基础/image-20230110093017190.png)
 
@@ -54,7 +54,19 @@ int main(void) {
 
 ```
 
+### 1.1.1 分析命令
 
+使用命令行分析时需要有对`/tmp`目录的写权限，否则会报错，参考[General Troubleshooting](https://docs.nvidia.com/nsight-systems/UserGuide/index.html#general-troubleshooting)
+
+我这里使用的挂载和命令如下
+
+```bash
+mount /dev/vblk_ufsb0 /
+mkdir /tmp /opt /root /opt/nvidia
+nsys profile -y 10 -d 50 -w true -t "cuda,cudnn,osrt,nvtx,nvmedia" -o ./Zyd24 --cuda-memory-usage=true --accelerator-trace=nvmedia --force-overwrite true ./zydApp
+```
+
+距离的指令含义参考[CLI Profile Command Switch Options](https://docs.nvidia.com/nsight-systems/UserGuide/index.html#cli-profile-command-switch-options)
 
 ## 1.2 Nsight Compute
 

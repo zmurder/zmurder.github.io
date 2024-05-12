@@ -33,7 +33,345 @@ color.diff=auto
 ...
 ```
 
-# 基础
+# 服务器上的 Git
+
+Git 可以使用四种不同的协议来传输资料：本地协议（Local），HTTP 协议，SSH（Secure Shell）协议及 Git
+协议。 在此，我们将会讨论那些协议及哪些情形应该使用（或避免使用）他们。
+
+## 本地协议
+
+ 最基本的就是 本地协议（Local protocol） ，其中的远程版本库就是同一主机上的另一个目录。
+
+ 例如，克隆一个本地版本库，可以执行如下的命令：
+
+```bash
+$ git clone /srv/git/project.git
+```
+
+或你可以执行这个命令：
+
+```bash
+$ git clone file:///srv/git/project.git
+```
+
+## HTTP 协议
+
+```bash
+$ git clone https://example.com/gitproject.git
+```
+
+## ssh 协议
+
+通过 SSH 协议克隆版本库，你可以指定一个 ssh:// 的 URL：
+
+```bash
+$ git clone ssh://[user@]server/project.git
+```
+
+或者使用一个简短的 scp 式的写法：
+
+```bash
+$ git clone [user@]server:project.git
+```
+
+在上面两种情况中，如果你不指定可选的用户名，那么 Git 会使用当前登录的用的名字。
+
+## 生成SSH key
+
+查看本地是否存在SSH-Key
+
+```shell
+ls -al ~/.ssh
+```
+
+如果没有文件则表示本地没有身成的SSH key
+
+生成新的SSH key  `your_email`这里填写你在[GitLab](https://so.csdn.net/so/search?q=GitLab&spm=1001.2101.3001.7020)或者GitHub注册时的邮箱。
+
+```shell
+ssh-keygen -t rsa -C"you_email"
+```
+
+Ubuntu平台会生成到目录：~/.ssh/
+可以将windows下生成的id_rsa拷贝到ubuntu的~/.ssh中
+生成的id_rsa是私钥，不能泄露出去，id_rsa.pub是公钥（需要注册到GitLab平台上）。
+
+## 云端配置SSH key
+
+打开gitlab,找到Profile Settings-->SSH Keys--->Add SSH Key,并把上一步中复制的内容粘贴到Key所对应的文本框，在Title对应的文本框中给这个sshkey设置一个名字，点击Add key按钮
+
+![image-20220507140912954](git基础/image-20220507140912954-1678287567922-85.png)
+
+到此就完成了gitlab配置ssh key的所有步骤，我们就可以愉快的使用ssh协议进行代码的拉取以及提交等操作了
+
+
+
+## 本地配置多个ssh key
+
+大多数时候，我们的机器上会有很多的git host,比如公司gitlab、github、oschina等，那我们就需要在本地配置多个ssh key，使得不同的host能使用不同的ssh key ,做法如下（以公司gitlab和github为例）：
+
+为公司生成一对秘钥ssh key
+
+```shell
+ssh-keygen -t rsa -C 'yourEmail@xx.com' -f ~/.ssh/gitlab-rsa
+```
+
+为github生成一对秘钥ssh key
+
+```shell
+ssh-keygen -t rsa -C 'yourEmail2@xx.com' -f ~/.ssh/github-rsa
+```
+
+在~/.ssh目录下新建名称为config的文件（无后缀名）。用于配置多个不同的host使用不同的ssh key，内容如下：
+
+```shell
+# gitlab
+Host gitlab.com
+    HostName gitlab.com
+    PreferredAuthentications publickey
+    IdentityFile ~/.ssh/gitlab_id-rsa
+# github
+Host github.com
+    HostName github.com
+    PreferredAuthentications publickey
+    IdentityFile ~/.ssh/github_id-rsa
+    
+# 配置文件参数
+# Host : 就是一个简称
+# HostName : 要登录主机的主机名，就是网址
+# User : 用户
+# IdentityFile : 指明上面User对应的identityFile路径
+```
+
+下面是一个具体的例子实现一台机器上管理多个 GitHub 账户
+
+### **1.** 生成 SSH 密钥
+
+在生成 SSH 密钥之前，我们可以检查一下我们是否有任何现有的 SSH 密钥：`ls -al ~/.ssh` 这将列出所有现有的公钥和私钥对，如果存在的话。
+
+如果 `~/.ssh/id_rsa` 是可用的，我们可以重新使用它，否则我们可以先通过运行以下代码来生成一个默认 `~/.ssh/id_rsa` 的密钥：
+
+```
+ssh-keygen -t rsa
+```
+
+对于保存密钥的位置，按回车键接受默认位置。一个私钥和公钥 `~/.ssh/id_rsa.pub` 将在默认的 SSH 位置 `~/.ssh/` 创建。
+
+让我们为我们的**个人账户使用这个默认的密钥对**。
+
+对于**工作账户**，我们将创建不同的 SSH 密钥。下面的代码将生成 SSH 密钥，并将标签为 “email@work_mail.com” 的公钥保存到 `~/.ssh/id_rsa_work_user1.pub` 中。
+
+```bash
+$ ssh-keygen -t rsa -C "email@work_mail.com" -f "id_rsa_work_user1"
+```
+
+到目前，我们创建了两个不同的密钥：id_rsa是默认的个人账户密钥，id_rsa_work_user1是工作账户密钥
+
+```bash
+~/.ssh/id_rsa
+~/.ssh/id_rsa_work_user1
+```
+
+### **2.** 将新的 SSH 密钥添加到相应的 GitHub 账户中
+
+我们已经准备好了 SSH 公钥，我们将要求 GitHub 账户信任我们创建的密钥。这是为了避免每次进行 Git 推送时都要输入用户名和密码的麻烦。
+
+**个人账户**
+
+复制公钥 `pbcopy < ~/.ssh/id_rsa.pub`，然后登录你的个人 GitHub 账户：
+
+- 转到 `Settings`
+- 在左边的菜单中选择 `SSH and GPG keys`
+- 点击 `New SSH key`，提供一个合适的标题，并将密钥粘贴在下面的方框中
+- 点击 `Add key` - 就完成了！
+
+对于**工作账户**，使用相应的公钥（`pbcopy < ~/.ssh/id_rsa_work_user1.pub`），在 GitHub 工作账户中重复上述步骤。
+
+### **3 .** 在 ssh-agent 上注册新的 SSH 密钥
+
+为了使用这些密钥，我们必须在我们机器上的 **ssh-agent** 上注册它们。使用 `eval "$(ssh-agent -s)"` 命令确保 ssh-agent 运行。像这样把密钥添加到 ssh-agent 中：
+
+```bash
+ssh-add ~/.ssh/id_rsa   # 个人账户
+ssh-add ~/.ssh/id_rsa_work_user1 # 工作账户
+```
+
+查看当前的密钥列表，查看是否添加成功        
+
+```bash
+ssh-add -l
+```
+
+让 ssh-agent 为不同的 SSH 主机使用各自的 SSH 密钥。
+
+这是最关键的部分，我们有两种不同的方法：
+
+使用 SSH 配置文件（第 4 步），以及在 ssh-agent 中每次只有一个有效的 SSH 密钥（第 5 步）。
+
+### 4. 创建 SSH 配置文件
+
+在这里，我们实际上是为不同的主机添加 SSH 配置规则，说明在哪个域名使用哪个身份文件。
+
+SSH 配置文件将在 **~/.ssh/config** 中。如果有的话，请编辑它，否则我们可以直接创建它。
+
+```bash
+$ cd ~/.ssh/
+$ touch config           // Creates the file if not exists
+$ code config            // Opens the file in VS code, use any editor
+```
+
+在 `~/.ssh/config` 文件中为相关的 GitHub 账号做类似于下面的配置项：
+
+```bash
+# Personal account, - the default config
+Host github.com
+   HostName github.com
+   User git
+   IdentityFile ~/.ssh/id_rsa
+   
+# Work account-1
+Host github.com-work_user1    
+   HostName github.com
+   User git
+   IdentityFile ~/.ssh/id_rsa_work_user1
+# 配置文件参数
+# Host : 是用来定义主机别名的关键字
+# HostName : 指定连接的远程主机的域名或IP地址。在这种情况下，连接的是GitHub的服务器。
+# User : 指定了用于SSH连接的用户名。在GitHub上，通常使用 git 用户名。
+# IdentityFile : 指定了用于身份验证的私钥文件的路径。
+```
+
+“work_user1” 是工作账户的 GitHub 用户 ID。
+
+“github.com-work_user1” 是用来区分多个 Git 账户的记号。你也可以使用 “work_user1.github.com”  记号。确保与你使用的主机名记号一致。当你克隆一个仓库或为本地仓库设置 remote origin 时，这一点很重要。
+
+上面的配置要求 ssh-agent：
+
+- 使用 **id_rsa** 作为任何使用 **@github.com** 的 Git URL 的密钥
+- 对任何使用 **@github.com-work_user1** 的 Git URL 使用 **id_rsa_work_user1** 密钥
+
+测试以确保Github识别密钥：
+
+```shell
+$ ssh -T github.com
+Hi work! You've successfully authenticated, but GitHub does not provide shell access.
+
+$ ssh -T github.com-work_user1
+Hi person! You've successfully authenticated, but GitHub does not provide shell access.
+```
+
+### **5.** 在 ssh-agent 中每次有一个活跃的 SSH 密钥
+
+这种方法不需要 SSH 配置规则。相反，我们手动确保在进行任何 Git 操作时，ssh-agent 中只有相关的密钥。
+
+`ssh-add -l` 会列出所有连接到 ssh-agent 的 SSH 密钥。把它们全部删除，然后添加你要用的那个密钥。
+
+如果是要推送到个人的 Git 账号：
+
+```bash
+$ ssh-add -D            //removes all ssh entries from the ssh-agent
+$ ssh-add ~/.ssh/id_rsa                 // Adds the relevant ssh key
+```
+
+现在 ssh-agent 已经有了映射到个人 GitHub 账户的密钥，我们可以向个人仓库进行 Git 推送。
+
+要推送到工作的 GitHub account-1，需要改变 SSH 密钥与 ssh-agent 的映射关系，删除现有的密钥，并添加与 GitHub 工作账号映射的 SSH 密钥。
+
+```bash
+$ ssh-add -D
+$ ssh-add ~/.ssh/id_rsa_work_user1
+```
+
+目前，ssh-agent 已经将密钥映射到了工作的 GitHub 账户，你可以将 Git 推送到工作仓库。不过这需要一点手动操作。
+
+### 为本地仓库设置 git remote url
+
+一旦我们克隆/创建了本地的 Git 仓库，确保 Git 配置的用户名和电子邮件正是你想要的。GitHub 会根据提交（commit）描述所附的电子邮件 ID 来识别任何提交的作者。
+
+要列出本地 Git 目录中的配置名称和电子邮件，请执行 `git config user.name` 和 `git config user.email`。如果没有找到，可以进行更新。
+
+```bash
+git config user.name "User 1"   // Updates git config user name
+git config user.email "user1@workMail.com"
+```
+
+### **6.** 克隆仓库
+
+注意：如果我们在本地已经有了仓库，那么请查看第 7 步。
+
+现在配置已经好了，我们可以继续克隆相应的仓库了。在克隆时，注意我们要使用在 SSH 配置中使用的主机名。
+
+仓库可以使用 Git 提供的 clone 命令来克隆：
+
+```
+git clone git@github.com:personal_account_name/repo_name.git
+```
+
+- 这个命令是克隆一个仓库，地址为 `git@github.com:personal_account_name/repo_name.git`。
+- `git@github.com` 是SSH协议下GitHub的标准主机别名。
+- `personal_account_name` 是你的GitHub个人账户的用户名。
+- `repo_name` 是你想要克隆的仓库的名称。
+- 这个命令会使用默认的SSH密钥文件（通常是 `~/.ssh/id_rsa`）来进行身份验证，因为在配置文件中没有指定与个人账户关联的特定密钥文件。
+
+工作仓库将需要用这个命令来进行修改：
+
+```bash
+git clone git@github.com-work_user1:work_user1/repo_name.git
+```
+
+- 这个命令是克隆一个仓库，地址为 `git@github.com-work_user1:work_user1/repo_name.git`。
+- `github.com-work_user1` 是在SSH配置文件中定义的自定义主机别名，用于与工作账户关联。
+- `work_user1` 是工作账户的用户名。
+- `repo_name` 是你想要克隆的仓库的名称。
+- 这个命令会使用配置文件中与 `github.com-work_user1` 主机别名关联的特定SSH密钥文件（`~/.ssh/id_rsa_work_user1`）来进行身份验证。因为在配置文件中明确指定了使用工作账户的身份验证信息。
+
+这个变化取决于 SSH 配置中定义的主机名。@ 和 : 之间的字符串应该与我们在 SSH 配置文件中给出的内容相匹配。
+
+### **7.** 对于本地存在的版本库
+
+**如果我们有已经克隆的仓库：**
+
+列出该仓库的 Git remote，`git remote -v`
+
+检查该 URL 是否与我们要使用的 GitHub 主机相匹配，否则就更新 remote origin URL。
+
+```bash
+git remote set-url origin git@github.com-work_user1:worker_user1/repo_name.git
+```
+
+确保 @ 和 : 之间的字符串与我们在 SSH 配置中给出的主机一致。
+
+- `git remote set-url origin`：这部分告诉Git，我们要修改名为 `origin` 的远程仓库的URL。在Git中，`origin` 是默认用来指代你最初克隆或添加的远程仓库的别名。它是一个常用的标识符，但你也可以使用其他名字。
+- `git@github.com-work_user1:worker_user1/repo_name.git`：这是新的远程仓库的URL。
+  - `git@github.com-work_user1` 是在SSH配置文件中定义的自定义主机别名，用于与工作账户关联。这与上一个例子中的自定义主机别名 
+  - `worker_user1` 是工作账户的用户名。
+  - `repo_name` 是你想要连接的仓库的名称。
+
+**如果你要在本地创建一个新的仓库：**
+
+在项目文件夹中初始化 Git `git init`。
+
+在 GitHub 账户中创建新的仓库，然后将其作为 Git remote 添加给本地仓库。
+
+```bash
+git remote add origin git@github.com-work_user1:work_user1/repo_name.git 
+```
+
+确保 @ 和 : 之间的字符串与我们在 SSH 配置中给出的主机相匹配。
+
+推送初始提交到 GitHub 仓库：
+
+```bash
+git add .
+git commit -m "Initial commit"
+git push -u origin master
+```
+
+我们完成了！
+
+依据正确的主机，添加或更新的本地 Git 目录的 Git remote，选择正确的 SSH 密钥来验证我们的身份。有了以上这些，我们的 `git` 操作应该可以无缝运行了。
+
+# Git 基础
 
 ## 初始化仓库
 
@@ -573,9 +911,55 @@ $ git fetch <remote>
 这个命令会访问远程仓库，从中拉取所有你还没有的数据。 执行完成后，你将会拥有那个远程仓库中所有分支的引用，**可以随时合并或查看。**
 
 如果你使用 clone 命令克隆了一个仓库，命令会自动将其添加为远程仓库并默认以 “origin” 为简写。 所以，git fetch origin 会抓取克隆（或上一次抓取）后新推送的所有工作。 **必须注意 git fetch 命令只会将数据下载到你的本地仓库——它并不会自动合并或修改你当前的工作。 当准备好时你必须手动将其合并入你的工作**。
-如果你的当前分支设置了**跟踪远程分支**（阅读下一节和 Git 分支 了解更多信息）， 那么可以用 **git pull 命令来自动抓取后合并该远程分支到当前分支**。  这或许是个更加简单舒服的工作流程。默认情况下，git clone 命令会自动设置本地 master 分支跟踪克隆的远程仓库的 master 分支（或其它名字的默认分支）。 运行 git pull 通常会从最初克隆的服务器上抓取数据并自动尝试合并到当前所在的分支。
+如果你的当前分支设置了**跟踪远程分支**（阅读下一节和 Git 分支 了解更多信息）， 那么可以用 **git pull 命令来自动抓取后合并该远程分支到当前分支**。  这或许是个更加简单舒服的工作流程。默认情况下，git clone 命令会自动设置本地 master 分支跟踪克隆的远程仓库的 master 分支（或其它名字的默认分支）。 **运行 git pull 通常会从最初克隆的服务器上抓取数据并自动尝试合并到当前所在的分支**。
+
+1、将远程指定分支 拉取到 本地指定分支上：
+
+```bash
+git pull origin <远程分支名>:<本地分支名>
+```
+
+2、将远程指定分支 拉取到 本地当前分支上：
+
+```bash
+git pull origin <远程分支名>
+```
+
+3、将与本地当前分支同名的远程分支 拉取到 本地当前分支上(需先关联远程分支，方法见文章末尾，只需关联一次)
+
+```bash
+git pull
+```
+
+
 
 ### 推送到远程仓库
+
+1、将本地当前分支 推送到 远程指定分支上（注意：pull是远程在前本地在后，push相反）：
+
+```bash
+git push origin <本地分支名>:<远程分支名>
+```
+
+2、将本地当前分支 推送到 与本地当前分支同名的远程分支上（注意：pull是远程在前本地在后，push相反）：
+
+```bash
+git push origin <本地分支名>
+```
+
+3、将本地当前分支 推送到 与本地当前分支同名的远程分支上(需先关联远程分支，方法见文章末尾)
+
+```bash
+git push
+```
+
+将本地分支与远程同名分支相关联(如果当前分支与多个主机存在追踪关系，那么这个时候**-u选项会指定一个默认主机**，这样后面就可以不加任何参数使用git push。下面命令将本地的<本地分支名>分支推送到origin主机，同时指定origin为默认主机，后面就可以不加任何参数使用git push了。)简单说 就是本地分支与远程的分支无任何联系，git push无法推上去，用-u（--up-stream）来建立本地分支与远程某个分支的关联，形成一个管道，之后 git push可以直接沿着管道  到达关联的分支  无需在加-u参数了
+
+```bash
+git push -u origin <本地分支名>
+```
+
+
 
 `git push <remote> <branch>。`
 
@@ -957,302 +1341,9 @@ If you are sure you want to delete it, run 'git branch -D testing'.
 
 如果真的想要删除分支并丢掉那些工作，如同帮助信息里所指出的，**可以使用 -D 选项强制删除它**。
 
-## 生成SSH key
 
-查看本地是否存在SSH-Key
 
-```shell
-ls -al ~/.ssh
-```
-
-如果没有文件则表示本地没有身成的SSH key
-
-生成新的SSH key  `your_email`这里填写你在[GitLab](https://so.csdn.net/so/search?q=GitLab&spm=1001.2101.3001.7020)或者GitHub注册时的邮箱。
-
-```shell
-ssh-keygen -t rsa -C"you_email"
-```
-
-Ubuntu平台会生成到目录：~/.ssh/
-可以将windows下生成的id_rsa拷贝到ubuntu的~/.ssh中
-生成的id_rsa是私钥，不能泄露出去，id_rsa.pub是公钥（需要注册到GitLab平台上）。
-
-## 云端配置SSH key
-
-打开gitlab,找到Profile Settings-->SSH Keys--->Add SSH Key,并把上一步中复制的内容粘贴到Key所对应的文本框，在Title对应的文本框中给这个sshkey设置一个名字，点击Add key按钮
-
-![image-20220507140912954](git基础/image-20220507140912954-1678287567922-85.png)
-
-到此就完成了gitlab配置ssh key的所有步骤，我们就可以愉快的使用ssh协议进行代码的拉取以及提交等操作了
-
-
-
-## 本地配置多个ssh key
-
-大多数时候，我们的机器上会有很多的git host,比如公司gitlab、github、oschina等，那我们就需要在本地配置多个ssh key，使得不同的host能使用不同的ssh key ,做法如下（以公司gitlab和github为例）：
-
-为公司生成一对秘钥ssh key
-
-```shell
-ssh-keygen -t rsa -C 'yourEmail@xx.com' -f ~/.ssh/gitlab-rsa
-```
-
-为github生成一对秘钥ssh key
-
-```shell
-ssh-keygen -t rsa -C 'yourEmail2@xx.com' -f ~/.ssh/github-rsa
-```
-
-在~/.ssh目录下新建名称为config的文件（无后缀名）。用于配置多个不同的host使用不同的ssh key，内容如下：
-
-```shell
-# gitlab
-Host gitlab.com
-    HostName gitlab.com
-    PreferredAuthentications publickey
-    IdentityFile ~/.ssh/gitlab_id-rsa
-# github
-Host github.com
-    HostName github.com
-    PreferredAuthentications publickey
-    IdentityFile ~/.ssh/github_id-rsa
-    
-# 配置文件参数
-# Host : 就是一个简称
-# HostName : 要登录主机的主机名，就是网址
-# User : 用户
-# IdentityFile : 指明上面User对应的identityFile路径
-```
-
-下面是一个具体的例子实现一台机器上管理多个 GitHub 账户
-
-### **1.** 生成 SSH 密钥
-
-在生成 SSH 密钥之前，我们可以检查一下我们是否有任何现有的 SSH 密钥：`ls -al ~/.ssh` 这将列出所有现有的公钥和私钥对，如果存在的话。
-
-如果 `~/.ssh/id_rsa` 是可用的，我们可以重新使用它，否则我们可以先通过运行以下代码来生成一个默认 `~/.ssh/id_rsa` 的密钥：
-
-```
-ssh-keygen -t rsa
-```
-
-对于保存密钥的位置，按回车键接受默认位置。一个私钥和公钥 `~/.ssh/id_rsa.pub` 将在默认的 SSH 位置 `~/.ssh/` 创建。
-
-让我们为我们的**个人账户使用这个默认的密钥对**。
-
-对于**工作账户**，我们将创建不同的 SSH 密钥。下面的代码将生成 SSH 密钥，并将标签为 “email@work_mail.com” 的公钥保存到 `~/.ssh/id_rsa_work_user1.pub` 中。
-
-```bash
-$ ssh-keygen -t rsa -C "email@work_mail.com" -f "id_rsa_work_user1"
-```
-
-到目前，我们创建了两个不同的密钥：id_rsa是默认的个人账户密钥，id_rsa_work_user1是工作账户密钥
-
-```bash
-~/.ssh/id_rsa
-~/.ssh/id_rsa_work_user1
-```
-
-### **2.** 将新的 SSH 密钥添加到相应的 GitHub 账户中
-
-我们已经准备好了 SSH 公钥，我们将要求 GitHub 账户信任我们创建的密钥。这是为了避免每次进行 Git 推送时都要输入用户名和密码的麻烦。
-
-**个人账户**
-
-复制公钥 `pbcopy < ~/.ssh/id_rsa.pub`，然后登录你的个人 GitHub 账户：
-
-- 转到 `Settings`
-- 在左边的菜单中选择 `SSH and GPG keys`
-- 点击 `New SSH key`，提供一个合适的标题，并将密钥粘贴在下面的方框中
-- 点击 `Add key` - 就完成了！
-
-对于**工作账户**，使用相应的公钥（`pbcopy < ~/.ssh/id_rsa_work_user1.pub`），在 GitHub 工作账户中重复上述步骤。
-
-### **3 .** 在 ssh-agent 上注册新的 SSH 密钥
-
-为了使用这些密钥，我们必须在我们机器上的 **ssh-agent** 上注册它们。使用 `eval "$(ssh-agent -s)"` 命令确保 ssh-agent 运行。像这样把密钥添加到 ssh-agent 中：
-
-```bash
-ssh-add ~/.ssh/id_rsa   # 个人账户
-ssh-add ~/.ssh/id_rsa_work_user1 # 工作账户
-```
-
-查看当前的密钥列表，查看是否添加成功        
-
-```bash
-ssh-add -l
-```
-
-让 ssh-agent 为不同的 SSH 主机使用各自的 SSH 密钥。
-
-这是最关键的部分，我们有两种不同的方法：
-
-使用 SSH 配置文件（第 4 步），以及在 ssh-agent 中每次只有一个有效的 SSH 密钥（第 5 步）。
-
-### 4. 创建 SSH 配置文件
-
-在这里，我们实际上是为不同的主机添加 SSH 配置规则，说明在哪个域名使用哪个身份文件。
-
-SSH 配置文件将在 **~/.ssh/config** 中。如果有的话，请编辑它，否则我们可以直接创建它。
-
-```bash
-$ cd ~/.ssh/
-$ touch config           // Creates the file if not exists
-$ code config            // Opens the file in VS code, use any editor
-```
-
-在 `~/.ssh/config` 文件中为相关的 GitHub 账号做类似于下面的配置项：
-
-```bash
-# Personal account, - the default config
-Host github.com
-   HostName github.com
-   User git
-   IdentityFile ~/.ssh/id_rsa
-   
-# Work account-1
-Host github.com-work_user1    
-   HostName github.com
-   User git
-   IdentityFile ~/.ssh/id_rsa_work_user1
-# 配置文件参数
-# Host : 是用来定义主机别名的关键字
-# HostName : 指定连接的远程主机的域名或IP地址。在这种情况下，连接的是GitHub的服务器。
-# User : 指定了用于SSH连接的用户名。在GitHub上，通常使用 git 用户名。
-# IdentityFile : 指定了用于身份验证的私钥文件的路径。
-```
-
-“work_user1” 是工作账户的 GitHub 用户 ID。
-
-“github.com-work_user1” 是用来区分多个 Git 账户的记号。你也可以使用 “work_user1.github.com”  记号。确保与你使用的主机名记号一致。当你克隆一个仓库或为本地仓库设置 remote origin 时，这一点很重要。
-
-上面的配置要求 ssh-agent：
-
-- 使用 **id_rsa** 作为任何使用 **@github.com** 的 Git URL 的密钥
-- 对任何使用 **@github.com-work_user1** 的 Git URL 使用 **id_rsa_work_user1** 密钥
-
-测试以确保Github识别密钥：
-
-```shell
-$ ssh -T github.com
-Hi work! You've successfully authenticated, but GitHub does not provide shell access.
-
-$ ssh -T github.com-work_user1
-Hi person! You've successfully authenticated, but GitHub does not provide shell access.
-```
-
-### **5.** 在 ssh-agent 中每次有一个活跃的 SSH 密钥
-
-这种方法不需要 SSH 配置规则。相反，我们手动确保在进行任何 Git 操作时，ssh-agent 中只有相关的密钥。
-
-`ssh-add -l` 会列出所有连接到 ssh-agent 的 SSH 密钥。把它们全部删除，然后添加你要用的那个密钥。
-
-如果是要推送到个人的 Git 账号：
-
-```bash
-$ ssh-add -D            //removes all ssh entries from the ssh-agent
-$ ssh-add ~/.ssh/id_rsa                 // Adds the relevant ssh key
-```
-
-现在 ssh-agent 已经有了映射到个人 GitHub 账户的密钥，我们可以向个人仓库进行 Git 推送。
-
-要推送到工作的 GitHub account-1，需要改变 SSH 密钥与 ssh-agent 的映射关系，删除现有的密钥，并添加与 GitHub 工作账号映射的 SSH 密钥。
-
-```bash
-$ ssh-add -D
-$ ssh-add ~/.ssh/id_rsa_work_user1
-```
-
-目前，ssh-agent 已经将密钥映射到了工作的 GitHub 账户，你可以将 Git 推送到工作仓库。不过这需要一点手动操作。
-
-### 为本地仓库设置 git remote url
-
-一旦我们克隆/创建了本地的 Git 仓库，确保 Git 配置的用户名和电子邮件正是你想要的。GitHub 会根据提交（commit）描述所附的电子邮件 ID 来识别任何提交的作者。
-
-要列出本地 Git 目录中的配置名称和电子邮件，请执行 `git config user.name` 和 `git config user.email`。如果没有找到，可以进行更新。
-
-```bash
-git config user.name "User 1"   // Updates git config user name
-git config user.email "user1@workMail.com"
-```
-
-### **6.** 克隆仓库
-
-注意：如果我们在本地已经有了仓库，那么请查看第 7 步。
-
-现在配置已经好了，我们可以继续克隆相应的仓库了。在克隆时，注意我们要使用在 SSH 配置中使用的主机名。
-
-仓库可以使用 Git 提供的 clone 命令来克隆：
-
-```
-git clone git@github.com:personal_account_name/repo_name.git
-```
-
-- 这个命令是克隆一个仓库，地址为 `git@github.com:personal_account_name/repo_name.git`。
-- `git@github.com` 是SSH协议下GitHub的标准主机别名。
-- `personal_account_name` 是你的GitHub个人账户的用户名。
-- `repo_name` 是你想要克隆的仓库的名称。
-- 这个命令会使用默认的SSH密钥文件（通常是 `~/.ssh/id_rsa`）来进行身份验证，因为在配置文件中没有指定与个人账户关联的特定密钥文件。
-
-工作仓库将需要用这个命令来进行修改：
-
-```bash
-git clone git@github.com-work_user1:work_user1/repo_name.git
-```
-
-- 这个命令是克隆一个仓库，地址为 `git@github.com-work_user1:work_user1/repo_name.git`。
-- `github.com-work_user1` 是在SSH配置文件中定义的自定义主机别名，用于与工作账户关联。
-- `work_user1` 是工作账户的用户名。
-- `repo_name` 是你想要克隆的仓库的名称。
-- 这个命令会使用配置文件中与 `github.com-work_user1` 主机别名关联的特定SSH密钥文件（`~/.ssh/id_rsa_work_user1`）来进行身份验证。因为在配置文件中明确指定了使用工作账户的身份验证信息。
-
-这个变化取决于 SSH 配置中定义的主机名。@ 和 : 之间的字符串应该与我们在 SSH 配置文件中给出的内容相匹配。
-
-### **7.** 对于本地存在的版本库
-
-**如果我们有已经克隆的仓库：**
-
-列出该仓库的 Git remote，`git remote -v`
-
-检查该 URL 是否与我们要使用的 GitHub 主机相匹配，否则就更新 remote origin URL。
-
-```bash
-git remote set-url origin git@github.com-work_user1:worker_user1/repo_name.git
-```
-
-确保 @ 和 : 之间的字符串与我们在 SSH 配置中给出的主机一致。
-
-- `git remote set-url origin`：这部分告诉Git，我们要修改名为 `origin` 的远程仓库的URL。在Git中，`origin` 是默认用来指代你最初克隆或添加的远程仓库的别名。它是一个常用的标识符，但你也可以使用其他名字。
-- `git@github.com-work_user1:worker_user1/repo_name.git`：这是新的远程仓库的URL。
-  - `git@github.com-work_user1` 是在SSH配置文件中定义的自定义主机别名，用于与工作账户关联。这与上一个例子中的自定义主机别名 
-  - `worker_user1` 是工作账户的用户名。
-  - `repo_name` 是你想要连接的仓库的名称。
-
-**如果你要在本地创建一个新的仓库：**
-
-在项目文件夹中初始化 Git `git init`。
-
-在 GitHub 账户中创建新的仓库，然后将其作为 Git remote 添加给本地仓库。
-
-```bash
-git remote add origin git@github.com-work_user1:work_user1/repo_name.git 
-```
-
-确保 @ 和 : 之间的字符串与我们在 SSH 配置中给出的主机相匹配。
-
-推送初始提交到 GitHub 仓库：
-
-```bash
-git add .
-git commit -m "Initial commit"
-git push -u origin master
-```
-
-我们完成了！
-
-依据正确的主机，添加或更新的本地 Git 目录的 Git remote，选择正确的 SSH 密钥来验证我们的身份。有了以上这些，我们的 `git` 操作应该可以无缝运行了。
-
-# 远程分支
+## 远程分支
 
  git ls-remote <remote> 来显式地获得远程引用的完整列表， 或者通过 git remote show <remote> 获得远程分支的更多信息。
 
@@ -1273,8 +1364,25 @@ git push -u origin master
 
  当你想要公开分享一个分支时，需要将其推送到有写入权限的远程仓库上
 
-如果希望和别人一起在名为 serverfix 的分支上工作，你可以像推送第一个分支那样推送它。 运行 git push
-<remote> <branch>:
+如果希望和别人一起在名为 serverfix 的分支上工作，你可以像推送第一个分支那样推送它。 运行 `git push
+<remote> <branch>`:
+
+下面两条指令的作用相同， “推送本地的 serverfix 分支，将其作为远程仓库的 serverfix 分支
+
+```bash
+git push origin serverfix
+git push origin serverfix:serverfix
+```
+
+ 可以通过这种格式来推送本地分支到一个命名不相同的远程分支。
+
+`git push origin local_name:remote_name` 
+
+如果并不想让远程仓库上的分支叫做 serverfix，下面的指令将本地的 serverfix 分支推送到远程仓库上的 awesomebranch分支
+
+```bash
+git push origin serverfix:awesomebranch
+```
 
 ```shell
 $ git push origin serverfix
@@ -1360,12 +1468,12 @@ should do it
   testing   5ea463a trying something new
 ```
 
-### 拉取
+## 拉取
 
  当 git fetch 命令从服务器上抓取本地没有的数据时，它并不会修改工作目录中的内容。 它只会获取数据然后让你自己合并。 然而，有一个命令叫作 git pull 在大多数情况下它的含义是一个 git fetch 紧接着一个git merge 命令。 如果有一个像之前章节中演示的设置好的跟踪分支，不管它是显式地设置还是通过 clone或 checkout 命令为你创建的，git pull 都会查找当前分支所跟踪的服务器与分支， 从服务器上抓取数据然后尝试合并入那个远程分支。
 **由于 git pull 的魔法经常令人困惑所以通常单独显式地使用 fetch 与 merge 命令会更好一些。**
 
-### 删除远程分支
+## 删除远程分支
 
 可以运行带有 --delete 选项的 git push 命令来删除一个远程分支。 如果想要从服务器上删除 serverfix 分支，运行下面的命令：
 

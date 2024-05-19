@@ -1,6 +1,41 @@
 # 7. 如何使用TensorRT中的INT8
 
+下面的内容实际上是根据TensorRT版本的更新是会变化的，这里的版本是8.4.1
+
+下面的思维导图是自己理解的总结。具体详细内容需要根据自己的TensorRT版本去查询对应的官方文档。
+
+关于历史版本TensorRT的文档在官方文档：[NVIDIA TensorRT](https://docs.nvidia.com/deeplearning/tensorrt/index.html)最下面
+
+[Documentation Archives](https://docs.nvidia.com/deeplearning/tensorrt/archives/index.html)中有对应版本文档的链接。
+
+
+
+模型量化是一种流行的深度学习优化方法，其中模型数据（包括网络参数和激活）从浮点表示转换为低精度表示，通常使用8位整数。这有几个好处：
+
+* 在处理8位整数数据时，NVIDIA GPU使用更快、更便宜的8位张量核来计算卷积和矩阵乘法运算。这会产生更多的计算吞吐量，这在计算受限的层上尤其有效。
+* 将数据从内存移动到计算元件（NVIDIA GPU中的流式多处理器）需要时间和精力，还会产生热量。将激活和参数数据的精度从32位浮点值降低到8位整数，可以减少4倍的数据，从而节省电力并减少产生的热量。
+* 有些层有带宽限制（内存有限）。这意味着它们的实现将大部分时间花在读取和写入数据上，因此减少它们的计算时间并不会减少它们的总体运行时间。带宽绑定层从减少的带宽需求中获益最多。
+* 内存占用空间的减少意味着该模型所需的存储空间更少，参数更新更小，缓存利用率更高，等等。
+
+![image-20240519153232620](7-TensorRT中的INT8/image-20240519153232620.png)
+
+具体看下图非常直观
+
+参考 https://developer.nvidia.com/blog/achieving-fp32-accuracy-for-int8-inference-using-quantization-aware-training-with-tensorrt/
+
+参考![8-bit-signed-integer-quantization](7-TensorRT中的INT8/8-bit-signed-integer-quantization.png)
+
+**如何解决上面的两种误差带来的精度损失？**
+
+![image-20240519153839309](7-TensorRT中的INT8/image-20240519153839309.png)
+
+下图是PTQ的两种方式
+*Figure 3. TensorRT PTQ workflow* (left) *vs. TensorRT INT8 quantization using quantization scales derived from the configured tensors dynamic-range* (right)
+
+![tensorrt-ptq-workflow](7-TensorRT中的INT8/tensorrt-ptq-workflow.png)
+
 ## 7.1. Introduction to Quantization
+
 TensorRT 支持使用 8 位整数来表示量化的浮点值。量化方案是对称均匀量化 - 量化值以有符号 INT8 表示，从量化到非量化值的转换只是一个乘法。在相反的方向上，量化使用倒数尺度，然后是舍入和钳位。
 
 要启用任何量化操作，必须在构建器配置中设置 INT8 标志。
@@ -17,6 +52,8 @@ TensorRT 的[量化工具包](https://github.com/NVIDIA/TensorRT/tree/main/tools
 
 ### 7.1.2. Explicit vs Implicit Quantization
 
+![image-20240519154307201](7-TensorRT中的INT8/image-20240519154307201.png)
+
 量化网络可以用两种方式表示：
 
 在隐式量化网络中，每个量化张量都有一个相关的尺度。在读写张量时，尺度用于隐式量化和反量化值。
@@ -31,6 +68,8 @@ TensorRT 的[量化工具包](https://github.com/NVIDIA/TensorRT/tree/main/tools
 
 ONNX 使用显式量化表示 - 当 PyTorch 或 TensorFlow 中的模型导出到 ONNX 时，框架图中的每个伪量化操作都导出为 Q，然后是 DQ。由于 TensorRT 保留了这些层的语义，因此您可以期望任务准确度非常接近框架中看到的准确度。虽然优化保留了量化和去量化的位置，但它们可能会改变模型中浮点运算的顺序，因此结果不会按位相同。
 请注意，与 TensorRT 的 PTQ 相比，在框架中执行 QAT 或 PTQ 然后导出到 ONNX 将产生一个明确量化的模型。
+
+![image-20240519154318728](7-TensorRT中的INT8/image-20240519154318728.png)
 
 <div class="tablenoborder"><a name="explicit-implicit-quantization__table_tyj_kjm_sqb" shape="rect">
                                     <!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="explicit-implicit-quantization__table_tyj_kjm_sqb" class="table" frame="border" border="1" rules="all">
@@ -98,6 +137,9 @@ ONNX 使用显式量化表示 - 当 PyTorch 或 TensorFlow 中的模型导出到
 有关量化的更多背景信息，请参阅深度学习推理的整数量化：[原理和实证评估](https://arxiv.org/abs/2004.09602)论文。
 
 ### 7.1.3. Per-Tensor and Per-Channel Quantization
+
+![image-20240519154338674](7-TensorRT中的INT8/image-20240519154338674.png)
+
 有两种常见的量化尺度粒度：
 * 每张量量化：其中使用单个比例值（标量）来缩放整个张量。
 * 每通道量化：沿给定轴广播尺度张量 - 对于卷积神经网络，这通常是通道轴。
@@ -123,7 +165,13 @@ TensorRT 仅支持激活张量的每张量量化，但支持卷积、反卷积�
 
 ## 7.2. Setting Dynamic Range
 TensorRT 提供 API 来直接设置动态范围（必须由量化张量表示的范围），以支持在 TensorRT 之外计算这些值的隐式量化。
+
+* 手动API设置动态范围（可以覆盖INT8校准生动态范围）
+* INT8校准生动态范围
+
 API 允许使用最小值和最大值设置张量的动态范围。由于 TensorRT 目前仅支持对称范围，因此使用`max(abs(min_float), abs(max_float))`计算比例。请注意，当`abs(min_float) != abs(max_float)`时，TensorRT 使用比配置更大的动态范围，这可能会增加舍入误差。
+
+* 
 
 将在 INT8 中执行的操作的所有浮点输入和输出都需要动态范围。
 
@@ -143,17 +191,17 @@ API 允许使用最小值和最大值设置张量的动态范围。由于 Tensor
 
 在训练后量化中，TensorRT 计算网络中每个张量的比例值。这个过程称为校准，需要您提供有代表性的输入数据，TensorRT 在其上运行网络以收集每个激活张量的统计信息。
 
-所需的输入数据量取决于应用程序，但实验表明大约 500 张图像足以校准 ImageNet 分类网络。
+所需的输入数据量取决于应用程序，**但实验表明大约 500 张图像足以校准 ImageNet 分类网络。**
 
 给定激活张量的统计数据，决定最佳尺度值并不是一门精确的科学——它需要平衡量化表示中的两个误差源：离散化误差（随着每个量化值表示的范围变大而增加）和截断误差（其中值被限制在可表示范围的极限）。因此，TensorRT 提供了多个不同的校准器，它们以不同的方式计算比例。较旧的校准器还为 GPU 执行层融合，以在执行校准之前优化掉不需要的张量。这在使用 DLA 时可能会出现问题，其中融合模式可能不同，并且可以使用`kCALIBRATE_BEFORE_FUSION`量化标志覆盖。
 
 **IInt8EntropyCalibrator2**
 
-熵校准选择张量的比例因子来优化量化张量的信息论内容，通常会抑制分布中的异常值。这是当前推荐的熵校准器，是 DLA 所必需的。默认情况下，校准发生在图层融合之前。推荐用于基于 CNN 的网络。
+**熵校准`Entropy calibration`**选择张量的比例因子来优化量化张量的信息论内容，通常会抑制分布中的异常值。这是当前推荐的熵校准器，是 DLA 所必需的。默认情况下，校准发生在图层融合之前。**推荐用于基于 CNN 的网络。**
 
 **IInt8MinMaxCalibrator**
 
-该校准器使用激活分布的整个范围来确定比例因子。它似乎更适合 NLP 任务。默认情况下，校准发生在图层融合之前。推荐用于 NVIDIA BERT（谷歌官方实现的优化版本）等网络。
+该校准器使用激活分布的整个范围来确定比例因子。**它似乎更适合 NLP 任务**。默认情况下，校准发生在图层融合之前。推荐用于 NVIDIA BERT（谷歌官方实现的优化版本）等网络。
 
 **IInt8EntropyCalibrator**
 
@@ -161,7 +209,7 @@ API 允许使用最小值和最大值设置张量的动态范围。由于 Tensor
 
 **IInt8LegacyCalibrator**
 
-该校准器与 TensorRT 2.0 EA 兼容。此校准器需要用户参数化，并且在其他校准器产生不良结果时作为备用选项提供。默认情况下，校准发生在图层融合之后。您可以自定义此校准器以实现最大百分比，例如，观察到 99.99% 的最大百分比对于 NVIDIA BERT 具有最佳精度。
+该校准器与 TensorRT 2.0 EA 兼容。此校准器需要用户参数化，并且在其他校准器产生不良结果时作为备用选项提供。默认情况下，校准发生在图层融合之后。**您可以自定义此校准器以实现最大百分比，例如，观察到 99.99% 的最大百分比对于 NVIDIA BERT 具有最佳精度**。
 
 构建 INT8 引擎时，构建器执行以下步骤：
 
@@ -414,7 +462,54 @@ PyTorch 1.8.0 和前版支持 ONNX [QuantizeLinear](https://github.com/onnx/onnx
                               </tbody>
                            </table>
                         </div>
+## 7.6 Calibration file
 
+参考：https://www.ccoderun.ca/programming/doxygen/tensorrt/md_TensorRT_samples_opensource_sampleINT8_README.html#calibration-file
+
+校准文件存储每个网络张量的激活尺度。激活尺度是使用校准算法生成的动态范围来计算的``abs(max_dynamic_range) / 127.0f`. 。如7.3节描述的`IInt8EntropyCalibrator2`就是使用的`熵校准 Entropy calibration`
+
+校准文件名为CalibrationTable＜NetworkName＞，其中＜NetworkName＜是网络的名称，例如mnist。该文件位于TensorRT-x.x.x/data/mnist目录中，其中x.x.x.x是您安装的TensorRT版本。
+
+如果没有找到CalibrationTable文件，构建器将再次运行校准算法来创建它。校准表的内容包括
+
+```bash
+TRT-7000-EntropyCalibration2
+data: 3c008912
+conv1: 3c88edfc
+pool1: 3c88edfc
+conv2: 3ddc858b
+pool2: 3ddc858b
+ip1: 3db6bd6e
+ip2: 3e691968
+prob: 3c010a14
+
+```
+
+其中
+
+* `<TRT xxxx>-<xxxxxxx>`TensorRT版本后面跟着校准算法，例如`EntropyCalibration2`。
+
+* `＜layer name＞：值`对应于网络中每个张量在校准期间确定的浮点激活标度。
+
+`CalibrationTable`文件是在运行校准算法的构建阶段生成的。创建校准文件后，可以读取该文件以进行后续运行，而无需再次运行校准。您可以提供`readCalibrationCache（）`的实现，以从所需位置加载校准文件。如果读取的校准文件与校准器类型（用于生成文件）和`TensorRT`版本兼容，构建器将跳过校准步骤，转而使用校准文件中的每个张量标度值。
+
+# TIPS:
+
+* INT8量化后生成的`engine`输入输出类型会变化吗？
+
+  答：不会变化：生成的engine输入输出还是和onnx的输入输出一样，例如是fp32或者int32等，但是**中间层可能是量化的精度，例如是INT8和INT16的混合**。见下图是官方的profile_tensorrt_resnet50_int8.ipynb文件里面的图片，可以看到输入还是FP32，第一层就是一个`Reformat`转换为了`Int8`。这些信息在使用trtexec生成int8 的engine时都会有打印输出。这是是使用官方的工具绘制出来的engine结构。绘制engine结构的官方工具TREx之后介绍，参考链接https://developer.nvidia.com/blog/exploring-tensorrt-engines-with-trex/
+
+  INT8量化后resnet50的engine输入如下：
+
+  ![image-20240519160545371](7-TensorRT中的INT8/image-20240519160545371.png)
+
+  INT8量化后resnet50的engine输出如下：
+
+  ![image-20240519160746455](7-TensorRT中的INT8/image-20240519160746455.png)
+
+# 附录：
+
+官方：[Achieving FP32 Accuracy for INT8 Inference Using Quantization Aware Training with NVIDIA TensorRT](https://developer.nvidia.com/blog/achieving-fp32-accuracy-for-int8-inference-using-quantization-aware-training-with-tensorrt/)
 
 
 

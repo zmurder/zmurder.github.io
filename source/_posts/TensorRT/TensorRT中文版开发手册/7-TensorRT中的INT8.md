@@ -25,6 +25,10 @@
 
 参考![8-bit-signed-integer-quantization](7-TensorRT中的INT8/8-bit-signed-integer-quantization.png)
 
+下图是官方文档 8-bit-inference-with-tensorrt.pdf文档的描述
+
+![image-20240519164204069](7-TensorRT中的INT8/image-20240519164204069.png)
+
 **如何解决上面的两种误差带来的精度损失？**
 
 ![image-20240519153839309](7-TensorRT中的INT8/image-20240519153839309.png)

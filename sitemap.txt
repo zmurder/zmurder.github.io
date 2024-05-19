@@ -1,3 +1,4 @@
+http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/7-TensorRT%E4%B8%AD%E7%9A%84INT8/
 http://example.com/git/git%E5%9F%BA%E7%A1%80/
 http://example.com/zeromq/1%20ZMQ%E5%9F%BA%E7%A1%80/
 http://example.com/fragment/Docker%E5%9F%BA%E7%A1%80/
@@ -71,7 +72,6 @@ http://example.com/TensorRT/TensorRT%E4%BE%8B%E5%AD%90/
 http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/README/
 http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/9-TensorRT%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%82/
 http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/8-TensorRT%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E5%BD%A2%E7%8A%B6/
-http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/7-TensorRT%E4%B8%AD%E7%9A%84INT8/
 http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/6-TensorRT%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/
 http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/5-TensorRT%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C/
 http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/4-TensorRT%E7%9A%84Python%E6%8E%A5%E5%8F%A3%E8%A7%A3%E6%9E%90/

@@ -50,7 +50,7 @@
 <meta property="og:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/7-TensorRT%E4%B8%AD%E7%9A%84INT8/image-20240519160545371.png">
 <meta property="og:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/7-TensorRT%E4%B8%AD%E7%9A%84INT8/image-20240519160746455.png">
 <meta property="article:published_time" content="2023-08-20T02:53:45.627Z">
-<meta property="article:modified_time" content="2024-05-19T08:42:49.910Z">
+<meta property="article:modified_time" content="2024-06-01T14:13:33.706Z">
 <meta property="article:author" content="奔跑的IC">
 <meta property="article:tag" content="git">
 <meta property="article:tag" content="C">
@@ -261,7 +261,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-05-19 16:42:49" itemprop="dateModified" datetime="2024-05-19T16:42:49+08:00">2024-05-19</time>
+      <time title="修改时间：2024-06-01 22:13:33" itemprop="dateModified" datetime="2024-06-01T22:13:33+08:00">2024-06-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -427,6 +427,7 @@
 <h2 id="7-3-Post-Training-Quantization-using-Calibration"><a href="#7-3-Post-Training-Quantization-using-Calibration" class="headerlink" title="7.3. Post-Training Quantization using Calibration"></a>7.3. Post-Training Quantization using Calibration</h2><p>在训练后量化中，TensorRT 计算网络中每个张量的比例值。这个过程称为校准，需要您提供有代表性的输入数据，TensorRT 在其上运行网络以收集每个激活张量的统计信息。</p>
 <p>所需的输入数据量取决于应用程序，<strong>但实验表明大约 500 张图像足以校准 ImageNet 分类网络。</strong></p>
 <p>给定激活张量的统计数据，决定最佳尺度值并不是一门精确的科学——它需要平衡量化表示中的两个误差源：离散化误差（随着每个量化值表示的范围变大而增加）和截断误差（其中值被限制在可表示范围的极限）。因此，TensorRT 提供了多个不同的校准器，它们以不同的方式计算比例。较旧的校准器还为 GPU 执行层融合，以在执行校准之前优化掉不需要的张量。这在使用 DLA 时可能会出现问题，其中融合模式可能不同，并且可以使用<code>kCALIBRATE_BEFORE_FUSION</code>量化标志覆盖。</p>
+<p><strong>校准批次大小也会影响IInt8EntropyCalibrator2和IInt8EntropyCalibrator的截断误差。</strong>例如，使用多个小批量校准数据进行校准可能导致直方图分辨率降低和标度值差。对于每个校准步骤，TensorRT更新每个激活张量的直方图分布。如果它在激活张量中遇到一个大于当前直方图最大值的值，则直方图范围将增加2的幂以适应新的最大值。这种方法效果很好，除非在最后一个校准步骤中重新分配直方图，导致最终的直方图中有一半是空的。这样的直方图可能产生较差的校准标度。这也使得校准容易受到校准批次顺序的影响，也就是说，不同的校准批次顺序可能导致直方图大小在不同点增加，从而产生略有不同的校准刻度。为了避免这个问题，请使用尽可能大的单个批次进行校准，并确保校准批次具有良好的随机性和相似的分布。</p>
 <p><strong>IInt8EntropyCalibrator2</strong></p>
 <p><strong>熵校准<code>Entropy calibration</code></strong>选择张量的比例因子来优化量化张量的信息论内容，通常会抑制分布中的异常值。这是当前推荐的熵校准器，是 DLA 所必需的。默认情况下，校准发生在图层融合之前。<strong>推荐用于基于 CNN 的网络。</strong></p>
 <p><strong>IInt8MinMaxCalibrator</strong></p>

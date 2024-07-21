@@ -1,3 +1,4 @@
+http://example.com/CUDA/%E5%9F%BA%E7%A1%80/CUDA%20%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/
 http://example.com/Linux/Linux%20shell%E9%87%8D%E5%AE%9A%E5%90%91/
 http://example.com/fragment/%E8%BD%AF%E4%BB%B6%E7%89%88%E6%9C%AC%E5%8F%B7/
 http://example.com/git/git%E5%AD%90%E6%A8%A1%E5%9D%97/

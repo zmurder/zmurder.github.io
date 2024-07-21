@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://example.com/Linux/Linux%20shell%E9%87%8D%E5%AE%9A%E5%90%91/</loc>
+    
+    <lastmod>2024-07-21</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://example.com/fragment/%E8%BD%AF%E4%BB%B6%E7%89%88%E6%9C%AC%E5%8F%B7/</loc>
     
     <lastmod>2024-07-21</lastmod>

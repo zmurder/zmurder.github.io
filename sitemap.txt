@@ -1,3 +1,4 @@
+http://example.com/DeepLearning/%E5%9F%BA%E7%A1%80/%E5%85%B3%E4%BA%8Eonnx%E7%9A%84resize%E5%B1%82/
 http://example.com/CUDA/Nsight/Nsight%20System%E7%BB%8F%E9%AA%8C/
 http://example.com/TensorRT/Calibration%20file/
 http://example.com/Linux/Linux%20shell%E9%87%8D%E5%AE%9A%E5%90%91/

@@ -2,36 +2,33 @@
 
 为什么需要子模块？：某个工作中的项目需要包含并使用另一个项目。 也许是第三方库，或者你独立开发的，用于多个父项目的库。 现在问题来了：你想要把它们当做两个独立的项目，同时又想在一个项目中使用另一个。
 
-Git 子模块是一个独立的 Git 仓库，被嵌套在另一个 Git 仓库中。它允许在一个存储库中引用另一个存储库，并且可以使项目更加模块化、易于维护。
+`Git` 子模块是一个独立的 `Git` 仓库，被嵌套在另一个 `Git` 仓库中。它允许在一个存储库中引用另一个存储库，并且可以使项目更加模块化、易于维护。子模块允许你将一个` Git` 仓库作为另一个 `Git` 仓库的子目录。 它能让你将另一个仓库克隆到自己的项目中，同时还保持提交的独立。
 
-子模块允许你将一个 Git 仓库作为另一个 Git 仓库的子目录。 它能让你将另一个仓库克隆到自己的项目中，同时还保持提交的独立。
+# 2  开始使用子模块 
 
-# 2 开始使用子模块
+## 2.1  添加子模块 
 
-## 2.1 添加子模块
+我们首先将一个已存在的 `Git` 仓库添加为正在工作的仓库的子模块，你可以通过在` git submodule add `后面加上想要跟踪的项目的相对或绝对` URL `来添加新的子模块。在本例中，我们将会添加一个名为`DbConnector` 的库。
 
- 我们首先将一个已存在的 Git 仓库添加为正在工作的仓库的子模块，你可以通过在` git submodule add `后面加上想要跟踪的项目的相对或绝对 URL 来添加新的子模块。在本例中，我们将会添加一个名为“DbConnector” 的库。
-
-```bash
-$ git submodule add https://github.com/chaconinc/DbConnector
-Cloning into 'DbConnector'...
-remote: Counting objects: 11, done.
-remote: Compressing objects: 100% (10/10), done.
-remote: Total 11 (delta 0), reused 11 (delta 0)
-Unpacking objects: 100% (11/11), done.
-Checking connectivity... done.
+```shell
+$git submodule add https: //github.com/chaconinc/DbConnector 
+Cloning into 'DbConnector'... 
+remote: Counting objects: 11, done. 
+remote: Compressing objects: 100% (10/10), done. 
+remote: Total 11 (delta 0), reused 11 (delta 0) 
+Unpacking objects: 100% (11/11), done. 
+Checking connectivity... done. 
 ```
 
-默认情况下，子模块会将子项目放到一个与仓库同名的目录中，本例中是 “DbConnector”。 如果你想要放到
-其他地方，那么可以在命令结尾添加一个不同的路径。
+默认情况下，子模块会将子项目放到一个与仓库同名的目录中，本例中是 `DbConnector`。 如果你想要放到其他地方，那么可以在命令结尾添加一个不同的路径。
 
 如果这时运行`git status`，你会注意到几件事。
 
 ```bash
-$ git status
+$git status
 On branch master
 Your branch is up-to-date with 'origin/master'.
-Changes to be committed:
+Changes to be committed: 
   (use "git reset HEAD <file>..." to unstage)
     new file:   .gitmodules
     new file:   DbConnector
@@ -45,41 +42,18 @@ Changes to be committed:
     url = https://github.com/chaconinc/DbConnector
 ```
 
-如果有多个子模块，该文件中就会有多条记录。 要重点注意的是，该文件也像` .gitignore` 文件一样受到（通
-过）版本控制。 它会和该项目的其他部分一同被拉取推送。 这就是克隆该项目的人知道去哪获得子模块的原
-因。
+如果有多个子模块，该文件中就会有多条记录。 要重点注意的是，该文件也像` .gitignore` 文件一样受到（通过）版本控制。 它会和该项目的其他部分一同被拉取推送。 这就是克隆该项目的人知道去哪获得子模块的原因。
 
  你也可以根据自己的需要，通过在本地执行 `git config submodule.DbConnector.url <私有URL>` 来覆盖这个选项的值。
 
-在 git status 输出中列出的另一个是项目文件夹记录。 如果你运行` git diff`，会看到类似下面的信息：
+在 git status 输出中列出的另一个是项目文件夹记录。 如果你运行` git diff`，会看到类似下面的信息
 
-```bash
-$ git diff --cached DbConnector
-diff --git a/DbConnector b/DbConnector
-new file mode 160000
-index 0000000..c3f01dc
---- /dev/null
-+++ b/DbConnector
-@@ -0,0 +1 @@
-+Subproject commit c3f01dc8862123d317dd46284b05b6892c7b29bc
-```
+![image-20240719195044418](git子模块/image-20240719195044418.png)
 
 虽然 DbConnector 是工作目录中的一个子目录，但 Git 还是会将它视作一个子模块。当你不在那个目录中时，Git 并不会跟踪它的内容， 而是将它看作子模块仓库中的某个具体的提交。
 如果你想看到更漂亮的差异输出，可以给 git diff 传递 --submodule 选项。
 
-```bash
-$ git diff --cached --submodule
-diff --git a/.gitmodules b/.gitmodules
-new file mode 100644
-index 0000000..71fc376
---- /dev/null
-+++ b/.gitmodules
-@@ -0,0 +1,3 @@
-+[submodule "DbConnector"]
-+       path = DbConnector
-+       url = https://github.com/chaconinc/DbConnector
-Submodule DbConnector 0000000...c3f01dc (new submodule)
-```
+![image-20240719195214088](git子模块/image-20240719195214088.png)
 
 当你提交时，会看到类似下面的信息：
 
@@ -174,3 +148,6 @@ Submodule path 'DbConnector': checked out
 任何嵌套的子模块， 请使用简明的` git submodule update --init --recursive`。
 
 ## 2.3 在包含子模块的项目上工作
+
+
+

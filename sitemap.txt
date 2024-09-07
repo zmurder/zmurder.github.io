@@ -1,3 +1,6 @@
+http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/
+http://example.com/TensorRT/trtexec%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/
+http://example.com/TensorRT/QAT/
 http://example.com/DeepLearning/%E5%9F%BA%E7%A1%80/%E5%85%B3%E4%BA%8Eonnx%E7%9A%84resize%E5%B1%82/
 http://example.com/CUDA/Nsight/Nsight%20System%E7%BB%8F%E9%AA%8C/
 http://example.com/TensorRT/Calibration%20file/

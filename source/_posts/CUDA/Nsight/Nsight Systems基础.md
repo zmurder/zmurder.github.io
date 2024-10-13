@@ -54,6 +54,12 @@ int main(void) {
 
 ```
 
+注意：如果希望使用nvtx来进行分析
+
+1. 添加头文件 `#include <nvtx3/nvToolsExt.h>`
+2. 添加编译选项`-lnvToolsExt`
+3. 在nsys-ui中勾选 **Collect NVTX trace** 或者使用CLI中的 flag ` -t nvtx`
+
 ### 1.1.1 分析命令
 
 使用命令行分析时需要有对`/tmp`目录的写权限，否则会报错，参考[General Troubleshooting](https://docs.nvidia.com/nsight-systems/UserGuide/index.html#general-troubleshooting)

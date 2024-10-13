@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://example.com/CUDA/Nsight/Nsight%20Systems%E5%9F%BA%E7%A1%80/</loc>
+    
+    <lastmod>2024-10-13</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://example.com/CUDA/Nsight/cudaMemcpyAsync%E8%80%97%E6%97%B6%E5%BC%82%E5%B8%B8/</loc>
     
     <lastmod>2024-10-13</lastmod>
@@ -147,15 +156,6 @@
   
   <url>
     <loc>http://example.com/fragment/Docker%E5%9F%BA%E7%A1%80/</loc>
-    
-    <lastmod>2024-05-12</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/CUDA/Nsight/Nsight%20Systems%E5%9F%BA%E7%A1%80/</loc>
     
     <lastmod>2024-05-12</lastmod>
     

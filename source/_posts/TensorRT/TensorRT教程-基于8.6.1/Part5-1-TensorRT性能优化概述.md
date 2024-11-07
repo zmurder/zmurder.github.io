@@ -10,7 +10,7 @@
 - part4 TensorRT高级用法
 - part5 常见优化策略
 
-![image-20241022204349489](./Part5.1-TensorRT性能优化概述/image-20241022204349489.png)
+![image-20241022204349489](./Part5-1-TensorRT性能优化概述/image-20241022204349489.png)
 
 这一部分为第五部分，对应上面的常见优化策略
 
@@ -29,7 +29,7 @@
 
 https://resources.nvidia.com/en-us-tensor-core/nvidia-tensor-core-gpu-datasheet
 
-![image-20241106112558549](./Part5.1-TensorRT性能优化概述/image-20241106112558549.png)
+![image-20241106112558549](./Part5-1-TensorRT性能优化概述/image-20241106112558549.png)
 
 ## 2.2 优化目标
 
@@ -108,7 +108,7 @@ GEMM kernel就是计算密集型的kernel。
 
 
 
-![image-20241106143223829](./Part5.1-TensorRT性能优化概述/image-20241106143223829.png)
+![image-20241106143223829](./Part5-1-TensorRT性能优化概述/image-20241106143223829.png)
 
 ## 2.3 优化流程
 
@@ -125,13 +125,13 @@ GEMM kernel就是计算密集型的kernel。
   * 重复的Transpose
   * 没有融合Conv+BatchNorm+Relu
 
-![image-20241106143622136](./Part5.1-TensorRT性能优化概述/image-20241106143622136.png)
+![image-20241106143622136](./Part5-1-TensorRT性能优化概述/image-20241106143622136.png)
 
 上面有两个 Transpose，
 
 从nsys分析timeLine 理解对应的kernel与计算图做关联，可能是一对多或者多对一的关系
 
-![image-20241106145621194](./Part5.1-TensorRT性能优化概述/image-20241106145621194.png)
+![image-20241106145621194](./Part5-1-TensorRT性能优化概述/image-20241106145621194.png)
 
 上图中非GEMM kernel占比超过了50%。
 
@@ -195,14 +195,14 @@ GEMM kernel就是计算密集型的kernel。
 
 * 代码示例：
 
-  ![image-20241106153021106](./Part5.1-TensorRT性能优化概述/image-20241106153021106.png)
+  ![image-20241106153021106](./Part5-1-TensorRT性能优化概述/image-20241106153021106.png)
 
 * 优化效果：
 
   *  去除Transpose后实现两倍吞吐
   * 使用INT8和multi stream可以达到四倍吞吐
 
-![image-20241106153037346](./Part5.1-TensorRT性能优化概述/image-20241106153037346.png)
+![image-20241106153037346](./Part5-1-TensorRT性能优化概述/image-20241106153037346.png)
 
 ## 2.5 判断是否是GEMM kernel
 
@@ -255,7 +255,7 @@ GEMM kernel就是计算密集型的kernel。
 
 另外也可以从nsys的 cuda API看出来，如下图
 
-![image-20241106150908297](./Part5.1-TensorRT性能优化概述/image-20241106150908297.png)
+![image-20241106150908297](./Part5-1-TensorRT性能优化概述/image-20241106150908297.png)
 
 # 附录
 

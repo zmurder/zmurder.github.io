@@ -2,9 +2,39 @@
 
 NVIDIA Nsight计算用户界面（UI）手册。有关工具UI中所有视图、控件和工作流的信息。Visual Profiler的转换指南。
 
+
+
 # 1 简介
 
 对于从Visual Profiler迁移到NVIDIA Nsight Compute的用户，请参阅Visual Profiler过渡指南  [Visual Profiler Transition Guide](https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#nvvp-guide) ，了解功能和工作流程的比较。
+
+下面是Nsight Compute分析的几个方面主要有几个方面：
+
+* GPU利用率低
+  * GPU线程少（修改block和grid）
+  * 寄存器限制
+  * Shared memory太大
+* 显存瓶颈
+  * Cache misses
+  * 带宽限制
+  * 访存类型
+* 指令瓶颈
+  * 算术指令
+  * 控制流
+
+![image-20230110094444621](Nsight Compute官方翻译/image-20230110094444621.png)
+
+![image-20230110095640055](Nsight Compute官方翻译/image-20230110095640055.png)
+
+![image-20230110094954160](Nsight Compute官方翻译/image-20230110094954160.png)
+
+ 利用Nsight Comute进行矩阵转置的kernel分析
+
+![image-20230110101230576](Nsight Compute官方翻译/image-20230110101230576.png)
+
+![image-20230110101426678](Nsight Compute官方翻译/image-20230110101426678.png)
+
+
 
 ## 1.1 概述
 

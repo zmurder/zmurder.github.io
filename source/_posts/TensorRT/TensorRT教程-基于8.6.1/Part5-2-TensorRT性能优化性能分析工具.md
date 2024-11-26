@@ -10,7 +10,7 @@
 - part4 TensorRT高级用法
 - part5 常见优化策略
 
-![image-20241022204349489](./Part5.2-TensorRT性能优化性能分析工具/image-20241022204349489.png)
+![image-20241022204349489](./Part5-2-TensorRT性能优化性能分析工具/image-20241022204349489.png)
 
 这一部分为第五部分，对应上面的常见优化策略
 
@@ -48,14 +48,14 @@
   * CUDA API, kernel launch and execution
   * Libraries: cuBLAS, cuDNN, TensorRT
 
-![image-20241106154049642](./Part5.2-TensorRT性能优化性能分析工具/image-20241106154049642.png)
+![image-20241106154049642](./Part5-2-TensorRT性能优化性能分析工具/image-20241106154049642.png)
 
 ## 3.2 GPU Workload In nsight system
 
 * See CUDA workloads execution time
 * Locate idle GPU times
 
-![image-20241106154724206](./Part5.2-TensorRT性能优化性能分析工具/image-20241106154724206.png)
+![image-20241106154724206](./Part5-2-TensorRT性能优化性能分析工具/image-20241106154724206.png)
 
 上图看出kernel直接有很大的空隙，建议使用cuda  graph，后面会讲到。
 
@@ -63,11 +63,11 @@
 
 kernel执行和kernel lanuch之间的关系
 
-![image-20241106155434532](./Part5.2-TensorRT性能优化性能分析工具/image-20241106155434532.png)
+![image-20241106155434532](./Part5-2-TensorRT性能优化性能分析工具/image-20241106155434532.png)
 
 ## 3.4 NVTX Instrumentation
 
-![image-20241106162313199](./Part5.2-TensorRT性能优化性能分析工具/image-20241106162313199.png)
+![image-20241106162313199](./Part5-2-TensorRT性能优化性能分析工具/image-20241106162313199.png)
 
 ## 3.5 解读nsys timeline
 
@@ -79,7 +79,7 @@ How to map CUDA kernel to model layer
 * TRT在build engine过程中会自动加入一些reformat layer，这些reformat layer在原模型中并不存在，NVTX显示UnnamedLayer
 * TRT对pointwise类算子可以自动生成generatedNativePointwise kernel
 
-![image-20241107101306454](./Part5.2-TensorRT性能优化性能分析工具/image-20241107101306454.png)
+![image-20241107101306454](./Part5-2-TensorRT性能优化性能分析工具/image-20241107101306454.png)
 
 * Myelin作为一个deep learning compiler，有独特的layer和kernel的命名规则
   * TRT 8.6之前Myelin nodes只有非常简单的NVTX tag，类似`{ForeignNode[onnx::MatMul_6493 + (Unnamed Layer* 132)[Shuffle].../down_blocks.0/attentions.0/Reshape_1 + /down_blocks.0/attentions.0/Transpose_1]}`，难以解读。这里面有。。。我们不清楚里面到底都是什么。
@@ -91,7 +91,7 @@ How to map CUDA kernel to model layer
   * Softmax对应的Myelin fused kernel一般命名为`ResNegExpResAddDivMul`
 * 从8.6开始，Myelin开始支持Layernorm、batchNorm、InstanceNorm，不需要编写plugin了。
 
-![image-20241107101610577](./Part5.2-TensorRT性能优化性能分析工具/image-20241107101610577.png)
+![image-20241107101610577](./Part5-2-TensorRT性能优化性能分析工具/image-20241107101610577.png)
 
 有一个讨论`Myelin`的帖子： https://github.com/NVIDIA/TensorRT/issues/2576
 
@@ -111,7 +111,7 @@ My log (this bit is super slow, when building the engine for https://huggingface
 
 Which likely corresponds to the following part of my graph:
 
-![myelin](./Part5.2-TensorRT性能优化性能分析工具/myelin.png)
+![myelin](./Part5-2-TensorRT性能优化性能分析工具/myelin.png)
 
 The user can try and guess why Myelin is used, but since there is no doc, it is hard.
 
@@ -135,7 +135,7 @@ In summary, it is normal that building GPT-J-6B would take ~10 mins since this i
 
 
 
-![image-20241107104617125](./Part5.2-TensorRT性能优化性能分析工具/image-20241107104617125.png)
+![image-20241107104617125](./Part5-2-TensorRT性能优化性能分析工具/image-20241107104617125.png)
 
 # 4 通过trtexec做性能分析
 
@@ -155,9 +155,9 @@ TensorRT Engine可视化工具：[Trex](https://github.com/NVIDIA/TensorRT/tree/
 
 下图右侧每一个方框就代表一个kernel，连接线
 
-![image-20241107105811522](./Part5.2-TensorRT性能优化性能分析工具/image-20241107105811522.png)
+![image-20241107105811522](./Part5-2-TensorRT性能优化性能分析工具/image-20241107105811522.png)
 
-![image-20241107110035439](./Part5.2-TensorRT性能优化性能分析工具/image-20241107110035439.png)
+![image-20241107110035439](./Part5-2-TensorRT性能优化性能分析工具/image-20241107110035439.png)
 
 # 附录：
 

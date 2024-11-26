@@ -10,7 +10,7 @@
 - part4 TensorRT高级用法
 - part5 常见优化策略
 
-![image-20241022204349489](./Part5.3-TensorRT性能优化性能优化技巧/image-20241022204349489.png)
+![image-20241022204349489](./Part5-3-TensorRT性能优化性能优化技巧/image-20241022204349489.png)
 
 这一部分为第五部分，对应上面的常见优化策略
 
@@ -42,7 +42,7 @@
 * 我们可以通过onnx-graphsurgeon和TRT plugin来**手动**实现graph fusion，比如经典的LayerNorm plugin
 * 我们可以利用TRT外部的资源，比如[Cutlass](https://github.com/NVIDIA/cutlass)，[FlashAttn](https://github.com/HazyResearch/flash-attention)， [xformer](https://github.com/facebookresearch/xformers)，将kernel implementation封装到TRT plugin
 
-![image-20241107114654759](./Part5.3-TensorRT性能优化性能优化技巧/image-20241107114654759.png)
+![image-20241107114654759](./Part5-3-TensorRT性能优化性能优化技巧/image-20241107114654759.png)
 
 ## 2.3 Optimizing Layer Performance Layer优化
 
@@ -122,7 +122,7 @@
 
 * Tensor Core对data alignment有要求：
 
-  ![image-20241107145908996](./Part5.3-TensorRT性能优化性能优化技巧/image-20241107145908996.png)
+  ![image-20241107145908996](./Part5-3-TensorRT性能优化性能优化技巧/image-20241107145908996.png)
 
   官网原文
   ```tex
@@ -167,7 +167,7 @@ https://developer.nvidia.com/blog/accelerating-inference-with-sparsity-using-amp
   * 推理阶段，通过设置build_config的SPARSE_WEIGHTS flag来挑选sparse kernel
 * 可以通过trtexec --sparsity=enable/force来快速测试加速效果
 
-![image-20241107161202855](./Part5.3-TensorRT性能优化性能优化技巧/image-20241107161202855.png)
+![image-20241107161202855](./Part5-3-TensorRT性能优化性能优化技巧/image-20241107161202855.png)
 
 
 

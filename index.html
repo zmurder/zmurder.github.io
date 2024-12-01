@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-count">148</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -186,6 +186,107 @@
     </div>
 
     <div class="main-inner index posts-expand">
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/fragment/Win10_11%E4%B8%8B%E5%AE%89%E8%A3%85WSL%E5%B9%B6%E4%BF%AE%E6%94%B9WSL%E9%BB%98%E8%AE%A4%E5%AE%89%E8%A3%85%E7%9B%AE%E5%BD%95%E5%88%B0%E5%85%B6%E4%BB%96%E7%9B%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/fragment/Win10_11%E4%B8%8B%E5%AE%89%E8%A3%85WSL%E5%B9%B6%E4%BF%AE%E6%94%B9WSL%E9%BB%98%E8%AE%A4%E5%AE%89%E8%A3%85%E7%9B%AE%E5%BD%95%E5%88%B0%E5%85%B6%E4%BB%96%E7%9B%98/" class="post-title-link" itemprop="url">Win10_11下安装WSL并修改WSL默认安装目录到其他盘</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2024-12-01 18:14:58 / 修改时间：18:50:16" itemprop="dateCreated datePublished" datetime="2024-12-01T18:14:58+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/fragment/" itemprop="url" rel="index"><span itemprop="name">fragment</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="1-1-安装WSL"><a href="#1-1-安装WSL" class="headerlink" title="1.1 安装WSL"></a>1.1 安装<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=WSL&amp;spm=1001.2101.3001.7020">WSL</a></h1><ul>
+<li><p>前提条件：我们需要保证你的操作系统版本满足 **Windows 10 版本 2004 及更高版本（内部版本 19041 及更高版本）或 Windows 11 ** 才能使用以下命令。</p>
+</li>
+<li><p>启用适用于 Linux 的 Windows 子系统：打开powershell并输入  <code>dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart</code></p>
+</li>
+<li><p>启用虚拟化:以管理员打开powershell输入下列命令：  <code>dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /norestart</code></p>
+</li>
+<li>可选/推荐】设置WSL默认版本为wsl2：<code>wsl --set-default-version 2</code>(WSL2.0相比WSL1.0具备完整的Linux内核、托管VM和完全的系统调用兼容性，所以我们这里使用WSL2.0)</li>
+<li>直接安装/指定内核版本安装  </li>
+<li><p>【直接安装】WSL的安装很简单，可以参考<a target="_blank" rel="noopener" href="https://learn.microsoft.com/zh-cn/windows/wsl/install#change-the-default-linux-distribution-installed">官方手册</a>:  可以使用单个命令安装运行 WSL 所需的一切内容。 在管理员模式下打开 PowerShell 或 Windows 命令提示符，方法是右键单击并选择“以管理员身份运行”，输入<code>wsl --install</code>命令，然后重启计算机。  【指定内核安装】  当然，可以选择指定内核的方式来安装wsl：</p>
+</li>
+<li><p>若要更改安装的发行版，请输入：<code>wsl --install -d &lt;Distribution Name&gt;</code>。 将 <code>&lt;Distribution Name&gt;</code>替换为要安装的发行版的名称。</p>
+</li>
+<li>若要查看可通过在线商店下载的可用 Linux 发行版列表，请输入：<code>wsl --list --online</code>或<code>wsl -l -o</code>。</li>
+<li>若要在初始安装后安装其他 Linux 发行版，还可使用命令：<code>wsl --install -d &lt;Distribution Name&gt;</code>。</li>
+</ul>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/fragment/Win10_11%E4%B8%8B%E5%AE%89%E8%A3%85WSL%E5%B9%B6%E4%BF%AE%E6%94%B9WSL%E9%BB%98%E8%AE%A4%E5%AE%89%E8%A3%85%E7%9B%AE%E5%BD%95%E5%88%B0%E5%85%B6%E4%BB%96%E7%9B%98/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
 
     
 
@@ -930,91 +1031,6 @@
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/protobuf/3%20protobuf%E4%BD%BF%E7%94%A8/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/protobuf/protobuf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/zyd.gif">
-      <meta itemprop="name" content="奔跑的IC">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="奔跑的IC">
-      <meta itemprop="description" content="死磕牛角的IT农民工">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 奔跑的IC">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/protobuf/protobuf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" class="post-title-link" itemprop="url">protobuf学习笔记</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/protobuf/" itemprop="url" rel="index"><span itemprop="name">protobuf</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="1-protobuf概述"><a href="#1-protobuf概述" class="headerlink" title="1 protobuf概述"></a>1 protobuf概述</h1><p>本教程基本上时官方教程的翻译</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/protobuf/protobuf%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>

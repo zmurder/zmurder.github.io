@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="3.1 CUDA执行模型概述前面使用了不同的block和grid来配置核函数，可以看出性能是有差异的，但是为什么会存在差异，如何选择最合适的参数呢？这一章就是解释这些内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3-1 CUDA执行模型概述">
+<meta property="og:url" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="3.1 CUDA执行模型概述前面使用了不同的block和grid来配置核函数，可以看出性能是有差异的，但是为什么会存在差异，如何选择最合适的参数呢？这一章就是解释这些内容。">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/fermi_sm.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/fermi.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/image-20230412151321995.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/3_8.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/70.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/v2-e51fe81b6f8808158b58e895cc4d3e09_r.jpg">
+<meta property="article:published_time" content="2024-12-01T10:13:43.586Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:43.586Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="GPU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/fermi_sm.png">
+
+
+<link rel="canonical" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/","path":"CUDA/CUDA C编程权威指南笔记/3-1 CUDA执行模型概述/","title":"3-1 CUDA执行模型概述"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>3-1 CUDA执行模型概述 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#3-1-CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0"><span class="nav-text">3.1 CUDA执行模型概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-1-GPU%E6%9E%B6%E6%9E%84%E6%A6%82%E8%BF%B0"><span class="nav-text">3.1.1 GPU架构概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-2-Fermi%E6%9E%B6%E6%9E%84"><span class="nav-text">3.1.2 Fermi架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-3-Kepler%E6%9E%B6%E6%9E%84"><span class="nav-text">3.1.3 Kepler架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-4-%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E9%A9%B1%E5%8A%A8%E4%BC%98%E5%8C%96"><span class="nav-text">3.1.4 配置文件驱动优化</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GPU%E7%A1%AC%E4%BB%B6%E6%9E%B6%E6%9E%84"><span class="nav-text">GPU硬件架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#SP%EF%BC%88CUDA-Core%EF%BC%89"><span class="nav-text">SP（CUDA Core）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#SM"><span class="nav-text">SM</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Warp"><span class="nav-text">Warp</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="3-1 CUDA执行模型概述 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          3-1 CUDA执行模型概述
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="3-1-CUDA执行模型概述"><a href="#3-1-CUDA执行模型概述" class="headerlink" title="3.1 CUDA执行模型概述"></a>3.1 CUDA执行模型概述</h1><p>前面使用了不同的block和grid来配置核函数，可以看出性能是有差异的，但是为什么会存在差异，如何选择最合适的参数呢？这一章就是解释这些内容。</p>
+<p>在第2章里，已经介绍了CUDA编程模型中两个主要的抽象概念：内存层次结构和线程层次结构。在本章会重点介绍指令吞吐量，在第4章和第5章里会介绍更多的关于高效内存访问的内容。</p>
+<h2 id="3-1-1-GPU架构概述"><a href="#3-1-1-GPU架构概述" class="headerlink" title="3.1.1 GPU架构概述"></a>3.1.1 GPU架构概述</h2><p>GPU架构是围绕一个流式多处理器（SM）的可扩展阵列搭建的。可以通过复制这种架构的构建块来实现GPU的硬件并行。也就一堆的SM堆出来的。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/fermi_sm.png" class="" title="img">
+<p>上图3-1说明了Fermi SM的关键组件：</p>
+<ul>
+<li>CUDA核心</li>
+<li>共享内存/一级缓存</li>
+<li>寄存器文件</li>
+<li>加载/存储单元</li>
+<li>特殊功能单元</li>
+<li>线程束调度器</li>
+</ul>
+<p>GPU中的每一个SM都能支持数百个线程并发执行</p>
+<p>每个GPU通常有多个SM，所以在一个GPU上并发执行数千个线程是有可能的。</p>
+<p><strong>当启动一个内核网格时，它的线程块被分布在了可用的SM上来执行。线程块一旦被调度到一个SM上，其中的线程只会在那个指定的SM上并发执行</strong>。</p>
+<p><strong>多个线程块可能会被分配到同一个SM上</strong>，而且是根据SM资源的可用性进行调度的。</p>
+<ul>
+<li>CUDA采用单指令多线程（SIMT）架构来管理和执行线程，<strong>每32个线程为一组，被称为线程束（warp）</strong>。</li>
+<li><strong>线程束中的所有线程同时执行相同的指令</strong>。每个线程都有自己的指令地址计数器和寄存器状态，利用自身的数据执行当前的指令。</li>
+<li>每个SM都将分配给它的线程块划分到包含32个线程的线程束中，然后在可用的硬件资源上调度执行。</li>
+<li><strong>一个线程块只能在一个SM上被调度</strong>。一旦线程块在一个SM上被调度，就会保存在该SM上直到执行完成。在同一时间，一个SM可以容纳多个线程块。</li>
+</ul>
+<p>在SM中，<strong>共享内存和寄存器是非常重要的资源</strong>。共享内存被分配在SM上的常驻线程块中，寄存器在线程中被分配。线程块中的线程通过这些资源可以进行相互的合作和通信。<br>尽管线程块里的所有线程都可以逻辑地并行运行，但是并不是所有线程都可以同时在物理层面执行。因此，<strong>线程块里的不同线程可能会以不同的速度前进</strong>。</p>
+<p><strong>SM：GPU架构的核心</strong><br>SM是GPU架构的核心。寄存器和共享内存是SM中的稀缺资源。CUDA将这些资源分配到SM中的所有常驻线程里。因此，这些有限的资源限制了在SM上活跃的线程束数量，活跃的线程束数量对应于SM上的并行量。</p>
+<h2 id="3-1-2-Fermi架构"><a href="#3-1-2-Fermi架构" class="headerlink" title="3.1.2 Fermi架构"></a>3.1.2 Fermi架构</h2><p>Fermi架构是第一个完整的GPU计算架构。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/fermi.png" class="" title="img">
+<ul>
+<li>Fermi的特征是多达512个加速器核心，这被称为CUDA核心。</li>
+<li>每个CUDA核心都有一个全流水线的整数算术逻辑单元（ALU）和一个浮点运算单元（FPU），在这里每个时钟周期执行一个整数或是浮点数指令。</li>
+<li>CUDA核心被组织到16个SM中，每一个SM含有32个CUDA核心。</li>
+<li>Fermi架构有6个384位的GDDR5 DRAM存储器接口，支持多达6GB的全局机载内存，这是许多应用程序关键的计算资源。</li>
+<li>主机接口通过PCIe总线将GPU与CPU相连。GigaThread引擎（图示左侧第三部分）是一个全局调度器，用来分配线程块到SM线程束调度器上。</li>
+<li>Fermi架构包含一个耦合的768 KB的二级缓存，被16个SM所共享。</li>
+</ul>
+<p>在上图中在图3-3中，一个垂直矩形条表示一个SM，包含了以下内容：</p>
+<ul>
+<li>执行单元（CUDA核心）</li>
+<li>调度线程束的调度器和调度单元</li>
+<li>共享内存、寄存器文件和一级缓存</li>
+</ul>
+<p>每个SM有两个线程束调度器和两个指令调度单元。当一个线程块被指定给一个SM时，线程块中的所有线程被分成了线程束。<strong>两个线程束调度器选择两个线程束，再把一个指令从线程束中发送到一个组上。</strong>每个线程束在同一时间执行同一指令，同一个块内的线程束互相切换是没有时间消耗的</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/image-20230412151321995.png" class="" title="image-20230412151321995">
+<p>从表格“CUDA_Occupancy_Calculator.xls”中可以看到具体的值如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Physical Limits for GPU Compute Capability:</th>
+<th>2.0</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Threads per Warp</td>
+<td>32</td>
+</tr>
+<tr>
+<td>Max Warps per Multiprocessor</td>
+<td>48</td>
+</tr>
+<tr>
+<td>Max Thread Blocks per Multiprocessor</td>
+<td>8</td>
+</tr>
+<tr>
+<td>Max Threads per Multiprocessor</td>
+<td>1536</td>
+</tr>
+<tr>
+<td>Maximum Thread Block Size</td>
+<td>1024</td>
+</tr>
+<tr>
+<td>Registers per Multiprocessor</td>
+<td>32768</td>
+</tr>
+<tr>
+<td>Max Registers per Thread Block</td>
+<td>32768</td>
+</tr>
+<tr>
+<td>Max Registers per Thread</td>
+<td>63</td>
+</tr>
+<tr>
+<td>Shared Memory per Multiprocessor (bytes)</td>
+<td>49152</td>
+</tr>
+<tr>
+<td>Max Shared Memory per Block</td>
+<td>49152</td>
+</tr>
+<tr>
+<td>Register allocation unit size</td>
+<td>#N/A</td>
+</tr>
+<tr>
+<td>Register allocation granularity</td>
+<td>warp</td>
+</tr>
+<tr>
+<td>Shared Memory allocation unit size</td>
+<td>128</td>
+</tr>
+<tr>
+<td>Warp allocation granularity</td>
+<td>2</td>
+</tr>
+<tr>
+<td>Shared Memory Per Block (bytes) (CUDA runtime use)</td>
+<td>0</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="3-1-3-Kepler架构"><a href="#3-1-3-Kepler架构" class="headerlink" title="3.1.3 Kepler架构"></a>3.1.3 Kepler架构</h2><p>kepler架构的最突出的一个特点就是内核可以启动内核了，这使得我们可以使用GPU完成简单的递归操作，流程如下。<br><img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/3_8.png" class="" title="img"></p>
+<h2 id="3-1-4-配置文件驱动优化"><a href="#3-1-4-配置文件驱动优化" class="headerlink" title="3.1.4 配置文件驱动优化"></a>3.1.4 配置文件驱动优化</h2><p>CUDA提供了两个主要的性能分析工具：nvvp，独立的可视化分析器；nvprof，命令行分析器。</p>
+<p>nvvp是可视化分析器，它可以可视化并优化CUDA程序的性能。</p>
+<p>nvprof在命令行上收集和显示分析数据。</p>
+<p>主要使用nvprof来提高内核性能。本书还介绍了如何选择合适的计数器和指标，并使用命令行中的nvprof来收集分析数据，以便用于设计优化策略。你还将会学习如何使用不同的计数器和指标，从多个角度分析内核。<br>有3种常见的限制内核性能的因素：</p>
+<ul>
+<li>存储带宽</li>
+<li>计算资源</li>
+<li>指令和内存延迟</li>
+</ul>
+<h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><h2 id="GPU硬件架构"><a href="#GPU硬件架构" class="headerlink" title="GPU硬件架构"></a>GPU硬件架构</h2><h3 id="SP（CUDA-Core）"><a href="#SP（CUDA-Core）" class="headerlink" title="SP（CUDA Core）"></a>SP（CUDA Core）</h3><p><strong>SP（streaming processor）：</strong>最基本的处理单元，也称为CUDA core。最后具体的指令和任务都是在SP上处理的。GPU进行并行计算，也就是很多个SP同时做处理。下面这个图是CUDA Core的结构：<br> <img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/70.png" class="" title="这里写图片描述"><br> 包括控制单元Dispatch Port、Operand Collector，以及浮点计算单元FP Unit、整数计算单元Int Unit，另外还包括计算结果队列。当然还有Compare、Logic、Branch等。相当于微型CPU。</p>
+<h3 id="SM"><a href="#SM" class="headerlink" title="SM"></a>SM</h3><p><strong>SM（streaming multiprocessor）：</strong> <strong>多个SP加上其他的一些资源组成一个SM，也叫GPU大核，其他资源如：warp scheduler，register，shared memory等</strong>。SM可以看做GPU的心脏（对比CPU核心），register和shared memory是SM的稀缺资源。CUDA将这些资源分配给所有驻留在SM中的threads。因此，这些有限的资源就使每个SM中active  warps有非常严格的限制，也就限制了并行能力。如下图是一个SM的基本组成，其中每个绿色小块代表一个SP。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/v2-e51fe81b6f8808158b58e895cc4d3e09_r.jpg" class="" title="img">
+<p>每个SM包含的SP数量依据GPU架构而不同，Fermi架构GF100是32个，GF10X是48个，Kepler架构都是192个，Maxwell都是128个。<strong>当一个kernel启动后，thread会被分配到很多SM中执行。大量的thread可能会被分配到不同的SM，但是同一个block中的thread必然在同一个SM中并行执行。</strong></p>
+<p>要注意的是CUDA Core是Single Precision的，也就是计算float单精度的。双精度Double Precision是那个黄色的模块。所以上面一个SM里边有32个DP Unit，有64个CUDA Core，所以单精度双精度单元数量比是2:1。LD/ST 是load store unit，用来内存操作的。SFU是Special function unit，用来做cuda的intrinsic function的，类似于__cos()这种。</p>
+<p>无论是图形渲染还是cuda编程，最基本的程序并行结构称为thread，这是程序员可以控制的最细粒度的并行单位。<strong>每一个thread在运算单元上就对应一个sp</strong>，所以新闻里常常会笼统的把sp数量等同于thread的并行数量，从而量化不同GPU的性能。多个thread组合起来称为一个block，数量是程序员可以设定的。在同一个block内的thread之间可以相互通信，因为他们可以共用同一个SM内的shared memory(共享储内存)，每一个thread还拥有各自独占的register(寄存器)和local memory(本地储存器)，这几种储存器都是整个GPU中距离运算单元距离最近，速度最快的储存器资源。但是跨block的线程通信不能通过SM内部的储存器，只能通过距离很远，访问时间长达几百个周期的global memory(全局内存，就是指显存)来实现，这个速度实在太慢了，所以cuda程序会尽量避免使用global memory。</p>
+<h3 id="Warp"><a href="#Warp" class="headerlink" title="Warp"></a>Warp</h3><p>多处理器multiprocessor以32个并行线程(称为warp)为一组来创建、管理、调度和执行线程。</p>
+<p>warp中所有threads并行的执行相同的指令。由SM的硬件warp scheduler负责调度。目前每个warp包含32个threads。从一个执行上下文切换到另一个执行上下文没有任何成本，并且在每次指令发出时，warp调度器warp scheduler都会选择一个具有准备执行下一条指令的线程的warp (warp的活动线程the <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#simt-architecture-notes">active threads</a> of the warp)，并向这些线程发出指令。</p>
+<p>参与当前指令的warp线程称为活动<em>active</em>线程，而不在当前指令上的线程称为非活动线程<em>inactive</em> (disabled)。</p>
+<p>所以在分配grid和blocksize时的基本概念是</p>
+<ul>
+<li>保证block中thread数目是32的倍数。这是因为同一个block必须在一个SM内，而SM的Warp调度是32个线程一组进行的。</li>
+<li>避免block太小：每个blcok最少128或256个thread。</li>
+<li>根据kernel需要的资源调整block，多做实验来挖掘最佳配置。</li>
+<li>保证block的数目远大于SM的数目。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/" title="3-1 CUDA执行模型概述">http://example.com/CUDA/CUDA C编程权威指南笔记/3-1 CUDA执行模型概述/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/" rel="prev" title="3-2 理解线程束执行的本质">
+                  <i class="fa fa-chevron-left"></i> 3-2 理解线程束执行的本质
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/2-4%20%E8%AE%BE%E5%A4%87%E7%AE%A1%E7%90%86/" rel="next" title="2-4 设备管理">
+                  2-4 设备管理 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"3c024bcf789e712240a8f29098f790c6"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

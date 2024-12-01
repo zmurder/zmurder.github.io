@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="1 简介​    目前使用TensorRT量化模型有两种方式，一种是使用TensorRT的黑盒模式，给出量化的数据集和量化方法隐形量化，另一种是修改模型结构，插入QDQ节点，再给定数据集或者重新训练模型来调整QDQ节点参数做到计算scales。具体的方式这里就不多说了，以后详谈。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="带有QDQ的onnx用trtexec转engine日日志分析">
+<meta property="og:url" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="1 简介​    目前使用TensorRT量化模型有两种方式，一种是使用TensorRT的黑盒模式，给出量化的数据集和量化方法隐形量化，另一种是修改模型结构，插入QDQ节点，再给定数据集或者重新训练模型来调整QDQ节点参数做到计算scales。具体的方式这里就不多说了，以后详谈。">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907192030127.png">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907192334331.png">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907192456935.png">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907192635279.png">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907192641690.png">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907192911868.png">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907192941647.png">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193002380.png">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193010572.png">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193041739.png">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193155348.png">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193211308.png">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193316094.png">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193406766.png">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193447402.png">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193518406.png">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193604443.png">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193706731.png">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193929500.png">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907194027435.png">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907194058726.png">
+<meta property="og:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907194121489.png">
+<meta property="article:published_time" content="2024-12-01T10:13:45.574Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.574Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="GPU">
+<meta property="article:tag" content="Tensorrt">
+<meta property="article:tag" content="Plugin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907192030127.png">
+
+
+<link rel="canonical" href="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/","path":"TensorRT/带有QDQ的onnx用trtexec转engine日日志分析/","title":"带有QDQ的onnx用trtexec转engine日日志分析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>带有QDQ的onnx用trtexec转engine日日志分析 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="nav-text">1 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-trtexec%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90"><span class="nav-text">2 trtexec日志分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF"><span class="nav-text">2.1 基本信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E5%BC%80%E5%A7%8B%E5%88%86%E6%9E%90model"><span class="nav-text">2.2 开始分析model</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-trtexec%E7%9A%84%E4%BC%98%E5%8C%96%E8%BF%87%E7%A8%8B%E4%BF%A1%E6%81%AF"><span class="nav-text">2.3 trtexec的优化过程信息</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-1-%E5%9B%A0%E4%B8%BA%E4%BD%BF%E7%94%A8%E4%BA%86QDQ%EF%BC%8C%E5%9B%A0%E6%AD%A4%E4%B8%8D%E9%9C%80%E8%A6%81Calibration-%E4%BA%86"><span class="nav-text">2.3.1 因为使用了QDQ，因此不需要Calibration 了</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-2-%E4%BC%98%E5%8C%96%EF%BC%8C%E5%8E%BB%E9%99%A4%E6%97%A0%E7%94%A8%E7%9A%84node%EF%BC%88%E7%BD%AE%E7%A9%BA%E7%AD%89op%EF%BC%89"><span class="nav-text">2.3.2 优化，去除无用的node（置空等op）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-3-%E5%8E%BB%E9%99%A4trt%E4%B8%AD%E7%9A%84%E5%B8%B8%E9%87%8F%E4%BF%A1%E6%81%AF-%E8%9E%8D%E5%90%88%E5%B8%B8%E9%87%8F%E4%BF%A1%E6%81%AF"><span class="nav-text">2.3.3 去除trt中的常量信息 融合常量信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-4-QDQ%E4%BC%98%E5%8C%96"><span class="nav-text">2.3.4 QDQ优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-5-DQ%E8%9E%8D%E5%90%88%E5%92%8C%E5%88%A0%E9%99%A4%E5%B8%B8%E9%87%8F"><span class="nav-text">2.3.5 DQ融合和删除常量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-6-%E6%BF%80%E6%B4%BB%E8%9E%8D%E5%90%88"><span class="nav-text">2.3.6 激活融合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-7-%E8%9E%8D%E5%90%88Conv%E7%9A%84weight%E5%92%8CQ"><span class="nav-text">2.3.7 融合Conv的weight和Q</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-8-Conv%E5%92%8CRelu%E7%9A%84%E8%9E%8D%E5%90%88"><span class="nav-text">2.3.8 Conv和Relu的融合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-9-Concat%E7%9A%84%E4%BC%98%E5%8C%96"><span class="nav-text">2.3.9 Concat的优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-10-%E4%BA%A4%E6%8D%A2%E8%8A%82%E7%82%B9%E4%BD%8D%E7%BD%AE"><span class="nav-text">2.3.10 交换节点位置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-11-%E5%90%88%E5%B9%B6%E9%87%8F%E5%8C%96%E8%8A%82%E7%82%B9"><span class="nav-text">2.3.11 合并量化节点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-12-%E9%87%8F%E5%8C%96%E8%8A%82%E7%82%B9%E4%BA%A4%E6%8D%A2"><span class="nav-text">2.3.12 量化节点交换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-13-%E8%9E%8D%E5%90%88add%E4%B8%8Ediv"><span class="nav-text">2.3.13 融合add与div</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-14-%E8%9E%8D%E5%90%88Conv-BN-Relu"><span class="nav-text">2.3.14 融合Conv BN Relu</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-15-%E8%9E%8D%E5%90%88-Conv%E5%89%8D%E5%90%8E%E7%9A%84Q%E5%92%8CDQ-%E5%B9%B6%E5%88%A0%E9%99%A4Q%E5%92%8CDQ-op"><span class="nav-text">2.3.15 融合 Conv前后的Q和DQ 并删除Q和DQ op</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-16-%E8%9E%8D%E5%90%88%E5%B8%B8%E9%87%8F%E6%9D%83%E9%87%8D%E4%B8%8EConv"><span class="nav-text">2.3.16 融合常量权重与Conv</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-17-%E4%BC%98%E5%8C%96%E5%89%8D%E5%90%8E%E6%A6%82%E8%BF%B0"><span class="nav-text">2.3.17 优化前后概述</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-18-QDQ-op%E7%9A%84%E6%8B%B7%E8%B4%9D"><span class="nav-text">2.3.18 QDQ op的拷贝</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-19-%E5%85%83%E7%B4%A0%E7%BA%A7%E5%8A%A0%E6%B3%95%E8%8A%82%E7%82%B9%E4%BC%98%E5%8C%96"><span class="nav-text">2.3.19 元素级加法节点优化</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-20-%E5%90%88%E5%B9%B6%E5%B1%82-Q-Conv-%E5%92%8C%E5%B8%B8%E9%87%8FConv-weight"><span class="nav-text">2.3.20 合并层 Q Conv 和常量Conv.weight</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-21-%E5%88%A0%E9%99%A4slice%E5%B1%82%EF%BC%8C%E9%87%8D%E5%AE%9A%E5%90%91%E8%BE%93%E5%87%BA"><span class="nav-text">2.3.21 删除slice层，重定向输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-22-%E5%88%A0%E9%99%A4Concat%E5%B1%82%EF%BC%8C%E9%87%8D%E5%AE%9A%E5%90%91%E8%BE%93%E5%87%BA"><span class="nav-text">2.3.22 删除Concat层，重定向输出</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-22-%E6%8F%90%E7%A4%BA%E8%9E%8D%E5%90%88%E4%BC%98%E5%8C%96%E5%AE%8C"><span class="nav-text">2.3.22 提示融合优化完</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-23-%E6%8F%90%E7%A4%BA%E5%B1%82%E8%BF%90%E8%A1%8C%E5%9C%A8GPU%E8%BF%98%E6%98%AFDLA"><span class="nav-text">2.3.23 提示层运行在GPU还是DLA</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-24-%E4%BC%98%E5%8C%96%E8%AE%A1%E7%AE%97"><span class="nav-text">2.3.24 优化计算</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="带有QDQ的onnx用trtexec转engine日日志分析 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          带有QDQ的onnx用trtexec转engine日日志分析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h1><p>​    目前使用TensorRT量化模型有两种方式，一种是使用TensorRT的黑盒模式，给出量化的数据集和量化方法隐形量化，另一种是修改模型结构，插入QDQ节点，再给定数据集或者重新训练模型来调整QDQ节点参数做到计算scales。具体的方式这里就不多说了，以后详谈。</p>
+<p>​    这里只是分析一下插入了QDQ的yolov8模型的 onnx文件在使用trtexec转换为GPU的engine时的日志分析，可以看到TensorRT的详细优化过程，方便我们理解。</p>
+<p>所有的日志和模型都在坚果云的“公用-笔记-trtlog分析.zip”中</p>
+<h1 id="2-trtexec日志分析"><a href="#2-trtexec日志分析" class="headerlink" title="2 trtexec日志分析"></a>2 trtexec日志分析</h1><p>如上所述，我们的带有QDQ的onnx已经是使用训练数据集校准过了，也就是已经有scales的值了。转换为engine的trtexec指令如下：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">trtexec --onnx=yolov8_test_qdq.onnx --int8 --verbose --dumpLayerInfo --dumpProfile --profilingVerbosity=detailed --exportLayerInfo=yolov8_test_qdq.onnxINT8.engine.layerInfo.json --saveEngine=yolov8_test_qdq.onnxINT8.engin</span><br></pre></td></tr></table></figure>
+<p>下面都是trtexec的日志与分析</p>
+<h2 id="2-1-基本信息"><a href="#2-1-基本信息" class="headerlink" title="2.1 基本信息"></a>2.1 基本信息</h2><p>下面提示当前使用的TensorRT版本信息 这里是8.4.12</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&amp;&amp;&amp;&amp; RUNNING TensorRT.trtexec [TensorRT v8412] <span class="comment"># trtexec --onnx=yolov8_test_qdq.onnx --int8 --verbose --dumpLayerInfo --dumpProfile --profilingVerbosity=detailed --exportLayerInfo=yolov8_test_qdq.onnxINT8.engine.layerInfo.json --saveEngine=yolov8_test_qdq.onnxINT8.engine</span></span><br></pre></td></tr></table></figure>
+<p>Batch信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:50] [I] Max batch: explicit batch</span><br></pre></td></tr></table></figure>
+<p>精度信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:50] [I] Precision: FP32+INT8</span><br></pre></td></tr></table></figure>
+<p>输入输出格式</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:50] [I] Input(s)s format: fp32:CHW</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Output(s)s format: fp32:CHW</span><br></pre></td></tr></table></figure>
+<p>推理的bash信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:50] [I] === Inference Options ===</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Batch: Explicit</span><br></pre></td></tr></table></figure>
+<p>硬件信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:50] [I] === Device Information ===</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Selected Device: Orin</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Compute Capability: 8.7</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] SMs: 16</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Compute Clock Rate: 1.275 GHz</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Device Global Memory: 28826 MiB</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Shared Memory per SM: 164 KiB</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Memory Bus Width: 128 bits (ECC disabled)</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Memory Clock Rate: 1.275 GHz</span><br></pre></td></tr></table></figure>
+<p>TensorRT版本信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:50] [I] TensorRT version: 8.4.12</span><br></pre></td></tr></table></figure>
+<p>这一部分的信息不算太长全部贴在下面</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">[[01/10/2024-21:52:50] [I] === Model Options ===</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Format: ONNX</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Model: yolov8_test_qdq.onnx</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Output:</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] === Build Options ===</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Max batch: explicit batch</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Memory Pools: workspace: default, dlaSRAM: default, dlaLocalDRAM: default, dlaGlobalDRAM: default</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] minTiming: 1</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] avgTiming: 8</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Precision: FP32+INT8</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] LayerPrecisions:</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Calibration: Dynamic</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Refit: Disabled</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Sparsity: Disabled</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Safe mode: Disabled</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] DirectIO mode: Disabled</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Restricted mode: Disabled</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Build only: Disabled</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Save engine: yolov8_test_qdq.onnxINT8.engine</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Load engine:</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Profiling verbosity: 2</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Tactic sources: Using default tactic sources</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] timingCacheMode: <span class="built_in">local</span></span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] timingCacheFile:</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Input(s)s format: fp32:CHW</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Output(s)s format: fp32:CHW</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Input build shapes: model</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Input calibration shapes: model</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] === System Options ===</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Device: 0</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] DLACore:</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Plugins:</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] === Inference Options ===</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Batch: Explicit</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Input inference shapes: model</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Iterations: 10</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Duration: 3s (+ 200ms warm up)</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Sleep time: 0ms</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Idle time: 0ms</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Streams: 1</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] ExposeDMA: Disabled</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Data transfers: Enabled</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Spin-<span class="built_in">wait</span>: Disabled</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Multithreading: Disabled</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] CUDA Graph: Disabled</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Separate profiling: Disabled</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Time Deserialize: Disabled</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Time Refit: Disabled</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Inputs:</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] === Reporting Options ===</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Verbose: Enabled</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Averages: 10 inferences</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Percentile: 99</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Dump refittable layers:Disabled</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Dump output: Disabled</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Profile: Enabled</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Export timing to JSON file:</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Export output to JSON file:</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Export profile to JSON file:</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] </span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] === Device Information ===</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Selected Device: Orin</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Compute Capability: 8.7</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] SMs: 16</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Compute Clock Rate: 1.275 GHz</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Device Global Memory: 28826 MiB</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Shared Memory per SM: 164 KiB</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Memory Bus Width: 128 bits (ECC disabled)</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] Memory Clock Rate: 1.275 GHz</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] </span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:50] [I] TensorRT version: 8.4.12</span><br></pre></td></tr></table></figure>
+<h2 id="2-2-开始分析model"><a href="#2-2-开始分析model" class="headerlink" title="2.2 开始分析model"></a>2.2 开始分析model</h2><p>下面的日志代表分析model的开始</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:51] [I] Start parsing network model</span><br></pre></td></tr></table></figure>
+<p>结束</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:52] [I] Finish parsing network model</span><br></pre></td></tr></table></figure>
+<p>包含一个信息是onnx的 opset version 可能是有点参考的，因为不同的版本算子是不太一样的</p>
+<p>剩下的部分就是模型的输入、输出、还有模型的结构和参数信息导入分析</p>
+ <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:52] [V] [TRT] Importing initializer: model.model.backbone0.conv.weight</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Importing initializer: model.model.backbone0.bn.weight</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Importing initializer: model.model.backbone0.bn.bias</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Importing initializer: model.model.backbone0.bn.running_mean</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Importing initializer: model.model.backbone0.bn.running_var</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Importing initializer: model.model.backbone1.conv.weight</span><br></pre></td></tr></table></figure>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:52] [V] [TRT] Importing initializer: onnx::Conv_2651</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Importing initializer: onnx::Conv_2652</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:52] [V] [TRT] Parsing node: /model/backbone0/conv/_input_quantizer/QuantizeLinear [QuantizeLinear]</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Searching <span class="keyword">for</span> input: images</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Searching <span class="keyword">for</span> input: /model/backbone0/conv/_input_quantizer/Constant_2_output_0</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Searching <span class="keyword">for</span> input: /model/backbone0/conv/_input_quantizer/Constant_1_output_0</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] /model/backbone0/conv/_input_quantizer/QuantizeLinear [QuantizeLinear] inputs: [images -&gt; (1, 3, 640, 960)[FLOAT]], [/model/backbone0/conv/_input_quantizer/Constant_2_output_0 -&gt; ()[FLOAT]], [/model/backbone0/conv/_input_quantizer/Constant_1_output_0 -&gt; ()[INT8]],</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Registering layer: /model/backbone0/conv/_input_quantizer/Constant_2_output_0 <span class="keyword">for</span> ONNX node: /model/backbone0/conv/_input_quantizer/Constant_2_output_0</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Registering layer: /model/backbone0/conv/_input_quantizer/Constant_1_output_0 <span class="keyword">for</span> ONNX node: /model/backbone0/conv/_input_quantizer/Constant_1_output_0</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Registering tensor: /model/backbone0/conv/_input_quantizer/QuantizeLinear_output_0 <span class="keyword">for</span> ONNX tensor: /model/backbone0/conv/_input_quantizer/QuantizeLinear_output_0</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] /model/backbone0/conv/_input_quantizer/QuantizeLinear [QuantizeLinear] outputs: [/model/backbone0/conv/_input_quantizer/QuantizeLinear_output_0 -&gt; (1, 3, 640, 960)[FLOAT]],</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:51] [I] Start parsing network model</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:51] [I] [TRT] ----------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:51] [I] [TRT] Input filename:  yolov8_test_qdq.onnx</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:51] [I] [TRT] ONNX IR version:  0.0.7</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:51] [I] [TRT] Opset version:   13</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:51] [I] [TRT] Producer name:   pytorch</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:51] [I] [TRT] Producer version: 2.0.1</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:51] [I] [TRT] Domain:      </span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:51] [I] [TRT] Model version:   0</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:51] [I] [TRT] Doc string:    </span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:51] [I] [TRT] ----------------------------------------------------------------</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Plugin creator already registered - ::GridAnchor_TRT version 1</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Plugin creator already registered - ::GridAnchorRect_TRT version 1</span><br></pre></td></tr></table></figure>
+<h2 id="2-3-trtexec的优化过程信息"><a href="#2-3-trtexec的优化过程信息" class="headerlink" title="2.3 trtexec的优化过程信息"></a>2.3 trtexec的优化过程信息</h2><p>这一部分详细记录了trtexec的优化过程，主要就是层的融合op和融合后的删除op过程。非常的长，慢慢分析</p>
+<h3 id="2-3-1-因为使用了QDQ，因此不需要Calibration-了"><a href="#2-3-1-因为使用了QDQ，因此不需要Calibration-了" class="headerlink" title="2.3.1 因为使用了QDQ，因此不需要Calibration 了"></a>2.3.1 因为使用了QDQ，因此不需要Calibration 了</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:52] [W] [TRT] Calibrator won<span class="string">&#x27;t be used in explicit precision mode. Use quantization aware training to generate network with Quantize/Dequantize nodes.</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-3-2-优化，去除无用的node（置空等op）"><a href="#2-3-2-优化，去除无用的node（置空等op）" class="headerlink" title="2.3.2 优化，去除无用的node（置空等op）"></a>2.3.2 优化，去除无用的node（置空等op）</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:52] [V] [TRT] Applying generic optimizations to the graph <span class="keyword">for</span> inference.</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Original: 755 layers</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] After dead-layer removal: 755 layers</span><br></pre></td></tr></table></figure>
+<h3 id="2-3-3-去除trt中的常量信息-融合常量信息"><a href="#2-3-3-去除trt中的常量信息-融合常量信息" class="headerlink" title="2.3.3 去除trt中的常量信息 融合常量信息"></a>2.3.3 去除trt中的常量信息 融合常量信息</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ConstShuffleFusion on /model/taskhead22/Squeeze_output_0</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] ConstShuffleFusion: Fusing /model/taskhead22/Squeeze_output_0 with (Unnamed Layer* 635) [Shuffle]</span><br></pre></td></tr></table></figure>
+<img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907192030127.png" class="" title="image-20240907192030127">
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ShuffleShuffleFusion on /model/taskhead22/dfl/Reshape</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] ShuffleShuffleFusion: Fusing /model/taskhead22/dfl/Reshape with /model/taskhead22/dfl/Transpose</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907192334331.png" class="" title="image-20240907192334331">
+<h3 id="2-3-4-QDQ优化"><a href="#2-3-4-QDQ优化" class="headerlink" title="2.3.4 QDQ优化"></a>2.3.4 QDQ优化</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:52] [V] [TRT] QDQ graph optimizer - constant folding of Q/DQ initializers</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ConstQDQInitializersFusion on /model/backbone0/conv/_input_quantizer/QuantizeLinear</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ConstQDQInitializersFusion on /model/backbone0/conv/_weight_quantizer/QuantizeLinear</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ConstQDQInitializersFusion on /model/backbone1/conv/_weight_quantizer/QuantizeLinear</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ConstQDQInitializersFusion on /model/backbone2/cv1/conv/_weight_quantizer/QuantizeLinear</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ConstQDQInitializersFusion on /model/backbone2/m.0/cv1/conv/_weight_quantizer/QuantizeLinear</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ConstQDQInitializersFusion on /model/backbone2/m.0/cv2/conv/_weight_quantizer/QuantizeLinear</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>其中的Q节点优化融合</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ConstQDQInitializersFusion on /model/backbone0/conv/_input_quantizer/QuantizeLinear</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ConstQDQInitializersFusion on /model/backbone0/conv/_weight_quantizer/QuantizeLinear</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ConstQDQInitializersFusion on /model/backbone1/conv/_weight_quantizer/QuantizeLinear</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>分别是下图的红框部分，都是融合的QuantizeLinear 除了input 其他都是Conv的weight</p>
+ <img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907192456935.png" class="" title="image-20240907192456935">
+<h3 id="2-3-5-DQ融合和删除常量"><a href="#2-3-5-DQ融合和删除常量" class="headerlink" title="2.3.5 DQ融合和删除常量"></a>2.3.5 DQ融合和删除常量</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ConstQDQInitializersFusion on /model/backbone0/conv/_input_quantizer/DequantizeLinear</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Removing /model/backbone0/conv/_input_quantizer/Constant_2_output_0</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ConstQDQInitializersFusion on /model/backbone0/conv/_weight_quantizer/DequantizeLinear</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Removing /model/backbone0/conv/_weight_quantizer/Constant_output_0</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ConstQDQInitializersFusion on /model/backbone1/conv/_weight_quantizer/DequantizeLinear</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Removing /model/backbone1/conv/_weight_quantizer/Constant_output_0</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ConstQDQInitializersFusion on /model/backbone2/cv1/conv/_weight_quantizer/DequantizeLinear</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Removing /model/backbone2/cv1/conv/_weight_quantizer/Constant_output_0</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ConstQDQInitializersFusion on /model/backbone2/m.0/cv1/conv/_weight_quantizer/DequantizeLinear</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Removing /model/backbone2/m.0/cv1/conv/_weight_quantizer/Constant_output_0</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907192635279.png" class="" title="image-20240907192635279">
+ <img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907192641690.png" class="" title="image-20240907192641690">
+<h3 id="2-3-6-激活融合"><a href="#2-3-6-激活融合" class="headerlink" title="2.3.6 激活融合"></a>2.3.6 激活融合</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ScaleActivationFusion on /model/backbone0/bn/BatchNormalization</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] ScaleActivationFusion: Fusing /model/backbone0/bn/BatchNormalization with /model/backbone0/act/Relu</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ScaleActivationFusion on /model/backbone1/bn/BatchNormalization</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] ScaleActivationFusion: Fusing /model/backbone1/bn/BatchNormalization with /model/backbone1/act/Relu</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ScaleActivationFusion on /model/backbone2/cv1/bn/BatchNormalization</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] ScaleActivationFusion: Fusing /model/backbone2/cv1/bn/BatchNormalization with /model/backbone2/cv1/act/Relu</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ScaleActivationFusion on /model/backbone2/m.0/cv1/bn/BatchNormalization</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>也就是融合下面的BN和Relu</p>
+<img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907192911868.png" class="" title="image-20240907192911868">
+<h3 id="2-3-7-融合Conv的weight和Q"><a href="#2-3-7-融合Conv的weight和Q" class="headerlink" title="2.3.7 融合Conv的weight和Q"></a>2.3.7 融合Conv的weight和Q</h3> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ConstWeightsQuantizeFusion on model.model.backbone0.conv.weight</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] ConstWeightsQuantizeFusion: Fusing model.model.backbone0.conv.weight with /model/backbone0/conv/_weight_quantizer/QuantizeLinear</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ConstWeightsQuantizeFusion on model.model.backbone1.conv.weight</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] ConstWeightsQuantizeFusion: Fusing model.model.backbone1.conv.weight with /model/backbone1/conv/_weight_quantizer/QuantizeLinear</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] Running: ConstWeightsQuantizeFusion on model.model.backbone2.cv1.conv.weight</span><br><span class="line">[01/10/2024-21:52:52] [V] [TRT] ConstWeightsQuantizeFusion: Fusing model.model.backbone2.cv1.conv.weight with /model/backbone2/cv1/conv/_weight_quantizer/QuantizeLinear</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907192941647.png" class="" title="image-20240907192941647">
+<p> 我的理解这里的融合后的就是如下图，上半部分是原始的op，下半部分是融合后的op。蓝色线代表数据是FP32 绿色是INT8。浅绿色框是融合在一起的op</p>
+ <img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193002380.png" class="" title="image-20240907193002380">
+<p> 这个从画出的engine图也可以验证一下</p>
+ <img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193010572.png" class="" title="image-20240907193010572">
+<h3 id="2-3-8-Conv和Relu的融合"><a href="#2-3-8-Conv和Relu的融合" class="headerlink" title="2.3.8 Conv和Relu的融合"></a>2.3.8 Conv和Relu的融合</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: ConvReluFusion on /model/taskhead22/cv4.0/cv4.0.0/conv/Conv</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] ConvReluFusion: Fusing /model/taskhead22/cv4.0/cv4.0.0/conv/Conv with /model/taskhead22/cv4.0/cv4.0.0/act/Relu</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: ConvReluFusion on /model/taskhead22/cv4.0/cv4.0.1/conv/Conv</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] ConvReluFusion: Fusing /model/taskhead22/cv4.0/cv4.0.1/conv/Conv with /model/taskhead22/cv4.0/cv4.0.1/act/Relu</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: ConvReluFusion on /model/taskhead22/cv2.0/cv2.0.1/conv/Conv</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] ConvReluFusion: Fusing /model/taskhead22/cv2.0/cv2.0.1/conv/Conv with /model/taskhead22/cv2.0/cv2.0.1/act/Relu</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>下红框中的Conv和Relu进行融合</p>
+<img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193041739.png" class="" title="image-20240907193041739">
+<h3 id="2-3-9-Concat的优化"><a href="#2-3-9-Concat的优化" class="headerlink" title="2.3.9 Concat的优化"></a>2.3.9 Concat的优化</h3> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: SplitQAcrossPrecedingFanIn on /model/backbone2/Concat</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: SplitQAcrossPrecedingFanIn on /model/backbone4/Concat</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: SplitQAcrossPrecedingFanIn on /model/backbone6/Concat</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: SplitQAcrossPrecedingFanIn on /model/backbone8/Concat</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: SplitQAcrossPrecedingFanIn on /model/backbone9/Concat</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>不太清楚这里是做什么的，从gpt获取的答案是<br> SplitQAcrossPrecedingFanIn 是一个与量化相关的优化操作。在量化过程中，TensorRT 会对模型的各个节点进行分析，并尝试优化量化方案。具体来说，这个操作可能涉及将量化操作分散到前面的分支中，以优化计算流程。</p>
+<p>SplitQAcrossPrecedingFanIn：这个操作可能意味着 TensorRT 正在尝试将量化操作应用于 Concat 操作之前的分支，而不是在 Concat 之后进行统一量化。这样做可以更好地利用低精度计算的优势，同时保持模型的准确性。</p>
+<h3 id="2-3-10-交换节点位置"><a href="#2-3-10-交换节点位置" class="headerlink" title="2.3.10 交换节点位置"></a>2.3.10 交换节点位置</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:53] [V] [TRT] Swapping /model/backbone2/Slice with /model/backbone2/cv2/conv/_input_quantizer/QuantizeLinear_clone_0</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: VanillaSwapWithFollowingQ on /model/backbone4/Slice</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Swapping /model/backbone4/Slice with /model/backbone4/cv2/conv/_input_quantizer/QuantizeLinear_clone_0</span><br></pre></td></tr></table></figure>
+<p>配合上面的Concatc层的信息一起看</p>
+<p>原始的模型是</p>
+<img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193155348.png" class="" title="image-20240907193155348">
+<p>经过转换节点后是如engine下图，大概意思应该就是先在Concat前进行量化，交换了下面的Conv层的Q。</p>
+<img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193211308.png" class="" title="image-20240907193211308">
+<h3 id="2-3-11-合并量化节点"><a href="#2-3-11-合并量化节点" class="headerlink" title="2.3.11 合并量化节点"></a>2.3.11 合并量化节点</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: HorizontalMergeQNodes on /model/backbone2/m.0/cv1/conv/_input_quantizer/QuantizeLinear</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Eliminating /model/backbone2/cv2/conv/_input_quantizer/QuantizeLinear_clone_1 <span class="built_in">which</span> duplicates (Q) /model/backbone2/m.0/cv1/conv/_input_quantizer/QuantizeLinear</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Removing /model/backbone2/cv2/conv/_input_quantizer/QuantizeLinear_clone_1</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: HorizontalMergeQNodes on /model/backbone4/m.0/cv1/conv/_input_quantizer/QuantizeLinear</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Eliminating /model/backbone4/cv2/conv/_input_quantizer/QuantizeLinear_clone_1 <span class="built_in">which</span> duplicates (Q) /model/backbone4/m.0/cv1/conv/_input_quantizer/QuantizeLinear</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Removing /model/backbone4/cv2/conv/_input_quantizer/QuantizeLinear_clone_1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>HorizontalMergeQNodes 这是一个优化操作的名字，用于合并量化节点。这个操作通常涉及到将多个量化节点合并成一个，以减少冗余和提高效率。</p>
+<p>HorizontalMergeQNodes：这个操作的目标是合并具有相似功能的量化节点，以减少重复计算和提高模型的效率。在量化过程中，可能会出现多个量化节点对同一数据流进行处理的情况。通过合并这些节点，可以简化模型并提高性能。</p>
+<p>消除重复的量化节点：第二条日志信息表明，trtexec 发现了一个重复的量化节点，并决定将其删除。这通常是因为在模型中存在多个路径，这些路径在某些点上汇合，并且汇合后的数据流需要经过同样的量化处理。通过删除重复的节点，可以避免不必要的计算，并简化模型。</p>
+<p>Eliminating：表示正在消除或删除某个节点。</p>
+<img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193316094.png" class="" title="image-20240907193316094">
+<h3 id="2-3-12-量化节点交换"><a href="#2-3-12-量化节点交换" class="headerlink" title="2.3.12 量化节点交换"></a>2.3.12 量化节点交换</h3> <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: VanillaSwapWithFollowingQ on /model/backbone2/Slice_1</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Swapping /model/backbone2/Slice_1 with /model/backbone2/m.0/cv1/conv/_input_quantizer/QuantizeLinear</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: VanillaSwapWithFollowingQ on /model/backbone4/Slice_1</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Swapping /model/backbone4/Slice_1 with /model/backbone4/m.0/cv1/conv/_input_quantizer/QuantizeLinear</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>VanillaSwapWithFollowingQ：这是一个优化操作的名字，意味着将一个操作（在这个例子中是 /model/backbone2/Slice_1）与紧随其后的量化操作（QuantizeLinear）进行交换。</p>
+<p>如下图红框</p>
+<img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193406766.png" class="" title="image-20240907193406766">
+<h3 id="2-3-13-融合add与div"><a href="#2-3-13-融合add与div" class="headerlink" title="2.3.13 融合add与div"></a>2.3.13 融合add与div</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: PointWiseFusion on /model/taskhead22/Add_5</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] PointWiseFusion: Fusing /model/taskhead22/Add_5 with /model/taskhead22/Div_1</span><br></pre></td></tr></table></figure>
+<p>这两条信息描述了 TensorRT 在优化模型过程中的一种融合操作。具体来说，PointWiseFusion 是一个优化技术，用于将多个逐元素操作（point-wise operations）融合成一个单一的操作，从而提高计算效率和减少内存开销。</p>
+<img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193447402.png" class="" title="image-20240907193447402">
+<h3 id="2-3-14-融合Conv-BN-Relu"><a href="#2-3-14-融合Conv-BN-Relu" class="headerlink" title="2.3.14 融合Conv BN Relu"></a>2.3.14 融合Conv BN Relu</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: QConvScaleFusion on /model/backbone0/conv/Conv</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Removing /model/backbone0/bn/BatchNormalization + /model/backbone0/act/Relu</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: QConvScaleFusion on /model/backbone1/conv/Conv</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Removing /model/backbone1/bn/BatchNormalization + /model/backbone1/act/Relu</span><br></pre></td></tr></table></figure>
+<p>QConvScaleFusion：这个优化操作的目标是将卷积操作（Convolution）与量化和缩放操作融合在一起，以减少计算开销并提高性能。</p>
+<p>移除 BatchNormalization 和 ReLU 层：在某些情况下，当卷积层后面跟着 BatchNormalization 和 ReLU 层时，TensorRT 可以通过融合操作将这些层的功能合并到卷积层中，从而简化模型并提高计算效率</p>
+<img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193518406.png" class="" title="image-20240907193518406">
+<h3 id="2-3-15-融合-Conv前后的Q和DQ-并删除Q和DQ-op"><a href="#2-3-15-融合-Conv前后的Q和DQ-并删除Q和DQ-op" class="headerlink" title="2.3.15 融合 Conv前后的Q和DQ 并删除Q和DQ op"></a>2.3.15 融合 Conv前后的Q和DQ 并删除Q和DQ op</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: QuantizeDoubleInputNodes on /model/backbone0/conv/Conv</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] QuantizeDoubleInputNodes: fusing /model/backbone1/conv/_input_quantizer/QuantizeLinear into /model/backbone0/conv/Conv</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] QuantizeDoubleInputNodes: fusing (/model/backbone0/conv/_input_quantizer/DequantizeLinear and /model/backbone0/conv/_weight_quantizer/DequantizeLinear) into /model/backbone0/conv/Conv</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Removing /model/backbone1/conv/_input_quantizer/QuantizeLinear</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Removing /model/backbone0/conv/_input_quantizer/DequantizeLinear</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Removing /model/backbone0/conv/_weight_quantizer/DequantizeLinear</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: QuantizeDoubleInputNodes on /model/backbone1/conv/Conv</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] QuantizeDoubleInputNodes: fusing /model/backbone2/cv1/conv/_input_quantizer/QuantizeLinear into /model/backbone1/conv/Conv</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] QuantizeDoubleInputNodes: fusing (/model/backbone1/conv/_input_quantizer/DequantizeLinear and /model/backbone1/conv/_weight_quantizer/DequantizeLinear) into /model/backbone1/conv/Conv</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Removing /model/backbone2/cv1/conv/_input_quantizer/QuantizeLinear</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Removing /model/backbone1/conv/_input_quantizer/DequantizeLinear</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Removing /model/backbone1/conv/_weight_quantizer/DequantizeLinear</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: QuantizeDoubleInputNodes on /model/backbone2/cv1/conv/Conv</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] QuantizeDoubleInputNodes: fusing /model/backbone2/m.0/cv1/conv/_input_quantizer/QuantizeLinear into /model/backbone2/cv1/conv/Conv</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] QuantizeDoubleInputNodes: fusing (/model/backbone2/cv1/conv/_input_quantizer/DequantizeLinear and /model/backbone2/cv1/conv/_weight_quantizer/DequantizeLinear) into /model/backbone2/cv1/conv/Conv</span><br></pre></td></tr></table></figure>
+<p>QuantizeDoubleInputNodes：这个优化操作的目标是将涉及双输入的量化节点与卷积层进行融合。通常情况下，卷积层会有两个输入，一个是输入数据，另一个是权重数据。这两个输入都需要经过量化和去量化操作。<br> 由于上述融合操作已经将量化和去量化操作的功能内嵌到了卷积层中，因此不再需要原来的单独量化和去量化节点。因此，trtexec 移除了这些节点，以简化模型结构并提高计算效率。</p>
+<img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193604443.png" class="" title="image-20240907193604443">
+<h3 id="2-3-16-融合常量权重与Conv"><a href="#2-3-16-融合常量权重与Conv" class="headerlink" title="2.3.16 融合常量权重与Conv"></a>2.3.16 融合常量权重与Conv</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: ConstWeightsFusion on model.model.backbone0.conv.weight + /model/backbone0/conv/_weight_quantizer/QuantizeLinear</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] ConstWeightsFusion: Fusing model.model.backbone0.conv.weight + /model/backbone0/conv/_weight_quantizer/QuantizeLinear with /model/backbone0/conv/Conv</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: ConstWeightsFusion on model.model.backbone1.conv.weight + /model/backbone1/conv/_weight_quantizer/QuantizeLinear</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] ConstWeightsFusion: Fusing model.model.backbone1.conv.weight + /model/backbone1/conv/_weight_quantizer/QuantizeLinear with /model/backbone1/conv/Conv</span><br></pre></td></tr></table></figure>
+<p>ConstWeightsFusion：这是一个优化操作的名字，意味着将常量权重与卷积层进行融合。</p>
+<p>这个优化操作的目标是将卷积层的常量权重与卷积层本身进行融合。通常情况下，卷积层的权重在训练过程中是固定的，而在推理过程中需要对这些权重进行量化处理。通过将权重直接融合到卷积层中，可以减少额外的量化操作，从而提高计算效率。</p>
+<img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193706731.png" class="" title="image-20240907193706731">
+<h3 id="2-3-17-优化前后概述"><a href="#2-3-17-优化前后概述" class="headerlink" title="2.3.17 优化前后概述"></a>2.3.17 优化前后概述</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:53] [V] [TRT] After dupe layer removal: 153 layers</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] After final dead-layer removal: 153 layers</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] After tensor merging: 153 layers</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] QDQ graph optimizer quantization epilogue pass</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] QDQ optimization pass</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] QDQ graph optimizer constant <span class="built_in">fold</span> dangling QDQ pass</span><br></pre></td></tr></table></figure>
+<p>中文就是<br> [01/10/2024-21:52:53] [V] [TRT]去除双重层后:153层</p>
+<p>[01/10/2024-21:52:53] [V] [TRT]最终去除死层后:153层</p>
+<p>[01/10/2024-21:52:53] [V] [TRT]张量合并后:153层</p>
+<p>[01/10/2024-21:52:53] [V] [TRT] QDQ图形优化器量化后记pass</p>
+<p>[01/10/2024-21:52:53] [V] [TRT] QDQ优化pass</p>
+<p>[01/10/2024-21:52:53] [V] [TRT] QDQ图形优化器常数折叠 QDQ pass</p>
+<h3 id="2-3-18-QDQ-op的拷贝"><a href="#2-3-18-QDQ-op的拷贝" class="headerlink" title="2.3.18 QDQ op的拷贝"></a>2.3.18 QDQ op的拷贝</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: QDQToCopy on /model/backbone0/conv/_input_quantizer/QuantizeLinear</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Swap the layer <span class="built_in">type</span> of /model/backbone0/conv/_input_quantizer/QuantizeLinear from QUANTIZE to kQDQ</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: QDQToCopy on /model/head12/cv1/conv/_input_quantizer/QuantizeLinear_clone_0</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Swap the layer <span class="built_in">type</span> of /model/head12/cv1/conv/_input_quantizer/QuantizeLinear_clone_0 from QUANTIZE to kQDQ</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: QDQToCopy on /model/head15/cv1/conv/_input_quantizer/QuantizeLinear_clone_0</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Swap the layer <span class="built_in">type</span> of /model/head15/cv1/conv/_input_quantizer/QuantizeLinear_clone_0 from QUANTIZE to kQDQ</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这个我没找到什么规律</p>
+<h3 id="2-3-19-元素级加法节点优化"><a href="#2-3-19-元素级加法节点优化" class="headerlink" title="2.3.19 元素级加法节点优化"></a>2.3.19 元素级加法节点优化</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: EltwiseAddToPwn on /model/backbone2/m.0/addop/Add</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Swap the layer <span class="built_in">type</span> of /model/backbone2/m.0/addop/Add from ELEMENTWISE to POINTWISE</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Running: EltwiseAddToPwn on /model/backbone4/m.0/addop/Add</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Swap the layer <span class="built_in">type</span> of /model/backbone4/m.0/addop/Add from ELEMENTWISE to POINTWISE</span><br></pre></td></tr></table></figure>
+<p>EltwiseAddToPwn：这个优化操作的目标是将一个元素级加法节点（通常表示为 ELEMENTWISE_ADD）转换为逐点操作（POINTWISE）节点。元素级加法是指两个相同形状的张量逐元素相加，而逐点操作则可以包含更多的操作，如逐元素乘法、加法等。</p>
+<p>ELEMENTWISE_ADD 节点：通常用于表示两个张量之间的逐元素加法操作。</p>
+<p>POINTWISE 节点：这种节点可以表示更为通用的逐点操作，包括但不限于逐元素加法</p>
+<img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907193929500.png" class="" title="image-20240907193929500">
+<h3 id="2-3-20-合并层-Q-Conv-和常量Conv-weight"><a href="#2-3-20-合并层-Q-Conv-和常量Conv-weight" class="headerlink" title="2.3.20 合并层 Q Conv 和常量Conv.weight"></a>2.3.20 合并层 Q Conv 和常量Conv.weight</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:53] [V] [TRT] Merging layers: model.model.taskhead22.cv_occ.0.0.conv.weight + /model/taskhead22/cv_occ.0/cv_occ.0.0/conv/_weight_quantizer/QuantizeLinear + /model/taskhead22/cv_occ.0/cv_occ.0.0/conv/Conv || model.model.taskhead22.cv3.0.0.conv.weight + /model/taskhead22/cv3.0/cv3.0.0/conv/_weight_quantizer/QuantizeLinear + /model/taskhead22/cv3.0/cv3.0.0/conv/Conv || model.model.taskhead22.cv2.0.0.conv.weight + /model/taskhead22/cv2.0/cv2.0.0/conv/_weight_quantizer/QuantizeLinear + /model/taskhead22/cv2.0/cv2.0.0/conv/Conv</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Merging layers: model.model.taskhead22.cv_occ.1.0.conv.weight + /model/taskhead22/cv_occ.1/cv_occ.1.0/conv/_weight_quantizer/QuantizeLinear + /model/taskhead22/cv_occ.1/cv_occ.1.0/conv/Conv || model.model.taskhead22.cv3.1.0.conv.weight + /model/taskhead22/cv3.1/cv3.1.0/conv/_weight_quantizer/QuantizeLinear + /model/taskhead22/cv3.1/cv3.1.0/conv/Conv</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Merging layers: /model/taskhead22/cv2.1/cv2.1.0/conv/Conv + /model/taskhead22/cv2.1/cv2.1.0/act/Relu || /model/taskhead22/cv4.1/cv4.1.0/conv/Conv + /model/taskhead22/cv4.1/cv4.1.0/act/Relu</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Merging layers: model.model.taskhead22.cv_occ.2.0.conv.weight + /model/taskhead22/cv_occ.2/cv_occ.2.0/conv/_weight_quantizer/QuantizeLinear + /model/taskhead22/cv_occ.2/cv_occ.2.0/conv/Conv || model.model.taskhead22.cv2.2.0.conv.weight + /model/taskhead22/cv2.2/cv2.2.0/conv/_weight_quantizer/QuantizeLinear + /model/taskhead22/cv2.2/cv2.2.0/conv/Conv</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Merging layers: /model/taskhead22/cv3.2/cv3.2.0/conv/Conv + /model/taskhead22/cv3.2/cv3.2.0/act/Relu || /model/taskhead22/cv4.2/cv4.2.0/conv/Conv + /model/taskhead22/cv4.2/cv4.2.0/act/Relu</span><br></pre></td></tr></table></figure>
+<img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907194027435.png" class="" title="image-20240907194027435">
+<h3 id="2-3-21-删除slice层，重定向输出"><a href="#2-3-21-删除slice层，重定向输出" class="headerlink" title="2.3.21 删除slice层，重定向输出"></a>2.3.21 删除slice层，重定向输出</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:53] [V] [TRT] Eliminating slice /model/taskhead22/Split_1 by retargeting /model/taskhead22/Split_1_output_0 from /model/taskhead22/Split_1_output_0 to /model/taskhead22/Concat_4_output_0</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Eliminating slice /model/taskhead22/Slice_1 by retargeting /model/taskhead22/Slice_1_output_0 from /model/taskhead22/Slice_1_output_0 to /model/taskhead22/dfl/Reshape_1_output_0</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Eliminating slice /model/taskhead22/Slice by retargeting /model/taskhead22/Slice_output_0 from /model/taskhead22/Slice_output_0 to /model/taskhead22/dfl/Reshape_1_output_0</span><br></pre></td></tr></table></figure>
+<p>/model/taskhead22/dfl/Reshape_1_output_0</p>
+<p>Eliminating slice：表示正在消除一个切片操作</p>
+<p>retargeting /model/taskhead22/Slice_output_0：表示正在重新定向切片操作的输出。</p>
+<p>重新定向输出：通过将切片操作的输出重新定向到另一个节点（通常是另一个操作的输出），可以避免执行切片操作，从而简化模型并提高计算效率。</p>
+<img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907194058726.png" class="" title="image-20240907194058726">
+<h3 id="2-3-22-删除Concat层，重定向输出"><a href="#2-3-22-删除Concat层，重定向输出" class="headerlink" title="2.3.22 删除Concat层，重定向输出"></a>2.3.22 删除Concat层，重定向输出</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:53] [V] [TRT] Eliminating concatenation /model/taskhead22/Concat_10</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Generating copy <span class="keyword">for</span> /model/taskhead22/Div_1_output_0 to /model/taskhead22/Concat_10_output_0 because of stomping hazard.</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Retargeting /model/taskhead22/Sub_1_output_0 to /model/taskhead22/Concat_10_output_0</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Eliminating concatenation /model/taskhead22/Concat_4</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Retargeting /model/taskhead22/Reshape_3_output_0 to /model/taskhead22/Concat_4_output_0</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Retargeting /model/taskhead22/Reshape_4_output_0 to /model/taskhead22/Concat_4_output_0</span><br><span class="line">[01/10/2024-21:52:53] [V] [TRT] Retargeting /model/taskhead22/Reshape_5_output_0 to /model/taskhead22/Concat_4_output_0</span><br></pre></td></tr></table></figure>
+<img src="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/image-20240907194121489.png" class="" title="image-20240907194121489">
+<h3 id="2-3-22-提示融合优化完"><a href="#2-3-22-提示融合优化完" class="headerlink" title="2.3.22 提示融合优化完"></a>2.3.22 提示融合优化完</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:53] [V] [TRT] Graph construction and optimization completed <span class="keyword">in</span> 0.971241 seconds.</span><br></pre></td></tr></table></figure>
+<h3 id="2-3-23-提示层运行在GPU还是DLA"><a href="#2-3-23-提示层运行在GPU还是DLA" class="headerlink" title="2.3.23 提示层运行在GPU还是DLA"></a>2.3.23 提示层运行在GPU还是DLA</h3><p>提示哪些层在DLA上，哪些层在GPU上，因为我的trt指令没有制定DLA，因此所有的层都是在GPU上。DLA下面是空的</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:53] [I] [TRT] ---------- Layers Running on DLA ----------</span><br><span class="line">[01/10/2024-21:52:53] [I] [TRT] ---------- Layers Running on GPU ----------</span><br><span class="line">[01/10/2024-21:52:53] [I] [TRT] [GpuLayer] MYELIN: &#123;ForeignNode[/model/taskhead22/Constant_12_output_0.../model/taskhead22/Unsqueeze_6]&#125;</span><br><span class="line">[01/10/2024-21:52:53] [I] [TRT] [GpuLayer] COPY: /model/backbone0/conv/_input_quantizer/QuantizeLinear</span><br><span class="line">[01/10/2024-21:52:53] [I] [TRT] [GpuLayer] CONVOLUTION: model.model.backbone0.conv.weight + /model/backbone0/conv/_weight_quantizer/QuantizeLinear + /model/backbone0/conv/Conv</span><br><span class="line">[01/10/2024-21:52:53] [I] [TRT] [GpuLayer] CONVOLUTION: model.model.backbone1.conv.weight + /model/backbone1/conv/_weight_quantizer/QuantizeLinear + /model/backbone1/conv/Conv</span><br><span class="line">[01/10/2024-21:52:53] [I] [TRT] [GpuLayer] CONVOLUTION: model.model.backbone2.cv1.conv.weight + /model/backbone2/cv1/conv/_weight_quantizer/QuantizeLinear + /model/backbone2/cv1/conv/Conv</span><br><span class="line">[01/10/2024-21:52:53] [I] [TRT] [GpuLayer] CONVOLUTION: model.model.backbone2.m.0.cv1.conv.weight + /model/backbone2/m.0/cv1/conv/_weight_quantizer/QuantizeLinear + /model/backbone2/m.0/cv1/conv/Conv</span><br><span class="line">[01/10/2024-21:52:53] [I] [TRT] [GpuLayer] CONVOLUTION: model.model.backbone2.m.0.cv2.conv.weight + /model/backbone2/m.0/cv2/conv/_weight_quantizer/QuantizeLinear + /model/backbone2/m.0/cv2/conv/Conv</span><br></pre></td></tr></table></figure>
+<p>MYELIN：这是 TensorRT 的一个优化框架的名字，用于自动识别和优化计算图。</p>
+<p>ForeignNode：表示这是一个外部节点，即 TensorRT 标记为不在其默认优化范围内的节点，但它可能被 MYELIN 优化框架处理。/model/taskhead22/Constant_12_output_0…/model/taskhead22/Unsqueeze_6：这是模型中的一个具体操作序列，从一个常量节点开始，到一个 Unsqueeze 操作结束。</p>
+<p>CONVOLUTION：这是一个优化操作的名字，意味着将卷积相关的操作进行融合</p>
+<h3 id="2-3-24-优化计算"><a href="#2-3-24-优化计算" class="headerlink" title="2.3.24 优化计算"></a>2.3.24 优化计算</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:52:54] [V] [TRT] =============== Computing reformatting costs</span><br><span class="line">[01/10/2024-21:52:54] [V] [TRT] =============== Computing reformatting costs</span><br><span class="line">[01/10/2024-21:52:54] [V] [TRT] =============== Computing reformatting costs</span><br><span class="line">[01/10/2024-21:52:54] [V] [TRT] *************** Autotuning Reformat: Float(1,1,1) -&gt; Float(1:4,1,1) ***************</span><br><span class="line">[01/10/2024-21:52:54] [V] [TRT] --------------- Timing Runner: Optimizer Reformat(&lt;<span class="keyword">in</span>&gt; -&gt; (Unnamed Layer* 689) [Shuffle]_output) (Reformat)</span><br><span class="line">[01/10/2024-21:52:54] [V] [TRT] Tactic: 0x00000000000003e8 Time: 0.00582967</span><br><span class="line">[01/10/2024-21:52:54] [V] [TRT] Tactic: 0x00000000000003ea Time: 0.0141162</span><br><span class="line">[01/10/2024-21:52:54] [V] [TRT] Tactic: 0x0000000000000000 Time: 0.00526547</span><br><span class="line">[01/10/2024-21:52:54] [V] [TRT] Fastest Tactic: 0x0000000000000000 Time: 0.00526547</span><br><span class="line">[01/10/2024-21:52:54] [V] [TRT] *************** Autotuning Reformat: Float(1,1,1) -&gt; Float(1:32,1,1) ***************</span><br><span class="line">[01/10/2024-21:52:54] [V] [TRT] --------------- Timing Runner: Optimizer Reformat(&lt;<span class="keyword">in</span>&gt; -&gt; (Unnamed Layer* 689) [Shuffle]_output) (Reformat)</span><br><span class="line">[01/10/2024-21:52:54] [V] [TRT] Tactic: 0x00000000000003e8 Time: 0.00507949</span><br><span class="line">[01/10/2024-21:52:54] [V] [TRT] Tactic: 0x00000000000003ea Time: 0.0140251</span><br><span class="line">[01/10/2024-21:52:54] [V] [TRT] Tactic: 0x0000000000000000 Time: 0.00603105</span><br><span class="line">[01/10/2024-21:52:54] [V] [TRT] Fastest Tactic: 0x00000000000003e8 Time: 0.00507949</span><br></pre></td></tr></table></figure>
+<p>直到 应该是选中了优化的方式，可能主要是Reformatted</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:55:12] [V] [TRT] &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; Chose Runner Type: Myelin Tactic: 0x0000000000000000</span><br></pre></td></tr></table></figure>
+<p>输出优化后的层信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">[01/10/2024-21:55:12] [V] [TRT] Engine Layer Information:</span><br><span class="line"></span><br><span class="line">Layer(Myelin): &#123;ForeignNode[/model/taskhead22/Constant_12_output_0.../model/taskhead22/Unsqueeze_6]&#125;, Tactic: 0x0000000000000000,  -&gt; /model/taskhead22/Transpose_output_0[Float(2,12600)], /model/taskhead22/Transpose_1_output_0[Float(1,12600)], (Unnamed Layer* 689) [Shuffle]_output[Float(1,1,1)], (Unnamed Layer* 693) [Shuffle]_output[Float(1,1,12600)], /model/taskhead22/Unsqueeze_6_output_0[Float(1,2,12600)]</span><br><span class="line"></span><br><span class="line">Layer(Reformat): /model/backbone0/conv/_input_quantizer/QuantizeLinear, Tactic: 0x00000000000003ea, images[Float(1,3,640,960)] -&gt; /model/backbone0/conv/_input_quantizer/QuantizeLinear_output_0[Int8(1,3,640,960)]</span><br></pre></td></tr></table></figure>
+<p>最后是内存占用还有输入输出的bind信息，<strong>注意这里的bind顺序是和onnx可能不一样的，最好通过名称来判断真正的engine输出的顺序</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"> [01/10/2024-21:55:12] [V] [TRT] Total per-runner device persistent memory is 130560</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:55:12] [V] [TRT] Total per-runner host persistent memory is 168256</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:55:13] [V] [TRT] Allocated activation device memory of size 39865856</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:55:13] [I] [TRT] [MemUsageChange] TensorRT-managed allocation <span class="keyword">in</span> IExecutionContext creation: CPU +0, GPU +39, now: CPU 0, GPU 57 (MiB)</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:55:13] [I] Using random values <span class="keyword">for</span> input images</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:55:13] [I] Created input binding <span class="keyword">for</span> images with dimensions 1x3x640x960</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:55:13] [I] Using random values <span class="keyword">for</span> output output0</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:55:13] [I] Created output binding <span class="keyword">for</span> output0 with dimensions 1x12600x16</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:55:13] [I] Using random values <span class="keyword">for</span> output output1</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:55:13] [I] Created output binding <span class="keyword">for</span> output1 with dimensions 1x12600x128</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:55:13] [I] Layer Information:</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:55:13] [I] [TRT] [MemUsageChange] Init CUDA: CPU +0, GPU +0, now: CPU 1606, GPU 13551 (MiB)</span><br><span class="line"></span><br><span class="line">[01/10/2024-21:55:13] [I] Layers:</span><br><span class="line"></span><br><span class="line">Name: &#123;ForeignNode[/model/taskhead22/Constant_12_output_0.../model/taskhead22/Unsqueeze_6]&#125;, LayerType: Myelin, Inputs: [], Outputs: [ &#123; Name: /model/taskhead22/Transpose_output_0, Location: Device, Dimensions: [2,12600], Format/Datatype: Row major linear FP32 &#125;, &#123; Name: /model/taskhead22/Transpose_1_output_0, Location: Device, Dimensions: [1,12600], Format/Datatype: Row major linear FP32 &#125;, &#123; Name: (Unnamed Layer* 689) [Shuffle]_output, Location: Device, Dimensions: [1,1,1], Format/Datatype: Row major linear FP32 &#125;, &#123; Name: (Unnamed Layer* 693) [Shuffle]_output, Location: Device, Dimensions: [1,1,12600], Format/Datatype: Row major linear FP32 &#125;, &#123; Name: /model/taskhead22/Unsqueeze_6_output_0, Location: Device, Dimensions: [1,2,12600], Format/Datatype: Row major linear FP32 &#125;], TacticValue: 0x0000000000000000</span><br><span class="line"></span><br><span class="line">Name: /model/backbone0/conv/_input_quantizer/QuantizeLinear, LayerType: Reformat, Inputs: [ &#123; Name: images, Location: Device, Dimensions: [1,3,640,960], Format/Datatype: Row major linear FP32 &#125;], Outputs: [ &#123; Name: /model/backbone0/conv/_input_quantizer/QuantizeLinear_output_0, Location: Device, Dimensions: [1,3,640,960], Format/Datatype: Row major Int8 format &#125;], ParameterType: Reformat, Origin: QDQ, TacticValue: 0x00000000000003ea</span><br><span class="line"></span><br><span class="line">Name: model.model.backbone0.conv.weight + /model/backbone0/conv/_weight_quantizer/QuantizeLinear + /model/backbone0/conv/Conv, LayerType: CaskConvolution, Inputs: [ &#123; Name: /model/backbone0/conv/_input_quantizer/QuantizeLinear_output_0, Location: Device, Dimensions: [1,3,640,960], Format/Datatype: Row major Int8 format &#125;], Outputs: [ &#123; Name: /model/backbone1/conv/_input_quantizer/QuantizeLinear_output_0, Location: Device, Dimensions: [1,32,320,480], Format/Datatype: Thirty-two wide channel vectorized row major Int8 format &#125;], ParameterType: Convolution, Kernel: [3,3], PaddingMode: kEXPLICIT_ROUND_DOWN, PrePadding: [1,1], PostPadding: [1,1], Stride: [2,2], Dilation: [1,1], OutMaps: 32, Groups: 1, Weights: &#123;<span class="string">&quot;Type&quot;</span>: <span class="string">&quot;Int8&quot;</span>, <span class="string">&quot;Count&quot;</span>: 864&#125;, Bias: &#123;<span class="string">&quot;Type&quot;</span>: <span class="string">&quot;Float&quot;</span>, <span class="string">&quot;Count&quot;</span>: 32&#125;, HasSparseWeights: 0, Activation: RELU, HasBias: 1, HasReLU: 1, TacticName: ampere_first_layer_filter3x3_imma_fwd, TacticValue: 0x9ae0c0d2fb3a01e5</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/" title="带有QDQ的onnx用trtexec转engine日日志分析">http://example.com/TensorRT/带有QDQ的onnx用trtexec转engine日日志分析/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+              <a href="/tags/Tensorrt/" rel="tag"><i class="fa fa-tag"></i> Tensorrt</a>
+              <a href="/tags/Plugin/" rel="tag"><i class="fa fa-tag"></i> Plugin</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/TensorRT/trtexec%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/" rel="prev" title="trtexec的一些常用指令">
+                  <i class="fa fa-chevron-left"></i> trtexec的一些常用指令
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/cmake/2%20cmake%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/" rel="next" title="2 cmake简单示例">
+                  2 cmake简单示例 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"76e976969fb9e0aa129ab07f813c70e6"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

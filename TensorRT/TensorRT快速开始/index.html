@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="说明翻译官方 Quick Start Guide">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorRT快速开始">
+<meta property="og:url" content="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="说明翻译官方 Quick Start Guide">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220902151211625.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220905104646753.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220905104734436.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220905105556096.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220905110307358.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220905155036479.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220929181124273.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20221012133000649.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220902174353329.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220902175125189-16621122856251.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220902180136970.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220906120536242.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220906120444542.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220902180805653.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220902192604994.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220905111244595.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220905112549388.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220905114540720.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220905132437311.png">
+<meta property="article:published_time" content="2024-12-01T10:13:45.417Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.417Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="GPU">
+<meta property="article:tag" content="Tensorrt">
+<meta property="article:tag" content="DeepLearning">
+<meta property="article:tag" content="Plugin">
+<meta property="article:tag" content="protobuf">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220902151211625.png">
+
+
+<link rel="canonical" href="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/","path":"TensorRT/TensorRT快速开始/","title":"TensorRT快速开始"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>TensorRT快速开始 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%B4%E6%98%8E"><span class="nav-text">说明</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A6%82%E8%A6%81"><span class="nav-text">概要</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B"><span class="nav-text">快速开始</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="nav-text">1 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AE%89%E8%A3%85TensorRT"><span class="nav-text">2 安装TensorRT</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E5%AE%B9%E5%99%A8%E5%AE%89%E8%A3%85-TODO"><span class="nav-text">2.1 容器安装 TODO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-Debian%E6%96%87%E4%BB%B6%E5%AE%89%E8%A3%85-TODO"><span class="nav-text">2.2 Debian文件安装 TODO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-PIP%E5%AE%89%E8%A3%85-TODO"><span class="nav-text">2.3 PIP安装 TODO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-%E7%89%88%E6%9C%AC%E6%9F%A5%E7%9C%8B"><span class="nav-text">2.4 版本查看</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-TensorRT%E6%B5%81%E7%A8%8B%E5%9B%BE"><span class="nav-text">3 TensorRT流程图</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E5%9F%BA%E7%A1%80%E6%B5%81%E7%A8%8B"><span class="nav-text">3.1 基础流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E8%BD%AC%E6%8D%A2%E5%92%8C%E9%83%A8%E7%BD%B2%E9%80%89%E9%A1%B9"><span class="nav-text">3.2. 转换和部署选项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-1-%E8%BD%AC%E6%8D%A2"><span class="nav-text">3.2.1. 转换</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-2-%E9%83%A8%E7%BD%B2"><span class="nav-text">3.2.2. 部署</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E9%80%89%E6%8B%A9%E6%AD%A3%E7%A1%AE%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B"><span class="nav-text">3.3. 选择正确的工作流程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E4%BD%BF%E7%94%A8ONNX%E9%83%A8%E7%BD%B2%E7%A4%BA%E4%BE%8B"><span class="nav-text">4 使用ONNX部署示例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E5%AF%BC%E5%87%BA%E6%A8%A1%E5%9E%8B"><span class="nav-text">4.1 导出模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E9%80%89%E6%8B%A9Batch-Size"><span class="nav-text">4.2 选择Batch Size</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E9%80%89%E6%8B%A9%E4%B8%80%E4%B8%AA%E7%B2%BE%E5%BA%A6"><span class="nav-text">4.3. 选择一个精度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-%E8%BD%AC%E6%8D%A2%E6%A8%A1%E5%9E%8B"><span class="nav-text">4.4. 转换模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-%E9%83%A8%E7%BD%B2%E6%A8%A1%E5%9E%8B"><span class="nav-text">4.5. 部署模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-TF-TRT%E6%A1%86%E6%9E%B6%E9%9B%86%E6%88%90"><span class="nav-text">5. TF-TRT框架集成</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-ONNX%E8%BD%AC%E6%8D%A2%E5%92%8C%E9%83%A8%E7%BD%B2"><span class="nav-text">6 ONNX转换和部署</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E7%94%A8ONNX%E5%AF%BC%E5%87%BA"><span class="nav-text">6.1 用ONNX导出</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-1-%E4%BB%8ETensorFlow%E5%AF%BC%E5%87%BA%E5%88%B0ONNX"><span class="nav-text">6.1.1 从TensorFlow导出到ONNX</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-1-2-%E4%BB%8EPyTorch%E5%AF%BC%E5%87%BA%E5%88%B0ONNX"><span class="nav-text">6.1.2 从PyTorch导出到ONNX</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-%E8%BD%AC%E6%8D%A2ONNX%E5%88%B0TensorRT-Engine"><span class="nav-text">6.2 转换ONNX到TensorRT Engine</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-%E5%B0%86TensorRT%E5%BC%95%E6%93%8E%E9%83%A8%E7%BD%B2%E5%88%B0Python%E8%BF%90%E8%A1%8C%E6%97%B6API"><span class="nav-text">6.3. 将TensorRT引擎部署到Python运行时API</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-%E4%BD%BF%E7%94%A8TensorRT%E8%BF%90%E8%A1%8C%E6%97%B6API"><span class="nav-text">7 使用TensorRT运行时API</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-%E8%AE%BE%E7%BD%AE%E6%B5%8B%E8%AF%95%E5%AE%B9%E5%99%A8%E5%B9%B6%E6%9E%84%E5%BB%BATensorRT%E5%BC%95%E6%93%8E"><span class="nav-text">7.1. 设置测试容器并构建TensorRT引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-2-%E4%BD%BF%E7%94%A8c-%E8%BF%90%E8%A1%8C%E4%B8%80%E4%B8%AAEngine"><span class="nav-text">7.2 使用c++运行一个Engine</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-3-%E5%9C%A8Python%E4%B8%AD%E8%BF%90%E8%A1%8CEngine"><span class="nav-text">7.3 在Python中运行Engine</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#TOPS"><span class="nav-text">TOPS:</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#plan-%E6%96%87%E4%BB%B6"><span class="nav-text">plan 文件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-text">附录</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="TensorRT快速开始 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TensorRT快速开始
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><p>翻译官方 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/quick-start-guide/index.html">Quick Start Guide</a></p>
+<h1 id="概要"><a href="#概要" class="headerlink" title="概要"></a>概要</h1><ul>
+<li>第一章介绍了TensorRT是如何打包和支持的，以及它是如何融入开发者生态系统的。</li>
+<li>第2章提供了TensorRT功能的概览。</li>
+<li>第三章和第四章分别介绍了c++和Python api。</li>
+<li>后续章节将详细介绍高级特性。</li>
+<li>附录包含一个层参考和常见问题的答案。</li>
+</ul>
+<p>NVIDIA TensorRT 8.4.3快速入门指南是想要尝试TensorRT SDK的开发者的一个起点;具体来说，本文演示了如何快速构造一个应用程序，在TensorRT引擎上运行推断。</p>
+<h1 id="快速开始"><a href="#快速开始" class="headerlink" title="快速开始"></a>快速开始</h1><h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h1><p>NVIDIA TensorRT是一个SDK，用于优化经过训练的深度学习模型，以实现高性能推理。TensorRT包含一个用于训练好的深度学习模型的深度学习推理优化器（inference optimizer），以及一个用于执行的运行时（runtime）。</p>
+<p>在您选择的框架中训练了您的深度学习模型之后，TensorRT使您能够以更高的吞吐量和更低的延迟运行它。</p>
+<p>图1。使用TensorRT的典型深度学习开发周期</p>
+<img src="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220902151211625.png" class="" title="image-20220902151211625">
+<p>本指南涵盖了TensorRT中提供的基本安装、转换和运行时选项，以及它们的最佳应用时间。</p>
+<p>以下是每一章的简要总结:</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/quick-start-guide/index.html#install">Installing TensorRT</a></p>
+<p>我们提供多种简单的安装TensorRT的方法。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/quick-start-guide/index.html#ecosystem">The TensorRT Ecosystem</a></p>
+<p>我们描述了一个简单的流程图，以显示不同类型的转换和部署工作流，并讨论它们的优缺点。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/quick-start-guide/index.html#ex-deploy-onnx">Example Deployment Using ONNX</a></p>
+<p>我们将了解转换和部署模型的基本步骤。它将介绍本指南其余部分中使用的概念，并指导您为优化推理执行</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/quick-start-guide/index.html#framework-integration">TF-TRT Framework Integration</a></p>
+<p>我们在Google®Tensorflow（TF）集成的内部介绍了Tensorrt（TRT）。</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/quick-start-guide/index.html#onnx-export">ONNX Conversion and Deployment</a></p>
+<p>我们提供了一个从TensorFlow和PyTorch导出ONNX的广泛概述，</p>
+</li>
+</ul>
+<h1 id="2-安装TensorRT"><a href="#2-安装TensorRT" class="headerlink" title="2 安装TensorRT"></a>2 安装TensorRT</h1><p>TensorRT的安装方法有很多种。本章涵盖了最常用的选项</p>
+<p>容器、Debian文件或独立pip文件。其他的安装方法参考<em><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html">NVIDIA TensorRT Installation Guide</a></em>.</p>
+<h2 id="2-1-容器安装-TODO"><a href="#2-1-容器安装-TODO" class="headerlink" title="2.1 容器安装 TODO"></a>2.1 容器安装 TODO</h2><h2 id="2-2-Debian文件安装-TODO"><a href="#2-2-Debian文件安装-TODO" class="headerlink" title="2.2 Debian文件安装 TODO"></a>2.2 Debian文件安装 TODO</h2><p>本节包含开发人员安装的说明。这种安装方法适用于新用户或希望安装完整的开发人员的用户，包括c++和Python api的示例和文档。</p>
+<ol>
+<li><p>下载指定的版本<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/install-guide/index.html#downloading">Download</a></p>
+<p>自己的电脑驱动版本如下</p>
+<img src="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220905104646753.png" class="" title="image-20220905104646753">
+<img src="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220905104734436.png" class="" title="image-20220905104734436">
+</li>
+<li><p>安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">os=&quot;ubuntuxx04&quot;</span><br><span class="line">tag=&quot;cudax.x-trt8.x.x.x-ga-yyyymmdd&quot;</span><br><span class="line">sudo dpkg -i nv-tensorrt-repo-$&#123;os&#125;-$&#123;tag&#125;_1-1_amd64.deb</span><br><span class="line">sudo apt-key add /var/nv-tensorrt-repo-$&#123;os&#125;-$&#123;tag&#125;/*.pub</span><br><span class="line"></span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install tensorrt</span><br></pre></td></tr></table></figure>
+<p>根据上面的官方指导安装如下：</p>
+<img src="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220905105556096.png" class="" title="image-20220905105556096">
+<p>如果使用Python 3.X</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 -m pip install numpy</span><br><span class="line">sudo apt-get install python3-libnvinfer-dev</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>​        会安装下面的内容</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3-libnvinfer</span><br></pre></td></tr></table></figure>
+<p>如果希望使用TensorFlow</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 -m pip install protobuf</span><br><span class="line">sudo apt-get install uff-converter-tf</span><br></pre></td></tr></table></figure>
+<p>graphsurgeon-tf包也将与上述命令一起安装。</p>
+<p>如果您想运行需要ONNX graphsurgeon的示例，或者在自己的项目中使用Python模块，请运行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">python3 -m pip install numpy onnx</span><br><span class="line">sudo apt-get install onnx-graphsurgeon</span><br></pre></td></tr></table></figure>
+<ol>
+<li><p>验证安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">dpkg -l | grep TensorRT</span><br></pre></td></tr></table></figure>
+<p>您应该看到类似以下内容</p>
+<img src="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220905110307358.png" class="" title="image-20220905110307358">
+</li>
+</ol>
+<img src="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220905155036479.png" class="" title="image-20220905155036479">
+<h2 id="2-3-PIP安装-TODO"><a href="#2-3-PIP安装-TODO" class="headerlink" title="2.3 PIP安装 TODO"></a>2.3 PIP安装 TODO</h2><h2 id="2-4-版本查看"><a href="#2-4-版本查看" class="headerlink" title="2.4 版本查看"></a>2.4 版本查看</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dpkg -l | grep TensorRT #下图显示是8.4.1</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">也可以查看文件find / -name NvInferVersion.h</span></span><br></pre></td></tr></table></figure>
+<img src="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220929181124273.png" class="" title="image-20220929181124273">
+<img src="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20221012133000649.png" class="" title="image-20221012133000649">
+<h1 id="3-TensorRT流程图"><a href="#3-TensorRT流程图" class="headerlink" title="3 TensorRT流程图"></a>3 TensorRT流程图</h1><p>TensorRT是一个大而灵活的项目。它可以处理各种转换和部署工作流，哪个工作流最适合您，这取决于您特定的用例和问题设置。</p>
+<p>TensorRT提供了几种部署选项，但所有的工作流都涉及到将模型转换为优化的表示，TensorRT将其称为引擎（<em>engine</em>）。为你的模型构建一个TensorRT工作流需要选择正确的部署选项，以及正确的引擎创建参数组合。</p>
+<h2 id="3-1-基础流程"><a href="#3-1-基础流程" class="headerlink" title="3.1 基础流程"></a>3.1 基础流程</h2><p>TensorRT用户必须遵循五个基本步骤来转换和部署他们的模型</p>
+<img src="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220902174353329.png" class="" title="image-20220902174353329">
+<p>在一个完整的端到端工作流的背景下，最容易理解这些步骤:在下面使用ONNX的示例部署中，我们将介绍一个简单的框架无关的部署工作流，使用ONNX转换和TensorRT的独立运行时，将一个训练有素的ResNet-50模型转换和部署到TensorRT。</p>
+<h2 id="3-2-转换和部署选项"><a href="#3-2-转换和部署选项" class="headerlink" title="3.2. 转换和部署选项"></a>3.2. 转换和部署选项</h2><p>分为两个部分：</p>
+<ul>
+<li>用户可以按照不同路径将他们的模型转换为优化的TensorRT引擎。</li>
+<li>不同的运行时用户可以使用TensorRT，当部署他们优化的TensorRT引擎时。</li>
+</ul>
+<img src="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220902175125189-16621122856251.png" class="" title="image-20220902175125189">
+<h3 id="3-2-1-转换"><a href="#3-2-1-转换" class="headerlink" title="3.2.1. 转换"></a>3.2.1. 转换</h3><p>使用TensorRT转换模型有三个主要的选项:</p>
+<ul>
+<li>使用TF-TRT</li>
+<li>从.onnx文件自动ONNX转换</li>
+<li>使用TensorRT API手动构建网络(c++或Python)</li>
+</ul>
+<p>为了转换TensorFlow模型，TensorFlow集成(TF-TRT)提供了模型转换和高级运行时API，并且能够退回到TensorFlow实现，当TensorRT不支持特定操作符时。有关支持的操作符的更多信息，请参阅NVIDIA TensorRT支持矩阵中的支持操作部分<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/support-matrix/index.html#supported-ops">Supported Ops</a>。</p>
+<p>对于自动模型转换和部署，一个性能更好的选择是使用ONNX进行转换。ONNX是一个框架无关选项，可以使用TensorFlow、PyTorch等模型。TensorRT支持ONNX文件的自动转换，可以使用TensorRT  API，也可以使用trtexec——我们将在本指南中使用后者。ONNX转换是全有或全无的，这意味着你的模型中的所有操作都必须得到TensorRT的支持(或者你必须为不支持的操作提供定制插件)。ONNX转换的结果是一个奇异的TensorRT引擎，允许比使用TF-TRT更少的开销。</p>
+<p>为了获得最大的性能和可定制性，你也可以使用TensorRT网络定义API手工构造TensorRT引擎。这本质上涉及到在TensorRT操作中构建一个与目标模型相同的网络，只使用TensorRT操作。在创建了TensorRT网络之后，你就可以从框架中导出模型的权重，并将它们加载到TensorRT网络中。对于这种方法，可以在这里找到更多关于使用TensorRT的网络定义API构建模型的信息</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#create_network_c">Creating A Network Definition From Scratch                                           Using The C++ API</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/#create_network_python">Creating A Network Definition From Scratch                                           Using The Python API</a></li>
+</ul>
+<h3 id="3-2-2-部署"><a href="#3-2-2-部署" class="headerlink" title="3.2.2. 部署"></a>3.2.2. 部署</h3><p>使用TensorRT部署模型有三种选择</p>
+<ul>
+<li>部署在Tensorflow中</li>
+<li>使用独立的Tensorrt Runtime API</li>
+<li>使用NVIDIA Triton Inference Server</li>
+</ul>
+<p>不同的部署步骤不同</p>
+<p>当使用TF-TRT时，最常见的部署选项是简单地在TensorFlow中部署。TF-TRT转换会产生一个TensorFlow图，其中插入了TensorRT操作。这意味着你可以像使用Python运行其他TensorFlow模型一样运行TF-TRT模型。</p>
+<p>TensorRT运行时API允许最低的开销和最细粒度的控制，但是TensorRT不支持的操作符必须以插件的形式实现(这里提供了一个预先编写的插件库 <a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/plugin">here</a>)。使用运行时API部署的最常见路径是从框架中使用ONNX导出，这将在下面的章节中介绍。</p>
+<p>最后，NVIDIA Triton Inference Server是一款开源的推理服务软件，可以让团队从任何框架(TensorFlow,  TensorRT, PyTorch, ONNX Runtime，或自定义框架)、本地存储、谷歌云平台或AWS  S3上在任何GPU或cpu基础设施(云、数据中心或边缘)上部署经过训练的AI模型。它是一个灵活的项目，具有几个独特的特性——例如异构模型的并发模型执行和同一模型的多个副本(多个模型副本可以进一步减少延迟)，以及负载平衡和模型分析。如果您必须通过HTTP提供模型——比如在云推理解决方案中——那么它是一个很好的选择。你可以在这里找到NVIDIA Triton Inference Server的主页，在这里找到文档<a target="_blank" rel="noopener" href="https://developer.nvidia.com/nvidia-triton-inference-server">here</a>。</p>
+<h2 id="3-3-选择正确的工作流程"><a href="#3-3-选择正确的工作流程" class="headerlink" title="3.3. 选择正确的工作流程"></a>3.3. 选择正确的工作流程</h2><p>选择如何转换和部署模型的两个最重要的因素是</p>
+<ul>
+<li>您选择的框架。</li>
+<li>目标tensorRT runtime</li>
+</ul>
+<p>下面的流程图涵盖了本指南中涉及的不同工作流程。此流程图将帮助您根据这两个因素选择路径。</p>
+<img src="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220902180136970.png" class="" title="image-20220902180136970">
+<p>这里放一张网络上找到的图</p>
+<img src="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220906120536242.png" class="" title="image-20220906120536242">
+<p>TensorRT 提供 <strong>Caffe、uff 与 ONNX</strong> 三种<a target="_blank" rel="noopener" href="http://www.elecfans.com/tags/解析器/">解析器</a>，其中 Caffe 框架已淡出市场、uff 仅支持 <a target="_blank" rel="noopener" href="http://www.elecfans.com/tags/tensorflow/">TensorFlow</a> 框架，其他的模型就需要透过 ONNX 交换格式进行转换。</p>
+<img src="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220906120444542.png" class="" title="image-20220906120444542">
+<h1 id="4-使用ONNX部署示例"><a href="#4-使用ONNX部署示例" class="headerlink" title="4 使用ONNX部署示例"></a>4 使用ONNX部署示例</h1><p>ONNX转换通常是将ONNX模型自动转换为TensorRT引擎的最有效的方式。在本节中，我们将在部署预训练的ONNX模型的背景下，通过TensorRT转换的五个基本步骤。</p>
+<p>对于这个例子，我们将使用ONNX格式从ONNX模型动物园转换一个预训练的ResNet-50模型;这是一种框架无关的模型格式，可以从大多数主流框架导出，包括TensorFlow和PyTorch。有关ONNX格式的更多信息，请参见此处。<a target="_blank" rel="noopener" href="https://github.com/onnx/onnx/blob/main/docs/IR.md">here</a> 。步骤的细节<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/quickstart/IntroNotebooks/0. Running This Guide.ipynb">here</a></p>
+<img src="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220902180805653.png" class="" title="image-20220902180805653">
+<h2 id="4-1-导出模型"><a href="#4-1-导出模型" class="headerlink" title="4.1 导出模型"></a>4.1 导出模型</h2><p>TensorRT转换的两种主要自动路径需要不同的模型格式才能成功转换模型</p>
+<ul>
+<li>TF-TRT使用TensorFlow SavedModels。</li>
+<li>ONNX路径要求模型保存在ONNX中。</li>
+</ul>
+<p>在这个例子中，我们使用的是ONNX，所以我们需要一个ONNX模型。我们将使用ResNet-50;一个基本的主干视觉模型，可以用于各种目的。我们将使用预训练的ResNet-50 ONNX模型进行分类，该模型包含在ONNX模型动物园中<a target="_blank" rel="noopener" href="https://github.com/onnx/models">ONNX model zoo</a>。</p>
+<p>使用wget从ONNX模型动物园下载一个预训练的ResNet-50模型并解压缩它。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://s3.amazonaws.com/download.onnx/models/opset_8/resnet50.tar.gz</span><br><span class="line">tar xzf resnet50.tar.gz</span><br></pre></td></tr></table></figure>
+<p>解压一个ResNet-50的.onnx文件到resnet50/model.onnx</p>
+<p>在从TensorFlow导出到ONNX或从PyTorch导出到ONNX中，你可以看到我们如何导出ONNX模型，这些模型将使用相同的部署工作流。</p>
+<p> <a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/quick-start-guide/index.html#export-from-tf">Exporting to ONNX from TensorFlow</a>     </p>
+<p> <a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/quick-start-guide/index.html#export-from-pytorch">Exporting to ONNX from PyTorch</a></p>
+<h2 id="4-2-选择Batch-Size"><a href="#4-2-选择Batch-Size" class="headerlink" title="4.2 选择Batch Size"></a>4.2 选择Batch Size</h2><p>批处理大小对TensorRT对我们的模型执行的优化有很大的影响。一般来说，在推断时，当我们优先考虑延迟，我们选择较小的批大小，而当我们要对吞吐量进行优先级排序时，我们选择较大的批大小。批量越大，处理时间越长，但减少了每个样品花费的平均时间。</p>
+<p>如果您直到运行时才知道需要多大的批处理大小，TensorRT能够动态地处理批处理大小。也就是说，固定的批量尺寸使Tensorrt可以进行额外的优化。对于此示例工作流程，我们使用固定批次大小为64。有关处理动态输入大小的更多信息，请参见“<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#work_dynamic_shapes">dynamic shapes</a>.” NVIDIA TENSORRT开发人员指南部分。</p>
+<p>在原始导出ONNX过程中，我们将设置批大小。例子model.onnx，文件已将其批处理大小设置为64。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">BATCH_SIZE=64</span><br></pre></td></tr></table></figure>
+<p>batch的细节<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#batching">Batching</a></p>
+<h2 id="4-3-选择一个精度"><a href="#4-3-选择一个精度" class="headerlink" title="4.3. 选择一个精度"></a>4.3. 选择一个精度</h2><p>推理对数值精度的要求通常低于训练。稍微注意一下，较低的精度可以提供更快的计算速度和较低的内存消耗，而不会牺牲任何有意义的精度。TensorRT支持TF32、FP32、FP16和INT8精度。关于精度的更多信息，请参考NVIDIA TensorRT开发者指南中的降低精度一节。<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#reduced-precision">Reduced Precision</a></p>
+<p>FP32是大多数框架的默认训练精度，所以我们将在这里使用FP32进行推断。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import numpy as np</span><br><span class="line">PRECISION = np.float32</span><br></pre></td></tr></table></figure>
+<p>我们设置了TensorRT引擎在运行时应该使用的精度</p>
+<h2 id="4-4-转换模型"><a href="#4-4-转换模型" class="headerlink" title="4.4. 转换模型"></a>4.4. 转换模型</h2><p>ONNX转换是自动TensorRT转换中最通用和性能最好的路径之一。它适用于TensorFlow、PyTorch和许多其他框架。</p>
+<p>有一些工具可以帮助你将模型从ONNX转换到TensorRT引擎。一种常见的方法是使用trtexec——TensorRT附带的一个命令行工具，它可以将ONNX模型转换为TensorRT引擎并分析它们。</p>
+<p>我们可以像下面这样运行这个转换</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">trtexec --onnx=resnet50/model.onnx --saveEngine=resnet_engine.trt</span><br></pre></td></tr></table></figure>
+<p>这将将我们的resnet50/model.onnx转换为名为resnet_engine.trt的TensorRT engine。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">--onnx= #onnx的路经</span><br><span class="line">--saveEngine= #生成的路经</span><br></pre></td></tr></table></figure>
+<h2 id="4-5-部署模型"><a href="#4-5-部署模型" class="headerlink" title="4.5. 部署模型"></a>4.5. 部署模型</h2><p>在我们成功创建了TensorRT引擎后，我们必须决定如何使用TensorRT运行它。</p>
+<p>TensorRT运行时有两种类型:一种是具有c++和Python绑定的独立运行时，另一种是TensorFlow的本地集成。在本节中，我们将使用一个调用独立运行时的简化包装器(ONNXClassifierWrapper)。我们将生成一批随机化的虚拟数据，并使用ONNXClassifierWrapper对该批数据运行推断。<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/quickstart/IntroNotebooks/5. Understanding TensorRT Runtimes.ipynb">Understanding TensorRT Runtimes</a></p>
+<ul>
+<li><p>设置ONNXClassifierWrapper（上面设置的BATCH_SIZE为64）</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from onnx_helper import ONNXClassifierWrapper</span><br><span class="line">N_CLASSES = 1000 # Our ResNet-50 is trained on a 1000 class ImageNet task</span><br><span class="line">trt_model = ONNXClassifierWrapper(&quot;resnet_engine.trt&quot;, [BATCH_SIZE, N_CLASSES], target_dtype = PRECISION)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>生成虚拟批处理。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BATCH_SIZE=32</span><br><span class="line">dummy_input_batch = np.zeros((BATCH_SIZE, 224, 224, 3))</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将一批数据馈送到我们的引擎中并获得我们的预测。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">predictions = trt_model.predict(dummy_input_batch)</span><br></pre></td></tr></table></figure>
+<p>注意，在运行第一批之前，包装器不会加载和初始化引擎，因此该批处理通常需要一段时间。</p>
+</li>
+</ul>
+<p>有关Tensorrt API的更多信息<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/api/index.html">API Reference</a>. </p>
+<h1 id="5-TF-TRT框架集成"><a href="#5-TF-TRT框架集成" class="headerlink" title="5. TF-TRT框架集成"></a>5. TF-TRT框架集成</h1><p>TF-TRT集成为开始使用TensorRT提供了一种简单而灵活的方式。TF-TRT是TensorRT的高级Python接口，直接与TensorFlow模型一起工作。它允许你将TensorFlow SavedModels转换为TensorRT优化模型，并使用高级API在Python中运行它们。</p>
+<p>TF-TRT提供了一个转换路径和一个Python运行时，它允许你像运行其他TensorFlow模型一样运行一个优化的模型。这有很多优点，值得注意的是TF-TRT能够转换包含受支持和不受支持层混合的模型，而不需要创建自定义插件，通过分析模型并将子图传递给TensorRT，在可能的情况下独立转换为引擎。</p>
+<p>从视觉上看，TF-TRT笔记本演示了如何通过TensorRT遵循这条路径</p>
+<img src="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220902192604994.png" class="" title="image-20220902192604994">
+<h1 id="6-ONNX转换和部署"><a href="#6-ONNX转换和部署" class="headerlink" title="6 ONNX转换和部署"></a>6 ONNX转换和部署</h1><p>ONNX交换格式提供了一种从许多框架导出模型的方式，包括PyTorch, TensorFlow和TensorFlow  2，用于TensorRT运行时。使用ONNX导入模型需要ONNX支持模型中的操作符，而要提供TensorRT不支持的任何操作符的插件实现。(TensorRT的插件库可以在这里找到)。 <a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/plugin">here</a></p>
+<h2 id="6-1-用ONNX导出"><a href="#6-1-用ONNX导出" class="headerlink" title="6.1 用ONNX导出"></a>6.1 用ONNX导出</h2><p>ONNX模型可以使用ONNX项目的keras2onnx和tf2onnx工具从TensorFlow模型轻松生成。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/quickstart/IntroNotebooks/3. Using Tensorflow 2 through ONNX.ipynb">This notebook</a>显示了如何从keras/tf2  resnet-50型号中生成ONNX模型，如何使用Trtexec将这些ONNX型号转换为TensorRT engines，以及如何使用Python  Tensorrt运行时将一批数据送到Tensorrt Engine中。</p>
+<h3 id="6-1-1-从TensorFlow导出到ONNX"><a href="#6-1-1-从TensorFlow导出到ONNX" class="headerlink" title="6.1.1 从TensorFlow导出到ONNX"></a>6.1.1 从TensorFlow导出到ONNX</h3><p>TensorFlow可以通过ONNX导出，并在我们的一个TensorRT运行时中运行。这里，我们提供了从TensorFlow导出ONNX模型所需的步骤。更多信息，请参考 <a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/quickstart/IntroNotebooks/3. Using Tensorflow 2 through ONNX.ipynb">Using Tensorflow 2 through ONNX</a>。</p>
+<img src="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220905111244595.png" class="" title="image-20220905111244595">
+<p>步骤：</p>
+<ol>
+<li><p>从keras.applications中导入ResNet-50模型。这将加载ResNet-50预训练权重的副本。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from tensorflow.keras.applications import ResNet50</span><br><span class="line"></span><br><span class="line">model = ResNet50(weights=&#x27;imagenet&#x27;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将Resnet-50模型转换为ONNX格式。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">import tf2onnx</span><br><span class="line"></span><br><span class="line">model.save(&#x27;my_model&#x27;)</span><br><span class="line">!python -m tf2onnx.convert --saved-model my_model --output temp.onnx</span><br><span class="line">onnx_model = onnx.load_model(&#x27;temp.onnx&#x27;)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>在ONNX文件中设置一个显式批处理大小。</p>
+<p>默认情况下，TensorFlow不显式设置批处理大小。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">import onnx</span><br><span class="line"></span><br><span class="line">BATCH_SIZE = 64</span><br><span class="line">inputs = onnx_model.graph.input</span><br><span class="line">for input in inputs:</span><br><span class="line">    dim1 = input.type.tensor_type.shape.dim[0]</span><br><span class="line">    dim1.dim_value = BATCH_SIZE</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>保存 ONNX文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">model_name = &quot;resnet50_onnx_model.onnx&quot;</span><br><span class="line">onnx.save_model(onnx_model, model_name)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="6-1-2-从PyTorch导出到ONNX"><a href="#6-1-2-从PyTorch导出到ONNX" class="headerlink" title="6.1.2 从PyTorch导出到ONNX"></a>6.1.2 从PyTorch导出到ONNX</h3><p>将PyTorch模型转换为TensorRT的一种方法是将一个PyTorch模型导出到ONNX，然后转换为TensorRT引擎。更多详细信息，请参见<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/quickstart/IntroNotebooks/4. Using PyTorch through ONNX.ipynb">Using PyTorch with TensorRT through ONNX</a></p>
+<img src="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220905112549388.png" class="" title="image-20220905112549388">
+<p>步骤：</p>
+<ol>
+<li><p>从torchvision导入ResNet-50模型。这将加载ResNet-50预训练权重的副本。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">import torchvision.models as models</span><br><span class="line"></span><br><span class="line">resnext50_32x4d = models.resnext50_32x4d(pretrained=True)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>从Pytorch保存ONNX文件。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">import torch</span><br><span class="line"></span><br><span class="line">BATCH_SIZE = 64</span><br><span class="line">dummy_input=torch.randn(BATCH_SIZE, 3, 224, 224)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>保存ONNX文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">import torch.onnx</span><br><span class="line">torch.onnx.export(resnext50_32x4d, dummy_input, &quot;resnet50_onnx_model.onnx&quot;, verbose=False)</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="6-2-转换ONNX到TensorRT-Engine"><a href="#6-2-转换ONNX到TensorRT-Engine" class="headerlink" title="6.2 转换ONNX到TensorRT Engine"></a>6.2 转换ONNX到TensorRT Engine</h2><p>有两种主要的方式将ONNX文件转换为TensorRT引擎</p>
+<ul>
+<li>使用trtexec</li>
+<li>使用Tensorrt API</li>
+</ul>
+<p>在本指南中，我们将重点介绍如何使用trtexec。要使用trtexec将上述的ONNX模型之一转换为TensorRT引擎，我们可以如下运行该转换</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">trtexec --onnx=resnet50_onnx_model.onnx --saveEngine=resnet_engine.trt</span><br></pre></td></tr></table></figure>
+<p>这将转换我们resnet50_onnx_model.onnx模型到一个名为resnet_engine.trt的TensorRT引擎。</p>
+<h2 id="6-3-将TensorRT引擎部署到Python运行时API"><a href="#6-3-将TensorRT引擎部署到Python运行时API" class="headerlink" title="6.3. 将TensorRT引擎部署到Python运行时API"></a>6.3. 将TensorRT引擎部署到Python运行时API</h2><p>TensorRT有许多可用的运行时。当性能很重要时，TensorRT API是运行ONNX模型的好方法。在下一节中，我们将使用c++和Python中的TensorRT运行时API来部署一个更复杂的ONNX模型。</p>
+<h1 id="7-使用TensorRT运行时API"><a href="#7-使用TensorRT运行时API" class="headerlink" title="7 使用TensorRT运行时API"></a>7 使用TensorRT运行时API</h1><p>对于模型转换和部署来说，性能最好且可定制的选项之一是使用TensorRT API，它同时具有c++和Python绑定。</p>
+<p>TensorRT包含一个独立的运行时，带有c++和Python绑定，通常比使用TF-TRT集成和运行在TensorFlow中更有性能和可定制性。c++ API的开销较低，但Python  API与Python数据加载器和库(如NumPy和SciPy)一起工作得很好，并且更容易用于原型设计、调试和测试。</p>
+<p>下面的教程演示了使用TensorRT c++和Python API对图像进行语义分割。该任务使用了带有ResNet-101主干的完全卷积模型。该模型接受任意大小的图像，并产生逐像素的预测。</p>
+<p>本教程包括以下步骤</p>
+<ul>
+<li>安装程序启动测试容器，并从导出到ONNX的PyTorch模型生成TensorRT引擎，并使用trtexec进行转换</li>
+<li>c++运行时API使用engine进行推理和TensorRT的c++ API</li>
+<li>python运行时API使用engine进行推理和TensorRT的python API</li>
+</ul>
+<h2 id="7-1-设置测试容器并构建TensorRT引擎"><a href="#7-1-设置测试容器并构建TensorRT引擎" class="headerlink" title="7.1. 设置测试容器并构建TensorRT引擎"></a>7.1. 设置测试容器并构建TensorRT引擎</h2><ol>
+<li><p>从TensorRT开源软件资源库下载本快速入门教程的源代码。<a target="_blank" rel="noopener" href="http://github.com/NVIDIA/TensorRT">TensorRT Open Source Software repository</a>.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">git <span class="built_in">clone</span> https://github.com/NVIDIA/TensorRT.git</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash"><span class="built_in">cd</span> TensorRT/quickstart</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>将预训练的FCN-Resnet-101模型从Torch.hub转换为ONNX。</p>
+<p>在这里，我们使用教程中包含的导出脚本来生成ONNX模型，并将其保存到FCN-Resnet101.onnx。该脚本还生成了大小1282x1026的测试图像，并将其保存到Input.ppm。</p>
+<img src="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220905114540720.png" class="" title="image-20220905114540720">
+<ul>
+<li><p>启动NVIDIA PyTorch容器来运行导出脚本。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">docker run --<span class="built_in">rm</span> -it --gpus all -p 8888:8888 -v `<span class="built_in">pwd</span>`:/workspace -w /workspace/SemanticSegmentation nvcr.io/nvidia/pytorch:20.12-py3 bash</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>运行导出脚本将预训练的模型转换为ONNX。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">python export.py</span></span><br></pre></td></tr></table></figure>
+<p>注:FCN-ResNet-101有一个维度[batch, 3, height, width]的输入和一个维度[batch, 21,  height,  weight]的输出包含21个类标签预测对应的非标准化概率。当将模型导出到ONNX时，我们在输出处附加一个argmax层，以产生最高概率的逐像素类标签。</p>
+</li>
+</ul>
+</li>
+<li><p>使用trtexec工具从ONNX构建一个TensorRT引擎。</p>
+<p>trtexec可以从ONNX模型生成TensorRT引擎，然后使用TensorRT运行时API进行部署。它利用TensorRT  ONNX解析器将ONNX模型加载到TensorRT网络图中，并利用TensorRT Builder  API生成优化的引擎。构建引擎可能很耗时，而且通常是脱机执行的。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">trtexec --onnx=fcn-resnet101.onnx --fp16 --workspace=64 --minShapes=input:1x3x256x256 --optShapes=input:1x3x1026x1282 --maxShapes=input:1x3x1440x2560 --buildOnly --saveEngine=fcn-resnet101.engine</span><br></pre></td></tr></table></figure>
+<p>成功执行应该会生成一个引擎文件，并在命令输出中看到类似于Successful的内容。</p>
+<p>trtexec可以构建TensorRT引擎与以下构建配置选项</p>
+<ul>
+<li><code>--fp16</code> 除了FP32外，还可以对支持它的图层启用FP16的精度。有关更多信息，请参阅《 NVIDIA Tensorrt开发人员指南》中的降低精度部分。<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#reduced-precision">Reduced Precision</a></li>
+<li><code>--int8</code> 除了FP32外，还可以为支持它的层启用INT8精度。</li>
+<li><code>--best</code> 实现所有支持的精确度，以实现每一层的最佳性能。</li>
+<li><code>--workspace</code>控制构建器考虑的算法可用的最大持久暂存内存(以MB为单位)。对于给定的平台，应该根据可用性设置尽可能高的值;在运行时，TensorRT将只分配需要的，不超过最大。</li>
+<li><code>--minShapes</code>和<code>--maxShapes</code>指定每个网络输入和的尺寸范围。<code>--optShapes</code>指定自动调优器应该用于优化的维度。<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#opt_profiles">Optimization Profiles</a></li>
+<li><code>--buildOnly</code>要求跳过推理性能测量。</li>
+<li><code>--saveEngine</code>指定保存序列化引擎的文件</li>
+<li><code>--safe</code>启用构建安全认证的引擎。</li>
+<li><code>--tacticSources</code>可用于从默认策略源（Cudnn，Cublas和Cublaslt）中添加或删除策略。</li>
+<li><code>--minTiming</code>和<code>--avgTiming</code>分别设置策略选择中使用的最小迭代次数和平均数。</li>
+<li><code>--noBuilderCache</code>禁用Tensorrt构建器中的层正时缓存。正时缓存有助于通过缓存层分析信息来减少构建器阶段中所花费的时间，</li>
+<li><code>--timingCacheFile</code>可用于保存或加载序列化的全局正时缓存。</li>
+</ul>
+</li>
+<li><p>可选地，使用trtexec验证随机值输入生成的引擎。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">trtexec --shapes=input:1x3x1026x1282 --loadEngine=fcn-resnet101.engine</span><br></pre></td></tr></table></figure>
+<p>其中——shapes设置用于推断的动态形状输入的输入大小。</p>
+<p>如果成功，您应该看到类似以下内容</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&amp;&amp;&amp;&amp; PASSED TensorRT.trtexec # trtexec --shapes=input:1x3x1026x1282 --loadEngine=fcn-resnet101.engine</span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="7-2-使用c-运行一个Engine"><a href="#7-2-使用c-运行一个Engine" class="headerlink" title="7.2 使用c++运行一个Engine"></a>7.2 使用c++运行一个Engine</h2><ol>
+<li><p>在测试容器中编译并运行C ++分割教程。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">./bin/segmentation_tutorial</span></span><br></pre></td></tr></table></figure>
+<p>以下步骤显示了如何使用推理计划</p>
+<p>步骤：</p>
+<ol>
+<li><p>从Engine文件中反序列化TensorRT引擎。文件内容被读入缓冲区并在内存中反序列化。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">std::vector&lt;<span class="type">char</span>&gt; <span class="title">engineData</span><span class="params">(fsize)</span></span>;</span><br><span class="line">engineFile.<span class="built_in">read</span>(engineData.<span class="built_in">data</span>(), fsize);</span><br><span class="line"></span><br><span class="line">util::UniquePtr&lt;nvinfer1::IRuntime&gt; runtime&#123;nvinfer1::<span class="built_in">createInferRuntime</span>(sample::gLogger.<span class="built_in">getTRTLogger</span>())&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function">util::UniquePtr&lt;nvinfer1::ICudaEngine&gt; <span class="title">mEngine</span><span class="params">(runtime-&gt;deserializeCudaEngine(engineData.data(), fsize, <span class="literal">nullptr</span>))</span></span>;</span><br></pre></td></tr></table></figure>
+<p>注意:TensorRT对象是通过destroy()方法销毁的。在本教程中，一个带有自定义删除的智能指针用于管理它们的生存期。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">struct</span> <span class="title class_">InferDeleter</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">operator</span><span class="params">()</span><span class="params">(T* obj)</span> <span class="type">const</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (obj) obj-&gt;<span class="built_in">destroy</span>();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> T&gt;</span><br><span class="line"><span class="keyword">using</span> UniquePtr = std::unique_ptr&lt;T, util::InferDeleter&gt;;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>TensorRT执行上下文封装执行状态，比如用于在推断期间保存中间激活张量的持久设备内存。</p>
+<p>由于分割模型是在启用了动态形状的情况下构建的，因此必须指定输入的形状以进行推断执行。可以查询网络输出形状，以确定输出缓冲区的相应尺寸。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> input_idx = mEngine-&gt;<span class="built_in">getBindingIndex</span>(<span class="string">&quot;input&quot;</span>);</span><br><span class="line"><span class="built_in">assert</span>(mEngine-&gt;<span class="built_in">getBindingDataType</span>(input_idx) == nvinfer1::DataType::kFLOAT);</span><br><span class="line"><span class="keyword">auto</span> input_dims = nvinfer1::Dims4&#123;<span class="number">1</span>, <span class="number">3</span> <span class="comment">/* channels */</span>, height, width&#125;;</span><br><span class="line">context-&gt;<span class="built_in">setBindingDimensions</span>(input_idx, input_dims);</span><br><span class="line"><span class="keyword">auto</span> input_size = util::<span class="built_in">getMemorySize</span>(input_dims, <span class="built_in">sizeof</span>(<span class="type">float</span>));</span><br><span class="line"><span class="keyword">auto</span> output_idx = mEngine-&gt;<span class="built_in">getBindingIndex</span>(<span class="string">&quot;output&quot;</span>);</span><br><span class="line"><span class="built_in">assert</span>(mEngine-&gt;<span class="built_in">getBindingDataType</span>(output_idx) == nvinfer1::DataType::kINT32);</span><br><span class="line"><span class="keyword">auto</span> output_dims = context-&gt;<span class="built_in">getBindingDimensions</span>(output_idx);</span><br><span class="line"><span class="keyword">auto</span> output_size = util::<span class="built_in">getMemorySize</span>(output_dims, <span class="built_in">sizeof</span>(<span class="type">int32_t</span>));</span><br></pre></td></tr></table></figure>
+<p>注意：网络I/O的绑定索引可以通过名称查询。</p>
+</li>
+<li><p>在为推理做准备时，为所有的输入和输出分配CUDA设备内存，处理图像数据并复制到输入内存中，生成一个引擎绑定列表。</p>
+<p>对于语义分割，将输入图像数据拟合到[0,1]范围内，使用均值[0.485,0.456,0.406]和标准差[0.229,0.224,0.225]进行归一化处理。参考这里的输入预处理要求的torchvision模型 <a target="_blank" rel="noopener" href="https://github.com/pytorch/vision/blob/main/docs/source/models.rst">here</a>。该操作由实用程序类RGBImageReader抽象。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span>* input_mem&#123;<span class="literal">nullptr</span>&#125;;</span><br><span class="line"><span class="built_in">cudaMalloc</span>(&amp;input_mem, input_size);</span><br><span class="line"><span class="type">void</span>* output_mem&#123;<span class="literal">nullptr</span>&#125;;</span><br><span class="line"><span class="built_in">cudaMalloc</span>(&amp;output_mem, output_size); </span><br><span class="line"><span class="type">const</span> std::vector&lt;<span class="type">float</span>&gt; mean&#123;<span class="number">0.485f</span>, <span class="number">0.456f</span>, <span class="number">0.406f</span>&#125;;</span><br><span class="line"><span class="type">const</span> std::vector&lt;<span class="type">float</span>&gt; stddev&#123;<span class="number">0.229f</span>, <span class="number">0.224f</span>, <span class="number">0.225f</span>&#125;;</span><br><span class="line"><span class="keyword">auto</span> input_image&#123;util::<span class="built_in">RGBImageReader</span>(input_filename, input_dims, mean, stddev)&#125;;</span><br><span class="line">input_image.<span class="built_in">read</span>();</span><br><span class="line"><span class="keyword">auto</span> input_buffer = input_image.<span class="built_in">process</span>();</span><br><span class="line"><span class="built_in">cudaMemcpyAsync</span>(input_mem, input_buffer.<span class="built_in">get</span>(), input_size, cudaMemcpyHostToDevice, stream);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>使用上下文的executeV2或enqueueV2方法启动推理执行。执行完成后，我们将结果复制回主机缓冲区，并释放所有设备内存分配。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span>* bindings[] = &#123;input_mem, output_mem&#125;;</span><br><span class="line"><span class="type">bool</span> status = context-&gt;<span class="built_in">enqueueV2</span>(bindings, stream, <span class="literal">nullptr</span>);</span><br><span class="line"><span class="keyword">auto</span> output_buffer = std::unique_ptr&lt;<span class="type">int</span>&gt;&#123;<span class="keyword">new</span> <span class="type">int</span>[output_size]&#125;;</span><br><span class="line"><span class="built_in">cudaMemcpyAsync</span>(output_buffer.<span class="built_in">get</span>(), output_mem, output_size, cudaMemcpyDeviceToHost, stream);</span><br><span class="line"><span class="built_in">cudaStreamSynchronize</span>(stream);</span><br><span class="line"></span><br><span class="line"><span class="built_in">cudaFree</span>(input_mem);</span><br><span class="line"><span class="built_in">cudaFree</span>(output_mem);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>为了可视化结果，将逐像素类预测的伪颜色图写入output.ppm。这是由实用程序类ArgmaxImageWriter抽象的。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int</span> num_classes&#123;<span class="number">21</span>&#125;;</span><br><span class="line"><span class="type">const</span> std::vector&lt;<span class="type">int</span>&gt; palette&#123;</span><br><span class="line">	(<span class="number">0x1</span> &lt;&lt; <span class="number">25</span>) - <span class="number">1</span>, (<span class="number">0x1</span> &lt;&lt; <span class="number">15</span>) - <span class="number">1</span>, (<span class="number">0x1</span> &lt;&lt; <span class="number">21</span>) - <span class="number">1</span>&#125;;</span><br><span class="line"><span class="keyword">auto</span> output_image&#123;util::<span class="built_in">ArgmaxImageWriter</span>(output_filename, output_dims, palette, num_classes)&#125;;</span><br><span class="line">output_image.<span class="built_in">process</span>(output_buffer.<span class="built_in">get</span>());</span><br><span class="line">output_image.<span class="built_in">write</span>();</span><br></pre></td></tr></table></figure>
+<img src="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/image-20220905132437311.png" class="" title="image-20220905132437311">
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="7-3-在Python中运行Engine"><a href="#7-3-在Python中运行Engine" class="headerlink" title="7.3 在Python中运行Engine"></a>7.3 在Python中运行Engine</h2><ol>
+<li><p>安装所需的Python包。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">pip install pycuda</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>启动Jupyter并使用浏览器<em>http://<host-ip-address>:8888</em>.</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">jupyter notebook --port=8888 --no-browser --ip=0.0.0.0 --allow-root</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>打开教程 -  runtime.ipynb笔记本，然后按照其步骤操作。</p>
+</li>
+</ol>
+<h1 id="TOPS"><a href="#TOPS" class="headerlink" title="TOPS:"></a>TOPS:</h1><h2 id="plan-文件"><a href="#plan-文件" class="headerlink" title="plan 文件"></a>plan 文件</h2><p>序列化格式的优化推理引擎。要初始化推理引擎，应用程序将首先从计划文件反序列化模型。典型的应用程序只构建一次引擎，然后将其序列化为计划文件以供以后使用。从下面三个例子可以看出来 .plan  .engine .trt文件都是序列化后的engine文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">trtexec --onnx=resnet50/model.onnx --saveEngine=resnet_engine.trt</span><br><span class="line">trtexec --onnx=foo.onnx --profilingVerbosity=detailed --saveEngine=foo.plan</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">trtexec --onnx=fcn-resnet101.onnx --fp16 --workspace=64 --minShapes=input:1x3x256x256 --optShapes=input:1x3x1026x1282 --maxShapes=input:1x3x1440x2560 --buildOnly --saveEngine=fcn-resnet101.engine</span><br><span class="line">trtexec --shapes=input:1x3x1026x1282 --loadEngine=fcn-resnet101.engine</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">trtexec --onnx=foo.onnx --profilingVerbosity=detailed --saveEngine=foo.plan</span><br><span class="line">nsys profile -o foo_profile --capture-range cudaProfilerApi trtexec --loadEngine=foo.plan --warmUp=0 --duration=0 --iterations=50</span><br></pre></td></tr></table></figure>
+<p>—saveEngine指定序列化引擎保存到的文件。</p>
+<p>—loadEngine=<file>从一个序列化的计划文件加载引擎，而不是从输入ONNX, UFF或Caffe模型构建它。</p>
+<h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><p>参考网址：官方 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/quick-start-guide/index.html">Quick Start Guide</a></p>
+<p>官方开发者文档 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html">https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#perform_inference_c"><em>NVIDIA TensorRT 8.4 Developer Guide</em>.</a> </p>
+<p>博客参考 ：</p>
+<ul>
+<li><p><a target="_blank" rel="noopener" href="https://murphypei.github.io/blog/2019/09/trt-useage.html">TensorRT 实战教程</a> </p>
+</li>
+<li><p><a href="TensorRT/三，如何使用tensorRT C%2B%2B API搭建网络">TensorRT/三，如何使用tensorRT C%2B%2B API搭建网络</a></p>
+</li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/TaipKang/p/15542329.html">TensorRT——INT8推理</a> 这个博客代码有点小错误。需要修改下。</li>
+<li>关于int8的git 资源<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/search?l=C%2B%2B&amp;o=desc&amp;p=3&amp;q=IInt8EntropyCalibrator2&amp;s=indexed&amp;type=Code">搜索git上调用</a> </li>
+<li>实现1 <a target="_blank" rel="noopener" href="https://github.com/Yu-Lingrui/Project-deployment-and-landing/blob/65030a5d830778ee73c5881fbf6c36ad45a6b876/tensorrtx/refinedet/calibrator.cpp">https://github.com/Yu-Lingrui/Project-deployment-and-landing/blob/65030a5d830778ee73c5881fbf6c36ad45a6b876/tensorrtx/refinedet/calibrator.cpp</a></li>
+<li></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/" title="TensorRT快速开始">http://example.com/TensorRT/TensorRT快速开始/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+              <a href="/tags/Tensorrt/" rel="tag"><i class="fa fa-tag"></i> Tensorrt</a>
+              <a href="/tags/DeepLearning/" rel="tag"><i class="fa fa-tag"></i> DeepLearning</a>
+              <a href="/tags/Plugin/" rel="tag"><i class="fa fa-tag"></i> Plugin</a>
+              <a href="/tags/protobuf/" rel="tag"><i class="fa fa-tag"></i> protobuf</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E4%BE%8B%E5%AD%90/" rel="prev" title="TensorRT例子">
+                  <i class="fa fa-chevron-left"></i> TensorRT例子
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/" rel="next" title="Part1-TensorRT简介">
+                  Part1-TensorRT简介 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"e5440a19c15bb1ee95bcc1e00582ce22"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

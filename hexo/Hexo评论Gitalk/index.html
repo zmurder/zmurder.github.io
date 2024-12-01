@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="博客已经有一个框架了，万一有人和我们交流，评论区必不可少。 Hexo的Next主题集成了几种评论插件，可以在themes&#x2F;next&#x2F;_config.yml中找到">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo评论Gitalk">
+<meta property="og:url" content="http://example.com/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="博客已经有一个框架了，万一有人和我们交流，评论区必不可少。 Hexo的Next主题集成了几种评论插件，可以在themes&#x2F;next&#x2F;_config.yml中找到">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311143833436.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311145108124.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311145210329.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311145703716.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311145835585.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311150059091.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311150724445.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311150810296.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311150934236.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311151045489.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311152243905.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/hexo_1.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/hexo_2.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/hexo_3.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311152432980.png">
+<meta property="article:published_time" content="2024-12-01T10:13:45.759Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.759Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311143833436.png">
+
+
+<link rel="canonical" href="http://example.com/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/","path":"hexo/Hexo评论Gitalk/","title":"Hexo评论Gitalk"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hexo评论Gitalk | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E4%BB%80%E4%B9%88%E6%98%AF-Gitalk"><span class="nav-text">1 什么是 Gitalk</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-Gitalk-%E7%89%B9%E6%80%A7"><span class="nav-text">1.1 Gitalk 特性</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E9%85%8D%E7%BD%AEGithub%E7%9A%84OAuth"><span class="nav-text">2 配置Github的OAuth</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E9%85%8D%E7%BD%AENexT"><span class="nav-text">3 配置NexT</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E9%81%87%E5%88%B0%E7%9A%84%E9%97%AE%E9%A2%98"><span class="nav-text">4 遇到的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-Error-Not-Found"><span class="nav-text">4.1 Error: Not Found</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-Error-Network-Error"><span class="nav-text">4.2 Error:Network Error</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hexo评论Gitalk | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hexo评论Gitalk
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/hexo/" itemprop="url" rel="index"><span itemprop="name">hexo</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>博客已经有一个框架了，万一有人和我们交流，评论区必不可少。</p>
+<p>Hexo的Next主题集成了几种评论插件，可以在themes/next/_config.yml中找到</p>
+<img src="/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311143833436.png" class="" title="image-20230311143833436">
+<p>网上看到比较多的是使用的gitalk插件，这里也就使用他了。</p>
+<h1 id="1-什么是-Gitalk"><a href="#1-什么是-Gitalk" class="headerlink" title="1 什么是 Gitalk"></a>1 什么是 Gitalk</h1><p>Gitalk 利用了 <a target="_blank" rel="noopener" href="https://links.jianshu.com/go?to=https%3A%2F%2Fdeveloper.github.com%2Fv3%2F">GithubAPI</a> 基于 GitHub Issue 和 Preact 开发的评论插件，官方网址： <a target="_blank" rel="noopener" href="https://links.jianshu.com/go?to=https%3A%2F%2Fgitalk.github.io%2F">https://gitalk.github.io</a></p>
+<h2 id="1-1-Gitalk-特性"><a href="#1-1-Gitalk-特性" class="headerlink" title="1.1 Gitalk 特性"></a>1.1 Gitalk 特性</h2><ul>
+<li>使用 GitHub 登录</li>
+<li>支持多语言 [en, zh-CN, zh-TW, es-ES, fr, ru]</li>
+<li>支持个人或组织</li>
+<li>无干扰模式（设置 distractionFreeMode 为 true 开启）</li>
+<li>快捷键提交评论 （cmd|ctrl + enter）</li>
+</ul>
+<h1 id="2-配置Github的OAuth"><a href="#2-配置Github的OAuth" class="headerlink" title="2 配置Github的OAuth"></a>2 配置Github的OAuth</h1><p>这东西可以理解为，一个口令</p>
+<p>1 登录Github，依次找到Settings/Developer settings/OAuth Apps，然后New OAuth App，进入申请。按以下格式填写就可以。</p>
+<img src="/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311145108124.png" class="" title="image-20230311145108124">
+<p>2 记下Clien ID 和Client secrets。Client secrets只显示一次。再次进入就会这样请添加图片描述<br>当然，要是忘记Client secrets，可以再申请一个新的，并将以前的作废。</p>
+<img src="/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311145210329.png" class="" title="image-20230311145210329">
+<h1 id="3-配置NexT"><a href="#3-配置NexT" class="headerlink" title="3 配置NexT"></a>3 配置NexT</h1><p>在themes/next/_config.yml中修改两个地方</p>
+<p><strong>1 启用评论为gitalk</strong>，搜索<code>comments:</code>关键字，修改如下</p>
+<img src="/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311145703716.png" class="" title="image-20230311145703716">
+<p><strong>2 配置gitalk</strong></p>
+<img src="/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311145835585.png" class="" title="image-20230311145835585">
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">gitalk:</span><br><span class="line">  enable: true</span><br><span class="line">  github_id: zmurder # GitHub repo owner </span><br><span class="line">  repo: zmurder.github.io</span><br><span class="line"><span class="meta prompt_">  # </span><span class="language-bash">Repository name to store issues</span></span><br><span class="line">  client_id: cf2343f27b6c29efe0bc # GitHub Application Client ID</span><br><span class="line">  client_secret: 3268a1fa92706c7358d5421f88f76a0f7ada3188  # GitHub Application Client Secret</span><br><span class="line">  admin_user: zmurder # GitHub repo owner and collaborators, only these guys can initialize gitHub issues</span><br><span class="line">  distraction_free_mode: true # Facebook-like distraction free mode</span><br><span class="line"><span class="meta prompt_">  # </span><span class="language-bash">When the official proxy is not available, you can change it to your own proxy address</span></span><br><span class="line">  proxy: https://strong-caramel-969805.netlify.app/github_access_token</span><br><span class="line"><span class="meta prompt_">  # </span><span class="language-bash">https://strong-caramel-969805.netlify.app/github_access_token</span></span><br><span class="line"><span class="meta prompt_">  # </span><span class="language-bash"> https://vercel.prohibitorum.top/github_access_token</span></span><br><span class="line"><span class="meta prompt_">  # </span><span class="language-bash">https://soft-sun-c382.zmurder.workers.dev/?/https://github.com/login/oauth/access_token</span></span><br><span class="line"><span class="meta prompt_">  # </span><span class="language-bash">https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token <span class="comment"># This is official proxy address</span></span></span><br><span class="line"><span class="meta prompt_">  # </span><span class="language-bash">Gitalk<span class="string">&#x27;s display language depends on user&#x27;</span>s browser or system environment</span></span><br><span class="line"><span class="meta prompt_">  # </span><span class="language-bash">If you want everyone visiting your site to see a uniform language, you can <span class="built_in">set</span> a force language value</span></span><br><span class="line"><span class="meta prompt_">  # </span><span class="language-bash">Available values: en | es-ES | fr | ru | zh-CN | zh-TW</span></span><br><span class="line">  language: zh-CN</span><br><span class="line">  </span><br><span class="line">  </span><br></pre></td></tr></table></figure>
+<ul>
+<li>github_id:   填写自己的github用户名</li>
+</ul>
+<img src="/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311150059091.png" class="" title="image-20230311150059091">
+<ul>
+<li><p>repo 填写仓库名称，注意这里不是网址，是名称</p>
+<img src="/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311150724445.png" class="" title="image-20230311150724445">
+<img src="/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311150810296.png" class="" title="image-20230311150810296">
+</li>
+<li><p>client_id 和client_secret 就是刚才的OAuth申请的</p>
+</li>
+<li><p>admin_user 填写自己的github用户名</p>
+</li>
+<li><p>proxy ，使用默认的被墙了，因此用的网友提供的。</p>
+</li>
+<li><p>language 设定为中文</p>
+</li>
+</ul>
+<p>设定完成后执行指令：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean  <span class="comment"># 清除缓存</span></span><br><span class="line">hexo g</span><br><span class="line">hexo d</span><br></pre></td></tr></table></figure>
+<p>打开网页以后会看到</p>
+<img src="/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311150934236.png" class="" title="image-20230311150934236">
+<p>授权后即可在文章底部看到</p>
+<img src="/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311151045489.png" class="" title="image-20230311151045489">
+<h1 id="4-遇到的问题"><a href="#4-遇到的问题" class="headerlink" title="4 遇到的问题"></a>4 遇到的问题</h1><h2 id="4-1-Error-Not-Found"><a href="#4-1-Error-Not-Found" class="headerlink" title="4.1 Error: Not Found"></a>4.1 Error: Not Found</h2><img src="/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311152243905.png" class="" title="image-20230311152243905">
+<p>gitalk的Error: Not Found.问题一般都是gitalk的配置有问题，未能正确找到仓库 repo，检查一下你的仓库是否配置正确。</p>
+<p>这里也可以使用网页调试看一下</p>
+<p>出现问题时按F12，进入网页调试界面</p>
+<p>看到如下的消息请求。复制右侧的GET指令，在新的标签页中打开</p>
+<img src="/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/hexo_1.png" class="" title="hexo_1">
+<p>显示如下：提示就是<code>Not Found</code>我这里是repo多了一个空格，可以根据自己的进行修改测试。</p>
+<img src="/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/hexo_2.png" class="" title="hexo_2">
+<img src="/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/hexo_3.png" class="" title="hexo_3">
+<h2 id="4-2-Error-Network-Error"><a href="#4-2-Error-Network-Error" class="headerlink" title="4.2 Error:Network Error"></a>4.2 Error:Network Error</h2><img src="/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/image-20230311152432980.png" class="" title="image-20230311152432980">
+<p>gitalk提示 Gitalk 加载中  Error:Network Error，都是网络被墙了。也就是gitalk配的的proxy有问题了。不能访问了。默认是 <a target="_blank" rel="noopener" href="https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token">https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token</a>  不能访问，我用的网友提供的，（主要是不会自己建）</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/" title="Hexo评论Gitalk">http://example.com/hexo/Hexo评论Gitalk/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Hexo/" rel="tag"><i class="fa fa-tag"></i> Hexo</a>
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" rel="prev" title="Hexo的基本使用">
+                  <i class="fa fa-chevron-left"></i> Hexo的基本使用
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/operatingSystem/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/1%20%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F%E6%BC%AB%E6%B8%B8/" rel="next" title="1 计算机系统漫游">
+                  1 计算机系统漫游 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"8d55cd03bf49e86537e02bea20480dec"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

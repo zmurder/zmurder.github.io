@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="TensorRT的最佳性能实践">
+<meta property="og:type" content="article">
+<meta property="og:title" content="13-TensorRT的最佳性能实践">
+<meta property="og:url" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/13-TensorRT%E7%9A%84%E6%9C%80%E4%BD%B3%E6%80%A7%E8%83%BD%E5%AE%9E%E8%B7%B5/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="TensorRT的最佳性能实践">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/13-TensorRT%E7%9A%84%E6%9C%80%E4%BD%B3%E6%80%A7%E8%83%BD%E5%AE%9E%E8%B7%B5/rdp.jpg">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/13-TensorRT%E7%9A%84%E6%9C%80%E4%BD%B3%E6%80%A7%E8%83%BD%E5%AE%9E%E8%B7%B5/layer-exe.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/13-TensorRT%E7%9A%84%E6%9C%80%E4%BD%B3%E6%80%A7%E8%83%BD%E5%AE%9E%E8%B7%B5/kernels-gpu.png">
+<meta property="article:published_time" content="2024-12-01T10:13:45.366Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.366Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="GPU">
+<meta property="article:tag" content="Tensorrt">
+<meta property="article:tag" content="DeepLearning">
+<meta property="article:tag" content="Plugin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/13-TensorRT%E7%9A%84%E6%9C%80%E4%BD%B3%E6%80%A7%E8%83%BD%E5%AE%9E%E8%B7%B5/rdp.jpg">
+
+
+<link rel="canonical" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/13-TensorRT%E7%9A%84%E6%9C%80%E4%BD%B3%E6%80%A7%E8%83%BD%E5%AE%9E%E8%B7%B5/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/13-TensorRT%E7%9A%84%E6%9C%80%E4%BD%B3%E6%80%A7%E8%83%BD%E5%AE%9E%E8%B7%B5/","path":"TensorRT/TensorRT中文版开发手册/13-TensorRT的最佳性能实践/","title":"13-TensorRT的最佳性能实践"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>13-TensorRT的最佳性能实践 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TensorRT%E7%9A%84%E6%9C%80%E4%BD%B3%E6%80%A7%E8%83%BD%E5%AE%9E%E8%B7%B5"><span class="nav-text">TensorRT的最佳性能实践</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#13-1-Measuring-Performance"><span class="nav-text">13.1. Measuring Performance</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#13-1-1-Wall-clock-Timing"><span class="nav-text">13.1.1. Wall-clock Timing</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-1-2-CUDA-Events"><span class="nav-text">13.1.2. CUDA Events</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-1-3-Built-In-TensorRT-Profiling"><span class="nav-text">13.1.3. Built-In TensorRT Profiling</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-1-4-CUDA-Profiling-Tools"><span class="nav-text">13.1.4. CUDA Profiling Tools</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-1-5-Tracking-Memory"><span class="nav-text">13.1.5. Tracking Memory</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-2-Optimizing-TensorRT-Performance"><span class="nav-text">13.2. Optimizing TensorRT Performance</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#13-2-1-Batching"><span class="nav-text">13.2.1. Batching</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-2-2-Streaming"><span class="nav-text">13.2.2. Streaming</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-2-3-CUDA-Graphs"><span class="nav-text">13.2.3. CUDA Graphs</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-2-4-Enabling-Fusion"><span class="nav-text">13.2.4. Enabling Fusion</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#13-2-4-1-Layer-Fusion"><span class="nav-text">13.2.4.1. Layer Fusion</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#13-2-4-2-Types-Of-Fusions"><span class="nav-text">13.2.4.2. Types Of Fusions</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#13-2-4-3-PointWise-Fusion"><span class="nav-text">13.2.4.3. PointWise Fusion</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#13-2-4-4-Q-DQ-Fusion"><span class="nav-text">13.2.4.4. Q&#x2F;DQ Fusion</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#13-2-5-Limiting-Compute-Resources"><span class="nav-text">13.2.5. Limiting Compute Resources</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-3-Optimizing-Layer-Performance"><span class="nav-text">13.3. Optimizing Layer Performance</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-4-Optimizing-for-Tensor-Cores"><span class="nav-text">13.4. Optimizing for Tensor Cores</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-5-Optimizing-Plugins"><span class="nav-text">13.5. Optimizing Plugins</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-6-Optimizing-Python-Performance"><span class="nav-text">13.6. Optimizing Python Performance</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#13-7-Improving-Model-Accuracy"><span class="nav-text">13.7. Improving Model Accuracy</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/13-TensorRT%E7%9A%84%E6%9C%80%E4%BD%B3%E6%80%A7%E8%83%BD%E5%AE%9E%E8%B7%B5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="13-TensorRT的最佳性能实践 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          13-TensorRT的最佳性能实践
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/" itemprop="url" rel="index"><span itemprop="name">TensorRT中文版开发手册</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="TensorRT的最佳性能实践"><a href="#TensorRT的最佳性能实践" class="headerlink" title="TensorRT的最佳性能实践"></a>TensorRT的最佳性能实践</h1><img src="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/13-TensorRT%E7%9A%84%E6%9C%80%E4%BD%B3%E6%80%A7%E8%83%BD%E5%AE%9E%E8%B7%B5/rdp.jpg" class="">
+<p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/zh-cn/developer-program">点击此处加入NVIDIA开发者计划</a></p>
+<h2 id="13-1-Measuring-Performance"><a href="#13-1-Measuring-Performance" class="headerlink" title="13.1. Measuring Performance"></a>13.1. Measuring Performance</h2><p>在开始使用 TensorRT 进行任何优化工作之前，必须确定应该测量什么。没有衡量标准，就不可能取得可靠的进展或衡量是否取得了成功</p>
+<p><strong>Latency</strong></p>
+<p>网络推理的性能度量是从输入呈现给网络到输出可用所经过的时间。这是单个推理的网络<strong>延迟</strong>。较低的延迟更好。在某些应用中，低延迟是一项关键的安全要求。在其他应用程序中，延迟作为服务质量问题对用户来说是直接可见的。对于批量处理，<strong>延迟可能根本不重要</strong>。</p>
+<p><strong>Throughput</strong></p>
+<p>另一个性能测量是在固定的时间单位内可以完成多少推理。这是网络的<strong>吞吐量</strong>。吞吐量越高越好。更高的吞吐量表明更有效地利用固定计算资源。对于批量处理，所花费的总时间将由网络的吞吐量决定。</p>
+<p>查看延迟和吞吐量的另一种方法是确定最大延迟并在该延迟下测量吞吐量。像这样的服务质量测量可以是用户体验和系统效率之间的合理折衷。</p>
+<p>在测量延迟和吞吐量之前，您需要选择开始和停止计时的确切点。根据网络和应用程序，选择不同的点可能是有意义的。</p>
+<p>在很多应用中，都有一个处理流水线，整个系统的性能可以通过整个处理流水线的延迟和吞吐量来衡量。由于预处理和后处理步骤在很大程度上取决于特定应用程序，因此本节仅考虑网络推理的延迟和吞吐量。</p>
+<h3 id="13-1-1-Wall-clock-Timing"><a href="#13-1-1-Wall-clock-Timing" class="headerlink" title="13.1.1. Wall-clock Timing"></a>13.1.1. Wall-clock Timing</h3><p>经过时间（计算开始和结束之间经过的时间）可用于测量应用程序的整体吞吐量和延迟，以及将推理时间置于更大系统的上下文中。 C++11 在<code>&lt;chrono&gt;</code>标准库中提供了高精度计时器。例如， <code>std::chrono::system_clock</code>表示系统范围的经过时间，而<code>std::chrono::high_resolution_clock</code>以可用的最高精度测量时间。</p>
+<p>以下示例代码片段显示了测量网络推理主机时间：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;chrono&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">auto</span> startTime = std::chrono::high_resolution_clock::<span class="built_in">now</span>();</span><br><span class="line">context-&gt;<span class="built_in">enqueueV2</span>(&amp;buffers[<span class="number">0</span>], stream, <span class="literal">nullptr</span>);</span><br><span class="line"><span class="built_in">cudaStreamSynchronize</span>(stream);</span><br><span class="line"><span class="keyword">auto</span> endTime = std::chrono::high_resolution_clock::<span class="built_in">now</span>();</span><br><span class="line"><span class="type">float</span> totalTime = std::chrono::<span class="built_in">duration</span>&lt;<span class="type">float</span>, std::milli&gt;</span><br><span class="line">(endTime - startTime).<span class="built_in">count</span>();</span><br></pre></td></tr></table></figure><br>如果设备上一次只发生一个推理，那么这可能是一种简单的方法来分析各种操作所花费的时间。推理通常是异步的，因此请确保添加显式 CUDA 流或设备同步以等待结果可用。</p>
+<h3 id="13-1-2-CUDA-Events"><a href="#13-1-2-CUDA-Events" class="headerlink" title="13.1.2. CUDA Events"></a>13.1.2. CUDA Events</h3><p>仅在主机上计时的一个问题是它需要主机/设备同步。优化的应用程序可能会在设备上并行运行许多推理，并具有重叠的数据移动。此外，同步本身给定时测量增加了一些噪声。<br>为了帮助解决这些问题，CUDA 提供了一个事件 API 。此 API 允许您将事件放入 CUDA 流中，这些事件将在遇到事件时由 GPU 打上时间戳。然后，时间戳的差异可以告诉您不同操作花费了多长时间。</p>
+<p>以下示例代码片段显示了计算两个 CUDA 事件之间的时间：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">cudaEvent_t start, end;</span><br><span class="line"><span class="built_in">cudaEventCreate</span>(&amp;start);</span><br><span class="line"><span class="built_in">cudaEventCreate</span>(&amp;end);</span><br><span class="line"></span><br><span class="line"><span class="built_in">cudaEventRecord</span>(start, stream);</span><br><span class="line">context-&gt;<span class="built_in">enqueueV2</span>(&amp;buffers[<span class="number">0</span>], stream, <span class="literal">nullptr</span>);</span><br><span class="line"><span class="built_in">cudaEventRecord</span>(end, stream);</span><br><span class="line"></span><br><span class="line"><span class="built_in">cudaEventSynchronize</span>(end);</span><br><span class="line"><span class="type">float</span> totalTime;</span><br><span class="line"><span class="built_in">cudaEventElapsedTime</span>(&amp;totalTime, start, end);</span><br></pre></td></tr></table></figure></p>
+<h3 id="13-1-3-Built-In-TensorRT-Profiling"><a href="#13-1-3-Built-In-TensorRT-Profiling" class="headerlink" title="13.1.3. Built-In TensorRT Profiling"></a>13.1.3. Built-In TensorRT Profiling</h3><p>深入挖掘推理性能需要在优化网络中进行更细粒度的时序测量。<br>TensorRT 有一个<strong>Profiler</strong> ( <a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/api/c_api/classnvinfer1_1_1_i_profiler.html">C++</a> , <a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/api/python_api/infer/Core/Profiler.html">Python</a> ) 接口，您可以实现该接口以便让 TensorRT 将分析信息传递给您的应用程序。调用时，网络将以分析模式运行。完成推理后，将调用您的类的分析器对象以报告网络中每一层的时间。这些时序可用于定位瓶颈、比较序列化引擎的不同版本以及调试性能问题。</p>
+<p>分析信息可以从常规推理<code>enqueueV2()</code>启动或 CUDA 图启动中收集。有关详细信息，请参阅<code>IExecutionContext::setProfiler()</code>和<code>IExecutionContext::reportToProfiler()</code> （ <a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/api/c_api/classnvinfer1_1_1_i_execution_context.html#a0e7271a7ea69c348f64db31b96103620">C++</a> 、 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/api/python_api/infer/Core/ExecutionContext.html?highlight=report_to_profiler#tensorrt.IExecutionContext.report_to_profiler">Python</a> ）。</p>
+<p>循环内的层编译为单个单片层，因此，这些层的单独时序不可用。</p>
+<p>公共示例代码 ( <code>common.h</code> ) 中提供了一个展示如何使用<code>IProfiler</code>接口的示例，然后在位于 GitHub 存储库中的<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/samples/sampleNMT">sampleNMT</a>中使用。</p>
+<p>您还可以使用<code>trtexec</code>在给定输入网络或计划文件的情况下使用 TensorRT 分析网络。有关详细信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#trtexec">trtexec</a>部分。</p>
+<h3 id="13-1-4-CUDA-Profiling-Tools"><a href="#13-1-4-CUDA-Profiling-Tools" class="headerlink" title="13.1.4. CUDA Profiling Tools"></a>13.1.4. CUDA Profiling Tools</h3><p>推荐的 CUDA 分析器是NVIDIA Nsight™ Systems 。一些 CUDA 开发人员可能更熟悉 nvprof 和 nvvp，但是，这些已被弃用。在任何情况下，这些分析器都可以用于任何 CUDA 程序，以报告有关在执行期间启动的内核、主机和设备之间的数据移动以及使用的 CUDA API 调用的时序信息。</p>
+<p>Nsight Systems 可以通过多种方式配置，以仅报告程序执行的一部分的时序信息，或者也可以将传统的 CPU 采样配置文件信息与 GPU 信息一起报告。</p>
+<p><strong>仅分析推理阶段</strong></p>
+<p>分析 TensorRT 应用程序时，您应该仅在构建引擎后启用分析。在构建阶段，所有可能的策略都被尝试和计时。分析这部分执行将不会显示任何有意义的性能测量，并将包括所有可能的内核，而不是实际选择用于推理的内核。限制分析范围的一种方法是：</p>
+<ul>
+<li>第一阶段：构建应用程序，然后在一个阶段序列化引擎。</li>
+<li>第二阶段：加载序列化引擎并在第二阶段运行推理并仅对第二阶段进行分析。</li>
+<li>如果应用程序无法序列化引擎，或者应用程序必须连续运行两个阶段，您还可以在第二阶段周围添加<code>cudaProfilerStart() / cudaProfilerStop()</code> CUDA API，并在 Nsight Systems 命令中添加<code>-c cudaProfilerApi</code>标志以仅配置文件<code>cudaProfilerStart()和cudaProfilerStop()</code>之间的部分。</li>
+</ul>
+<p>在 Nsight Systems 中使用 <code>NVTX</code> 跟踪<br>启用NVIDIA 工具扩展 SDK (NVTX)跟踪允许 Nsight Compute 和 Nsight Systems 收集由 TensorRT 应用程序生成的数据。 NVTX 是一个基于 C 的 API，用于标记应用程序中的事件和范围。</p>
+<p>将内核名称解码回原始网络中的层可能很复杂。因此，TensorRT 使用 NVTX 为每一层标记一个范围，然后允许 CUDA 分析器将每一层与调用来实现它的内核相关联。在 TensorRT 中，NVTX 有助于将运行时引擎层的执行与 CUDA内核调用相关联。 Nsight Systems 支持在时间轴上收集和可视化这些事件和范围。 Nsight Compute 还支持在应用程序挂起时收集和显示给定线程中所有活动 NVTX 域和范围的状态。</p>
+<p>在 TensorRT 中，每一层都可以启动一个或多个内核来执行其操作。启动的确切内核取决于优化的网络和存在的硬件。根据构建器的选择，可能会有多个额外的操作对穿插在层计算中的数据进行重新排序；这些重新格式化操作可以作为设备到设备的内存副本或自定义内核来实现。</p>
+<p>例如，以下屏幕截图来自 Nsight Systems。</p>
+<img src="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/13-TensorRT%E7%9A%84%E6%9C%80%E4%BD%B3%E6%80%A7%E8%83%BD%E5%AE%9E%E8%B7%B5/layer-exe.png" class="">
+<img src="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/13-TensorRT%E7%9A%84%E6%9C%80%E4%BD%B3%E6%80%A7%E8%83%BD%E5%AE%9E%E8%B7%B5/kernels-gpu.png" class="">
+<p><strong>控制 NVTX 跟踪中的详细程度</strong></p>
+<p>默认情况下，TensorRT 仅在 NVTX 标记中显示层名称，而用户可以在构建引擎时通过设置<code>IBuilderConfig</code>中的 <code>ProfilingVerbosity</code> 来控制细节级别。例如，要禁用 NVTX 跟踪，请将 <code>ProfilingVerbosity</code> 设置为<code>kNONE</code> ：</p>
+<p><strong>C++</strong></p>
+<p><code>builderConfig-&gt;setProfilingVerbosity(ProfilingVerbosity::kNONE);</code></p>
+<p><strong>Python</strong></p>
+<p><code>builder_config.profiling_verbosity = trt.ProfilingVerbosity.NONE</code></p>
+<p>另一方面，您可以通过将<code>ProfilingVerbosity</code>设置为<code>kDETAILED</code>来选择允许 TensorRT 在 NVTX 标记中打印更详细的层信息，包括输入和输出尺寸、操作、参数、顺序编号等：</p>
+<p><strong>C++</strong></p>
+<p><code>builderConfig-&gt;setProfilingVerbosity(ProfilingVerbosity::kDETAILED);</code></p>
+<p><strong>Python</strong></p>
+<p><code>builder_config.profiling_verbosity = trt.ProfilingVerbosity.DETAILED</code></p>
+<p>trtexec运行 Nsight 系统<br>以下是使用trtexec工具收集 Nsight Systems 配置文件的命令示例：</p>
+<p><code>trtexec --onnx=foo.onnx --profilingVerbosity=detailed --saveEngine=foo.plan</code></p>
+<p><code>nsys profile -o foo_profile trtexec --loadEngine=foo.plan --warmUp=0 --duration=0 --iterations=50</code></p>
+<p>第一个命令构建引擎并将其序列化为<code>foo.plan</code> ，第二个命令使用<code>foo.plan</code>运行推理并生成一个<code>foo_profile.qdrep</code>文件，然后可以在 Nsight Systems GUI 界面中打开该文件以进行可视化。</p>
+<p><code>--profilingVerbosity=detailed</code>标志允许 TensorRT 在 NVTX 标记中显示更详细的层信息，而<code>--warmUp =0</code> <code>--duration=0</code> <code>--iterations=50</code>标志允许您控制要运行的推理迭代次数。默认情况下， trtexec运行推理三秒钟，这可能会导致输出 <code>qdrep</code> 文件非常大。</p>
+<h3 id="13-1-5-Tracking-Memory"><a href="#13-1-5-Tracking-Memory" class="headerlink" title="13.1.5. Tracking Memory"></a>13.1.5. Tracking Memory</h3><p>跟踪内存使用情况与执行性能一样重要。通常，设备上的内存比主机上的内存更受限制。为了跟踪设备内存，推荐的机制是创建一个简单的自定义 GPU 分配器，它在内部保留一些统计信息，然后使用常规 CUDA 内存分配函数<code>cudaMalloc</code>和<code>cudaFree</code> 。</p>
+<p>可以为构建器<code>IBuilder</code>设置自定义 GPU 分配器以进行网络优化，并在使用<code>IGpuAllocator</code> API反序列化引擎时为<code>IRuntime</code> 设置。自定义分配器的一个想法是跟踪当前分配的内存量，并将带有时间戳和其他信息的分配事件推送到分配事件的全局列表中。查看分配事件列表可以分析一段时间内的内存使用情况。</p>
+<p>在移动平台上，GPU 内存和 CPU 内存共享系统内存。在内存大小非常有限的设备上，如 Nano，系统内存可能会因大型网络而耗尽；甚至所需的 GPU 内存也小于系统内存。在这种情况下，增加系统交换大小可以解决一些问题。一个示例脚本是：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">echo <span class="string">&quot;######alloc swap######&quot;</span></span><br><span class="line"><span class="keyword">if</span> [ ! -e /swapfile ];then</span><br><span class="line">    sudo fallocate -l <span class="number">4</span>G /swapfile</span><br><span class="line">    sudo chmod <span class="number">600</span> /swapfile</span><br><span class="line">    sudo mkswap /swapfile</span><br><span class="line">    sudo /bin/sh -c <span class="string">&#x27;echo  &quot;/swapfile \t none \t swap \t defaults \t 0 \t 0&quot; &gt;&gt; /etc/fstab&#x27;</span></span><br><span class="line">    sudo swapon -a</span><br><span class="line">fi</span><br></pre></td></tr></table></figure></p>
+<h2 id="13-2-Optimizing-TensorRT-Performance"><a href="#13-2-Optimizing-TensorRT-Performance" class="headerlink" title="13.2. Optimizing TensorRT Performance"></a>13.2. Optimizing TensorRT Performance</h2><p>以下部分重点介绍 GPU 上的一般推理流程和一些提高性能的一般策略。这些想法适用于大多数 CUDA 程序员，但对于来自其他背景的开发人员可能并不那么明显。</p>
+<h3 id="13-2-1-Batching"><a href="#13-2-1-Batching" class="headerlink" title="13.2.1. Batching"></a>13.2.1. Batching</h3><p>最重要的优化是使用批处理并行计算尽可能多的结果。在 TensorRT 中，批次是可以统一处理的输入的集合。批次中的每个实例都具有相同的形状，并以完全相同的方式流经网络。因此，每个实例都可以简单地并行计算。</p>
+<p>网络的每一层都有计算前向推理所需的一定数量的开销和同步。通过并行计算更多结果，这种开销可以更有效地得到回报。此外，许多层的性能受到输入中最小维度的限制。如果批量大小为 1 或较小，则此大小通常可能是性能限制维度。例如，具有V个输入和K个输出的完全连接层可以针对一个批次实例实现为1xV矩阵与VxK权重矩阵的矩阵乘法。如果对N个实例进行批处理，则这将变为NxV乘以VxK矩阵。向量矩阵乘法器变成矩阵矩阵乘法器，效率更高。</p>
+<p>更大的批量大小几乎总是在 GPU 上更有效。非常大的批次，例如N &gt; 2^16 ，有时可能需要扩展索引计算，因此应尽可能避免。但通常，增加批量大小会提高总吞吐量。此外，当网络包含 <code>MatrixMultiply</code> 层或完全连接层时，如果硬件支持，由于使用了 Tensor Cores，32 的倍数的批大小往往对 FP16 和 INT8 推理具有最佳性能。</p>
+<p>由于应用程序的组织，有时无法进行批处理推理工作。在一些常见的应用程序中，例如根据请求进行推理的服务器，可以实现机会批处理。对于每个传入的请求，等待时间T 。如果在此期间有其他请求进来，请将它们一起批处理。否则，继续进行单实例推理。这种类型的策略为每个请求增加了固定的延迟，但可以将系统的最大吞吐量提高几个数量级。</p>
+<p><strong>使用批处理</strong></p>
+<p>如果在创建网络时使用显式批处理模式，则批处理维度是张量维度的一部分，您可以通过添加优化配置文件来指定批处理大小和批处理大小的范围以优化引擎。有关更多详细信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#work_dynamic_shapes">使用动态形状</a>部分。</p>
+<p>如果在创建网络时使用隐式批处理模式，则<code>IExecutionContext::execute</code>（ Python 中的<code>IExecutionContext.execute</code> ）和<code>IExecutionContext::enqueue</code> （ Python 中的<code>IExecutionContext.execute_async</code> ）方法采用批处理大小参数。在使用<code>IBuilder::setMaxBatchSize</code> （ Python中的 <code>Builder.max_batch_size</code> ）构建优化网络时，还应该为构建器设置最大批量大小。当调用<code>IExecutionContext::execute</code>或<code>enqueue</code>时，作为绑定参数传递的绑定是按张量组织的，而不是按实例组织的。换句话说，一个输入实例的数据没有组合到一个连续的内存区域中。相反，每个张量绑定都是该张量的实例数据数组。</p>
+<p>另一个考虑因素是构建优化的网络会针对给定的最大批量大小进行优化。最终结果将针对最大批量大小进行调整，但对于任何较小的批量大小仍然可以正常工作。可以运行多个构建操作来为不同的批量大小创建多个优化引擎，然后在运行时根据实际批量大小选择要使用的引擎。</p>
+<h3 id="13-2-2-Streaming"><a href="#13-2-2-Streaming" class="headerlink" title="13.2.2. Streaming"></a>13.2.2. Streaming</h3><p>一般来说，CUDA 编程流是一种组织异步工作的方式。放入流中的异步命令保证按顺序运行，但相对于其他流可能会乱序执行。特别是，两个流中的异步命令可以被调度为同时运行（受硬件限制）。</p>
+<p>在 TensorRT 和推理的上下文中，优化的最终网络的每一层都需要在 GPU 上工作。但是，并非所有层都能够充分利用硬件的计算能力。在单独的流中安排请求允许在硬件可用时立即安排工作，而无需进行不必要的同步。即使只有一些层可以重叠，整体性能也会提高。</p>
+<p><strong>使用流式传输</strong></p>
+<ol>
+<li>识别独立的推理批次。</li>
+<li>为网络创建一个引擎。</li>
+<li><code>cudaStreamCreate</code>为每个独立批次创建一个 CUDA 流，并为每个独立批次创建一个<code>IExecutionContext</code> 。</li>
+<li><code>IExecutionContext::enqueue</code>从适当的<code>IExecutionContext</code>请求异步结果并传入适当的流来启动推理工作。</li>
+<li>在所有工作启动后，与所有流同步以等待结果。执行上下文和流可以重用于以后的独立工作批次。</li>
+</ol>
+<p><strong>多个流</strong><br>运行多个并发流通常会导致多个流同时共享计算资源的情况。这意味着与优化 TensorRT 引擎时相比，推理期间网络可用的计算资源可能更少。这种资源可用性的差异可能会导致 TensorRT 选择一个对于实际运行时条件不是最佳的内核。为了减轻这种影响，您可以在引擎创建期间限制可用计算资源的数量，使其更接近实际运行时条件。这种方法通常以延迟为代价来提高吞吐量。有关更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#limit-compute-resources">限制计算资源</a>。</p>
+<p>也可以将多个主机线程与流一起使用。一种常见的模式是将传入的请求分派到等待工作线程池中。在这种情况下，工作线程池将每个都有一个执行上下文和 CUDA 流。当工作变得可用时，每个线程将在自己的流中请求工作。每个线程将与其流同步以等待结果，而不会阻塞其他工作线程。</p>
+<h3 id="13-2-3-CUDA-Graphs"><a href="#13-2-3-CUDA-Graphs" class="headerlink" title="13.2.3. CUDA Graphs"></a>13.2.3. CUDA Graphs</h3><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#cuda-graphs">CUDA 图</a>是一种表示内核序列（或更一般地是图）的方式，其调度方式允许由 CUDA 优化。当您的应用程序性能对将内核排入队列所花费的 CPU 时间敏感时，这可能特别有用。<br>TensorRT 的<code>enqueuev2()</code>方法支持对不需要 CPU 交互的模型进行 CUDA 图捕获。例如：</p>
+<p><strong>C++</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Capture a CUDA graph instance</span></span><br><span class="line">cudaGraph_t graph;</span><br><span class="line">cudaGraphExec_t instance;</span><br><span class="line"><span class="built_in">cudaStreamBeginCapture</span>(stream, cudaStreamCaptureModeGlobal);</span><br><span class="line">context-&gt;<span class="built_in">enqueueV2</span>(buffers, stream, <span class="literal">nullptr</span>);</span><br><span class="line"><span class="built_in">cudaStreamEndCapture</span>(stream, &amp;graph);</span><br><span class="line"><span class="built_in">cudaGraphInstantiate</span>(&amp;instance, graph, <span class="literal">NULL</span>, <span class="literal">NULL</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"><span class="comment">// To run inferences:</span></span><br><span class="line"><span class="built_in">cudaGraphLaunch</span>(instance, stream);</span><br><span class="line"><span class="built_in">cudaStreamSynchronize</span>(stream);</span><br></pre></td></tr></table></figure></p>
+<p>不支持图的模型包括带有循环或条件的模型。在这种情况下， <code>cudaStreamEndCapture()</code>将返回<code>cudaErrorStreamCapture*</code>错误，表示图捕获失败，但上下文可以继续用于没有 CUDA 图的正常推理。</p>
+<p>捕获图时，重要的是要考虑在存在动态形状时使用的两阶段执行策略。</p>
+<ol>
+<li>更新模型的内部状态以考虑输入大小的任何变化</li>
+<li>将工作流式传输到 GPU</li>
+</ol>
+<p>对于在构建时输入大小固定的模型，第一阶段不需要每次调用工作。否则，如果自上次调用以来输入大小发生了变化，则可能需要进行一些工作来更新派生属性。</p>
+<p>第一阶段的工作不是为捕获而设计的，即使捕获成功也可能会增加模型执行时间。因此，在更改输入的形状或形状张量的值后，调用<code>enqueueV2()</code>一次以在捕获图形之前刷新延迟更新。</p>
+<p>使用 TensorRT 捕获的图特定于捕获它们的输入大小，以及执行上下文的状态。修改捕获图表的上下文将导致执行图表时未定义的行为 - 特别是，如果应用程序通过<code>createExecutionContextWithoutDeviceMemory()</code>为激活提供自己的内存，则内存地址也会作为图表的一部分被捕获。绑定位置也被捕获为图表的一部分。</p>
+<p><code>trtexec</code>允许您检查构建的 TensorRT 引擎是否与 CUDA 图形捕获兼容。有关详细信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#trtexec">trtexec</a>部分。</p>
+<h3 id="13-2-4-Enabling-Fusion"><a href="#13-2-4-Enabling-Fusion" class="headerlink" title="13.2.4. Enabling Fusion"></a>13.2.4. Enabling Fusion</h3><h4 id="13-2-4-1-Layer-Fusion"><a href="#13-2-4-1-Layer-Fusion" class="headerlink" title="13.2.4.1. Layer Fusion"></a>13.2.4.1. Layer Fusion</h4><p>TensorRT 尝试在构建阶段在网络中执行许多不同类型的优化。在第一阶段，尽可能将层融合在一起。融合将网络转换为更简单的形式，但保持相同的整体行为。在内部，许多层实现具有在创建网络时无法直接访问的额外参数和选项。相反，融合优化步骤检测支持的操作模式，并将多个层融合到一个具有内部选项集的层中。</p>
+<p>考虑卷积后跟 <code>ReLU</code> 激活的常见情况。要创建具有这些操作的网络，需要使用 <code>addConvolution</code> 添加卷积层，然后使用<code>addActivation</code>和<code>kRELU</code>的<code>ActivationType</code>添加激活层。未优化的图将包含用于卷积和激活的单独层。卷积的内部实现支持直接从卷积核一步计算输出上的 ReLU 函数，而无需第二次内核调用。融合优化步骤将检测 ReLU 之后的卷积，验证实现是否支持这些操作，然后将它们融合到一层。</p>
+<p>为了调查哪些融合已经发生或没有发生，构建器将其操作记录到构建期间提供的记录器对象。优化步骤在<code>kINFO</code>日志级别。要查看这些消息，请确保将它们记录在<code>ILogger</code>回调中。</p>
+<p>融合通常通过创建一个新层来处理，该层的名称包含被融合的两个层的名称。例如，在 MNIST 中，名为 <code>ip1</code> 的全连接层（<code>InnerProduct</code>）与名为<code>relu1</code>的 <code>ReLU</code> 激活层融合，以创建名为<code>ip1 + relu1</code>的新层。</p>
+<h4 id="13-2-4-2-Types-Of-Fusions"><a href="#13-2-4-2-Types-Of-Fusions" class="headerlink" title="13.2.4.2. Types Of Fusions"></a>13.2.4.2. Types Of Fusions</h4><p>以下列表描述了支持的融合类型。</p>
+<p><strong>支持的层融合</strong></p>
+<p><strong>ReLU ReLU Activation</strong></p>
+<p>执行 ReLU 的激活层，然后执行 ReLU 的激活将被单个激活层替换。</p>
+<p><strong>Convolution and ReLU Activation</strong><br>卷积层可以是任何类型，并且对值没有限制。激活层必须是 ReLU 类型。</p>
+<p><strong>Convolution and GELU Activation</strong></p>
+<p>输入输出精度要一致；它们都是 <code>FP16</code> 或 <code>INT8</code>。激活层必须是 <code>GELU</code>类型。 TensorRT 应该在具有 CUDA 10.0 或更高版本的 Turing 或更高版本的设备上运行。</p>
+<p><strong>Convolution and Clip Activation</strong></p>
+<p>卷积层可以是任何类型，并且对值没有限制。激活层必须是Clip类型。</p>
+<p><strong>Scale and Activation</strong></p>
+<p>Scale 层后跟一个 Activation 层可以融合成一个 Activation 层。</p>
+<p><strong>Convolution And ElementWise Operation</strong></p>
+<p>卷积层后跟 ElementWise 层中的简单求和、最小值或最大值可以融合到卷积层中。总和不得使用广播，除非广播跨越批量大小。</p>
+<p><strong>Padding and Convolution/Deconvolution</strong></p>
+<p>如果所有填充大小都是非负的，则可以将后跟卷积或反卷积的填充融合到单个卷积/反卷积层中。</p>
+<p><strong>Shuffle and Reduce</strong></p>
+<p>一个没有 reshape 的 Shuffle 层，然后是一个 Reduce 层，可以融合成一个 Reduce 层。 Shuffle 层可以执行排列，但不能执行任何重塑操作。 Reduce 层必须有一组keepDimensions维度。</p>
+<p><strong>Shuffle and Shuffle</strong></p>
+<p>每个 Shuffle 层由转置、重塑和第二个转置组成。一个 Shuffle 层后跟另一个 Shuffle 层可以被单个 Shuffle 替换（或什么都没有）。如果两个 Shuffle 层都执行 reshape 操作，则只有当第一个 shuffle 的第二个转置是第二个 shuffle 的第一个转置的逆时，才允许这种融合。</p>
+<p><strong>Scale</strong><br>可以擦除添加0 、乘以1或计算 1 的幂的Scale 层。</p>
+<p><strong>Convolution and Scale</strong></p>
+<p>卷积层后跟kUNIFORM或kCHANNEL的 Scale 层融合为单个卷积。如果秤具有非恒定功率参数，则禁用此融合。</p>
+<p><strong>Reduce</strong></p>
+<p>执行平均池化的 Reduce 层将被 Pooling 层取代。 Reduce 层必须有一个keepDimensions集，使用kAVG操作在批处理之前从CHW输入格式减少H和W维度。</p>
+<p>Convolution and Pooling<br>卷积层和池化层必须具有相同的精度。卷积层可能已经具有来自先前融合的融合激活操作。</p>
+<p><strong>Depthwise Separable Convolution</strong><br>带有激活的深度卷积，然后是带有激活的卷积，有时可能会融合到单个优化的 DepSepConvolution 层中。两个卷积的精度必须为 INT8，并且设备的计算能力必须为 7.2 或更高版本。</p>
+<p><strong>SoftMax and Log</strong></p>
+<p>如果 SoftMax 尚未与先前的日志操作融合，则可以将其融合为单个 Softmax 层。</p>
+<p><strong>SoftMax 和 TopK</strong></p>
+<p>可以融合成单层。 SoftMax 可能包含也可能不包含 Log 操作。</p>
+<p><strong>FullyConnected</strong></p>
+<p>FullyConnected 层将被转换为 Convolution 层，所有用于卷积的融合都会生效。</p>
+<p><strong>Supported Reduction Operation Fusions</strong></p>
+<p><strong>GELU</strong></p>
+<p>一组表示以下方程的 <code>Unary</code> 层和 <code>ElementWise</code> 层可以融合到单个 GELU 归约操作中。 </p>
+<p>$0.5x × (1+tanh (2/π (x+0.044715x^3)))$</p>
+<p>或替代表示：<br>$0.5x × (1+erf (x/\sqrt{2}))$</p>
+<p><strong>L1Norm</strong></p>
+<p>一个一元层kABS操作和一个 Reduce 层kSUM操作可以融合成一个 L1Norm 归约操作。</p>
+<p><strong>Sum of Squares</strong></p>
+<p>具有相同输入（平方运算）的乘积 ElementWise 层后跟kSUM 约简可以融合为单个平方和约简运算。</p>
+<p><strong>L2Norm</strong></p>
+<p>kSQRT UnaryOperation之后的平方和运算可以融合到单个 L2Norm 归约运算中。</p>
+<p><strong>LogSum</strong></p>
+<p>一个缩减层kSUM后跟一个kLOG UnaryOperation 可以融合成一个单一的 LogSum 缩减操作。</p>
+<p><strong>LogSumExp</strong></p>
+<p>一个一元kEXP ElementWise操作后跟一个 LogSum 融合可以融合成一个单一的 LogSumExp 约简。</p>
+<h4 id="13-2-4-3-PointWise-Fusion"><a href="#13-2-4-3-PointWise-Fusion" class="headerlink" title="13.2.4.3. PointWise Fusion"></a>13.2.4.3. PointWise Fusion</h4><p>多个相邻的 <code>PointWise</code> 层可以融合到一个 <code>PointWise</code> 层中，以提高性能。</p>
+<p>支持以下类型的 <code>PointWise</code> 层，但有一些限制：</p>
+<p><strong>Activation</strong></p>
+<p>每个ActivationType 。</p>
+<p><strong>Constant</strong></p>
+<p>仅具有单个值的常量（大小 == 1）。</p>
+<p><strong>ElementWise</strong></p>
+<p>每个ElementWiseOperation 。</p>
+<p><strong>PointWise</strong></p>
+<p>PointWise本身也是一个 PointWise 层。</p>
+<p><strong>Scale</strong></p>
+<p>仅支持<code>ScaleMode::kUNIFORM</code> 。</p>
+<p><strong>Unary</strong></p>
+<p>每个UnaryOperation 。</p>
+<p>融合的 PointWise 层的大小不是无限的，因此，某些 <code>PointWise</code> 层可能无法融合。</p>
+<p>Fusion 创建一个新层，其名称由融合的两个层组成。例如，名为add1的 ElementWise 层与名为relu1的 ReLU 激活层融合，新层名称为： <code>fusedPointwiseNode(add1, relu1)</code> 。</p>
+<h4 id="13-2-4-4-Q-DQ-Fusion"><a href="#13-2-4-4-Q-DQ-Fusion" class="headerlink" title="13.2.4.4. Q/DQ Fusion"></a>13.2.4.4. Q/DQ Fusion</h4><p>从 QAT 工具（如<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/tools/pytorch-quantization">NVIDIA 的 PyTorch 量化工具包</a>）生成的量化 INT8 图由具有比例和零点的<code>onnx::QuantizeLinear</code>和<code>onnx::DequantizeLinear</code>节点对 <code>(Q/DQ)</code> 组成。从 TensorRT 7.0 开始，要求<code>zero_point</code>为0 。</p>
+<p>Q/DQ 节点帮助将 FP32 值转换为 INT8，反之亦然。这样的图在 FP32 精度上仍然会有权重和偏差。</p>
+<p>权重之后是 <code>Q/DQ</code> 节点对，以便在需要时可以对它们进行量化/去量化。偏置量化是使用来自激活和权重的尺度执行的，因此偏置输入不需要额外的 <code>Q/DQ</code> 节点对。偏差量化的假设是$S_weights * S_input = S_bias$ 。</p>
+<p>与 Q/DQ 节点相关的融合包括量化/去量化权重，在不改变模型数学等价性的情况下对 Q/DQ 节点进行交换，以及擦除冗余 Q/DQ 节点。应用 Q/DQ 融合后，其余的构建器优化将应用于图。</p>
+<p><strong>Fuse Q/DQ with weighted node (Conv, FC, Deconv)</strong></p>
+<p>如果我们有一个</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[<span class="built_in">DequantizeLinear</span> (Activations), <span class="built_in">DequantizeLinear</span> (weights)] &gt; Node &gt;</span><br><span class="line">        QuantizeLinear</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>( [DQ, DQ] &gt; Node &gt; Q ) 序列，然后融合到量化节点 ( QNode )。</p>
+<p>支持权重的 Q/DQ 节点对需要加权节点支持多个输入。因此，我们支持添加第二个输入（用于权重张量）和第三个输入（用于偏置张量）。可以使用<code>setInput(index, tensor)</code> API 为卷积、反卷积和全连接层设置其他输入，其中 index = 2 用于权重张量， index = 3 用于偏置张量。</p>
+<p>在与加权节点融合期间，我们会将 FP32 权重量化为 INT8，并将其与相应的加权节点融合。类似地，FP32 偏差将被量化为 INT32 并融合。</p>
+<p><strong>使用非加权节点融合 Q/DQ</strong></p>
+<p>如果我们有一个<code>DequantizeLinear &gt; Node &gt; QuantizeLinear ( DQ &gt; Node &gt; Q )</code> 序列，那么它将融合到量化节点 <code>( QNode )</code>。</p>
+<p><strong>Commutate Q/DQ nodes</strong></p>
+<p><code>DequantizeLinear</code> commutation is allowed when $Φ (DQ (x)) == DQ (Φ (x))$ . <code>QuantizeLinear</code>commutation is allowed when $Q (Φ (x)) == Φ (Q (x))$ .</p>
+<p>此外，交换逻辑还考虑了可用的内核实现，从而保证了数学等价性。</p>
+<p><strong>Insert missing Q/DQ nodes</strong></p>
+<p>如果一个节点缺少一个 Q/DQ 节点对，并且$max (abs (Φ (x))) == max (abs (x))$ ; （例如，MaxPool），将插入缺少的 Q/DQ 对以运行更多具有 INT8 精度的节点。</p>
+<p><strong>Erase redundant Q/DQ nodes</strong></p>
+<p>有可能在应用所有优化之后，该图仍然有 Q/DQ 节点对，它们本身就是一个空操作。 Q/DQ 节点擦除融合将删除此类冗余对。</p>
+<h3 id="13-2-5-Limiting-Compute-Resources"><a href="#13-2-5-Limiting-Compute-Resources" class="headerlink" title="13.2.5. Limiting Compute Resources"></a>13.2.5. Limiting Compute Resources</h3><p>当减少的数量更好地代表运行时的预期条件时，限制在引擎创建期间可用于 TensorRT 的计算资源量是有益的。例如，当期望 GPU 与 TensorRT 引擎并行执行额外工作时，或者当期望引擎在资源较少的不同 GPU 上运行时（请注意，推荐的方法是在 GPU 上构建引擎，即将用于推理，但这可能并不总是可行的）。</p>
+<p>您可以通过以下步骤限制可用计算资源的数量：</p>
+<ol>
+<li><p>启动 CUDA MPS 控制守护进程。</p>
+<p><code>nvidia-cuda-mps-control -d</code></p>
+</li>
+<li><p><code>CUDA_MPS_ACTIVE_THREAD_PERCENTAGE</code>环境变量一起使用的计算资源量。例如，导出 <code>CUDA_MPS_ACTIVE_THREAD_PERCENTAGE=50</code> 。</p>
+</li>
+<li>构建网络引擎。</li>
+<li><p>停止 CUDA MPS 控制守护程序。</p>
+<p><code>echo quit | nvidia-cuda-mps-control</code></p>
+</li>
+</ol>
+<p>生成的引擎针对减少的计算核心数量（本例中为 50%）进行了优化，并在推理期间使用类似条件时提供更好的吞吐量。鼓励您尝试不同数量的流和不同的 MPS 值，以确定网络的最佳性能。</p>
+<p>有关nvidia-cuda-mps-control 的更多详细信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deploy/mps/index.html#topic_5_1_1">nvidia-cuda-mps-control</a>文档和<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deploy/mps/index.html#topic_3_3_1_1">此处</a>的相关 GPU 要求。</p>
+<h2 id="13-3-Optimizing-Layer-Performance"><a href="#13-3-Optimizing-Layer-Performance" class="headerlink" title="13.3. Optimizing Layer Performance"></a>13.3. Optimizing Layer Performance</h2><p>以下描述详细说明了如何优化列出的层。</p>
+<p><strong>Concatenation Layer</strong></p>
+<p>如果使用隐式批处理维度，连接层的主要考虑是如果多个输出连接在一起，它们不能跨批处理维度广播，必须显式复制。大多数层支持跨批次维度的广播以避免不必要地复制数据，但如果输出与其他张量连接，这将被禁用。</p>
+<p><strong>Gather Layer</strong><br>请使用0轴。 Gather 层没有可用的融合。</p>
+<p><strong>Reduce Layer</strong></p>
+<p>要从 Reduce 层获得最大性能，请在最后一个维度上执行归约（尾部归约）。这允许最佳内存通过顺序内存位置读取/写入模式。如果进行常见的归约操作，请尽可能以将融合为单个操作的方式表达归约。</p>
+<p><strong>RNN Layer</strong></p>
+<p>如果可能，请选择使用较新的 RNNv2 接口而不是传统的 RNN 接口。较新的接口支持可变序列长度和可变批量大小，以及具有更一致的接口。为了获得最佳性能，更大的批量大小更好。通常，大小为 64 的倍数可获得最高性能。双向 RNN 模式由于增加了依赖性而阻止了波前传播，因此，它往往更慢。</p>
+<p>此外，新引入的基于 <code>ILoop</code> 的 API 提供了一种更灵活的机制，可以在循环中使用通用层，而不受限于一小组预定义的 <code>RNNv2</code> 接口。 ILoop 循环实现了一组丰富的自动循环优化，包括循环融合、展开和循环不变的代码运动，仅举几例。例如，当同一 <code>MatrixMultiply</code> 或 <code>FullyConnected</code> 层的多个实例正确组合以在沿序列维度展开循环后最大化机器利用率时，通常会获得显着的性能提升。如果您可以避免 <code>MatrixMultiply</code> 或 <code>FullyConnected</code> 层沿序列维度具有循环数据依赖性，则此方法效果最佳。</p>
+<p><strong>Shuffle</strong></p>
+<p>如果输入张量仅用于 shuffle 层，并且该层的输入和输出张量不是网络的输入和输出张量，则省略相当于对基础数据的身份操作的 shuffle 操作。 TensorRT 不会为此类操作执行额外的内核或内存副本。</p>
+<p><strong>TopK</strong></p>
+<p>要从 TopK 层中获得最大性能，请使用较小的K值来减少数据的最后一维，以实现最佳的顺序内存访问。通过使用 Shuffle 层来重塑数据，然后适当地重新解释索引值，可以一次模拟沿多个维度的缩减。</p>
+<p>有关层的更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#layers">TensorRT 层</a>。</p>
+<h2 id="13-4-Optimizing-for-Tensor-Cores"><a href="#13-4-Optimizing-for-Tensor-Cores" class="headerlink" title="13.4. Optimizing for Tensor Cores"></a>13.4. Optimizing for Tensor Cores</h2><p>Tensor Core 是在 NVIDIA GPU 上提供高性能推理的关键技术。在 TensorRT 中，所有计算密集型层（<code>MatrixMultiply</code>、<code>FullyConnected</code>、<code>Convolution</code> 和 <code>Deconvolution</code>）都支持 Tensor Core 操作。</p>
+<p>如果输入/输出张量维度与某个最小粒度对齐，则张量核心层往往会获得更好的性能：</p>
+<ul>
+<li>在卷积和反卷积层中，对齐要求是输入/输出通道维度</li>
+<li>在 <code>MatrixMultiply</code> 和 <code>FullyConnected</code> 层中，对齐要求是在 <code>MatrixMultiply</code> 中的矩阵维度K和N上，即M x K乘以K x N</li>
+</ul>
+<p>下表捕获了建议的张量维度对齐，以获得更好的张量核心性能。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Tensor Core Operation Type</th>
+<th>Suggested Tensor Dimension Alignment in Elements</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>TF32</td>
+<td>4</td>
+</tr>
+<tr>
+<td>FP16</td>
+<td>8 for dense math, 16 for sparse math</td>
+</tr>
+<tr>
+<td>INT8</td>
+<td>32</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>在不满足这些要求的情况下使用 Tensor Core 实现时，TensorRT 会隐式地将张量填充到最接近的对齐倍数，将模型定义中的维度向上舍入，以在不增加计算或内存流量的情况下允许模型中的额外容量。</p>
+<p>TensorRT 总是对层使用最快的实现，因此在某些情况下，即使可用，也可能不使用 Tensor Core 实现。</p>
+<h2 id="13-5-Optimizing-Plugins"><a href="#13-5-Optimizing-Plugins" class="headerlink" title="13.5. Optimizing Plugins"></a>13.5. Optimizing Plugins</h2><p>TensorRT 提供了一种注册执行层操作的自定义插件的机制。插件创建者注册后，您可以在序列化/反序列化过程中查找注册表找到创建者并将相应的插件对象添加到网络中。</p>
+<p>加载插件库后，所有 TensorRT 插件都会自动注册。有关自定义插件的更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#extending">使用自定义层扩展 TensorRT</a> 。</p>
+<p>插件的性能取决于执行插件操作的 CUDA 代码。适用标准CUDA 最佳实践。在开发插件时，从执行插件操作并验证正确性的简单独立 CUDA 应用程序开始会很有帮助。然后可以通过性能测量、更多单元测试和替代实现来扩展插件程序。代码运行并优化后，可以作为插件集成到 TensorRT 中。<br>为了尽可能获得最佳性能，在插件中支持尽可能多的格式非常重要。这消除了在网络执行期间对内部重新格式化操作的需要。有关示例，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#extending">使用自定义层扩展 TensorRT</a>部分。</p>
+<h2 id="13-6-Optimizing-Python-Performance"><a href="#13-6-Optimizing-Python-Performance" class="headerlink" title="13.6. Optimizing Python Performance"></a>13.6. Optimizing Python Performance</h2><p>使用 Python API 时，大多数相同的性能注意事项都适用。在构建引擎时，构建器优化阶段通常会成为性能瓶颈；不是 API 调用来构建网络。 Python API 和 C++ API 的推理时间应该几乎相同。</p>
+<p>在 Python API 中设置输入缓冲区涉及使用pycuda或其他 CUDA Python 库（如cupy ）将数据从主机传输到设备内存。其工作原理的详细信息将取决于主机数据的来源。在内部， pycuda支持允许有效访问内存区域的<a target="_blank" rel="noopener" href="https://docs.python.org/3/c-api/buffer.html">Python 缓冲区协议</a>。这意味着，如果输入数据在numpy数组或其他也支持缓冲区协议的类型中以合适的格式可用，则可以有效地访问和传输到 GPU。为了获得更好的性能，请确保您使用pycuda分配一个页面锁定的缓冲区，并在那里写入最终的预处理输入。</p>
+<p>有关使用 Python API 的更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#python_topics">Python API</a> 。</p>
+<h2 id="13-7-Improving-Model-Accuracy"><a href="#13-7-Improving-Model-Accuracy" class="headerlink" title="13.7. Improving Model Accuracy"></a>13.7. Improving Model Accuracy</h2><p>TensorRT 可以根据构建器配置以 <code>FP32</code>、<code>FP16</code> 或 <code>INT8</code> 精度执行层。默认情况下，TensorRT 选择以可实现最佳性能的精度运行层。有时这可能会导致准确性下降。通常，以更高的精度运行层有助于提高准确性，但会影响一些性能。</p>
+<p>我们可以采取几个步骤来提高模型的准确性：</p>
+<ol>
+<li><p>验证层输出：</p>
+<ol>
+<li>使用<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/tools/Polygraphy">Polygraphy</a>转储层输出并验证没有 NaN 或 Inf。 <code>--validate</code>选项可以检查 NaN 和 Infs 。此外，我们可以将层输出与来自例如 ONNX 运行时的黄金值进行比较。</li>
+<li>对于 FP16，模型可能需要重新训练以确保中间层输出可以以 FP16 精度表示，而不会出现上溢/下溢。</li>
+<li>对于 INT8，考虑使用更具代表性的校准数据集重新校准。如果您的模型来自 PyTorch，除了 TensorRT 中的 PTQ，我们还提供了 NVIDIA 的 <a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/tools/pytorch-quantization">Quantization Toolkit for PyTorch for QAT</a> 框架中的 QAT。您可以尝试这两种方法并选择更准确的方法。</li>
+</ol>
+</li>
+<li><p>操纵层精度：</p>
+<ol>
+<li>有时以特定精度运行层会导致输出不正确。这可能是由于固有的层约束（例如，LayerNorm 输出不应为 INT8）、模型约束（输出发散导致准确性差）或报告TensorRT 错误。</li>
+<li>您可以控制层执行精度和输出精度。</li>
+<li>一个实验性的<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/tools/Polygraphy/polygraphy/tools/debug">调试精度</a>工具可以帮助自动找到以高精度运行的层。</li>
+</ol>
+</li>
+<li><p>使用<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#algorithm-select">算法选择和可重现构建</a>来禁用不稳定的策略：</p>
+<ol>
+<li>当构建+运行与构建+运行之间的准确性发生变化时，可能是由于为层选择了错误的策略。</li>
+<li>使用算法选择器从好的和坏的运行中转储策略。将算法选择器配置为仅允许策略的子集（即仅允许来自良好运行的策略等）。<br>c.    您可以使用<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/tools/Polygraphy">Polygraphy</a><a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/tools/Polygraphy/examples/cli/debug/01_debugging_flaky_trt_tactics">自动执行此过程</a>。</li>
+</ol>
+</li>
+</ol>
+<p>每次运行变化的准确性不应改变；一旦为特定 GPU 构建了引擎，它应该会在多次运行中产生位准确的输出。如果没有，请提交<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#bug-reporting">TensorRT 错误</a>。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/13-TensorRT%E7%9A%84%E6%9C%80%E4%BD%B3%E6%80%A7%E8%83%BD%E5%AE%9E%E8%B7%B5/" title="13-TensorRT的最佳性能实践">http://example.com/TensorRT/TensorRT中文版开发手册/13-TensorRT的最佳性能实践/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+              <a href="/tags/Tensorrt/" rel="tag"><i class="fa fa-tag"></i> Tensorrt</a>
+              <a href="/tags/DeepLearning/" rel="tag"><i class="fa fa-tag"></i> DeepLearning</a>
+              <a href="/tags/Plugin/" rel="tag"><i class="fa fa-tag"></i> Plugin</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/12-TensorRT%E5%92%8CDLA(Deep_Learning_Accelerator)/" rel="prev" title="12-TensorRT和DLA(Deep_Learning_Accelerator)">
+                  <i class="fa fa-chevron-left"></i> 12-TensorRT和DLA(Deep_Learning_Accelerator)
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/14-TensorRT%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" rel="next" title="14-TensorRT中的常见问题">
+                  14-TensorRT中的常见问题 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"e92814d1ab1af0ec3c8c1536d2ceae9f"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="4.2 内存管理CUDA编程的内存管理与C语言的类似，需要程序员显式地管理主机和设备之间的数据移动。工作重点在于如何使用CUDA函数来显式地管理内存和数据移动。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="4-2 内存管理">
+<meta property="og:url" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="4.2 内存管理CUDA编程的内存管理与C语言的类似，需要程序员显式地管理主机和设备之间的数据移动。工作重点在于如何使用CUDA函数来显式地管理内存和数据移动。">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/image-20230307143203630.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/image-20230307143504879.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/image-20230307153640765.png">
+<meta property="article:published_time" content="2024-12-01T10:13:43.671Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:43.671Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="GPU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/image-20230307143203630.png">
+
+
+<link rel="canonical" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/","path":"CUDA/CUDA C编程权威指南笔记/4-2 内存管理/","title":"4-2 内存管理"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>4-2 内存管理 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-text">4.2 内存管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-1%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E5%92%8C%E9%87%8A%E6%94%BE"><span class="nav-text">4.2.1内存分配和释放</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-2-%E5%86%85%E5%AD%98%E4%BC%A0%E8%BE%93"><span class="nav-text">4.2.2 内存传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-3-%E5%9B%BA%E5%AE%9A%E5%86%85%E5%AD%98"><span class="nav-text">4.2.3 固定内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-4-%E9%9B%B6%E6%8B%B7%E8%B4%9D%E5%86%85%E5%AD%98"><span class="nav-text">4.2.4 零拷贝内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-5-%E7%BB%9F%E4%B8%80%E8%99%9A%E6%8B%9F%E5%AF%BB%E5%9D%80"><span class="nav-text">4.2.5 统一虚拟寻址</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-6-%E7%BB%9F%E4%B8%80%E5%86%85%E5%AD%98%E5%AF%BB%E5%9D%80"><span class="nav-text">4.2.6 统一内存寻址</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="4-2 内存管理 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          4-2 内存管理
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="4-2-内存管理"><a href="#4-2-内存管理" class="headerlink" title="4.2 内存管理"></a>4.2 内存管理</h2><p>CUDA编程的内存管理与C语言的类似，需要程序员显式地管理主机和设备之间的数据移动。工作重点在于如何使用CUDA函数来显式地管理内存和数据移动。</p>
+<ul>
+<li>分配和释放设备内存</li>
+<li>在主机和设备之间传输数据</li>
+</ul>
+<h3 id="4-2-1内存分配和释放"><a href="#4-2-1内存分配和释放" class="headerlink" title="4.2.1内存分配和释放"></a>4.2.1内存分配和释放</h3><p>CUDA编程模型假设了一个包含一个主机和一个设备的异构系统（例如我们常用的PC的CPU与GPU），每一个异构系统都有自己独立的内存空间，我们用C语言或python编程时是在CPU上运行的（除了少数特别情况），因此C代码的内存空间都是在CPU上进行操作，但是有了GPU后，名内存空间是独立的，但是CUDA提供了接口函数在CPU上对GPU内存进行一些操作，例如下面讲到的申请、移动、释放。<strong>核函数在设备内存空间中运行，CUDA运行时提供函数以分配和释放设备内存</strong>。你可以在<strong>主机上</strong>使用下列函数分配<strong>全局内存</strong>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaMalloc</span><span class="params">(<span class="type">void</span> ** devPtr,<span class="type">size_t</span> count)</span></span><br></pre></td></tr></table></figure>
+<p>这个函数在设备上分配了count字节的全局内存，并用devptr指针返回该内存的地址。Malloc函数执行失败则返回cudaErrorMemoryAllocation。</p>
+<p>下列函数将其初始化：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaMemset</span><span class="params">(<span class="type">void</span> * devPtr,<span class="type">int</span> value,<span class="type">size_t</span> count)</span></span><br></pre></td></tr></table></figure>
+<p>下代码释放该内存空间：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaFree</span><span class="params">(<span class="type">void</span> * devPtr)</span></span><br></pre></td></tr></table></figure>
+<p>套路基本和C语言一致。设备内存的分配和释放操作成本较高，所以应用程序应重利用设备内存，以减少对整体性能的影响。</p>
+<h3 id="4-2-2-内存传输"><a href="#4-2-2-内存传输" class="headerlink" title="4.2.2 内存传输"></a>4.2.2 内存传输</h3><p>使用下列函数在主机（CPU）和设备（GPU）传输数据：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaMemcpy</span><span class="params">(<span class="type">void</span> *dst,<span class="type">const</span> <span class="type">void</span> * src,<span class="type">size_t</span> count,<span class="keyword">enum</span> cudaMemcpyKind kind)</span></span><br></pre></td></tr></table></figure>
+<p>第一个参数dst是目标地址，第二个参数src是原始地址，然后是拷贝的内存大小，最后是传输类型，传输类型包括以下几种：</p>
+<ul>
+<li>cudaMemcpyHostToHost</li>
+<li>cudaMemcpyHostToDevice</li>
+<li>cudaMemcpyDeviceToHost</li>
+<li>cudaMemcpyDeviceToDevice</li>
+</ul>
+<p>这个函数在大多数情况下都是<strong>同步</strong>的。</p>
+<p>代码清单4-2是一个使用<code>cudaMemcpy</code>的例子。这个例子展示了在主机和设备之间来回地传输数据。使用<code>cudaMalloc</code>分配全局内存，使用<code>cudaMemcpy</code>将数据传输给设备，传输方向由<code>cudaMemcpyHostToDevice</code>指定。然后使用<code>cudaMemcpy</code>将数据传回主机，方向由<code>cudaMemcpyDeviceToHost</code>指定。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;../common/common.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cuda_runtime.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * An example of using CUDA&#x27;s memory copy API to transfer data to and from the</span></span><br><span class="line"><span class="comment"> * device. In this case, cudaMalloc is used to allocate memory on the GPU and</span></span><br><span class="line"><span class="comment"> * cudaMemcpy is used to transfer the contents of host memory to an array</span></span><br><span class="line"><span class="comment"> * allocated using cudaMalloc.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// set up device</span></span><br><span class="line">    <span class="type">int</span> dev = <span class="number">0</span>;</span><br><span class="line">    CHECK(cudaSetDevice(dev));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// memory size</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> isize = <span class="number">1</span> &lt;&lt; <span class="number">22</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> nbytes = isize * <span class="keyword">sizeof</span>(<span class="type">float</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// get device information</span></span><br><span class="line">    cudaDeviceProp deviceProp;</span><br><span class="line">    CHECK(cudaGetDeviceProperties(&amp;deviceProp, dev));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s starting at &quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;device %d: %s memory size %d nbyte %5.2fMB\n&quot;</span>, dev,</span><br><span class="line">           deviceProp.name, isize, nbytes / (<span class="number">1024.0f</span> * <span class="number">1024.0f</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// allocate the host memory</span></span><br><span class="line">    <span class="type">float</span> *h_a = (<span class="type">float</span> *)<span class="built_in">malloc</span>(nbytes);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// allocate the device memory</span></span><br><span class="line">    <span class="type">float</span> *d_a;</span><br><span class="line">    CHECK(cudaMalloc((<span class="type">float</span> **)&amp;d_a, nbytes));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// initialize the host memory</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="type">unsigned</span> <span class="type">int</span> i = <span class="number">0</span>; i &lt; isize; i++) h_a[i] = <span class="number">0.5f</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// transfer data from the host to the device</span></span><br><span class="line">    CHECK(cudaMemcpy(d_a, h_a, nbytes, cudaMemcpyHostToDevice));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// transfer data from the device to the host</span></span><br><span class="line">    CHECK(cudaMemcpy(h_a, d_a, nbytes, cudaMemcpyDeviceToHost));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// free memory</span></span><br><span class="line">    CHECK(cudaFree(d_a));</span><br><span class="line">    <span class="built_in">free</span>(h_a);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// reset device</span></span><br><span class="line">    CHECK(cudaDeviceReset());</span><br><span class="line">    <span class="keyword">return</span> EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>图4-3所示为CPU内存和GPU内存间的连接性能。从图中可以看到GPU芯片和板载GDDR5 GPU内存之间的理论峰值带宽非常高，对于Fermi C2050 GPU来说为144GB/s。CPU和GPU之间通过PCIe Gen2总线相连，这种连接的理论带宽要低得多，为8GB/s（PCIeGen3总线最大理论限制值是16GB/s）。这种差距意味着如果管理不当的话，主机和设备间的数据传输会降低应用程序的整体性能。因此，<strong>CUDA编程的一个基本原则应是尽可能地减少主机与设备之间的传输</strong>。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/image-20230307143203630.png" class="" title="image-20230307143203630">
+<h3 id="4-2-3-固定内存"><a href="#4-2-3-固定内存" class="headerlink" title="4.2.3 固定内存"></a>4.2.3 固定内存</h3><p><strong>主机内存</strong>采用分页式管理(pageable)，通俗的说法就是操作系统把物理内存分成一些“页”，然后给一个应用程序一大块内存，但是这一大块内存可能在一些不连续的页上，应用只能看到虚拟的内存地址，而操作系统可能随时更换物理地址的页（从原始地址复制到另一个地址）但是应用是不会差觉得，但是从主机传输到设备上的时候，如果此时发生了页面移动，对于传输操作来说是致命的，所以在数据传输之前，CUDA驱动会锁定页面，或者直接分配固定的主机内存，将主机源数据复制到固定内存上，然后从固定内存传输数据到设备上：</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/image-20230307143504879.png" class="" title="image-20230307143504879">
+<p>上图左边是正常分配内存，传输过程是：锁页-复制到固定内存-复制到设备<br>右边时分配时就是固定内存，直接传输到设备上。</p>
+<p>你可以理解为 Page lock Memory 是 VIP 房间，锁定给你一个人用。而 Pageable Memory 是普通房间，在酒店房间不够的时候，选择性的把你的房间腾出来给其他人交换用(交换到硬盘上)，这就可以容纳更多人了。<strong>造成房间很多的假象，代价是性能降低</strong></p>
+<p>CUDA运行时允许你使用如下指令直接分配<strong>固定主机内存</strong>（注意不是分配GPU内存，是分配类似于malloc的主机内存）：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaMallocHost</span><span class="params">(<span class="type">void</span> ** devPtr,<span class="type">size_t</span> count)</span></span><br></pre></td></tr></table></figure>
+<p>这个函数分配了count字节的主机内存，这些内存是页面锁定的并且对设备来说是可访问的。由于固定内存能被设备直接访问，所以它能用比可分页内存高得多的带宽进行读写。</p>
+<p>固定的主机内存释放使用：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaFreeHost</span><span class="params">(<span class="type">void</span> *ptr)</span></span><br></pre></td></tr></table></figure>
+<p>下面的例子与4.2.2基本一致，但是CPU端的主机内存使用的是pinned内存，也就是固定页内存。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;../common/common.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cuda_runtime.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * An example of using CUDA&#x27;s memory copy API to transfer data to and from the</span></span><br><span class="line"><span class="comment"> * device. In this case, cudaMalloc is used to allocate memory on the GPU and</span></span><br><span class="line"><span class="comment"> * cudaMemcpy is used to transfer the contents of host memory to an array</span></span><br><span class="line"><span class="comment"> * allocated using cudaMalloc. Host memory is allocated using cudaMallocHost to</span></span><br><span class="line"><span class="comment"> * create a page-locked host array.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// set up device</span></span><br><span class="line">    <span class="type">int</span> dev = <span class="number">0</span>;</span><br><span class="line">    CHECK(cudaSetDevice(dev));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// memory size</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> isize = <span class="number">1</span> &lt;&lt; <span class="number">22</span>;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> nbytes = isize * <span class="keyword">sizeof</span>(<span class="type">float</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// get device information</span></span><br><span class="line">    cudaDeviceProp deviceProp;</span><br><span class="line">    CHECK(cudaGetDeviceProperties(&amp;deviceProp, dev));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!deviceProp.canMapHostMemory)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Device %d does not support mapping CPU host memory!\n&quot;</span>, dev);</span><br><span class="line">        CHECK(cudaDeviceReset());</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_SUCCESS);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s starting at &quot;</span>, argv[<span class="number">0</span>]);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;device %d: %s memory size %d nbyte %5.2fMB canMap %d\n&quot;</span>, dev,</span><br><span class="line">           deviceProp.name, isize, nbytes / (<span class="number">1024.0f</span> * <span class="number">1024.0f</span>),</span><br><span class="line">           deviceProp.canMapHostMemory);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// allocate pinned host memory</span></span><br><span class="line">    <span class="type">float</span> *h_a;</span><br><span class="line">    CHECK(cudaMallocHost ((<span class="type">float</span> **)&amp;h_a, nbytes));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// allocate device memory</span></span><br><span class="line">    <span class="type">float</span> *d_a;</span><br><span class="line">    CHECK(cudaMalloc((<span class="type">float</span> **)&amp;d_a, nbytes));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// initialize host memory</span></span><br><span class="line">    <span class="built_in">memset</span>(h_a, <span class="number">0</span>, nbytes);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; isize; i++) h_a[i] = <span class="number">100.10f</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// transfer data from the host to the device</span></span><br><span class="line">    CHECK(cudaMemcpy(d_a, h_a, nbytes, cudaMemcpyHostToDevice));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// transfer data from the device to the host</span></span><br><span class="line">    CHECK(cudaMemcpy(h_a, d_a, nbytes, cudaMemcpyDeviceToHost));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// free memory</span></span><br><span class="line">    CHECK(cudaFree(d_a));</span><br><span class="line">    CHECK(cudaFreeHost(h_a));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// reset device</span></span><br><span class="line">    CHECK(cudaDeviceReset());</span><br><span class="line">    <span class="keyword">return</span> EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>对比两这之间的内存拷贝实际ian如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">zmurder@zmurder:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南练习code/chapter04$ nvprof ./memTransfer</span><br><span class="line">==1682219== NVPROF is profiling process 1682219, <span class="built_in">command</span>: ./memTransfer</span><br><span class="line">./memTransfer starting at device 0: Quadro P2000 memory size 4194304 nbyte 16.00MB</span><br><span class="line">==1682219== Profiling application: ./memTransfer</span><br><span class="line">==1682219== Profiling result:</span><br><span class="line">            Type  Time(%)      Time     Calls       Avg       Min       Max  Name</span><br><span class="line"> GPU activities:   51.27%  1.8903ms         1  1.8903ms  1.8903ms  1.8903ms  [CUDA memcpy HtoD]</span><br><span class="line">                   48.73%  1.7969ms         1  1.7969ms  1.7969ms  1.7969ms  [CUDA memcpy DtoH]</span><br><span class="line">      API calls:   72.20%  138.40ms         1  138.40ms  138.40ms  138.40ms  cudaMalloc</span><br><span class="line">                   25.46%  48.816ms         1  48.816ms  48.816ms  48.816ms  cudaDeviceReset</span><br><span class="line">                    2.09%  4.0120ms         2  2.0060ms  1.9514ms  2.0606ms  cudaMemcpy</span><br><span class="line">                    0.09%  174.48us         1  174.48us  174.48us  174.48us  cudaFree</span><br><span class="line">                    0.07%  139.85us       101  1.3840us     177ns  63.176us  cuDeviceGetAttribute</span><br><span class="line">                    0.05%  96.258us         1  96.258us  96.258us  96.258us  cudaGetDeviceProperties</span><br><span class="line">                    0.02%  37.649us         1  37.649us  37.649us  37.649us  cuDeviceGetName</span><br><span class="line">                    0.01%  16.478us         1  16.478us  16.478us  16.478us  cuDeviceGetPCIBusId</span><br><span class="line">                    0.00%  4.7350us         1  4.7350us  4.7350us  4.7350us  cudaSetDevice</span><br><span class="line">                    0.00%  1.8140us         3     604ns     275ns  1.0870us  cuDeviceGetCount</span><br><span class="line">                    0.00%     812ns         2     406ns     211ns     601ns  cuDeviceGet</span><br><span class="line">                    0.00%     545ns         1     545ns     545ns     545ns  cuDeviceTotalMem</span><br><span class="line">                    0.00%     375ns         1     375ns     375ns     375ns  cuDeviceGetUuid</span><br><span class="line">zmurder@zmurder:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南练习code/chapter04$ nvprof ./pinMemTransfer</span><br><span class="line">==1682235== NVPROF is profiling process 1682235, <span class="built_in">command</span>: ./pinMemTransfer</span><br><span class="line">./pinMemTransfer starting at device 0: Quadro P2000 memory size 4194304 nbyte 16.00MB canMap 1</span><br><span class="line">==1682235== Profiling application: ./pinMemTransfer</span><br><span class="line">==1682235== Profiling result:</span><br><span class="line">            Type  Time(%)      Time     Calls       Avg       Min       Max  Name</span><br><span class="line"> GPU activities:   51.27%  1.3619ms         1  1.3619ms  1.3619ms  1.3619ms  [CUDA memcpy HtoD]</span><br><span class="line">                   48.73%  1.2941ms         1  1.2941ms  1.2941ms  1.2941ms  [CUDA memcpy DtoH]</span><br><span class="line">      API calls:   66.89%  138.00ms         1  138.00ms  138.00ms  138.00ms  cudaHostAlloc</span><br><span class="line">                   30.07%  62.042ms         1  62.042ms  62.042ms  62.042ms  cudaDeviceReset</span><br><span class="line">                    1.47%  3.0384ms         1  3.0384ms  3.0384ms  3.0384ms  cudaFreeHost</span><br><span class="line">                    1.31%  2.7029ms         2  1.3515ms  1.3070ms  1.3959ms  cudaMemcpy</span><br><span class="line">                    0.08%  156.32us       101  1.5470us     217ns  67.033us  cuDeviceGetAttribute</span><br><span class="line">                    0.07%  151.61us         1  151.61us  151.61us  151.61us  cudaFree</span><br><span class="line">                    0.05%  96.445us         1  96.445us  96.445us  96.445us  cudaMalloc</span><br><span class="line">                    0.04%  79.530us         1  79.530us  79.530us  79.530us  cudaGetDeviceProperties</span><br><span class="line">                    0.02%  35.024us         1  35.024us  35.024us  35.024us  cuDeviceGetName</span><br><span class="line">                    0.00%  9.2520us         1  9.2520us  9.2520us  9.2520us  cuDeviceGetPCIBusId</span><br><span class="line">                    0.00%  3.6730us         1  3.6730us  3.6730us  3.6730us  cudaSetDevice</span><br><span class="line">                    0.00%  3.0140us         3  1.0040us     337ns  2.1700us  cuDeviceGetCount</span><br><span class="line">                    0.00%  1.1520us         2     576ns     257ns     895ns  cuDeviceGet</span><br><span class="line">                    0.00%     644ns         1     644ns     644ns     644ns  cuDeviceTotalMem</span><br><span class="line">                    0.00%     445ns         1     445ns     445ns     445ns  cuDeviceGetUuid</span><br><span class="line">zmurder@zmurder:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南练习code/chapter04$ </span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>可以看出malloc申请的内存 与GPU之间拷贝的平均时间为1.8903ms和1.7969ms</p>
+<p>使用cudaMallocHost申请的内存与GPU之间的拷贝时间为1.3619ms和1.2941ms。的确是快了。</p>
+<h3 id="4-2-4-零拷贝内存"><a href="#4-2-4-零拷贝内存" class="headerlink" title="4.2.4 零拷贝内存"></a>4.2.4 零拷贝内存</h3><p>通常来说，主机不能直接访问设备变量，同时设备也不能直接访问主机变量。但有一<br>个例外：零拷贝内存。<strong>主机和设备都可以访问零拷贝内存</strong>。GPU线程可以直接访问零拷贝内存。在CUDA核函数中使用零拷贝内存有以下几个优势。</p>
+<ul>
+<li>当设备内存不足时可利用主机内存</li>
+<li>避免主机和设备间的显式数据传输</li>
+<li>提高PCIe传输率</li>
+</ul>
+<p>当使用零拷贝内存来共享主机和设备间的数据时，你必须同步主机和设备间的内存访问，同时更改主机和设备的零拷贝内存中的数据将导致不可预知的后果。</p>
+<p>可以通过以下函数创建零拷贝内存：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaHostAlloc</span><span class="params">(<span class="type">void</span> ** pHost,<span class="type">size_t</span> count,<span class="type">unsigned</span> <span class="type">int</span> flags)</span></span><br></pre></td></tr></table></figure>
+<p>这个函数分配了count字节的主机内存，<strong>该内存是页面锁定的且设备可访问的</strong>。最后一个标志参数，可以选择以下值：</p>
+<ul>
+<li>cudaHostAllocDefalt : 和cudaMallocHost函数一致</li>
+<li>cudaHostAllocPortable:返回能被所有CUDA上下文使用的固定内存</li>
+<li>cudaHostAllocWriteCombined:返回写结合内存，在某些设备上这种内存传输效率更高</li>
+<li>cudaHostAllocMapped:零拷贝内存</li>
+</ul>
+<p>释放使用：（和固定页内存一样）</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaFreeHost</span><span class="params">(<span class="type">void</span> *ptr)</span></span><br></pre></td></tr></table></figure>
+<p>零拷贝内存虽然不需要显式的传递到设备上，但是设备还不能通过pHost直接访问对应的内存地址，设备需要访问主机上的零拷贝内存，需要先获得另一个地址，这个地址帮助设备访问到主机对应的内存，函数为</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaHostGetDevicePointer</span><span class="params">(<span class="type">void</span> ** pDevice,<span class="type">void</span> * pHost,<span class="type">unsigned</span> flags)</span>;</span><br></pre></td></tr></table></figure>
+<p>该函数返回了一个在pDevice中的设备指针，该指针可以在设备上被引用以访问映射<br>得到的固定主机内存。</p>
+<p><strong>在进行频繁的读写操作时，使用零拷贝内存作为设备内存的补充将显著降低性能</strong>。因为每一次映射到内存的传输必须经过PCIe总线。与全局内存相比，延迟也显著增加。</p>
+<p>下面代码演示了零拷贝内存的使用方法，第一部分先使用malloc和cudamalloc来申请主机和设备内存，这也是常用的流程。第二部分作为对比使用cudaHostAlloc来申请设备内存。</p>
+<p>两部分最大的差别就是第一部分使用了cudaMemcpy，但是第二部分的另拷贝内存没有使用。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;../common/common.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cuda_runtime.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * This example demonstrates the use of zero-copy memory to remove the need to</span></span><br><span class="line"><span class="comment"> * explicitly issue a memcpy operation between the host and device. By mapping</span></span><br><span class="line"><span class="comment"> * host, page-locked memory into the device&#x27;s address space, the address can</span></span><br><span class="line"><span class="comment"> * directly reference a host array and transfer its contents over the PCIe bus.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * This example compares performing a vector addition with and without zero-copy</span></span><br><span class="line"><span class="comment"> * memory.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">checkResult</span><span class="params">(<span class="type">float</span> *hostRef, <span class="type">float</span> *gpuRef, <span class="type">const</span> <span class="type">int</span> N)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">double</span> epsilon = <span class="number">1.0E-8</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; N; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">abs</span>(hostRef[i] - gpuRef[i]) &gt; epsilon)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;Arrays do not match!\n&quot;</span>);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;host %5.2f gpu %5.2f at current %d\n&quot;</span>, hostRef[i],</span><br><span class="line">                    gpuRef[i], i);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">initialData</span><span class="params">(<span class="type">float</span> *ip, <span class="type">int</span> size)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        ip[i] = (<span class="type">float</span>)( rand() &amp; <span class="number">0xFF</span> ) / <span class="number">10.0f</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">sumArraysOnHost</span><span class="params">(<span class="type">float</span> *A, <span class="type">float</span> *B, <span class="type">float</span> *C, <span class="type">const</span> <span class="type">int</span> N)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> idx = <span class="number">0</span>; idx &lt; N; idx++)</span><br><span class="line">    &#123;</span><br><span class="line">        C[idx] = A[idx] + B[idx];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">sumArrays</span><span class="params">(<span class="type">float</span> *A, <span class="type">float</span> *B, <span class="type">float</span> *C, <span class="type">const</span> <span class="type">int</span> N)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (i &lt; N) C[i] = A[i] + B[i];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">sumArraysZeroCopy</span><span class="params">(<span class="type">float</span> *A, <span class="type">float</span> *B, <span class="type">float</span> *C, <span class="type">const</span> <span class="type">int</span> N)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (i &lt; N) C[i] = A[i] + B[i];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// set up device</span></span><br><span class="line">    <span class="type">int</span> dev = <span class="number">0</span>;</span><br><span class="line">    CHECK(cudaSetDevice(dev));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// get device properties</span></span><br><span class="line">    cudaDeviceProp deviceProp;</span><br><span class="line">    CHECK(cudaGetDeviceProperties(&amp;deviceProp, dev));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// check if support mapped memory</span></span><br><span class="line">    <span class="keyword">if</span> (!deviceProp.canMapHostMemory)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Device %d does not support mapping CPU host memory!\n&quot;</span>, dev);</span><br><span class="line">        CHECK(cudaDeviceReset());</span><br><span class="line">        <span class="built_in">exit</span>(EXIT_SUCCESS);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Using Device %d: %s &quot;</span>, dev, deviceProp.name);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// set up data size of vectors</span></span><br><span class="line">    <span class="type">int</span> ipower = <span class="number">10</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc &gt; <span class="number">1</span>) ipower = atoi(argv[<span class="number">1</span>]);</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> nElem = <span class="number">1</span> &lt;&lt; ipower;</span><br><span class="line">    <span class="type">size_t</span> nBytes = nElem * <span class="keyword">sizeof</span>(<span class="type">float</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ipower &lt; <span class="number">18</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Vector size %d power %d  nbytes  %3.0f KB\n&quot;</span>, nElem, ipower,</span><br><span class="line">               (<span class="type">float</span>)nBytes / (<span class="number">1024.0f</span>));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Vector size %d power %d  nbytes  %3.0f MB\n&quot;</span>, nElem, ipower,</span><br><span class="line">               (<span class="type">float</span>)nBytes / (<span class="number">1024.0f</span> * <span class="number">1024.0f</span>));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// part 1: using device memory</span></span><br><span class="line">    <span class="comment">// malloc host memory</span></span><br><span class="line">    <span class="type">float</span> *h_A, *h_B, *hostRef, *gpuRef;</span><br><span class="line">    h_A     = (<span class="type">float</span> *)<span class="built_in">malloc</span>(nBytes);</span><br><span class="line">    h_B     = (<span class="type">float</span> *)<span class="built_in">malloc</span>(nBytes);</span><br><span class="line">    hostRef = (<span class="type">float</span> *)<span class="built_in">malloc</span>(nBytes);</span><br><span class="line">    gpuRef  = (<span class="type">float</span> *)<span class="built_in">malloc</span>(nBytes);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// initialize data at host side</span></span><br><span class="line">    initialData(h_A, nElem);</span><br><span class="line">    initialData(h_B, nElem);</span><br><span class="line">    <span class="built_in">memset</span>(hostRef, <span class="number">0</span>, nBytes);</span><br><span class="line">    <span class="built_in">memset</span>(gpuRef,  <span class="number">0</span>, nBytes);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// add vector at host side for result checks</span></span><br><span class="line">    sumArraysOnHost(h_A, h_B, hostRef, nElem);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// malloc device global memory</span></span><br><span class="line">    <span class="type">float</span> *d_A, *d_B, *d_C;</span><br><span class="line">    CHECK(cudaMalloc((<span class="type">float</span>**)&amp;d_A, nBytes));</span><br><span class="line">    CHECK(cudaMalloc((<span class="type">float</span>**)&amp;d_B, nBytes));</span><br><span class="line">    CHECK(cudaMalloc((<span class="type">float</span>**)&amp;d_C, nBytes));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// transfer data from host to device</span></span><br><span class="line">    CHECK(cudaMemcpy(d_A, h_A, nBytes, cudaMemcpyHostToDevice));</span><br><span class="line">    CHECK(cudaMemcpy(d_B, h_B, nBytes, cudaMemcpyHostToDevice));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// set up execution configuration</span></span><br><span class="line">    <span class="type">int</span> iLen = <span class="number">512</span>;</span><br><span class="line">    dim3 <span class="title function_">block</span> <span class="params">(iLen)</span>;</span><br><span class="line">    dim3 <span class="title function_">grid</span>  <span class="params">((nElem + block.x - <span class="number">1</span>) / block.x)</span>;</span><br><span class="line"></span><br><span class="line">    sumArrays&lt;&lt;&lt;grid, block&gt;&gt;&gt;(d_A, d_B, d_C, nElem);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// copy kernel result back to host side</span></span><br><span class="line">    CHECK(cudaMemcpy(gpuRef, d_C, nBytes, cudaMemcpyDeviceToHost));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// check device results</span></span><br><span class="line">    checkResult(hostRef, gpuRef, nElem);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// free device global memory</span></span><br><span class="line">    CHECK(cudaFree(d_A));</span><br><span class="line">    CHECK(cudaFree(d_B));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// free host memory</span></span><br><span class="line">    <span class="built_in">free</span>(h_A);</span><br><span class="line">    <span class="built_in">free</span>(h_B);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// part 2: using zerocopy memory for array A and B</span></span><br><span class="line">    <span class="comment">// allocate zerocpy memory</span></span><br><span class="line">    CHECK(cudaHostAlloc((<span class="type">void</span> **)&amp;h_A, nBytes, cudaHostAllocMapped));</span><br><span class="line">    CHECK(cudaHostAlloc((<span class="type">void</span> **)&amp;h_B, nBytes, cudaHostAllocMapped));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// initialize data at host side</span></span><br><span class="line">    initialData(h_A, nElem);</span><br><span class="line">    initialData(h_B, nElem);</span><br><span class="line">    <span class="built_in">memset</span>(hostRef, <span class="number">0</span>, nBytes);</span><br><span class="line">    <span class="built_in">memset</span>(gpuRef,  <span class="number">0</span>, nBytes);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// pass the pointer to device</span></span><br><span class="line">    CHECK(cudaHostGetDevicePointer((<span class="type">void</span> **)&amp;d_A, (<span class="type">void</span> *)h_A, <span class="number">0</span>));</span><br><span class="line">    CHECK(cudaHostGetDevicePointer((<span class="type">void</span> **)&amp;d_B, (<span class="type">void</span> *)h_B, <span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// add at host side for result checks</span></span><br><span class="line">    sumArraysOnHost(h_A, h_B, hostRef, nElem);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// execute kernel with zero copy memory</span></span><br><span class="line">    sumArraysZeroCopy&lt;&lt;&lt;grid, block&gt;&gt;&gt;(d_A, d_B, d_C, nElem);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// copy kernel result back to host side</span></span><br><span class="line">    CHECK(cudaMemcpy(gpuRef, d_C, nBytes, cudaMemcpyDeviceToHost));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// check device results</span></span><br><span class="line">    checkResult(hostRef, gpuRef, nElem);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// free  memory</span></span><br><span class="line">    CHECK(cudaFree(d_C));</span><br><span class="line">    CHECK(cudaFreeHost(h_A));</span><br><span class="line">    CHECK(cudaFreeHost(h_B));</span><br><span class="line"></span><br><span class="line">    <span class="built_in">free</span>(hostRef);</span><br><span class="line">    <span class="built_in">free</span>(gpuRef);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// reset device</span></span><br><span class="line">    CHECK(cudaDeviceReset());</span><br><span class="line">    <span class="keyword">return</span> EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>如果你想共享主机和设备端的少量数据，零拷贝内存可能会是一个不错的选择，因为它简化了编程并且有较好的性能。<strong>对于由PCIe总线连接的离散GPU上的更大数据集来说，零拷贝内存不是一个好的选择，它会导致性能的显著下降。在集成架构中，CPU和GPU集成在一个芯片上，并且在物理地址上共享主存。在这种架构中，由于无须在PCIe总线上备份，所以零拷贝内存在性能和可编程性方面可能更佳。</strong></p>
+<h3 id="4-2-5-统一虚拟寻址"><a href="#4-2-5-统一虚拟寻址" class="headerlink" title="4.2.5 统一虚拟寻址"></a>4.2.5 统一虚拟寻址</h3><p>计算能力为2.0及以上版本的设备支持一种特殊的寻址方式，称为统一虚拟寻址（UVA）。UVA，在CUDA 4.0中被引入，支持64位Linux系统。有了UVA，主机内存和设备内存可以共享同一个虚拟地址空间，如图4-5所示。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/image-20230307153640765.png" class="" title="image-20230307153640765">
+<p>UVA，由指针指向的内存空间对应用程序代码来说是透明的。通过UVA，由cudaHostAlloc分配的固定主机内存具有相同的主机和设备指针。因此，<strong>可以将返回的指针直接传递给核函数</strong>。回忆前一节中的零拷贝例子，可以知道以下几个方面。</p>
+<ul>
+<li>分配映射的固定主机内存</li>
+<li>使用CUDA运行时函数获取映射到固定内存的设备指针</li>
+<li>将设备指针传递给核函数</li>
+</ul>
+<p>有了UVA，无须获取设备指针或管理物理上数据完全相同的两个指针。UVA会进一步简化前一节中的sumArrayZerocpy.cu示例：</p>
+<p>有了UVA，可以不用上面的那个获得设备上访问零拷贝内存的函数了：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaHostGetDevicePointer</span><span class="params">(<span class="type">void</span> ** pDevice,<span class="type">void</span> * pHost,<span class="type">unsigned</span> flags)</span>;</span><br></pre></td></tr></table></figure>
+<p>UVA来了以后，此函数基本失业了。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// malloc device global memory</span></span><br><span class="line"><span class="type">float</span>  *d_C;</span><br><span class="line">CHECK(cudaMalloc((<span class="type">float</span>**)&amp;d_C, nBytes));</span><br><span class="line"><span class="comment">// part 2: using zerocopy memory for array A and B</span></span><br><span class="line"><span class="comment">// allocate zerocpy memory</span></span><br><span class="line">CHECK(cudaHostAlloc((<span class="type">void</span> **)&amp;h_A, nBytes, cudaHostAllocMapped));</span><br><span class="line">CHECK(cudaHostAlloc((<span class="type">void</span> **)&amp;h_B, nBytes, cudaHostAllocMapped));</span><br><span class="line"></span><br><span class="line"><span class="comment">// initialize data at host side</span></span><br><span class="line">initialData(h_A, nElem);</span><br><span class="line">initialData(h_B, nElem);</span><br><span class="line"></span><br><span class="line"><span class="comment">// execute kernel with zero copy memory</span></span><br><span class="line">sumArraysZeroCopy&lt;&lt;&lt;grid, block&gt;&gt;&gt;(h_A, h_B, d_C, nElem);</span><br></pre></td></tr></table></figure>
+<p>使用更少的代码取得相同的结果，这提高了应用程序的可读性和可维护性。</p>
+<h3 id="4-2-6-统一内存寻址"><a href="#4-2-6-统一内存寻址" class="headerlink" title="4.2.6 统一内存寻址"></a>4.2.6 统一内存寻址</h3><p>Nvidia的同志们还是不停的搞出新花样，CUDA6.0的时候又来了个统一内存寻址，注意不是同一虚拟寻址，提出的目的也是为了简化内存管理（我感觉是越简化越困难，因为套路多了）统一内存中创建一个托管内存池（CPU上有，GPU上也有），内存池中已分配的空间可以通过相同的指针直接被CPU和GPU访问，底层系统在统一的内存空间中自动的进行设备和主机间的传输。数据传输对应用是透明的，大大简化了代码。<br>就是搞个内存池，这部分内存用一个指针同时表示主机和设备内存地址，依赖于UVA但是是完全不同的技术。<br>统一内存寻址提供了一个“指针到数据”的编程模型，概念上类似于零拷贝，但是零拷贝内存的分配是在主机上完成的，而且需要互相传输，但是统一寻址不同。<br>托管内存是指底层系统自动分配的统一内存，未托管内存就是我们自己分配的内存，这时候对于核函数，可以传递给他两种类型的内存，已托管和未托管内存，可以同时传递。<br>托管内存可以是静态的，也可以是动态的，添加 <strong>managed</strong> 关键字修饰托管内存变量。静态声明的托管内存作用域是文件，这一点可以注意一下。<br>托管内存分配方式：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaMallocManaged</span><span class="params">(<span class="type">void</span> ** devPtr,<span class="type">size_t</span> size,<span class="type">unsigned</span> <span class="type">int</span> flags=<span class="number">0</span>)</span></span><br></pre></td></tr></table></figure>
+<p>这个函数和前面函数结构一致，注意函数名就好了，参数就不解释了，很明显了已经。<br>CUDA6.0中设备代码不能调用cudaMallocManaged，只能主机调用，所有托管内存必须在主机代码上动态声明，或者全局静态声明</p>
+<ul>
+<li>后面4.5 我们会详细的研究统一内存寻址。</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" title="4-2 内存管理">http://example.com/CUDA/CUDA C编程权威指南笔记/4-2 内存管理/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-3%20%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE%E6%A8%A1%E5%BC%8F/" rel="prev" title="4-3 内存访问模式">
+                  <i class="fa fa-chevron-left"></i> 4-3 内存访问模式
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/" rel="next" title="4-4 核函数可达到的带宽">
+                  4-4 核函数可达到的带宽 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"2405a62139987d664ff3ddf485362f41"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

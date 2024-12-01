@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="前言我暂时还没有使用到多个GPU，因此先占位吧，等后面有机会再补充深入，这里只是一个大概的描述。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="9 多GPU编程">
+<meta property="og:url" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/9%20%E5%A4%9AGPU%E7%BC%96%E7%A8%8B/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="前言我暂时还没有使用到多个GPU，因此先占位吧，等后面有机会再补充深入，这里只是一个大概的描述。">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/9%20%E5%A4%9AGPU%E7%BC%96%E7%A8%8B/image-20240123143219806.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/9%20%E5%A4%9AGPU%E7%BC%96%E7%A8%8B/image-20240123145329291.png">
+<meta property="article:published_time" content="2024-12-01T10:13:43.883Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:43.883Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="GPU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/9%20%E5%A4%9AGPU%E7%BC%96%E7%A8%8B/image-20240123143219806.png">
+
+
+<link rel="canonical" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/9%20%E5%A4%9AGPU%E7%BC%96%E7%A8%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/9%20%E5%A4%9AGPU%E7%BC%96%E7%A8%8B/","path":"CUDA/CUDA C编程权威指南笔记/9 多GPU编程/","title":"9 多GPU编程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>9 多GPU编程 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#9-1-%E4%BB%8E%E4%B8%80%E4%B8%AAGPU%E5%88%B0%E5%A4%9A%E4%B8%AAGPU"><span class="nav-text">9.1 从一个GPU到多个GPU</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#9-1-1-%E5%9C%A8%E5%A4%9AGPU%E4%B8%8A%E6%89%A7%E8%A1%8C"><span class="nav-text">9.1.1 在多GPU上执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-1-2-%E7%82%B9%E5%AF%B9%E7%82%B9%E9%80%9A%E4%BF%A1"><span class="nav-text">9.1.2 点对点通信</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#9-1-2-1-%E5%90%AF%E7%94%A8%E7%82%B9%E5%88%B0%E7%82%B9%E8%AE%BF%E9%97%AE"><span class="nav-text">9.1.2.1 启用点到点访问</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#9-1-2-2-%E7%82%B9%E5%AF%B9%E7%82%B9%E5%86%85%E5%AD%98%E5%A4%8D%E5%88%B6"><span class="nav-text">9.1.2.2 点对点内存复制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-1-3-%E5%A4%9AGPU%E9%97%B4%E7%9A%84%E5%90%8C%E6%AD%A5"><span class="nav-text">9.1.3 多GPU间的同步</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-2-%E5%A4%9AGPU%E9%97%B4%E7%BB%86%E5%88%86%E8%AE%A1%E7%AE%97"><span class="nav-text">9.2 多GPU间细分计算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#9-2-1-%E5%9C%A8%E5%A4%9A%E8%AE%BE%E5%A4%87%E4%B8%8A%E5%88%86%E9%85%8D%E5%86%85%E5%AD%98"><span class="nav-text">9.2.1 在多设备上分配内存</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-2-2-%E5%8D%95%E4%B8%BB%E6%9C%BA%E7%BA%BF%E7%A8%8B%E5%88%86%E9%85%8D%E5%B7%A5%E4%BD%9C"><span class="nav-text">9.2.2 单主机线程分配工作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-3-%E5%A4%9AGPU%E4%B8%8A%E7%9A%84%E7%82%B9%E5%AF%B9%E7%82%B9%E9%80%9A%E4%BF%A1"><span class="nav-text">9.3 多GPU上的点对点通信</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#9-3-1-%E5%AE%9E%E7%8E%B0%E7%82%B9%E5%AF%B9%E7%82%B9%E8%AE%BF%E9%97%AE"><span class="nav-text">9.3.1 实现点对点访问</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-3-2-%E7%82%B9%E5%AF%B9%E7%82%B9%E7%9A%84%E5%86%85%E5%AD%98%E5%A4%8D%E5%88%B6"><span class="nav-text">9.3.2 点对点的内存复制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-3-3-%E7%BB%9F%E4%B8%80%E8%99%9A%E6%8B%9F%E5%AF%BB%E5%9D%80%E7%9A%84%E7%82%B9%E5%AF%B9%E7%82%B9%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE"><span class="nav-text">9.3.3 统一虚拟寻址的点对点内存访问</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-4-%E5%A4%9AGPU%E4%B8%8A%E7%9A%84%E6%9C%89%E9%99%90%E5%B7%AE%E5%88%86"><span class="nav-text">9.4 多GPU上的有限差分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-5-%E8%B7%A8GPU%E9%9B%86%E7%BE%A4%E6%89%A9%E5%B1%95%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="nav-text">9.5 跨GPU集群扩展应用程序</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/9%20%E5%A4%9AGPU%E7%BC%96%E7%A8%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="9 多GPU编程 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          9 多GPU编程
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>我暂时还没有使用到多个GPU，因此先占位吧，等后面有机会再补充深入，这里只是一个大概的描述。</p>
+<h2 id="9-1-从一个GPU到多个GPU"><a href="#9-1-从一个GPU到多个GPU" class="headerlink" title="9.1 从一个GPU到多个GPU"></a>9.1 从一个GPU到多个GPU</h2><p>在多GPU系统里有两种连接方式：</p>
+<ul>
+<li>多GPU通过单个节点连接到PCIe总线上</li>
+<li>多GPU连接到集群中的网络交换机上</li>
+</ul>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/9%20%E5%A4%9AGPU%E7%BC%96%E7%A8%8B/image-20240123143219806.png" class="" title="image-20240123143219806">
+<h3 id="9-1-1-在多GPU上执行"><a href="#9-1-1-在多GPU上执行" class="headerlink" title="9.1.1 在多GPU上执行"></a>9.1.1 在多GPU上执行</h3><p>单个主机线程可以管理多个设备。一般来说，第一步是确定系统内可用的使能CUDA设备的数量，使用如下函数获得：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaGetDeviceCount</span><span class="params">(<span class="type">int</span>* count)</span>;</span><br></pre></td></tr></table></figure>
+<p>在利用与多GPU一起工作的CUDA应用程序时，必须显式地指定哪个GPU是当前所有CUDA运算的目标。使用以下函数设置当前设备：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaSetDevice</span><span class="params">(<span class="type">int</span> id)</span>;</span><br></pre></td></tr></table></figure>
+<p>一旦选定了当前设备，所有的CUDA运算将被应用到那个设备上：</p>
+<p>下面的代码准确展示了如何执行内核和在单一的主机线程中进行内存拷贝，使用循环遍历设备：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; ngpus; i++) &#123;</span><br><span class="line"><span class="comment">// set the current device</span></span><br><span class="line">cudaSetDevice(i);</span><br><span class="line"><span class="comment">// execute kernel on current device</span></span><br><span class="line">kernel&lt;&lt;&lt;grid, block&gt;&gt;&gt;(...);</span><br><span class="line"><span class="comment">// asynchronously transfer data between the host and current device</span></span><br><span class="line">cudaMemcpyAsync(...);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="9-1-2-点对点通信"><a href="#9-1-2-点对点通信" class="headerlink" title="9.1.2 点对点通信"></a>9.1.2 点对点通信</h3><p>在计算能力为2.0或以上的设备中，在64位应用程序上执行的内核，可以直接访问任何GPU的全局内存，这些GPU连接到同一个PCIe根节点上。如果想这样操作，必须使用CUDA点对点（P2P）API来实现设备间的直接通信。点对点通信需要CUDA 4.0或更高版本，相应的GPU驱动器，以及一个具有两个或两个以上连接到同一个PCIe根节点上的Fermi或Kepler GPU系统。有两个由CUDA P2P API支持的模式，它们允许GPU之间直接通信：</p>
+<ul>
+<li>点对点访问：在CUDA内核和GPU间直接加载和存储地</li>
+<li>点对点传输：在GPU间直接复制数据</li>
+</ul>
+<p>在一个系统内，如果两个GPU连接到不同的PCIe根节点上，那么不允许直接进行点对点访问，并且CUDA P2P API将会通知你。仍然可以使用CUDA P2P API在这些设备之间进行点对点传输，但是驱动器将通过主机内存透明地传输数据，而不是通过PCIe总线直接传输数据。</p>
+<h4 id="9-1-2-1-启用点到点访问"><a href="#9-1-2-1-启用点到点访问" class="headerlink" title="9.1.2.1 启用点到点访问"></a>9.1.2.1 启用点到点访问</h4><p>点对点访问允许各GPU连接到同一个PCIe根节点上，使其直接引用存储在其他GPU设备内存上的数据。对于透明的内核，引用的数据将通过PCIe总线传输到请求的线程上。<br>因为不是所有的GPU都支持点对点访问，所以需要使用下述函数显式地检查设备是否支持P2P</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaDeviceCanAccessPeer</span><span class="params">(<span class="type">int</span>* canAccessPeer, <span class="type">int</span> device,<span class="type">int</span> peerDevice)</span>;</span><br></pre></td></tr></table></figure>
+<p>在两个设备间，必须用以下函数显式地启用点对点内存访问：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaDeviceEnablePeerAccess</span><span class="params">(<span class="type">int</span> peerDevice, <span class="type">unsigned</span> <span class="type">int</span> flag)</span>;</span><br></pre></td></tr></table></figure>
+<p>这个函数允许从当前设备到peerDevice进行点对点访问。flag参数被保留以备将来使用，目前必须将其设置为0。一旦成功，该对等设备的内存将立即由当前设备进行访问。</p>
+<p>这个函数授权的访问是单向的，即这个函数允许从当前设备到peerDevice的访问，但不允许从peerDevice到当前设备的访问。如果希望对等设备能直接访问当前设备的内存，则需要另一个方向单独的匹配调用。</p>
+<p>点对点访问保持启用状态，直到它被以下函数显式地禁用：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaDeviceDisablePeerAccess</span><span class="params">(<span class="type">int</span> peerDevice)</span>;</span><br></pre></td></tr></table></figure>
+<h4 id="9-1-2-2-点对点内存复制"><a href="#9-1-2-2-点对点内存复制" class="headerlink" title="9.1.2.2 点对点内存复制"></a>9.1.2.2 点对点内存复制</h4><p>两个设备之间启用对等访问之后，使用下面的函数，可以异步地复制设备上的数据：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaMemcpyPeerAsync</span><span class="params">(<span class="type">void</span>* dst, <span class="type">int</span> dstDev, <span class="type">void</span>* src, <span class="type">int</span> srcDev,<span class="type">size_t</span> nBytes, cudaStream_t stream)</span>;</span><br></pre></td></tr></table></figure>
+<p>这个函数将数据从设备的srcDev设备内存传输到设备dstDev的设备内存中。函数cudaMemcpyPeerAsync对于主机和所有其他设备来说是异步的。如果srcDev和dstDev共享相同的PCIe根节点，那么数据传输是沿着PCIe最短路径执行的，不需要通过主机内存中转。</p>
+<h3 id="9-1-3-多GPU间的同步"><a href="#9-1-3-多GPU间的同步" class="headerlink" title="9.1.3 多GPU间的同步"></a>9.1.3 多GPU间的同步</h3><p>多GPU应用程序中使用流和事件的典型工作流程如下所示：</p>
+<ol>
+<li>选择这个应用程序将使用的GPU集。</li>
+<li>为每个设备创建流和事件。</li>
+<li>为每个设备分配设备资源（如设备内存）。</li>
+<li>通过流在每个GPU上启动任务（例如，数据传输或内核执行）。</li>
+<li>使用流和事件来查询和等待任务完成。</li>
+<li>清空所有设备的资源。</li>
+</ol>
+<p>只有与该流相关联的设备是当前设备时，在流中才能启动内核。只有与该流相关联的<br>设备是当前设备时，才可以在流中记录事件。<br>任何时间都可以在任何流中进行内存拷贝，无论该流与什么设备相关联或当前设备是<br>什么。<strong>即使流或事件与当前设备不相关，也可以查询或同步它们</strong>。</p>
+<h2 id="9-2-多GPU间细分计算"><a href="#9-2-多GPU间细分计算" class="headerlink" title="9.2 多GPU间细分计算"></a>9.2 多GPU间细分计算</h2><p>在向量加法的例子中，元素的总输入大小为16M，所有设备平分，给每个设备isize个<br>元素：</p>
+<h3 id="9-2-1-在多设备上分配内存"><a href="#9-2-1-在多设备上分配内存" class="headerlink" title="9.2.1 在多设备上分配内存"></a>9.2.1 在多设备上分配内存</h3><p>现在，可以分配主机和设备内存了，为每个设备创建CUDA流，代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// allocat device emory</span></span><br><span class="line">    <span class="type">float</span> **d_A = (<span class="type">float</span> **)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">float</span> *) * ngpus);</span><br><span class="line">    <span class="type">float</span> **d_B = (<span class="type">float</span> **)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">float</span> *) * ngpus);</span><br><span class="line">    <span class="type">float</span> **d_C = (<span class="type">float</span> **)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">float</span> *) * ngpus);</span><br><span class="line"></span><br><span class="line">    <span class="type">float</span> **h_A = (<span class="type">float</span> **)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">float</span> *) * ngpus);</span><br><span class="line">    <span class="type">float</span> **h_B = (<span class="type">float</span> **)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">float</span> *) * ngpus);</span><br><span class="line">    <span class="type">float</span> **hostRef = (<span class="type">float</span> **)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">float</span> *) * ngpus);</span><br><span class="line">    <span class="type">float</span> **gpuRef = (<span class="type">float</span> **)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="type">float</span> *) * ngpus);</span><br><span class="line">    cudaStream_t *stream = (cudaStream_t *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(cudaStream_t) * ngpus);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; ngpus; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// set current device</span></span><br><span class="line">        CHECK(cudaSetDevice(i));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// allocate device memory</span></span><br><span class="line">        CHECK(cudaMalloc((<span class="type">void</span> **) &amp;d_A[i], iBytes));</span><br><span class="line">        CHECK(cudaMalloc((<span class="type">void</span> **) &amp;d_B[i], iBytes));</span><br><span class="line">        CHECK(cudaMalloc((<span class="type">void</span> **) &amp;d_C[i], iBytes));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// allocate page locked host memory for asynchronous data transfer</span></span><br><span class="line">        CHECK(cudaMallocHost((<span class="type">void</span> **) &amp;h_A[i],     iBytes));</span><br><span class="line">        CHECK(cudaMallocHost((<span class="type">void</span> **) &amp;h_B[i],     iBytes));</span><br><span class="line">        CHECK(cudaMallocHost((<span class="type">void</span> **) &amp;hostRef[i], iBytes));</span><br><span class="line">        CHECK(cudaMallocHost((<span class="type">void</span> **) &amp;gpuRef[i],  iBytes));</span><br><span class="line"></span><br><span class="line">        <span class="comment">// create streams for timing and synchronizing</span></span><br><span class="line">        CHECK(cudaStreamCreate(&amp;stream[i]));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="9-2-2-单主机线程分配工作"><a href="#9-2-2-单主机线程分配工作" class="headerlink" title="9.2.2 单主机线程分配工作"></a>9.2.2 单主机线程分配工作</h3><p>这个循环遍历多个GPU，为设备异步地复制输入数组。然后在相同的流中操作iSize个<br>数据元素以便启动内核。最后，设备发出的异步拷贝命令，把结果从内核返回到主机</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// distributing the workload across multiple devices</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; ngpus; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        CHECK(cudaSetDevice(i));</span><br><span class="line"></span><br><span class="line">        CHECK(cudaMemcpyAsync(d_A[i], h_A[i], iBytes, cudaMemcpyHostToDevice,</span><br><span class="line">                              stream[i]));</span><br><span class="line">        CHECK(cudaMemcpyAsync(d_B[i], h_B[i], iBytes, cudaMemcpyHostToDevice,</span><br><span class="line">                              stream[i]));</span><br><span class="line"></span><br><span class="line">        iKernel&lt;&lt;&lt;grid, block, <span class="number">0</span>, stream[i]&gt;&gt;&gt;(d_A[i], d_B[i], d_C[i], iSize);</span><br><span class="line"></span><br><span class="line">        CHECK(cudaMemcpyAsync(gpuRef[i], d_C[i], iBytes, cudaMemcpyDeviceToHost,</span><br><span class="line">                              stream[i]));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// synchronize streams</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; ngpus; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        CHECK(cudaSetDevice(i));</span><br><span class="line">        CHECK(cudaStreamSynchronize(stream[i]));</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>书中的代码如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// distributing the workload across multiple devices</span></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; ngpus; i++) &#123;</span><br><span class="line">cudaSetDevice(i);</span><br><span class="line">cudaMemcpyAsync(d_A[i], h_A[i], iBytes, cudaMemcpyHostToDevice, stream[i]);</span><br><span class="line">cudaMemcpyAsync(d_B[i], h_B[i], iBytes, cudaMemcpyHostToDevice, stream[i]);</span><br><span class="line">iKernel&lt;&lt;&lt;grid, block, <span class="number">0</span>, stream[i]&gt;&gt;&gt; (d_A[i], d_B[i], d_C[i], iSize);</span><br><span class="line">cudaMemcpyAsync(gpuRef[i], d_C[i], iBytes, cudaMemcpyDeviceToHost, stream[i]);</span><br><span class="line">&#125;</span><br><span class="line">cudaDeviceSynchronize();</span><br></pre></td></tr></table></figure>
+<p>对比下书中的代码使用的是<code>cudaDeviceSynchronize();</code>进行同步的，查询了一下这个函数可以同步所有的GPU。</p>
+<h2 id="9-3-多GPU上的点对点通信"><a href="#9-3-多GPU上的点对点通信" class="headerlink" title="9.3 多GPU上的点对点通信"></a>9.3 多GPU上的点对点通信</h2><h3 id="9-3-1-实现点对点访问"><a href="#9-3-1-实现点对点访问" class="headerlink" title="9.3.1 实现点对点访问"></a>9.3.1 实现点对点访问</h3><p>首先，必须对所有设备启用双向点对点访问，如以下代码所示：注意是双层<code>for</code>循环，因为<code>cudaDeviceCanAccessPeer</code>是单向的，如果需要双向的需要分别调用。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">* enable P2P memcopies between GPUs (all GPUs must be compute capability 2.0 or</span></span><br><span class="line"><span class="comment">* later (Fermi or later)).</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">inline</span> <span class="type">void</span> <span class="title function_">enableP2P</span> <span class="params">(<span class="type">int</span> ngpus)</span> </span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">for</span>( <span class="type">int</span> i = <span class="number">0</span>; i &lt; ngpus; i++ ) </span><br><span class="line">    &#123;</span><br><span class="line">        cudaSetDevice(i);</span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt; ngpus; j++) </span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(i == j) <span class="keyword">continue</span>;</span><br><span class="line">            <span class="type">int</span> peer_access_available = <span class="number">0</span>;</span><br><span class="line">            cudaDeviceCanAccessPeer(&amp;peer_access_available, i, j);</span><br><span class="line">            <span class="keyword">if</span> (peer_access_available) </span><br><span class="line">            &#123;</span><br><span class="line">                cudaDeviceEnablePeerAccess(j, <span class="number">0</span>);</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;&gt; GPU%d enabled direct access to GPU%d\n&quot;</span>,i,j);</span><br><span class="line">            &#125; </span><br><span class="line">            <span class="keyword">else</span> </span><br><span class="line">            &#123;</span><br><span class="line">                <span class="built_in">printf</span>(<span class="string">&quot;(%d, %d)\n&quot;</span>, i, j);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="9-3-2-点对点的内存复制"><a href="#9-3-2-点对点的内存复制" class="headerlink" title="9.3.2 点对点的内存复制"></a>9.3.2 点对点的内存复制</h3><p>启用点对点访问后，可以在两个设备之间直接复制数据。</p>
+<p>如果点对点访问在所有设备上都被成功启用了，那么将直接通过PCIe总线进行数据传输而不用与主机交互。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// ping pong unidirectional gmem copy</span></span><br><span class="line">cudaEventRecord(start, <span class="number">0</span>);</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; <span class="number">100</span>; i++) </span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (i % <span class="number">2</span> == <span class="number">0</span>) </span><br><span class="line">    &#123;</span><br><span class="line">        cudaMemcpy(d_src[<span class="number">1</span>], d_src[<span class="number">0</span>], iBytes, cudaMemcpyDeviceToDevice);</span><br><span class="line">    &#125; </span><br><span class="line">    <span class="keyword">else</span> </span><br><span class="line">    &#123;</span><br><span class="line">        cudaMemcpy(d_src[<span class="number">0</span>], d_src[<span class="number">1</span>], iBytes, cudaMemcpyDeviceToDevice);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>请注意，在内存复制之前没有设备转换，因为跨设备的内存复制不需要显式地设置当前设备。如果在内存复制前指定了设备，也不会影响它的行为。</p>
+<h3 id="9-3-3-统一虚拟寻址的点对点内存访问"><a href="#9-3-3-统一虚拟寻址的点对点内存访问" class="headerlink" title="9.3.3 统一虚拟寻址的点对点内存访问"></a>9.3.3 统一虚拟寻址的点对点内存访问</h3><p>第4章中介绍的统一虚拟寻址（UVA），是将CPU系统内存和设备的全局内存映射到一个单一的虚拟地址空间中，如图9-2所示。所有由cudaHostAlloc分配的主机内存和由cudaMalloc分配的设备内存驻留在这个统一的地址空间内。内存地址所驻留的设备可以根据地址本身确定。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/9%20%E5%A4%9AGPU%E7%BC%96%E7%A8%8B/image-20240123145329291.png" class="" title="image-20240123145329291">
+<p>将点对点CUDA API与UVA相结合，可以实现对任何设备内存的透明访问。不必手动管理单独的内存缓冲区，也不必从主机内存中进行显式的复制。底层系统能使我们避免显式地执行这些操作，从而简化了代码。请注意，过于依赖UVA进行对等访问对性能将产生负面的影响，如跨PCIe总线的许多小规模的传输会明显地有过大的消耗。</p>
+<p>下面的代码演示了如何检查设备是否支持统一寻址：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> deviceId = <span class="number">0</span>;</span><br><span class="line">cudaDeviceProp prop;</span><br><span class="line">cudaGetDeviceProperties(&amp;prop, deviceId));</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;GPU%d: %s unified addressing\n&quot;</span>, deviceId,</span><br><span class="line">prop.unifiedAddressing ? <span class="string">&quot;supports&quot;</span> : <span class="string">&quot;does not support&quot;</span>);</span><br></pre></td></tr></table></figure>
+<p>可以使用以下简单的核函数（该函数将输入数组扩展了2倍，并将结果存储在输出数组中），来测试GPU的直接点对点内存访问：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">__global__ <span class="type">void</span> <span class="title function_">iKernel</span><span class="params">(<span class="type">float</span> *src, <span class="type">float</span> *dst)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">const</span> <span class="type">int</span> idx = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">	dst[idx] = src[idx] * <span class="number">2.0f</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以下代码将设备0设置为当前设备，并有一个核函数使用指针d_src[1]从设备1中读取全局内存，同时通过全局内存的指针d_rcv[0]将结果写入当前设备中。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cudaSetDevice(<span class="number">0</span>);</span><br><span class="line">iKernel&lt;&lt;&lt;grid, block&gt;&gt;&gt;(d_rcv[<span class="number">0</span>], d_src[<span class="number">1</span>]);</span><br></pre></td></tr></table></figure>
+<p>以下代码将设备1设置为当前设备，并有一个核函数使用指针d_src[0]从设备0中读取全局内存，同时通过全局内存的指针d_rcv[1]将结果写入当前设备中</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cudaSetDevice(<span class="number">1</span>);</span><br><span class="line">iKernel&lt;&lt;&lt;grid, block&gt;&gt;&gt;(d_rcv[<span class="number">1</span>], d_src[<span class="number">0</span>]);</span><br></pre></td></tr></table></figure>
+<h2 id="9-4-多GPU上的有限差分"><a href="#9-4-多GPU上的有限差分" class="headerlink" title="9.4 多GPU上的有限差分"></a>9.4 多GPU上的有限差分</h2><h2 id="9-5-跨GPU集群扩展应用程序"><a href="#9-5-跨GPU集群扩展应用程序" class="headerlink" title="9.5 跨GPU集群扩展应用程序"></a>9.5 跨GPU集群扩展应用程序</h2>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/9%20%E5%A4%9AGPU%E7%BC%96%E7%A8%8B/" title="9 多GPU编程">http://example.com/CUDA/CUDA C编程权威指南笔记/9 多GPU编程/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/6-3%20%E9%87%8D%E5%8F%A0%E5%86%85%E6%A0%B8%E6%89%A7%E8%A1%8C%E5%92%8C%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93/" rel="prev" title="6-3 重叠内核执行和数据传输">
+                  <i class="fa fa-chevron-left"></i> 6-3 重叠内核执行和数据传输
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/8%20GPU%E5%8A%A0%E9%80%9F%E5%BA%93%E5%92%8COpenACC/" rel="next" title="8 GPU加速库和OpenACC">
+                  8 GPU加速库和OpenACC <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"986a72ece6617f15cc19ff868678c1f4"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

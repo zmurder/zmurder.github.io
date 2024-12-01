@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="1 前言在上一篇文章《1-cuda_API》中降到cuda Driver API主要的一个作用就是管理cuda Context，那么这里讲解一下什么是cuda Context">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2 cuda_context">
+<meta property="og:url" content="http://example.com/CUDA/%E5%9F%BA%E7%A1%80/2%20cuda_context/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="1 前言在上一篇文章《1-cuda_API》中降到cuda Driver API主要的一个作用就是管理cuda Context，那么这里讲解一下什么是cuda Context">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/CUDA/%E5%9F%BA%E7%A1%80/2%20cuda_context/a66887be2bcb4cb088515fa5a9258952.png">
+<meta property="og:image" content="http://example.com/CUDA/%E5%9F%BA%E7%A1%80/2%20cuda_context/image-20240122150953905.png">
+<meta property="og:image" content="http://example.com/CUDA/%E5%9F%BA%E7%A1%80/2%20cuda_context/image-20240122151239479.png">
+<meta property="og:image" content="http://example.com/CUDA/%E5%9F%BA%E7%A1%80/2%20cuda_context/image-20240122151453400.png">
+<meta property="article:published_time" content="2024-12-01T10:13:44.387Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:44.387Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="GPU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/CUDA/%E5%9F%BA%E7%A1%80/2%20cuda_context/a66887be2bcb4cb088515fa5a9258952.png">
+
+
+<link rel="canonical" href="http://example.com/CUDA/%E5%9F%BA%E7%A1%80/2%20cuda_context/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/CUDA/%E5%9F%BA%E7%A1%80/2%20cuda_context/","path":"CUDA/基础/2 cuda_context/","title":"2 cuda_context"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>2 cuda_context | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%89%8D%E8%A8%80"><span class="nav-text">1 前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-cuda-context-%E7%AE%80%E4%BB%8B"><span class="nav-text">2 cuda context 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E5%85%B3%E4%BA%8EcuDevicePrimaryCtxRetain"><span class="nav-text">2.1 关于cuDevicePrimaryCtxRetain</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E7%AE%A1%E7%90%86cuda-context"><span class="nav-text">2.2 管理cuda context</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E6%B5%8B%E8%AF%95-cuda-context"><span class="nav-text">2.3 测试 cuda context</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/%E5%9F%BA%E7%A1%80/2%20cuda_context/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="2 cuda_context | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          2 cuda_context
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:44" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:44+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-前言"><a href="#1-前言" class="headerlink" title="1 前言"></a>1 前言</h1><p>在上一篇文章《1-cuda_API》中降到<code>cuda Driver API</code>主要的一个作用就是管理<code>cuda Context</code>，那么这里讲解一下什么是<code>cuda Context</code></p>
+<h1 id="2-cuda-context-简介"><a href="#2-cuda-context-简介" class="headerlink" title="2 cuda context 简介"></a>2 cuda context 简介</h1><p>官方文档<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#context">17.1. Context</a>一段话如下：</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">A CUDA context is analogous to a CPU process. All resources and actions performed within the driver API are encapsulated inside a CUDA context, and the system automatically cleans up these resources when the context is destroyed.</span><br></pre></td></tr></table></figure>
+<p>翻译过来就是</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">CUDA 上下文类似于 CPU 进程。驱动程序 API 中执行的所有资源和操作都封装在 CUDA 上下文中，当上下文被破坏时，系统会自动清理这些资源。</span><br></pre></td></tr></table></figure>
+<p>官方<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/archive/11.4.4/cuda-c-best-practices-guide/index.html#multiple-contexts">10.6. Multiple contexts</a>解释</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">CUDA work occurs within a process space for a particular GPU known as a context. The context encapsulates kernel launches and memory allocations for that GPU as well as supporting constructs such as the page tables. The context is explicit in the CUDA Driver API but is entirely implicit in the CUDA Runtime API, which creates and manages contexts automatically.</span><br><span class="line"></span><br><span class="line">With the CUDA Driver API, a CUDA application process can potentially create more than one context for a given GPU. If multiple CUDA application processes access the same GPU concurrently, this almost always implies multiple contexts, since a context is tied to a particular host process unless Multi-Process Service is in use.</span><br><span class="line"></span><br><span class="line">While multiple contexts (and their associated resources such as global memory allocations) can be allocated concurrently on a given GPU, only one of these contexts can execute work at any given moment on that GPU; contexts sharing the same GPU are time-sliced. Creating additional contexts incurs memory overhead for per-context data and time overhead for context switching. Furthermore, the need for context switching can reduce utilization when work from several contexts could otherwise execute concurrently (see also Concurrent Kernel Execution).</span><br><span class="line"></span><br><span class="line">Therefore, it is best to avoid multiple contexts per GPU within the same CUDA application. To assist with this, the CUDA Driver API provides methods to access and manage a special context on each GPU called the primary context. These are the same contexts used implicitly by the CUDA Runtime when there is not already a current context for a thread. </span><br></pre></td></tr></table></figure>
+<p>翻译过来就是</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CUDA 工作发生在称为上下文的特定 GPU 的进程空间内。上下文封装了 GPU 的内核启动和内存分配以及页表等支持结构。上下文在 CUDA 驱动程序 API 中是显式的，但在 CUDA 运行时 API 中是完全隐式的，它会自动创建和管理上下文。</span><br><span class="line">借助 CUDA 驱动程序 API，CUDA 应用程序进程可以为给定 GPU 创建多个上下文。如果多个 CUDA 应用程序进程同时访问同一 GPU，则这几乎总是意味着多个上下文，因为除非使用多进程服务，否则上下文会绑定到特定主机进程。</span><br><span class="line">虽然可以在给定 GPU 上同时分配多个上下文（及其相关资源，例如全局内存分配），但在任何给定时刻，只有这些上下文之一可以在该 GPU 上执行工作；共享相同 GPU 的上下文是时间切片的。创建额外的上下文会导致每个上下文数据的内存开销和上下文切换的时间开销。此外，当来自多个上下文的工作可以同时执行时，上下文切换的需要可能会降低利用率（另请参阅并发内核执行）。</span><br><span class="line">因此，最好避免同一 CUDA 应用程序中每个 GPU 有多个上下文。为了帮助实现这一点，CUDA 驱动程序 API 提供了访问和管理每个 GPU 上称为主上下文的特殊上下文的方法。当线程尚不存在当前上下文时，CUDA 运行时隐式使用这些上下文。</span><br></pre></td></tr></table></figure>
+<p>总结下来就是：</p>
+<ul>
+<li><p>context 是一种上下文，可以关联对 GPU 的所有操作</p>
+</li>
+<li><p><strong>在任何给定的时间，一个 GPU 上只能有一个活动的 CUDA context。</strong>（关于cuda context的调度策策略我没有找到）</p>
+<p>虽然 CUDA context 在运行时可以被创建和销毁，但同一时间只有一个 context 可以与 GPU 进行交互。当你在同一 GPU 上创建一个新的 CUDA context 时，它会覆盖之前的 context。</p>
+<p>在单 GPU 环境下，多个任务通常使用 CUDA streams 来实现并发性，而无需创建多个 CUDA context。CUDA  streams 允许在同一个 context 中并发地执行多个任务，而不需要切换 context，从而提高了 GPU 的利用率。</p>
+</li>
+<li><p>context 与一块显关联，一个显卡可以被多个 context 关联</p>
+<p>在单 GPU 环境下，<code>cuCtxCreate</code> 可以用来创建一个 CUDA 上下文，然后在该上下文中执行 CUDA 的计算任务。这是 CUDA 编程中常见的用法（<strong>在单 GPU 环境下，通常使用多个 CUDA stream 可以更有效地进行并发计算，而不太需要显式地创建多个 CUDA context。在单  GPU 上切换 CUDA context 确实可能涉及到一些开销，而多个 stream  可以通过异步执行来提高并发性，而不引入额外的上下文切换开销</strong>。）。</p>
+<p>在多 GPU 环境下，如果系统中有多个 GPU 设备，每个 GPU 设备都有自己的 primary context。你可以使用 <code>cuCtxCreate</code> 来创建多个上下文，每个上下文关联到不同的 GPU 设备上。这样，你就可以在多个 GPU 上并行地执行 CUDA 计算任务。</p>
+<p><strong>如果您有多进程使用 GPU，通常会在该 GPU 上创建多个上下文。正如您所发现的，可以从单个进程创建多个上下文，但通常没有必要。</strong></p>
+<p><strong>总的来说，<code>cuCtxCreate</code> 主要用于创建 CUDA 上下文，而在多 GPU 环境下，可以用它来创建多个上下文以便在多个 GPU 上并行执行任务。</strong></p>
+</li>
+<li><p>每个线程都有一个栈结构储存 context，栈顶是当前使用的 context，对应有 push、pop 函数操作 context 的栈，所有 api 都以当前 context 为操作目标</p>
+</li>
+<li><p>由于是高频操作，是一个线程基本固定访问一个显卡不变，且只使用一个 context，很少会用到多 context</p>
+</li>
+<li><p>CreateContext、PushCurrent、PopCurrent 这种多 context 管理就显得麻烦，还得再简单</p>
+</li>
+<li><p>因此推出了 cuDevicePrimaryCtxRetain，为设备关联主 context，分配、释放、设置、栈都不用你管</p>
+</li>
+</ul>
+<h2 id="2-1-关于cuDevicePrimaryCtxRetain"><a href="#2-1-关于cuDevicePrimaryCtxRetain" class="headerlink" title="2.1 关于cuDevicePrimaryCtxRetain"></a>2.1 关于cuDevicePrimaryCtxRetain</h2><p><code>cuDevicePrimaryCtxRetain</code> 函数的作用是增加一个 GPU 设备的 primary context 的引用计数。在多线程环境下，如果一个线程先后使用了 GPU，并在释放资源时调用了 <code>cuCtxDestroy</code> 来销毁上下文，如果其他线程仍需要使用这个 GPU，它们就会面临没有有效上下文可用的问题。</p>
+<p><code>cuDevicePrimaryCtxRetain</code> 的作用就是为了避免这个问题。它会增加 primary context 的引用计数，使得即使一个线程销毁了它的上下文，其他线程仍然可以继续使用。当其他线程不再需要 GPU 时，它们可以通过调用 <code>cuCtxDestroy</code> 来减少引用计数，当引用计数降为零时，真正地释放资源。</p>
+<p>这样，使用 <code>cuDevicePrimaryCtxRetain</code> 可以确保在多线程环境中，一个线程使用完 GPU 后，其他线程仍能够在同一个 GPU 上使用有效的 CUDA 上下文，而不受到一个线程释放上下文的影响。</p>
+<h2 id="2-2-管理cuda-context"><a href="#2-2-管理cuda-context" class="headerlink" title="2.2 管理cuda context"></a>2.2 管理cuda context</h2><p>如何管理上下文：</p>
+<ul>
+<li>在 cuda driver 同样需要显示管理上下文</li>
+<li>开始时 cuCtxCreate() 创建上下文，结束时 cuCtxDestroy 销毁上下文。像文件管理一样需手动开关。</li>
+<li>用 cuDevicePrimaryCtxRetain() 创建上下文更好！</li>
+<li>cuCtxGetCurrent() 获取当前上下文</li>
+<li>可以使用堆栈管理多个上下文 cuCtxPushCurrent() 压入，cuCtxPopCurrent() 推出</li>
+<li>对 ctxA 使用 cuCtxPushCurrent() 和 cuCtxCreate() 都相当于将 ctxA 放到栈顶（让它成为 current context）</li>
+<li>cuda runtime 可以自动创建，是基于 cuDevicePrimaryCtxRetain() 创建的</li>
+</ul>
+<p>切换cuda context的示例代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// CUDA驱动头文件cuda.h</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cuda.h&gt;</span>   <span class="comment">// include &lt;&gt; 和 &quot;&quot; 的区别    </span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span>  <span class="comment">// include &lt;&gt; : 标准库文件 </span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;string.h&gt;</span> <span class="comment">// include &quot;&quot; : 自定义文件  详细情况请查看 readme.md -&gt; 5</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> checkDriver(op)  __check_cuda_driver((op), #op, __FILE__, __LINE__)</span></span><br><span class="line"></span><br><span class="line"><span class="type">bool</span> __check_cuda_driver(CUresult code, <span class="type">const</span> <span class="type">char</span>* op, <span class="type">const</span> <span class="type">char</span>* file, <span class="type">int</span> line)&#123;</span><br><span class="line">    <span class="keyword">if</span>(code != CUresult::CUDA_SUCCESS)&#123;    <span class="comment">// 如果 成功获取CUDA情况下的返回值 与我们给定的值(0)不相等， 即条件成立， 返回值为flase</span></span><br><span class="line">        <span class="type">const</span> <span class="type">char</span>* err_name = nullptr;    <span class="comment">// 定义了一个字符串常量的空指针</span></span><br><span class="line">        <span class="type">const</span> <span class="type">char</span>* err_message = nullptr;  </span><br><span class="line">        cuGetErrorName(code, &amp;err_name);    </span><br><span class="line">        cuGetErrorString(code, &amp;err_message);   </span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s:%d  %s failed. \n  code = %s, message = %s\n&quot;</span>, file, line, op, err_name, err_message); <span class="comment">//打印错误信息</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 检查cuda driver的初始化</span></span><br><span class="line">    checkDriver(cuInit(<span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 为设备创建上下文</span></span><br><span class="line">    CUcontext ctxA = nullptr;                                   <span class="comment">// CUcontext 其实是 struct CUctx_st*（是一个指向结构体CUctx_st的指针）</span></span><br><span class="line">    CUcontext ctxB = nullptr;</span><br><span class="line">    CUdevice device = <span class="number">0</span>;</span><br><span class="line">    checkDriver(cuCtxCreate(&amp;ctxA, CU_CTX_SCHED_AUTO, device)); <span class="comment">// 这一步相当于告知要某一块设备上的某块地方创建 ctxA 管理数据。输入参数 参考 https://www.cs.cmu.edu/afs/cs/academic/class/15668-s11/www/cuda-doc/html/group__CUDA__CTX_g65dc0012348bc84810e2103a40d8e2cf.html</span></span><br><span class="line">    checkDriver(cuCtxCreate(&amp;ctxB, CU_CTX_SCHED_AUTO, device)); <span class="comment">// 参考 1.ctx-stack.jpg</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ctxA = %p\n&quot;</span>, ctxA);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ctxB = %p\n&quot;</span>, ctxB);</span><br><span class="line">    <span class="comment">/* </span></span><br><span class="line"><span class="comment">        contexts 栈：</span></span><br><span class="line"><span class="comment">            ctxB -- top &lt;--- current_context</span></span><br><span class="line"><span class="comment">            ctxA </span></span><br><span class="line"><span class="comment">            ...</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 获取当前上下文信息</span></span><br><span class="line">    CUcontext current_context = nullptr;</span><br><span class="line">    checkDriver(cuCtxGetCurrent(&amp;current_context));             <span class="comment">// 这个时候current_context 就是上面创建的context</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;current_context = %p\n&quot;</span>, current_context);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 可以使用上下文堆栈对设备管理多个上下文</span></span><br><span class="line">    <span class="comment">// 压入当前context</span></span><br><span class="line">    checkDriver(cuCtxPushCurrent(ctxA));                        <span class="comment">// 将这个 ctxA 压入CPU调用的thread上。专门用一个thread以栈的方式来管理多个contexts的切换</span></span><br><span class="line">    checkDriver(cuCtxGetCurrent(&amp;current_context));             <span class="comment">// 获取current_context (即栈顶的context)</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;after pushing, current_context = %p\n&quot;</span>, current_context);</span><br><span class="line">    <span class="comment">/* </span></span><br><span class="line"><span class="comment">        contexts 栈：</span></span><br><span class="line"><span class="comment">            ctxA -- top &lt;--- current_context</span></span><br><span class="line"><span class="comment">            ctxB</span></span><br><span class="line"><span class="comment">            ...</span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    <span class="comment">// 弹出当前context</span></span><br><span class="line">    CUcontext popped_ctx = nullptr;</span><br><span class="line">    checkDriver(cuCtxPopCurrent(&amp;popped_ctx));                   <span class="comment">// 将当前的context pop掉，并用popped_ctx承接它pop出来的context</span></span><br><span class="line">    checkDriver(cuCtxGetCurrent(&amp;current_context));              <span class="comment">// 获取current_context(栈顶的)</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;after poping, popped_ctx = %p\n&quot;</span>, popped_ctx);       <span class="comment">// 弹出的是ctxA</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;after poping, current_context = %p\n&quot;</span>, current_context); <span class="comment">// current_context是ctxB</span></span><br><span class="line"></span><br><span class="line">    checkDriver(cuCtxDestroy(ctxA));</span><br><span class="line">    checkDriver(cuCtxDestroy(ctxB));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 更推荐使用cuDevicePrimaryCtxRetain获取与设备关联的context</span></span><br><span class="line">    <span class="comment">// 注意这个重点，以后的runtime也是基于此, 自动为设备只关联一个context</span></span><br><span class="line">    checkDriver(cuDevicePrimaryCtxRetain(&amp;ctxA, device));       <span class="comment">// 在 device 上指定一个新地址对ctxA进行管理</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ctxA = %p\n&quot;</span>, ctxA);</span><br><span class="line">    checkDriver(cuDevicePrimaryCtxRelease(device));</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果如下</p>
+<img src="/CUDA/%E5%9F%BA%E7%A1%80/2%20cuda_context/a66887be2bcb4cb088515fa5a9258952.png" class="" title="在这里插入图片描述">
+<h2 id="2-3-测试-cuda-context"><a href="#2-3-测试-cuda-context" class="headerlink" title="2.3 测试 cuda context"></a>2.3 测试 cuda context</h2><p>上面提到，在一个GPU上创建多个cuda context会引入一部分的开销，我理解就像CPU切换进程一样。上面也提到了，<strong>一个 GPU 上只能有一个活动的 CUDA context。</strong></p>
+<p>下面针对单GPU上单个cuda context和多个cuda context进行测试验证。</p>
+<p>代码如下<strong>（需要注意的是如果调用了cuda driver 的API，那么需要添加头文件cuda.h 和链接库 libcuda.so）</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;../common/common.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cuda_runtime.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cuda.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * This example implements matrix element-wise addition on the host and GPU.</span></span><br><span class="line"><span class="comment"> * sumMatrixOnHost iterates over the rows and columns of each matrix, adding</span></span><br><span class="line"><span class="comment"> * elements from A and B together and storing the results in C. The current</span></span><br><span class="line"><span class="comment"> * offset in each matrix is stored using pointer arithmetic. sumMatrixOnGPU2D</span></span><br><span class="line"><span class="comment"> * implements the same logic, but using CUDA threads to process each matrix.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> NSTEP 10</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> NKERNEL 40</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MULTIPLE_CUDA_CONTEXT 1</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> checkDriver(op) __check_cuda_driver((op), #op, __FILE__, __LINE__)</span></span><br><span class="line"><span class="type">bool</span> __check_cuda_driver(CUresult code, <span class="type">const</span> <span class="type">char</span> *op, <span class="type">const</span> <span class="type">char</span> *file, <span class="type">int</span> line)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> (code != CUresult::CUDA_SUCCESS)</span><br><span class="line">    &#123;                                   <span class="comment">// 如果 成功获取CUDA情况下的返回值 与我们给定的值(0)不相等， 即条件成立， 返回值为flase</span></span><br><span class="line">        <span class="type">const</span> <span class="type">char</span> *err_name = nullptr; <span class="comment">// 定义了一个字符串常量的空指针</span></span><br><span class="line">        <span class="type">const</span> <span class="type">char</span> *err_message = nullptr;</span><br><span class="line">        cuGetErrorName(code, &amp;err_name);</span><br><span class="line">        cuGetErrorString(code, &amp;err_message);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;%s:%d  %s failed. \n  code = %s, message = %s\n&quot;</span>, file, line, op, err_name, err_message); <span class="comment">// 打印错误信息</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">initialData</span><span class="params">(<span class="type">float</span> *ip, <span class="type">const</span> <span class="type">int</span> size)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (i = <span class="number">0</span>; i &lt; size; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        ip[i] = (<span class="type">float</span>)(rand() &amp; <span class="number">0xFF</span>) / <span class="number">10.0f</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">sumMatrixOnHost</span><span class="params">(<span class="type">float</span> *A, <span class="type">float</span> *B, <span class="type">float</span> *C, <span class="type">const</span> <span class="type">int</span> nx, <span class="type">const</span> <span class="type">int</span> ny)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">float</span> *ia = A;</span><br><span class="line">    <span class="type">float</span> *ib = B;</span><br><span class="line">    <span class="type">float</span> *ic = C;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> iy = <span class="number">0</span>; iy &lt; ny; iy++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> ix = <span class="number">0</span>; ix &lt; nx; ix++)</span><br><span class="line">        &#123;</span><br><span class="line">            ic[ix] = ia[ix] + ib[ix];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        ia += nx;</span><br><span class="line">        ib += nx;</span><br><span class="line">        ic += nx;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">checkResult</span><span class="params">(<span class="type">float</span> *hostRef, <span class="type">float</span> *gpuRef, <span class="type">const</span> <span class="type">int</span> N)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">double</span> epsilon = <span class="number">1.0E-8</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; N; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (<span class="built_in">abs</span>(hostRef[i] - gpuRef[i]) &gt; epsilon)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;host %f gpu %f &quot;</span>, hostRef[i], gpuRef[i]);</span><br><span class="line">            <span class="built_in">printf</span>(<span class="string">&quot;Arrays do not match.\n\n&quot;</span>);</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// grid 2D block 2D</span></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">sumMatrixOnGPU2D</span><span class="params">(<span class="type">float</span> *A, <span class="type">float</span> *B, <span class="type">float</span> *C, <span class="type">int</span> NX, <span class="type">int</span> NY)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> ix = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> iy = blockIdx.y * blockDim.y + threadIdx.y;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> idx = iy * NX + ix;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ix &lt; NX &amp;&amp; iy &lt; NY)</span><br><span class="line">    &#123;</span><br><span class="line">        C[idx] = A[idx] + B[idx];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">float</span> elapsed_time;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// set up device</span></span><br><span class="line">    <span class="type">int</span> dev = <span class="number">0</span>;</span><br><span class="line">    cudaDeviceProp deviceProp;</span><br><span class="line">    CHECK(cudaGetDeviceProperties(&amp;deviceProp, dev));</span><br><span class="line">    CHECK(cudaSetDevice(dev));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 为设备创建上下文</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">CUctx_st</span> *<span class="title">ctxA</span> =</span> nullptr; <span class="comment">// CUcontext 其实是 struct CUctx_st*（是一个指向结构体CUctx_st的指针）</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">CUctx_st</span> *<span class="title">ctxB</span> =</span> nullptr;</span><br><span class="line">    cudaStream_t streamA, streamB;</span><br><span class="line"></span><br><span class="line">    CUdevice device = <span class="number">0</span>;</span><br><span class="line">    checkDriver(cuCtxCreate(&amp;ctxA, CU_CTX_SCHED_AUTO, device)); <span class="comment">// 这一步相当于告知要某一块设备上的某块地方创建 ctxA 管理数据。输入参数 参考 https://www.cs.cmu.edu/afs/cs/academic/class/15668-s11/www/cuda-doc/html/group__CUDA__CTX_g65dc0012348bc84810e2103a40d8e2cf.html</span></span><br><span class="line">    CHECK(cudaStreamCreate(&amp;streamA));</span><br><span class="line">    checkDriver(cuCtxCreate(&amp;ctxB, CU_CTX_SCHED_AUTO, device)); <span class="comment">// 参考 1.ctx-stack.jpg</span></span><br><span class="line">    CHECK(cudaStreamCreate(&amp;streamB));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ctxA = %p  streamA=%p \n&quot;</span>, ctxA, streamA);</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;ctxB = %p  streamb=%p \n&quot;</span>, ctxB, streamB);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// set up data size of matrix</span></span><br><span class="line">    <span class="type">int</span> nx = <span class="number">1</span> &lt;&lt; <span class="number">5</span>;</span><br><span class="line">    <span class="type">int</span> ny = <span class="number">1</span> &lt;&lt; <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> nxy = nx * ny;</span><br><span class="line">    <span class="type">int</span> nBytes = nxy * <span class="keyword">sizeof</span>(<span class="type">float</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// malloc host memory</span></span><br><span class="line">    <span class="type">float</span> *h_A, *h_B, *hostRef, *gpuRef;</span><br><span class="line">    h_A = (<span class="type">float</span> *)<span class="built_in">malloc</span>(nBytes);</span><br><span class="line">    h_B = (<span class="type">float</span> *)<span class="built_in">malloc</span>(nBytes);</span><br><span class="line">    hostRef = (<span class="type">float</span> *)<span class="built_in">malloc</span>(nBytes);</span><br><span class="line">    gpuRef = (<span class="type">float</span> *)<span class="built_in">malloc</span>(nBytes);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// initialize data at host side</span></span><br><span class="line">    <span class="type">double</span> iStart = seconds();</span><br><span class="line">    initialData(h_A, nxy);</span><br><span class="line">    initialData(h_B, nxy);</span><br><span class="line">    <span class="type">double</span> iElaps = seconds() - iStart;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">memset</span>(hostRef, <span class="number">0</span>, nBytes);</span><br><span class="line">    <span class="built_in">memset</span>(gpuRef, <span class="number">0</span>, nBytes);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// add matrix at host side for result checks</span></span><br><span class="line">    <span class="comment">// iStart = seconds();</span></span><br><span class="line">    sumMatrixOnHost(h_A, h_B, hostRef, nx, ny);</span><br><span class="line">    <span class="comment">// iElaps = seconds() - iStart;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// malloc device global memory</span></span><br><span class="line">    <span class="type">float</span> *d_MatA, *d_MatB, *d_MatC;</span><br><span class="line">    CHECK(cudaMalloc((<span class="type">void</span> **)&amp;d_MatA, nBytes));</span><br><span class="line">    CHECK(cudaMalloc((<span class="type">void</span> **)&amp;d_MatB, nBytes));</span><br><span class="line">    CHECK(cudaMalloc((<span class="type">void</span> **)&amp;d_MatC, nBytes));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// transfer data from host to device</span></span><br><span class="line">    CHECK(cudaMemcpy(d_MatA, h_A, nBytes, cudaMemcpyHostToDevice));</span><br><span class="line">    CHECK(cudaMemcpy(d_MatB, h_B, nBytes, cudaMemcpyHostToDevice));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// invoke kernel at host side</span></span><br><span class="line">    <span class="type">int</span> dimx = <span class="number">32</span>;</span><br><span class="line">    <span class="type">int</span> dimy = <span class="number">32</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (argc &gt; <span class="number">2</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        dimx = atoi(argv[<span class="number">1</span>]);</span><br><span class="line">        dimy = atoi(argv[<span class="number">2</span>]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    dim3 <span class="title function_">block</span><span class="params">(dimx, dimy)</span>;</span><br><span class="line">    dim3 <span class="title function_">grid</span><span class="params">((nx + block.x - <span class="number">1</span>) / block.x, (ny + block.y - <span class="number">1</span>) / block.y)</span>;</span><br><span class="line"></span><br><span class="line">    cudaStream_t streamTemp;</span><br><span class="line">    streamTemp = streamB;</span><br><span class="line">    <span class="comment">// creat events</span></span><br><span class="line">    cudaEvent_t start, stop;</span><br><span class="line">    CHECK(cudaEventCreate(&amp;start));</span><br><span class="line">    CHECK(cudaEventCreate(&amp;stop));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// record start event</span></span><br><span class="line">    CHECK(cudaEventRecord(start, <span class="number">0</span>));</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> istep = <span class="number">0</span>; istep &lt; NSTEP; istep++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// 获取当前上下文信息</span></span><br><span class="line">        <span class="class"><span class="keyword">struct</span> <span class="title">CUctx_st</span> *<span class="title">current_context</span> =</span> nullptr;</span><br><span class="line"><span class="meta">#<span class="keyword">if</span> MULTIPLE_CUDA_CONTEXT</span></span><br><span class="line">        <span class="keyword">if</span> (istep % <span class="number">2</span> == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 可以使用上下文堆栈对设备管理多个上下文</span></span><br><span class="line">            <span class="comment">// 压入当前context</span></span><br><span class="line">            checkDriver(cuCtxPushCurrent(ctxA));            <span class="comment">// 将这个 ctxA 压入CPU调用的thread上。专门用一个thread以栈的方式来管理多个contexts的切换</span></span><br><span class="line">            checkDriver(cuCtxGetCurrent(&amp;current_context)); <span class="comment">// 获取current_context (即栈顶的context)</span></span><br><span class="line">            streamTemp = streamA;</span><br><span class="line">            <span class="comment">// printf(&quot;after pushing, current_context = %p\n&quot;, current_context); // ctxA</span></span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">        &#123;</span><br><span class="line">            streamTemp = streamB;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        checkDriver(cuCtxGetCurrent(&amp;current_context));                              <span class="comment">// 这个时候current_context 就是上面创建的context</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;current_context = %p streamTemp=%p\n&quot;</span>, current_context, streamTemp); <span class="comment">// ctxB</span></span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> ikrnl = <span class="number">0</span>; ikrnl &lt; NKERNEL; ikrnl++)</span><br><span class="line">        &#123;</span><br><span class="line">            sumMatrixOnGPU2D&lt;&lt;&lt;grid, block, <span class="number">0</span>, streamTemp&gt;&gt;&gt;(d_MatA, d_MatB, d_MatC, nx, ny);</span><br><span class="line">        &#125;</span><br><span class="line">        CHECK(cudaStreamSynchronize(streamTemp));</span><br><span class="line"><span class="meta">#<span class="keyword">if</span> MULTIPLE_CUDA_CONTEXT</span></span><br><span class="line">        <span class="keyword">if</span> (istep % <span class="number">2</span> == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="comment">// 弹出当前context</span></span><br><span class="line">            CUcontext popped_ctx = nullptr;</span><br><span class="line">            checkDriver(cuCtxPopCurrent(&amp;popped_ctx)); <span class="comment">// 将当前的context pop掉，并用popped_ctx承接它pop出来的context</span></span><br><span class="line">            <span class="comment">// CHECK(cuCtxGetCurrent(&amp;current_context));                        // 获取current_context(栈顶的)</span></span><br><span class="line">            <span class="comment">// printf(&quot;after poping, popped_ctx = %p\n&quot;, popped_ctx); // 弹出的是ctxA</span></span><br><span class="line">            <span class="comment">// printf(&quot;after poping, current_context = %p\n&quot;, current_context); // current_context是ctxB</span></span><br><span class="line">        &#125;</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    CHECK(cudaEventRecord(stop, <span class="number">0</span>));</span><br><span class="line">    CHECK(cudaEventSynchronize(stop));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// calculate elapsed time</span></span><br><span class="line">    CHECK(cudaEventElapsedTime(&amp;elapsed_time, start, stop));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Measured time for Graph execution = %fs\n&quot;</span>,</span><br><span class="line">           elapsed_time / <span class="number">1000.0f</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// copy kernel result back to host side</span></span><br><span class="line">    CHECK(cudaMemcpy(gpuRef, d_MatC, nBytes, cudaMemcpyDeviceToHost));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// check device results</span></span><br><span class="line">    checkResult(hostRef, gpuRef, nxy);</span><br><span class="line"></span><br><span class="line">    CHECK(cudaStreamDestroy(streamA));</span><br><span class="line">    CHECK(cudaStreamDestroy(streamB));</span><br><span class="line">    <span class="comment">// free device global memory</span></span><br><span class="line">    CHECK(cudaFree(d_MatA));</span><br><span class="line">    CHECK(cudaFree(d_MatB));</span><br><span class="line">    CHECK(cudaFree(d_MatC));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// free host memory</span></span><br><span class="line">    <span class="built_in">free</span>(h_A);</span><br><span class="line">    <span class="built_in">free</span>(h_B);</span><br><span class="line">    <span class="built_in">free</span>(hostRef);</span><br><span class="line">    <span class="built_in">free</span>(gpuRef);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// reset device</span></span><br><span class="line">    CHECK(cudaDeviceReset());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>MULTIPLE_CUDA_CONTEXT 为1 时，测试多cuda context的运行结果如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">ctxA = 0x556f4f61e800  streamA=0x556f4f9e5860 </span><br><span class="line">ctxB = 0x556f4fa95cb0  streamb=0x556f4f64f6a0 </span><br><span class="line">current_context = 0x556f4f61e800 streamTemp=0x556f4f9e5860</span><br><span class="line">current_context = 0x556f4fa95cb0 streamTemp=0x556f4f64f6a0</span><br><span class="line">current_context = 0x556f4f61e800 streamTemp=0x556f4f9e5860</span><br><span class="line">current_context = 0x556f4fa95cb0 streamTemp=0x556f4f64f6a0</span><br><span class="line">current_context = 0x556f4f61e800 streamTemp=0x556f4f9e5860</span><br><span class="line">current_context = 0x556f4fa95cb0 streamTemp=0x556f4f64f6a0</span><br><span class="line">current_context = 0x556f4f61e800 streamTemp=0x556f4f9e5860</span><br><span class="line">current_context = 0x556f4fa95cb0 streamTemp=0x556f4f64f6a0</span><br><span class="line">current_context = 0x556f4f61e800 streamTemp=0x556f4f9e5860</span><br><span class="line">current_context = 0x556f4fa95cb0 streamTemp=0x556f4f64f6a0</span><br><span class="line">Measured time for Graph execution = 0.003592s</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>MULTIPLE_CUDA_CONTEXT 为0 时，测试单cuda context的运行结果如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ctxA = 0x56205823f800  streamA=0x562058606970 </span><br><span class="line">ctxB = 0x5620586b6dc0  streamb=0x5620582706a0 </span><br><span class="line">Measured time for Graph execution = 0.002897s</span><br></pre></td></tr></table></figure>
+<p>可以看出多个cuda context整体的运行时间会长一点，使用nsys system分析结果如下（如果使用nsys的命令行可以传入参数—gpuctxsw=true）</p>
+<img src="/CUDA/%E5%9F%BA%E7%A1%80/2%20cuda_context/image-20240122150953905.png" class="" title="image-20240122150953905">
+<p>下图是多个cuda context的分析,可以看出cuda context切换需要时间，我这边测试是60us左右。</p>
+<img src="/CUDA/%E5%9F%BA%E7%A1%80/2%20cuda_context/image-20240122151239479.png" class="" title="image-20240122151239479">
+<p>下图是单个cuda context的分析</p>
+<img src="/CUDA/%E5%9F%BA%E7%A1%80/2%20cuda_context/image-20240122151453400.png" class="" title="image-20240122151453400">
+<h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><ul>
+<li>官方：<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#context">17.1. Context</a></li>
+<li>官方：<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/archive/11.4.4/cuda-c-best-practices-guide/index.html#multiple-contexts">10.6. Multiple contexts</a></li>
+<li>博客：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40672115/article/details/131606115">https://blog.csdn.net/qq_40672115/article/details/131606115</a></li>
+<li>论坛：<a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/29964392/multiple-cuda-contexts-for-one-device-any-sense">https://stackoverflow.com/questions/29964392/multiple-cuda-contexts-for-one-device-any-sense</a></li>
+<li>论坛：<a target="_blank" rel="noopener" href="https://forums.developer.nvidia.com/t/gpu-context-switch-of-multiple-processes/79606">https://forums.developer.nvidia.com/t/gpu-context-switch-of-multiple-processes/79606</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/CUDA/%E5%9F%BA%E7%A1%80/2%20cuda_context/" title="2 cuda_context">http://example.com/CUDA/基础/2 cuda_context/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/CUDA/%E5%9F%BA%E7%A1%80/CUDA%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF/" rel="prev" title="CUDA常见错误">
+                  <i class="fa fa-chevron-left"></i> CUDA常见错误
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/CUDA/%E5%9F%BA%E7%A1%80/CUDA%20%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F/" rel="next" title="CUDA 环境变量">
+                  CUDA 环境变量 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"dfb244575a8c1cd27ae24d81eef7b832"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

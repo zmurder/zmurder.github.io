@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="1 简单分类1. 行内公式">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Markdown数学公式语法">
+<meta property="og:url" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="1 简单分类1. 行内公式">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-170115162522673.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-17011515156962.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-17011515156963.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-17011515156964.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-17011515156965.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-17011515156966.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-17011515156977.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-17011515156978.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/right.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/rangle.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/rceil.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/rfloor.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/sum_%7Br=1%7D%5En.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/infty.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/iint.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/iiint.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/prod_%7Bi=1%7D%5E%7BK%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/prod.svg">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cbigcup">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cbigcap">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/max_%7Bc_k%7D.svg">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=arg%2C%5Cmin_%7Bc_k%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cmathop%20%7Bargmin%7D_%7Bc_k%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cmathop%20%7Bargmax%7D_%7Bc_k%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cmax_%7Bc_k%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cmin_%7Bc_k%7D">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/end%7Bcases%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/end%7Baligned%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/right.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/lt.svg">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5Cgt">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5Cle%20">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/ge.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/ne.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/lt.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/cup.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/cap.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/setminus.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/subset.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/subseteq.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/subsetneq.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/supset.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/in.svg">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%60(%5Cnotin">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5Cemptyset">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/varnothing.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/binom%7Bn+1%7D%7B2k%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/to.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/rightarrow.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/leftarrow.svg">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%60(%5CRightarrow">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5CLeftarrow">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/mapsto.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/land.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/lor.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/lnot.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/forall.svg">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5Cexists">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5Ctop">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5Cbot">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5Cvdash">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5CvDash">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%60(%5Cstar">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5Cast">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5Coplus">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5Ccirc">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5Cbullet">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5Capprox">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5Csim">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5Cequiv">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5Cprec">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5Cinfty">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5Caleph_o">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5Cnabla">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5CIm">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5CRe">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%60(%5Cpmod">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=a%20%5Cequiv%20b%20%5Cpmod%20n">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5Cldots">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5Ccdots">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=(%5Ccdot">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/end%7Bcases%7D-1701153132684105.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/end%7Barray%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/frac%7Bx+y%7D%7By+z%7D.svg">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cunderline%7Bx%2By%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Ctag%7B11%7D">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/overbrace%7Ba+b+c+d%7D%5E%7B2.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/underbrace%7Bb+c%7D_%7B1.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/dots,x_n%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-1701153176795124.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-1701153176795125.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-1701153176795126.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-1701153176795127.svg">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%EF%BC%88%EF%BC%89%5Cbig(%5Cbig">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Bx%2By%5D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%7Bx%2By%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cleft(x%5Cright">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%7Bn%2B1%20%5Cchoose%20k%7D%3D%7Bn%20%5Cchoose%20k%7D%2B%7Bn%20%5Cchoose%20k-1%7D">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Csum_%7Bk_0%2Ck_1%2C%5Cldots%3E0%20%5Catop%20k_0%2Bk_1%2B%5Ccdots%3Dn%7DA_%7Bk_0%7DA_%7Bk_1%7D%5Ccdots">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%2By%3Dz">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x-y%3Dz">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Cpm%20y%3Dz">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Cmp%20y%3Dz">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Ctimes%20y%3Dz">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Ccdot%20y%3Dz">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Cast%20y%3Dz">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%20%5Cdiv%20y%3Dz">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%2Fy%3Dz">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/frac%7Bx+y%7D%7By+z%7D-1701153176796133.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-1701153176796134.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/overline%7Bxyz%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/sqrt%5B3%5D%7Bx+y%7D.svg">
+<meta property="og:image" content="http://example.com/frac%7Bx%7D%7By%7D%7D-1701153176797136.svg%20%5Csum%5E%7Bx%20%5Cto%20%5Cinfty%7D_%7By%20%5Cto%200%7D%7B%5Cfrac%7Bx%7D%7By%7D%7D%20%25%7D%3C/li%3E%0A%3Cli%3EB%EF%BF%BD%D0%97%0C&%EF%BF%BD%1A%3Ccode%3E%5Cdisplaystyle%20%5Csum%3C/code%3E%0C%EF%BF%BD%1A%3Cimg%20src=%22https:/math.jianshu.com/math?formula=%5Cdisplaystyle%20%5Csum%5E%7Bx%20%5Cto%20%5Cinfty%7D_%7By%20%5Cto%200%7D%7B%5Cfrac%7Bx%7D%7By%7D%7D%22%20alt=%22%5Cdisplaystyle%20%5Csum%5E%7Bx%20%5Cto%20%5Cinfty%7D_%7By%20%5Cto%200%7D%7B%5Cfrac%7Bx%7D%7By%7D%7D%22%3E%3C/li%3E%0A%3Cli%3E%EF%BF%BD%06%D0%97%0C&%EF%BF%BD%1A%3Ccode%3E%5Cint%3C/code%3E%0C%EF%BF%BD%1A%3Cimg%20src=%22https:/math.jianshu.com/math?formula=%5Cint%5E%7B%5Cinfty%7D_%7B0%7D%7Bxdx%7D%22%20alt=%22%5Cint%5E%7B%5Cinfty%7D_%7B0%7D%7Bxdx%7D%22%3E%3C/li%3E%0A%3Cli%3E%EF%BF%BD%06%D0%97%0C&%EF%BF%BD%1A%3Ccode%3E%5Cdisplaystyle%20%5Cint%3C/code%3E%0C%EF%BF%BD%1A%3Cimg%20src=%22https:/math.jianshu.com/math?formula=%5Cdisplaystyle%20%5Cint%5E%7B%5Cinfty%7D_%7B0%7D%7Bxdx%7D%22%20alt=%22%5Cdisplaystyle%20%5Cint%5E%7B%5Cinfty%7D_%7B0%7D%7Bxdx%7D%22%3E%3C/li%3E%0A%3Cli%3E%EF%BF%BD%06%D0%97%0C&%EF%BF%BD%1A%3Ccode%3E%5Cpartial%3C/code%3E%0C%EF%BF%BD%1A%3Cimg%20src=%22https:/math.jianshu.com/math?formula=%5Cfrac%7B%5Cpartial%20x%7D%7B%5Cpartial%20y%7D%22%20alt=%22%5Cfrac%7B%5Cpartial%20x%7D%7B%5Cpartial%20y%7D%22%3E%3C/li%3E%0A%3Cli%3E%EF%BF%BD5h:%0C&%EF%BF%BD%1A%3Ccode%3E%5Cbegin&#123;matrix&#125;%20%5Cend&#123;matrix&#125;%3C/code%3E%0C%EF%BF%BD%1A%7B%25">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%2By%3Dz">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-1701153176797139.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-1701153176797140.svg">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x%2By%20%5Cgeq%20z">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/emptyset.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/infty.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/imath.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/jmath.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/hat%7Ba%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/check%7Ba%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/breve%7Ba%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/tilde%7Ba%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/bar%7Ba%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/vec%7Ba%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/acute%7Ba%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/grave%7Ba%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/mathring%7Ba%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/dot%7Ba%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/ddot%7Ba%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/uparrow.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/downarrow.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/leftarrow.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/rightarrow.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/ldots,n.svg">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=x_1%5E2%20%2B%20x_2%5E2%20%2B%20%5Ccdots%20%2B%20x_n%5E2">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cvdots">
+<meta property="og:image" content="https://math.jianshu.com/math?formula=%5Cddots">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/end%7Bmatrix%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/end%7Bpmatrix%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/end%7Bbmatrix%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/end%7Bvmatrix%7D.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/end%7Bpmatrix%7D-1701153217261330.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/right%5D-1701153236873333.svg">
+<meta property="og:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/tag%7B1%7D.svg">
+<meta property="article:published_time" content="2024-12-01T10:13:45.623Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.623Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math.svg">
+
+
+<link rel="canonical" href="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/","path":"fragment/Markdown数学公式语法/","title":"Markdown数学公式语法"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Markdown数学公式语法 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E7%AE%80%E5%8D%95%E5%88%86%E7%B1%BB"><span class="nav-text">1 简单分类</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E8%A1%8C%E5%86%85%E5%85%AC%E5%BC%8F"><span class="nav-text">1. 行内公式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E8%A1%8C%E9%97%B4%E5%85%AC%E5%BC%8F"><span class="nav-text">2. 行间公式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E4%B8%8A%E6%A0%87%E3%80%81%E4%B8%8B%E6%A0%87%E4%B8%8E%E7%BB%84%E5%90%88"><span class="nav-text">2 上标、下标与组合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E6%8B%AC%E5%8F%B7"><span class="nav-text">3 括号</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E5%B0%8F%E6%8B%AC%E5%8F%B7%E4%B8%8E%E6%96%B9%E6%8B%AC%E5%8F%B7"><span class="nav-text">3.1 小括号与方括号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E5%A4%A7%E6%8B%AC%E5%8F%B7"><span class="nav-text">3.2. 大括号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E5%B0%96%E6%8B%AC%E5%8F%B7"><span class="nav-text">3.3. 尖括号</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%8F%96%E6%95%B4"><span class="nav-text">4 取整</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E4%B8%8A%E5%8F%96%E6%95%B4"><span class="nav-text">4.1. 上取整</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E4%B8%8B%E5%8F%96%E6%95%B4"><span class="nav-text">4.2. 下取整</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E6%B1%82%E5%92%8C-%E7%A7%AF%E5%88%86-%E8%BF%9E%E4%B9%98"><span class="nav-text">5 求和\积分\连乘</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-%E6%B1%82%E5%92%8C"><span class="nav-text">5.1.求和</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-%E7%A7%AF%E5%88%86"><span class="nav-text">5.2. 积分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E8%BF%9E%E4%B9%98"><span class="nav-text">5.3. 连乘</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-%E5%85%B6%E4%BB%96"><span class="nav-text">5.4. 其他</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E5%88%86%E5%BC%8F%E4%B8%8E%E6%A0%B9%E5%BC%8F"><span class="nav-text">6 分式与根式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E5%88%86%E5%BC%8F"><span class="nav-text">6.1. 分式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-%E8%BF%9E%E5%88%86%E6%95%B0"><span class="nav-text">6.2. 连分数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-%E5%A4%9A%E8%A1%8C%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">7 多行表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#7-1-%E5%88%86%E7%B1%BB%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">7.1. 分类表达式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#7-2-%E5%A4%9A%E8%A1%8C%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">7.2. 多行表达式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-%E6%96%B9%E7%A8%8B%E7%BB%84"><span class="nav-text">8 方程组</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9-%E7%89%B9%E6%AE%8A%E5%87%BD%E6%95%B0%E4%B8%8E%E7%AC%A6%E5%8F%B7"><span class="nav-text">9 特殊函数与符号</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#9-1-%E4%B8%89%E8%A7%92%E5%87%BD%E6%95%B0"><span class="nav-text">9.1. 三角函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-2-%E6%AF%94%E8%BE%83%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-text">9.2.比较运算符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-3-%E9%9B%86%E5%90%88%E5%85%B3%E7%B3%BB%E4%B8%8E%E8%BF%90%E7%AE%97"><span class="nav-text">9.3.集合关系与运算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-4-%E6%8E%92%E5%88%97"><span class="nav-text">9.4. 排列</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-5-%E7%AE%AD%E5%A4%B4"><span class="nav-text">9.5. 箭头</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-6-%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-text">9.6. 逻辑运算符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-7-%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-text">9.7.操作符</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-8-%E7%AD%89%E4%BA%8E"><span class="nav-text">9.8.等于</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-9-%E8%8C%83%E5%9B%B4"><span class="nav-text">9.9.范围</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-10-%E6%A8%A1%E8%BF%90%E7%AE%97"><span class="nav-text">9.10. 模运算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-11-%E7%82%B9"><span class="nav-text">9.11. 点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-12-%E9%A1%B6%E9%83%A8%E7%AC%A6%E5%8F%B7"><span class="nav-text">9.12.顶部符号</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#10-%E8%A1%A8%E6%A0%BC"><span class="nav-text">10 表格</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#12-%E6%B1%89%E5%AD%97%E3%80%81%E5%AD%97%E4%BD%93%E4%B8%8E%E6%A0%BC%E5%BC%8F"><span class="nav-text">12 汉字、字体与格式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#14-%E5%AE%9A%E7%95%8C%E7%AC%A6%E4%B8%8E%E7%BB%84%E5%90%88"><span class="nav-text">14 定界符与组合</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#15-%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97"><span class="nav-text">15 四则运算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#16-%E9%AB%98%E7%BA%A7%E8%BF%90%E7%AE%97"><span class="nav-text">16 高级运算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#17-%E9%80%BB%E8%BE%91%E8%BF%90%E7%AE%97"><span class="nav-text">17 逻辑运算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#18-%E9%9B%86%E5%90%88%E8%BF%90%E7%AE%97"><span class="nav-text">18 集合运算</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#19-%E6%95%B0%E5%AD%A6%E7%AC%A6%E5%8F%B7"><span class="nav-text">19 数学符号</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#20-%E7%9F%A9%E9%98%B5"><span class="nav-text">20 矩阵</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#20-1-%E6%8B%AC%E5%8F%B7"><span class="nav-text">20.1. 括号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#20-2-%E5%A2%9E%E5%B9%BF%E7%9F%A9%E9%98%B5"><span class="nav-text">20.2. 增广矩阵</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#21-%E5%85%AC%E5%BC%8F%E6%A0%87%E8%AE%B0%E4%B8%8E%E5%BC%95%E7%94%A8"><span class="nav-text">21 公式标记与引用</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#22-%E5%AD%97%E4%BD%93"><span class="nav-text">22 字体</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#22-1-%E9%BB%91%E6%9D%BF%E7%B2%97%E4%BD%93%E5%AD%97"><span class="nav-text">22.1.黑板粗体字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#22-3-%E9%BB%91%E4%BD%93%E5%AD%97"><span class="nav-text">22.3.黑体字</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#22-3-%E6%89%93%E5%8D%B0%E6%9C%BA%E5%AD%97%E4%BD%93"><span class="nav-text">22.3.打印机字体</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#23-%E5%B8%8C%E8%85%8A%E5%AD%97%E6%AF%8D"><span class="nav-text">23 希腊字母</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Markdown数学公式语法 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Markdown数学公式语法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/fragment/" itemprop="url" rel="index"><span itemprop="name">fragment</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-简单分类"><a href="#1-简单分类" class="headerlink" title="1 简单分类"></a>1 简单分类</h1><h2 id="1-行内公式"><a href="#1-行内公式" class="headerlink" title="1. 行内公式"></a>1. 行内公式</h2><p>将公式插入到本行内，符号：<script type="math/tex">公式内容</script>，如：<script type="math/tex">xyz</script></p>
+<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math.svg" class="" title="math">
+<h2 id="2-行间公式"><a href="#2-行间公式" class="headerlink" title="2. 行间公式"></a>2. 行间公式</h2><p>将公式插入到新的一行内，并且居中，符号：<script type="math/tex">公式内容</script>，如：$$$xyz$$$<br><img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math.svg" class="" title="xyz"></p>
+<h1 id="2-上标、下标与组合"><a href="#2-上标、下标与组合" class="headerlink" title="2 上标、下标与组合"></a>2 上标、下标与组合</h1><ol>
+<li><p>上标符号，符号：<code>^</code>，如：<script type="math/tex">x^4</script> <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-170115162522673.svg" class="" title="x^4"></p>
+</li>
+<li><p>下标符号，符号：<code>_</code>，如：<script type="math/tex">x_1</script> <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-17011515156962.svg" class="" title="x_1"></p>
+</li>
+<li><p>组合符号，符号：<code>&#123;&#125;</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-17011515156963.svg" class="" title="&lt;sup&gt;{16}_{8}O&lt;&#x2F;sup&gt;{2+}_{2}"></p>
+</li>
+</ol>
+<p>默认情况下，上、下标符号仅仅对下一个组起作用。一个组即单个字符或者使用{}（大括号） 包裹起来的内容。如果使用<script type="math/tex">10^10</script>表示的是<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-17011515156964.svg" class="" title="10^10">,而<script type="math/tex">10^{10}</script> 才可以表示为<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-17011515156965.svg" class="" title="10^{10}">。同时，大括号还能消除二义性，如：<script type="math/tex">x^5^6</script> 将得到一个错误，必须使用大括号来界定^的结合性，如:<script type="math/tex">{x^5}^6</script>表示的<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-17011515156966.svg" class="" title="{x^5}^6">：或者用<script type="math/tex">x^{5^6}</script>表示的<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-17011515156977.svg" class="" title="x^{5^6}">。</p>
+<h1 id="3-括号"><a href="#3-括号" class="headerlink" title="3 括号"></a>3 括号</h1><h2 id="3-1-小括号与方括号"><a href="#3-1-小括号与方括号" class="headerlink" title="3.1 小括号与方括号"></a>3.1 小括号与方括号</h2><p>用原始的( ) ，[ ] 即可，如<code>(2+3)[4+4]</code>可表示：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-17011515156978.svg" class="" title="(2+3)[4+4]">。<br> 使用\left(或\right)使符号大小与邻近的公式相适应（该语句适用于所有括号类型），如\left(\frac{x}{y}\right)可表示<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/right.svg" class="" title="\left(\frac{x}{y}\right)"></p>
+<h2 id="3-2-大括号"><a href="#3-2-大括号" class="headerlink" title="3.2. 大括号"></a>3.2. 大括号</h2><p>由于大括号{} 被用于分组，因此需要使用{和}表示大括号，也可以使用\lbrace 和\rbrace来表示。如{ab}或\lbrace ab\rbrace表示:<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/%7D.svg" class="" title="\{ab\}"></p>
+<h2 id="3-3-尖括号"><a href="#3-3-尖括号" class="headerlink" title="3.3. 尖括号"></a>3.3. 尖括号</h2><p>区分于小于号和大于号，使用\langle 和\rangle 表示左尖括号和右尖括号。如\langle x \rangle表示：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/rangle.svg" class="" title="\langle x \rangle"></p>
+<h1 id="4-取整"><a href="#4-取整" class="headerlink" title="4 取整"></a>4 取整</h1><h2 id="4-1-上取整"><a href="#4-1-上取整" class="headerlink" title="4.1. 上取整"></a>4.1. 上取整</h2><p>使用\lceil 和 \rceil 表示。 如，\lceil x \rceil表示为：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/rceil.svg" class="" title="\lceil x \rceil"></p>
+<h2 id="4-2-下取整"><a href="#4-2-下取整" class="headerlink" title="4.2. 下取整"></a>4.2. 下取整</h2><p>使用\lfloor 和 \rfloor 表示。如，\lfloor x \rfloor表示为:<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/rfloor.svg" class="" title="\lfloor x \rfloor"></p>
+<h1 id="5-求和-积分-连乘"><a href="#5-求和-积分-连乘" class="headerlink" title="5 求和\积分\连乘"></a>5 求和\积分\连乘</h1><h2 id="5-1-求和"><a href="#5-1-求和" class="headerlink" title="5.1.求和"></a>5.1.求和</h2><p><code>\sum</code> 用来表示求和符号，其下标表示求和下限，上标表示上限。如:</p>
+<p> <script type="math/tex">\sum_{r=1}^n</script>表示：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/sum_%7Br=1%7D%5En.svg" class="" title="\sum_{r&#x3D;1}^n"></p>
+<h2 id="5-2-积分"><a href="#5-2-积分" class="headerlink" title="5.2. 积分"></a>5.2. 积分</h2><p><code>\int</code> 用来表示积分符号，同样地，其上下标表示积分的上下限。如，<script type="math/tex">\int_{r=1}^\infty</script>表示:<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/infty.svg" class="" title="\int_{r&#x3D;1}^\infty"><br> 多重积分同样使用<code>\int</code> ，通过 i 的数量表示积分导数：<br> 如：</p>
+<p> <script type="math/tex">\iint</script> 表示为：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/iint.svg" class="" title="\iint"></p>
+<p> <script type="math/tex">\iiint</script> 表示为：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/iiint.svg" class="" title="\iiint"></p>
+<h2 id="5-3-连乘"><a href="#5-3-连乘" class="headerlink" title="5.3. 连乘"></a>5.3. 连乘</h2><p><script type="math/tex">\prod {a+b}</script> 表示：</p>
+<p> <script type="math/tex">\prod_{i=1}^{K}</script> 表示：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/prod_%7Bi=1%7D%5E%7BK%7D.svg" class="" title="\prod_{i&#x3D;1}^{K}"></p>
+<p> $$$\prod<em>{i=1}^{K}$$$表示（注意是行间公式）：![\prod</em>{i=1}^{K}](<a target="_blank" rel="noopener" href="https://math.jianshu.com/math?formula=%5Cprod_%7Bi%3D1%7D%5E%7BK%7D">https://math.jianshu.com/math?formula=%5Cprod_%7Bi%3D1%7D%5E%7BK%7D</a>)</p>
+<h2 id="5-4-其他"><a href="#5-4-其他" class="headerlink" title="5.4. 其他"></a>5.4. 其他</h2><p>与此类似的符号还有，</p>
+<p> <script type="math/tex">\prod</script> ：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/prod.svg" class="" title="\prod"></p>
+<p> <script type="math/tex">\bigcup</script>：<img src="https://math.jianshu.com/math?formula=%5Cbigcup" alt="\bigcup"></p>
+<p> <script type="math/tex">\bigcap</script> ：<img src="https://math.jianshu.com/math?formula=%5Cbigcap" alt="\bigcap"></p>
+<p> <script type="math/tex">arg\,\max_{c_k}</script>：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/max_%7Bc_k%7D.svg" class="" title="arg\,\max_{c_k}"></p>
+<p> <script type="math/tex">arg\,\min_{c_k}</script>：<img src="https://math.jianshu.com/math?formula=arg%2C%5Cmin_%7Bc_k%7D" alt="arg,\min_{c_k}"></p>
+<p> <script type="math/tex">\mathop {argmin}_{c_k}</script>：<img src="https://math.jianshu.com/math?formula=%5Cmathop%20%7Bargmin%7D_%7Bc_k%7D" alt="\mathop {argmin}_{c_k}"></p>
+<p> <script type="math/tex">\mathop {argmax}_{c_k}</script>：<img src="https://math.jianshu.com/math?formula=%5Cmathop%20%7Bargmax%7D_%7Bc_k%7D" alt="\mathop {argmax}_{c_k}"></p>
+<p> <script type="math/tex">\max_{c_k}</script>：<img src="https://math.jianshu.com/math?formula=%5Cmax_%7Bc_k%7D" alt="\max_{c_k}"></p>
+<p> <script type="math/tex">\min_{c_k}</script>：<img src="https://math.jianshu.com/math?formula=%5Cmin_%7Bc_k%7D" alt="\min_{c_k}"></p>
+<h1 id="6-分式与根式"><a href="#6-分式与根式" class="headerlink" title="6 分式与根式"></a>6 分式与根式</h1><h2 id="6-1-分式"><a href="#6-1-分式" class="headerlink" title="6.1. 分式"></a>6.1. 分式</h2><p>第一种，使用<code>\frac ab</code>，表示为: ，<code>\frac</code>作用于其后的两个组a ，b ，结果为。如果你的分子或分母不是单个字符，请使用{…}来分组，比如<script type="math/tex">\frac {a+c+1}{b+c+2}</script>表示:<br> 第二种，使用\over来分隔一个组的前后两部分，如<script type="math/tex">{a+1\over b+1}</script>：</p>
+<h2 id="6-2-连分数"><a href="#6-2-连分数" class="headerlink" title="6.2. 连分数"></a>6.2. 连分数</h2><p>书写连分数表达式时，请使用<code>\cfrac</code>代替<code>\frac</code>或者<code>\over</code>两者效果对比如下：<br> <code>\frac</code> 表示如下：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$$x=a<span class="emphasis">_0 + \frac &#123;1^2&#125;&#123;a_</span>1 + \frac &#123;2^2&#125;&#123;a<span class="emphasis">_2 + \frac &#123;3^2&#125;&#123;a_</span>3 + \frac &#123;4^2&#125;&#123;a<span class="emphasis">_4 + ...&#125;&#125;&#125;&#125;$$</span></span><br><span class="line"><span class="emphasis"></span></span><br></pre></td></tr></table></figure>
+<p>显示如下：<br> <br> 开平方：<script type="math/tex">\sqrt {a+b}</script>可表示：</p>
+<h1 id="7-多行表达式"><a href="#7-多行表达式" class="headerlink" title="7 多行表达式"></a>7 多行表达式</h1><h2 id="7-1-分类表达式"><a href="#7-1-分类表达式" class="headerlink" title="7.1. 分类表达式"></a>7.1. 分类表达式</h2><p>定义函数的时候经常需要分情况给出表达式，使用\begin{cases}…\end{cases} 。其中：<br> 使用<code>\\</code> 来分类，<br> 使用<code>&amp;</code>指示需要对齐的位置，<br> 使用<code>\ +space</code>表示空格。<br> 如：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br><span class="line">f(n)</span><br><span class="line">\begin&#123;cases&#125;</span><br><span class="line">\cfrac n2, &amp;if\ n\ is\ even\\</span><br><span class="line">3n + 1, &amp;if\  n\ is\ odd</span><br><span class="line">\end&#123;cases&#125;</span><br><span class="line">$$</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>表示:<br> <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/end%7Bcases%7D.svg" class="" title="f(n) \begin{cases} \cfrac n2, &amp;if\ n\ is\ even\\ 3n + 1, &amp;if\ n\ is\ odd \end{cases}"><br> 以及:</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br><span class="line">L(Y,f(X)) =</span><br><span class="line">\begin&#123;cases&#125;</span><br><span class="line">0, &amp; \text&#123;Y = f(X)&#125;  \\</span><br><span class="line">1, &amp; \text&#123;Y $\neq$ f(X)&#125;</span><br><span class="line">\end&#123;cases&#125;</span><br><span class="line">$$</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+<p>表示:<br> <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math.svg" class="" title="L(Y,f(X)) &#x3D; \begin{cases} 0, &amp; \text{Y &#x3D; f(X)} \\ 1, &amp; \text{Y $\neq$ f(X)} \end{cases}">%20%3D%20%5Cbegin%7Bcases%7D%200%2C%20%26%20%5Ctext%7BY%20%3D%20f(X)%7D%20%5C%5C%201%2C%20%26%20%5Ctext%7BY%20%24%5Cneq%24%20f(X)%7D%20%5Cend%7Bcases%7D)</p>
+<p>如果想分类之间的垂直间隔变大，可以使用<code>\\[2ex]</code>代替<code>\\</code>来分隔不同的情况。<code>(3ex,4ex</code> 也可以用，<code>1ex</code>相当于原始距离）。如下所示：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br><span class="line">L(Y,f(X)) =</span><br><span class="line">\begin&#123;cases&#125;</span><br><span class="line">0, &amp; \text&#123;Y = f(X)&#125; \\[5ex]</span><br><span class="line">1, &amp; \text&#123;Y $\neq$ f(X)&#125;</span><br><span class="line">\end&#123;cases&#125;</span><br><span class="line">$$</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>表示：<br> <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math.svg" class="" title="L(Y,f(X)) &#x3D; \begin{cases} 0, &amp; \text{Y &#x3D; f(X)} \\[5ex] 1, &amp; \text{Y $\neq$ f(X)} \end{cases}">%20%3D%20%5Cbegin%7Bcases%7D%200%2C%20%26%20%5Ctext%7BY%20%3D%20f(X)%7D%20%5C%5C%5B5ex%5D%201%2C%20%26%20%5Ctext%7BY%20%24%5Cneq%24%20f(X)%7D%20%5Cend%7Bcases%7D)</p>
+<h2 id="7-2-多行表达式"><a href="#7-2-多行表达式" class="headerlink" title="7.2. 多行表达式"></a>7.2. 多行表达式</h2><p>有时候需要将一行公式分多行进行显示。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br><span class="line">\begin&#123;aligned&#125;</span><br><span class="line">\sqrt&#123;37&#125; &amp; = \sqrt&#123;\frac&#123;73^2-1&#125;&#123;12^2&#125;&#125; \\</span><br><span class="line"> &amp; = \sqrt&#123;\frac&#123;73^2&#125;&#123;12^2&#125;\cdot\frac&#123;73^2-1&#125;&#123;73^2&#125;&#125; \\ </span><br><span class="line"> &amp; = \sqrt&#123;\frac&#123;73^2&#125;&#123;12^2&#125;&#125;\sqrt&#123;\frac&#123;73^2-1&#125;&#123;73^2&#125;&#125; \\</span><br><span class="line"> &amp; = \frac&#123;73&#125;&#123;12&#125;\sqrt&#123;1 - \frac&#123;1&#125;&#123;73^2&#125;&#125; \\ </span><br><span class="line"> &amp; \approx \frac&#123;73&#125;&#123;12&#125;\left(1 - \frac&#123;1&#125;&#123;2\cdot73^2&#125;\right)</span><br><span class="line">\end&#123;aligned&#125;</span><br><span class="line">$$</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>表示:<br> <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/end%7Baligned%7D.svg" class="" title="\begin{aligned} \sqrt{37} &amp; &#x3D; \sqrt{\frac{73^2-1}{12^2}} \\ &amp; &#x3D; \sqrt{\frac{73^2}{12^2}\cdot\frac{73^2-1}{73^2}} \\ &amp; &#x3D; \sqrt{\frac{73^2}{12^2}}\sqrt{\frac{73^2-1}{73^2}} \\ &amp; &#x3D; \frac{73}{12}\sqrt{1 - \frac{1}{73^2}} \\ &amp; \approx \frac{73}{12}\left(1 - \frac{1}{2\cdot73^2}\right) \end{aligned} %}&lt;&#x2F;p&gt;
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br><span class="line">\begin&#123;aligned&#125;</span><br><span class="line">a&amp;=b+c-d \\</span><br><span class="line">&amp;=e-f \\</span><br><span class="line">&amp;=i \\</span><br><span class="line">\end&#123;aligned&#125;</span><br><span class="line">$$</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+&lt;p&gt;表示:&lt;br&gt; {% asset_img end{aligned}-170115307251129.svg \begin{aligned} a&amp;&#x3D;b+c-d \\ &amp;&#x3D;e-f \\ &amp;&#x3D;i \\ \end{aligned}"></p>
+<p>其中<code>begin&#123;equation&#125;</code> 表示开始方程，<code>end&#123;equation&#125;</code>表示方程结束；<code>begin&#123;split&#125;</code> 表示开始多行公式，<code>end&#123;split&#125;</code> 表示结束；公式中用<code>\\</code> 表示回车到下一行，<code>&amp;</code> 表示对齐的位置。</p>
+<h1 id="8-方程组"><a href="#8-方程组" class="headerlink" title="8 方程组"></a>8 方程组</h1><p>使用\begin{array}…\end{array} 与\left \与\right 配合表示方程组,如:</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br><span class="line">\left \&#123; </span><br><span class="line">\begin&#123;array&#125;&#123;c&#125;</span><br><span class="line">a<span class="emphasis">_1x+b_</span>1y+c<span class="emphasis">_1z=d_</span>1 \\ </span><br><span class="line">a<span class="emphasis">_2x+b_</span>2y+c<span class="emphasis">_2z=d_</span>2 \\ </span><br><span class="line">a<span class="emphasis">_3x+b_</span>3y+c<span class="emphasis">_3z=d_</span>3</span><br><span class="line">\end&#123;array&#125;</span><br><span class="line">\right.</span><br><span class="line">$$</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>表示：<br> <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/right.svg" class="" title="\left \{ \begin{array}{c} a_1x+b_1y+c_1z&#x3D;d_1 \\ a_2x+b_2y+c_2z&#x3D;d_2 \\ a_3x+b_3y+c_3z&#x3D;d_3 \end{array} \right."></p>
+<p>注意：通常MathJax通过内部策略自己管理公式内部的空间，因此<code>a…b</code> 与<code>a…….b</code>（.表示空格）都会显示为<code>ab</code>。可以通过在<code>ab</code>间加入<code>\</code>,增加些许间隙，<code>\;</code>增加较宽的间隙，<code>\quad</code> 与<code>\qquad</code> 会增加更大的间隙。</p>
+<h1 id="9-特殊函数与符号"><a href="#9-特殊函数与符号" class="headerlink" title="9 特殊函数与符号"></a>9 特殊函数与符号</h1><h2 id="9-1-三角函数"><a href="#9-1-三角函数" class="headerlink" title="9.1. 三角函数"></a>9.1. 三角函数</h2><p><script type="math/tex">\sin x</script> : </p>
+<p> <script type="math/tex">\arctan x</script> : </p>
+<h2 id="9-2-比较运算符"><a href="#9-2-比较运算符" class="headerlink" title="9.2.比较运算符"></a>9.2.比较运算符</h2><p>小于<code>(\lt )</code>：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/lt.svg" class="" title="(\lt )"><br> 大于<code>(\gt )</code>：<img src="https://math.jianshu.com/math?formula=(%5Cgt" alt="(\gt"><br> 小于等于<code>(\le )</code>：<img src="https://math.jianshu.com/math?formula=(%5Cle%20" alt="(\le )">)<br> 大于等于<code>(\ge )</code>：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/ge.svg" class="" title="(\ge )"><br> 不等于<code>(\ne )</code> :<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/ne.svg" class="" title="(\ne )"><br> 可以在这些运算符前面加上<code>\not</code> ，如<code>\not\lt</code> : <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/lt.svg" class="" title="\not\lt"></p>
+<h2 id="9-3-集合关系与运算"><a href="#9-3-集合关系与运算" class="headerlink" title="9.3.集合关系与运算"></a>9.3.集合关系与运算</h2><p>并集<code>(\cup)</code>: <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/cup.svg" class="" title="(\cup)"><br> 交集<code>(\cap)</code>: <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/cap.svg" class="" title="(\cap)"><br> 差集<code>(\setminus)</code>:<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/setminus.svg" class="" title="(\setminus)"><br> 子集<code>(\subset)</code>: <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/subset.svg" class="" title="(\subset)"><br> 子集<code>(\subseteq)</code>: <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/subseteq.svg" class="" title="(\subseteq)"><br> 非子集<code>(\subsetneq)</code>: <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/subsetneq.svg" class="" title="(\subsetneq)"><br> 父集<code>(\supset)</code>: <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/supset.svg" class="" title="(\supset)"><br> 属于<code>(\in)</code>: <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/in.svg" class="" title="(\in)"><br> 不属于<code>(\notin)</code>:<img src="https://math.jianshu.com/math?formula=%60(%5Cnotin" alt="`(\notin)">)<br> 空集<code>(\emptyset)</code>: <img src="https://math.jianshu.com/math?formula=(%5Cemptyset" alt="(\emptyset)">)<br> 空<code>(\varnothing)</code>: <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/varnothing.svg" class="" title="(\varnothing)"></p>
+<h2 id="9-4-排列"><a href="#9-4-排列" class="headerlink" title="9.4. 排列"></a>9.4. 排列</h2><p><code>\binom&#123;n+1&#125;&#123;2k&#125;</code> : <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/binom%7Bn+1%7D%7B2k%7D.svg" class="" title="\binom{n+1}{2k}"><br> <code>&#123;n+1 \choose 2k&#125;</code> : </p>
+<h2 id="9-5-箭头"><a href="#9-5-箭头" class="headerlink" title="9.5. 箭头"></a>9.5. 箭头</h2><p><code>(\to)</code>:<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/to.svg" class="" title="(\to)"><br> <code>(\rightarrow)</code>: <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/rightarrow.svg" class="" title="(\rightarrow)"><br> <code>(\leftarrow)</code>: <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/leftarrow.svg" class="" title="(\leftarrow)"><br> <code>(\Rightarrow)</code>:<img src="https://math.jianshu.com/math?formula=%60(%5CRightarrow" alt="`(\Rightarrow)">)<br> <code>(\Leftarrow)</code>: <img src="https://math.jianshu.com/math?formula=(%5CLeftarrow" alt="(\Leftarrow)">)<br> <code>(\mapsto)</code>: <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/mapsto.svg" class="" title="\mapsto)">)</p>
+<h2 id="9-6-逻辑运算符"><a href="#9-6-逻辑运算符" class="headerlink" title="9.6. 逻辑运算符"></a>9.6. 逻辑运算符</h2><p><code>(\land)</code>: <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/land.svg" class="" title="(\land)"><br> <code>(\lor)</code>: <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/lor.svg" class="" title="(\lor)"><br> <code>(\lnot)</code>: <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/lnot.svg" class="" title="(\lnot)"><br> <code>(\forall)</code>: <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/forall.svg" class="" title="(\forall)"><br> <code>(\exists)</code>: <img src="https://math.jianshu.com/math?formula=(%5Cexists" alt="(\exists)">)<br> <code>(\top)</code>: <img src="https://math.jianshu.com/math?formula=(%5Ctop" alt="(\top)">)<br> <code>(\bot)</code>: <img src="https://math.jianshu.com/math?formula=(%5Cbot" alt="(\bot)">)<br> <code>(\vdash)</code>: <img src="https://math.jianshu.com/math?formula=(%5Cvdash" alt="(\vdash)">)<br> <code>(\vDash)</code>:<img src="https://math.jianshu.com/math?formula=(%5CvDash" alt="(\vDash)">)</p>
+<h2 id="9-7-操作符"><a href="#9-7-操作符" class="headerlink" title="9.7.操作符"></a>9.7.操作符</h2><p><code>(\star)</code>: <img src="https://math.jianshu.com/math?formula=%60(%5Cstar" alt="`(\star)">)<br> <code>(\ast)</code>: <img src="https://math.jianshu.com/math?formula=(%5Cast" alt="(\ast)">)<br> <code>(\oplus)</code>: <img src="https://math.jianshu.com/math?formula=(%5Coplus" alt="(\oplus)">)<br> <code>(\circ)</code>: <img src="https://math.jianshu.com/math?formula=(%5Ccirc" alt="(\circ)">)<br> <code>(\bullet)</code>: <img src="https://math.jianshu.com/math?formula=(%5Cbullet" alt="(\bullet)">)</p>
+<h2 id="9-8-等于"><a href="#9-8-等于" class="headerlink" title="9.8.等于"></a>9.8.等于</h2><p><code>(\approx)</code>:<img src="https://math.jianshu.com/math?formula=(%5Capprox" alt="(\approx)">)<br> <code>(\sim)</code>: <img src="https://math.jianshu.com/math?formula=(%5Csim" alt="(\sim)">)<br> <code>(\equiv)</code>: <img src="https://math.jianshu.com/math?formula=(%5Cequiv" alt="(\equiv)">)<br> <code>(\prec)</code>: <img src="https://math.jianshu.com/math?formula=(%5Cprec" alt="(\prec)">)</p>
+<h2 id="9-9-范围"><a href="#9-9-范围" class="headerlink" title="9.9.范围"></a>9.9.范围</h2><p><code>(\infty)</code>:<img src="https://math.jianshu.com/math?formula=(%5Cinfty" alt="(\infty)">)<br> <code>(\aleph_o)</code>:<img src="https://math.jianshu.com/math?formula=(%5Caleph_o" alt="(\aleph_o)">)<br> <code>(\nabla)</code>: <img src="https://math.jianshu.com/math?formula=(%5Cnabla" alt="(\nabla)">)<br> <code>(\Im)</code>: <img src="https://math.jianshu.com/math?formula=(%5CIm" alt="(\Im)">)<br> <code>(\Re)</code>: <img src="https://math.jianshu.com/math?formula=(%5CRe" alt="(\Re)">)</p>
+<h2 id="9-10-模运算"><a href="#9-10-模运算" class="headerlink" title="9.10. 模运算"></a>9.10. 模运算</h2><p><code>(\pmod)</code>: <img src="https://math.jianshu.com/math?formula=%60(%5Cpmod" alt="`(\pmod)">)<br> 如a \equiv b \pmod n 表示为: <img src="https://math.jianshu.com/math?formula=a%20%5Cequiv%20b%20%5Cpmod%20n" alt="a \equiv b \pmod n"></p>
+<h2 id="9-11-点"><a href="#9-11-点" class="headerlink" title="9.11. 点"></a>9.11. 点</h2><p><code>(\ldots)</code>: <img src="https://math.jianshu.com/math?formula=(%5Cldots" alt="(\ldots)">)<br> <code>(\cdots)</code>: <img src="https://math.jianshu.com/math?formula=(%5Ccdots" alt="(\cdots)">)<br> <code>(\cdot)</code>: <img src="https://math.jianshu.com/math?formula=(%5Ccdot" alt="(\cdot)">)<br> 其区别是点的位置不同，<code>\ldots</code> 位置稍低，<code>\cdots</code> 位置居中。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br><span class="line">\begin&#123;cases&#125;</span><br><span class="line">a<span class="emphasis">_1+a_</span>2+\ldots+a<span class="emphasis">_n \\ </span></span><br><span class="line"><span class="emphasis">a_</span>1+a<span class="emphasis">_2+\cdots+a_</span>n \\</span><br><span class="line">\end&#123;cases&#125;</span><br><span class="line">$$</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>表示(注意两部分点的位置)：<br> <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/end%7Bcases%7D-1701153132684105.svg" class="" title="\begin{cases} a_1+a_2+\ldots+a_n \\ a_1+a_2+\cdots+a_n \\ \end{cases}"></p>
+<h2 id="9-12-顶部符号"><a href="#9-12-顶部符号" class="headerlink" title="9.12.顶部符号"></a>9.12.顶部符号</h2><p>对于单字符，<code>\hat x</code>：<br> 多字符可以使用<code>\widehat &#123;xy&#125;</code>：<br> 类似的还有<code>\overline x</code>: <br> 矢量<code>\vec x</code>:<br> 向量<code>\overrightarrow &#123;xy&#125;</code>: <br> <code>\dot x</code> : <br> <code>\ddot x</code>: <br> <code>\dot &#123;\dot x&#125;</code>: </p>
+<h1 id="10-表格"><a href="#10-表格" class="headerlink" title="10 表格"></a>10 表格</h1><p>使用<code>\begin&#123;array&#125;&#123;列样式&#125;…\end&#123;array&#125;</code>这样的形式来创建表格，列样式可以是<code>clr</code> 表示居中，左，右对齐，还可以使用<code>|</code>表示一条竖线。表格中各行使用\ 分隔，各列使用&amp; 分隔。使用<code>\hline</code> 在本行前加入一条直线。 例如:</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br><span class="line">\begin&#123;array&#125;&#123;c|lcr&#125;</span><br><span class="line">n &amp; \text&#123;Left&#125; &amp; \text&#123;Center&#125; &amp; \text&#123;Right&#125; \\</span><br><span class="line">\hline</span><br><span class="line">1 &amp; 0.24 &amp; 1 &amp; 125 \\</span><br><span class="line">2 &amp; -1 &amp; 189 &amp; -8 \\</span><br><span class="line">3 &amp; -20 &amp; 2000 &amp; 1+10i \\</span><br><span class="line">\end&#123;array&#125;</span><br><span class="line">$$</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>得到：<br> <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/end%7Barray%7D.svg" class="" title="\begin{array}{c|lcr} n &amp; \text{Left} &amp; \text{Center} &amp; \text{Right} \\ \hline 1 &amp; 0.24 &amp; 1 &amp; 125 \\ 2 &amp; -1 &amp; 189 &amp; -8 \\ 3 &amp; -20 &amp; 2000 &amp; 1+10i \\ \end{array}"></p>
+<h1 id="12-汉字、字体与格式"><a href="#12-汉字、字体与格式" class="headerlink" title="12 汉字、字体与格式"></a>12 汉字、字体与格式</h1><ol>
+<li>汉字形式，符号：<code>\mbox&#123;&#125;</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/frac%7Bx+y%7D%7By+z%7D.svg" class="mbox{初始}}.svg V_{\mbox{初始}} %}&lt;&#x2F;li&gt;
+&lt;li&gt;字体控制，符号：&lt;code&gt;\displaystyle&lt;&#x2F;code&gt;，如：{% asset_img" title="\displaystyle \frac{x+y}{y+z}"></li>
+<li>下划线符号，符号：<code>\underline</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cunderline%7Bx%2By%7D" alt="\underline{x+y}"></li>
+<li>标签，符号<code>\tag&#123;数字&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Ctag%7B11%7D" alt="\tag{11}"></li>
+<li>上大括号，符号：<code>\overbrace&#123;算式&#125;</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/overbrace%7Ba+b+c+d%7D%5E%7B2.svg" class="" title="\overbrace{a+b+c+d}^{2.0}"></li>
+<li>下大括号，符号：<code>\underbrace&#123;算式&#125;</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/underbrace%7Bb+c%7D_%7B1.svg" class="" title="a+\underbrace{b+c}_{1.0}+d"></li>
+<li>上位符号，符号：<code>\stacrel&#123;上位符号&#125;&#123;基位符号&#125;</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/dots,x_n%7D.svg" class="" title="\vec{x}\stackrel{\mathrm{def}}{&#x3D;}{x_1,\dots,x_n} %}&lt;&#x2F;li&gt;
+&lt;&#x2F;ol&gt;
+&lt;h1 id&#x3D;" alt="13-占位符"></li>
+<li>大空格，符号<code>\</code>，如：</li>
+<li>中空格，符号<code>\:</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-1701153176795124.svg" class="" title="x : y"></li>
+<li>小空格，符号<code>\,</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-1701153176795125.svg" class="" title="x , y"></li>
+<li>没有空格，符号``，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-1701153176795126.svg" class="" title="xy"></li>
+<li>紧贴，符号<code>\!</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-1701153176795127.svg" class="" title="x ! y"></li>
+</ol>
+<h1 id="14-定界符与组合"><a href="#14-定界符与组合" class="headerlink" title="14 定界符与组合"></a>14 定界符与组合</h1><ol>
+<li>括号，符号：<code>（）\big(\big) \Big(\Big) \bigg(\bigg) \Bigg(\Bigg)</code>，如：<img src="https://math.jianshu.com/math?formula=%EF%BC%88%EF%BC%89%5Cbig(%5Cbig" alt="（）\big(\big) \Big(\Big) \bigg(\bigg) \Bigg(\Bigg)">%20%5CBig(%5CBig)%20%5Cbigg(%5Cbigg)%20%5CBigg(%5CBigg))</li>
+<li>中括号，符号：<code>[]</code>，如：<img src="https://math.jianshu.com/math?formula=%5Bx%2By%5D" alt="[x+y]"></li>
+<li>大括号，符号：<code>\&#123; \&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%7Bx%2By%7D" alt="{x+y}"></li>
+<li>自适应括号，符号：<code>\left \right</code>，如：<script type="math/tex">\left(x\right)</script>，<img src="https://math.jianshu.com/math?formula=%5Cleft(x%5Cright" alt="\left(x\right)">)</li>
+<li>组合公式，符号：<code>&#123;上位公式 \choose 下位公式&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%7Bn%2B1%20%5Cchoose%20k%7D%3D%7Bn%20%5Cchoose%20k%7D%2B%7Bn%20%5Cchoose%20k-1%7D" alt="{n+1 \choose k}={n \choose k}+{n \choose k-1}"></li>
+<li>组合公式，符号：<code>&#123;上位公式 \atop 下位公式&#125;</code>，如：<img src="https://math.jianshu.com/math?formula=%5Csum_%7Bk_0%2Ck_1%2C%5Cldots%3E0%20%5Catop%20k_0%2Bk_1%2B%5Ccdots%3Dn%7DA_%7Bk_0%7DA_%7Bk_1%7D%5Ccdots" alt="\sum_{k_0,k_1,\ldots&gt;0 \atop k_0+k_1+\cdots=n}A_{k_0}A_{k_1}\cdots"></li>
+</ol>
+<h1 id="15-四则运算"><a href="#15-四则运算" class="headerlink" title="15 四则运算"></a>15 四则运算</h1><ol>
+<li>加法运算，符号：<code>+</code>，如：<img src="https://math.jianshu.com/math?formula=x%2By%3Dz" alt="x+y=z"></li>
+<li>减法运算，符号：<code>-</code>，如：<img src="https://math.jianshu.com/math?formula=x-y%3Dz" alt="x-y=z"></li>
+<li>加减运算，符号：<code>\pm</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cpm%20y%3Dz" alt="x \pm y=z"></li>
+<li>减甲运算，符号：<code>\mp</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cmp%20y%3Dz" alt="x \mp y=z"></li>
+<li>乘法运算，符号：<code>\times</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Ctimes%20y%3Dz" alt="x \times y=z"></li>
+<li>点乘运算，符号：<code>\cdot</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Ccdot%20y%3Dz" alt="x \cdot y=z"></li>
+<li>星乘运算，符号：<code>\ast</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cast%20y%3Dz" alt="x \ast y=z"></li>
+<li>除法运算，符号：<code>\div</code>，如：<img src="https://math.jianshu.com/math?formula=x%20%5Cdiv%20y%3Dz" alt="x \div y=z"></li>
+<li>斜法运算，符号：<code>/</code>，如：<img src="https://math.jianshu.com/math?formula=x%2Fy%3Dz" alt="x/y=z"></li>
+<li>分式表示，符号：<code>\frac&#123;分子&#125;&#123;分母&#125;</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/frac%7Bx+y%7D%7By+z%7D-1701153176796133.svg" class="" title="\frac{x+y}{y+z}"></li>
+<li>分式表示，符号：<code>&#123;分子&#125; \voer &#123;分母&#125;</code>，如：</li>
+<li>绝对值表示，符号：<code>||</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-1701153176796134.svg" class="" title="|x+y|"></li>
+</ol>
+<h1 id="16-高级运算"><a href="#16-高级运算" class="headerlink" title="16 高级运算"></a>16 高级运算</h1><ol>
+<li>平均数运算，符号：<code>\overline&#123;算式&#125;</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/overline%7Bxyz%7D.svg" class="" title="\overline{xyz}"></li>
+<li>开二次方运算，符号：<code>\sqrt</code>，如：</li>
+<li>开方运算，符号：<code>\sqrt[开方数]&#123;被开方数&#125;</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/sqrt%5B3%5D%7Bx+y%7D.svg" class="" title="\sqrt[3]{x+y}"></li>
+<li>对数运算，符号：<code>\log</code>，如：</li>
+<li>极限运算，符号：<code>\lim</code>，如：<img src="/frac%7Bx%7D%7By%7D%7D-1701153176797136.svg%20%5Csum%5E%7Bx%20%5Cto%20%5Cinfty%7D_%7By%20%5Cto%200%7D%7B%5Cfrac%7Bx%7D%7By%7D%7D%20%25%7D%3C/li%3E%0A%3Cli%3EB%EF%BF%BD%D0%97%0C&%EF%BF%BD%1A%3Ccode%3E%5Cdisplaystyle%20%5Csum%3C/code%3E%0C%EF%BF%BD%1A%3Cimg%20src=%22https:/math.jianshu.com/math?formula=%5Cdisplaystyle%20%5Csum%5E%7Bx%20%5Cto%20%5Cinfty%7D_%7By%20%5Cto%200%7D%7B%5Cfrac%7Bx%7D%7By%7D%7D%22%20alt=%22%5Cdisplaystyle%20%5Csum%5E%7Bx%20%5Cto%20%5Cinfty%7D_%7By%20%5Cto%200%7D%7B%5Cfrac%7Bx%7D%7By%7D%7D%22%3E%3C/li%3E%0A%3Cli%3E%EF%BF%BD%06%D0%97%0C&%EF%BF%BD%1A%3Ccode%3E%5Cint%3C/code%3E%0C%EF%BF%BD%1A%3Cimg%20src=%22https:/math.jianshu.com/math?formula=%5Cint%5E%7B%5Cinfty%7D_%7B0%7D%7Bxdx%7D%22%20alt=%22%5Cint%5E%7B%5Cinfty%7D_%7B0%7D%7Bxdx%7D%22%3E%3C/li%3E%0A%3Cli%3E%EF%BF%BD%06%D0%97%0C&%EF%BF%BD%1A%3Ccode%3E%5Cdisplaystyle%20%5Cint%3C/code%3E%0C%EF%BF%BD%1A%3Cimg%20src=%22https:/math.jianshu.com/math?formula=%5Cdisplaystyle%20%5Cint%5E%7B%5Cinfty%7D_%7B0%7D%7Bxdx%7D%22%20alt=%22%5Cdisplaystyle%20%5Cint%5E%7B%5Cinfty%7D_%7B0%7D%7Bxdx%7D%22%3E%3C/li%3E%0A%3Cli%3E%EF%BF%BD%06%D0%97%0C&%EF%BF%BD%1A%3Ccode%3E%5Cpartial%3C/code%3E%0C%EF%BF%BD%1A%3Cimg%20src=%22https:/math.jianshu.com/math?formula=%5Cfrac%7B%5Cpartial%20x%7D%7B%5Cpartial%20y%7D%22%20alt=%22%5Cfrac%7B%5Cpartial%20x%7D%7B%5Cpartial%20y%7D%22%3E%3C/li%3E%0A%3Cli%3E%EF%BF%BD5h:%0C&%EF%BF%BD%1A%3Ccode%3E%5Cbegin&#123;matrix&#125;%20%5Cend&#123;matrix&#125;%3C/code%3E%0C%EF%BF%BD%1A%7B%25" class="frac{x}{y}}.svg \lim^{x \to \infty}_{y \to 0}{\frac{x}{y}} %}&lt;&#x2F;li&gt;
+&lt;li&gt;极限运算，符号：&lt;code&gt;\displaystyle \lim&lt;&#x2F;code&gt;，如：{% asset_img frac{x}{y}}-1701153176796135.svg \displaystyle \lim^{x \to \infty}_{y \to 0}{\frac{x}{y}} %}&lt;&#x2F;li&gt;
+&lt;li&gt;求和运算，符号：&lt;code&gt;\sum&lt;&#x2F;code&gt;，如：{% asset_img" title="asset_img &#x2F;fragment&#x2F;Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95&#x2F;right%5D.svg \left[ \begin{matrix} 1 &amp;2 &amp;\cdots &amp;4\5 &amp;6 &amp;\cdots &amp;8\\vdots &amp;\vdots &amp;\ddots &amp;\vdots\13 &amp;14 &amp;\cdots &amp;16\end{matrix} \right]"></li>
+</ol>
+<h1 id="17-逻辑运算"><a href="#17-逻辑运算" class="headerlink" title="17 逻辑运算"></a>17 逻辑运算</h1><ol>
+<li>等于运算，符号：<code>=</code>，如：<img src="https://math.jianshu.com/math?formula=x%2By%3Dz" alt="x+y=z"></li>
+<li>大于运算，符号：<code>&gt;</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-1701153176797139.svg" class="" title="x+y&gt;z"></li>
+<li>小于运算，符号：<code>&lt;</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/math-1701153176797140.svg" class="" title="x+y&lt;z"></li>
+<li>大于等于运算，符号：<code>\geq</code>，如：<img src="https://math.jianshu.com/math?formula=x%2By%20%5Cgeq%20z" alt="x+y \geq z"></li>
+<li>小于等于运算，符号：<code>\leq</code>，如：</li>
+<li>不等于运算，符号：<code>\neq</code>，如：</li>
+<li>不大于等于运算，符号：<code>\ngeq</code>，如：</li>
+<li>不大于等于运算，符号：<code>\not\geq</code>，如：</li>
+<li>不小于等于运算，符号：<code>\nleq</code>，如：</li>
+<li>不小于等于运算，符号：<code>\not\leq</code>，如：</li>
+<li>约等于运算，符号：<code>\approx</code>，如：</li>
+<li>恒定等于运算，符号：<code>\equiv</code>，如：</li>
+</ol>
+<h1 id="18-集合运算"><a href="#18-集合运算" class="headerlink" title="18 集合运算"></a>18 集合运算</h1><ol>
+<li>属于运算，符号：<code>\in</code>，如：</li>
+<li>不属于运算，符号：<code>\notin</code>，如：</li>
+<li>不属于运算，符号：<code>\not\in</code>，如：</li>
+<li>子集运算，符号：<code>\subset</code>，如：</li>
+<li>子集运算，符号：<code>\supset</code>，如：</li>
+<li>真子集运算，符号：<code>\subseteq</code>，如：</li>
+<li>非真子集运算，符号：<code>\subsetneq</code>，如：</li>
+<li>真子集运算，符号：<code>\supseteq</code>，如：</li>
+<li>非真子集运算，符号：<code>\supsetneq</code>，如：</li>
+<li>非子集运算，符号：<code>\not\subset</code>，如：</li>
+<li>非子集运算，符号：<code>\not\supset</code>，如：</li>
+<li>并集运算，符号：<code>\cup</code>，如：</li>
+<li>交集运算，符号：<code>\cap</code>，如：</li>
+<li>差集运算，符号：<code>\setminus</code>，如：</li>
+<li>同或运算，符号：<code>\bigodot</code>，如：</li>
+<li>同与运算，符号：<code>\bigotimes</code>，如：</li>
+<li>实数集合，符号：<code>\mathbb&#123;R&#125;</code>，如：<code>\mathbb&#123;R&#125;</code></li>
+<li>自然数集合，符号：<code>\mathbb&#123;Z&#125;</code>，如：<code>\mathbb&#123;Z&#125;</code></li>
+<li>空集，符号：<code>\emptyset</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/emptyset.svg" class="" title="\emptyset"></li>
+</ol>
+<h1 id="19-数学符号"><a href="#19-数学符号" class="headerlink" title="19 数学符号"></a>19 数学符号</h1><ol>
+<li>无穷，符号：<code>\infty</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/infty.svg" class="" title="\infty"></li>
+<li>虚数，符号：<code>\imath</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/imath.svg" class="" title="\imath"></li>
+<li>虚数，符号：<code>\jmath</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/jmath.svg" class="" title="\jmath"></li>
+<li>数学符号，符号<code>\hat&#123;a&#125;</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/hat%7Ba%7D.svg" class="" title="\hat{a}"></li>
+<li>数学符号，符号<code>\check&#123;a&#125;</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/check%7Ba%7D.svg" class="" title="\check{a}"></li>
+<li>数学符号，符号<code>\breve&#123;a&#125;</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/breve%7Ba%7D.svg" class="" title="\breve{a}"></li>
+<li>数学符号，符号<code>\tilde&#123;a&#125;</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/tilde%7Ba%7D.svg" class="" title="\tilde{a}"></li>
+<li>数学符号，符号<code>\bar&#123;a&#125;</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/bar%7Ba%7D.svg" class="" title="\bar{a}"></li>
+<li>矢量符号，符号<code>\vec&#123;a&#125;</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/vec%7Ba%7D.svg" class="" title="\vec{a}"></li>
+<li>数学符号，符号<code>\acute&#123;a&#125;</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/acute%7Ba%7D.svg" class="" title="\acute{a}"></li>
+<li>数学符号，符号<code>\grave&#123;a&#125;</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/grave%7Ba%7D.svg" class="" title="\grave{a}"></li>
+<li>数学符号，符号<code>\mathring&#123;a&#125;</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/mathring%7Ba%7D.svg" class="" title="\mathring{a}"></li>
+<li>一阶导数符号，符号<code>\dot&#123;a&#125;</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/dot%7Ba%7D.svg" class="" title="\dot{a}"></li>
+<li>二阶导数符号，符号<code>\ddot&#123;a&#125;</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/ddot%7Ba%7D.svg" class="" title="\ddot{a}"></li>
+<li>上箭头，符号：<code>\uparrow</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/uparrow.svg" class="" title="\uparrow"></li>
+<li>上箭头，符号：<code>\Uparrow</code>，如：</li>
+<li>下箭头，符号：<code>\downarrow</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/downarrow.svg" class="" title="\downarrow"></li>
+<li>下箭头，符号：<code>\Downarrow</code>，如：</li>
+<li>左箭头，符号：<code>\leftarrow</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/leftarrow.svg" class="" title="\leftarrow"></li>
+<li>左箭头，符号：<code>\Leftarrow</code>，如：</li>
+<li>右箭头，符号：<code>\rightarrow</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/rightarrow.svg" class="" title="\rightarrow"></li>
+<li>右箭头，符号：<code>\Rightarrow</code>，如：</li>
+<li>底端对齐的省略号，符号：<code>\ldots</code>，如：<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/ldots,n.svg" class="" title="1,2,\ldots,n"></li>
+<li>中线对齐的省略号，符号：<code>\cdots</code>，如：<img src="https://math.jianshu.com/math?formula=x_1%5E2%20%2B%20x_2%5E2%20%2B%20%5Ccdots%20%2B%20x_n%5E2" alt="x_1^2 + x_2^2 + \cdots + x_n^2"></li>
+<li>竖直对齐的省略号，符号：<code>\vdots</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cvdots" alt="\vdots"></li>
+<li>斜对齐的省略号，符号：<code>\ddots</code>，如：<img src="https://math.jianshu.com/math?formula=%5Cddots" alt="\ddots"></li>
+</ol>
+<h1 id="20-矩阵"><a href="#20-矩阵" class="headerlink" title="20 矩阵"></a>20 矩阵</h1><p>使用<code>\begin&#123;matrix&#125;…\end&#123;matrix&#125;</code>这样的形式来表示矩阵，在<code>\begin</code> 与<code>\end</code>之间加入矩阵中的元素即可。矩阵的行之间使用<code>\\</code>分隔，列之间使用<code>&amp;</code>分隔，例如:</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br><span class="line">\begin&#123;matrix&#125;</span><br><span class="line">1 &amp; x &amp; x^2 \\</span><br><span class="line">1 &amp; y &amp; y^2 \\</span><br><span class="line">1 &amp; z &amp; z^2 \\</span><br><span class="line">\end&#123;matrix&#125;</span><br><span class="line">$$</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>得到：<br> <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/end%7Bmatrix%7D.svg" class="" title="\begin{matrix} 1 &amp; x &amp; x^2 \\ 1 &amp; y &amp; y^2 \\ 1 &amp; z &amp; z^2 \\ \end{matrix}"></p>
+<h2 id="20-1-括号"><a href="#20-1-括号" class="headerlink" title="20.1. 括号"></a>20.1. 括号</h2><p>如果要对矩阵加括号，可以像上文中提到的一样，使用<code>\left</code>与<code>\right</code> 配合表示括号符号。也可以使用特殊的matrix 。即替换<code>\begin&#123;matrix&#125;…\end&#123;matrix&#125; 中matrix 为pmatrix ，bmatrix ，Bmatrix ，vmatrix , Vmatrix</code> 。<br> <code>pmatrix$\begin&#123;pmatrix&#125;1 &amp; 2 \\ 3 &amp; 4\\ \end&#123;pmatrix&#125;$</code>:pmatrix<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/end%7Bpmatrix%7D.svg" class="" title="\begin{pmatrix}1 &amp; 2 \\ 3 &amp; 4\\ \end{pmatrix}"><br> <code>bmatrix$\begin&#123;bmatrix&#125;1 &amp; 2 \\ 3 &amp; 4\\ \end&#123;bmatrix&#125;$</code> :bmatrix<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/end%7Bbmatrix%7D.svg" class="" title="\begin{bmatrix}1 &amp; 2 \\ 3 &amp; 4\\ \end{bmatrix}"><br> <code>Bmatrix$\begin&#123;Bmatrix&#125;1 &amp; 2 \\ 3 &amp; 4\\ \end&#123;Bmatrix&#125;$</code> :Bmatrix<br> <code>vmatrix$\begin&#123;vmatrix&#125;1 &amp; 2 \\ 3 &amp; 4\\ \end&#123;vmatrix&#125;$</code> :vmatrix<img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/end%7Bvmatrix%7D.svg" class="" title="\begin{vmatrix}1 &amp; 2 \\ 3 &amp; 4\\ \end{vmatrix}"><br> <code>Vmatrix$\begin&#123;Vmatrix&#125;1 &amp; 2 \\ 3 &amp; 4\\ \end&#123;Vmatrix&#125;$</code> :Vmatrix<br> 元素省略:<br> 可以使用\cdots ：⋯，\ddots：⋱ ，\vdots：⋮ 来省略矩阵中的元素，如：</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br><span class="line">\begin&#123;pmatrix&#125;</span><br><span class="line">1&amp;a<span class="emphasis">_1&amp;a_</span>1^2&amp;\cdots&amp;a<span class="emphasis">_1^n\\</span></span><br><span class="line"><span class="emphasis">1&amp;a_</span>2&amp;a<span class="emphasis">_2^2&amp;\cdots&amp;a_</span>2^n\\</span><br><span class="line">\vdots&amp;\vdots&amp;\vdots&amp;\ddots&amp;\vdots\\</span><br><span class="line">1&amp;a<span class="emphasis">_m&amp;a_</span>m^2&amp;\cdots&amp;a<span class="emphasis">_m^n\\</span></span><br><span class="line"><span class="emphasis">\end&#123;pmatrix&#125;</span></span><br><span class="line"><span class="emphasis">$$</span></span><br><span class="line"><span class="emphasis"></span></span><br><span class="line"><span class="emphasis"></span></span><br></pre></td></tr></table></figure>
+<p>表示：<br> <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/end%7Bpmatrix%7D-1701153217261330.svg" class="" title="\begin{pmatrix} 1&amp;a_1&amp;a_1^2&amp;\cdots&amp;a_1^n\\ 1&amp;a_2&amp;a_2^2&amp;\cdots&amp;a_2^n\\ \vdots&amp;\vdots&amp;\vdots&amp;\ddots&amp;\vdots\\ 1&amp;a_m&amp;a_m^2&amp;\cdots&amp;a_m^n\\ \end{pmatrix}"></p>
+<h2 id="20-2-增广矩阵"><a href="#20-2-增广矩阵" class="headerlink" title="20.2. 增广矩阵"></a>20.2. 增广矩阵</h2><p>增广矩阵需要使用前面的表格中使用到的<code>\begin&#123;array&#125; ... \end&#123;array&#125;</code>来实现。</p>
+<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">$$</span><br><span class="line">\left[  \begin&#123;array&#125;  &#123;c c | c&#125; %这里的c表示数组中元素对其方式：c居中、r右对齐、l左对齐，竖线表示2、3列间插入竖线</span><br><span class="line">1 &amp; 2 &amp; 3 \\</span><br><span class="line">\hline %插入横线，如果去掉\hline就是增广矩阵</span><br><span class="line">4 &amp; 5 &amp; 6</span><br><span class="line">\end&#123;array&#125;  \right]</span><br><span class="line">$$</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>显示为：<br> <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/right%5D-1701153236873333.svg" class="" title="\left[ \begin{array} {c c | c} 1 &amp; 2 &amp; 3 \\ \hline 4 &amp; 5 &amp; 6 \end{array} \right]"></p>
+<h1 id="21-公式标记与引用"><a href="#21-公式标记与引用" class="headerlink" title="21 公式标记与引用"></a>21 公式标记与引用</h1><p>使用<code>\tag&#123;yourtag&#125;</code>来标记公式，如$$$a=x^2-y^3\tag{1}$$$显示为：<br> <img src="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/tag%7B1%7D.svg" class="" title="a&#x3D;x^2-y^3\tag{1}"></p>
+<h1 id="22-字体"><a href="#22-字体" class="headerlink" title="22 字体"></a>22 字体</h1><h2 id="22-1-黑板粗体字"><a href="#22-1-黑板粗体字" class="headerlink" title="22.1.黑板粗体字"></a>22.1.黑板粗体字</h2><p>此字体经常用来表示代表实数、整数、有理数、复数的大写字母。</p>
+<p> <script type="math/tex">\mathbb ABCDEF</script>：</p>
+<p> <script type="math/tex">\Bbb ABCDEF</script>：</p>
+<h2 id="22-3-黑体字"><a href="#22-3-黑体字" class="headerlink" title="22.3.黑体字"></a>22.3.黑体字</h2><p><script type="math/tex">\mathbf ABCDEFGHIJKLMNOPQRSTUVWXYZ</script>:</p>
+<p> <script type="math/tex">\mathbf abcdefghijklmnopqrstuvwxyz</script>:</p>
+<h2 id="22-3-打印机字体"><a href="#22-3-打印机字体" class="headerlink" title="22.3.打印机字体"></a>22.3.打印机字体</h2><p><script type="math/tex">\mathtt ABCDEFGHIJKLMNOPQRSTUVWXYZ</script>:</p>
+<h1 id="23-希腊字母"><a href="#23-希腊字母" class="headerlink" title="23 希腊字母"></a>23 希腊字母</h1><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>字母</th>
+<th>实现</th>
+<th>字母</th>
+<th>实现</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>A</td>
+<td><code>A</code></td>
+<td>α</td>
+<td><code>\alhpa</code></td>
+</tr>
+<tr>
+<td>B</td>
+<td><code>B</code></td>
+<td>β</td>
+<td><code>\beta</code></td>
+</tr>
+<tr>
+<td>Γ</td>
+<td><code>\Gamma</code></td>
+<td>γ</td>
+<td><code>\gamma</code></td>
+</tr>
+<tr>
+<td>Δ</td>
+<td><code>\Delta</code></td>
+<td>δ</td>
+<td><code>\delta</code></td>
+</tr>
+<tr>
+<td>E</td>
+<td><code>E</code></td>
+<td>ϵ</td>
+<td><code>\epsilon</code></td>
+</tr>
+<tr>
+<td>Z</td>
+<td><code>Z</code></td>
+<td>ζ</td>
+<td><code>\zeta</code></td>
+</tr>
+<tr>
+<td>H</td>
+<td><code>H</code></td>
+<td>η</td>
+<td><code>\eta</code></td>
+</tr>
+<tr>
+<td>Θ</td>
+<td><code>\Theta</code></td>
+<td>θ</td>
+<td><code>\theta</code></td>
+</tr>
+<tr>
+<td>I</td>
+<td><code>I</code></td>
+<td>ι</td>
+<td><code>\iota</code></td>
+</tr>
+<tr>
+<td>K</td>
+<td><code>K</code></td>
+<td>κ</td>
+<td><code>\kappa</code></td>
+</tr>
+<tr>
+<td>Λ</td>
+<td><code>\Lambda</code></td>
+<td>λ</td>
+<td><code>\lambda</code></td>
+</tr>
+<tr>
+<td>M</td>
+<td><code>M</code></td>
+<td>μ</td>
+<td><code>\mu</code></td>
+</tr>
+<tr>
+<td>N</td>
+<td><code>N</code></td>
+<td>ν</td>
+<td><code>\nu</code></td>
+</tr>
+<tr>
+<td>Ξ</td>
+<td><code>\Xi</code></td>
+<td>ξ</td>
+<td><code>\xi</code></td>
+</tr>
+<tr>
+<td>O</td>
+<td><code>O</code></td>
+<td>ο</td>
+<td><code>\omicron</code></td>
+</tr>
+<tr>
+<td>Π</td>
+<td><code>\Pi</code></td>
+<td>π</td>
+<td><code>\pi</code></td>
+</tr>
+<tr>
+<td>P</td>
+<td><code>P</code></td>
+<td>ρ</td>
+<td><code>\rho</code></td>
+</tr>
+<tr>
+<td>Σ</td>
+<td><code>\Sigma</code></td>
+<td>σ</td>
+<td><code>\sigma</code></td>
+</tr>
+<tr>
+<td>T</td>
+<td><code>T</code></td>
+<td>τ</td>
+<td><code>\tau</code></td>
+</tr>
+<tr>
+<td>Υ</td>
+<td><code>\Upsilon</code></td>
+<td>υ</td>
+<td><code>\upsilon</code></td>
+</tr>
+<tr>
+<td>Φ</td>
+<td><code>\Phi</code></td>
+<td>ϕ</td>
+<td><code>\phi</code></td>
+</tr>
+<tr>
+<td>X</td>
+<td><code>X</code></td>
+<td>χ</td>
+<td><code>\chi</code></td>
+</tr>
+<tr>
+<td>Ψ</td>
+<td><code>\Psi</code></td>
+<td>ψ</td>
+<td><code>\psi</code></td>
+</tr>
+<tr>
+<td>Ω</td>
+<td><code>\v</code></td>
+<td>ω</td>
+<td><code>\omega</code></td>
+</tr>
+<tr>
+<td>ε</td>
+<td><script type="math/tex">\varepsilon</script></td>
+<td>ϑ</td>
+<td><script type="math/tex">\vartheta</script></td>
+</tr>
+<tr>
+<td>ϖ</td>
+<td><script type="math/tex">\varpi</script></td>
+<td>ϱ</td>
+<td><script type="math/tex">\varrho</script></td>
+</tr>
+<tr>
+<td>ς</td>
+<td><script type="math/tex">\varsigma</script></td>
+<td>φ</td>
+<td><script type="math/tex">\varphi</script></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/383e8149136c">Markdown数学公式语法</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/" title="Markdown数学公式语法">http://example.com/fragment/Markdown数学公式语法/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/fragment/Docker%E5%9F%BA%E7%A1%80/" rel="prev" title="Docker基础">
+                  <i class="fa fa-chevron-left"></i> Docker基础
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" rel="next" title="时间复杂度">
+                  时间复杂度 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"0eb45fa07886653adf329802e545db9c"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

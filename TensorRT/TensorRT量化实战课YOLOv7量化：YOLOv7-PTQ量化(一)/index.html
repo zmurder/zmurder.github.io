@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="目录  注意事项 一、2023&#x2F;11&#x2F;5更新 前言 1. YOLOv7-PTQ量化流程 2. 准备工作 3. 插入QDQ节点  3.1 自动插入QDQ节点 3.2 手动插入QDQ节点 3.3 手动initialize   总结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorRT量化实战课YOLOv7量化：YOLOv7-PTQ量化(一)">
+<meta property="og:url" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="目录  注意事项 一、2023&#x2F;11&#x2F;5更新 前言 1. YOLOv7-PTQ量化流程 2. 准备工作 3. 插入QDQ节点  3.1 自动插入QDQ节点 3.2 手动插入QDQ节点 3.3 手动initialize   总结">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/3ac8e54d0077179cfb351dafc2574475.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/58b081510492e028789108b8fcb87d42.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/075ea1a990307b383f44c3dd7ea2304e.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/e130471d29babd681626fb5413ac083f.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/d06c38807b1aaa233e9d24c9cbd5e86a.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/d266ac5e9fe31c1b7912b94edc202afb.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/a2e73bee11aec11e9558c33f98da3d88.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/835dc14ca12e4382ef1d6173038e9d7a.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/d38812303c139eff477729e0a7c2c95f.png">
+<meta property="article:published_time" content="2024-12-01T10:13:45.541Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.542Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="Tensorrt">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/3ac8e54d0077179cfb351dafc2574475.png">
+
+
+<link rel="canonical" href="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/","path":"TensorRT/TensorRT量化实战课YOLOv7量化：YOLOv7-PTQ量化(一)/","title":"TensorRT量化实战课YOLOv7量化：YOLOv7-PTQ量化(一)"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>TensorRT量化实战课YOLOv7量化：YOLOv7-PTQ量化(一) | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9B%AE%E5%BD%95"><span class="nav-text">目录</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-text">注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%812023-11-5%E6%9B%B4%E6%96%B0"><span class="nav-text">一、2023&#x2F;11&#x2F;5更新</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%89%8D%E8%A8%80"><span class="nav-text">前言</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-YOLOv7-PTQ%E9%87%8F%E5%8C%96%E6%B5%81%E7%A8%8B"><span class="nav-text">1. YOLOv7-PTQ量化流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-text">1. 准备工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E6%8F%92%E5%85%A5-QDQ-%E8%8A%82%E7%82%B9"><span class="nav-text">2. 插入 QDQ 节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E6%A0%87%E5%AE%9A"><span class="nav-text">3. 标定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E6%95%8F%E6%84%9F%E5%B1%82%E5%88%86%E6%9E%90"><span class="nav-text">4. 敏感层分析</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%AF%BC%E5%87%BA-PTQ-%E6%A8%A1%E5%9E%8B"><span class="nav-text">5. 导出 PTQ 模型</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%87%86%E5%A4%87%E5%B7%A5%E4%BD%9C"><span class="nav-text">2. 准备工作</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E6%8F%92%E5%85%A5QDQ%E8%8A%82%E7%82%B9"><span class="nav-text">3. 插入QDQ节点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E8%87%AA%E5%8A%A8%E6%8F%92%E5%85%A5QDQ%E8%8A%82%E7%82%B9"><span class="nav-text">3.1 自动插入QDQ节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E6%89%8B%E5%8A%A8%E6%8F%92%E5%85%A5QDQ%E8%8A%82%E7%82%B9"><span class="nav-text">3.2 手动插入QDQ节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E6%89%8B%E5%8A%A8initialize"><span class="nav-text">3.3 手动initialize</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%BB%E7%BB%93"><span class="nav-text">总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="TensorRT量化实战课YOLOv7量化：YOLOv7-PTQ量化(一) | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TensorRT量化实战课YOLOv7量化：YOLOv7-PTQ量化(一)
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
+<li><ul>
+<li><a href="#_2">注意事项</a></li>
+<li><a href="#2023115_3">一、2023/11/5更新</a></li>
+<li><a href="#_6">前言</a></li>
+<li><a href="#1_YOLOv7PTQ_19">1. YOLOv7-PTQ量化流程</a></li>
+<li><a href="#2__69">2. 准备工作</a></li>
+<li><a href="#3_QDQ_306">3. 插入QDQ节点</a></li>
+<li><ul>
+<li><a href="#31_QDQ_308">3.1 自动插入QDQ节点</a></li>
+<li><a href="#32_QDQ_630">3.2 手动插入QDQ节点</a></li>
+<li><a href="#33_initialize_833">3.3 手动initialize</a></li>
+</ul>
+</li>
+<li><a href="#_872">总结</a></li>
+</ul>
+</li>
+</ul>
+<h1 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h1><h3 id="一、2023-11-5更新"><a href="#一、2023-11-5更新" class="headerlink" title="一、2023/11/5更新"></a>一、2023/11/5更新</h3><p><strong>新增手动插入 QDQ 节点以及手动 initialize</strong></p>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><blockquote>
+<p>手写 AI 推出的全新 TensorRT <a target="_blank" rel="noopener" href="https://ml-summit.org/cloud-member?uid=c1041&amp;spm=1001.2101.3001.7020">模型</a>量化实战课程，<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1NN411b7HZ/?spm_id_from=333.999.0.0">链接</a>。记录下个人学习笔记，仅供自己参考。</p>
+<p>该实战课程主要基于手写 AI 的 Latte 老师所出的 <a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV18L41197Uz/">TensorRT下的模型量化</a>，在其课程的基础上，所整理出的一些实战应用。</p>
+<p>本次课程为 YOLOv7 量化实战第二课，主要介绍 YOLOv7-PTQ 量化</p>
+<p>课程大纲可看下面的思维导图</p>
+</blockquote>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/3ac8e54d0077179cfb351dafc2574475.png" class="" title="3ac8e54d0077179cfb351dafc2574475">
+<h1 id="1-YOLOv7-PTQ量化流程"><a href="#1-YOLOv7-PTQ量化流程" class="headerlink" title="1. YOLOv7-PTQ量化流程"></a>1. YOLOv7-PTQ量化流程</h1><blockquote>
+<p>在上节课程中我们介绍了 pytorch_quantization 量化工具箱，从这节课开始我们将正式进入 YOLOv7-PTQ 量化的实战。</p>
+<p>从上面的思维导图我们可以看到 YOLOv7-PTQ 量化的步骤，我们代码的讲解和编写都是按照这个流程来的。</p>
+</blockquote>
+<p>在编写代码开始之前我们还是再来梳理下整个 YOLOv7-PTQ 量化的过程，如下：</p>
+<h2 id="1-准备工作"><a href="#1-准备工作" class="headerlink" title="1. 准备工作"></a><strong>1.</strong> <strong>准备工作</strong></h2><p>首先是我们的准备工作，我们需要下载 YOLOv7 官方代码和预训练模型以及 COCO 数据集，并编写代码完成模型和数据的加载工作。</p>
+<h2 id="2-插入-QDQ-节点"><a href="#2-插入-QDQ-节点" class="headerlink" title="2. 插入 QDQ 节点"></a><strong>2.</strong> <strong>插入 QDQ 节点</strong></h2><p>第二个就是我们需要对模型插入 QDQ 节点，它有以下两种方式：</p>
+<ul>
+<li><strong>自动插入</strong><ul>
+<li>使用 quant_modules.initialize() 自动插入量化节点</li>
+</ul>
+</li>
+<li><strong>手动插入</strong><ul>
+<li>使用 quant_modules.initialize() 初始化量化操作或使用 QuantDescriptor() 自定义初始化量化操作</li>
+<li>编写代码为模型插入量化节点</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-标定"><a href="#3-标定" class="headerlink" title="3. 标定"></a><strong>3.</strong> <strong>标定</strong></h2><p>第三部分就是我们的标定，其流程如下：</p>
+<ul>
+<li><strong>1.</strong> 通过将标定数据送到网络并收集网络每个层的输入输出信息</li>
+<li><strong>2.</strong> 根据统计出的信息，计算动态范围 range 和 scale，并保存在 QDQ 节点中</li>
+</ul>
+<h2 id="4-敏感层分析"><a href="#4-敏感层分析" class="headerlink" title="4. 敏感层分析"></a><strong>4.</strong> <strong>敏感层分析</strong></h2><p>第四部分是敏感层分析，大致流程如下：</p>
+<ul>
+<li><strong>1.</strong> 进行单一逐层量化，只开启某一层的量化其他层都不开启</li>
+<li><strong>2.</strong> 在验证集上进行模型精度测试</li>
+<li><strong>3.</strong> 选出前 10 个对模型精度影响比较大的层，关闭这 10 个层的量化，在前向计算时使用 float16 而不去使用 int8</li>
+</ul>
+<h2 id="5-导出-PTQ-模型"><a href="#5-导出-PTQ-模型" class="headerlink" title="5. 导出 PTQ 模型"></a><strong>5.</strong> <strong>导出 PTQ 模型</strong></h2><p>第五个就是我们在标定之后需要导出 PTQ 模型，导出流程如下：</p>
+<ul>
+<li><strong>1.</strong> 需要将我们上节课所说的 quant_nn.TensorQuantizer.use_fb_fake_quant 属性设置为 true</li>
+<li><strong>2.</strong> torch.onnx.export() 导出 ONNX 模型</li>
+</ul>
+<p><strong>6.</strong> <strong>性能对比</strong></p>
+<p>第六个就是<a target="_blank" rel="noopener" href="https://marketing.csdn.net/p/3127db09a98e0723b83b2914d9256174?pId=2782?utm_source=glcblog&amp;spm=1001.2101.3001.7020">性能</a>的对比，包括精度和速度的对比。</p>
+<p>OK！以上就是 YOLOv7-PTQ 量化的流程，下面我们根据上面的流程来具体的实现，让我们开始吧！！！🚀🚀🚀</p>
+<h1 id="2-准备工作"><a href="#2-准备工作" class="headerlink" title="2. 准备工作"></a>2. 准备工作</h1><p>首先是我们的准备工作，在正式开始前我们需要准备三个东西：</p>
+<ul>
+<li><strong>代码</strong>：yolov7 官方代码</li>
+<li><strong>数据集</strong>：coco2017</li>
+<li><strong>官方预训练模型</strong>：yolov7.pt</li>
+</ul>
+<p>大家可以点击 <a target="_blank" rel="noopener" href="https://pan.baidu.com/s/1hXBxi9Sm_iW6nw5BFYxy-g">here【pwd:yolo】</a> 下载博主准备好的相关代码、模型和数据集</p>
+<p>我们来看下我们整个项目的目录结构，如下图所示：</p>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/58b081510492e028789108b8fcb87d42.png" class="" title="58b081510492e028789108b8fcb87d42">
+<p>其中的 coco2017 的数据集目录如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├─train2017</span><br><span class="line">│  ├─images</span><br><span class="line">│  ├─labels</span><br><span class="line">│  └─xml</span><br><span class="line">└─val2017</span><br><span class="line">    ├─images</span><br><span class="line">    ├─labels</span><br><span class="line">    └─xml</span><br></pre></td></tr></table></figure>
+<p>除此之外我们还需要 train2017.txt 和 val2017.txt 两个 TXT 文件，分别存储着对应<a target="_blank" rel="noopener" href="https://ml-summit.org/cloud-member?uid=c1041&amp;spm=1001.2101.3001.7020">训练集</a>和验证集<strong>图像的完整路径</strong>，以下是生成对应 TXT 的代码：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"></span><br><span class="line">save_dir  = <span class="string">&quot;/home/jarvis/Learn/Datasets/VOC_QAT&quot;</span></span><br><span class="line">train_dir = <span class="string">&quot;/home/jarvis/Learn/Datasets/VOC_QAT/images/train&quot;</span></span><br><span class="line">train_txt_path = os.path.join(save_dir, <span class="string">&quot;train2017.txt&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(train_txt_path, <span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    <span class="keyword">for</span> filename <span class="keyword">in</span> os.listdir(train_dir):</span><br><span class="line">        <span class="keyword">if</span> filename.endswith(<span class="string">&quot;.jpg&quot;</span>) <span class="keyword">or</span> filename.endswith(<span class="string">&quot;.png&quot;</span>): <span class="comment"># 添加你的图像文件扩展名</span></span><br><span class="line">            file_path = os.path.join(train_dir, filename)</span><br><span class="line">            f.write(file_path + <span class="string">&quot;\n&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;train2017.txt has been created at <span class="subst">&#123;train_txt_path&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">val_dir = <span class="string">&quot;/home/jarvis/Learn/Datasets/VOC_QAT/images/val&quot;</span></span><br><span class="line">val_txt_path = os.path.join(save_dir, <span class="string">&quot;val2017.txt&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(val_txt_path, <span class="string">&quot;w&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">    <span class="keyword">for</span> filename <span class="keyword">in</span> os.listdir(val_dir):</span><br><span class="line">        <span class="keyword">if</span> filename.endswith(<span class="string">&quot;.jpg&quot;</span>) <span class="keyword">or</span> filename.endswith(<span class="string">&quot;.png&quot;</span>): <span class="comment"># 添加你的图像文件扩展名</span></span><br><span class="line">            file_path = os.path.join(val_dir, filename)</span><br><span class="line">            f.write(file_path + <span class="string">&quot;\n&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">f&quot;val2017.txt has been created at <span class="subst">&#123;val_txt_path&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>你需要修改以下几项：</p>
+<ul>
+<li><strong>save_dir</strong>：txt 文档保存的路径，应该与 train2017 和 val2017 文件夹在同一级目录</li>
+<li><strong>train_dir</strong>：训练集图片路径</li>
+<li><strong>val_dir</strong>：验证集图片路径</li>
+</ul>
+<p>将上述工作完成后，下面我们正式开始编写代码。</p>
+<p>我们将数据集和权重文件都放在 YOLOv7-main 文件夹下，并先新建一个 <strong>ptq.py</strong> 文件，先完成模型和数据集加载以及模型 mAP 测试工作，主要是以下三个函数的编写：</p>
+<ul>
+<li><strong>load_yolov7_model</strong>：加载 YOLOv7 模型权重</li>
+<li><strong>prepare_dataset</strong>：加载数据</li>
+<li><strong>evaluate_coco()</strong>：mAP 测试</li>
+</ul>
+<p>我们先看模型加载函数的编写，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">load_yolov7_model</span>(<span class="params">weight, device=<span class="string">&#x27;cpu&#x27;</span></span>):</span><br><span class="line">    ckpt  = torch.load(weight, map_location=device)</span><br><span class="line">    model = Model(<span class="string">&quot;cfg/training/yolov7.yaml&quot;</span>, ch=<span class="number">3</span>, nc=<span class="number">80</span>).to(device)</span><br><span class="line">    state_dict = ckpt[<span class="string">&#x27;model&#x27;</span>].<span class="built_in">float</span>().state_dict()</span><br><span class="line">    model.load_state_dict(state_dict, strict=<span class="literal">False</span>)</span><br><span class="line">    <span class="keyword">return</span> model</span><br></pre></td></tr></table></figure>
+<p>首先我们通过 torch 加载了预训练权重，然后通过 YOLOv7 官方的 Model 类创建了一个实例，并通过 load_state_dict 方法将状态字典加载到模型中，最后返回模型。值得大家注意的是我们会将加载的模型权重转换为单精度浮点数，这是因为我们加载的权重可能是 float64，但是我们模型通常在前向的时候使用的是单精度 float32 进行的推理，所以这边做一个转化。</p>
+<p>接着我们来看数据集加载函数的编写，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">prepare_dataset</span>(<span class="params">cocodir, batch_size=<span class="number">4</span></span>):</span><br><span class="line">    dataloader = create_dataloader(</span><br><span class="line">        <span class="string">f&quot;<span class="subst">&#123;cocodir&#125;</span>/val2017.txt&quot;</span>,</span><br><span class="line">        imgsz=<span class="number">640</span>,</span><br><span class="line">        batch_size=batch_size,</span><br><span class="line">        opt=collections.namedtuple(<span class="string">&quot;Opt&quot;</span>, <span class="string">&quot;single_cls&quot;</span>)(<span class="literal">False</span>),</span><br><span class="line">        augment=<span class="literal">False</span>, hyp=<span class="literal">None</span>, rect=<span class="literal">True</span>, cache=<span class="literal">False</span>, stride=<span class="number">32</span>, pad=<span class="number">0.5</span>, image_weights=<span class="literal">False</span></span><br><span class="line">    )[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">return</span> dataloader</span><br></pre></td></tr></table></figure>
+<p>我们使用 YOLOv7 官方提供的数据加载器函数 create_dataloader 完成数据加载，我们将对应的参数填入即可，其中的 opt 参数是用来指定当前数据集是否为单类别数据集，由于我们使用的是 COCO 数据集，其中包含 80 个类别，我们应该设置为 False。</p>
+<p>在代码中我们是使用 python 的 <strong>collections.namedtuple</strong> 函数实例化了一个名为 <strong>Opt</strong> 的命名元组类，它有一个字段 <strong>single_cls</strong>，其被设置为 <strong>False</strong>，那其实就相当于 <strong>opt.single_cls = Flase</strong> 参数传递进去了。</p>
+<p>最后我们来看验证函数的编写，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">evaluate_coco</span>(<span class="params">model, loader, save_dir=<span class="string">&#x27;&#x27;</span>, conf_thres=<span class="number">0.001</span>, iou_thres=<span class="number">0.65</span></span>):</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> save_dir <span class="keyword">and</span> os.path.dirname(save_dir) != <span class="string">&quot;&quot;</span>:</span><br><span class="line">        os.makedirs(os.path.dirname(save_dir), exist_ok=<span class="literal">True</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> test.test(</span><br><span class="line">        <span class="string">&quot;data/coco.yaml&quot;</span>,</span><br><span class="line">        save_dir=Path(save_dir),</span><br><span class="line">        conf_thres=conf_thres,</span><br><span class="line">        iou_thres=iou_thres,</span><br><span class="line">        model=model,</span><br><span class="line">        dataloader=loader,</span><br><span class="line">        is_coco=<span class="literal">True</span>,</span><br><span class="line">        plots=<span class="literal">False</span>,</span><br><span class="line">        half_precision=<span class="literal">True</span>,</span><br><span class="line">        save_json=<span class="literal">False</span></span><br><span class="line">    )[<span class="number">0</span>][<span class="number">3</span>]</span><br></pre></td></tr></table></figure>
+<p>我们使用的是 YOLOv7 官方的 test 函数，将对应的参数传递即可。</p>
+<p>完整的示例代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> test</span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">import</span> collections</span><br><span class="line"><span class="keyword">from</span> pathlib <span class="keyword">import</span> Path</span><br><span class="line"><span class="keyword">from</span> models.yolo <span class="keyword">import</span> Model</span><br><span class="line"><span class="keyword">from</span> utils.datasets <span class="keyword">import</span> create_dataloader</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">load_yolov7_model</span>(<span class="params">weight, device=<span class="string">&#x27;cpu&#x27;</span></span>):</span><br><span class="line">    ckpt  = torch.load(weight, map_location=device)</span><br><span class="line">    model = Model(<span class="string">&quot;cfg/training/yolov7.yaml&quot;</span>, ch=<span class="number">3</span>, nc=<span class="number">80</span>).to(device)</span><br><span class="line">    state_dict = ckpt[<span class="string">&#x27;model&#x27;</span>].<span class="built_in">float</span>().state_dict()</span><br><span class="line">    model.load_state_dict(state_dict, strict=<span class="literal">False</span>)</span><br><span class="line">    <span class="keyword">return</span> model</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">prepare_dataset</span>(<span class="params">cocodir, batch_size=<span class="number">4</span></span>):</span><br><span class="line">    dataloader = create_dataloader(</span><br><span class="line">        <span class="string">f&quot;<span class="subst">&#123;cocodir&#125;</span>/val2017.txt&quot;</span>,</span><br><span class="line">        imgsz=<span class="number">640</span>,</span><br><span class="line">        batch_size=batch_size,</span><br><span class="line">        opt=collections.namedtuple(<span class="string">&quot;Opt&quot;</span>, <span class="string">&quot;single_cls&quot;</span>)(<span class="literal">False</span>),</span><br><span class="line">        augment=<span class="literal">False</span>, hyp=<span class="literal">None</span>, rect=<span class="literal">True</span>, cache=<span class="literal">False</span>, stride=<span class="number">32</span>, pad=<span class="number">0.5</span>, image_weights=<span class="literal">False</span></span><br><span class="line">    )[<span class="number">0</span>]</span><br><span class="line">    <span class="keyword">return</span> dataloader</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">evaluate_coco</span>(<span class="params">model, loader, save_dir=<span class="string">&#x27;&#x27;</span>, conf_thres=<span class="number">0.001</span>, iou_thres=<span class="number">0.65</span></span>):</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> save_dir <span class="keyword">and</span> os.path.dirname(save_dir) != <span class="string">&quot;&quot;</span>:</span><br><span class="line">        os.makedirs(os.path.dirname(save_dir), exist_ok=<span class="literal">True</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> test.test(</span><br><span class="line">        <span class="string">&quot;data/coco.yaml&quot;</span>,</span><br><span class="line">        save_dir=Path(save_dir),</span><br><span class="line">        conf_thres=conf_thres,</span><br><span class="line">        iou_thres=iou_thres,</span><br><span class="line">        model=model,</span><br><span class="line">        dataloader=loader,</span><br><span class="line">        is_coco=<span class="literal">True</span>,</span><br><span class="line">        plots=<span class="literal">False</span>,</span><br><span class="line">        half_precision=<span class="literal">True</span>,</span><br><span class="line">        save_json=<span class="literal">False</span></span><br><span class="line">    )[<span class="number">0</span>][<span class="number">3</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line"></span><br><span class="line">    weight = <span class="string">&quot;yolov7.pt&quot;</span></span><br><span class="line"></span><br><span class="line">    device = torch.device(<span class="string">&#x27;cuda:0&#x27;</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">&#x27;cpu&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    model = load_yolov7_model(weight, device)</span><br><span class="line"></span><br><span class="line">    cocodir = <span class="string">&quot;dataset/coco2017&quot;</span></span><br><span class="line">    dataloader = prepare_dataset(cocodir)</span><br><span class="line"></span><br><span class="line">    ap = evaluate_coco(model, dataloader)</span><br></pre></td></tr></table></figure>
+<p>在正式开始测试之前，我们还需要修改下 data/coco.yaml 文件，主要修改以下几点：</p>
+<ul>
+<li>注释第 4 行的数据下载</li>
+<li>修改第 7 行和 第 8 行的 txt 路径</li>
+<li>注释第 9 行的 test 路径</li>
+</ul>
+<p>完整的 coco.yaml 文件内容如下：</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># COCO 2017 dataset http://cocodataset.org</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># download command/URL (optional)</span></span><br><span class="line"><span class="comment"># download: bash ./scripts/get_coco.sh</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># train and val data as 1) directory: path/images/, 2) file: path/images.txt, or 3) list: [path1/images/, path2/images/]</span></span><br><span class="line"><span class="attr">train:</span> <span class="string">D:\\YOLO\\yolov7-qat\\yolov7-main\\dataset\\coco2017\\train2017.txt</span>  <span class="comment"># 118287 images</span></span><br><span class="line"><span class="attr">val:</span> <span class="string">D:\\YOLO\\yolov7-qat\\yolov7-main\\dataset\\coco2017\\val2017.txt</span>  <span class="comment"># 5000 images</span></span><br><span class="line"><span class="comment"># test: ./coco/test-dev2017.txt  # 20288 of 40670 images, submit to https://competitions.codalab.org/competitions/20794</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># number of classes</span></span><br><span class="line"><span class="attr">nc:</span> <span class="number">80</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># class names</span></span><br><span class="line"><span class="attr">names:</span> [ <span class="string">&#x27;person&#x27;</span>, <span class="string">&#x27;bicycle&#x27;</span>, <span class="string">&#x27;car&#x27;</span>, <span class="string">&#x27;motorcycle&#x27;</span>, <span class="string">&#x27;airplane&#x27;</span>, <span class="string">&#x27;bus&#x27;</span>, <span class="string">&#x27;train&#x27;</span>, <span class="string">&#x27;truck&#x27;</span>, <span class="string">&#x27;boat&#x27;</span>, <span class="string">&#x27;traffic light&#x27;</span>,</span><br><span class="line">         <span class="string">&#x27;fire hydrant&#x27;</span>, <span class="string">&#x27;stop sign&#x27;</span>, <span class="string">&#x27;parking meter&#x27;</span>, <span class="string">&#x27;bench&#x27;</span>, <span class="string">&#x27;bird&#x27;</span>, <span class="string">&#x27;cat&#x27;</span>, <span class="string">&#x27;dog&#x27;</span>, <span class="string">&#x27;horse&#x27;</span>, <span class="string">&#x27;sheep&#x27;</span>, <span class="string">&#x27;cow&#x27;</span>,</span><br><span class="line">         <span class="string">&#x27;elephant&#x27;</span>, <span class="string">&#x27;bear&#x27;</span>, <span class="string">&#x27;zebra&#x27;</span>, <span class="string">&#x27;giraffe&#x27;</span>, <span class="string">&#x27;backpack&#x27;</span>, <span class="string">&#x27;umbrella&#x27;</span>, <span class="string">&#x27;handbag&#x27;</span>, <span class="string">&#x27;tie&#x27;</span>, <span class="string">&#x27;suitcase&#x27;</span>, <span class="string">&#x27;frisbee&#x27;</span>,</span><br><span class="line">         <span class="string">&#x27;skis&#x27;</span>, <span class="string">&#x27;snowboard&#x27;</span>, <span class="string">&#x27;sports ball&#x27;</span>, <span class="string">&#x27;kite&#x27;</span>, <span class="string">&#x27;baseball bat&#x27;</span>, <span class="string">&#x27;baseball glove&#x27;</span>, <span class="string">&#x27;skateboard&#x27;</span>, <span class="string">&#x27;surfboard&#x27;</span>,</span><br><span class="line">         <span class="string">&#x27;tennis racket&#x27;</span>, <span class="string">&#x27;bottle&#x27;</span>, <span class="string">&#x27;wine glass&#x27;</span>, <span class="string">&#x27;cup&#x27;</span>, <span class="string">&#x27;fork&#x27;</span>, <span class="string">&#x27;knife&#x27;</span>, <span class="string">&#x27;spoon&#x27;</span>, <span class="string">&#x27;bowl&#x27;</span>, <span class="string">&#x27;banana&#x27;</span>, <span class="string">&#x27;apple&#x27;</span>,</span><br><span class="line">         <span class="string">&#x27;sandwich&#x27;</span>, <span class="string">&#x27;orange&#x27;</span>, <span class="string">&#x27;broccoli&#x27;</span>, <span class="string">&#x27;carrot&#x27;</span>, <span class="string">&#x27;hot dog&#x27;</span>, <span class="string">&#x27;pizza&#x27;</span>, <span class="string">&#x27;donut&#x27;</span>, <span class="string">&#x27;cake&#x27;</span>, <span class="string">&#x27;chair&#x27;</span>, <span class="string">&#x27;couch&#x27;</span>,</span><br><span class="line">         <span class="string">&#x27;potted plant&#x27;</span>, <span class="string">&#x27;bed&#x27;</span>, <span class="string">&#x27;dining table&#x27;</span>, <span class="string">&#x27;toilet&#x27;</span>, <span class="string">&#x27;tv&#x27;</span>, <span class="string">&#x27;laptop&#x27;</span>, <span class="string">&#x27;mouse&#x27;</span>, <span class="string">&#x27;remote&#x27;</span>, <span class="string">&#x27;keyboard&#x27;</span>, <span class="string">&#x27;cell phone&#x27;</span>,</span><br><span class="line">         <span class="string">&#x27;microwave&#x27;</span>, <span class="string">&#x27;oven&#x27;</span>, <span class="string">&#x27;toaster&#x27;</span>, <span class="string">&#x27;sink&#x27;</span>, <span class="string">&#x27;refrigerator&#x27;</span>, <span class="string">&#x27;book&#x27;</span>, <span class="string">&#x27;clock&#x27;</span>, <span class="string">&#x27;vase&#x27;</span>, <span class="string">&#x27;scissors&#x27;</span>, <span class="string">&#x27;teddy bear&#x27;</span>,</span><br><span class="line">         <span class="string">&#x27;hair drier&#x27;</span>, <span class="string">&#x27;toothbrush&#x27;</span> ]</span><br></pre></td></tr></table></figure>
+<p>修改完成之后我们就可以在终端执行如下指令完成 mAP 的测试了，指令如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python ptq.py</span><br></pre></td></tr></table></figure>
+<p>如下图所示：</p>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/075ea1a990307b383f44c3dd7ea2304e.png" class="" title="075ea1a990307b383f44c3dd7ea2304e">
+<p>可以看到我们最终测试的 mAP@.5:.95 值是 0.454，那以上就是我们测试 mAP 的一个简单流程了，大家可以自行测试。</p>
+<p>下面我们来看如何在模型中插入 QDQ 节点。</p>
+<h1 id="3-插入QDQ节点"><a href="#3-插入QDQ节点" class="headerlink" title="3. 插入QDQ节点"></a>3. 插入QDQ节点</h1><h2 id="3-1-自动插入QDQ节点"><a href="#3-1-自动插入QDQ节点" class="headerlink" title="3.1 自动插入QDQ节点"></a>3.1 自动插入QDQ节点</h2><p>我们先来看自动插入 QDQ 节点，编写 <strong>prepare_model</strong> 函数，代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">prepare_model</span>(<span class="params">weight, device</span>):</span><br><span class="line">    quant_modules.initialize()</span><br><span class="line">    model = load_yolov7_model(weight, device)</span><br><span class="line">    model.<span class="built_in">float</span>()</span><br><span class="line">    model.<span class="built_in">eval</span>()</span><br><span class="line">    <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">        model.fuse()    <span class="comment"># conv bn 进行层的合并, 加速</span></span><br><span class="line">    <span class="keyword">return</span> model</span><br></pre></td></tr></table></figure>
+<p>我们使用 initialize 函数来自动插入 QDQ 节点，我们打印对比下原来的 torch 模型和插入 QDQ 节点模型结构的变化，如下图所示：</p>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/e130471d29babd681626fb5413ac083f.png" class="" title="e130471d29babd681626fb5413ac083f">
+<p><strong>图3-1 原始torch模型</strong></p>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/d06c38807b1aaa233e9d24c9cbd5e86a.png" class="" title="d06c38807b1aaa233e9d24c9cbd5e86a">
+<p><strong>图3-2 插入QDQ节点模型</strong></p>
+<p>从上图可以看出 torch 模型的结构是我们常见的一个卷积层的结构，而插入了量化节点的模型结构可以看到多了两个输入 _input_quantizer 和 _weight_quantizer，另外 Conv2d 也变成了对应的量化版 QuantConv2d。</p>
+<p>至此，QDQ 节点的自动插入就完成了。</p>
+<p>下面我们来了解下 initializer 具体的工作流程，函数定义如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">initialize</span>(<span class="params">float_module_list=<span class="literal">None</span>, custom_quant_modules=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Dynamic module replacement using monkey patching.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Dynamically monkey patches the modules with their quantized versions. Internally, the</span></span><br><span class="line"><span class="string">    state is maintained by a helper class object which helps in replacing the original</span></span><br><span class="line"><span class="string">    modules back.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        float_module_list: A list. User supplied list which indicates which modules to not monkey patch.</span></span><br><span class="line"><span class="string">        custom_quant_modules: A dict. A mapping provided by user to indicate any other module apart</span></span><br><span class="line"><span class="string">            from torch.nn and its corresponding quantized version.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Returns:</span></span><br><span class="line"><span class="string">        nothing.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Typical usage example:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        # Define the deny list for torch.nn modules and custom map for modules other than torch.nn.</span></span><br><span class="line"><span class="string">        float_module_list = [&quot;Linear&quot;]</span></span><br><span class="line"><span class="string">        custom_quant_modules = [(torch.nn, &quot;Linear&quot;, quant_nn.QuantLinear)]</span></span><br><span class="line"><span class="string">        ## Monkey patch the modules</span></span><br><span class="line"><span class="string">        pytorch_quantization.quant_modules.initialize(float_module_list, custom_modules)</span></span><br><span class="line"><span class="string">        ## Use the quantized modules</span></span><br><span class="line"><span class="string">        pytorch_quantization.quant_modules.deactivate()</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line">    _quant_module_helper_object.prepare_state(float_module_list, custom_quant_modules)</span><br><span class="line">    _quant_module_helper_object.apply_quant_modules()</span><br></pre></td></tr></table></figure>
+<p>首先 <strong>initialize</strong> 函数属于 <strong>pytorch_quantization.quant_modules</strong> 模块，它用于初始化量化过程，通过所谓的 <strong>monkey patching</strong> 动态地替换模型中的模块为它们的量化版本。</p>
+<p>它包含以下两个参数：</p>
+<ul>
+<li><strong>float_module_list</strong>：用户提供的列表，用来指示哪些模块不应该被替换为量化版本。这允许用户对哪些模块进行量化有更细粒度的控制</li>
+<li><strong>custom_quant_modules</strong>：用户提供的字典，可以用于指示除了 <strong>torch.nn</strong> 之外的其他模块及其对应的量化版本。这允许用户为自定义的模块指定量化版本</li>
+</ul>
+<p>它的工作流程包含以下两个步骤：</p>
+<p><strong>1.</strong> <strong>准备状态</strong></p>
+<ul>
+<li>使用 <strong>prepare_state</strong> 函数来准备量化的状态</li>
+<li>这个函数接收 <strong>float_module_list</strong> 和 <strong>custom_quant_modules</strong> 参数，并将这些信息传递给一个辅助类对象</li>
+<li>辅助类对象使用这些信息来确定哪些模块应该被替换为量化版本，哪些应该保持原样</li>
+</ul>
+<p><strong>2.</strong> <strong>应用量化模块</strong></p>
+<ul>
+<li>接下来，<strong>apply_quant_modules</strong> 函数来实际应用量化</li>
+<li>在这一步中，原始的模块被它们的量化版本所替换。对于 <strong>torch.nn</strong> 中的标准模块，比如说 <strong>torch.nn.Conv2d</strong> 会被替换为 <strong>quant_nn.QuantConv2d</strong></li>
+<li>对于用户指定的自定义模块，将使用 <strong>custom_quant_modules</strong> 中提供的映射来进行替换</li>
+</ul>
+<p>我们再来看下具体的实现模块替换的 QuantModuleReplacementHelper 类，它的结构和功能如下：</p>
+<p><strong>类属性</strong></p>
+<ul>
+<li><strong>orginal_func_map</strong>：用于存储原始模块，这些原始模块在进行 <strong>monkey patching</strong> 时会被替换</li>
+<li><strong>default_quant_map</strong>：存储 pytorch_quantization 工具所支持的默认量化模块的列表，这些是内置的量化版本，通常对应于 torch.nn 中的标准模块，比如 Conv、Pool、LSTM 等，值得注意的是，我们在使用自定义模块的量化版替换的时候需要使用 <strong>namedtuple</strong> 这种形式。</li>
+<li><strong>quant_map</strong>：存储最终的量化模块，着包括 pytorch_quantization 默认的量化模块和用户提供的自定义量化模块</li>
+</ul>
+<p><strong>prepare_state 方法</strong></p>
+<ul>
+<li>这个方法是用于准备 <strong>monkey patching</strong> 机制中使用的量化模块列表</li>
+<li>它接受两个参数：<strong>float_module_list</strong> 和 <strong>custom_map</strong></li>
+<li><strong>float_module_list</strong> 是用户指定的不应该被替换的模块列表</li>
+<li><strong>custom_map</strong> 是用户提供的除了 <strong>torch.nn</strong> 之外的自定义模块量化版本的映射</li>
+<li>该方法首先基于 <strong>default_quant_map</strong> 生成 <strong>quant_map</strong>，但会跳过 <strong>float_module_list</strong> 中指定的模块</li>
+<li>然后，它会将 <strong>custom_map</strong> 中的自定义模块添加到 <strong>quant_map</strong> 中</li>
+<li>同时，它也会在 <strong>orginal_func_map</strong> 中存储原始模块，以便以后可以恢复。</li>
+</ul>
+<p><strong>apply_quant_modules 方法</strong></p>
+<ul>
+<li>这个用于实际应用 <strong>monkey patching</strong></li>
+<li>它会遍历 <strong>quant_map</strong> 中注册的模块，将它们替换为量化版本，并在 <strong>orginal_func_map</strong> 中存储原始模块，以便以后恢复</li>
+<li>我们可以在运行时动态地替换 torch.nn 中的模块，将其变为量化版本，从而实现模型的量化。</li>
+</ul>
+<p><strong>restore_float_modules 方法</strong></p>
+<ul>
+<li>这个方法用于恢复原始模块，即撤销之前应用的 <strong>monkey patching</strong></li>
+<li>它会遍历 <strong>orginal_func_map</strong>，将原始模块替换回去</li>
+</ul>
+<p>综上，<strong>QuantModuleReplacementHelper</strong> 类是一个重要的辅助类，用于实现模块的动态替换，以便进行<a target="_blank" rel="noopener" href="https://so.csdn.net/so/search?q=%E6%A8%A1%E5%9E%8B%E9%87%8F%E5%8C%96&amp;spm=1001.2101.3001.7020">模型量化</a>。通过这个类，用户可以灵活地指定哪些模块应该被量化，哪些不应该被量化，甚至可以提供自定义的量化模块，为我们提供了一种高效且灵活的方式来替换模型的量化版本。</p>
+<p>那下面我们就来具体看看量化版本的模块到底是如何实现的，我们以 <strong>QuantConv2d</strong> 为例说明</p>
+<p>首先 <strong>QuantConv2d</strong> 继承自 <strong>_QuantConvNd</strong>，而 <strong>_QuantConvNd</strong> 又继承自 <strong>torch.nn.modules.conv._ConvNd</strong> 和 <strong>_utils.QuantMixin</strong>，那我们重点来关注下 <strong>QuantMixin</strong> 类的工作流程</p>
+<p><strong>QuantMixin</strong> 类的定义如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">QuantMixin</span>():</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Mixin class for adding basic quantization logic to quantized modules&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    default_quant_desc_input = QUANT_DESC_8BIT_PER_TENSOR</span><br><span class="line">    default_quant_desc_weight = QUANT_DESC_8BIT_PER_TENSOR</span><br><span class="line"></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">set_default_quant_desc_input</span>(<span class="params">cls, value</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Args:</span></span><br><span class="line"><span class="string">            value: An instance of :class:`QuantDescriptor &lt;pytorch_quantization.tensor_quant.QuantDescriptor&gt;`</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">isinstance</span>(value, QuantDescriptor):</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&quot;&#123;&#125; is not an instance of QuantDescriptor!&quot;</span>)</span><br><span class="line">        cls.default_quant_desc_input = copy.deepcopy(value)</span><br><span class="line"></span><br><span class="line"><span class="meta">    @classmethod</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">set_default_quant_desc_weight</span>(<span class="params">cls, value</span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">        Args:</span></span><br><span class="line"><span class="string">            value: An instance of :class:`QuantDescriptor &lt;pytorch_quantization.tensor_quant.QuantDescriptor&gt;`</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">isinstance</span>(value, QuantDescriptor):</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&quot;&#123;&#125; is not an instance of QuantDescriptor!&quot;</span>)</span><br><span class="line">        cls.default_quant_desc_weight = copy.deepcopy(value)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">init_quantizer</span>(<span class="params">self, quant_desc_input, quant_desc_weight, num_layers=<span class="literal">None</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Helper function for __init__ of quantized module</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Create input and weight quantizer based on quant_desc passed by kwargs, or default of the class.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">        Args:</span></span><br><span class="line"><span class="string">            quant_desc_input: An instance of :class:`QuantDescriptor &lt;pytorch_quantization.tensor_quant.QuantDescriptor&gt;`</span></span><br><span class="line"><span class="string">            quant_desc_weight: An instance of :class:`QuantDescriptor &lt;pytorch_quantization.tensor_quant.QuantDescriptor&gt;`</span></span><br><span class="line"><span class="string">            num_layers: An integer. Default None. If not None, create a list of quantizers.</span></span><br><span class="line"><span class="string">        &quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> inspect.stack()[<span class="number">1</span>].function == <span class="string">&quot;__init__&quot;</span>:</span><br><span class="line">            <span class="keyword">raise</span> TypeError(<span class="string">&quot;&#123;&#125; should be only called by __init__ of quantized module.&quot;</span>.<span class="built_in">format</span>(__name__))</span><br><span class="line">        self._fake_quant = <span class="literal">True</span></span><br><span class="line">        <span class="keyword">if</span> (<span class="keyword">not</span> quant_desc_input.fake_quant) <span class="keyword">or</span> (<span class="keyword">not</span> quant_desc_weight.fake_quant):</span><br><span class="line">            <span class="keyword">raise</span> ValueError(<span class="string">&quot;Only fake quantization is supported!&quot;</span>)</span><br><span class="line"></span><br><span class="line">        logging.info(<span class="string">&quot;Input is %squantized to %d bits in %s with axis %s!&quot;</span>, <span class="string">&quot;&quot;</span></span><br><span class="line">                     <span class="keyword">if</span> <span class="keyword">not</span> quant_desc_input.fake_quant <span class="keyword">else</span> <span class="string">&quot;fake &quot;</span>,</span><br><span class="line">                     quant_desc_input.num_bits, self.__class__.__name__, quant_desc_input.axis)</span><br><span class="line">        logging.info(<span class="string">&quot;Weight is %squantized to %d bits in %s with axis %s!&quot;</span>, <span class="string">&quot;&quot;</span></span><br><span class="line">                     <span class="keyword">if</span> <span class="keyword">not</span> quant_desc_weight.fake_quant <span class="keyword">else</span> <span class="string">&quot;fake &quot;</span>,</span><br><span class="line">                     quant_desc_weight.num_bits, self.__class__.__name__, quant_desc_weight.axis)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> num_layers <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            self._input_quantizer = TensorQuantizer(quant_desc_input)</span><br><span class="line">            self._weight_quantizer = TensorQuantizer(quant_desc_weight)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self._input_quantizers = nn.ModuleList([TensorQuantizer(quant_desc_input) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(num_layers)])</span><br><span class="line">            self._weight_quantizers = nn.ModuleList([TensorQuantizer(quant_desc_weight) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(num_layers)])</span><br><span class="line"></span><br><span class="line">    <span class="comment"># pylint:disable=missing-docstring</span></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">input_quantizer</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> self._input_quantizer</span><br><span class="line"></span><br><span class="line"><span class="meta">    @property</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">weight_quantizer</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">return</span> self._weight_quantizer</span><br><span class="line">    <span class="comment"># pylint:enable=missing-docstring</span></span><br></pre></td></tr></table></figure>
+<p>它是一个混合类，用于向量化模块和基本的量化逻辑，它的结构和功能如下：</p>
+<p><strong>类属性</strong></p>
+<ul>
+<li><strong>default_quant_desc_input</strong>: 输入张量的默认量化描述符。</li>
+<li><strong>default_quant_desc_weight</strong>: 权重张量的默认量化描述符。</li>
+</ul>
+<p><strong>set_default_quant_desc_input(weight) 类方法</strong></p>
+<ul>
+<li>这两个方法用于设置输入和权重张量的自定义描述符</li>
+<li>它们接受一个 <strong>QuantDescriptor</strong> 实例作为参数，并将其复制为对应的默认描述符</li>
+</ul>
+<p><strong>init_quantizer 方法</strong></p>
+<ul>
+<li>这是一个辅助方法，通常在量化模块的 <strong>__init__</strong> 方法中调用</li>
+<li>它会根据提供的量化描述符创建输入和权重量化器，通过 <strong>TensorQuantizer</strong> 来创建</li>
+</ul>
+<p>值得注意的是描述符是 <strong>ScaleQuantDescriptor</strong> 类的实例，<strong>ScaleQuantDescriptor</strong> 类的描述如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ScaledQuantDescriptor</span>():</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Supportive descriptor of quantization</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Describe how a tensor should be quantized. A QuantDescriptor and a tensor defines a quantized tensor.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        num_bits: An integer. Number of bits of quantization. It is used to calculate scaling factor. Default 8.</span></span><br><span class="line"><span class="string">        name: Seems a nice thing to have</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Keyword Arguments:</span></span><br><span class="line"><span class="string">        fake_quant: A boolean. If True, use fake quantization mode. Default True.</span></span><br><span class="line"><span class="string">        axis: None, int or tuple of int. axes which will have its own max for computing scaling factor.</span></span><br><span class="line"><span class="string">            If None (the default), use per tensor scale.</span></span><br><span class="line"><span class="string">            Must be in the range [-rank(input_tensor), rank(input_tensor)).</span></span><br><span class="line"><span class="string">            e.g. For a KCRS weight tensor, quant_axis=(0) will yield per channel scaling.</span></span><br><span class="line"><span class="string">            Default None.</span></span><br><span class="line"><span class="string">        amax: A float or list/ndarray of floats of user specified absolute max range. If supplied,</span></span><br><span class="line"><span class="string">            ignore quant_axis and use this to quantize. If learn_amax is True, will be used to initialize</span></span><br><span class="line"><span class="string">            learnable amax. Default None.</span></span><br><span class="line"><span class="string">        learn_amax: A boolean. If True, learn amax. Default False.</span></span><br><span class="line"><span class="string">        scale_amax: A float. If supplied, multiply amax by scale_amax. Default None. It is useful for some</span></span><br><span class="line"><span class="string">            quick experiment.</span></span><br><span class="line"><span class="string">        calib_method: A string. One of [&quot;max&quot;, &quot;histogram&quot;] indicates which calibration to use. Except the simple</span></span><br><span class="line"><span class="string">            max calibration, other methods are all hisogram based. Default &quot;max&quot;.</span></span><br><span class="line"><span class="string">        unsigned: A Boolean. If True, use unsigned. Default False.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Raises:</span></span><br><span class="line"><span class="string">        TypeError: If unsupported type is passed in.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Read-only properties:</span></span><br><span class="line"><span class="string">        - fake_quant:</span></span><br><span class="line"><span class="string">        - name:</span></span><br><span class="line"><span class="string">        - learn_amax:</span></span><br><span class="line"><span class="string">        - scale_amax:</span></span><br><span class="line"><span class="string">        - axis:</span></span><br><span class="line"><span class="string">        - calib_method:</span></span><br><span class="line"><span class="string">        - num_bits:</span></span><br><span class="line"><span class="string">        - amax:</span></span><br><span class="line"><span class="string">        - unsigned:</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, num_bits=<span class="number">8</span>, name=<span class="literal">None</span>, **kwargs</span>):</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
+<p>它描述了张量应该如何进行量化，这个类定义了量化所需的参数和属性，提供了一种灵活的方式来配置量化过程，它的结构和功能如下：</p>
+<p><strong>类属性</strong></p>
+<ul>
+<li><strong>num_bits</strong>：量化位数，用于计算缩放因子</li>
+<li><strong>fake_quant</strong>：伪量化模式，如果设置为 True，则使用伪量化，默认为 True</li>
+<li><strong>axis</strong>：用于计算缩放因子 scale 的轴，如果为 None，则使用每个张量计算 scale，例如 input_quant；如果等于 0 将按照每个通道计算 scale，默认为 None</li>
+<li><strong>amax</strong>：动态范围的最大值，如果用户提供，则使用该值进行量化</li>
+<li><strong>learn_amax</strong>：布尔值，如果为 True 则将学习 amax，默认 False</li>
+<li><strong>scale_amax</strong>：如果用户提供，则会将 amax 乘以 scale_amax，默认 None</li>
+<li><strong>calib_method</strong>：校准方法，可以是 Max 最大值校准或者 Histogram 直方图校准，默认直方图校准</li>
+</ul>
+<p>而量化器模块 <strong>TensorQuantizer</strong> 类的描述如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TensorQuantizer</span>(nn.Module):</span><br><span class="line">    <span class="string">&quot;&quot;&quot;Tensor quantizer module</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    This module uses tensor_quant or fake_tensor_quant function to quantize a tensor. And wrappers variable, moving</span></span><br><span class="line"><span class="string">    statistics we&#x27;d want when training a quantized network.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Experimental features:</span></span><br><span class="line"><span class="string">        ``clip`` stage learns range before enabling quantization.</span></span><br><span class="line"><span class="string">        ``calib`` stage runs calibration</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Args:</span></span><br><span class="line"><span class="string">        quant_desc: An instance of :func:`QuantDescriptor &lt;pytorch_quantization.tensor_quant.QuantDescriptor&gt;`.</span></span><br><span class="line"><span class="string">        disabled: A boolean. If True, by pass the whole module returns input. Default False.</span></span><br><span class="line"><span class="string">        if_quant: A boolean. If True, run main quantization body. Default True.</span></span><br><span class="line"><span class="string">        if_clip: A boolean. If True, clip before quantization and learn amax. Default False.</span></span><br><span class="line"><span class="string">        if_calib: A boolean. If True, run calibration. Not implemented yet. Settings of calibration will probably</span></span><br><span class="line"><span class="string">            go to :func:`QuantDescriptor &lt;pytorch_quantization.tensor_quant.QuantDescriptor&gt;`.</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Raises:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Readonly Properties:</span></span><br><span class="line"><span class="string">        - axis:</span></span><br><span class="line"><span class="string">        - fake_quant:</span></span><br><span class="line"><span class="string">        - scale:</span></span><br><span class="line"><span class="string">        - step_size:</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    Mutable Properties:</span></span><br><span class="line"><span class="string">        - num_bits:</span></span><br><span class="line"><span class="string">        - unsigned:</span></span><br><span class="line"><span class="string">        - amax:</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># An experimental static switch for using pytorch&#x27;s native fake quantization</span></span><br><span class="line">    <span class="comment"># Primary usage is to export to ONNX</span></span><br><span class="line">    use_fb_fake_quant = <span class="literal">False</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, quant_desc=QuantDescriptor(<span class="params"></span>), disabled=<span class="literal">False</span>, if_quant=<span class="literal">True</span>, if_clip=<span class="literal">False</span>, if_calib=<span class="literal">False</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Initialize quantizer and set up required variables&quot;&quot;&quot;</span></span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
+<p>该类是我们实际的张量量化模块，即量化器模块。它使用 tensor_quant 或者 fake_tensor_quant 函数对张量进行量化，特点是在启动量化之前它会计算量化的一个动态范围，之后根据我们选用的校准方法来进行校准。它的结构和功能如下：</p>
+<p><strong>__init__ 方法</strong></p>
+<ul>
+<li>接收一个 <strong>QuantDescriptor</strong> 量化描述符实例作为参数，用于设置量化的各种属性和参数</li>
+<li><strong>disabled</strong> 参数用于控制是否禁用该层进行量化，默认 False</li>
+<li><strong>if_quant</strong> 参数用于控制是否运行主体量化逻辑，默认 True</li>
+<li><strong>if_clip</strong> 参数用于控制是否在量化前裁剪并学习 amax，默认 False</li>
+<li><strong>if_calib</strong> 参数控制是否运行校准，默认 False</li>
+</ul>
+<p>OK！以上就是 QDQ 节点的自动插入和 initializer 函数的简单分析，下面我们来介绍下手动插入 QDQ 量化节点。</p>
+<h2 id="3-2-手动插入QDQ节点"><a href="#3-2-手动插入QDQ节点" class="headerlink" title="3.2 手动插入QDQ节点"></a>3.2 手动插入QDQ节点</h2><p>上面我们对 initializer 函数进行了简单的分析，其中涉及了多个类之间的继承关系，下面是 initializer 函数中涉及到的类的继承关系图：</p>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/d266ac5e9fe31c1b7912b94edc202afb.png" class="" title="d266ac5e9fe31c1b7912b94edc202afb">
+<p>大家可以根据上面的继承关系图对应到实际的代码中去看看相应的继承关系，比如在量化模块转换中 <strong>QuantConv2d</strong> 继承自 <strong>_QuantConvNd</strong>，而 <strong>QuantConv2d</strong> 与 <strong>Conv2d</strong> 又可以相互转换。</p>
+<p>下面我们就根据上面的继承关系流程图来手动实现 QDQ 节点的插入，我们主要是实现三个函数：</p>
+<p><strong>1.</strong> <strong>replace_to_quantization_model</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">replace_to_quantization_model</span>(<span class="params">model</span>):</span><br><span class="line">    </span><br><span class="line">    module_list = &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> entry <span class="keyword">in</span> quant_modules._DEFAULT_QUANT_MAP:</span><br><span class="line">        module = <span class="built_in">getattr</span>(entry.orig_mod, entry.mod_name)  <span class="comment"># module -&gt; torch.nn.modules.conv.Conv1d</span></span><br><span class="line">        module_list[<span class="built_in">id</span>(module)] = entry.replace_mod</span><br><span class="line">    </span><br><span class="line">    torch_module_find_quant_module(model, module_list)</span><br></pre></td></tr></table></figure>
+<p>该函数是手动插入量化节点的起始函数，目的是为模型生成一个替换映射，并调用<a target="_blank" rel="noopener" href="https://edu.csdn.net/course/detail/40020?utm_source=glcblog&amp;spm=1001.2101.3001.7020">递归</a>函数来查找和替换模型中的模块。</p>
+<ul>
+<li><strong>生成替换映射</strong>：module_list 字典基于 quant_modules._DEFAULT_QUANT_MAP 构建，它包含了原始 pytorch 模块类（如 nn.Conv2d）到它们对应的量化模块类（如 quant_modules.QuantConv2d）的映射。</li>
+<li><strong>调用递归函数</strong>：调用 torch_module_find_quant_module 函数开始递归过程，传入模型和 module_list 作为参数</li>
+</ul>
+<p><strong>2.</strong> <strong>torch_module_find_quant_module</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">torch_module_find_quant_module</span>(<span class="params">model, module_list, prefix=<span class="string">&#x27;&#x27;</span></span>):</span><br><span class="line">    <span class="keyword">for</span> name <span class="keyword">in</span> model._modules:</span><br><span class="line">        submodule = model._modules[name]</span><br><span class="line">        path = name <span class="keyword">if</span> prefix == <span class="string">&#x27;&#x27;</span> <span class="keyword">else</span> prefix + <span class="string">&#x27;.&#x27;</span> + name</span><br><span class="line">        torch_module_find_quant_module(submodule, module_list, prefix=path) <span class="comment"># 递归</span></span><br><span class="line"></span><br><span class="line">        submodule_id = <span class="built_in">id</span>(<span class="built_in">type</span>(submodule))</span><br><span class="line">        <span class="keyword">if</span> submodule_id <span class="keyword">in</span> module_list:</span><br><span class="line">            <span class="comment"># 转换</span></span><br><span class="line">            model._modules[name] = transfer_torch_to_quantization(submodule, module_list[submodule_id])</span><br></pre></td></tr></table></figure>
+<p>该函数递归的遍历模型中的所有子模块，寻找可以被量化版本替换的模块。</p>
+<ul>
+<li><strong>递归遍历</strong>：对于模型中的每一个子模块，函数递归调用自身以遍历更深层次的子模块</li>
+<li><strong>检查并替换模块</strong>：如果子模块的类型存在于 module_list 映射中，则使用 transfer_torch_to_quantization 函数将子模块替换为其量化版本</li>
+<li><strong>路径记录</strong>：prefix 参数用于跟踪当前子模块在模型中的路径</li>
+</ul>
+<p><strong>3.</strong> <strong>transfer_torch_to_quantization</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">transfer_torch_to_quantization</span>(<span class="params">nn_instance, quant_module</span>):</span><br><span class="line">    </span><br><span class="line">    quant_instances = quant_module.__new__(quant_module)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 属性赋值</span></span><br><span class="line">    <span class="keyword">for</span> k, val <span class="keyword">in</span> <span class="built_in">vars</span>(nn_instance).items():</span><br><span class="line">        <span class="built_in">setattr</span>(quant_instances, k, val)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 初始化</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="comment"># 返回两个 QuantDescriptor 的实例 self.__class__ 是 quant_instance 的类, QuantConv2d</span></span><br><span class="line">        quant_desc_input, quant_desc_weight = quant_nn_utils.pop_quant_desc_in_kwargs(self.__class__)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(self, quant_nn_utils.QuantInputMixin):</span><br><span class="line">            self.init_quantizer(quant_desc_input)</span><br><span class="line">            <span class="comment"># 加快量化速度</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(self._input_quantizer._calibrator, calib.HistogramCalibrator):</span><br><span class="line">                self._input_quantizer._calibrator._torch_hist = <span class="literal">True</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.init_quantizer(quant_desc_input, quant_desc_weight)</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(self._input_quantizer._calibrator, calib.HistogramCalibrator):</span><br><span class="line">                self._input_quantizer._calibrator._torch_hist = <span class="literal">True</span></span><br><span class="line">                self._weight_quantizer._calibrator._torch_hist = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">    __init__(quant_instances)</span><br><span class="line">    <span class="keyword">return</span> quant_instances</span><br></pre></td></tr></table></figure>
+<p>核心函数，用于将一个标准的 pytorch 模块实例转换为其量化版本</p>
+<ul>
+<li><strong>实例量化模块</strong>：使用 quant_module 参数（一个量化模块类）创建一个新的量化模块实例</li>
+<li><strong>属性复制</strong>：将原始模块 nn_instance 的所有属性复制到新的量化模块实例中</li>
+<li><strong>初始化量化器</strong>：通过 通过 __init__ 内部函数调用，使用 init_quantizer 方法初始化量化器。这个步骤确保量化模块具有适当的量化描述符，并设置了任何必要的量化参数。</li>
+<li><strong>启用直方图校准优化</strong>: 如果量化器使用 HistogramCalibrator，将设置 _torch_hist 标志以加速直方图计算过程。</li>
+</ul>
+<p>完整的示例代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">import</span> torch</span><br><span class="line"><span class="keyword">from</span> models.yolo <span class="keyword">import</span> Model</span><br><span class="line"><span class="keyword">from</span> pytorch_quantization <span class="keyword">import</span> calib</span><br><span class="line"><span class="keyword">from</span> pytorch_quantization <span class="keyword">import</span> quant_modules</span><br><span class="line"><span class="keyword">from</span> pytorch_quantization.nn.modules <span class="keyword">import</span> _utils <span class="keyword">as</span> quant_nn_utils</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">load_yolov7_model</span>(<span class="params">weight, device=<span class="string">&#x27;cpu&#x27;</span></span>):</span><br><span class="line">    ckpt  = torch.load(weight, map_location=device)</span><br><span class="line">    model = Model(<span class="string">&quot;cfg/training/yolov7.yaml&quot;</span>, ch=<span class="number">3</span>, nc=<span class="number">80</span>).to(device)</span><br><span class="line">    state_dict = ckpt[<span class="string">&#x27;model&#x27;</span>].<span class="built_in">float</span>().state_dict()</span><br><span class="line">    model.load_state_dict(state_dict, strict=<span class="literal">False</span>)</span><br><span class="line">    <span class="keyword">return</span> model</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">prepare_model</span>(<span class="params">weight, device</span>):</span><br><span class="line">    model = load_yolov7_model(weight, device)</span><br><span class="line">    model.<span class="built_in">float</span>()</span><br><span class="line">    model.<span class="built_in">eval</span>()</span><br><span class="line">    <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">        model.fuse()    <span class="comment"># conv bn 进行层的合并, 加速</span></span><br><span class="line">    <span class="keyword">return</span> model</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">transfer_torch_to_quantization</span>(<span class="params">nn_instance, quant_module</span>):</span><br><span class="line">    </span><br><span class="line">    quant_instances = quant_module.__new__(quant_module)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 属性赋值</span></span><br><span class="line">    <span class="keyword">for</span> k, val <span class="keyword">in</span> <span class="built_in">vars</span>(nn_instance).items():</span><br><span class="line">        <span class="built_in">setattr</span>(quant_instances, k, val)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 初始化</span></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="comment"># 返回两个 QuantDescriptor 的实例 self.__class__ 是 quant_instance 的类, QuantConv2d</span></span><br><span class="line">        quant_desc_input, quant_desc_weight = quant_nn_utils.pop_quant_desc_in_kwargs(self.__class__)</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(self, quant_nn_utils.QuantInputMixin):</span><br><span class="line">            self.init_quantizer(quant_desc_input)</span><br><span class="line">            <span class="comment"># 加快量化速度</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(self._input_quantizer._calibrator, calib.HistogramCalibrator):</span><br><span class="line">                self._input_quantizer._calibrator._torch_hist = <span class="literal">True</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.init_quantizer(quant_desc_input, quant_desc_weight)</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(self._input_quantizer._calibrator, calib.HistogramCalibrator):</span><br><span class="line">                self._input_quantizer._calibrator._torch_hist = <span class="literal">True</span></span><br><span class="line">                self._weight_quantizer._calibrator._torch_hist = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">    __init__(quant_instances)</span><br><span class="line">    <span class="keyword">return</span> quant_instances</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">torch_module_find_quant_module</span>(<span class="params">model, module_list, prefix=<span class="string">&#x27;&#x27;</span></span>):</span><br><span class="line">    <span class="keyword">for</span> name <span class="keyword">in</span> model._modules:</span><br><span class="line">        submodule = model._modules[name]</span><br><span class="line">        path = name <span class="keyword">if</span> prefix == <span class="string">&#x27;&#x27;</span> <span class="keyword">else</span> prefix + <span class="string">&#x27;.&#x27;</span> + name</span><br><span class="line">        torch_module_find_quant_module(submodule, module_list, prefix=path) <span class="comment"># 递归</span></span><br><span class="line"></span><br><span class="line">        submodule_id = <span class="built_in">id</span>(<span class="built_in">type</span>(submodule))</span><br><span class="line">        <span class="keyword">if</span> submodule_id <span class="keyword">in</span> module_list:</span><br><span class="line">            <span class="comment"># 转换</span></span><br><span class="line">            model._modules[name] = transfer_torch_to_quantization(submodule, module_list[submodule_id])</span><br><span class="line">        </span><br><span class="line"><span class="keyword">def</span> <span class="title function_">replace_to_quantization_model</span>(<span class="params">model</span>):</span><br><span class="line">    </span><br><span class="line">    module_list = &#123;&#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> entry <span class="keyword">in</span> quant_modules._DEFAULT_QUANT_MAP:</span><br><span class="line">        module = <span class="built_in">getattr</span>(entry.orig_mod, entry.mod_name)  <span class="comment"># module -&gt; torch.nn.modules.conv.Conv1d</span></span><br><span class="line">        module_list[<span class="built_in">id</span>(module)] = entry.replace_mod</span><br><span class="line">    </span><br><span class="line">    torch_module_find_quant_module(model, module_list)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line"></span><br><span class="line">    weight = <span class="string">&quot;yolov7.pt&quot;</span></span><br><span class="line"></span><br><span class="line">    device = torch.device(<span class="string">&#x27;cuda:0&#x27;</span> <span class="keyword">if</span> torch.cuda.is_available() <span class="keyword">else</span> <span class="string">&#x27;cpu&#x27;</span>)</span><br><span class="line"></span><br><span class="line">    pth_model = load_yolov7_model(weight, device)</span><br><span class="line"></span><br><span class="line">    model = prepare_model(weight, device)</span><br><span class="line">    replace_to_quantization_model(model)</span><br><span class="line">    <span class="built_in">print</span>(model)</span><br></pre></td></tr></table></figure>
+<p>运行效果如下：</p>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/a2e73bee11aec11e9558c33f98da3d88.png" class="" title="a2e73bee11aec11e9558c33f98da3d88">
+<p><strong>图3-3 手动插入QDQ节点模型</strong></p>
+<p>可以看到对应的 pytorch 算子都变成了其对应的量化版本，同时还拥有了 _input_quantizer 和 _weight_quantizer。</p>
+<p>下面我们简单总结下手动插入量化节点的流程：</p>
+<ul>
+<li><p><strong>1. 准备模型</strong>: 在模型准备阶段，执行必要的优化（如层融合）。</p>
+</li>
+<li><p><strong>2. 构建替换映射</strong>: 基于预定义的量化映射（quant_modules._DEFAULT_QUANT_MAP），创建一个映射字典，用于将标准模块替换为相应的量化模块。</p>
+</li>
+<li><p><strong>3. 递归遍历模型</strong>: 使用 torch_module_find_quant_module 函数递归地遍历整个模型的子模块。</p>
+</li>
+<li><p><strong>4. 检查并替换模块</strong>: 对于每个子模块，如果其类型在替换映射中，则使用 transfer_torch_to_quantization 函数将其替换为量化版本。</p>
+</li>
+<li><p><strong>5. 初始化量化器</strong>: 在量化模块实例中初始化量化器，确保量化描述符和校准器设置正确。</p>
+</li>
+<li><p><strong>6. 优化量化过程</strong>: 如果使用直方图校准器，开启 _torch_hist 以加快直方图校准过程。</p>
+</li>
+<li><p><strong>7. 插入量化节点</strong>: 将量化模块实例插入到模型中，替换原始的非量化模块。</p>
+</li>
+<li><p><strong>8. 完成量化准备</strong>: 完成这些步骤后，模型就被转换为一个量化模型，其中包含了为推断和/或训练过程量化准备好的节点。</p>
+</li>
+</ul>
+<p>通过这个过程，模型中的每个符合条件的模块都会被其量化版本所替换。这种手动插入量化节点的方法可以让你有更细粒度的控制，例如在模型的特定部分使用不同的量化策略或描述符。</p>
+<p>OK！以上就是 QDQ 节点的手动插入，下面我们来介绍下手动 initialize。</p>
+<h2 id="3-3-手动initialize"><a href="#3-3-手动initialize" class="headerlink" title="3.3 手动initialize"></a>3.3 手动initialize</h2><p>我们先来看下手动插入量化节点后模型 mAP 测试的结果，运行如下图所示：</p>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/835dc14ca12e4382ef1d6173038e9d7a.png" class="" title="835dc14ca12e4382ef1d6173038e9d7a">
+<p>可以看到测试结果和 torch 差不多，此外量化器使用的是默认 MaxCalibrator 校准器，其中的 initialize 是按照<strong>默认的方法</strong>去进行初始化的。</p>
+<p>下面我们手动来实现 initialize，不使用默认的 Max 量化器而是去使用直方图，我们来看下应该怎么去操作。</p>
+<p><strong>initialize</strong> 函数的实现代码如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> absl <span class="keyword">import</span> logging <span class="keyword">as</span> quant_logging</span><br><span class="line"><span class="keyword">from</span> pytorch_quantization <span class="keyword">import</span> nn <span class="keyword">as</span> quant_nn</span><br><span class="line"><span class="keyword">from</span> pytorch_quantization.tensor_quant <span class="keyword">import</span> QuantDescriptor</span><br><span class="line"></span><br><span class="line"><span class="comment"># input: Max ==&gt; Histogram</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">initialize</span>():</span><br><span class="line">    quant_desc_input = QuantDescriptor(calib_method=<span class="string">&#x27;histogram&#x27;</span>)</span><br><span class="line">    quant_nn.QuantConv2d.set_default_quant_desc_input(quant_desc_input)</span><br><span class="line">    quant_nn.QuantMaxPool2d.set_default_quant_desc_input(quant_desc_input)</span><br><span class="line">    quant_nn.QuantLinear.set_default_quant_desc_input(quant_desc_input)</span><br><span class="line"></span><br><span class="line">    quant_logging.set_verbosity(quant_logging.ERROR)</span><br></pre></td></tr></table></figure>
+<p>在代码中我们将 QuantConv2d、QuantMaxPool2d 以及 QuantLinear 的 input 量化器修改为了直方图，我们可以自己手动编写 initialize 从而完成一些自定义的操作。</p>
+<p>接下来我们来进行验证，看看量化方式会不会有所变化，运行效果如下：</p>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/d38812303c139eff477729e0a7c2c95f.png" class="" title="d38812303c139eff477729e0a7c2c95f">
+<p>我们可以看到 input 的量化器使用的是直方图，权重依旧使用的是默认的 Max 量化器，这说明我们手动实现的 initialize 起作用了。另外可以看到 mAP 和之前的没有什么变化，因为我们并没有真正的去执行相关量化操作，而仅仅插入了量化节点。</p>
+<p>下节课我们将会讲解模型标定的相关内容。</p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><blockquote>
+<p>本次课程介绍了 YOLOv7-PTQ 量化流程中的准备工作和 QDQ 节点的插入，其中准备工作包括模型和数据集的准备，而量化节点的插入我们介绍了自动和手动插入两种方式，其中自动插入是调用 initialize 函数来完成的，而手动插入是根据 initialize 函数中类的继承关系图来一步步实现的。QDQ 节点插入后从模型结构可以看到每个节点多了 _input_quantizer 和 _weight_quantizer 两个输入，同时 torch 模块也变成了对应的量化版本。最后我们手动实现了 initialize 函数将 input 的校准器从默认的 Max 替换成了直方图。</p>
+<p>下节课程我们将会真正的去编写代码对插入量化节点的模型进行标定计算以完成 PTQ 模型的量化和导出工作。</p>
+</blockquote>
+<p>本文转自 <a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40672115/article/details/134108526">https://blog.csdn.net/qq_40672115/article/details/134108526</a>，如有侵权，请联系删除。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/" title="TensorRT量化实战课YOLOv7量化：YOLOv7-PTQ量化(一)">http://example.com/TensorRT/TensorRT量化实战课YOLOv7量化：YOLOv7-PTQ量化(一)/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/Tensorrt/" rel="tag"><i class="fa fa-tag"></i> Tensorrt</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-3-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/" rel="prev" title="Part5-3-TensorRT性能优化性能优化技巧">
+                  <i class="fa fa-chevron-left"></i> Part5-3-TensorRT性能优化性能优化技巧
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%BA%8C)/" rel="next" title="TensorRT量化实战课YOLOv7量化：YOLOv7-PTQ量化(二)">
+                  TensorRT量化实战课YOLOv7量化：YOLOv7-PTQ量化(二) <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"142c897ba22767ffbee62afe8aebdbde"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="1 综述">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nsight Systems官方入门">
+<meta property="og:url" content="http://example.com/CUDA/Nsight/Nsight%20Systems%E5%AE%98%E6%96%B9%E5%85%A5%E9%97%A8/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="1 综述">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Systems%E5%AE%98%E6%96%B9%E5%85%A5%E9%97%A8/image-20230110093017190.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Systems%E5%AE%98%E6%96%B9%E5%85%A5%E9%97%A8/device-list-empty-x86.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Systems%E5%AE%98%E6%96%B9%E5%85%A5%E9%97%A8/device-list-empty.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Systems%E5%AE%98%E6%96%B9%E5%85%A5%E9%97%A8/network-connection.png">
+<meta property="article:published_time" content="2024-12-01T10:13:44.118Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:44.118Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="GPU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/CUDA/Nsight/Nsight%20Systems%E5%AE%98%E6%96%B9%E5%85%A5%E9%97%A8/image-20230110093017190.png">
+
+
+<link rel="canonical" href="http://example.com/CUDA/Nsight/Nsight%20Systems%E5%AE%98%E6%96%B9%E5%85%A5%E9%97%A8/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/CUDA/Nsight/Nsight%20Systems%E5%AE%98%E6%96%B9%E5%85%A5%E9%97%A8/","path":"CUDA/Nsight/Nsight Systems官方入门/","title":"Nsight Systems官方入门"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Nsight Systems官方入门 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E7%BB%BC%E8%BF%B0"><span class="nav-text">1 综述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Nsight-Systems"><span class="nav-text">Nsight Systems</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E6%8C%87%E5%8D%97"><span class="nav-text">安装指南</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="nav-text">1 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E7%B3%BB%E7%BB%9F%E8%A6%81%E6%B1%82"><span class="nav-text">2 系统要求</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1%E6%94%AF%E6%8C%81%E7%9A%84%E5%B9%B3%E5%8F%B0"><span class="nav-text">2.1支持的平台</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-CUDA%E7%89%88%E6%9C%AC"><span class="nav-text">2.2 CUDA版本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-Linux-%E4%B8%8A%E7%9A%84-x86-64%E3%80%81Power-%E5%92%8C-Arm-SBSA-%E7%9B%AE%E6%A0%87%E8%A6%81%E6%B1%82"><span class="nav-text">2.3 Linux 上的 x86_64、Power 和 Arm SBSA 目标要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-x86-64-Windows-%E7%9B%AE%E6%A0%87%E8%AE%BE%E5%A4%87%E8%A6%81%E6%B1%82"><span class="nav-text">2.4 x86_64 Windows 目标设备要求</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-%E4%B8%BB%E6%9C%BA%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E8%A6%81%E6%B1%82"><span class="nav-text">2.5 主机应用程序要求</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%85%A5%E9%97%A8%E6%8C%87%E5%8D%97"><span class="nav-text">3 入门指南</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E6%89%BE%E5%88%B0%E5%90%88%E9%80%82%E7%9A%84%E5%8C%85%E8%A3%85"><span class="nav-text">3.1.找到合适的包装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E5%9C%A8%E4%B8%BB%E6%9C%BA%E7%B3%BB%E7%BB%9F%E4%B8%8A%E5%AE%89%E8%A3%85GUI"><span class="nav-text">3.2.在主机系统上安装GUI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E5%8F%AF%E9%80%89-%E9%85%8D%E7%BD%AECLI"><span class="nav-text">3.3. 可选:配置CLI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-%E5%90%AF%E5%8A%A8GUI"><span class="nav-text">3.4.启动GUI</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E6%8C%87%E5%8D%97"><span class="nav-text">用户指南</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E4%BB%8E-CLI-%E8%BF%9B%E8%A1%8C%E5%88%86%E6%9E%90%EF%BC%88TODO%EF%BC%89"><span class="nav-text">1 从 CLI 进行分析（TODO）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E4%BB%8EGUI%E5%88%86%E6%9E%90"><span class="nav-text">2 从GUI分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E4%BB%8E-GUI-%E5%88%86%E6%9E%90Linux%E7%9B%AE%E6%A0%87"><span class="nav-text">2.1. 从 GUI 分析Linux目标</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-1-%E8%BF%9E%E6%8E%A5%E5%88%B0%E7%9B%AE%E6%A0%87%E8%AE%BE%E5%A4%87"><span class="nav-text">2.1.1. 连接到目标设备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-2-%E7%B3%BB%E7%BB%9F%E8%8C%83%E5%9B%B4%E7%9A%84%E6%A6%82%E8%A6%81%E5%88%86%E6%9E%90%E9%80%89%E9%A1%B9"><span class="nav-text">2.1.2. 系统范围的概要分析选项</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/Nsight/Nsight%20Systems%E5%AE%98%E6%96%B9%E5%85%A5%E9%97%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Nsight Systems官方入门 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Nsight Systems官方入门
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:44" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:44+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/Nsight/" itemprop="url" rel="index"><span itemprop="name">Nsight</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-综述"><a href="#1-综述" class="headerlink" title="1 综述"></a>1 综述</h1><img src="/CUDA/Nsight/Nsight%20Systems%E5%AE%98%E6%96%B9%E5%85%A5%E9%97%A8/image-20230110093017190.png" class="" title="image-20230110093017190">
+<p>Nsight是一个Nvidia的性能调试工具集其中：</p>
+<ul>
+<li>Nsight Systems是综合的性能分析CPU、GPU之间的协同，整体流程</li>
+<li>Nsight Compute是针对kernel的详细分析</li>
+<li>Nsight Graphics是图形渲染方面的。</li>
+</ul>
+<h1 id="Nsight-Systems"><a href="#Nsight-Systems" class="headerlink" title="Nsight Systems"></a>Nsight Systems</h1><p>参考：<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-systems/InstallationGuide/index.html">Installation Guide</a></p>
+<h1 id="安装指南"><a href="#安装指南" class="headerlink" title="安装指南"></a>安装指南</h1><h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h1><p>Nsight  Systems是一个具有跟踪功能的统计采样分析器。它旨在与基于NVIDIA Tegra SoC（片上系统）、Arm  SBSA（基于服务器的系统架构）系统、IBM Power系统以及基于x86_64处理器架构（也包括NVIDIA  GPU）的系统的设备和开发套件一起工作。</p>
+<p>在本文档中，我们将以进行评测的设备为目标，以用户工作和控制评测会话的计算机为主机。请注意，对于基于x86_64的系统，它们可能位于同一设备上，而对于基于Tegra、Arm或IBM Power的系统，这些系统始终是独立的。</p>
+<p>此外，三种不同的活动被区分如下</p>
+<ul>
+<li>分析—收集任何性能数据的过程。Nsight系统中的分析会话通常包括采样和跟踪。</li>
+<li>采样-周期性地停止profilee（评测会话期间正在调查的应用程序）的过程，通常用于收集回溯（活动线程的调用堆栈），这允许您从统计上了解每个函数所花费的时间。此外，还可以对硬件计数器进行采样。当采集了少量样本时，该过程本质上是不精确的。</li>
+<li>跟踪-收集有关配置文件或系统中发生的各种活动的精确信息的过程。例如，可以跟踪profilee API执行，提供函数调用的准确时间和持续时间。</li>
+</ul>
+<p>Nsight Systems支持多代Tegra  SoC、NVIDIA分立GPU、各种CPU架构以及各种目标和主机操作系统。本文档描述了Nsight  Systems任何版本中可用的全部功能。如果某个功能在所有版本中都不可用，将在文本中注明。通常，Nsight Systems Embedded  Platforms Edition表示支持嵌入式和汽车市场的Tegra处理器的软件包，而Nsight System Workstation  Edition支持工作站和集群市场的x86_64、IBM Power和Arm服务器（SBSA）处理器。</p>
+<p>Nsight Systems在大多数平台上支持的常见功能包括：</p>
+<ul>
+<li>使用多种算法(如帧指针或DWARF数据)对概要文件进行采样和收集回溯。适当地构建自顶向下、自底向上和平面视图。这些信息有助于识别cpu密集型代码中的性能瓶颈。</li>
+<li>采样或跟踪系统电源行为，例如CPU频率。</li>
+<li>(仅适用于Nsight系统嵌入式平台版)来自Arm PMU(性能监控单元)的采样计数器。缓存丢失等信息在统计上与函数执行相关。</li>
+<li>支持多个窗口。具有多个监视器的用户可以同时查看多个报告，或在同一报告文件中具有多个视图。</li>
+</ul>
+<p>使用Nsight Systems，用户可以：</p>
+<ul>
+<li>识别独占CPU的调用路径。</li>
+<li>识别独占CPU的各个函数(跨不同的调用路径)。</li>
+<li>对于Nsight Systems嵌入式平台版，识别具有较差缓存利用率的函数。</li>
+<li>如果平台支持CUDA，请参阅CUDA运行时和驱动程序API调用的可视化表示，以及CUDA GPU工作负载。Nsight Systems使用CUDA分析工具接口(CUPTI)，欲了解更多信息，请参阅:CUPTI文档。<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cupti/index.html">CUPTI documentation</a>.</li>
+<li>如果用户使用NVIDIA工具扩展(NVTX)进行注释，NVTX注释的可视化表示:范围、标记和线程名。</li>
+<li>对于Windows目标，请参见D3D12的可视化表示：CPU上正在进行哪些API调用、图形帧、stutter(卡顿)分析以及GPU工作负载（命令列表和调试范围）。</li>
+<li>有关x86_64目标，请参阅 Vulkan 的可视化表示：在 CPU 上进行哪些 API 调用、图形帧、卡顿分析以及 Vulkan GPU 工作负载（命令缓冲区和调试范围）。</li>
+</ul>
+<h1 id="2-系统要求"><a href="#2-系统要求" class="headerlink" title="2 系统要求"></a>2 系统要求</h1><p>Nsight  Systems支持多个平台。为简单起见，请将其视为Nsight Systems Embedded Platforms  Edition和Nsight System Workstation Edition，其中Nsight系统Workstation  Edition支持在Linux和Windows操作系统上使用x86_64、IBM Power和Arm SBSA  CPU的台式机、工作站和集群，而Nsight Systems Embedded Platforms  Edition支持用于Tegra和QNX操作系统的嵌入式和游戏空间的NVIDIA Tegra产品。</p>
+<h2 id="2-1支持的平台"><a href="#2-1支持的平台" class="headerlink" title="2.1支持的平台"></a>2.1支持的平台</h2><p>L4T (Linux for Tegra)                        </p>
+<ul>
+<li>Jetson AGX Xavier</li>
+<li>Jetson TX2</li>
+<li>Jetson TX2i</li>
+<li>Jetson TX</li>
+<li>Jetson Nano</li>
+<li>Jetson Xavier NX</li>
+</ul>
+<p>x86_64, IBM Power (from Power 9),  or Arm SBSA</p>
+<ul>
+<li>NVIDIA GPU architectures starting with Pascal</li>
+<li>OS (64 bit only)<ul>
+<li>Ubuntu 18.04, 20.04, and 22.04</li>
+<li>CentOS and RedHat Enterprise Linux 7.4+ with kernel version 3.10.0-693 or later.</li>
+<li>Windows 10, 11, and Win Server 2022</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-2-CUDA版本"><a href="#2-2-CUDA版本" class="headerlink" title="2.2 CUDA版本"></a>2.2 CUDA版本</h2><ul>
+<li>Nsight Systems supports CUDA 10.0, 10.1, 10.2, and                                    11.X for most platforms                                 </li>
+<li>Nsight Systems on Arm SBSA supports 10.2 and 11.X                                 </li>
+</ul>
+<p>Note that CUDA version and driver version must be compatible.</p>
+<blockquote>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>CUDA Version</th>
+<th>Driver minimum version</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>11.0</td>
+<td>450</td>
+</tr>
+<tr>
+<td>10.2</td>
+<td>440.30</td>
+</tr>
+<tr>
+<td>10.1</td>
+<td>418.39</td>
+</tr>
+<tr>
+<td>10.0</td>
+<td>410.48</td>
+</tr>
+</tbody>
+</table>
+</div>
+</blockquote>
+<p>From CUDA 11.X on, any driver from 450 on will be supported, although new                           features introduced in more recent drivers will not be available.                        </p>
+<p>For information about which drivers were specifically released with  each toolkit, see  <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-toolkit-release-notes/index.html#cuda-major-component-versions">CUDA Toolkit Release Notes - Major Component Versions</a></p>
+<h2 id="2-3-Linux-上的-x86-64、Power-和-Arm-SBSA-目标要求"><a href="#2-3-Linux-上的-x86-64、Power-和-Arm-SBSA-目标要求" class="headerlink" title="2.3 Linux 上的 x86_64、Power 和 Arm SBSA 目标要求"></a>2.3 Linux 上的 x86_64、Power 和 Arm SBSA 目标要求</h2><p>当从主机上的GUI连接到基于x86_64、Power或Arm SBSA Linux的目标时，将通过SSH建立连接。</p>
+<p><strong>Linux Perf 的使用</strong>：要收集线程调度数据和 IP（指令指针）样本，Linux 操作系统的perf_event_paranoid级别必须为 2 或更小。使用以下命令进行检查：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /proc/sys/kernel/perf_event_paranoid</span><br></pre></td></tr></table></figure>
+<p>我的电脑显示如下(板子origin用的qnx没有这个文件)</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">huolin@huolin:~/WorkSpace/zyd/newaddr$ cat /proc/sys/kernel/perf_event_paranoid</span><br><span class="line">4</span><br><span class="line">huolin@huolin:~/WorkSpace/zyd/newaddr$ </span><br></pre></td></tr></table></figure>
+<p>如果输出为 &gt;2，请执行以下操作以临时调整偏执级别（请注意，这必须在每次重新启动后完成）：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo sh -c &#x27;echo 2 &gt;/proc/sys/kernel/perf_event_paranoid&#x27;</span><br></pre></td></tr></table></figure>
+<p>要使更改永久，请使用以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo sh -c &#x27;echo kernel.perf_event_paranoid=2 &gt; /etc/sysctl.d/local.conf&#x27;</span><br></pre></td></tr></table></figure>
+<p><strong>内核版本</strong>：要收集线程调度数据和 IP（指令指针）样本和回溯，内核版本必须为：</p>
+<ul>
+<li>3.10.0-693 or later for CentOS and RedHat Enterprise Linux 7.4+</li>
+<li>4.3 or greater for all other distros including Ubuntu</li>
+</ul>
+<p>要检查目标设备上内核的版本号，请在设备上运行以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">uname -a</span><br></pre></td></tr></table></figure>
+<p>请注意，只有 CentOS、RedHat 和 Ubuntu 发行版经过测试/确认可以正常工作。</p>
+<p><strong>glibc 版本</strong>：要检查目标设备上的 glibc 版本，请运行以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ldd --version</span><br></pre></td></tr></table></figure>
+<p>Nsight Systems 需要 glibc 2.17 或更高版本。</p>
+<p><strong>CUDA</strong>：有关此版本中支持的 CUDA 版本，请参阅上文。使用 deviceQuery 命令确定系统上的 CUDA 驱动程序和运行时版本。deviceQuery 命令在 CUDA SDK 中可用。它通常安装在：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/usr/local/cuda/samples/1_Utilities/deviceQuery</span><br></pre></td></tr></table></figure>
+<p>仅支持纯 64 位环境。换句话说，不支持在 64 位环境中运行的 32 位系统或 32 位进程。</p>
+<p>Nsight Systems需要对目标系统上的/var/lock目录的写入权限。</p>
+<h2 id="2-4-x86-64-Windows-目标设备要求"><a href="#2-4-x86-64-Windows-目标设备要求" class="headerlink" title="2.4 x86_64 Windows 目标设备要求"></a>2.4 x86_64 Windows 目标设备要求</h2><p>DX12 要求：</p>
+<ul>
+<li>Windows 10 with NVIDIA Driver 411.63 or higher for DX12 trace</li>
+<li>Windows 10 April 2018 Update (version 1803, AKA Redstone 4) with                                    NVIDIA Driver 411.63 or higher for DirectX Ray Tracing, and tracing DX12                                    Copy command queues.                                 </li>
+</ul>
+<h2 id="2-5-主机应用程序要求"><a href="#2-5-主机应用程序要求" class="headerlink" title="2.5 主机应用程序要求"></a>2.5 主机应用程序要求</h2><p>Nsight Systems主机应用程序在以下主机平台上运行：</p>
+<ul>
+<li>Windows 10，Windows Server 2019。仅支持 64 位版本。</li>
+<li>众所周知，Linux Ubuntu 14.04 及更高版本可以工作，在其他现代发行版上运行也应该可以。仅支持 64 位版本。</li>
+<li>OS X 10.10“Yosemite”及更高版本。</li>
+</ul>
+<h1 id="3-入门指南"><a href="#3-入门指南" class="headerlink" title="3 入门指南"></a>3 入门指南</h1><h2 id="3-1-找到合适的包装"><a href="#3-1-找到合适的包装" class="headerlink" title="3.1.找到合适的包装"></a>3.1.找到合适的包装</h2><p>Nsight Systems可用于多个目标和多个主机操作系统。要选择正确的软件包，首先考虑要分析的目标系统。</p>
+<ul>
+<li>对于Tegra目标系统，请选择Nsight systems For Tegra，作为NVIDIA JetPack SDK的一部分提供。<a target="_blank" rel="noopener" href="https://developer.nvidia.com/embedded/jetpack">NVIDIA JetPack SDK</a>. </li>
+<li>对于x86_64、IBM Power目标系统或Arm  SBSA，请从Nsight systems For  Workstations的目标软件包中选择，可从<a target="_blank" rel="noopener" href="https://developer.nvidia.com/nsight-systems.此web版本将始终包含最新和最伟大的Nsight系统功能。">https://developer.nvidia.com/nsight-systems.此web版本将始终包含最新和最伟大的Nsight系统功能。</a></li>
+<li>CUDA工具包中还提供了Nsight Systems的x86_64、IBM Power和Arm SBSA目标版本。</li>
+</ul>
+<p>每个包仅限于一个架构。例如，Tegra软件包不支持评测x86目标，而x86软件包也不支持评测Tegra目标。</p>
+<p>选择适当的目标版本后，选择与主机OS相对应的软件包，即系统上要查看结果的OS。这些软件包的形式为常见的安装程序类型：.msi for Windows。对于x86 Linux；，运行.rpm和.deb。deb和.rpm（适用于IBM  Power上的Linux）；macOS安装程序为.dmg。</p>
+<p>注意：IBM Power和Arm SBSA包没有用于可视化结果的GUI。如果您希望可视化结果，请下载并安装适用于macOS、x86_64 Linux或Windows系统的GUI。</p>
+<p><strong>Tegra包装</strong></p>
+<ul>
+<li>Windows主机–在Windows计算机上安装.msi。允许远程访问Tegra设备进行分析。</li>
+<li>Linux主机–在Linux系统上安装并运行。允许远程访问Tegra设备进行分析。</li>
+<li>macOS主机–在macOS计算机上安装.dmg。允许远程访问Tegra设备进行分析。</li>
+</ul>
+<p><strong>x86_64软件包</strong></p>
+<ul>
+<li>Windows主机–在Windows计算机上安装.msi。允许远程访问Linux x86_64或Windows设备以进行评测以及在本地系统上运行。</li>
+<li>Linux主机–在Linux系统上安装.run、.rpm或.deb。允许远程访问Linux x86_64或Windows设备，以便在本地主机上分析或运行集合。</li>
+<li>macOS主机–在macOS计算机上安装.dmg。允许远程访问Linux x86_64设备进行评测。</li>
+</ul>
+<p><strong>IBM Power软件包</strong></p>
+<ul>
+<li>仅限Power CLI—IBM Power支持不包括主机GUI。在电源系统上安装.deb或.rpm。仅启用CLI收集，报告可以在任何受支持的主机平台上的GUI中导入或打开。</li>
+</ul>
+<p><strong>Arm SBSA软件包</strong></p>
+<ul>
+<li>仅限Arm SBSA CLI—Arm SBSA支持不包括主机GUI。在Arm SBSA系统上安装.deb或.rpm。仅启用CLI收集，报告可以在任何受支持的主机平台上的GUI中导入或打开。</li>
+</ul>
+<h2 id="3-2-在主机系统上安装GUI"><a href="#3-2-在主机系统上安装GUI" class="headerlink" title="3.2.在主机系统上安装GUI"></a>3.2.在主机系统上安装GUI</h2><p>将适当的文件复制到具有写入和执行权限的目录中的主机系统。运行安装文件，接受EULA，Nsight Systems将在您的系统上安装。</p>
+<p>在Linux上，有一些特殊选项可以实现自动安装。使用—accept标志运行安装程序将自动接受EULA，使用—acceptance标志和—quiet标志运行将自动接受该EULA，而不打印到stdout。使用—quiet而不使用—accept运行将显示错误。</p>
+<p>安装将为此主机创建一个Host目录，并为Nsight Systems软件包支持的每个目标创建一个Target目录。</p>
+<p>在目标设备上收集数据所需的所有二进制文件将在首次连接到设备时由主机安装到目标设备上。无需在目标设备上安装软件包。</p>
+<p>如果从CUDA Toolkit安装，请参阅CUDA Toolkit文档。 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/">CUDA Toolkit documentation</a></p>
+<h2 id="3-3-可选-配置CLI"><a href="#3-3-可选-配置CLI" class="headerlink" title="3.3. 可选:配置CLI"></a>3.3. 可选:配置CLI</h2><p>CLI can be expanded as ‘Command-Line Interface’</p>
+<p>可以使用CLI对所有Nsight Systems目标进行概要分析。只能使用CLI分析IBM Power和Arm SBSA目标。当脚本用于运行无人值守集合或无法通过ssh访问目标系统时，CLI特别有用。特别是，这可以用于在Docker容器中启用收集。</p>
+<p>CLI可以在Nsight Systems安装的目标目录中找到。希望将CLI作为独立工具安装的用户可以通过将目标目录中的文件复制到他们选择的位置来完成此操作。</p>
+<p>如果希望在没有root用户的情况下运行CLI（推荐模式），则需要将其安装在具有完全访问权限的目录中。</p>
+<p>设置CLI后，可以使用nsys status-e命令检查环境。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">~$ </span><span class="language-bash">nsys status -e</span></span><br><span class="line">       </span><br><span class="line">Sampling Environment Check</span><br><span class="line">Linux Kernel Paranoid Level = 1: OK</span><br><span class="line">Linux Distribution = Ubuntu</span><br><span class="line">Linux Kernel Version = 4.15.0-109-generic: OK</span><br><span class="line">Linux perf_event_open syscall available: OK</span><br><span class="line">Sampling trigger event available: OK</span><br><span class="line">Intel(c) Last Branch Record support: Available</span><br><span class="line">Sampling Environment: OK</span><br></pre></td></tr></table></figure>
+<p>此状态检查允许您确保在本地环境中满足使用Nsight系统进行CPU采样的系统要求。如果采样环境不正常，您仍然可以运行各种跟踪操作。</p>
+<p>Intel（c）Last Branch Record允许包括Nsight Systems在内的工具使用硬件快速获取有限的堆栈信息。如果可用，Nsight Systems将默认使用此方法进行堆栈解析。</p>
+<p>有关更改这些环境设置的信息，请参阅《安装指南》中的“系统要求”部分。有关更改回溯方法的信息，请参阅《用户指南》中的CLI评测。</p>
+<p>要开始使用CLI，请运行nsys—help以获取选项列表，或参阅《用户指南》中的“从CLI评测应用程序”以获取完整文档。</p>
+<h2 id="3-4-启动GUI"><a href="#3-4-启动GUI" class="headerlink" title="3.4.启动GUI"></a>3.4.启动GUI</h2><p>根据您的操作系统，Nsight系统将在您的主机桌面上安装一个图标，您可以使用它来启动GUI。要直接启动GUI，请在安装的Host子目录下运行<code>nsight-sys</code>可执行文件。</p>
+<h1 id="用户指南"><a href="#用户指南" class="headerlink" title="用户指南"></a>用户指南</h1><p>参考：<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-systems/UserGuide/index.html">User Guide</a></p>
+<h1 id="1-从-CLI-进行分析（TODO）"><a href="#1-从-CLI-进行分析（TODO）" class="headerlink" title="1 从 CLI 进行分析（TODO）"></a>1 从 CLI 进行分析（TODO）</h1><h1 id="2-从GUI分析"><a href="#2-从GUI分析" class="headerlink" title="2 从GUI分析"></a>2 从GUI分析</h1><h2 id="2-1-从-GUI-分析Linux目标"><a href="#2-1-从-GUI-分析Linux目标" class="headerlink" title="2.1. 从 GUI 分析Linux目标"></a>2.1. 从 GUI 分析Linux目标</h2><h3 id="2-1-1-连接到目标设备"><a href="#2-1-1-连接到目标设备" class="headerlink" title="2.1.1. 连接到目标设备"></a>2.1.1. 连接到目标设备</h3><p>Nsight Systems提供了一个简单的界面，可以在本地主机上进行分析，或通过SSH管理与Linux或Windows设备的多个连接。可以通过设备选择下拉列表启动网络连接管理器：</p>
+<p>On x86_64:</p>
+<img src="/CUDA/Nsight/Nsight%20Systems%E5%AE%98%E6%96%B9%E5%85%A5%E9%97%A8/device-list-empty-x86.png" class="" title="Empty device list">
+<p>On Tegra:</p>
+<img src="/CUDA/Nsight/Nsight%20Systems%E5%AE%98%E6%96%B9%E5%85%A5%E9%97%A8/device-list-empty.png" class="" title="Empty device list">
+<p>该对话框具有允许添加、删除和修改连接的简单控件：</p>
+<img src="/CUDA/Nsight/Nsight%20Systems%E5%AE%98%E6%96%B9%E5%85%A5%E9%97%A8/network-connection.png" class="" title="Network connection">
+<p>安全通知：SSH 仅用于建立与目标设备的初始连接、执行检查和上传必要的文件。实际的性能分析命令和数据通过原始的未加密套接字传输。Nsight Systems 不应用于可能出现中间攻击者攻击的网络设置，或者不受信任的各方可能对目标设备进行网络访问的网络设置。</p>
+<p>“无身份验证”选项对于配置为使用root用户名进行无密码登录的设备非常有用。要启用这样的配置，请在目标上编辑文件/etc/ssh/sshd_config，并指定以下选项：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">PermitRootLogin yes</span><br></pre></td></tr></table></figure>
+<p>然后使用 <code>passwd</code> 设置空密码，并使用<code>service ssh restart</code>重新启动 SSH 服务。</p>
+<p>开放端口：Nsight Systems 守护程序要求打开端口 22 和端口 45555 进行侦听。您可以使用以下命令确认这些端口是否已打开：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo firewall-cmd --list-ports --permanent </span><br><span class="line">sudo firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+<p>要打开端口，请使用以下命令，请跳过 —permanent 选项以仅为此会话打开：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo firewall-cmd --permanent --add-port 45555/tcp </span><br><span class="line">sudo firewall-cmd --reload</span><br></pre></td></tr></table></figure>
+<p>同样，如果您在云系统上运行，则必须打开端口 22 和端口 45555 以进行入口。</p>
+<p>内核版本号 - 要检查目标设备上 Nsight Systems 的内核支持版本号，请在远程设备上运行以下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /proc/quadd/version</span><br></pre></td></tr></table></figure>
+<p>支持的最低版本为 1.82。</p>
+<p>此外，目标设备上需要存在 Netcat 命令 （nc）。例如，在 Ubuntu 上，可以使用以下命令安装此软件包：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get install netcat-openbsd</span><br></pre></td></tr></table></figure>
+<h3 id="2-1-2-系统范围的概要分析选项"><a href="#2-1-2-系统范围的概要分析选项" class="headerlink" title="2.1.2. 系统范围的概要分析选项"></a>2.1.2. 系统范围的概要分析选项</h3><h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><p>官方：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-systems/index.html#nsight-systems">Nsight Systems</a><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-systems/InstallationGuide/index.html">Installation Guide</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-systems/UserGuide/index.html">User Guide</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-systems/UserGuide/index.html#nvtx-trace">14. NVTX Trace</a></li>
+</ul>
+</li>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html">Nsight Compute</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/CUDA/Nsight/Nsight%20Systems%E5%AE%98%E6%96%B9%E5%85%A5%E9%97%A8/" title="Nsight Systems官方入门">http://example.com/CUDA/Nsight/Nsight Systems官方入门/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/" rel="prev" title="Nsight Compute示例1_总览">
+                  <i class="fa fa-chevron-left"></i> Nsight Compute示例1_总览
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/" rel="next" title="Nsight System基础">
+                  Nsight System基础 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"345f58f02cde852daf57c586f9c5dfde"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="1.手册简介">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1-简介">
+<meta property="og:url" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/1-%E7%AE%80%E4%BB%8B/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="1.手册简介">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/2-TensorRT%E7%9A%84%E8%83%BD%E5%8A%9B/rdp.jpg">
+<meta property="article:published_time" content="2024-12-01T10:13:45.358Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.358Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="GPU">
+<meta property="article:tag" content="Tensorrt">
+<meta property="article:tag" content="DeepLearning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/2-TensorRT%E7%9A%84%E8%83%BD%E5%8A%9B/rdp.jpg">
+
+
+<link rel="canonical" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/1-%E7%AE%80%E4%BB%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/1-%E7%AE%80%E4%BB%8B/","path":"TensorRT/TensorRT中文版开发手册/1-简介/","title":"1-简介"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>1-简介 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E6%89%8B%E5%86%8C%E7%AE%80%E4%BB%8B"><span class="nav-text">1.手册简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-Structure-of-this-Guide"><span class="nav-text">1.1. Structure of this Guide</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-Samples"><span class="nav-text">1.2. Samples</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-Complementary-GPU-Features"><span class="nav-text">1.3. Complementary GPU Features</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-Complementary-Software"><span class="nav-text">1.4. Complementary Software</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-ONNX"><span class="nav-text">1.5. ONNX</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-Code-Analysis-Tools"><span class="nav-text">1.6. Code Analysis Tools</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-7-API-Versioning"><span class="nav-text">1.7. API Versioning</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-8-Deprecation-Policy"><span class="nav-text">1.8. Deprecation Policy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-9-Support"><span class="nav-text">1.9. Support</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-10-How-Do-I-Report-A-Bug"><span class="nav-text">1.10. How Do I Report A Bug?</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/1-%E7%AE%80%E4%BB%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="1-简介 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          1-简介
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/" itemprop="url" rel="index"><span itemprop="name">TensorRT中文版开发手册</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-手册简介"><a href="#1-手册简介" class="headerlink" title="1.手册简介"></a>1.手册简介</h1><p><img src="../2-TensorRT的能力/rdp.jpg" alt=""></p>
+<p>NVIDIA® TensorRT™ 是一个促进高性能机器学习推理的 SDK。 它旨在与 TensorFlow、PyTorch 和 MXNet 等训练框架以互补的方式工作。 它特别专注于在 NVIDIA 硬件上快速高效地运行已经训练好的网络。<br>有关如何安装 TensorRT 的说明，请参阅 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-install-guide/index.html">NVIDIA TensorRT 安装指南</a>。</p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/quick-start-guide/index.html">NVIDIA TensorRT 快速入门指南</a>适用于想要试用 TensorRT SDK 的用户； 具体来说，您将学习如何快速构建应用程序以在 TensorRT 引擎上运行推理。</p>
+<h2 id="1-1-Structure-of-this-Guide"><a href="#1-1-Structure-of-this-Guide" class="headerlink" title="1.1. Structure of this Guide"></a>1.1. Structure of this Guide</h2><p>第 1 章提供了有关如何打包和支持 TensorRT 以及它如何融入开发者生态系统的信息。</p>
+<p>第 2 章提供了对 TensorRT 功能的广泛概述。</p>
+<p>第 3 章和第 4 章分别介绍了 C++ 和 Python API。</p>
+<p>后续章节提供有关高级功能的更多详细信息。</p>
+<p>附录包含网络层参考和常见问题解答。</p>
+<h2 id="1-2-Samples"><a href="#1-2-Samples" class="headerlink" title="1.2. Samples"></a>1.2. Samples</h2><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/sample-support-guide/index.html">NVIDIA TensorRT 示例支持指南</a>说明了本手册中讨论的许多主题。可在此处找到其他侧重于嵌入式应用程序的示例。</p>
+<h2 id="1-3-Complementary-GPU-Features"><a href="#1-3-Complementary-GPU-Features" class="headerlink" title="1.3. Complementary GPU Features"></a>1.3. Complementary GPU Features</h2><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/datacenter/tesla/mig-user-guide/index.html">多实例 GPU</a>或 MIG 是具有 NVIDIA Ampere 架构或更高架构的 NVIDIA GPU 的一项功能，可实现用户控制的将单个 GPU 划分为多个较小 GPU 的功能。物理分区提供具有 QoS 的专用计算和内存切片，并在 GPU 的一部分上独立执行并行工作负载。对于 GPU 利用率低的 TensorRT 应用程序，MIG 可以在对延迟影响很小或没有影响的情况下产生更高的吞吐量。最佳分区方案是特定于应用程序的。</p>
+<h2 id="1-4-Complementary-Software"><a href="#1-4-Complementary-Software" class="headerlink" title="1.4. Complementary Software"></a>1.4. Complementary Software</h2><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/triton-inference-server/user-guide/index.html">NVIDIA Triton™</a>推理服务器是一个更高级别的库，可提供跨 CPU 和 GPU 的优化推理。它提供了启动和管理多个模型的功能，以及用于服务推理的 REST 和 gRPC 端点。</p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/dali/user-guide/docs/#nvidia-dali-documentation">NVIDIA DALI ®</a>为预处理图像、音频和视频数据提供高性能原语。 TensorRT 推理可以作为自定义算子集成到 DALI 管道中。可以在<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/DL4AGX">此处</a>找到作为 DALI 的一部分集成的 TensorRT 推理的工作示例。</p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/frameworks/tf-trt-user-guide/index.html">TensorFlow-TensorRT (TF-TRT)</a>是将 TensorRT 直接集成到 TensorFlow 中。它选择 TensorFlow 图的子图由 TensorRT 加速，同时让图的其余部分由 TensorFlow 本地执行。结果仍然是您可以照常执行的 TensorFlow 图。有关 TF-TRT 示例，请参阅<a target="_blank" rel="noopener" href="https://github.com/tensorflow/tensorrt">TensorFlow 中的 TensorRT 示例</a>。</p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/pytorch-quantization-toolkit/docs/userguide.html">PyTorch 量化工具包</a>提供了以降低精度训练模型的工具，然后可以将其导出以在 TensorRT 中进行优化。</p>
+<p>此外， <a target="_blank" rel="noopener" href="https://github.com/NVIDIA/apex/tree/master/apex/contrib/sparsity">PyTorch Automatic SParsity (ASP)</a>工具提供了用于训练具有结构化稀疏性的模型的工具，然后可以将其导出并允许 TensorRT 在 NVIDIA Ampere GPU 上利用更快的稀疏策略。</p>
+<p>TensorRT 与 NVIDIA 的分析工具、 <a target="_blank" rel="noopener" href="https://developer.nvidia.com/nsight-systems">NVIDIA Nsight™ Systems</a>和<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/frameworks/dlprof-user-guide/">NVIDIA® Deep Learning Profiler (DLProf)</a>集成。</p>
+<p>TensorRT 的一个受限子集经过认证可用于<a target="_blank" rel="noopener" href="https://developer.nvidia.com/drive">NVIDIA DRIVE ®</a>产品。某些 API 被标记为仅在 NVIDIA DRIVE 中使用，不支持一般用途。</p>
+<h2 id="1-5-ONNX"><a href="#1-5-ONNX" class="headerlink" title="1.5. ONNX"></a>1.5. ONNX</h2><p>TensorRT 从框架中导入训练模型的主要方式是通过<a target="_blank" rel="noopener" href="https://onnx.ai/">ONNX</a>交换格式。 TensorRT 附带一个 ONNX 解析器库来帮助导入模型。在可能的情况下，解析器向后兼容 opset 7； ONNX模型<a target="_blank" rel="noopener" href="https://github.com/onnx/onnx/blob/master/docs/VersionConverter.md"> Opset 版本转换器</a>可以帮助解决不兼容问题。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/onnx/onnx-tensorrt/">GitHub 版本</a>可能支持比 TensorRT 附带的版本更高的 opset，请参阅 ONNX-TensorRT<a target="_blank" rel="noopener" href="https://github.com/onnx/onnx-tensorrt/blob/master/docs/operators.md">运算符支持矩阵</a>以获取有关受支持的 opset 和运算符的最新信息。</p>
+<p>TensorRT 的 ONNX 算子支持列表可在<a target="_blank" rel="noopener" href="https://github.com/onnx/onnx-tensorrt/blob/master/docs/operators.md">此处</a>找到。</p>
+<p>PyTorch 原生支持<a target="_blank" rel="noopener" href="https://pytorch.org/docs/stable/onnx.html">ONNX 导出</a>。对于 TensorFlow，推荐的方法是<a target="_blank" rel="noopener" href="https://github.com/onnx/tensorflow-onnx">tf2onnx</a> 。</p>
+<p>将模型导出到 ONNX 后的第一步是使用<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#polygraphy-ovr">Polygraphy</a>运行常量折叠。这通常可以解决 ONNX 解析器中的 TensorRT 转换问题，并且通常可以简化工作流程。有关详细信息，请参阅<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/tools/Polygraphy/examples/cli/surgeon/02_folding_constants">此示例</a>。在某些情况下，可能需要进一步修改 ONNX 模型，例如，用插件替换子图或根据其他操作重新实现不受支持的操作。为了简化此过程，您可以使用<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/tools/onnx-graphsurgeon">ONNX-GraphSurgeon</a> 。</p>
+<h2 id="1-6-Code-Analysis-Tools"><a href="#1-6-Code-Analysis-Tools" class="headerlink" title="1.6. Code Analysis Tools"></a>1.6. Code Analysis Tools</h2><p>有关在 TensorRT 中使用 valgrind 和 clang sanitizer 工具的指导，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#troubleshooting">故障排除</a>章节。</p>
+<h2 id="1-7-API-Versioning"><a href="#1-7-API-Versioning" class="headerlink" title="1.7. API Versioning"></a>1.7. API Versioning</h2><p>TensorRT 版本号 (MAJOR.MINOR.PATCH) 遵循Semantic Versioning 2.0.0的公共 API 和库 ABI。版本号变化如下：</p>
+<ol>
+<li>进行不兼容的 API 或 ABI 更改时的主要版本</li>
+<li>以向后兼容的方式添加功能时的次要版本</li>
+<li>进行向后兼容的错误修复时的 PATCH 版本</li>
+</ol>
+<p>请注意，语义版本控制不会扩展到序列化对象。要重用计划文件和时序缓存，版本号必须在主要、次要、补丁和构建版本之间匹配。校准缓存通常可以在主要版本中重复使用，但不保证兼容性。</p>
+<h2 id="1-8-Deprecation-Policy"><a href="#1-8-Deprecation-Policy" class="headerlink" title="1.8. Deprecation Policy"></a>1.8. Deprecation Policy</h2><p>弃用用于通知开发人员不再推荐使用某些 API 和工具。从 8.0 版本开始，TensorRT 具有以下弃用政策：</p>
+<ul>
+<li>弃用通知在发行说明中传达。已弃用的 API 元素在可能的情况下使用<code>TRT_DEPRECATED</code>宏进行标记。</li>
+<li>TensorRT 在弃用后提供 12 个月的迁移期。</li>
+<li>API 和工具在迁移期间继续工作。</li>
+<li>迁移期结束后，API 和工具会以符合语义版本控制的方式移除。</li>
+</ul>
+<p>对于在 TensorRT 7.x 中明确弃用的任何 API 和工具，12 个月的迁移期从 TensorRT 8.0 GA 发布日期开始。</p>
+<h2 id="1-9-Support"><a href="#1-9-Support" class="headerlink" title="1.9. Support"></a>1.9. Support</h2><p>可以在 <a target="_blank" rel="noopener" href="https://developer.nvidia.com/tensorrt">https://developer.nvidia.com/tensorrt</a>在线找到有关 TensorRT 的支持、资源和信息。这包括博客、示例等。<br>此外，您可以在<a target="_blank" rel="noopener" href="https://devtalk.nvidia.com/default/board/304/tensorrt/">https://devtalk.nvidia.com/default/board/304/tensorrt/</a> 访问 NVIDIA DevTalk TensorRT 论坛，了解与 TensorRT 相关的所有内容。该论坛提供了寻找答案、建立联系以及参与与客户、开发人员和 TensorRT 工程师讨论的可能性。</p>
+<h2 id="1-10-How-Do-I-Report-A-Bug"><a href="#1-10-How-Do-I-Report-A-Bug" class="headerlink" title="1.10. How Do I Report A Bug?"></a>1.10. How Do I Report A Bug?</h2><p>我们感谢所有类型的反馈。如果您遇到任何问题，请按照以下步骤进行报告。</p>
+<ol>
+<li>注册NVIDIA 开发者网站。</li>
+<li>登录开发者网站。</li>
+<li>点击右上角你的名字。</li>
+<li>单击我的帐户&gt;我的错误并选择提交新错误。</li>
+<li>填写错误报告页面。具有描述性，如果可能，请提供您正在遵循的步骤以帮助重现问题。</li>
+<li>单击提交错误。</li>
+</ol>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/1-%E7%AE%80%E4%BB%8B/" title="1-简介">http://example.com/TensorRT/TensorRT中文版开发手册/1-简介/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+              <a href="/tags/Tensorrt/" rel="tag"><i class="fa fa-tag"></i> Tensorrt</a>
+              <a href="/tags/DeepLearning/" rel="tag"><i class="fa fa-tag"></i> DeepLearning</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT-plugin/" rel="prev" title="TensorRT-plugin">
+                  <i class="fa fa-chevron-left"></i> TensorRT-plugin
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E4%B8%8Eonnx/" rel="next" title="TensorRT与onnx">
+                  TensorRT与onnx <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"a5a09aa2e7efd954bced95f14b9e3f92"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="TensorRT的命令行程序">
+<meta property="og:type" content="article">
+<meta property="og:title" content="17-TensorRT的命令行程序">
+<meta property="og:url" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/17-TensorRT%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%A8%8B%E5%BA%8F/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="TensorRT的命令行程序">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/17-TensorRT%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%A8%8B%E5%BA%8F/rdp.jpg">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/17-TensorRT%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%A8%8B%E5%BA%8F/trtexec.png">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/19610152-8723d92399f96678.png?imageMogr2/auto-orient/strip|imageView2/2/w/1147/format/webp">
+<meta property="article:published_time" content="2024-12-01T10:13:45.377Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.377Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="GPU">
+<meta property="article:tag" content="Tensorrt">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/17-TensorRT%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%A8%8B%E5%BA%8F/rdp.jpg">
+
+
+<link rel="canonical" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/17-TensorRT%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%A8%8B%E5%BA%8F/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/17-TensorRT%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%A8%8B%E5%BA%8F/","path":"TensorRT/TensorRT中文版开发手册/17-TensorRT的命令行程序/","title":"17-TensorRT的命令行程序"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>17-TensorRT的命令行程序 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TensorRT%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%A8%8B%E5%BA%8F"><span class="nav-text">TensorRT的命令行程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#A-3-1-trtexec"><span class="nav-text">A.3.1. trtexec</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-3-1-1-Benchmarking-Network"><span class="nav-text">A.3.1.1. Benchmarking Network</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-3-1-2-Serialized-Engine-Generation"><span class="nav-text">A.3.1.2. Serialized Engine Generation</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-3-1-3-trtexec"><span class="nav-text">A.3.1.3. trtexec</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-3-1-4-%E5%B8%B8%E7%94%A8%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E6%A0%87%E5%BF%97"><span class="nav-text">A.3.1.4. 常用的命令行标志</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#trtexec%E8%BE%93%E5%87%BA%E6%A6%82%E8%BF%B0"><span class="nav-text">trtexec输出概述</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/17-TensorRT%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%A8%8B%E5%BA%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="17-TensorRT的命令行程序 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          17-TensorRT的命令行程序
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/" itemprop="url" rel="index"><span itemprop="name">TensorRT中文版开发手册</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="TensorRT的命令行程序"><a href="#TensorRT的命令行程序" class="headerlink" title="TensorRT的命令行程序"></a>TensorRT的命令行程序</h1><img src="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/17-TensorRT%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%A8%8B%E5%BA%8F/rdp.jpg" class="">
+<p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/zh-cn/developer-program">点击此处加入NVIDIA开发者计划</a></p>
+<h2 id="A-3-1-trtexec"><a href="#A-3-1-trtexec" class="headerlink" title="A.3.1. trtexec"></a>A.3.1. trtexec</h2><p>示例目录中包含一个名为<code>trtexec</code>的命令行包装工具。 <code>trtexec</code>是一种无需开发自己的应用程序即可快速使用 TensorRT 的工具。</p>
+<p><code>trtexec</code>工具有三个主要用途：</p>
+<ul>
+<li>它对于在随机或用户提供的输入数据上对网络进行基准测试很有用。</li>
+<li>它对于从模型生成序列化引擎很有用。</li>
+<li>它对于从构建器生成序列化时序缓存很有用。</li>
+</ul>
+<h3 id="A-3-1-1-Benchmarking-Network"><a href="#A-3-1-1-Benchmarking-Network" class="headerlink" title="A.3.1.1. Benchmarking Network"></a>A.3.1.1. Benchmarking Network</h3><p>如果您将模型保存为 <code>ONNX</code> 文件、<code>UFF</code> 文件，或者如果您有 <code>Caffe prototxt</code> 格式的网络描述，则可以使用<code>trtexec</code>工具测试使用 TensorRT 在网络上运行推理的性能。 <code>trtexec</code>工具有许多选项用于指定输入和输出、性能计时的迭代、允许的精度和其他选项。</p>
+<p>为了最大限度地提高 GPU 利用率， <code>trtexec</code>会提前将一个batch放入队列。换句话说，它执行以下操作：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">enqueue batch <span class="number">0</span> </span><br><span class="line">-&gt; enqueue batch <span class="number">1</span> </span><br><span class="line">-&gt; wait until batch <span class="number">0</span> is done </span><br><span class="line">-&gt; enqueue batch <span class="number">2</span> </span><br><span class="line">-&gt; wait until batch <span class="number">1</span> is done </span><br><span class="line">-&gt; enqueue batch <span class="number">3</span> </span><br><span class="line">-&gt; wait until batch <span class="number">2</span> is done </span><br><span class="line">-&gt; enqueue batch <span class="number">4</span> </span><br><span class="line">-&gt; ...</span><br></pre></td></tr></table></figure><br>如果使用多流（ <code>--streams=N</code>标志），则<code>trtexec</code>在每个流上分别遵循此模式。</p>
+<p><code>trtexec</code>工具打印以下性能指标。下图显示了<code>trtexec</code>运行的示例 <code>Nsight</code> 系统配置文件，其中标记显示了每个性能指标的含义。</p>
+<p><strong>Throughput</strong></p>
+<p>观察到的吞吐量是通过将执行数除以 <code>Total Host Walltime</code> 来计算的。如果这显着低于 GPU 计算时间的倒数，则 GPU 可能由于主机端开销或数据传输而未被充分利用。使用 CUDA 图（使用<code>--useCudaGraph</code> ）或禁用 H2D/D2H 传输（使用<code>--noDataTransfer</code> ）可以提高 GPU 利用率。当<code>trtexec</code>检测到 GPU 未充分利用时，输出日志提供了有关使用哪个标志的指导。</p>
+<p><strong>Host Latency</strong></p>
+<p><code>H2D</code>延迟、GPU 计算时间和 <code>D2H</code> 延迟的总和。这是推断单个执行的延迟。</p>
+<p><strong>Enqueue Time</strong></p>
+<p>将执行排入队列的主机延迟，包括调用 <code>H2D/D2H</code> CUDA API、运行主机端方法和启动 CUDA 内核。如果这比 GPU 计算时间长，则 GPU 可能未被充分利用，并且吞吐量可能由主机端开销支配。使用 CUDA 图（带有<code>--useCudaGraph</code> ）可以减少排队时间。</p>
+<p><strong>H2D Latency</strong></p>
+<p>单个执行的输入张量的主机到设备数据传输的延迟。添加<code>--noDataTransfer</code>以禁用 <code>H2D/D2H</code>数据传输。</p>
+<p><strong>D2H Latency</strong></p>
+<p>单个执行的输出张量的设备到主机数据传输的延迟。添加<code>--noDataTransfer</code>以禁用 <code>H2D/D2H</code> 数据传输。</p>
+<p><strong>GPU Compute Time</strong></p>
+<p>为执行 CUDA 内核的 GPU 延迟。</p>
+<p><strong>Total Host Walltime</strong></p>
+<p>从第一个执行（预热后）入队到最后一个执行完成的主机时间。</p>
+<p><strong>Total GPU Compute Time</strong></p>
+<p>所有执行的 GPU 计算时间的总和。如果这明显短于 <code>Total Host Walltime</code>，则 GPU 可能由于主机端开销或数据传输而未得到充分利用。</p>
+<p>图 1. 在 <code>Nsight</code> 系统下运行的正常<code>trtexec</code>的性能指标（<code>ShuffleNet</code>，<code>BS=16</code>，best，TitanRTX@1200MHz）</p>
+<img src="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/17-TensorRT%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%A8%8B%E5%BA%8F/trtexec.png" class="">
+<p>将<code>--dumpProfile</code>标志添加到<code>trtexec</code>以显示每层性能配置文件，这使用户可以了解网络中的哪些层在 GPU 执行中花费的时间最多。每层性能分析也适用于作为 CUDA 图启动推理（需要 <code>CUDA 11.1</code> 及更高版本）。此外，使用<code>--profilingVerbosity=detailed</code>标志构建引擎并添加<code>--dumpLayerInfo</code>标志以显示详细的引擎信息，包括每层详细信息和绑定信息。这可以让你了解引擎中每一层对应的操作及其参数。</p>
+<p>下面是网上看到的另一个解释作为补充：</p>
+<p>使用TensorRT进行模型转换及部署主要涉及以下几个性能指标：</p>
+<p><img src="https:////upload-images.jianshu.io/upload_images/19610152-8723d92399f96678.png?imageMogr2/auto-orient/strip|imageView2/2/w/1147/format/webp" alt="img"></p>
+<p>性能统计指标</p>
+<ol>
+<li>Throughput 吞吐量</li>
+</ol>
+<blockquote>
+<p>单位：qps, QPS, Queries Per Second 表示每秒能够相应的查询次数<br> 由查询次数除以主机Walltime总和得到。如果该值明显低于GPU计算时间的倒数，说明GPU可能由于主机侧的开销或数据传输导致其未能充分利用<br> the observed throughput computed by dividing the number of queries by the Total Host Walltime. If this is significantly lower than the reciprocal of GPU Compute Time, the GPU may be under-utilized because of host-side overheads or data transfers.</p>
+</blockquote>
+<ol>
+<li>Latency</li>
+</ol>
+<blockquote>
+<p>该值由 H2D 延迟, GPU 计算时间, 和 D2H 延迟相加得到，是推断单个查询的延迟。<br> the summation of H2D Latency, GPU Compute Time, and D2H Latency. This is the latency to infer a single query.</p>
+</blockquote>
+<ol>
+<li>End-to-End Host Latency 主机侧端到端延迟</li>
+</ol>
+<blockquote>
+<p>单次查询的H2D被调用，到D2H完成所用的耗时，其包括等待之前查询完成所需时间。<br> the duration from when the H2D of a query is called to when the D2H of the same query is completed, which includes the latency to wait for the completion of the previous query. This is the latency of a query if multiple queries are enqueued consecutively.</p>
+</blockquote>
+<ol>
+<li>Enqueue Time 查询排队时间</li>
+</ol>
+<blockquote>
+<p>主机侧进行单次查询排队延迟。如果该值大于GPU计算时间，说明GPU可能没有被充分利用<br> the host latency to enqueue a query. If this is longer than GPU Compute Time, the GPU may be under-utilized.</p>
+</blockquote>
+<ol>
+<li>H2D Latency、Host to Device 延迟</li>
+</ol>
+<blockquote>
+<p>将单次查询的输入张量传输至设备侧引起的延时<br> the latency for host-to-device data transfers for input tensors of a single query.</p>
+</blockquote>
+<ol>
+<li>GPU Compute Time、GPU计算时间</li>
+</ol>
+<blockquote>
+<p>单次查询执行核函数引起的延时，用来衡量GPU用来完成计算（执行核函数）所需的时间<br> the GPU latency to execute the kernels for a query.</p>
+</blockquote>
+<ol>
+<li>D2H Latency、Device to Host 延迟</li>
+</ol>
+<blockquote>
+<p>将单次查询的输出张量传输至主机侧引起的延时<br> the latency for device-to-host data transfers for output tensors of a single query.</p>
+</blockquote>
+<ol>
+<li>Total Host Walltime、主机Walltime<a href="#fn1">[1]</a>总和</li>
+</ol>
+<blockquote>
+<p>主机侧首个查询开始排队到最后一个查询完成的Walltime总和<br> the host walltime from when the first query (after warmups) is enqueued to when the last query is completed.</p>
+</blockquote>
+<ol>
+<li>Total GPU Compute Time、GPU计算时间总和</li>
+</ol>
+<blockquote>
+<p>所有查询的GPU耗时的总和。如果该值显著低于Total Host Walltime，说明GPU可能由于主机侧的开销和数据传输导致GPU没有被充分利用。<br> the summation of the GPU Compute Time of all the queries. If this is significantly shorter than Total Host Walltime, the GPU may be under-utilized because of host-side overheads or data transfers.</p>
+</blockquote>
+<h3 id="A-3-1-2-Serialized-Engine-Generation"><a href="#A-3-1-2-Serialized-Engine-Generation" class="headerlink" title="A.3.1.2. Serialized Engine Generation"></a>A.3.1.2. Serialized Engine Generation</h3><p>如果您生成保存的序列化引擎文件，您可以将其拉入另一个运行推理的应用程序中。例如，您可以使用<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/tensorrt-laboratory">TensorRT 实验室</a>以完全流水线异步方式运行具有来自多个线程的多个执行上下文的引擎，以测试并行推理性能。有一些警告；例如，如果您使用 <code>Caffe prototxt</code> 文件并且未提供模型，则会生成随机权重。此外，在 <code>INT8</code> 模式下，使用随机权重，这意味着 <code>trtexec</code> 不提供校准功能。</p>
+<h3 id="A-3-1-3-trtexec"><a href="#A-3-1-3-trtexec" class="headerlink" title="A.3.1.3. trtexec"></a>A.3.1.3. trtexec</h3><p>如果您向<code>--timingCacheFile</code>选项提供时序缓存文件，则构建器可以从中加载现有的分析数据并在层分析期间添加新的分析数据条目。计时缓存文件可以在其他构建器实例中重用，以提高构建器执行时间。建议仅在相同的硬件/软件配置（例如，<code>CUDA/cuDNN/TensorRT</code> 版本、设备型号和时钟频率）中重复使用此缓存；否则，可能会出现功能或性能问题。</p>
+<h3 id="A-3-1-4-常用的命令行标志"><a href="#A-3-1-4-常用的命令行标志" class="headerlink" title="A.3.1.4. 常用的命令行标志"></a>A.3.1.4. 常用的命令行标志</h3><p>该部分列出了常用的trtexec命令行标志。</p>
+<p><strong>构建阶段的标志</strong></p>
+<ul>
+<li><p><code>--onnx=&lt;model&gt;</code> ：指定输入 ONNX 模型。</p>
+</li>
+<li><p><code>--deploy=&lt;caffe_prototxt&gt;</code> ：指定输入的 Caffe <code>prototxt</code>模型。</p>
+</li>
+<li><code>--uff=&lt;model&gt;</code>：指定输入 UFF 模型。</li>
+<li><code>--output=&lt;tensor&gt;</code> ：指定输出张量名称。仅当输入模型为 UFF 或 Caffe 格式时才需要。</li>
+<li><code>--maxBatch=&lt;BS&gt;</code>：指定构建引擎的最大批量大小。仅当输入模型为 UFF 或 Caffe 格式时才需要。如果输入模型是 ONNX 格式，请使用<code>--minShapes</code> 、 <code>--optShapes</code> 、 <code>--maxShapes</code>标志来控制输入形状的范围，包括批量大小。</li>
+<li><code>--minShapes=&lt;shapes&gt;</code> , <code>--optShapes=&lt;shapes&gt;</code> , <code>--maxShapes=&lt;shapes&gt;</code> ：指定用于构建引擎的输入形状的范围。仅当输入模型为 ONNX 格式时才需要。</li>
+<li><code>--workspace=&lt;size in MB&gt;</code> ：指定策略允许使用的最大工作空间大小。该标志已被弃用。您可以改用<code>--memPoolSize=&lt;pool_spec&gt;</code>标志。</li>
+<li><code>--memPoolSize=&lt;pool_spec&gt;</code> ：指定策略允许使用的工作空间的最大大小，以及 DLA 将分配的每个可加载的内存池的大小。</li>
+<li><code>--saveEngine=&lt;file&gt;</code> ：指定保存引擎的路径。</li>
+<li><code>--fp16</code> 、 <code>--int8</code> 、 <code>--noTF32</code> 、 <code>--best</code> ：指定网络级精度。</li>
+<li><code>--sparsity=[disable|enable|force]</code> ：指定是否使用支持结构化稀疏的策略。<ul>
+<li><code>disable</code>：使用结构化稀疏禁用所有策略。这是默认设置。</li>
+<li><code>enable</code> ：使用结构化稀疏启用策略。只有当 ONNX 文件中的权重满足结构化稀疏性的要求时，才会使用策略。</li>
+<li><code>force</code> ：使用结构化稀疏启用策略，并允许 <code>trtexec</code> 覆盖 <code>ONNX</code> 文件中的权重，以强制它们具有结构化稀疏模式。请注意，不会保留准确性，因此这只是为了获得推理性能。</li>
+</ul>
+</li>
+<li><code>--timingCacheFile=&lt;file&gt;</code> ：指定要从中加载和保存的时序缓存。</li>
+<li><code>--verbose</code> ：打开详细日志记录。</li>
+<li><code>--buildOnly</code> ：在不运行推理的情况下构建并保存引擎。</li>
+<li><code>--profilingVerbosity=[layer_names_only|detailed|none]</code> ：指定用于构建引擎的分析详细程度。</li>
+<li><code>--dumpLayerInfo , --exportLayerInfo=&lt;file&gt;</code> ：打印/保存引擎的层信息。</li>
+<li><code>--precisionConstraints=spec</code> ：控制精度约束设置。<ul>
+<li><code>none</code> ：没有限制。</li>
+<li><code>prefer</code> ：如果可能，满足<code>--layerPrecisions / --layerOutputTypes</code>设置的精度约束。</li>
+<li><code>obey</code>：满足由<code>--layerPrecisions / --layerOutputTypes</code>设置的精度约束，否则失败。</li>
+</ul>
+</li>
+<li><code>--layerPrecisions=spec</code> ：控制每层精度约束。仅当PrecisionConstraints设置为服从或首选时才有效。规范是从左到右阅读的，后面的会覆盖前面的。 “ * ”可以用作layerName来指定所有未指定层的默认精度。<ul>
+<li>例如： <code>--layerPrecisions=*:fp16</code>,<code>layer_1:fp32</code>将所有层的精度设置为<code>FP16</code> ，除了 <code>layer_1</code> 将设置为 <code>FP32</code>。</li>
+</ul>
+</li>
+<li><code>--layerOutputTypes=spec</code> ：控制每层输出类型约束。仅当<code>PrecisionConstraints</code>设置为服从或首选时才有效。规范是从左到右阅读的，后面的会覆盖前面的。 “ * ”可以用作<code>layerName</code>来指定所有未指定层的默认精度。如果一个层有多个输出，则可以为该层提供用“ + ”分隔的多种类型。<ul>
+<li>例如： <code>--layerOutputTypes=*:fp16</code>,<code>layer_1:fp32+fp16</code>将所有层输出的精度设置为<code>FP16</code> ，但 <code>layer_1</code> 除外，其第一个输出将设置为 <code>FP32</code>，其第二个输出将设置为 <code>FP16</code>。</li>
+</ul>
+</li>
+</ul>
+<p><strong>推理阶段的标志</strong></p>
+<ul>
+<li><code>--loadEngine=&lt;file&gt;</code> ：从序列化计划文件加载引擎，而不是从输入 ONNX、UFF 或 Caffe 模型构建引擎。</li>
+<li><code>--batch=&lt;N&gt;</code> ：指定运行推理的批次大小。仅当输入模型为 UFF 或 Caffe 格式时才需要。如果输入模型是 ONNX 格式，或者引擎是使用显式批量维度构建的，请改用<code>--shapes</code> 。</li>
+<li><code>--shapes=&lt;shapes&gt;</code> ：指定要运行推理的输入形状。</li>
+<li><code>--warmUp=&lt;duration in ms&gt;</code>, <code>--duration=&lt;duration in seconds&gt;</code> , <code>--iterations=&lt;N&gt;</code> : 指定预热运行的最短持续时间、推理运行的最短持续时间和推理运行的迭代。例如，设置<code>--warmUp=0 --duration=0 --iterations</code>允许用户准确控制运行推理的迭代次数。</li>
+<li><code>--useCudaGraph</code> ：将推理捕获到 CUDA 图并通过启动图来运行推理。当构建的 TensorRT 引擎包含 CUDA 图捕获模式下不允许的操作时，可以忽略此参数。</li>
+<li><code>--noDataTransfers</code> ：关闭主机到设备和设备到主机的数据传输。</li>
+<li><code>--streams=&lt;N&gt;</code> ：并行运行多个流的推理。</li>
+<li><code>--verbose</code> ：打开详细日志记录。</li>
+<li><code>--dumpProfile, --exportProfile=&lt;file&gt;</code>：打印/保存每层性能配置文件。</li>
+</ul>
+<p>有关所有受支持的标志和详细说明，请参阅<code>trtexec --help</code> 。</p>
+<p>有关如何构建此工具及其使用示例的详细信息，请参阅<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/samples/trtexec">GitHub：trtexec/README.md</a>文件。</p>
+<h2 id="trtexec输出概述"><a href="#trtexec输出概述" class="headerlink" title="trtexec输出概述"></a>trtexec输出概述</h2><p>trtexec输出的结果有一段内容如下：</p>
+<p>可以看出<code>Performance summary</code>的内容解释如下</p>
+<p>=== 性能指标说明 ===</p>
+<ul>
+<li>Total Host Walltime：从第一个查询（预热后）排队到最后一个查询完成时的主机挂起时间。</li>
+<li>GPU Compute Time：执行查询内核的 GPU 延迟。</li>
+<li>Total GPU Compute Time：所有查询的 GPU 计算时间总和。如果总计算时间明显短于Total Host Walltime，那么 GPU 可能因为主机端开销或数据传输而未得到充分利用。</li>
+<li>Throughput：通过将查询数除以Total Host Walltime 计算得出的观察到的吞吐量。如果这明显低于 GPU Compute Time的倒数，则 GPU 可能由于主机端开销或数据传输而未得到充分利用。<ul>
+<li><strong>Throughput</strong> 是衡量模型整体性能的重要指标。它表示每秒可以处理的查询数越多，模型的性能就越好。</li>
+<li><strong>GPU Compute Time</strong> 是衡量模型推理计算性能的重要指标。它表示模型在 GPU 上进行实际计算所花费的时间越短，模型的性能就越好。</li>
+</ul>
+</li>
+<li>Enqueue Time:：将查询入队的主机延迟。如果这比 GPU 计算时间长，则 GPU 可能未得到充分利用。</li>
+<li>H2D Latency：单个查询的输入张量的主机到设备数据传输的延迟。</li>
+<li>D2H Latency：单个查询的输出张量的设备到主机数据传输的延迟。</li>
+<li>Latency：H2D Latency、GPU Compute Time和 D2H Latency的总和。这是推断单个查询的延迟。</li>
+<li>End-to-End Host Latency：从调用查询的 H2D 到同一查询的 D2H 完成的持续时间，其中包括等待上一个查询完成的延迟。这是多个查询连续排队时查询的延迟。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">[10/01/2019-00:03:33] [I] === Performance summary ===</span><br><span class="line">[10/01/2019-00:03:33] [I] Throughput: 90.9004 qps</span><br><span class="line">[10/01/2019-00:03:33] [I] Latency: min = 11.1738 ms, max = 11.6914 ms, mean = 11.2522 ms, median = 11.25 ms, percentile(99%) = 11.291 ms</span><br><span class="line">[10/01/2019-00:03:33] [I] End-to-End Host Latency: min = 11.1875 ms, max = 11.7305 ms, mean = 11.2657 ms, median = 11.2646 ms, percentile(99%) = 11.3057 ms</span><br><span class="line">[10/01/2019-00:03:33] [I] Enqueue Time: min = 10.8203 ms, max = 11.3086 ms, mean = 10.9017 ms, median = 10.9004 ms, percentile(99%) = 10.9365 ms</span><br><span class="line">[10/01/2019-00:03:33] [I] H2D Latency: min = 0.34375 ms, max = 0.445313 ms, mean = 0.412366 ms, median = 0.412109 ms, percentile(99%) = 0.417969 ms</span><br><span class="line">[10/01/2019-00:03:33] [I] GPU Compute Time: min = 10.4883 ms, max = 10.918 ms, mean = 10.5202 ms, median = 10.5195 ms, percentile(99%) = 10.5547 ms</span><br><span class="line">[10/01/2019-00:03:33] [I] D2H Latency: min = 0.28125 ms, max = 0.347656 ms, mean = 0.319619 ms, median = 0.320313 ms, percentile(99%) = 0.328125 ms</span><br><span class="line">[10/01/2019-00:03:33] [I] Total Host Walltime: 55.0053 s</span><br><span class="line">[10/01/2019-00:03:33] [I] Total GPU Compute Time: 52.6011 s</span><br><span class="line">[10/01/2019-00:03:33] [W] * Throughput may be bound by Enqueue Time rather than GPU Compute and the GPU may be under-utilized.</span><br><span class="line">[10/01/2019-00:03:33] [W]   If not already <span class="keyword">in</span> use, --useCudaGraph (utilize CUDA graphs <span class="built_in">where</span> possible) may increase the throughput.</span><br><span class="line">[10/01/2019-00:03:33] [I] Explanations of the performance metrics are printed <span class="keyword">in</span> the verbose logs.</span><br><span class="line">[10/01/2019-00:03:33] [V] </span><br><span class="line">[10/01/2019-00:03:33] [V] === Explanations of the performance metrics ===</span><br><span class="line">[10/01/2019-00:03:33] [V] Total Host Walltime: the host walltime from when the first query (after warmups) is enqueued to when the last query is completed.</span><br><span class="line">[10/01/2019-00:03:33] [V] GPU Compute Time: the GPU latency to execute the kernels <span class="keyword">for</span> a query.</span><br><span class="line">[10/01/2019-00:03:33] [V] Total GPU Compute Time: the summation of the GPU Compute Time of all the queries. If this is significantly shorter than Total Host Walltime, the GPU may be under-utilized because of host-side overheads or data transfers.</span><br><span class="line">[10/01/2019-00:03:33] [V] Throughput: the observed throughput computed by dividing the number of queries by the Total Host Walltime. If this is significantly lower than the reciprocal of GPU Compute Time, the GPU may be under-utilized because of host-side overheads or data transfers.</span><br><span class="line">[10/01/2019-00:03:33] [V] Enqueue Time: the host latency to enqueue a query. If this is longer than GPU Compute Time, the GPU may be under-utilized.</span><br><span class="line">[10/01/2019-00:03:33] [V] H2D Latency: the latency <span class="keyword">for</span> host-to-device data transfers <span class="keyword">for</span> input tensors of a single query.</span><br><span class="line">[10/01/2019-00:03:33] [V] D2H Latency: the latency <span class="keyword">for</span> device-to-host data transfers <span class="keyword">for</span> output tensors of a single query.</span><br><span class="line">[10/01/2019-00:03:33] [V] Latency: the summation of H2D Latency, GPU Compute Time, and D2H Latency. This is the latency to infer a single query.</span><br><span class="line">[10/01/2019-00:03:33] [V] End-to-End Host Latency: the duration from when the H2D of a query is called to when the D2H of the same query is completed, <span class="built_in">which</span> includes the latency to <span class="built_in">wait</span> <span class="keyword">for</span> the completion of the previous query. This is the latency of a query <span class="keyword">if</span> multiple queries are enqueued consecutively.</span><br><span class="line">[10/01/2019-00:03:33] [I] </span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/17-TensorRT%E7%9A%84%E5%91%BD%E4%BB%A4%E8%A1%8C%E7%A8%8B%E5%BA%8F/" title="17-TensorRT的命令行程序">http://example.com/TensorRT/TensorRT中文版开发手册/17-TensorRT的命令行程序/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+              <a href="/tags/Tensorrt/" rel="tag"><i class="fa fa-tag"></i> Tensorrt</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/16-TensorRT%E7%9A%84%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F%E5%AE%9A%E4%B9%89%E8%AF%A6%E8%A7%A3/" rel="prev" title="16-TensorRT的数据格式定义详解">
+                  <i class="fa fa-chevron-left"></i> 16-TensorRT的数据格式定义详解
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/2-TensorRT%E7%9A%84%E8%83%BD%E5%8A%9B/" rel="next" title="2-TensorRT的能力">
+                  2-TensorRT的能力 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"6fb085ad032b556e47b2780f563e4a48"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

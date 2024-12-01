@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="1 背景本文档是记录学习Nvidia官方B站的视频，参考对应的PDF文件 TensorRTTraining-TRT8.6.1-Part5-V1.1.pdf 的记录。对应的官方代码[trt-samples-for-hackathon-cn]">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Part5-1-TensorRT性能优化概述">
+<meta property="og:url" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="1 背景本文档是记录学习Nvidia官方B站的视频，参考对应的PDF文件 TensorRTTraining-TRT8.6.1-Part5-V1.1.pdf 的记录。对应的官方代码[trt-samples-for-hackathon-cn]">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/image-20241022204349489.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/image-20241106112558549.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/image-20241106143223829.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/image-20241106143622136.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/image-20241106145621194.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/image-20241106153021106.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/image-20241106153037346.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/image-20241106150908297.png">
+<meta property="article:published_time" content="2024-12-01T10:13:45.506Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.506Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="GPU">
+<meta property="article:tag" content="Tensorrt">
+<meta property="article:tag" content="Plugin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/image-20241022204349489.png">
+
+
+<link rel="canonical" href="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/","path":"TensorRT/TensorRT教程-基于8.6.1/Part5-1-TensorRT性能优化概述/","title":"Part5-1-TensorRT性能优化概述"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Part5-1-TensorRT性能优化概述 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E8%83%8C%E6%99%AF"><span class="nav-text">1 背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0"><span class="nav-text">2 TensorRT性能优化概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-GPU-specifications"><span class="nav-text">2.1 GPU specifications</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E4%BC%98%E5%8C%96%E7%9B%AE%E6%A0%87"><span class="nav-text">2.2 优化目标</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E4%BC%98%E5%8C%96%E6%B5%81%E7%A8%8B"><span class="nav-text">2.3 优化流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-A-simple-optimization-example"><span class="nav-text">2.4 A simple optimization example</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-%E5%88%A4%E6%96%AD%E6%98%AF%E5%90%A6%E6%98%AFGEMM-kernel"><span class="nav-text">2.5 判断是否是GEMM kernel</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-text">附录</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Part5-1-TensorRT性能优化概述 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Part5-1-TensorRT性能优化概述
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8-6-1/" itemprop="url" rel="index"><span itemprop="name">TensorRT教程-基于8.6.1</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-背景"><a href="#1-背景" class="headerlink" title="1 背景"></a>1 背景</h1><p>本文档是记录学习Nvidia官方B站的<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1jj411Z7wG?spm_id_from=333.788.videopod.sections&amp;vd_source=cde2e7b9bca1a7048a13eaf0b48210b6">视频</a>，参考对应的PDF文件 TensorRTTraining-TRT8.6.1-Part5-V1.1.pdf 的记录。对应的官方代码<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/trt-samples-for-hackathon-cn">[trt-samples-for-hackathon-cn]</a></p>
+<p>官方的视频教程基于TensorRT8.6.1版本。但是官方代码没有对应的tag。只有8.4、8.5和截至目前最新的8.10（master分支）。因此我这里参考的都是8.4分支的代码。</p>
+<ul>
+<li>part1 TensorRT简介</li>
+<li>part2 开发辅助工具</li>
+<li>part3 插件书写</li>
+<li>part4 TensorRT高级用法</li>
+<li>part5 常见优化策略</li>
+</ul>
+<img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/image-20241022204349489.png" class="" title="image-20241022204349489">
+<p>这一部分为第五部分，对应上面的常见优化策略</p>
+<h1 id="2-TensorRT性能优化概述"><a href="#2-TensorRT性能优化概述" class="headerlink" title="2 TensorRT性能优化概述"></a>2 TensorRT性能优化概述</h1><ul>
+<li>性能优化的核心是充分发挥GPU算力</li>
+<li>Nsight system是分析性能瓶颈的关键工具</li>
+<li>trtexec除了构建engine，也是非常实用的性能测试工具</li>
+<li>计算图优化和TRT plugin是性能优化的主要手段</li>
+<li>本次讲座主要基于Framework-&gt;ONNX-&gt;TRT workflow</li>
+</ul>
+<h2 id="2-1-GPU-specifications"><a href="#2-1-GPU-specifications" class="headerlink" title="2.1 GPU specifications"></a>2.1 GPU specifications</h2><ul>
+<li>最主要的算里来自Tensor Core ,要充分发挥Tensor Core算力</li>
+<li>数据类型：TF32，FP16，INT8，FP8</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://resources.nvidia.com/en-us-tensor-core/nvidia-tensor-core-gpu-datasheet">https://resources.nvidia.com/en-us-tensor-core/nvidia-tensor-core-gpu-datasheet</a></p>
+<img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/image-20241106112558549.png" class="" title="image-20241106112558549">
+<h2 id="2-2-优化目标"><a href="#2-2-优化目标" class="headerlink" title="2.2 优化目标"></a>2.2 优化目标</h2><ul>
+<li>推理框架的性能优化的目标：<ul>
+<li>尽可能地把所有非GEMM kernel融合起来(不是GEMM的kernel给融合进GEMMkernel中，融合不了的尽可能将这部分融合为一个GEMM kernel)</li>
+<li>GEMM kernel (Tensor Core )占比较高，例如在90%以上</li>
+</ul>
+</li>
+</ul>
+<p>GEMM kernel就是计算密集型的kernel。</p>
+<p><strong>常见的 GEMM 操作包括：</strong></p>
+<ol>
+<li><strong>全连接层（Fully Connected Layer）：</strong><ul>
+<li>全连接层的计算可以表示为 <script type="math/tex">Y=W×X+b</script>，其中 W是权重矩阵，X是输入特征向量，b是偏置向量。</li>
+<li>TensorRT 会将全连接层的计算转换为 GEMM 操作。</li>
+</ul>
+</li>
+<li><strong>卷积层（Convolutional Layer）</strong>：<ul>
+<li>卷积层的计算可以通过 Im2Col 或 Winograd 等技术转换为 GEMM 操作。</li>
+<li>Im2Col 技术将输入特征图展开成一个矩阵，卷积核也展开成一个矩阵，然后进行矩阵乘法操作。</li>
+<li>Winograd 算法通过减少卷积操作中的乘法次数，进一步提高计算效率。</li>
+</ul>
+</li>
+<li><strong>矩阵乘法（Matrix Multiplication）</strong>：<ul>
+<li>直接的矩阵乘法操作，如 <script type="math/tex">C=A×B</script></li>
+</ul>
+</li>
+<li><strong>RNN 和 LSTM 层</strong>：<ul>
+<li>RNN 和 LSTM 层中的门控计算（如输入门、遗忘门、输出门）涉及大量的矩阵乘法操作，这些操作可以转换为 GEMM 操作。</li>
+</ul>
+</li>
+</ol>
+<p><strong>非 GEMM 操作</strong></p>
+<p>非 GEMM 操作包括各种其他类型的计算，如激活函数、池化、归一化等。常见的非 GEMM 操作包括：</p>
+<ol>
+<li><p><strong>激活函数（Activation Functions）</strong>：</p>
+<ul>
+<li><p>ReLU（Rectified Linear Unit）</p>
+</li>
+<li><p>Sigmoid：</p>
+</li>
+<li><p>Tanh：</p>
+</li>
+<li><p>Leaky ReLU</p>
+</li>
+</ul>
+</li>
+<li><p><strong>池化层（Pooling Layer）</strong>：</p>
+<ul>
+<li>最大池化（Max Pooling）：在每个池化区域中选择最大值。</li>
+<li>平均池化（Average Pooling）：在每个池化区域中计算平均值。</li>
+</ul>
+</li>
+<li><p><strong>归一化层（Normalization Layer）</strong>：</p>
+<ul>
+<li>批归一化（Batch Normalization）：对每个 mini-batch 的数据进行归一化处理。</li>
+<li>层归一化（Layer Normalization）：对每个样本的特征进行归一化处理。</li>
+</ul>
+</li>
+<li><p><strong>裁剪层（Clipping Layer）</strong>：</p>
+<ul>
+<li>将输入值限制在一个指定的范围内，如 <script type="math/tex">f(x)=min⁡(max⁡(x,min_value),max_value)</script></li>
+</ul>
+</li>
+<li><p><strong>重塑层（Reshape Layer）</strong>：</p>
+<ul>
+<li>改变张量的形状，但不改变其数据。</li>
+</ul>
+</li>
+<li><p><strong>转置层（Transpose Layer）</strong>：</p>
+<ul>
+<li>交换张量的维度，如将 (N,C,H,W)转换为 (N,H,W,C)。</li>
+</ul>
+</li>
+<li><p><strong>拼接层（Concatenation Layer）</strong>：</p>
+<ul>
+<li>将多个张量沿着指定的维度拼接在一起。</li>
+</ul>
+</li>
+<li><p><strong>切片层（Slice Layer）</strong>：</p>
+<ul>
+<li>从张量中提取子张量。</li>
+</ul>
+</li>
+<li><p><strong>广播层（Broadcast Layer）</strong>：</p>
+<ul>
+<li>将张量广播到更大的形状。</li>
+</ul>
+</li>
+<li><p><strong>点积层（Dot Product Layer）</strong>：</p>
+<ul>
+<li>计算两个张量的点积。</li>
+</ul>
+</li>
+<li><p><strong>元素-wise 操作（Element-wise Operations）</strong>：</p>
+</li>
+</ol>
+<ul>
+<li>如加法、减法、乘法、除法等，这些操作在每个元素上独立进行。</li>
+</ul>
+<img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/image-20241106143223829.png" class="" title="image-20241106143223829">
+<h2 id="2-3-优化流程"><a href="#2-3-优化流程" class="headerlink" title="2.3 优化流程"></a>2.3 优化流程</h2><ol>
+<li>Run Framework-&gt;ONNX-&gt;TRT to get baseline</li>
+<li>Profile and find perf bottleneck</li>
+<li>Optimize with ONNX-graphsurgeon（图优化） and TRT plugin</li>
+<li>Repeat step2 and step3 until satisfied</li>
+</ol>
+<h2 id="2-4-A-simple-optimization-example"><a href="#2-4-A-simple-optimization-example" class="headerlink" title="2.4 A simple optimization example"></a>2.4 A simple optimization example</h2><ul>
+<li>FaceNet<ul>
+<li>CNN网络，人脸识别</li>
+</ul>
+</li>
+<li>性能瓶颈：<ul>
+<li>重复的Transpose</li>
+<li>没有融合Conv+BatchNorm+Relu</li>
+</ul>
+</li>
+</ul>
+<img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/image-20241106143622136.png" class="" title="image-20241106143622136">
+<p>上面有两个 Transpose，</p>
+<p>从nsys分析timeLine 理解对应的kernel与计算图做关联，可能是一对多或者多对一的关系</p>
+<img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/image-20241106145621194.png" class="" title="image-20241106145621194">
+<p>上图中非GEMM kernel占比超过了50%。</p>
+<p>其中：</p>
+<ul>
+<li><p><code>copyPackedKernel</code> 是一个常见的内核，用于在不同内存布局之间复制数据。这个内核通常出现在数据预处理或后处理阶段，尤其是在数据格式转换和内存对齐操作中。要确定 <code>copyPackedKernel</code> 对应的 ONNX 操作（op），可以考虑以下几个常见的场景和操作。</p>
+<p>对应常见的 ONNX 操作</p>
+<ol>
+<li><strong>Reshape 操作</strong>：<ul>
+<li><code>Reshape</code> 操作用于改变张量的形状，但不改变其数据。在某些情况下，<code>Reshape</code> 操作可能需要重新排列内存中的数据，这可能会触发 <code>copyPackedKernel</code>。</li>
+</ul>
+</li>
+<li><strong>Transpose 操作</strong>：<ul>
+<li><code>Transpose</code> 操作用于交换张量的维度。在某些情况下，<code>Transpose</code> 操作可能需要重新排列内存中的数据，这可能会触发 <code>copyPackedKernel</code>。</li>
+</ul>
+</li>
+<li><strong>Concat 操作</strong>：<ul>
+<li><code>Concat</code> 操作用于沿指定维度拼接多个张量。在某些情况下，<code>Concat</code> 操作可能需要重新排列内存中的数据，这可能会触发 <code>copyPackedKernel</code>。</li>
+</ul>
+</li>
+<li><strong>Split 操作</strong>：<ul>
+<li><code>Split</code> 操作用于将一个张量沿指定维度分割成多个子张量。在某些情况下，<code>Split</code> 操作可能需要重新排列内存中的数据，这可能会触发 <code>copyPackedKernel</code>。</li>
+</ul>
+</li>
+<li><strong>Squeeze 和 Unsqueeze 操作</strong>：<ul>
+<li><code>Squeeze</code> 操作用于删除张量中大小为 1 的维度，而 <code>Unsqueeze</code> 操作用于插入大小为 1 的维度。在某些情况下，这些操作可能需要重新排列内存中的数据，这可能会触发 <code>copyPackedKernel</code>。</li>
+</ul>
+</li>
+<li><strong>Pad 操作</strong>：<ul>
+<li><code>Pad</code> 操作用于在张量的边缘填充数据。在某些情况下，<code>Pad</code> 操作可能需要重新排列内存中的数据，这可能会触发 <code>copyPackedKernel</code>。</li>
+</ul>
+</li>
+<li><strong>Gather 和 Scatter 操作</strong>：<ul>
+<li><code>Gather</code> 操作用于从张量中收集数据，而 <code>Scatter</code> 操作用于将数据分散到张量中。在某些情况下，这些操作可能需要重新排列内存中的数据，这可能会触发 <code>copyPackedKernel</code>。</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p><code>permutationKernelPLC3</code> 是一个内核，通常用于处理张量的维度置换（Permutation）。这种内核通常对应于 ONNX 中的 <code>Transpose</code> 操作</p>
+</li>
+<li><p><code>generatedNativePointwise</code> 的 kernel 通常与 <strong>逐元素操作（element-wise operations）</strong> 相关。这个 kernel 名称并不是直接对应于某一个 ONNX 操作符的标准名称，而是 NVIDIA TensorRT 中内部生成的一个高效实现，用于处理一些常见的逐元素操作，比如加法、乘法、激活函数<code>generatedNativePointwise</code> 内核通常与以下几类 ONNX 操作（op）相关：</p>
+<ol>
+<li><strong>逐元素激活函数</strong>：<ul>
+<li><strong>Relu</strong> (<code>Relu</code>)</li>
+<li><strong>Sigmoid</strong> (<code>Sigmoid</code>)</li>
+<li><strong>Tanh</strong> (<code>Tanh</code>)</li>
+<li><strong>LeakyRelu</strong> (<code>LeakyRelu</code>)</li>
+<li><strong>Softmax</strong> (<code>Softmax</code>)</li>
+<li><strong>Mish</strong> (<code>Mish</code>)</li>
+</ul>
+</li>
+<li><strong>逐元素数学操作</strong>：<ul>
+<li><strong>Add</strong> (<code>Add</code>)</li>
+<li><strong>Sub</strong> (<code>Sub</code>)</li>
+<li><strong>Mul</strong> (<code>Mul</code>)</li>
+<li><strong>Div</strong> (<code>Div</code>)</li>
+<li><strong>Pow</strong> (<code>Pow</code>)</li>
+<li><strong>Abs</strong> (<code>Abs</code>)</li>
+<li><strong>Exp</strong> (<code>Exp</code>)</li>
+<li><strong>Sqrt</strong> (<code>Sqrt</code>)</li>
+<li><strong>Ceil</strong> (<code>Ceil</code>)</li>
+<li><strong>Floor</strong> (<code>Floor</code>)</li>
+<li><strong>Clip</strong> (<code>Clip</code>)</li>
+</ul>
+</li>
+<li><strong>逐元素比较操作</strong>：<ul>
+<li><strong>Equal</strong> (<code>Equal</code>)</li>
+<li><strong>Greater</strong> (<code>Greater</code>)</li>
+<li><strong>Less</strong> (<code>Less</code>)</li>
+<li><strong>NotEqual</strong> (<code>NotEqual</code>)</li>
+<li><strong>GreaterOrEqual</strong> (<code>GreaterOrEqual</code>)</li>
+<li><strong>LessOrEqual</strong> (<code>LessOrEqual</code>)</li>
+</ul>
+</li>
+</ol>
+</li>
+</ul>
+<p>结合onnx来看就是<code>Transpose</code>和<code>Relu</code>占用了太多的时间，我们希望<code>Relu</code>融合进 Conv BN。Transpose不是必须的。因为例如NCHW到NHWC没有存在的意义。直接去掉上图中<code>Relu</code>两侧的<code>Transpose</code></p>
+<ul>
+<li><p>解决方案：</p>
+<ul>
+<li>通过onnx-graphsurgeon去除重复的transpose</li>
+</ul>
+</li>
+<li><p>代码示例：</p>
+<img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/image-20241106153021106.png" class="" title="image-20241106153021106">
+</li>
+<li><p>优化效果：</p>
+<ul>
+<li>去除Transpose后实现两倍吞吐</li>
+<li>使用INT8和multi stream可以达到四倍吞吐</li>
+</ul>
+</li>
+</ul>
+<img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/image-20241106153037346.png" class="" title="image-20241106153037346">
+<h2 id="2-5-判断是否是GEMM-kernel"><a href="#2-5-判断是否是GEMM-kernel" class="headerlink" title="2.5 判断是否是GEMM kernel"></a>2.5 判断是否是GEMM kernel</h2><p><strong>如何得知onnx的op经过tensorRT转换后的kernel是不是GEMM 的kernel呢？</strong></p>
+<p>视频没有讲，我的理解可以从trtexec转换engine的日志看出一些，在日志中<code>Set Tactic Name</code>的name可以看出带有<code>gemm</code>字符的就应该是GEMM kernel了，例如：</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">[12/01/2023-06:45:46] [V] [TRT] &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; Chose Runner Type: CaskConvolution Tactic: 0x3d988d07a78b0918</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] *************** Autotuning format combination: Int8(614400,614400:32,960,1) -&gt; Int8(153600,153600:32,480,1) ***************</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] --------------- Timing Runner: model.model.backbone0.conv.weight + /model/backbone0/conv/_weight_quantizer/QuantizeLinear + /model/backbone0/conv/Conv (CudaGroupConvolution)</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] CudaGroupConvolution has no valid tactics for this config, skipping</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] --------------- Timing Runner: model.model.backbone0.conv.weight + /model/backbone0/conv/_weight_quantizer/QuantizeLinear + /model/backbone0/conv/Conv (CudaDepthwiseConvolution)</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] CudaDepthwiseConvolution has no valid tactics for this config, skipping</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] --------------- Timing Runner: model.model.backbone0.conv.weight + /model/backbone0/conv/_weight_quantizer/QuantizeLinear + /model/backbone0/conv/Conv (FusedConvActConvolution)</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] FusedConvActConvolution has no valid tactics for this config, skipping</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] --------------- Timing Runner: model.model.backbone0.conv.weight + /model/backbone0/conv/_weight_quantizer/QuantizeLinear + /model/backbone0/conv/Conv (CaskConvolution)</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] model.model.backbone0.conv.weight + /model/backbone0/conv/_weight_quantizer/QuantizeLinear + /model/backbone0/conv/Conv Set Tactic Name: sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize64x96x64_stage3_warpsize2x2x1_g1_tensor16x8x32_t1r3s3 Tactic: 0x028e842ce51fbd9d</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] Tactic: 0x028e842ce51fbd9d Time: 0.323858</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] model.model.backbone0.conv.weight + /model/backbone0/conv/_weight_quantizer/QuantizeLinear + /model/backbone0/conv/Conv Set Tactic Name: sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize256x96x64_stage3_warpsize4x1x1_g1_tensor16x8x32 Tactic: 0x048dc59a1807b5bb</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] Tactic: 0x048dc59a1807b5bb Time: 0.473294</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] model.model.backbone0.conv.weight + /model/backbone0/conv/_weight_quantizer/QuantizeLinear + /model/backbone0/conv/Conv Set Tactic Name: sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize128x192x64_stage3_warpsize4x2x1_g1_tensor16x8x32 Tactic: 0x0f6ba1e5b0320393</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] Tactic: 0x0f6ba1e5b0320393 Time: 0.576841</span><br><span class="line">.......</span><br><span class="line"></span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] model.model.backbone0.conv.weight + /model/backbone0/conv/_weight_quantizer/QuantizeLinear + /model/backbone0/conv/Conv Set Tactic Name: sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize32x64x64_stage6_warpsize2x2x1_g1_tensor16x8x32 Tactic: 0x8e1e9d670448aca7</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] Tactic: 0x8e1e9d670448aca7 Time: 0.386953</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] model.model.backbone0.conv.weight + /model/backbone0/conv/_weight_quantizer/QuantizeLinear + /model/backbone0/conv/Conv Set Tactic Name: sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize96x32x64_stage4_warpsize2x1x1_g1_tensor16x8x32_t1r3s3 Tactic: 0x9262f8f95beb428d</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] Tactic: 0x9262f8f95beb428d Time: 0.181481</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] model.model.backbone0.conv.weight + /model/backbone0/conv/_weight_quantizer/QuantizeLinear + /model/backbone0/conv/Conv Set Tactic Name: sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize64x32x64_stage6_warpsize2x1x1_g1_tensor16x8x32 Tactic: 0x955d593b1135a423</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] Tactic: 0x955d593b1135a423 Time: 0.241339</span><br><span class="line">.........</span><br><span class="line"></span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] model.model.backbone0.conv.weight + /model/backbone0/conv/_weight_quantizer/QuantizeLinear + /model/backbone0/conv/Conv Set Tactic Name: sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize64x64x64_stage6_warpsize2x2x1_g1_tensor16x8x32 Tactic: 0xf56c0ac895d82363</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] Tactic: 0xf56c0ac895d82363 Time: 0.318222</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] model.model.backbone0.conv.weight + /model/backbone0/conv/_weight_quantizer/QuantizeLinear + /model/backbone0/conv/Conv Set Tactic Name: sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize256x128x64_stage4_warpsize4x2x1_g1_tensor16x8x32_t1r3s3 Tactic: 0xf8d4389f60adfa3c</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] Tactic: 0xf8d4389f60adfa3c Time: 0.381161</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] Fastest Tactic: 0x9262f8f95beb428d Time: 0.181481</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt; Chose Runner Type: CaskConvolution Tactic: 0x9262f8f95beb428d</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] =============== Computing costs for </span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] *************** Autotuning format combination: Int8(4915200,153600,480,1) -&gt; Int8(2457600,38400,240,1) ***************</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] --------------- Timing Runner: model.model.backbone1.conv.weight + /model/backbone1/conv/_weight_quantizer/QuantizeLinear + /model/backbone1/conv/Conv (CaskConvolution)</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] CaskConvolution has no valid tactics for this config, skipping</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] *************** Autotuning format combination: Int8(1228800,153600:4,480,1) -&gt; Int8(614400,38400:4,240,1) ***************</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] --------------- Timing Runner: model.model.backbone1.conv.weight + /model/backbone1/conv/_weight_quantizer/QuantizeLinear + /model/backbone1/conv/Conv (CudaDepthwiseConvolution)</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] CudaDepthwiseConvolution has no valid tactics for this config, skipping</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] --------------- Timing Runner: model.model.backbone1.conv.weight + /model/backbone1/conv/_weight_quantizer/QuantizeLinear + /model/backbone1/conv/Conv (FusedConvActConvolution)</span><br><span class="line">[12/01/2023-06:45:46] [V] [TRT] FusedConvActConvolution has no valid tactics for this config, skipping</span><br></pre></td></tr></table></figure>
+<p>另外也可以从nsys的 cuda API看出来，如下图</p>
+<img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/image-20241106150908297.png" class="" title="image-20241106150908297">
+<h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://resources.nvidia.com/en-us-tensor-core/nvidia-tensor-core-gpu-datasheet">https://resources.nvidia.com/en-us-tensor-core/nvidia-tensor-core-gpu-datasheet</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/" title="Part5-1-TensorRT性能优化概述">http://example.com/TensorRT/TensorRT教程-基于8.6.1/Part5-1-TensorRT性能优化概述/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+              <a href="/tags/Tensorrt/" rel="tag"><i class="fa fa-tag"></i> Tensorrt</a>
+              <a href="/tags/Plugin/" rel="tag"><i class="fa fa-tag"></i> Plugin</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part4-TensorRT%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/" rel="prev" title="Part4-TensorRT高级用法">
+                  <i class="fa fa-chevron-left"></i> Part4-TensorRT高级用法
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-2-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/" rel="next" title="Part5-2-TensorRT性能优化性能分析工具">
+                  Part5-2-TensorRT性能优化性能分析工具 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"77d5ac9f5d47340d0670cd11d24b1da8"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

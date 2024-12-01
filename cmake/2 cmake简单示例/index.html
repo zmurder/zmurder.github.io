@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="2 cmake简单示例2.1 编译单个源文件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2 cmake简单示例">
+<meta property="og:url" content="http://example.com/cmake/2%20cmake%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="2 cmake简单示例2.1 编译单个源文件">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/cmake/2%20cmake%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/image-20220629112803675.png">
+<meta property="og:image" content="http://example.com/cmake/2%20cmake%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/image-20220629112911740.png">
+<meta property="og:image" content="http://example.com/cmake/2%20cmake%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/image-20220629135327927.png">
+<meta property="og:image" content="http://example.com/cmake/2%20cmake%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/image-20220629144137867.png">
+<meta property="og:image" content="http://example.com/cmake/2%20cmake%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/image-20220629145748184.png">
+<meta property="article:published_time" content="2024-12-01T10:13:45.597Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.597Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="cmake">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/cmake/2%20cmake%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/image-20220629112803675.png">
+
+
+<link rel="canonical" href="http://example.com/cmake/2%20cmake%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/cmake/2%20cmake%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/","path":"cmake/2 cmake简单示例/","title":"2 cmake简单示例"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>2 cmake简单示例 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#2-cmake%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B"><span class="nav-text">2 cmake简单示例</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E7%BC%96%E8%AF%91%E5%8D%95%E4%B8%AA%E6%BA%90%E6%96%87%E4%BB%B6"><span class="nav-text">2.1 编译单个源文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E7%BC%96%E8%AF%91%E5%A4%9A%E4%B8%AA%E6%BA%90%E6%96%87%E4%BB%B6"><span class="nav-text">2.2 编译多个源文件</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1-%E5%90%8C%E4%B8%80%E7%9B%AE%E5%BD%95%E5%A4%9A%E4%B8%AA%E6%BA%90%E6%96%87%E4%BB%B6"><span class="nav-text">2.2.1 同一目录多个源文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2-%E5%A4%9A%E4%B8%AA%E7%9B%AE%E5%BD%95%EF%BC%8C%E5%A4%9A%E4%B8%AA%E6%BA%90%E6%96%87%E4%BB%B6"><span class="nav-text">2.2.2 多个目录，多个源文件</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E7%BC%96%E8%AF%91%E5%BA%93"><span class="nav-text">2.3 编译库</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-%E4%BD%BF%E7%94%A8%E5%85%B6%E4%BB%96%E5%BA%93"><span class="nav-text">2.4 使用其他库</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-1-%E5%BA%93%E7%9A%84%E7%9B%B8%E4%BA%92%E4%BE%9D%E8%B5%96"><span class="nav-text">2.4.1 库的相互依赖</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91"><span class="nav-text">2.5 交叉编译</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-1-arm-linux"><span class="nav-text">2.5.1 arm-linux</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-1-1-%E8%AE%BE%E7%BD%AE%E7%B3%BB%E7%BB%9F%E5%92%8C%E5%B7%A5%E5%85%B7%E9%93%BE"><span class="nav-text">2.5.1.1. 设置系统和工具链</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-1-2-%E5%B7%A5%E5%85%B7%E9%93%BE%E6%96%87%E4%BB%B6"><span class="nav-text">2.5.1.2. 工具链文件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-1-3-%E7%BC%96%E8%AF%91"><span class="nav-text">2.5.1.3 编译</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-2-%E5%AE%98%E6%96%B9%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="nav-text">2.5.2 官方的例子</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-2-1-Cross-Compiling-for-Linux"><span class="nav-text">2.5.2.1 Cross Compiling for Linux</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-2-2-Cross-Compiling-for-QNX"><span class="nav-text">2.5.2.2 Cross Compiling for QNX</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text"> </span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/cmake/2%20cmake%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="2 cmake简单示例 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          2 cmake简单示例
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cmake/" itemprop="url" rel="index"><span itemprop="name">cmake</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="2-cmake简单示例"><a href="#2-cmake简单示例" class="headerlink" title="2 cmake简单示例"></a>2 cmake简单示例</h1><h2 id="2-1-编译单个源文件"><a href="#2-1-编译单个源文件" class="headerlink" title="2.1 编译单个源文件"></a>2.1 编译单个源文件</h2><p>创建一个hello.c文件</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="built_in">printf</span>(<span class="string">&quot;Hello,World\n&quot;</span>);</span><br><span class="line">  <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在hello.c当前目录创建一个CMakeLists.txt（名字需要一致，大小写也一致），它就是 cmake所处理的“代码“</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># CMake 最低版本号要求</span></span><br><span class="line"><span class="keyword">cmake_minimum_required</span> (VERSION <span class="number">2.8</span>)</span><br><span class="line"><span class="comment"># #项目名称 任意</span></span><br><span class="line"><span class="keyword">project</span> (Demo1)</span><br><span class="line"><span class="comment"># 指定生成目标 Demo1</span></span><br><span class="line"><span class="keyword">add_executable</span>(Demo1 hello.c)</span><br></pre></td></tr></table></figure>
+<p>编辑后文件结构如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── build</span><br><span class="line">├── CMakeLists.txt</span><br><span class="line">└── hello.c</span><br><span class="line"></span><br><span class="line">1 directory, 2 files</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>生成makefile文件：在当前目录执行<code>cmake .</code>(注意后面有一个点)（也可以创建一个build目录，在build目录执行<code>cmake ..</code>），执行后如图：</p>
+<img src="/cmake/2%20cmake%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/image-20220629112803675.png" class="" title="image-20220629112803675">
+<p>编译项目：在build目录执行<code>make</code>编译,生成Demo1可执行文件</p>
+<img src="/cmake/2%20cmake%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/image-20220629112911740.png" class="" title="image-20220629112911740">
+<h2 id="2-2-编译多个源文件"><a href="#2-2-编译多个源文件" class="headerlink" title="2.2 编译多个源文件"></a>2.2 编译多个源文件</h2><h3 id="2-2-1-同一目录多个源文件"><a href="#2-2-1-同一目录多个源文件" class="headerlink" title="2.2.1 同一目录多个源文件"></a>2.2.1 同一目录多个源文件</h3><p>源文件都在一个目录内如下，两个源文件helloc.和fun.c</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── build</span><br><span class="line">├── CMakeLists.txt</span><br><span class="line">├── fun.c</span><br><span class="line">└── hello.c</span><br><span class="line"></span><br><span class="line">1 directory, 3 files</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>对应的CMakeLists.txt 如下</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># CMake 最低版本号要求</span></span><br><span class="line"><span class="keyword">cmake_minimum_required</span> (VERSION <span class="number">2.8</span>)</span><br><span class="line"><span class="comment"># 项目信息</span></span><br><span class="line"><span class="keyword">project</span> (Demo2)</span><br><span class="line"><span class="comment"># 指定生成目标</span></span><br><span class="line"><span class="keyword">add_executable</span>(Demo hello.c fun.c)</span><br></pre></td></tr></table></figure>
+<p>唯一的改动只是在 add_executable 命令中增加了一个 fun.c源文件但是如果源文件很多，把所有源文件的名字都加进去将是一件烦人的工作。更省事的方法是使用 aux_source_directory 命令，该命令会查找指定目录下的所有源文件，然后将结果存进指定变量名。其语法如下：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">aux_source_directory</span>(&lt;dir&gt; &lt;variable&gt;)</span><br></pre></td></tr></table></figure>
+<p>因此可以修改CMakeLists.txt如下</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#cmake最低版本需求，不加入此行会受到警告信息</span></span><br><span class="line"><span class="keyword">cmake_minimum_required</span>(VERSION <span class="number">2.6</span>)</span><br><span class="line"><span class="keyword">project</span>(HELLO) <span class="comment">#项目名称 任意</span></span><br><span class="line"><span class="comment">#把当前目录(.)下所有源代码文件和头文件加入变量SRC_LIST</span></span><br><span class="line"><span class="keyword">aux_source_directory</span>(. SRC_LIST)</span><br><span class="line"><span class="comment">#生成可执行程序 hello</span></span><br><span class="line"><span class="keyword">add_executable</span>(Demo2 <span class="variable">$&#123;SRC_LIST&#125;</span>)</span><br></pre></td></tr></table></figure>
+<p>这样，CMake 会将当前目录所有源文件的文件名赋值给变量 DIR_SRCS ，再指示变量 DIR_SRCS 中的源文件需要编译成一个名称为 Demo2 的可执行文件。</p>
+<h3 id="2-2-2-多个目录，多个源文件"><a href="#2-2-2-多个目录，多个源文件" class="headerlink" title="2.2.2 多个目录，多个源文件"></a>2.2.2 多个目录，多个源文件</h3><p>目录结构如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">3</span><br><span class="line">├── build</span><br><span class="line">├── CMakeLists.txt</span><br><span class="line">├── hello.c</span><br><span class="line">└── src</span><br><span class="line">    ├── CMakeLists.txt</span><br><span class="line">    ├── fun1.c</span><br><span class="line">    ├── fun1.h</span><br><span class="line">    ├── fun2.c</span><br><span class="line">    └── fun2.h</span><br><span class="line"></span><br><span class="line">2 directories, 7 files</span><br></pre></td></tr></table></figure>
+<p>对于这种情况，需要分别在项目根目录 3 和 src 目录里各编写一个 CMakeLists.txt 文件。为了方便，我们可以先将 src 目录里的文件编译成静态库再由 main 函数调用。</p>
+<p>根目录的CMakeLists.txt如下</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># CMake 最低版本号要求</span></span><br><span class="line"><span class="keyword">cmake_minimum_required</span> (VERSION <span class="number">2.8</span>)</span><br><span class="line"><span class="comment"># 项目信息</span></span><br><span class="line"><span class="keyword">project</span> (Demo3)</span><br><span class="line"><span class="comment"># 指定头文件目录</span></span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;project_SOURCE_DIR&#125;</span>/src)</span><br><span class="line"><span class="comment"># 查找当前目录下的所有源文件</span></span><br><span class="line"><span class="comment"># 并将名称保存到 DIR_SRCS 变量</span></span><br><span class="line"><span class="keyword">aux_source_directory</span>(. DIR_SRCS)</span><br><span class="line"><span class="comment"># 添加 src 子目录</span></span><br><span class="line"><span class="keyword">add_subdirectory</span>(src)</span><br><span class="line"><span class="comment"># 指定生成目标</span></span><br><span class="line"><span class="keyword">add_executable</span>(Demo <span class="variable">$&#123;DIR_SRCS&#125;</span>)</span><br><span class="line"><span class="comment"># 添加链接库</span></span><br><span class="line"><span class="keyword">target_link_libraries</span>(Demo fun)</span><br></pre></td></tr></table></figure>
+<p>该文件添加了下面的内容: </p>
+<ul>
+<li><p>include_directories 添加头文件路径</p>
+</li>
+<li><p>使用命令 add_subdirectory 指明本项目包含一个子目录 src，这样 src 目录下的  CMakeLists.txt 文件和源代码也会被处理，也就是会调用src下的CMakeList.txt进行编译 。</p>
+</li>
+<li>使用命令 target_link_libraries 指明可执行文件 Demo  需要连接一个名为 fun 的链接库 。</li>
+</ul>
+<p>子目录src下的CMakeLists.txt如下</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 查找当前目录下的所有源文件</span></span><br><span class="line"><span class="comment"># 并将名称保存到 DIR_LIB_SRCS 变量</span></span><br><span class="line"><span class="keyword">aux_source_directory</span>(. DIR_LIB_SRCS)</span><br><span class="line"><span class="comment"># 生成链接库</span></span><br><span class="line"><span class="keyword">add_library</span> (fun <span class="variable">$&#123;DIR_LIB_SRCS&#125;</span>)</span><br></pre></td></tr></table></figure>
+<p> 在该文件中使用命令 add_library 将 src 目录中的源文件编译为静态链接库<code>fun</code>。具体就是<code>libfun.a</code></p>
+<p>编译如下：</p>
+<img src="/cmake/2%20cmake%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/image-20220629135327927.png" class="" title="image-20220629135327927">
+<h2 id="2-3-编译库"><a href="#2-3-编译库" class="headerlink" title="2.3 编译库"></a>2.3 编译库</h2><p>目录结构和上面目录多源文件一致，目的是将src的fun文件编译为库</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">3</span><br><span class="line">├── build</span><br><span class="line">├── CMakeLists.txt</span><br><span class="line">├── hello.c</span><br><span class="line">└── src</span><br><span class="line">    ├── CMakeLists.txt</span><br><span class="line">    ├── fun1.c</span><br><span class="line">    ├── fun1.h</span><br><span class="line">    ├── fun2.c</span><br><span class="line">    └── fun2.h</span><br><span class="line"></span><br><span class="line">2 directories, 7 files</span><br></pre></td></tr></table></figure>
+<p>在src文件夹中创建CMakeLists.txt</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">project</span>(lib_test)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_BUILD_TYPE Release)</span><br><span class="line"></span><br><span class="line"><span class="comment">#Bring the headers, such as Student.h into the project</span></span><br><span class="line"><span class="keyword">include_directories</span>(.)</span><br><span class="line"></span><br><span class="line"><span class="comment">#However, the file(GLOB...) allows for wildcard additions:</span></span><br><span class="line"><span class="keyword">file</span>(GLOB SOURCES <span class="string">&quot;*.c&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#Generate the shared library from the sources</span></span><br><span class="line"><span class="comment">#生成文件名testlib</span></span><br><span class="line"><span class="keyword">add_library</span>(testlib SHARED <span class="variable">$&#123;SOURCES&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#Set the location for library installation -- i.e., /usr/lib in this case</span></span><br><span class="line"><span class="comment"># not really necessary in this example. Use &quot;sudo make install&quot; to apply</span></span><br><span class="line"><span class="comment"># install 指定安装目录，执行sudo make install时动态库将被安装在/usr/lib目录</span></span><br><span class="line"><span class="comment"># install(TARGETS testStudent DESTINATION /usr/lib)</span></span><br></pre></td></tr></table></figure>
+<p>上面的变化</p>
+<ul>
+<li><code>file</code>指令，这里的作用和<code>aux_source_directory</code>类似</li>
+<li><code>add_library</code>而不是<code>add_executable</code>生成库文件，而不是可执行文件，<code>SHARED</code>参数是表明生成动态库，如果是需要生成静态库就是<code>STATIC</code></li>
+</ul>
+<p>编译如下</p>
+<img src="/cmake/2%20cmake%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/image-20220629144137867.png" class="" title="image-20220629144137867">
+<h2 id="2-4-使用其他库"><a href="#2-4-使用其他库" class="headerlink" title="2.4 使用其他库"></a>2.4 使用其他库</h2><p>现在使用上面生成的库libtestlib.so，文件结构如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">5</span><br><span class="line">├── build</span><br><span class="line">├── CMakeLists.txt</span><br><span class="line">├── hello.c</span><br><span class="line">└── lib</span><br><span class="line">    ├── fun1.h</span><br><span class="line">    ├── fun2.h</span><br><span class="line">    └── libtestlib.so</span><br><span class="line"></span><br><span class="line">2 directories, 5 files</span><br></pre></td></tr></table></figure>
+<p>在根目录下创建CMakeLists.txt如下</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># CMake 最低版本号要求</span></span><br><span class="line"><span class="keyword">cmake_minimum_required</span> (VERSION <span class="number">2.8</span>)</span><br><span class="line"><span class="comment"># 项目信息</span></span><br><span class="line"><span class="keyword">project</span> (Demo3)</span><br><span class="line"><span class="comment"># 指定头文件目录</span></span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;project_SOURCE_DIR&#125;</span>/lib)</span><br><span class="line"><span class="comment">#添加共享库搜索路径</span></span><br><span class="line"><span class="keyword">link_directories</span>(<span class="variable">$&#123;project_SOURCE_DIR&#125;</span>/lib)</span><br><span class="line"><span class="comment"># 查找当前目录下的所有源文件</span></span><br><span class="line"><span class="comment"># 并将名称保存到 DIR_SRCS 变量</span></span><br><span class="line"><span class="keyword">aux_source_directory</span>(. DIR_SRCS)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定生成目标</span></span><br><span class="line"><span class="keyword">add_executable</span>(Demo <span class="variable">$&#123;DIR_SRCS&#125;</span>)</span><br><span class="line"><span class="comment"># 添加链接库</span></span><br><span class="line"><span class="keyword">target_link_libraries</span>(Demo testlib)</span><br></pre></td></tr></table></figure>
+<p>编译如下</p>
+<img src="/cmake/2%20cmake%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/image-20220629145748184.png" class="" title="image-20220629145748184">
+<h3 id="2-4-1-库的相互依赖"><a href="#2-4-1-库的相互依赖" class="headerlink" title="2.4.1 库的相互依赖"></a>2.4.1 库的相互依赖</h3><p>当生成可执行程序依赖一个静态库，而这个静态库又依赖一个动态库时，你需要在两个 CMakeLists.txt 文件中进行相应的配置。</p>
+<p>首先，我们来看生成静态库的 CMakeLists.txt 文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.12)</span><br><span class="line">project(MyStaticLibrary)</span><br><span class="line"></span><br><span class="line"># 添加需要编译的源文件</span><br><span class="line">add_library(MyStaticLibrary STATIC</span><br><span class="line">    src/library.cpp</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># 指定头文件的搜索路径</span><br><span class="line">target_include_directories(MyStaticLibrary PUBLIC include)</span><br><span class="line"></span><br><span class="line"># 如果静态库依赖于动态库，可以使用target_link_libraries命令链接动态库</span><br><span class="line">target_link_libraries(MyStaticLibrary PRIVATE other_library)</span><br><span class="line"></span><br><span class="line"># 指定安装规则（可选）</span><br><span class="line">install(TARGETS MyStaticLibrary</span><br><span class="line">    ARCHIVE DESTINATION lib</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>在这个示例中，假设你的源文件位于 <code>src</code> 目录中，头文件位于 <code>include</code> 目录中。静态库将被安装到 <code>lib</code> 目录下。注意，使用 <code>target_link_libraries</code> 命令将动态库链接到静态库时，使用 <code>PRIVATE</code> 关键字表示该依赖关系仅适用于静态库本身，而不会传递给依赖于该静态库的其他目标。</p>
+<p>接下来，我们来看生成可执行程序的 CMakeLists.txt 文件：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">cmake_minimum_required(VERSION 3.12)</span><br><span class="line">project(MyExecutable)</span><br><span class="line"></span><br><span class="line"># 添加需要编译的源文件</span><br><span class="line">add_executable(MyExecutable</span><br><span class="line">    src/main.cpp</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"># 指定头文件的搜索路径</span><br><span class="line">target_include_directories(MyExecutable PRIVATE include)</span><br><span class="line"></span><br><span class="line"># 如果可执行程序依赖于静态库，使用target_link_libraries命令链接静态库</span><br><span class="line">target_link_libraries(MyExecutable PRIVATE MyStaticLibrary)</span><br><span class="line"></span><br><span class="line"># 如果静态库依赖于动态库，还需要将动态库链接到可执行程序</span><br><span class="line">target_link_libraries(MyExecutable PRIVATE other_dynamic_library)</span><br><span class="line"></span><br><span class="line"># 指定安装规则（可选）</span><br><span class="line">install(TARGETS MyExecutable</span><br><span class="line">    RUNTIME DESTINATION bin</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>在这个示例中，假设你的主程序源文件位于 <code>src</code> 目录中，头文件位于 <code>include</code> 目录中。可执行程序将被安装到 <code>bin</code> 目录下。注意，使用 <code>target_link_libraries</code> 命令将静态库链接到可执行程序时，使用 <code>PRIVATE</code> 关键字表示该依赖关系仅适用于可执行程序本身，而不会传递给其他目标。</p>
+<h2 id="2-5-交叉编译"><a href="#2-5-交叉编译" class="headerlink" title="2.5 交叉编译"></a>2.5 交叉编译</h2><p>交叉编译官方说明 <a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html#variables-and-properties">https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html#variables-and-properties</a></p>
+<h3 id="2-5-1-arm-linux"><a href="#2-5-1-arm-linux" class="headerlink" title="2.5.1 arm-linux"></a>2.5.1 arm-linux</h3><h4 id="2-5-1-1-设置系统和工具链"><a href="#2-5-1-1-设置系统和工具链" class="headerlink" title="2.5.1.1. 设置系统和工具链"></a>2.5.1.1. 设置系统和工具链</h4><p>对于交叉编译，CMake并不知道目标系统是什么，所以需要设置一些CMake变量来告知CMake，</p>
+<ul>
+<li>CMAKE_SYSTEM_NAME：即目标系统名，这里是Linux</li>
+<li>CMAKE_SYSTEM_PROCESSOR ：目标系统的处理器名，这里是arm</li>
+</ul>
+<p>对于工具链，则是通过下面2个变量来定位，</p>
+<ul>
+<li>CMAKE_C_COMPILER：C编译器的可执行文件名称</li>
+<li>CMAKE_CXX_COMPILER：C++编译器的可执行文件名称</li>
+</ul>
+<p>这些变量可以在调用CMake时通过命令行传递，但是这种做法容易出错，而且用起来不方便，所以CMake提供了工具链文件的方式来传递这些变量信息。</p>
+<h4 id="2-5-1-2-工具链文件"><a href="#2-5-1-2-工具链文件" class="headerlink" title="2.5.1.2. 工具链文件"></a>2.5.1.2. 工具链文件</h4><p>我们在工程里新建一个文件叫arm_linux_toolchain.cmake，放置位置如下（也可以放在别的地方），</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span>(CMAKE_SYSTEM_NAME Linux)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_SYSTEM_PROCESSOR arm)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(tools /home/wh/work/cross_compile/gcc-linaro-<span class="number">7.3</span>.<span class="number">1</span>-<span class="number">2018.05</span>-x86_64_arm-linux-gnueabihf)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_COMPILER <span class="variable">$&#123;tools&#125;</span>/bin/arm-linux-gnueabihf-gcc)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_COMPILER <span class="variable">$&#123;tools&#125;</span>/bin/arm-linux-gnueabihf-g++)</span><br></pre></td></tr></table></figure>
+<p><strong>注意：</strong></p>
+<ul>
+<li>上述命令必须写入脚本中，使用 -DCMAKE_TOOLCHAIN_FILE=xxx.cmake 的方式使用。不能直接写入 CMakeLists.txt 或使用 include(xx.cmake) 。</li>
+<li>set(CMAKE_SYSTEM_NAME  Linux)：该指令必须存在，其目的是设置目标机使用的操作系统名称，支持Linux，QNX，WindowsCE，Android等。如果没有操作系统，那么就写 Generic。执行该指令后，cmake 变量CMAKE_CROSSCOMPILING 会自动被设置为 TRUE，此时 cmake  就会“知道“现在执行的是交叉编译；</li>
+</ul>
+<p>tools是本人使用的交叉工具链路径，可以根据自己的实际文件来做修改。</p>
+<h4 id="2-5-1-3-编译"><a href="#2-5-1-3-编译" class="headerlink" title="2.5.1.3 编译"></a>2.5.1.3 编译</h4><p>使用CMake的变量CMAKE_TOOLCHAIN_FILE来指定工具链文件，cd到build目录，然后执行下面的命令，</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">注意，工具链文件的指定一定要紧跟cmake命令之后，不能放到 .. 后面</span></span><br><span class="line">cmake -DCMAKE_TOOLCHAIN_FILE=../arm_linux_toolchain.cmake ..</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">使用make开始安装编译源代码</span></span><br><span class="line">make</span><br></pre></td></tr></table></figure>
+<p>使用工具链文件的好处就是只要编写一遍，然后在任意地方只需要使用CMAKE_TOOLCHAIN_FILE去指定其位置就可以了，非常方便。</p>
+<h3 id="2-5-2-官方的例子"><a href="#2-5-2-官方的例子" class="headerlink" title="2.5.2 官方的例子"></a>2.5.2 官方的例子</h3><h4 id="2-5-2-1-Cross-Compiling-for-Linux"><a href="#2-5-2-1-Cross-Compiling-for-Linux" class="headerlink" title="2.5.2.1 Cross Compiling for Linux"></a>2.5.2.1 Cross Compiling for Linux</h4><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span>(CMAKE_SYSTEM_NAME Linux)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_SYSTEM_PROCESSOR arm)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_SYSROOT /home/devel/rasp-pi-rootfs)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_STAGING_PREFIX /home/devel/stage)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(tools /home/devel/gcc-<span class="number">4.7</span>-linaro-rpi-gnueabihf)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_COMPILER <span class="variable">$&#123;tools&#125;</span>/bin/arm-linux-gnueabihf-gcc)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_COMPILER <span class="variable">$&#123;tools&#125;</span>/bin/arm-linux-gnueabihf-g++)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>CMAKE_SYSTEM_NAME要构建目标平台名称。</p>
+</li>
+<li><p>CMAKE_SYSTEM_PROCESER目标系统的处理</p>
+</li>
+<li><p>CMAKE_SYSROOT是可选的，如果有Sysroot可用，则可以指定</p>
+</li>
+<li><p>CMAKE_STAGING_PREFIX也是可选的。它可用于指定主机上要安装的路径。即使在交叉编译时，CMAKE_INSTALL_PREFIX始终是运行时安装位置。</p>
+</li>
+<li><p>CMAKE_C_COMPLIER C语言编译器</p>
+</li>
+<li><p>CMAKE_CXX_COMPLIER C++语言编译器</p>
+</li>
+<li><p>CMAKE_FIND_ROOT_PATH</p>
+<p>一般工程都包含一些外部依赖的库或者工具，cmake提供给我们一些变量可以进行查找FIND_PROGRAM(), FIND_LIBRARY(), FIND_FILE(), FIND_PATH() and FIND_PACKAGE() 查找文件和返回结果。<code>FIND_PACKAGE()</code>其实并不进行查找，而是通过执行<code>FindXXX.cmake</code>模块，进而调用<code>FIND_PROGRAM(), FIND_LIBRARY(), FIND_FILE(), FIND_PATH()</code>去查找文件。例如当你编译软件时候，希望程序链接文件 <code>/usr/lib/libjpeg.so</code>，<code>FIND_PACKAGE(JPEG)</code>会直接在主机的相对位置查找此链接文件，所以我们必须设定CMake在指定的位置查找需要的文件。</p>
+<p>下面的设置可以帮助我们完成相应的操作</p>
+<ul>
+<li><p>这是一个文件夹列表，如果你的目标环境安装在<code>/opt/eldk/ppc_74xx</code>，配置CMAKE_FIND_ROOT_PATH指向此处，然后FIND_LIBRARY(BZ2_LIB bz2)将会搜索<code>/opt/eldk/ppc_74xx/lib</code>, <code>/opt/eldk/ppc_74xx/usr/lib</code>, <code>/lib</code>, <code>/usr/lib</code> 之后会将 <code>/opt/eldk/ppc_74xx/usr/lib/libbz2.so</code> 作为结果返回。</p>
+<p>CMAKE_FIND_ROOT_PATH默认设置为空。如果设置之后，cmake默认会首先搜索具有这个前缀的位置下文件，之后去其他位置查找。</p>
+<ul>
+<li>每个FIND_XXX()可以通过参数<code>NO_CMAKE_FIND_ROOT_PATH</code>, <code>ONLY_CMAKE_FIND_ROOT_PATH</code> 和<code>CMAKE_FIND_ROOT_PATH_BOTH</code>设置查找范围</li>
+<li>或者采用对所有的FIND_XXX()都起作用的的参数<code>CMAKE_FIND_ROOT_PATH_MODE_PROGRAM</code>, <code>CMAKE_FIND_ROOT_PATH_MODE_LIBRARY</code> 和 <code>CMAKE_FIND_ROOT_PATH_MODE_INCLUDE</code>进行设置。</li>
+</ul>
+<p>如果你的工程不仅需要toolchain里面的工具，还有目标平台的附加库。我们还需要为这些依赖包建立一个安装文件夹，例如<code>/home/ke/install</code>,同时需要添加这个位置进去<code>CMAKE_FIND_ROOT_PATH</code>，之后FIND_XXX()才可以在这些位置进行查找。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="2-5-2-2-Cross-Compiling-for-QNX"><a href="#2-5-2-2-Cross-Compiling-for-QNX" class="headerlink" title="2.5.2.2 Cross Compiling for QNX"></a>2.5.2.2 Cross Compiling for QNX</h4><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span>(CMAKE_SYSTEM_NAME QNX)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(arch gcc_ntoarmv7le)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_COMPILER qcc)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_COMPILER_TARGET <span class="variable">$&#123;arch&#125;</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_COMPILER QCC)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_COMPILER_TARGET <span class="variable">$&#123;arch&#125;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_SYSROOT $ENV&#123;QNX_TARGET&#125;)</span><br></pre></td></tr></table></figure>
+<h1 id=""><a href="#" class="headerlink" title=" "></a> </h1>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/cmake/2%20cmake%E7%AE%80%E5%8D%95%E7%A4%BA%E4%BE%8B/" title="2 cmake简单示例">http://example.com/cmake/2 cmake简单示例/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/cmake/" rel="tag"><i class="fa fa-tag"></i> cmake</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/TensorRT/%E5%B8%A6%E6%9C%89QDQ%E7%9A%84onnx%E7%94%A8trtexec%E8%BD%ACengine%E6%97%A5%E6%97%A5%E5%BF%97%E5%88%86%E6%9E%90/" rel="prev" title="带有QDQ的onnx用trtexec转engine日日志分析">
+                  <i class="fa fa-chevron-left"></i> 带有QDQ的onnx用trtexec转engine日日志分析
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/cmake/1%20cmake%E7%AE%80%E4%BB%8B/" rel="next" title="1 cmake简介">
+                  1 cmake简介 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"06fb8ffdd5fa64f18e7803bb454de99b"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

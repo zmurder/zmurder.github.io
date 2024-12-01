@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="1 背景本文档是记录学习Nvidia官方B站的视频，参考对应的PDF文件 TensorRTTraining-TRT8.6.1-Part5-V1.1.pdf 的记录。对应的官方代码[trt-samples-for-hackathon-cn]">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Part1-TensorRT简介">
+<meta property="og:url" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="1 背景本文档是记录学习Nvidia官方B站的视频，参考对应的PDF文件 TensorRTTraining-TRT8.6.1-Part5-V1.1.pdf 的记录。对应的官方代码[trt-samples-for-hackathon-cn]">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022204349489.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022205538493.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/Snipaste_2024-10-22_11-31-47.bmp">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022114945048.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022121539251.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022134902150.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022134931729.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022135545336.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022163317261.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022164841748.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022165403922.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022170656853.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022171023913.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022171230426.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022171348466.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022171447672.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022171855355.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022172146674.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022194147857.png">
+<meta property="article:published_time" content="2024-12-01T10:13:45.434Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.434Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="GPU">
+<meta property="article:tag" content="Tensorrt">
+<meta property="article:tag" content="DeepLearning">
+<meta property="article:tag" content="Plugin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022204349489.png">
+
+
+<link rel="canonical" href="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/","path":"TensorRT/TensorRT教程-基于8.6.1/Part1-TensorRT简介/","title":"Part1-TensorRT简介"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Part1-TensorRT简介 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E8%83%8C%E6%99%AF"><span class="nav-text">1 背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-TensorRT%E7%AE%80%E4%BB%8B"><span class="nav-text">2 TensorRT简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-TensorRT%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-text">2.1 TensorRT是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-TensorRT-%E5%81%9A%E7%9A%84%E5%B7%A5%E4%BD%9C"><span class="nav-text">2.2 TensorRT 做的工作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-TensorRT-%E7%9A%84%E8%A1%A8%E7%8E%B0"><span class="nav-text">2.3 TensorRT 的表现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-TensorRT-%E5%9F%BA%E6%9C%AC%E6%B5%81%E7%A8%8B"><span class="nav-text">3 TensorRT 基本流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E5%9F%BA%E6%9C%AC%E6%B5%81%E7%A8%8B"><span class="nav-text">3.1 基本流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Workflow"><span class="nav-text">3.2 Workflow</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Workflow%EF%BC%9A%E4%BD%BF%E7%94%A8-TensorRT-API-%E6%90%AD%E5%BB%BA"><span class="nav-text">3.3 Workflow：使用 TensorRT API 搭建</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-Logger-%E6%97%A5%E5%BF%97%E8%AE%B0%E5%BD%95%E5%99%A8"><span class="nav-text">3.4 Logger 日志记录器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-5-Builder-%E5%BC%95%E6%93%8E%E6%9E%84%E5%BB%BA%E5%99%A8"><span class="nav-text">3.5 Builder 引擎构建器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-6-BuilderConfig-%E7%BD%91%E7%BB%9C%E5%B1%9E%E6%80%A7%E9%80%89%E9%A1%B9"><span class="nav-text">3.6 BuilderConfig 网络属性选项</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-7-Network-%E7%BD%91%E7%BB%9C%E5%85%B7%E4%BD%93%E6%9E%84%E9%80%A0"><span class="nav-text">3.7 Network 网络具体构造</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-7-1-Explicit-Batch-%E6%A8%A1%E5%BC%8F-v-s-Implicit-Batch-%E6%A8%A1%E5%BC%8F"><span class="nav-text">3.7.1 Explicit Batch 模式 v.s. Implicit Batch 模式</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-8-Dynamic-Shape-%E6%A8%A1%E5%BC%8F"><span class="nav-text">3.8 Dynamic Shape 模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-9-Layer-%E5%92%8C-Tensor%EF%BC%88%E4%BD%BF%E7%94%A8API%E6%90%AD%E5%BB%BA-%EF%BC%89"><span class="nav-text">3.9 Layer 和 Tensor（使用API搭建 ）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-10-%E4%BB%8ENetwork%E4%B8%AD%E6%89%93%E5%8D%B0%E6%89%80%E6%9C%89%E5%B1%82%E5%92%8C%E5%BC%A0%E9%87%8F%E7%9A%84%E4%BF%A1%E6%81%AF"><span class="nav-text">3.10 从Network中打印所有层和张量的信息</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-11-%E4%BD%BF%E7%94%A8API%E6%90%AD%E5%BB%BA%E7%9A%84%E7%A4%BA%E4%BE%8B"><span class="nav-text">3.11 使用API搭建的示例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-11-1-%E6%9D%83%E9%87%8D%E8%BF%81%E7%A7%BB"><span class="nav-text">3.11.1 权重迁移</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-11-2-%E9%80%90%E5%B1%82%E6%90%AD%E5%BB%BA"><span class="nav-text">3.11.2 逐层搭建</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-11-3-%E9%80%90%E5%B1%82%E6%A3%80%E9%AA%8C%E8%BE%93%E5%87%BA"><span class="nav-text">3.11.3 逐层检验输出</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-12-FP16%E6%A8%A1%E5%BC%8F"><span class="nav-text">3.12 FP16模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-13-INT8%E6%A8%A1%E5%BC%8F"><span class="nav-text">3.13 INT8模式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-14-TensorRT-%E8%BF%90%E8%A1%8C%E6%9C%9F%EF%BC%88Runtime%EF%BC%89"><span class="nav-text">3.14 TensorRT 运行期（Runtime）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-15-Engine-%E8%AE%A1%E7%AE%97%E5%BC%95%E6%93%8E"><span class="nav-text">3.15 Engine 计算引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-16-Context-%E6%8E%A8%E7%90%86%E8%BF%9B%E7%A8%8B"><span class="nav-text">3.16 Context 推理进程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-17-CUDA-%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97"><span class="nav-text">3.17 CUDA 异构计算</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-18-Buffer"><span class="nav-text">3.18 Buffer</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-19-%E5%BA%8F%E5%88%97%E5%8C%96%E4%B8%8E%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96"><span class="nav-text">3.19 序列化与反序列化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-20-Workflow%EF%BC%9A%E4%BD%BF%E7%94%A8-Parser"><span class="nav-text">3.20 Workflow：使用 Parser</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-21-Workflow%EF%BC%9A%E4%BD%BF%E7%94%A8%E6%A1%86%E6%9E%B6%E5%86%85-TensorRT-%E6%8E%A5%E5%8F%A3"><span class="nav-text">3.21 Workflow：使用框架内 TensorRT 接口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-22-TensorRT-%E7%8E%AF%E5%A2%83"><span class="nav-text">3.22 TensorRT 环境</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Part1-TensorRT简介 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Part1-TensorRT简介
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8-6-1/" itemprop="url" rel="index"><span itemprop="name">TensorRT教程-基于8.6.1</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-背景"><a href="#1-背景" class="headerlink" title="1 背景"></a>1 背景</h1><p>本文档是记录学习Nvidia官方B站的<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1jj411Z7wG?spm_id_from=333.788.videopod.sections&amp;vd_source=cde2e7b9bca1a7048a13eaf0b48210b6">视频</a>，参考对应的PDF文件 TensorRTTraining-TRT8.6.1-Part5-V1.1.pdf 的记录。对应的官方代码<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/trt-samples-for-hackathon-cn">[trt-samples-for-hackathon-cn]</a></p>
+<p>官方的视频教程基于TensorRT8.6.1版本。但是官方代码没有对应的tag。只有8.4、8.5和截至目前最新的8.10（master分支）。因此我这里参考的都是8.4分支的代码。</p>
+<ul>
+<li>part1 TensorRT简介</li>
+<li>part2 开发辅助工具</li>
+<li>part3 插件书写</li>
+<li>part4 TensorRT高级用法</li>
+<li>part5 常见优化策略</li>
+</ul>
+<img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022204349489.png" class="" title="image-20241022204349489">
+<h1 id="2-TensorRT简介"><a href="#2-TensorRT简介" class="headerlink" title="2 TensorRT简介"></a>2 TensorRT简介</h1><h2 id="2-1-TensorRT是什么"><a href="#2-1-TensorRT是什么" class="headerlink" title="2.1 TensorRT是什么"></a>2.1 TensorRT是什么</h2><ul>
+<li>用于高效实现已训练好的深度学习模型的<strong>推理过程</strong>的SDK</li>
+<li>内含<strong>推理优化器</strong>和<strong>运行时环境</strong></li>
+<li>使 DL 模型能以<strong>更高吞吐量</strong>和<strong>更低的延迟</strong>运行</li>
+<li>有 C++ 和 python 的 API，完全等价可以混用</li>
+</ul>
+<h2 id="2-2-TensorRT-做的工作"><a href="#2-2-TensorRT-做的工作" class="headerlink" title="2.2 TensorRT 做的工作"></a>2.2 TensorRT 做的工作</h2><ul>
+<li><strong>构建期（推理优化器）</strong><ul>
+<li>模型解析 / 建立 加载 Onnx 等其他格式的模型 / 使用原生 API 搭建模型</li>
+<li>计算图优化 横向层融合（Conv），纵向层融合（Conv+add+ReLU） <a target="_blank" rel="noopener" href="https://developer.nvidia.com/blog/deploying-deep-learning-nvidia-tensorrt/">参考链接</a></li>
+<li>节点消除 去除无用层，节点变换（Pad，Slice，Concat，Shuffle）</li>
+<li>多精度支持 FP32 / FP16 / INT8 / TF32（代价是可能插入 reformat 节点，用于数据类型变换）</li>
+<li>优选 kernel / format 硬件有关优化。一个节点在GPU有多种实现，自动选择哪一种<strong>最快</strong></li>
+<li>导入 plugin 实现自定义操作</li>
+<li>显存优化 显存池复用</li>
+</ul>
+</li>
+<li><strong>运行期（运行时环境）</strong><ul>
+<li>运行时环境 对象生命期管理，内存显存管理，异常处理</li>
+<li>序列化反序列化 推理引擎保存为文件或从文件中加载</li>
+</ul>
+</li>
+</ul>
+<img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022205538493.png" class="" title="image-20241022205538493">
+<h2 id="2-3-TensorRT-的表现"><a href="#2-3-TensorRT-的表现" class="headerlink" title="2.3 TensorRT 的表现"></a>2.3 TensorRT 的表现</h2><ul>
+<li>不同模型加速效果不同</li>
+<li>选用高效算子提升运算效率（计算密集型）</li>
+<li>算子融合减少访存数据、提高访问效率（算子融合）</li>
+<li>使用低精度数据类型，节约时间空间</li>
+</ul>
+<p><strong>注意高版本的TensorRT可能有更加好的优化策略。</strong></p>
+<h1 id="3-TensorRT-基本流程"><a href="#3-TensorRT-基本流程" class="headerlink" title="3 TensorRT 基本流程"></a>3 TensorRT 基本流程</h1><p>范例代码 01-SimpleDemo/TensorRT8.5   main.py 或 main.cpp（python 和 C++ 等价版本）</p>
+<h2 id="3-1-基本流程"><a href="#3-1-基本流程" class="headerlink" title="3.1 基本流程"></a>3.1 基本流程</h2><ul>
+<li>构建期<ul>
+<li>前期准备（Logger，Builder，Config，Profile）</li>
+<li>创建 Network（计算图内容）</li>
+<li>生成序列化网络（计算图 TRT 内部表示）</li>
+</ul>
+</li>
+<li>运行期<ul>
+<li>建立 Engine 和 Context</li>
+<li>Buffer 相关准备（申请+拷贝）</li>
+<li>执行推理（Execute）</li>
+<li>善后工作</li>
+</ul>
+</li>
+</ul>
+<p>python代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Copyright (c) 2021-2022, NVIDIA CORPORATION. All rights reserved.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></span><br><span class="line"><span class="comment"># you may not use this file except in compliance with the License.</span></span><br><span class="line"><span class="comment"># You may obtain a copy of the License at</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#     http://www.apache.org/licenses/LICENSE-2.0</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Unless required by applicable law or agreed to in writing, software</span></span><br><span class="line"><span class="comment"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span></span><br><span class="line"><span class="comment"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></span><br><span class="line"><span class="comment"># See the License for the specific language governing permissions and</span></span><br><span class="line"><span class="comment"># limitations under the License.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> cuda <span class="keyword">import</span> cudart  <span class="comment"># 使用 cuda runtime API</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> tensorrt <span class="keyword">as</span> trt</span><br><span class="line"></span><br><span class="line"><span class="comment"># yapf:disable</span></span><br><span class="line"></span><br><span class="line">trtFile = <span class="string">&quot;./model.plan&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">run</span>():</span><br><span class="line">    logger = trt.Logger(trt.Logger.ERROR)                                       <span class="comment"># create Logger, avaiable level: VERBOSE, INFO, WARNING, ERRROR, INTERNAL_ERROR</span></span><br><span class="line">    <span class="keyword">if</span> os.path.isfile(trtFile):                                                 <span class="comment"># load serialized network and skip building process if .plan file existed</span></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(trtFile, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            engineString = f.read()</span><br><span class="line">        <span class="keyword">if</span> engineString == <span class="literal">None</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Failed getting serialized engine!&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Succeeded getting serialized engine!&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:                                                                       <span class="comment"># build a serialized network from scratch</span></span><br><span class="line">        builder = trt.Builder(logger)                                           <span class="comment"># create Builder</span></span><br><span class="line">        network = builder.create_network(<span class="number">1</span> &lt;&lt; <span class="built_in">int</span>(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH))  <span class="comment"># create Network</span></span><br><span class="line">        profile = builder.create_optimization_profile()                         <span class="comment"># create Optimization Profile if using Dynamic Shape mode</span></span><br><span class="line">        config = builder.create_builder_config()                                <span class="comment"># create BuidlerConfig to set meta data of the network</span></span><br><span class="line">        config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, <span class="number">1</span> &lt;&lt; <span class="number">30</span>)     <span class="comment"># set workspace for the optimization process (default value is the total GPU memory)</span></span><br><span class="line"></span><br><span class="line">        inputTensor = network.add_input(<span class="string">&quot;inputT0&quot;</span>, trt.float32, [-<span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>])   <span class="comment"># set inpute tensor for the network</span></span><br><span class="line">        profile.set_shape(inputTensor.name, [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>], [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>], [<span class="number">6</span>, <span class="number">8</span>, <span class="number">10</span>])   <span class="comment"># set danamic range of the input tensor</span></span><br><span class="line">        config.add_optimization_profile(profile)                                <span class="comment"># add the Optimization Profile into the BuilderConfig</span></span><br><span class="line"></span><br><span class="line">        identityLayer = network.add_identity(inputTensor)                       <span class="comment"># here is only a identity transformation layer in our simple network, which the output is exactly equal to input</span></span><br><span class="line">        identityLayer.get_output(<span class="number">0</span>).name = <span class="string">&#x27;outputT0&#x27;</span>                           <span class="comment"># set the name of the output tensor from the laer (not required)</span></span><br><span class="line">        network.mark_output(identityLayer.get_output(<span class="number">0</span>))                        <span class="comment"># mark the output tensor of the network</span></span><br><span class="line"></span><br><span class="line">        engineString = builder.build_serialized_network(network, config)        <span class="comment"># create a serialized network</span></span><br><span class="line">        <span class="keyword">if</span> engineString == <span class="literal">None</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Failed building serialized engine!&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Succeeded building serialized engine!&quot;</span>)</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(trtFile, <span class="string">&quot;wb&quot;</span>) <span class="keyword">as</span> f:                                          <span class="comment"># write the serialized netwok into a .plan file</span></span><br><span class="line">            f.write(engineString)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Succeeded saving .plan file!&quot;</span>)</span><br><span class="line"><span class="comment">#上面的代码为构件期，下面的代码为运行期</span></span><br><span class="line">    engine = trt.Runtime(logger).deserialize_cuda_engine(engineString)          <span class="comment"># create inference Engine using Runtime</span></span><br><span class="line">    <span class="keyword">if</span> engine == <span class="literal">None</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Failed building engine!&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Succeeded building engine!&quot;</span>)</span><br><span class="line"></span><br><span class="line">    nIO = engine.num_io_tensors                                                 <span class="comment"># since TensorRT 8.5, the concept of Binding is replaced by I/O Tensor, all the APIs with &quot;binding&quot; in their name are deprecated</span></span><br><span class="line">    lTensorName = [engine.get_tensor_name(i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nIO)]               <span class="comment"># get a list of I/O tensor names of the engine, because all I/O tensor in Engine and Excution Context are indexed by name, not binding number like TensorRT 8.4 or before</span></span><br><span class="line">    nInput = [engine.get_tensor_mode(lTensorName[i]) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nIO)].count(trt.TensorIOMode.INPUT)  <span class="comment"># get the count of input tensor</span></span><br><span class="line">    <span class="comment">#nOutput = [engine.get_tensor_mode(lTensorName[i]) for i in range(nIO)].count(trt.TensorIOMode.OUTPUT)  # get the count of output tensor</span></span><br><span class="line"></span><br><span class="line">    context = engine.create_execution_context()                                 <span class="comment"># create Excution Context from the engine (analogy to a GPU context, or a CPU process)</span></span><br><span class="line">    context.set_input_shape(lTensorName[<span class="number">0</span>], [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])                          <span class="comment"># set actual size of input tensor if using Dynamic Shape mode</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nIO):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;[%2d]%s-&gt;&quot;</span> % (i, <span class="string">&quot;Input &quot;</span> <span class="keyword">if</span> i &lt; nInput <span class="keyword">else</span> <span class="string">&quot;Output&quot;</span>), engine.get_tensor_dtype(lTensorName[i]), engine.get_tensor_shape(lTensorName[i]), context.get_tensor_shape(lTensorName[i]), lTensorName[i])</span><br><span class="line"></span><br><span class="line">    bufferH = []                                                                <span class="comment"># prepare the memory buffer on host and device</span></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nIO):</span><br><span class="line">        bufferH.append(np.empty(context.get_tensor_shape(lTensorName[i]), dtype=trt.nptype(engine.get_tensor_dtype(lTensorName[i]))))</span><br><span class="line">    bufferD = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nIO):</span><br><span class="line">        bufferD.append(cudart.cudaMalloc(bufferH[i].nbytes)[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">    data = np.ascontiguousarray(np.arange(<span class="number">3</span> * <span class="number">4</span> * <span class="number">5</span>, dtype=np.float32).reshape(<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>))  <span class="comment"># feed input data into host buffer</span></span><br><span class="line">    bufferH[<span class="number">0</span>] = data</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nInput):                                                     <span class="comment"># copy input data from host buffer into device buffer</span></span><br><span class="line">        cudart.cudaMemcpy(bufferD[i], bufferH[i].ctypes.data, bufferH[i].nbytes, cudart.cudaMemcpyKind.cudaMemcpyHostToDevice)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nIO):</span><br><span class="line">        context.set_tensor_address(lTensorName[i], <span class="built_in">int</span>(bufferD[i]))             <span class="comment"># set address of all input and output data in device buffer</span></span><br><span class="line"></span><br><span class="line">    context.execute_async_v3(<span class="number">0</span>)                                                 <span class="comment"># do inference computation</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nInput, nIO):                                                <span class="comment"># copy output data from device buffer into host buffer</span></span><br><span class="line">        cudart.cudaMemcpy(bufferH[i].ctypes.data, bufferD[i], bufferH[i].nbytes, cudart.cudaMemcpyKind.cudaMemcpyDeviceToHost)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nIO):</span><br><span class="line">        <span class="built_in">print</span>(lTensorName[i])</span><br><span class="line">        <span class="built_in">print</span>(bufferH[i])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> b <span class="keyword">in</span> bufferD:                                                           <span class="comment"># free the GPU memory buffer after all work</span></span><br><span class="line">        cudart.cudaFree(b)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    os.system(<span class="string">&quot;rm -rf ./*.plan&quot;</span>)</span><br><span class="line">    run()                                                                       <span class="comment"># create a serialized network of TensorRT and do inference</span></span><br><span class="line">    run()                                                                       <span class="comment"># load a serialized network of TensorRT and do inference</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>c++代码</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Copyright (c) 2021-2022, NVIDIA CORPORATION. All rights reserved.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></span><br><span class="line"><span class="comment"> * you may not use this file except in compliance with the License.</span></span><br><span class="line"><span class="comment"> * You may obtain a copy of the License at</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *     http://www.apache.org/licenses/LICENSE-2.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Unless required by applicable law or agreed to in writing, software</span></span><br><span class="line"><span class="comment"> * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span></span><br><span class="line"><span class="comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></span><br><span class="line"><span class="comment"> * See the License for the specific language governing permissions and</span></span><br><span class="line"><span class="comment"> * limitations under the License.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;cookbookHelper.hpp&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> nvinfer1;</span><br><span class="line"></span><br><span class="line"><span class="type">const</span> std::string trtFile &#123;<span class="string">&quot;./model.plan&quot;</span>&#125;;</span><br><span class="line"><span class="function"><span class="type">static</span> Logger     <span class="title">gLogger</span><span class="params">(ILogger::Severity::kERROR)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">run</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ICudaEngine *engine = <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">access</span>(trtFile.<span class="built_in">c_str</span>(), F_OK) == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function">std::ifstream <span class="title">engineFile</span><span class="params">(trtFile, std::ios::binary)</span></span>;</span><br><span class="line">        <span class="type">long</span> <span class="type">int</span>      fsize = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        engineFile.<span class="built_in">seekg</span>(<span class="number">0</span>, engineFile.end);</span><br><span class="line">        fsize = engineFile.<span class="built_in">tellg</span>();</span><br><span class="line">        engineFile.<span class="built_in">seekg</span>(<span class="number">0</span>, engineFile.beg);</span><br><span class="line">        <span class="function">std::vector&lt;<span class="type">char</span>&gt; <span class="title">engineString</span><span class="params">(fsize)</span></span>;</span><br><span class="line">        engineFile.<span class="built_in">read</span>(engineString.<span class="built_in">data</span>(), fsize);</span><br><span class="line">        <span class="keyword">if</span> (engineString.<span class="built_in">size</span>() == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;Failed getting serialized engine!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Succeeded getting serialized engine!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">        IRuntime *runtime &#123;<span class="built_in">createInferRuntime</span>(gLogger)&#125;;</span><br><span class="line">        engine = runtime-&gt;<span class="built_in">deserializeCudaEngine</span>(engineString.<span class="built_in">data</span>(), fsize);</span><br><span class="line">        <span class="keyword">if</span> (engine == <span class="literal">nullptr</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;Failed loading engine!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Succeeded loading engine!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        IBuilder *            builder = <span class="built_in">createInferBuilder</span>(gLogger);</span><br><span class="line">        INetworkDefinition *  network = builder-&gt;<span class="built_in">createNetworkV2</span>(<span class="number">1U</span> &lt;&lt; <span class="built_in">int</span>(NetworkDefinitionCreationFlag::kEXPLICIT_BATCH));</span><br><span class="line">        IOptimizationProfile *profile = builder-&gt;<span class="built_in">createOptimizationProfile</span>();</span><br><span class="line">        IBuilderConfig *      config  = builder-&gt;<span class="built_in">createBuilderConfig</span>();</span><br><span class="line">        config-&gt;<span class="built_in">setMemoryPoolLimit</span>(MemoryPoolType::kWORKSPACE, <span class="number">1</span> &lt;&lt; <span class="number">30</span>);</span><br><span class="line"></span><br><span class="line">        ITensor *inputTensor = network-&gt;<span class="built_in">addInput</span>(<span class="string">&quot;inputT0&quot;</span>, DataType::kFLOAT, Dims32 &#123;<span class="number">3</span>, &#123;<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>&#125;&#125;);</span><br><span class="line">        profile-&gt;<span class="built_in">setDimensions</span>(inputTensor-&gt;<span class="built_in">getName</span>(), OptProfileSelector::kMIN, Dims32 &#123;<span class="number">3</span>, &#123;<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>&#125;&#125;);</span><br><span class="line">        profile-&gt;<span class="built_in">setDimensions</span>(inputTensor-&gt;<span class="built_in">getName</span>(), OptProfileSelector::kOPT, Dims32 &#123;<span class="number">3</span>, &#123;<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;&#125;);</span><br><span class="line">        profile-&gt;<span class="built_in">setDimensions</span>(inputTensor-&gt;<span class="built_in">getName</span>(), OptProfileSelector::kMAX, Dims32 &#123;<span class="number">3</span>, &#123;<span class="number">6</span>, <span class="number">8</span>, <span class="number">10</span>&#125;&#125;);</span><br><span class="line">        config-&gt;<span class="built_in">addOptimizationProfile</span>(profile);</span><br><span class="line"></span><br><span class="line">        IIdentityLayer *identityLayer = network-&gt;<span class="built_in">addIdentity</span>(*inputTensor);</span><br><span class="line">        network-&gt;<span class="built_in">markOutput</span>(*identityLayer-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>));</span><br><span class="line">        IHostMemory *engineString = builder-&gt;<span class="built_in">buildSerializedNetwork</span>(*network, *config);</span><br><span class="line">        <span class="keyword">if</span> (engineString == <span class="literal">nullptr</span> || engineString-&gt;<span class="built_in">size</span>() == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;Failed building serialized engine!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Succeeded building serialized engine!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">        IRuntime *runtime &#123;<span class="built_in">createInferRuntime</span>(gLogger)&#125;;</span><br><span class="line">        engine = runtime-&gt;<span class="built_in">deserializeCudaEngine</span>(engineString-&gt;<span class="built_in">data</span>(), engineString-&gt;<span class="built_in">size</span>());</span><br><span class="line">        <span class="keyword">if</span> (engine == <span class="literal">nullptr</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;Failed building engine!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Succeeded building engine!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">        <span class="function">std::ofstream <span class="title">engineFile</span><span class="params">(trtFile, std::ios::binary)</span></span>;</span><br><span class="line">        <span class="keyword">if</span> (!engineFile)</span><br><span class="line">        &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;Failed opening file to write&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        engineFile.<span class="built_in">write</span>(<span class="built_in">static_cast</span>&lt;<span class="type">char</span> *&gt;(engineString-&gt;<span class="built_in">data</span>()), engineString-&gt;<span class="built_in">size</span>());</span><br><span class="line">        <span class="keyword">if</span> (engineFile.<span class="built_in">fail</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;Failed saving .plan file!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Succeeded saving .plan file!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span>                      nIO     = engine-&gt;<span class="built_in">getNbIOTensors</span>();</span><br><span class="line">    <span class="type">int</span>                      nInput  = <span class="number">0</span>;</span><br><span class="line">    <span class="type">int</span>                      nOutput = <span class="number">0</span>;</span><br><span class="line">    <span class="function">std::vector&lt;std::string&gt; <span class="title">vTensorName</span><span class="params">(nIO)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nIO; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        vTensorName[i] = std::<span class="built_in">string</span>(engine-&gt;<span class="built_in">getIOTensorName</span>(i));</span><br><span class="line">        nInput += <span class="built_in">int</span>(engine-&gt;<span class="built_in">getTensorIOMode</span>(vTensorName[i].<span class="built_in">c_str</span>()) == TensorIOMode::kINPUT);</span><br><span class="line">        nOutput += <span class="built_in">int</span>(engine-&gt;<span class="built_in">getTensorIOMode</span>(vTensorName[i].<span class="built_in">c_str</span>()) == TensorIOMode::kOUTPUT);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    IExecutionContext *context = engine-&gt;<span class="built_in">createExecutionContext</span>();</span><br><span class="line">    context-&gt;<span class="built_in">setInputShape</span>(vTensorName[<span class="number">0</span>].<span class="built_in">c_str</span>(), Dims32 &#123;<span class="number">3</span>, &#123;<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;&#125;);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nIO; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; std::<span class="built_in">string</span>(i &lt; nInput ? <span class="string">&quot;Input [&quot;</span> : <span class="string">&quot;Output[&quot;</span>);</span><br><span class="line">        std::cout &lt;&lt; i &lt;&lt; std::<span class="built_in">string</span>(<span class="string">&quot;]-&gt; &quot;</span>);</span><br><span class="line">        std::cout &lt;&lt; <span class="built_in">dataTypeToString</span>(engine-&gt;<span class="built_in">getTensorDataType</span>(vTensorName[i].<span class="built_in">c_str</span>())) &lt;&lt; std::<span class="built_in">string</span>(<span class="string">&quot; &quot;</span>);</span><br><span class="line">        std::cout &lt;&lt; <span class="built_in">shapeToString</span>(engine-&gt;<span class="built_in">getTensorShape</span>(vTensorName[i].<span class="built_in">c_str</span>())) &lt;&lt; std::<span class="built_in">string</span>(<span class="string">&quot; &quot;</span>);</span><br><span class="line">        std::cout &lt;&lt; <span class="built_in">shapeToString</span>(context-&gt;<span class="built_in">getTensorShape</span>(vTensorName[i].<span class="built_in">c_str</span>())) &lt;&lt; std::<span class="built_in">string</span>(<span class="string">&quot; &quot;</span>);</span><br><span class="line">        std::cout &lt;&lt; vTensorName[i] &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">std::vector&lt;<span class="type">int</span>&gt; <span class="title">vTensorSize</span><span class="params">(nIO, <span class="number">0</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nIO; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        Dims32 dim  = context-&gt;<span class="built_in">getTensorShape</span>(vTensorName[i].<span class="built_in">c_str</span>());</span><br><span class="line">        <span class="type">int</span>    size = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; dim.nbDims; ++j)</span><br><span class="line">        &#123;</span><br><span class="line">            size *= dim.d[j];</span><br><span class="line">        &#125;</span><br><span class="line">        vTensorSize[i] = size * <span class="built_in">dataTypeToSize</span>(engine-&gt;<span class="built_in">getTensorDataType</span>(vTensorName[i].<span class="built_in">c_str</span>()));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    std::vector&lt;<span class="type">void</span> *&gt;</span><br><span class="line">        vBufferH &#123;nIO, <span class="literal">nullptr</span>&#125;;</span><br><span class="line">    std::vector&lt;<span class="type">void</span> *&gt; vBufferD &#123;nIO, <span class="literal">nullptr</span>&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nIO; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        vBufferH[i] = (<span class="type">void</span> *)<span class="keyword">new</span> <span class="type">char</span>[vTensorSize[i]];</span><br><span class="line">        <span class="built_in">CHECK</span>(<span class="built_in">cudaMalloc</span>(&amp;vBufferD[i], vTensorSize[i]));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">float</span> *pData = (<span class="type">float</span> *)vBufferH[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; vTensorSize[<span class="number">0</span>] / <span class="built_in">dataTypeToSize</span>(engine-&gt;<span class="built_in">getTensorDataType</span>(vTensorName[<span class="number">0</span>].<span class="built_in">c_str</span>())); ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        pData[i] = <span class="built_in">float</span>(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nInput; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">CHECK</span>(<span class="built_in">cudaMemcpy</span>(vBufferD[i], vBufferH[i], vTensorSize[i], cudaMemcpyHostToDevice));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nIO; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        context-&gt;<span class="built_in">setTensorAddress</span>(vTensorName[i].<span class="built_in">c_str</span>(), vBufferD[i]);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    context-&gt;<span class="built_in">enqueueV3</span>(<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = nInput; i &lt; nIO; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">CHECK</span>(<span class="built_in">cudaMemcpy</span>(vBufferH[i], vBufferD[i], vTensorSize[i], cudaMemcpyDeviceToHost));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nIO; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printArrayInfomation</span>((<span class="type">float</span> *)vBufferH[i], context-&gt;<span class="built_in">getTensorShape</span>(vTensorName[i].<span class="built_in">c_str</span>()), vTensorName[i], <span class="literal">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nIO; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">delete</span>[] vBufferH[i];</span><br><span class="line">        <span class="built_in">CHECK</span>(<span class="built_in">cudaFree</span>(vBufferD[i]));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">CHECK</span>(<span class="built_in">cudaSetDevice</span>(<span class="number">0</span>));</span><br><span class="line">    <span class="built_in">run</span>();</span><br><span class="line">    <span class="built_in">run</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="3-2-Workflow"><a href="#3-2-Workflow" class="headerlink" title="3.2 Workflow"></a>3.2 Workflow</h2><p>如何将我们训练好的模型使用TensorRT运行，有三种方式</p>
+<ul>
+<li>使用框架自带 TRT 接口（TF-TRT，Torch-TensorRT），部署在原框架中，不支持的算子返回到原框架中计算，不需要写plugin</li>
+<li>使用 Parser（TF/Torch/… → ONNX → TensorRT），<strong>目前我主要使用这一种方式来做</strong>，也是一个主流的方案，<strong>推荐使用</strong></li>
+<li>使用 TensorRT 原生 API 搭建网络</li>
+</ul>
+<img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/Snipaste_2024-10-22_11-31-47.bmp" class="" title="Snipaste_2024-10-22_11-31-47">
+<h2 id="3-3-Workflow：使用-TensorRT-API-搭建"><a href="#3-3-Workflow：使用-TensorRT-API-搭建" class="headerlink" title="3.3 Workflow：使用 TensorRT API 搭建"></a>3.3 Workflow：使用 TensorRT API 搭建</h2><ul>
+<li>怎样从头开始写一个网络？</li>
+<li>哪些代码是 API 搭建特有的，哪些是所有 Workflow 通用的？</li>
+<li>怎么让一个 Network 跑起来？</li>
+<li>用于推理计算的输入输出内存显存怎么准备？</li>
+<li>构建引擎需要时间，怎么构建一次，反复使用？</li>
+<li>TensorRT 的开发环境？</li>
+</ul>
+<p><strong>使用 API 完整搭建一个 MNIST 手写识别模型的示例</strong></p>
+<p>范例代码 cookbook\03-APIModel\MNISTExample-pyTorch</p>
+<p>基本流程：</p>
+<ul>
+<li>TensorFlow / pyTorch 中创建并训练一个网络</li>
+<li>提取网络权重，保存为 para.npz</li>
+<li><strong>TensorRT 中逐层重建该网络并加载 para.npz 中的权重</strong></li>
+<li>生成推理引擎</li>
+<li>用引擎做实际推理</li>
+</ul>
+<ul>
+<li>构建阶段<ul>
+<li>建立 Logger（日志记录器）</li>
+<li>建立 Builder（网络元数据）和BuilderConfig（网络元数据的选项）</li>
+<li>创建 Network（计算图内容）</li>
+<li>生成 SerializedNetwork（网络的 TRT 内部表示，生成序列化的engine文件保存或者生成可执行的推理engine）</li>
+</ul>
+</li>
+<li>运行阶段<ul>
+<li>建立 Engine（理解为可执行代码）</li>
+<li>创建 Context（GPU 进程）</li>
+<li>Buffer 准备（Host 端 + Device 端）</li>
+<li>Buffer 拷贝 Host to Device</li>
+<li>执行推理（Execute）</li>
+<li>Buffer 拷贝 Device to Host</li>
+<li>善后工作</li>
+</ul>
+</li>
+</ul>
+<img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022114945048.png" class="" title="image-20241022114945048">
+<h2 id="3-4-Logger-日志记录器"><a href="#3-4-Logger-日志记录器" class="headerlink" title="3.4 Logger 日志记录器"></a>3.4 Logger <strong>日志记录器</strong></h2><img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022121539251.png" class="" title="image-20241022121539251">
+<p>多个builder可以共享一个logger</p>
+<p><code>logger = trt.Logger(trt.Logger.VERBOSE)</code></p>
+<p>可选参数：VERBOSE, INFO, WARNING, ERROR, INTERNAL_ERROR，产生不同等级的日志，由详细到简略</p>
+<p>参考代码cookbook\02-API\Logger</p>
+<h2 id="3-5-Builder-引擎构建器"><a href="#3-5-Builder-引擎构建器" class="headerlink" title="3.5 Builder 引擎构建器"></a>3.5 Builder 引擎构建器</h2><img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022134902150.png" class="" title="image-20241022134902150">
+<p><code>builder = trt.Builder(logger)</code></p>
+<ul>
+<li><p><strong>常用API</strong></p>
+<ul>
+<li><code>builder.create_network(…)</code> 创建 TensorRT 网络对象</li>
+<li><code>builder.create_optimization_profile()</code> 创建用于 Dyanmic Shape 输入的配置器</li>
+</ul>
+<p>更多细节见 02-API/Builder</p>
+</li>
+</ul>
+<h2 id="3-6-BuilderConfig-网络属性选项"><a href="#3-6-BuilderConfig-网络属性选项" class="headerlink" title="3.6 BuilderConfig 网络属性选项"></a>3.6 BuilderConfig <strong>网络属性选项</strong></h2><img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022134931729.png" class="" title="image-20241022134931729">
+<ul>
+<li>BuilderConfig <strong>网络属性选项</strong></li>
+</ul>
+<p><code>config = builder.create_builder_config()</code></p>
+<ul>
+<li>常用成员：<ul>
+<li>config. config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, 1 &lt;&lt; 30) 指定构建期可用显存（单位：Byte）</li>
+<li>config.flag = … 设置标志位开关，如启闭 FP16/INT8 模式，Refit 模式，手工数据类型限制等</li>
+<li>config.int8_calibrator = … 指定 INT8-PTQ 的校正器</li>
+<li>config.add_optimization_profile(…) 添加用于 Dynamic Shape 输入的配置器</li>
+<li>config.set_tactic_sources/set_timing_cache/set_preview_feature/ … 更多高级用法（见教程第四部分）</li>
+</ul>
+</li>
+</ul>
+<p>更多细节见 02-API/BuilderConfig</p>
+<h2 id="3-7-Network-网络具体构造"><a href="#3-7-Network-网络具体构造" class="headerlink" title="3.7 Network 网络具体构造"></a>3.7 Network <strong>网络具体构造</strong></h2><img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022135545336.png" class="" title="image-20241022135545336">
+<p>Network <strong>网络具体构造</strong></p>
+<p><code>network = builder.create_network()</code></p>
+<p><strong>在使用API搭建网络时需要add来添加网络层，如果使用parser导入解析后网络就完成了。</strong></p>
+<ul>
+<li><p>常用参数：</p>
+<ul>
+<li>1 &lt;&lt; int(tensorrt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH)，使用 Explicit Batch 模式</li>
+</ul>
+</li>
+<li><p>（使用API搭建 ）常用方法：</p>
+<ul>
+<li><p>network.add_input( ‘oneTensor’ ,trt.float32, (3,4,5)) 标记网络输入张量</p>
+</li>
+<li><p>convLayer = network.add_convolution_nd(XXX) 添加各种网络层</p>
+</li>
+<li><p>network.mark_output(convLayer.get_output(0)) 标记网络输出张量</p>
+</li>
+</ul>
+</li>
+<li><p>常用获取网络信息的成员：</p>
+<ul>
+<li>network.name / network.num_layers / network.num_inputs / network.num_outputs</li>
+<li>network.has_implicit_batch_dimension / network.has_explicit_precision</li>
+</ul>
+</li>
+</ul>
+<p>其他细节见 02-API/Network</p>
+<h3 id="3-7-1-Explicit-Batch-模式-v-s-Implicit-Batch-模式"><a href="#3-7-1-Explicit-Batch-模式-v-s-Implicit-Batch-模式" class="headerlink" title="3.7.1 Explicit Batch 模式 v.s. Implicit Batch 模式"></a>3.7.1 Explicit Batch 模式 v.s. Implicit Batch 模式</h3><ul>
+<li><strong>Explicit Batch 为 TensorRT 主流 Network 构建方法</strong>，Implicit Batch 模式（builder.create_network(0)）仅用作后向兼容</li>
+<li>Implicit Batch 模式：所有张量的batch维度不显式的包含在张量形状中，在运行时指定。</li>
+<li><strong>Explicit Batch所有张量显式包含 Batch 维度、比 Implicit Batch 模式多一维</strong></li>
+<li>需要使用 builder.create_network(1 &lt;&lt; int(tensorrt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH))</li>
+<li><p>Explicit Batch 模式能做、Implicit Batch 模式不能做的事情：</p>
+<ul>
+<li>Batch Normalization（视频教程的录音中说成了 Layer Normalization）</li>
+<li>Reshape/Transpose/Reduce over batch dimension</li>
+<li>Dynamic shape 模式</li>
+<li>Loop 结构</li>
+<li>一些 Layer 的高级用法（如 ShufleLayer.set_input） </li>
+</ul>
+</li>
+<li><p><strong>从 Onnx 导入的模型也默认使用 Explicit Batch 模式</strong></p>
+</li>
+</ul>
+<p>范例代码仅在 01-SimpleDemo 中 TensorRT6 和 TensorRT7 中保留了 Implicit Batch 的例子</p>
+<h2 id="3-8-Dynamic-Shape-模式"><a href="#3-8-Dynamic-Shape-模式" class="headerlink" title="3.8 Dynamic Shape 模式"></a>3.8 Dynamic Shape 模式</h2><ul>
+<li>适用于输入张量形状在推理时才决定网络</li>
+<li>除了 Batch 维，其他维度也可以推理时才决定</li>
+<li>需要 Explicit Batch 模式</li>
+<li>需要 Optimazation Profile 帮助网络优化</li>
+<li>需用 context.set_input_shape 绑定实际输入数据形状</li>
+</ul>
+<p>Profile <strong>指定输入张量大小范围</strong></p>
+<p><code>profile = builder.create_optimization_profile()</code></p>
+<ul>
+<li>常用方法：<ul>
+<li>profile.set_shape(tensorName, minShape, commonShape, maxShape) 给定输入张量的最小、最常见、最大尺寸</li>
+<li>config.add_optimization_profile(profile) 将设置的 profile 传递给 config 以创建网络</li>
+</ul>
+</li>
+</ul>
+<p>涉及到两个部分的代码</p>
+<p>完整的python和c++代码参考下面 <a href="#3.11 使用API搭建的示例">3.11 使用API搭建的示例</a></p>
+<ul>
+<li><p>构建网络阶段 也就是上面提到的 Optimazation Profile 帮助网络优化</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">builder = trt.Builder(logger)                                           <span class="comment"># 网络元信息，Builder/Network/BuilderConfig/Profile 相关</span></span><br><span class="line">network = builder.create_network(<span class="number">1</span> &lt;&lt; <span class="built_in">int</span>(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH))</span><br><span class="line">profile = builder.create_optimization_profile()</span><br><span class="line">config = builder.create_builder_config()</span><br><span class="line">config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, <span class="number">1</span> &lt;&lt; <span class="number">30</span>)     <span class="comment"># 设置空间给 TensoRT 尝试优化，单位 Byte</span></span><br><span class="line">  </span><br><span class="line">inputTensor = network.add_input(<span class="string">&quot;inputT0&quot;</span>, trt.float32, [-<span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>])   <span class="comment"># 指定输入张量</span></span><br><span class="line">profile.set_shape(inputTensor.name, [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>], [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>], [<span class="number">6</span>, <span class="number">8</span>, <span class="number">10</span>])   <span class="comment"># 指定输入张量 Dynamic Shape 范围</span></span><br><span class="line">config.add_optimization_profile(profile)</span><br><span class="line">  </span><br><span class="line">identityLayer = network.add_identity(inputTensor)                       <span class="comment"># 恒等变换</span></span><br><span class="line">identityLayer.get_output(<span class="number">0</span>).name = <span class="string">&#x27;outputT0&#x27;</span></span><br><span class="line">network.mark_output(identityLayer.get_output(<span class="number">0</span>))                        <span class="comment"># 标记输出张量</span></span><br><span class="line">  </span><br><span class="line">engineString = builder.build_serialized_network(network, config)        <span class="comment"># 生成序列化网络</span></span><br><span class="line"><span class="keyword">if</span> engineString == <span class="literal">None</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Failed building serialized engine!&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Succeeded building serialized engine!&quot;</span>)</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(trtFile, <span class="string">&quot;wb&quot;</span>) <span class="keyword">as</span> f:                                          <span class="comment"># 将序列化网络保存为 .plan 文件</span></span><br><span class="line">    f.write(engineString)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Succeeded saving .plan file!&quot;</span>)</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>运行网络阶段 也就是上面提到的 context.set_input_shape 绑定实际输入数据形状</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">engine = trt.Runtime(logger).deserialize_cuda_engine(engineString)          <span class="comment"># 使用 Runtime 来创建 engine</span></span><br><span class="line"><span class="keyword">if</span> engine == <span class="literal">None</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Failed building engine!&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Succeeded building engine!&quot;</span>)</span><br><span class="line">  </span><br><span class="line">context = engine.create_execution_context()                                 <span class="comment"># 创建 context（相当于 GPU 进程）</span></span><br><span class="line">context.set_binding_shape(<span class="number">0</span>, [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])                                     <span class="comment"># Dynamic Shape 模式需要绑定真实数据形状</span></span><br><span class="line">nInput = np.<span class="built_in">sum</span>([engine.binding_is_input(i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(engine.num_bindings)])  <span class="comment"># 获取 engine 绑定信息</span></span><br><span class="line">nOutput = engine.num_bindings - nInput</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nInput):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Bind[%2d]:i[%2d]-&gt;&quot;</span> % (i, i), engine.get_binding_dtype(i), engine.get_binding_shape(i), context.get_binding_shape(i), engine.get_binding_name(i))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nInput, nInput + nOutput):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Bind[%2d]:o[%2d]-&gt;&quot;</span> % (i, i - nInput), engine.get_binding_dtype(i), engine.get_binding_shape(i), context.get_binding_shape(i), engine.get_binding_name(i))</span><br><span class="line">  </span><br><span class="line">data = np.arange(<span class="number">3</span> * <span class="number">4</span> * <span class="number">5</span>, dtype=np.float32).reshape(<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>)              <span class="comment"># 准备数据和 Host/Device 端内存</span></span><br><span class="line">bufferH = []</span><br><span class="line">bufferH.append(np.ascontiguousarray(data))</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nInput, nInput + nOutput):</span><br><span class="line">    bufferH.append(np.empty(context.get_binding_shape(i), dtype=trt.nptype(engine.get_binding_dtype(i))))</span><br><span class="line">bufferD = []</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nInput + nOutput):</span><br><span class="line">    bufferD.append(cudart.cudaMalloc(bufferH[i].nbytes)[<span class="number">1</span>])</span><br><span class="line">  </span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nInput):                                                     <span class="comment"># 首先将 Host 数据拷贝到 Device 端</span></span><br><span class="line">    cudart.cudaMemcpy(bufferD[i], bufferH[i].ctypes.data, bufferH[i].nbytes, cudart.cudaMemcpyKind.cudaMemcpyHostToDevice)</span><br><span class="line">  </span><br><span class="line">context.execute_v2(bufferD)                                                 <span class="comment"># 运行推理计算</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="3-9-Layer-和-Tensor（使用API搭建-）"><a href="#3-9-Layer-和-Tensor（使用API搭建-）" class="headerlink" title="3.9 Layer 和 Tensor（使用API搭建 ）"></a>3.9 Layer 和 Tensor（使用API搭建 ）</h2><p>注意区别 Layer 和 Tensor</p>
+<img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022163317261.png" class="" title="image-20241022163317261">
+<p>Layer 的常用成员和方法：</p>
+<ul>
+<li>oneLayer.name = ‘one’ 获取或指定 Layer 的名字</li>
+<li>oneLayer.type 获取该层的种类</li>
+<li>oneLayer.precision 指定改层计算精度（需配合 builder.strict_type_constraints）</li>
+<li>oneLayer.get_output(i) 获取该层第 i 个输出张量</li>
+</ul>
+<p><strong>常见 Layer 的使用范例</strong></p>
+<p>范例代码 02-API/Layer/<em>/</em>.md，41 种 Layer 示例 各 Layer 目录中示例代码可以直接运行</p>
+<p>遇到 TensorRT 不原生支持的节点 自己实现 Plugin（见教程第三部分讲）</p>
+<p>Tensor 的常用成员和方法：</p>
+<ul>
+<li>oneTensor.name = ‘one’ 获取或指定 tensor 的名字</li>
+<li>oneTensor.shape 获取 tensor 的形状，可用于 print 检查或作为后续层的参数</li>
+<li>oneTensor.dtype 获取或设定 tensor 的数据类型（可用于配合 identity 层实现数据类型转换）</li>
+</ul>
+<p>更多细节见 02-API/Tensor 和 02-API/Layer  这里面有非常多的层，因为我没用过API搭建网络，因此不熟，这里给出一个里面的例子</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">from</span> cuda <span class="keyword">import</span> cudart</span><br><span class="line"><span class="keyword">import</span> tensorrt <span class="keyword">as</span> trt</span><br><span class="line"></span><br><span class="line">nB, nC, nH, nW = <span class="number">1</span>, <span class="number">4</span>, <span class="number">8</span>, <span class="number">8</span>  <span class="comment"># nC % 4 ==0，全部值得到保存</span></span><br><span class="line"><span class="comment">#nB, nC, nH, nW = 1, 3, 8, 8  # nC % 4 !=0，会丢值</span></span><br><span class="line">data = (np.arange(<span class="number">1</span>, <span class="number">1</span> + nB * nC * nH * nW, dtype=np.float32) / np.prod(nB * nC * nH * nW) * <span class="number">128</span>).astype(np.float32).reshape(nB, nC, nH, nW)</span><br><span class="line"></span><br><span class="line">np.set_printoptions(precision=<span class="number">3</span>, edgeitems=<span class="number">8</span>, linewidth=<span class="number">300</span>, suppress=<span class="literal">True</span>)</span><br><span class="line">cudart.cudaDeviceSynchronize()</span><br><span class="line"></span><br><span class="line">logger = trt.Logger(trt.Logger.ERROR)</span><br><span class="line">builder = trt.Builder(logger)</span><br><span class="line">network = builder.create_network(<span class="number">1</span> &lt;&lt; <span class="built_in">int</span>(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH))</span><br><span class="line">profile = builder.create_optimization_profile()</span><br><span class="line">config = builder.create_builder_config()</span><br><span class="line">config.set_flag(trt.BuilderFlag.INT8)</span><br><span class="line">inputT0 = network.add_input(<span class="string">&quot;inputT0&quot;</span>, trt.float32, (-<span class="number">1</span>, nC, nH, nW))</span><br><span class="line">profile.set_shape(inputT0.name, [<span class="number">1</span>, nC, nH, nW], [nB, nC, nH, nW], [nB * <span class="number">2</span>, nC, nH, nW])</span><br><span class="line">config.add_optimization_profile(profile)</span><br><span class="line"></span><br><span class="line">layer = network.add_identity(inputT0)</span><br><span class="line">layer.name = <span class="string">&quot;Identity Layer&quot;</span></span><br><span class="line">layer.precision = trt.int8</span><br><span class="line">layer.reset_precision()</span><br><span class="line">layer.precision = trt.int8</span><br><span class="line">layer.get_output(<span class="number">0</span>).dtype = trt.int8</span><br><span class="line">layer.set_output_type(<span class="number">0</span>, trt.int8)</span><br><span class="line">layer.reset_output_type(<span class="number">0</span>)</span><br><span class="line">layer.set_output_type(<span class="number">0</span>, trt.int8)</span><br><span class="line">layer.get_output(<span class="number">0</span>).allowed_formats = <span class="number">1</span> &lt;&lt; <span class="built_in">int</span>(trt.TensorFormat.CHW4)</span><br><span class="line">layer.get_output(<span class="number">0</span>).dynamic_range = [-<span class="number">128</span>, <span class="number">128</span>]</span><br><span class="line"></span><br><span class="line">network.mark_output(layer.get_output(<span class="number">0</span>))</span><br><span class="line"></span><br><span class="line">engineString = builder.build_serialized_network(network, config)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;layer.name = %s&quot;</span> % layer.name)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;layer.type = %s&quot;</span> % layer.<span class="built_in">type</span>)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;layer.__sizeof__() = %s&quot;</span> % layer.__sizeof__())</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;layer.__str__ = %s&quot;</span> % layer.__str__())</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;layer.num_inputs = %d&quot;</span> % layer.num_inputs)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(layer.num_inputs):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\tlayer.get_input(%d) = %s&quot;</span> % (i, layer.get_input(i)))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;layer.num_outputs = %d&quot;</span> % layer.num_outputs)</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(layer.num_outputs):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\tlayer.get_output(%d) = %s&quot;</span> % (i, layer.get_output(i)))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\tlayer.get_output_type(%d) = %s&quot;</span> % (i, layer.get_output_type(i)))</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;\tlayer.output_type_is_set(%d) = %s&quot;</span> % (i, layer.output_type_is_set(i)))</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;layer.precision = %s&quot;</span> % layer.precision)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;layer.precision_is_set = %s&quot;</span> % layer.precision_is_set)</span><br></pre></td></tr></table></figure>
+<h2 id="3-10-从Network中打印所有层和张量的信息"><a href="#3-10-从Network中打印所有层和张量的信息" class="headerlink" title="3.10 从Network中打印所有层和张量的信息"></a>3.10 从Network中打印所有层和张量的信息</h2><p>范例代码：07-Tool/NetworkPrinter</p>
+<ul>
+<li>外层循环遍历所有 Layer</li>
+<li>内层循环遍历该 Layer 的的所有 input/output</li>
+</ul>
+<img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022164841748.png" class="" title="image-20241022164841748">
+<p>python代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(network.num_layers):</span><br><span class="line">    layer = network.get_layer(i)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;%4d-&gt;%s,in=%d,out=%d,%s&quot;</span> % (i, <span class="built_in">str</span>(layer.<span class="built_in">type</span>)[<span class="number">10</span>:], layer.num_inputs, layer.num_outputs, layer.name))</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(layer.num_inputs):</span><br><span class="line">        tensor = layer.get_input(j)</span><br><span class="line">        <span class="keyword">if</span> tensor == <span class="literal">None</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;\tInput  %2d:&quot;</span> % j, <span class="string">&quot;None&quot;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;\tInput  %2d:%s,%s,%s&quot;</span> % (j, tensor.shape, <span class="built_in">str</span>(tensor.dtype)[<span class="number">9</span>:], tensor.name))</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> <span class="built_in">range</span>(layer.num_outputs):</span><br><span class="line">        tensor = layer.get_output(j)</span><br><span class="line">        <span class="keyword">if</span> tensor == <span class="literal">None</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;\tOutput %2d:&quot;</span> % j, <span class="string">&quot;None&quot;</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;\tOutput %2d:%s,%s,%s&quot;</span> % (j, tensor.shape, <span class="built_in">str</span>(tensor.dtype)[<span class="number">9</span>:], tensor.name))</span><br></pre></td></tr></table></figure>
+<p>c++代码</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; network-&gt;<span class="built_in">getNbLayers</span>(); ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        ILayer *layer = network-&gt;<span class="built_in">getLayer</span>(i);</span><br><span class="line">        std::cout &lt;&lt; std::<span class="built_in">setw</span>(<span class="number">4</span>) &lt;&lt; i &lt;&lt; std::<span class="built_in">string</span>(<span class="string">&quot;-&gt;&quot;</span>) &lt;&lt; <span class="built_in">layerTypeToString</span>(layer-&gt;<span class="built_in">getType</span>()) &lt;&lt; std::<span class="built_in">string</span>(<span class="string">&quot;,in=&quot;</span>) &lt;&lt; layer-&gt;<span class="built_in">getNbInputs</span>() &lt;&lt; std::<span class="built_in">string</span>(<span class="string">&quot;,out=&quot;</span>) &lt;&lt; layer-&gt;<span class="built_in">getNbOutputs</span>() &lt;&lt; std::<span class="built_in">string</span>(<span class="string">&quot;,&quot;</span>) &lt;&lt; std::<span class="built_in">string</span>(layer-&gt;<span class="built_in">getName</span>()) &lt;&lt; std::endl;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; layer-&gt;<span class="built_in">getNbInputs</span>(); ++j)</span><br><span class="line">        &#123;</span><br><span class="line">            ITensor *tensor = layer-&gt;<span class="built_in">getInput</span>(j);</span><br><span class="line">            std::cout &lt;&lt; std::<span class="built_in">string</span>(<span class="string">&quot;\tInput  &quot;</span>) &lt;&lt; std::<span class="built_in">setw</span>(<span class="number">2</span>) &lt;&lt; j &lt;&lt; std::<span class="built_in">string</span>(<span class="string">&quot;:&quot;</span>) &lt;&lt; <span class="built_in">shapeToString</span>(tensor-&gt;<span class="built_in">getDimensions</span>()) &lt;&lt; std::<span class="built_in">string</span>(<span class="string">&quot;,&quot;</span>) &lt;&lt; <span class="built_in">dataTypeToString</span>(tensor-&gt;<span class="built_in">getType</span>()) &lt;&lt; std::<span class="built_in">string</span>(<span class="string">&quot;,&quot;</span>) &lt;&lt; std ::<span class="built_in">string</span>(tensor-&gt;<span class="built_in">getName</span>()) &lt;&lt; std::endl;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; layer-&gt;<span class="built_in">getNbOutputs</span>(); ++j)</span><br><span class="line">        &#123;</span><br><span class="line">            ITensor *tensor = layer-&gt;<span class="built_in">getOutput</span>(j);</span><br><span class="line">            std::cout &lt;&lt; std::<span class="built_in">string</span>(<span class="string">&quot;\tOutput &quot;</span>) &lt;&lt; std::<span class="built_in">setw</span>(<span class="number">2</span>) &lt;&lt; j &lt;&lt; std::<span class="built_in">string</span>(<span class="string">&quot;:&quot;</span>) &lt;&lt; <span class="built_in">shapeToString</span>(tensor-&gt;<span class="built_in">getDimensions</span>()) &lt;&lt; std::<span class="built_in">string</span>(<span class="string">&quot;,&quot;</span>) &lt;&lt; <span class="built_in">dataTypeToString</span>(tensor-&gt;<span class="built_in">getType</span>()) &lt;&lt; std::<span class="built_in">string</span>(<span class="string">&quot;,&quot;</span>) &lt;&lt; std ::<span class="built_in">string</span>(tensor-&gt;<span class="built_in">getName</span>()) &lt;&lt; std::endl;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="3-11-使用API搭建的示例"><a href="#3-11-使用API搭建的示例" class="headerlink" title="3.11 使用API搭建的示例"></a>3.11 使用API搭建的示例</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Copyright (c) 2021-2023, NVIDIA CORPORATION. All rights reserved.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></span><br><span class="line"><span class="comment"># you may not use this file except in compliance with the License.</span></span><br><span class="line"><span class="comment"># You may obtain a copy of the License at</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#     http://www.apache.org/licenses/LICENSE-2.0</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Unless required by applicable law or agreed to in writing, software</span></span><br><span class="line"><span class="comment"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span></span><br><span class="line"><span class="comment"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></span><br><span class="line"><span class="comment"># See the License for the specific language governing permissions and</span></span><br><span class="line"><span class="comment"># limitations under the License.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> tensorrt <span class="keyword">as</span> trt</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">MyLogger</span>(trt.ILogger):  <span class="comment"># customerized Logger</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        trt.ILogger.__init__(self)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">log</span>(<span class="params">self, severity, msg</span>):</span><br><span class="line">        <span class="keyword">if</span> severity &lt;= self.min_severity:</span><br><span class="line">            <span class="comment"># int(trt.ILogger.Severity.VERBOSE) == 4</span></span><br><span class="line">            <span class="comment"># int(trt.ILogger.Severity.INFO) == 3</span></span><br><span class="line">            <span class="comment"># int(trt.ILogger.Severity.WARNING) == 2</span></span><br><span class="line">            <span class="comment"># int(trt.ILogger.Severity.ERROR) == 1</span></span><br><span class="line">            <span class="comment"># int(trt.ILogger.Severity.INTERNAL_ERROR) == 0</span></span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;My Logger[%s] %s&quot;</span> % (severity, msg))  <span class="comment"># customerized log content</span></span><br><span class="line"></span><br><span class="line">logger = MyLogger()  <span class="comment"># default severity is VERBOSE</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Build time --------------------------------------------------------------&quot;</span>)</span><br><span class="line">logger.min_severity = trt.ILogger.Severity.INFO  <span class="comment"># use severity INFO in build time</span></span><br><span class="line">builder = trt.Builder(logger)  <span class="comment"># assign logger to Builder</span></span><br><span class="line">network = builder.create_network(<span class="number">1</span> &lt;&lt; <span class="built_in">int</span>(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH))</span><br><span class="line">config = builder.create_builder_config()</span><br><span class="line">inputTensor = network.add_input(<span class="string">&quot;inputT0&quot;</span>, trt.float32, [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])</span><br><span class="line">identityLayer = network.add_identity(inputTensor)</span><br><span class="line">network.mark_output(identityLayer.get_output(<span class="number">0</span>))</span><br><span class="line">engineString = builder.build_serialized_network(network, config)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Run time ----------------------------------------------------------------&quot;</span>)</span><br><span class="line">logger.min_severity = trt.ILogger.Severity.VERBOSE  <span class="comment"># change severity into VERBOSE in run time</span></span><br><span class="line"></span><br><span class="line">engine = trt.Runtime(logger).deserialize_cuda_engine(engineString)  <span class="comment"># assign logger to Runtime</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>python代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Copyright (c) 2021-2022, NVIDIA CORPORATION. All rights reserved.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></span><br><span class="line"><span class="comment"># you may not use this file except in compliance with the License.</span></span><br><span class="line"><span class="comment"># You may obtain a copy of the License at</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#     http://www.apache.org/licenses/LICENSE-2.0</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Unless required by applicable law or agreed to in writing, software</span></span><br><span class="line"><span class="comment"># distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span></span><br><span class="line"><span class="comment"># WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></span><br><span class="line"><span class="comment"># See the License for the specific language governing permissions and</span></span><br><span class="line"><span class="comment"># limitations under the License.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> cuda <span class="keyword">import</span> cudart  <span class="comment"># 使用 cuda runtime API</span></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> tensorrt <span class="keyword">as</span> trt</span><br><span class="line"></span><br><span class="line"><span class="comment"># yapf:disable</span></span><br><span class="line"></span><br><span class="line">trtFile = <span class="string">&quot;./model.plan&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">run</span>():</span><br><span class="line">    logger = trt.Logger(trt.Logger.ERROR)                                       <span class="comment"># 指定 Logger，可用等级：VERBOSE，INFO，WARNING，ERRROR，INTERNAL_ERROR</span></span><br><span class="line">    <span class="keyword">if</span> os.path.isfile(trtFile):                                                 <span class="comment"># 如果有 .plan 文件则直接读取</span></span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(trtFile, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> f:</span><br><span class="line">            engineString = f.read()</span><br><span class="line">        <span class="keyword">if</span> engineString == <span class="literal">None</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Failed getting serialized engine!&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Succeeded getting serialized engine!&quot;</span>)</span><br><span class="line">    <span class="keyword">else</span>:                                                                       <span class="comment"># 没有 .plan 文件，从头开始创建</span></span><br><span class="line">        builder = trt.Builder(logger)                                           <span class="comment"># 网络元信息，Builder/Network/BuilderConfig/Profile 相关</span></span><br><span class="line">        network = builder.create_network(<span class="number">1</span> &lt;&lt; <span class="built_in">int</span>(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH))</span><br><span class="line">        profile = builder.create_optimization_profile()</span><br><span class="line">        config = builder.create_builder_config()</span><br><span class="line">        config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, <span class="number">1</span> &lt;&lt; <span class="number">30</span>)     <span class="comment"># 设置空间给 TensoRT 尝试优化，单位 Byte</span></span><br><span class="line"></span><br><span class="line">        inputTensor = network.add_input(<span class="string">&quot;inputT0&quot;</span>, trt.float32, [-<span class="number">1</span>, -<span class="number">1</span>, -<span class="number">1</span>])   <span class="comment"># 指定输入张量</span></span><br><span class="line">        profile.set_shape(inputTensor.name, [<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>], [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>], [<span class="number">6</span>, <span class="number">8</span>, <span class="number">10</span>])   <span class="comment"># 指定输入张量 Dynamic Shape 范围</span></span><br><span class="line">        config.add_optimization_profile(profile)</span><br><span class="line"></span><br><span class="line">        identityLayer = network.add_identity(inputTensor)                       <span class="comment"># 恒等变换</span></span><br><span class="line">        identityLayer.get_output(<span class="number">0</span>).name = <span class="string">&#x27;outputT0&#x27;</span></span><br><span class="line">        network.mark_output(identityLayer.get_output(<span class="number">0</span>))                        <span class="comment"># 标记输出张量</span></span><br><span class="line"></span><br><span class="line">        engineString = builder.build_serialized_network(network, config)        <span class="comment"># 生成序列化网络</span></span><br><span class="line">        <span class="keyword">if</span> engineString == <span class="literal">None</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Failed building serialized engine!&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Succeeded building serialized engine!&quot;</span>)</span><br><span class="line">        <span class="keyword">with</span> <span class="built_in">open</span>(trtFile, <span class="string">&quot;wb&quot;</span>) <span class="keyword">as</span> f:                                          <span class="comment"># 将序列化网络保存为 .plan 文件</span></span><br><span class="line">            f.write(engineString)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&quot;Succeeded saving .plan file!&quot;</span>)</span><br><span class="line"></span><br><span class="line">    engine = trt.Runtime(logger).deserialize_cuda_engine(engineString)          <span class="comment"># 使用 Runtime 来创建 engine</span></span><br><span class="line">    <span class="keyword">if</span> engine == <span class="literal">None</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Failed building engine!&quot;</span>)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Succeeded building engine!&quot;</span>)</span><br><span class="line"></span><br><span class="line">    context = engine.create_execution_context()                                 <span class="comment"># 创建 context（相当于 GPU 进程）</span></span><br><span class="line">    context.set_binding_shape(<span class="number">0</span>, [<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>])                                     <span class="comment"># Dynamic Shape 模式需要绑定真实数据形状</span></span><br><span class="line">    nInput = np.<span class="built_in">sum</span>([engine.binding_is_input(i) <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(engine.num_bindings)])  <span class="comment"># 获取 engine 绑定信息</span></span><br><span class="line">    nOutput = engine.num_bindings - nInput</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nInput):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Bind[%2d]:i[%2d]-&gt;&quot;</span> % (i, i), engine.get_binding_dtype(i), engine.get_binding_shape(i), context.get_binding_shape(i), engine.get_binding_name(i))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nInput, nInput + nOutput):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Bind[%2d]:o[%2d]-&gt;&quot;</span> % (i, i - nInput), engine.get_binding_dtype(i), engine.get_binding_shape(i), context.get_binding_shape(i), engine.get_binding_name(i))</span><br><span class="line"></span><br><span class="line">    data = np.arange(<span class="number">3</span> * <span class="number">4</span> * <span class="number">5</span>, dtype=np.float32).reshape(<span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>)              <span class="comment"># 准备数据和 Host/Device 端内存</span></span><br><span class="line">    bufferH = []</span><br><span class="line">    bufferH.append(np.ascontiguousarray(data))</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nInput, nInput + nOutput):</span><br><span class="line">        bufferH.append(np.empty(context.get_binding_shape(i), dtype=trt.nptype(engine.get_binding_dtype(i))))</span><br><span class="line">    bufferD = []</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nInput + nOutput):</span><br><span class="line">        bufferD.append(cudart.cudaMalloc(bufferH[i].nbytes)[<span class="number">1</span>])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nInput):                                                     <span class="comment"># 首先将 Host 数据拷贝到 Device 端</span></span><br><span class="line">        cudart.cudaMemcpy(bufferD[i], bufferH[i].ctypes.data, bufferH[i].nbytes, cudart.cudaMemcpyKind.cudaMemcpyHostToDevice)</span><br><span class="line"></span><br><span class="line">    context.execute_v2(bufferD)                                                 <span class="comment"># 运行推理计算</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nInput, nInput + nOutput):                                   <span class="comment"># 将结果从 Device 端拷回 Host 端</span></span><br><span class="line">        cudart.cudaMemcpy(bufferH[i].ctypes.data, bufferD[i], bufferH[i].nbytes, cudart.cudaMemcpyKind.cudaMemcpyDeviceToHost)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(nInput + nOutput):</span><br><span class="line">        <span class="built_in">print</span>(engine.get_binding_name(i))</span><br><span class="line">        <span class="built_in">print</span>(bufferH[i])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> b <span class="keyword">in</span> bufferD:                                                           <span class="comment"># 释放 Device 端内存</span></span><br><span class="line">        cudart.cudaFree(b)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    os.system(<span class="string">&quot;rm -rf ./*.plan&quot;</span>)</span><br><span class="line">    run()                                                                       <span class="comment"># 创建 TensorRT 引擎并推理</span></span><br><span class="line">    run()                                                                       <span class="comment"># 读取 TensorRT 引擎并推理</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>c++ 代码</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// TensorRT 日志结构体</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Logger</span> : <span class="keyword">public</span> ILogger</span><br><span class="line">&#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    Severity reportableSeverity;</span><br><span class="line"></span><br><span class="line">    <span class="built_in">Logger</span>(Severity severity = Severity::kINFO):</span><br><span class="line">        <span class="built_in">reportableSeverity</span>(severity) &#123;&#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">log</span><span class="params">(Severity severity, <span class="type">const</span> <span class="type">char</span> *msg)</span> <span class="keyword">noexcept</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (severity &gt; reportableSeverity)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">switch</span> (severity)</span><br><span class="line">        &#123;</span><br><span class="line">        <span class="keyword">case</span> Severity::kINTERNAL_ERROR:</span><br><span class="line">            std::cerr &lt;&lt; <span class="string">&quot;INTERNAL_ERROR: &quot;</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> Severity::kERROR:</span><br><span class="line">            std::cerr &lt;&lt; <span class="string">&quot;ERROR: &quot;</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> Severity::kWARNING:</span><br><span class="line">            std::cerr &lt;&lt; <span class="string">&quot;WARNING: &quot;</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">case</span> Severity::kINFO:</span><br><span class="line">            std::cerr &lt;&lt; <span class="string">&quot;INFO: &quot;</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        <span class="keyword">default</span>:</span><br><span class="line">            std::cerr &lt;&lt; <span class="string">&quot;VERBOSE: &quot;</span>;</span><br><span class="line">            <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        std::cerr &lt;&lt; msg &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * Copyright (c) 2021-2022, NVIDIA CORPORATION. All rights reserved.</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);</span></span><br><span class="line"><span class="comment"> * you may not use this file except in compliance with the License.</span></span><br><span class="line"><span class="comment"> * You may obtain a copy of the License at</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> *     http://www.apache.org/licenses/LICENSE-2.0</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * Unless required by applicable law or agreed to in writing, software</span></span><br><span class="line"><span class="comment"> * distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span></span><br><span class="line"><span class="comment"> * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span></span><br><span class="line"><span class="comment"> * See the License for the specific language governing permissions and</span></span><br><span class="line"><span class="comment"> * limitations under the License.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;cookbookHelper.hpp&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> nvinfer1;</span><br><span class="line"></span><br><span class="line"><span class="type">const</span> std::string trtFile &#123;<span class="string">&quot;./model.plan&quot;</span>&#125;;</span><br><span class="line"><span class="function"><span class="type">static</span> Logger     <span class="title">gLogger</span><span class="params">(ILogger::Severity::kERROR)</span></span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">run</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ICudaEngine *engine = <span class="literal">nullptr</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (<span class="built_in">access</span>(trtFile.<span class="built_in">c_str</span>(), F_OK) == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="function">std::ifstream <span class="title">engineFile</span><span class="params">(trtFile, std::ios::binary)</span></span>;</span><br><span class="line">        <span class="type">long</span> <span class="type">int</span>      fsize = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        engineFile.<span class="built_in">seekg</span>(<span class="number">0</span>, engineFile.end);</span><br><span class="line">        fsize = engineFile.<span class="built_in">tellg</span>();</span><br><span class="line">        engineFile.<span class="built_in">seekg</span>(<span class="number">0</span>, engineFile.beg);</span><br><span class="line">        <span class="function">std::vector&lt;<span class="type">char</span>&gt; <span class="title">engineString</span><span class="params">(fsize)</span></span>;</span><br><span class="line">        engineFile.<span class="built_in">read</span>(engineString.<span class="built_in">data</span>(), fsize);</span><br><span class="line">        <span class="keyword">if</span> (engineString.<span class="built_in">size</span>() == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;Failed getting serialized engine!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Succeeded getting serialized engine!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">        IRuntime *runtime &#123;<span class="built_in">createInferRuntime</span>(gLogger)&#125;;</span><br><span class="line">        engine = runtime-&gt;<span class="built_in">deserializeCudaEngine</span>(engineString.<span class="built_in">data</span>(), fsize);</span><br><span class="line">        <span class="keyword">if</span> (engine == <span class="literal">nullptr</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;Failed loading engine!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Succeeded loading engine!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        IBuilder *            builder = <span class="built_in">createInferBuilder</span>(gLogger);</span><br><span class="line">        INetworkDefinition *  network = builder-&gt;<span class="built_in">createNetworkV2</span>(<span class="number">1U</span> &lt;&lt; <span class="built_in">int</span>(NetworkDefinitionCreationFlag::kEXPLICIT_BATCH));</span><br><span class="line">        IOptimizationProfile *profile = builder-&gt;<span class="built_in">createOptimizationProfile</span>();</span><br><span class="line">        IBuilderConfig *      config  = builder-&gt;<span class="built_in">createBuilderConfig</span>();</span><br><span class="line">        config-&gt;<span class="built_in">setMemoryPoolLimit</span>(MemoryPoolType::kWORKSPACE, <span class="number">1</span> &lt;&lt; <span class="number">30</span>);</span><br><span class="line"></span><br><span class="line">        ITensor *inputTensor = network-&gt;<span class="built_in">addInput</span>(<span class="string">&quot;inputT0&quot;</span>, DataType::kFLOAT, Dims32 &#123;<span class="number">4</span>, &#123;<span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>, <span class="number">-1</span>&#125;&#125;);</span><br><span class="line">        profile-&gt;<span class="built_in">setDimensions</span>(inputTensor-&gt;<span class="built_in">getName</span>(), OptProfileSelector::kMIN, Dims32 &#123;<span class="number">4</span>, &#123;<span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>, <span class="number">1</span>&#125;&#125;);</span><br><span class="line">        profile-&gt;<span class="built_in">setDimensions</span>(inputTensor-&gt;<span class="built_in">getName</span>(), OptProfileSelector::kOPT, Dims32 &#123;<span class="number">4</span>, &#123;<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;&#125;);</span><br><span class="line">        profile-&gt;<span class="built_in">setDimensions</span>(inputTensor-&gt;<span class="built_in">getName</span>(), OptProfileSelector::kMAX, Dims32 &#123;<span class="number">4</span>, &#123;<span class="number">4</span>, <span class="number">6</span>, <span class="number">8</span>, <span class="number">10</span>&#125;&#125;);</span><br><span class="line">        config-&gt;<span class="built_in">addOptimizationProfile</span>(profile);</span><br><span class="line"></span><br><span class="line">        IIdentityLayer *identityLayer = network-&gt;<span class="built_in">addIdentity</span>(*inputTensor);</span><br><span class="line">        network-&gt;<span class="built_in">markOutput</span>(*identityLayer-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>));</span><br><span class="line">        IHostMemory *engineString = builder-&gt;<span class="built_in">buildSerializedNetwork</span>(*network, *config);</span><br><span class="line">        <span class="keyword">if</span> (engineString == <span class="literal">nullptr</span> || engineString-&gt;<span class="built_in">size</span>() == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;Failed building serialized engine!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Succeeded building serialized engine!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">        IRuntime *runtime &#123;<span class="built_in">createInferRuntime</span>(gLogger)&#125;;</span><br><span class="line">        engine = runtime-&gt;<span class="built_in">deserializeCudaEngine</span>(engineString-&gt;<span class="built_in">data</span>(), engineString-&gt;<span class="built_in">size</span>());</span><br><span class="line">        <span class="keyword">if</span> (engine == <span class="literal">nullptr</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;Failed building engine!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Succeeded building engine!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"></span><br><span class="line">        <span class="function">std::ofstream <span class="title">engineFile</span><span class="params">(trtFile, std::ios::binary)</span></span>;</span><br><span class="line">        <span class="keyword">if</span> (!engineFile)</span><br><span class="line">        &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;Failed opening file to write&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        engineFile.<span class="built_in">write</span>(<span class="built_in">static_cast</span>&lt;<span class="type">char</span> *&gt;(engineString-&gt;<span class="built_in">data</span>()), engineString-&gt;<span class="built_in">size</span>());</span><br><span class="line">        <span class="keyword">if</span> (engineFile.<span class="built_in">fail</span>())</span><br><span class="line">        &#123;</span><br><span class="line">            std::cout &lt;&lt; <span class="string">&quot;Failed saving .plan file!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        std::cout &lt;&lt; <span class="string">&quot;Succeeded saving .plan file!&quot;</span> &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    IExecutionContext *context = engine-&gt;<span class="built_in">createExecutionContext</span>();</span><br><span class="line">    context-&gt;<span class="built_in">setBindingDimensions</span>(<span class="number">0</span>, Dims32 &#123;<span class="number">4</span>, &#123;<span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>&#125;&#125;);</span><br><span class="line">    std::cout &lt;&lt; std::<span class="built_in">string</span>(<span class="string">&quot;Binding all? &quot;</span>) &lt;&lt; std::<span class="built_in">string</span>(context-&gt;<span class="built_in">allInputDimensionsSpecified</span>() ? <span class="string">&quot;Yes&quot;</span> : <span class="string">&quot;No&quot;</span>) &lt;&lt; std::endl;</span><br><span class="line">    <span class="type">int</span> nBinding = engine-&gt;<span class="built_in">getNbBindings</span>();</span><br><span class="line">    <span class="type">int</span> nInput   = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nBinding; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        nInput += <span class="built_in">int</span>(engine-&gt;<span class="built_in">bindingIsInput</span>(i));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="type">int</span> nOutput = nBinding - nInput;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nBinding; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        std::cout &lt;&lt; std::<span class="built_in">string</span>(<span class="string">&quot;Bind[&quot;</span>) &lt;&lt; i &lt;&lt; std::<span class="built_in">string</span>(i &lt; nInput ? <span class="string">&quot;]:i[&quot;</span> : <span class="string">&quot;]:o[&quot;</span>) &lt;&lt; (i &lt; nInput ? i : i - nInput) &lt;&lt; std::<span class="built_in">string</span>(<span class="string">&quot;]-&gt;&quot;</span>);</span><br><span class="line">        std::cout &lt;&lt; <span class="built_in">dataTypeToString</span>(engine-&gt;<span class="built_in">getBindingDataType</span>(i)) &lt;&lt; std::<span class="built_in">string</span>(<span class="string">&quot; &quot;</span>);</span><br><span class="line">        std::cout &lt;&lt; <span class="built_in">shapeToString</span>(context-&gt;<span class="built_in">getBindingDimensions</span>(i)) &lt;&lt; std::<span class="built_in">string</span>(<span class="string">&quot; &quot;</span>);</span><br><span class="line">        std::cout &lt;&lt; engine-&gt;<span class="built_in">getBindingName</span>(i) &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function">std::vector&lt;<span class="type">int</span>&gt; <span class="title">vBindingSize</span><span class="params">(nBinding, <span class="number">0</span>)</span></span>;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nBinding; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        Dims32 dim  = context-&gt;<span class="built_in">getBindingDimensions</span>(i);</span><br><span class="line">        <span class="type">int</span>    size = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span> (<span class="type">int</span> j = <span class="number">0</span>; j &lt; dim.nbDims; ++j)</span><br><span class="line">        &#123;</span><br><span class="line">            size *= dim.d[j];</span><br><span class="line">        &#125;</span><br><span class="line">        vBindingSize[i] = size * <span class="built_in">dataTypeToSize</span>(engine-&gt;<span class="built_in">getBindingDataType</span>(i));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    std::vector&lt;<span class="type">void</span> *&gt; vBufferH &#123;nBinding, <span class="literal">nullptr</span>&#125;;</span><br><span class="line">    std::vector&lt;<span class="type">void</span> *&gt; vBufferD &#123;nBinding, <span class="literal">nullptr</span>&#125;;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nBinding; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        vBufferH[i] = (<span class="type">void</span> *)<span class="keyword">new</span> <span class="type">char</span>[vBindingSize[i]];</span><br><span class="line">        <span class="built_in">CHECK</span>(<span class="built_in">cudaMalloc</span>(&amp;vBufferD[i], vBindingSize[i]));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="type">float</span> *pData = (<span class="type">float</span> *)vBufferH[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; vBindingSize[<span class="number">0</span>] / <span class="built_in">dataTypeToSize</span>(engine-&gt;<span class="built_in">getBindingDataType</span>(<span class="number">0</span>)); ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        pData[i] = <span class="built_in">float</span>(i);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nInput; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">CHECK</span>(<span class="built_in">cudaMemcpy</span>(vBufferD[i], vBufferH[i], vBindingSize[i], cudaMemcpyHostToDevice));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    context-&gt;<span class="built_in">executeV2</span>(vBufferD.<span class="built_in">data</span>());</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = nInput; i &lt; nBinding; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">CHECK</span>(<span class="built_in">cudaMemcpy</span>(vBufferH[i], vBufferD[i], vBindingSize[i], cudaMemcpyDeviceToHost));</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nBinding; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="built_in">printArrayInfomation</span>((<span class="type">float</span> *)vBufferH[i], context-&gt;<span class="built_in">getBindingDimensions</span>(i), std::<span class="built_in">string</span>(engine-&gt;<span class="built_in">getBindingName</span>(i)), <span class="literal">true</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; nBinding; ++i)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">delete</span>[] vBufferH[i];</span><br><span class="line">        <span class="built_in">CHECK</span>(<span class="built_in">cudaFree</span>(vBufferD[i]));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">CHECK</span>(<span class="built_in">cudaSetDevice</span>(<span class="number">0</span>));</span><br><span class="line">    <span class="built_in">run</span>();</span><br><span class="line">    <span class="built_in">run</span>();</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="3-11-1-权重迁移"><a href="#3-11-1-权重迁移" class="headerlink" title="3.11.1 权重迁移"></a>3.11.1 权重迁移</h3><p>原模型中权重保存为 npz，方便 TensorRT 读取</p>
+<p>范例代码 03-BuildEngineByTensorRTAPI/TypicalAPI-* 介绍了从TensorFlow、pytorch、Paddlepaddle的权重迁移方式</p>
+<img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022165403922.png" class="" title="image-20241022165403922">
+<h3 id="3-11-2-逐层搭建"><a href="#3-11-2-逐层搭建" class="headerlink" title="3.11.2 逐层搭建"></a>3.11.2 逐层搭建</h3><p>注意算法一致性和权重的排列方式</p>
+<p>举例：TensorFlow 中 LSTM 多种实现，各种实现导出权重的排列顺序不同</p>
+<h3 id="3-11-3-逐层检验输出"><a href="#3-11-3-逐层检验输出" class="headerlink" title="3.11.3 逐层检验输出"></a>3.11.3 逐层检验输出</h3><p><strong>FP32 模式相对误差均值 1×10-6 量级，FP16 模式相对误差均值 1×10-3 量级</strong></p>
+<p>保证 FP32 模式结果正确后，逐步尝试 FP16 和 INT8 模式</p>
+<h2 id="3-12-FP16模式"><a href="#3-12-FP16模式" class="headerlink" title="3.12 FP16模式"></a>3.12 FP16模式</h2><p>范例代码：03-BuildEngineByONNXParser/pyTorch-ONNX-TensorRT</p>
+<p><code>config.flags = 1&lt;&lt;int(trt.BuilderFlag.FP16)</code></p>
+<ul>
+<li>建立 engine 时间比 FP32 模式更长（更多 kernel 选择，需要插入 Reformat 节点）</li>
+<li>Timeline 中出现 nchwToNchw 等 kernel 调用（就是在做数据类型转换 ）</li>
+<li>部分层可能精度下降导致较大误差</li>
+<li>找到误差较大的层（用 polygraphy等工具，见教程第二部分）<ul>
+<li>强制该层使用 FP32 进行计算</li>
+<li>config.set_flag(trt.BuilderFlag.OBEY_PRECISION_CONSTRAINTS)</li>
+<li>layer.precision = trt.float32</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-13-INT8模式"><a href="#3-13-INT8模式" class="headerlink" title="3.13 INT8模式"></a>3.13 INT8模式</h2><p>Int8 模式 —— PTQ</p>
+<p>范例代码：03-BuildEngineByONNXParser/pyTorch-ONNX-TensorRT-PTQ</p>
+<ul>
+<li>需要有校准集（输入范例数据）</li>
+<li>自己实现 calibrator（如右图）</li>
+<li>config.set_flag(trt.BuilderFlag.INT8)</li>
+<li>config.int8_calibrator = …</li>
+</ul>
+<p>Int8 模式 —— QAT</p>
+<p>范例代码：03-BuildEngineByONNXParser/pyTorch-ONNX-TensorRT-QAT</p>
+<ul>
+<li>config.set_flag(trt.BuilderFlag.INT8)</li>
+<li>在 pyTorch 网络中插入 Quantize/Dequantize 层</li>
+</ul>
+<h2 id="3-14-TensorRT-运行期（Runtime）"><a href="#3-14-TensorRT-运行期（Runtime）" class="headerlink" title="3.14 TensorRT 运行期（Runtime）"></a>3.14 <strong>TensorRT 运行期（Runtime）</strong></h2><img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022170656853.png" class="" title="image-20241022170656853">
+<ul>
+<li>生成 TRT 内部表示<ul>
+<li>serializedNetwork = builder. build_serialized_network(network, config)</li>
+</ul>
+</li>
+<li><p>生成 Engine</p>
+<ul>
+<li>engine = trt.Runtime(logger).deserialize_cuda_engine(serializedNetwork)</li>
+<li>lTensorName = [engine.get_tensor_name(i) for i in range(engine.num_io_tensors)]</li>
+</ul>
+</li>
+<li><p>创建 Context</p>
+<ul>
+<li>context = engine.create_execution_context()</li>
+</ul>
+</li>
+<li><p>绑定输入输出（Dynamic Shape 模式必须）</p>
+<ul>
+<li>context.set_input_shape(lTensorName[0], [3, 4, 5]) ## TensorRT 8.5 开始 binding 系列 API 全部 deprecated，换成 tensor 系列 API</li>
+</ul>
+</li>
+<li><p>准备 Buffer</p>
+<ul>
+<li><p>inputHost = np.ascontiguousarray(inputData.reshape(-1))</p>
+</li>
+<li><p>outputHost = np.empty(context.get_tensor_shape(iTensorName[i]), trt.nptype(engine.get_tensor_dtype(iTensorName[1])))</p>
+</li>
+<li><p>inputDevice = cudart.cudaMalloc(inputHost.nbytes)[1]</p>
+</li>
+<li><p>outputDevice = cudart.cudaMalloc(outputHost.nbytes)[1]</p>
+</li>
+<li><p>context.set_tensor_address(iTensorName[0], inputDevice) ## 用到的 GPU 指针提前在这里设置，不再传入 execute_v3 函数</p>
+</li>
+<li><p>context.set_tensor_address(iTensorName[1], outputDevice)</p>
+</li>
+</ul>
+</li>
+<li><p>执行计算</p>
+<ul>
+<li><p>cudart.cudaMemcpy(inputDevice, inputHost.ctypes.data, inputHost.nbytes, cudart.cudaMemcpyKind.cudaMemcpyHostToDevice)</p>
+</li>
+<li><p>context. execute_async_v3(0) </p>
+</li>
+<li><p>cudart.cudaMemcpy(outputHost.ctypes.data, outputDevice, outputHost.nbytes, cudart.cudaMemcpyKind.cudaMemcpyDeviceToHost)</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-15-Engine-计算引擎"><a href="#3-15-Engine-计算引擎" class="headerlink" title="3.15 Engine 计算引擎"></a>3.15 Engine 计算引擎</h2><img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022171023913.png" class="" title="image-20241022171023913">
+<ul>
+<li><p>serializedNetwork = builder. build_serialized_network(network, config)</p>
+</li>
+<li><p>engine = trt.Runtime(logger).deserialize_cuda_engine(serializedNetwork)</p>
+</li>
+<li><p>常用成员：</p>
+<ul>
+<li><p>engine. num_io_tensors 获取 engine 绑定的输入输出张量总数，n + m</p>
+</li>
+<li><p>engine.num_layers 获取 engine（自动优化后）总层数</p>
+</li>
+</ul>
+</li>
+<li><p>常用方法：## TensorRT 8.5 开始 binding 系列 API 全部 deprecated，换成 tensor 系列 API</p>
+<ul>
+<li><p>Engine.get_tensor_name(i) 第 i 个张量的名字</p>
+</li>
+<li><p>engine.get_tensor_dtype(iTensorName[i]) 第 i 个张量的数据类型，传入张量名字而非索引</p>
+</li>
+<li><p>engine.get_tensor_shape(iTensorName[i]) 第 i 个张量的张量形状，传入张量名字而非索引，Dynamic Shape 模式下结果可能含 -1</p>
+</li>
+<li><p>engine. engine.get_tensor_mode(iTensorName[i]) 第 i 个张量属于是输入还是输出张量</p>
+</li>
+</ul>
+</li>
+<li><p>更多细节见 02-API/CudaEngine</p>
+</li>
+</ul>
+<h2 id="3-16-Context-推理进程"><a href="#3-16-Context-推理进程" class="headerlink" title="3.16 Context 推理进程"></a>3.16 Context <strong>推理进程</strong></h2><img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022171230426.png" class="" title="image-20241022171230426">
+<p>相当于CPU端的一个进程</p>
+<ul>
+<li><p>context = engine.create_execution_context()</p>
+</li>
+<li><p>常用方法：## TensorRT 8.5 开始 binding 系列 API 全部 deprecated，换成 tensor 系列 API</p>
+<ul>
+<li><p>context. set_input_shape(iTensorName[i], shapeOfInputTensor) 设定第 i 个张量的形状（Dynamic Shape 模式中使用）</p>
+</li>
+<li><p>context.get_tensor_shape(iTensorName[i]) 获取第 i 个张量的形状</p>
+</li>
+<li><p>context.set_tensor_address(iTensorName[i], address) 设定输入输出张量的指针</p>
+</li>
+<li><p>context.execute_async_v3(srteam) Explicit batch 模式的异步执行</p>
+</li>
+</ul>
+</li>
+<li><p>更多细节见 02-API/ExecutionContext</p>
+</li>
+</ul>
+<h2 id="3-17-CUDA-异构计算"><a href="#3-17-CUDA-异构计算" class="headerlink" title="3.17 CUDA 异构计算"></a>3.17 CUDA 异构计算</h2><img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022171348466.png" class="" title="image-20241022171348466">
+<ul>
+<li><p>同时准备 CPU 端内存和 GPU端显存</p>
+</li>
+<li><p>开始计算前把数据从内存拷贝到显存中</p>
+</li>
+<li><p>计算过程的输入输出数据均在 GPU端读写</p>
+</li>
+<li><p>计算完成后要把结果拷贝会内存才能使用</p>
+</li>
+</ul>
+<h2 id="3-18-Buffer"><a href="#3-18-Buffer" class="headerlink" title="3.18 Buffer"></a>3.18 Buffer</h2><img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022171447672.png" class="" title="image-20241022171447672">
+<ul>
+<li><p>内存和显存的申请</p>
+</li>
+<li><p>inputHost = np.<strong>ascontiguousarray</strong>(inputData) # 不要忘了 ascontiguousarray！</p>
+</li>
+<li><p>outputHost = np.empty(context.get_tensor_shape(iTensorName[1]), trt.nptype(engine.get_tensor_dtype(iTensorName[1])))</p>
+</li>
+<li><p>inputDevice = cudart.cudaMalloc(inputHost.nbytes)[1]</p>
+</li>
+<li><p>outputDevice = cudart.cudaMalloc(outputHost.nbytes)[1]</p>
+</li>
+<li><p>context.set_tensor_address(iTensorName[0], inputDevice)</p>
+</li>
+<li><p>context.set_tensor_address(iTensorName[1], outputDevice)</p>
+</li>
+<li><p>内存和显存之间的拷贝</p>
+</li>
+<li><p>cudart.cudaMemcpy(inputDevice, inputHost.ctypes.data, inputHost.nbytes, cudart.cudaMemcpyKind.cudaMemcpyHostToDevice)</p>
+</li>
+<li><p>cudart.cudaMemcpy(outputHost.ctypes.data, outputDevice, outputHost.nbytes, cudart.cudaMemcpyKind.cudaMemcpyDeviceToHost)</p>
+</li>
+<li><p>推理完成后释放显存</p>
+</li>
+<li><p>cudart.cudaFree(inputDevice)</p>
+</li>
+<li><p>cudart.cudaFree(outputDevice)</p>
+</li>
+</ul>
+<h2 id="3-19-序列化与反序列化"><a href="#3-19-序列化与反序列化" class="headerlink" title="3.19 序列化与反序列化"></a>3.19 序列化与反序列化</h2><img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022171855355.png" class="" title="image-20241022171855355">
+<p>构建引擎需要时间，怎么构建一次，反复使用?</p>
+<p>将 SerializedNetwork 保存为文件，下次跳过构建直接使用</p>
+<img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022172146674.png" class="" title="image-20241022172146674">
+<ul>
+<li><p>注意环境统一（硬件环境 + CUDA/cuDNN/TensorRT 环境）</p>
+<ul>
+<li><strong>Engine 包含硬件有关优化，不能跨硬件平台使用</strong></li>
+<li><strong>不同版本 TensorRT 生成的 engine 不能相互兼容</strong></li>
+<li><strong>同平台同环境多次生成的 engine 可能不同</strong></li>
+</ul>
+</li>
+<li><p>TensorRT runtime 版本与 engine 版本不同时的报错信息</p>
+<ul>
+<li><p><em>[TensorRT] ERROR: INVALID_CONFIG: The engine plan file is not compatible with this version of TensorRT, expecting library version 8.6.1.5 got 8.6.1.6, please rebuild.</em></p>
+</li>
+<li><p><em>[TensorRT] ERROR: engine.cpp (1646) - Serialization Error in deserialize: 0 (Core engine deserialization failure)</em></p>
+</li>
+</ul>
+</li>
+<li><p>高级话题（见教程第四部分）：</p>
+<ul>
+<li><p><strong>利用 AlgorthimSelector 或 TimingCache 多次生成一模一样的 engine</strong></p>
+</li>
+<li><p>利用 TensorRT 8.6 的 Hardware compatibility 和 Version compatibility 特性创建跨设备、跨 TensorRT 版本的 engine</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-20-Workflow：使用-Parser"><a href="#3-20-Workflow：使用-Parser" class="headerlink" title="3.20 Workflow：使用 Parser"></a>3.20 <strong>Workflow：使用 Parser</strong></h2><img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/image-20241022194147857.png" class="" title="image-20241022194147857">
+<ul>
+<li><p>ONNX</p>
+<ul>
+<li><p>简介 <a target="_blank" rel="noopener" href="https://onnx.ai/">https://onnx.ai/</a></p>
+</li>
+<li><p>Open Neural Network Exchange，针对机器学习所设计的开放式的文件格式</p>
+</li>
+<li><p>用于存储训练好的模型，使得不同框架可以采用相同格式存储模型数据并交互</p>
+</li>
+<li><p>TensorFlow / pyTorch 模型转 TensorRT 的中间表示</p>
+</li>
+<li><p>当前 TensoRT 导入模型的主要途径</p>
+</li>
+</ul>
+</li>
+<li><p>Onnxruntime</p>
+<ul>
+<li><p>简介 <a target="_blank" rel="noopener" href="https://onnxruntime.ai/">https://onnxruntime.ai/</a></p>
+</li>
+<li><p>利用 onnx 格式模型进行推理计算的框架</p>
+</li>
+<li><p>兼容多硬件、多操作系统，支持多深度学习框架</p>
+</li>
+<li><p>可用于检查 TensorFlow / Torch 模型导出到 Onnx 的正确性</p>
+</li>
+</ul>
+</li>
+<li><p>pyTorch 的例子</p>
+<ul>
+<li>范例代码 04-BuildEngineByONNXParser/pyTorch-ONNX-TensorRT</li>
+</ul>
+</li>
+<li><p>基本流程：</p>
+<ul>
+<li><p>pyTorch 中创建网络并保存为 .pt 文件</p>
+</li>
+<li><p>使用 pyTorch 内部 API 将 .pt 转化为 .onnx</p>
+</li>
+<li><p>TensorRT 中读取 .onnx 构建 engine 并做推理</p>
+</li>
+</ul>
+</li>
+<li><p>本例在 TensorRT 中开启了 Int8 模式</p>
+<ul>
+<li>需要自己实现 calibrator 类（calibrator.py 可作为 Int8 通用样例）</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Export model as ONNX file ----------------------------------------------------</span></span><br><span class="line">t.onnx.export(model, t.randn(<span class="number">1</span>, <span class="number">1</span>, nHeight, nWidth, device=<span class="string">&quot;cuda&quot;</span>), onnxFile, input_names=[<span class="string">&quot;x&quot;</span>], output_names=[<span class="string">&quot;y&quot;</span>, <span class="string">&quot;z&quot;</span>], do_constant_folding=<span class="literal">True</span>, verbose=<span class="literal">True</span>, keep_initializers_as_inputs=<span class="literal">True</span>, opset_version=<span class="number">12</span>, dynamic_axes=&#123;<span class="string">&quot;x&quot;</span>: &#123;<span class="number">0</span>: <span class="string">&quot;nBatchSize&quot;</span>&#125;, <span class="string">&quot;z&quot;</span>: &#123;<span class="number">0</span>: <span class="string">&quot;nBatchSize&quot;</span>&#125;&#125;)</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Succeeded converting model into ONNX!&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># Parse network, rebuild network and do inference in TensorRT ------------------</span></span><br><span class="line">logger = trt.Logger(trt.Logger.ERROR)</span><br><span class="line">builder = trt.Builder(logger)</span><br><span class="line">network = builder.create_network(<span class="number">1</span> &lt;&lt; <span class="built_in">int</span>(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH))</span><br><span class="line">profile = builder.create_optimization_profile()</span><br><span class="line">config = builder.create_builder_config()</span><br><span class="line">config.set_memory_pool_limit(trt.MemoryPoolType.WORKSPACE, <span class="number">3</span> &lt;&lt; <span class="number">30</span>)</span><br><span class="line"><span class="keyword">if</span> bUseFP16Mode:</span><br><span class="line">    config.set_flag(trt.BuilderFlag.FP16)</span><br><span class="line"><span class="keyword">if</span> bUseINT8Mode:</span><br><span class="line">    config.set_flag(trt.BuilderFlag.INT8)</span><br><span class="line">    config.int8_calibrator = calibrator.MyCalibrator(calibrationDataPath, nCalibration, (<span class="number">1</span>, <span class="number">1</span>, nHeight, nWidth), cacheFile)</span><br><span class="line"></span><br><span class="line">parser = trt.OnnxParser(network, logger)</span><br><span class="line"><span class="keyword">if</span> <span class="keyword">not</span> os.path.exists(onnxFile):</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Failed finding ONNX file!&quot;</span>)</span><br><span class="line">    exit()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Succeeded finding ONNX file!&quot;</span>)</span><br><span class="line"><span class="keyword">with</span> <span class="built_in">open</span>(onnxFile, <span class="string">&quot;rb&quot;</span>) <span class="keyword">as</span> model:</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> parser.parse(model.read()):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Failed parsing .onnx file!&quot;</span>)</span><br><span class="line">        <span class="keyword">for</span> error <span class="keyword">in</span> <span class="built_in">range</span>(parser.num_errors):</span><br><span class="line">            <span class="built_in">print</span>(parser.get_error(error))</span><br><span class="line">        exit()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Succeeded parsing .onnx file!&quot;</span>)</span><br><span class="line"></span><br><span class="line">inputTensor = network.get_input(<span class="number">0</span>)</span><br><span class="line">profile.set_shape(inputTensor.name, (<span class="number">1</span>, <span class="number">1</span>, nHeight, nWidth), (<span class="number">4</span>, <span class="number">1</span>, nHeight, nWidth), (<span class="number">8</span>, <span class="number">1</span>, nHeight, nWidth))</span><br><span class="line">config.add_optimization_profile(profile)</span><br><span class="line"></span><br><span class="line">network.unmark_output(network.get_output(<span class="number">0</span>))  <span class="comment"># 去掉输出张量 &quot;y&quot;</span></span><br><span class="line">engineString = builder.build_serialized_network(network, config)</span><br><span class="line"><span class="keyword">if</span> engineString == <span class="literal">None</span>:</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Failed building engine!&quot;</span>)</span><br><span class="line">    exit()</span><br><span class="line"><span class="built_in">print</span>(<span class="string">&quot;Succeeded building engine!&quot;</span>)</span><br><span class="line"><span class="comment">#with open(trtFile, &quot;wb&quot;) as f:</span></span><br><span class="line"><span class="comment">#    f.write(engineString)</span></span><br><span class="line">engine = trt.Runtime(logger).deserialize_cuda_engine(engineString)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>TensorFlow 的例子</p>
+<ul>
+<li>范例代码 04-BuildEngineByONNXParser/TensorFlow*-ONNX-TensorRT</li>
+</ul>
+</li>
+<li><p>基本流程：</p>
+<ul>
+<li><p>中创建网络并保存为 .pb 文件</p>
+</li>
+<li><p>使用 tf2onnx 将 .pb 转化为 ONNX 文件</p>
+</li>
+<li><p>TensorRT 中读取 ONNX 构建 engine 并做推理</p>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li><p>如果不用 Int8 模式，onnx parser 的代码几乎是通用的</p>
+<ul>
+<li><strong>有命令行工具可用，基本等价于脚本中的 API（见教程第二部分 trtexec）</strong></li>
+</ul>
+</li>
+<li><p>遇到 TensorRT 不支持的节点</p>
+<ul>
+<li><p>修改源模型</p>
+</li>
+<li><p>修改 Onnx 计算图（见教程第二部分 onnx-surgeon）</p>
+</li>
+<li><p>TensorRT 中实现 Plugin（见教程第三部分）</p>
+</li>
+<li><p>修改 Parser：修改 TRT 源码并重新编译 TRT（见 <a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT">https://github.com/NVIDIA/TensorRT</a> 项目）</p>
+</li>
+</ul>
+</li>
+<li><p>trtexec，onnx-graphsurgeon 和 plugin 都是使用 parser 的必备知识，将在后面的教程展开</p>
+</li>
+</ul>
+<h2 id="3-21-Workflow：使用框架内-TensorRT-接口"><a href="#3-21-Workflow：使用框架内-TensorRT-接口" class="headerlink" title="3.21 Workflow：使用框架内 TensorRT 接口"></a>3.21 <strong>Workflow：使用框架内 TensorRT 接口</strong></h2><ul>
+<li><p>TF-TRT</p>
+<ul>
+<li>范例代码 06-UseFrameworkTRT/TensorFlow*-TFTRT</li>
+</ul>
+</li>
+<li><p>Torch-TensorRT（旧名 TRTorch）</p>
+<ul>
+<li>范例代码 06-UseFrameworkTRT/Torch-TensorRT</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-22-TensorRT-环境"><a href="#3-22-TensorRT-环境" class="headerlink" title="3.22 TensorRT 环境"></a>3.22 <strong>TensorRT 环境</strong></h2><ul>
+<li><p>推荐使用 NVIDIA-optimized Docker</p>
+<ul>
+<li><p>安装步骤：<a target="_blank" rel="noopener" href="https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker">https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/install-guide.html#docker</a></p>
+</li>
+<li><p>镜像列表：<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/frameworks/support-matrix/index.html">https://docs.nvidia.com/deeplearning/frameworks/support-matrix/index.html</a></p>
+</li>
+<li>推荐镜像：nvcr.io/nvidia/pytorch:23.03-py3（pyTorch1.14+TRT8.5.2），nvcr.io/nvidia/pytorch:23.04-py3（pyTorch2.0+TRT8.6.1）</li>
+</ul>
+</li>
+<li><p>python 库（见 cookbook requirements.txt）</p>
+<ul>
+<li>nvidia-pyindex，cuda-python（python≥3.7），pycuda，onnx，onnx-surgeon，onnxruntime-gpu，opencv-python，polygraphy</li>
+</ul>
+</li>
+<li><p>推荐使用：</p>
+<ul>
+<li><p>最新的 TensorRT8，图优化内容更多，优化过程和推理过程显存使用量更少</p>
+</li>
+<li><p>builderConfig API，功能覆盖旧版 builder API，旧版 builder API 将被废弃</p>
+</li>
+<li><p>explicit batch 模式 + dynamic shape 模式，ONNX 格式默认模式，灵活性和应用场景更广，使模型适应性更好</p>
+</li>
+<li>cuda-python 库，完整的 CUDA API 支持，修复 pycuda 库可能存在的问题（如与其他框架交互使用时的同步操作等）</li>
+</ul>
+</li>
+</ul>
+<h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><ul>
+<li>Nvidia官方B站的<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1jj411Z7wG?spm_id_from=333.788.videopod.sections&amp;vd_source=cde2e7b9bca1a7048a13eaf0b48210b6">视频</a></li>
+<li>官方代码<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/trt-samples-for-hackathon-cn">[trt-samples-for-hackathon-cn]</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html（TensorRT">https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html（TensorRT</a> 文档）</li>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/api/c_api（C++">https://docs.nvidia.com/deeplearning/tensorrt/api/c_api（C++</a> API 文档）</li>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/api/python_api/（python">https://docs.nvidia.com/deeplearning/tensorrt/api/python_api/（python</a> API 文档）</li>
+<li><a target="_blank" rel="noopener" href="https://developer.nvidia.com/nvidia-tensorrt-download（TensorRT">https://developer.nvidia.com/nvidia-tensorrt-download（TensorRT</a> 下载）</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/NVIDIA/trt-samples-for-hackathon-cn/tree/master/cookbook（本教程配套代码，包含视频以外的更多范例代码）">https://github.com/NVIDIA/trt-samples-for-hackathon-cn/tree/master/cookbook（本教程配套代码，包含视频以外的更多范例代码）</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/" title="Part1-TensorRT简介">http://example.com/TensorRT/TensorRT教程-基于8.6.1/Part1-TensorRT简介/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+              <a href="/tags/Tensorrt/" rel="tag"><i class="fa fa-tag"></i> Tensorrt</a>
+              <a href="/tags/DeepLearning/" rel="tag"><i class="fa fa-tag"></i> DeepLearning</a>
+              <a href="/tags/Plugin/" rel="tag"><i class="fa fa-tag"></i> Plugin</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/" rel="prev" title="TensorRT快速开始">
+                  <i class="fa fa-chevron-left"></i> TensorRT快速开始
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part2-TensorRT%E5%BC%80%E5%8F%91%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7/" rel="next" title="Part2-TensorRT开发辅助工具">
+                  Part2-TensorRT开发辅助工具 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1e4c54b8662894e16569cd868e30d82a"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

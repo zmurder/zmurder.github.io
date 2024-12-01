@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="1 前言最近在b站发现了一个非常好的 计算机视觉 + pytorch 的教程，相见恨晚，能让初学者少走很多弯路。因此决定按着up给的教程路线：图像分类→目标检测→…一步步学习用pytorch实现深度学习在cv上的应用，并做笔记整理和总结。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="7 MobileNet">
+<meta property="og:url" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="1 前言最近在b站发现了一个非常好的 计算机视觉 + pytorch 的教程，相见恨晚，能让初学者少走很多弯路。因此决定按着up给的教程路线：图像分类→目标检测→…一步步学习用pytorch实现深度学习在cv上的应用，并做笔记整理和总结。">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127141036545.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127141132334.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127141705472.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127142251027.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127142605565.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127143218375.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127144311417.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127144855767.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127150943203.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5pyo5Y2vX1RIVQ==,size_20,color_FFFFFF,t_70,g_se,x_16.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/d15a0e56517b4f7284a862f1d6eaef9a-17063409923195.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127145217576.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127145600638.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127151256926.png">
+<meta property="article:published_time" content="2024-12-01T10:13:44.580Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:44.580Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127141036545.png">
+
+
+<link rel="canonical" href="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/","path":"DeepLearning/图像分类网络/7 MobileNet/","title":"7 MobileNet"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>7 MobileNet | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%89%8D%E8%A8%80"><span class="nav-text">1 前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-MobileNet%E8%AF%A6%E8%A7%A3"><span class="nav-text">2 MobileNet详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-Depthwise-Conv"><span class="nav-text">2.1 Depthwise Conv</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-Depthwise-Separable-Conv"><span class="nav-text">2.2 Depthwise Separable Conv</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="nav-text">2.3 网络结构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-MobileNet-v2"><span class="nav-text">3 MobileNet v2</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Inverted-Residuals"><span class="nav-text">3.1 Inverted Residuals</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-1-Relu6"><span class="nav-text">3.1.1 Relu6</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="nav-text">3.2 网络结构</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="7 MobileNet | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          7 MobileNet
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:44" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:44+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/DeepLearning/" itemprop="url" rel="index"><span itemprop="name">DeepLearning</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">图像分类网络</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-前言"><a href="#1-前言" class="headerlink" title="1 前言"></a>1 前言</h1><p>最近在b站发现了一个非常好的 计算机视觉 + pytorch 的教程，相见恨晚，能让初学者少走很多弯路。<br>因此决定按着up给的教程路线：图像分类→目标检测→…一步步学习用pytorch实现深度学习在cv上的应用，并做笔记整理和总结。</p>
+<p>up主教程给出了pytorch和tensorflow两个版本的实现，我暂时只记录pytorch版本的笔记。</p>
+<p>参考内容来自：</p>
+<ul>
+<li>up主的b站链接：<a target="_blank" rel="noopener" href="https://space.bilibili.com/18161609/channel/index">https://space.bilibili.com/18161609/channel/index</a></li>
+<li>up主将代码和ppt都放在了github：<a target="_blank" rel="noopener" href="https://github.com/WZMIAOMIAO/deep-learning-for-image-processing\">https://github.com/WZMIAOMIAO/deep-learning-for-image-processing\</a></li>
+<li>up主的CSDN博客：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_37541097/article/details/103482003">https://blog.csdn.net/qq_37541097/article/details/103482003</a></li>
+</ul>
+<h1 id="2-MobileNet详解"><a href="#2-MobileNet详解" class="headerlink" title="2 MobileNet详解"></a>2 MobileNet详解</h1><p>之前将的VGG16模型权重大小大约490M，resNet152层模型权重大约644M，模型参数太大，不能在嵌入式设别运行。</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127141036545.png" class="" title="image-20240127141036545">
+<p>MobileNet参数量大大减少，同时精度小幅下降</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127141132334.png" class="" title="image-20240127141132334">
+<p><strong>MobileNet网络的亮点</strong></p>
+<ul>
+<li>使用Depthwise Convolution大大减少运算量和参数量</li>
+<li>增加了两个超参数控制卷积蹭卷积核个数α，和控制输入图像大小的β。</li>
+</ul>
+<h2 id="2-1-Depthwise-Conv"><a href="#2-1-Depthwise-Conv" class="headerlink" title="2.1 Depthwise Conv"></a>2.1 Depthwise Conv</h2><img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127141705472.png" class="" title="image-20240127141705472">
+<p>上图是对比传统的卷积和DW卷积</p>
+<ul>
+<li>传统卷积：<ul>
+<li>卷积核channel=输入特征矩阵chennel</li>
+<li>输出特征矩阵channel=卷积核个数</li>
+</ul>
+</li>
+<li>DW卷积<ul>
+<li>卷积核channel=1</li>
+<li>输入特征矩阵channel=卷积核个数=输出特征矩阵channel</li>
+</ul>
+</li>
+</ul>
+<h2 id="2-2-Depthwise-Separable-Conv"><a href="#2-2-Depthwise-Separable-Conv" class="headerlink" title="2.2 Depthwise Separable Conv"></a>2.2 Depthwise Separable Conv</h2><p>深度可分离卷积Depthwise Separable Conv如下图</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127142251027.png" class="" title="image-20240127142251027">
+<p>DW卷积上面介绍过了</p>
+<p>PW卷积就是普通的卷积，只不过卷积核的大小是<code>1*1</code></p>
+<p>DW和PW是组合使用的 如下图</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127142605565.png" class="" title="image-20240127142605565">
+<p>上图中上面的普通的卷积，下面是DW和PW组合的，参数如上图所示。</p>
+<h2 id="2-3-网络结构"><a href="#2-3-网络结构" class="headerlink" title="2.3 网络结构"></a>2.3 网络结构</h2><img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127143218375.png" class="" title="image-20240127143218375">
+<p>分析一下每一层网络</p>
+<ul>
+<li>第一层 <ul>
+<li>Conv/s2 :普通卷积，步距为2    </li>
+<li>Filter Shape 3×3×3×32： 卷积核3×3    3通道输入（彩色图像）   32个卷积核</li>
+</ul>
+</li>
+<li>第二层<ul>
+<li>Conv dw/s1 ：DW卷积操作 步距为1  </li>
+<li>Filter Shape 3×3×32dw： 卷积核3×3    单通道输入   32个卷积核</li>
+</ul>
+</li>
+<li>下面的类似 串联即可</li>
+</ul>
+<p>α，和β可以影响准确率和计算量，参数量。</p>
+<h1 id="3-MobileNet-v2"><a href="#3-MobileNet-v2" class="headerlink" title="3 MobileNet v2"></a>3 MobileNet v2</h1><img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127144311417.png" class="" title="image-20240127144311417">
+<h2 id="3-1-Inverted-Residuals"><a href="#3-1-Inverted-Residuals" class="headerlink" title="3.1 Inverted Residuals"></a>3.1 Inverted Residuals</h2><p>下图对比一下之前将的残差网络的block和这里的Inverted Residuals倒残差结构</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127144855767.png" class="" title="image-20240127144855767">
+<p><strong>Residual block中是先降维再升维，采用的relu激活函数</strong></p>
+<p><strong>Inverted residual block中是先升维再降维，采用的是Relu6激活函数</strong></p>
+<p>注意下图中最后一个conv 1×1使用的激活函数是Linear</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127150943203.png" class="" title="image-20240127150943203">
+<p>Inverted Residuals 结构的核心问题在于：为什么要升维再降维？</p>
+<p>MobileNetV1 网络主要思路就是深度可分离卷积的堆叠，这和 VGG 的堆叠思想基本一致。Inverted Residuals 结构包含 DW 卷积结构之外，还使用了Expansion layer和 Projection layer。这个 Projection layer 就是使用 1 × 1 1 \times 1 1×1 卷积网络结构，其目的是希望把高维特征映射到低维空间去。补充说一句，使用 1 × 1 1 \times 1 1×1 卷积网络结构将高维空间映射到低维空间的设计有的时候我们也称之为 Bottleneck layer。Expansion layer 的功能正相反，使用 1 × 1 1 \times 1 1×1 卷积网络结构，其目的是将低维空间映射到高维空间。这里 Expansion 有一个超参数是维度扩展几倍。可以根据实际情况来做调整的，默认值是 6，也就是扩展 6 倍。</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/watermark,type_ZHJvaWRzYW5zZmFsbGJhY2s,shadow_50,text_Q1NETiBA5pyo5Y2vX1RIVQ==,size_20,color_FFFFFF,t_70,g_se,x_16.png" class="" title="请添加图片描述">
+<p>我们知道：如果 Tensor 维度越低，卷积层的乘/加法计算量就越小。那么如果整个网络都是低维的 Tensor，那么整体计算速度就会很快(这个和 MobileNet 的初心一致呀)。然而，如果只是使用低维的 Tensor 效果并不会好（在 ICIP2021 的文章 MEPDNet 中提到了倒三角，不是增加维度，而是增加尺寸）。如果卷积层的 filter 都是使用低维的 Tensor 来提取特征的话，那么就没有办法提取到整体的足够多的信息。所以，如果提取特征数据的话，我们可能更希望有高维的 Tensor 来做这个事情。总结而言就是：在没有办法确定这些特征是否充足或者完备的情况下，那就多来点特征你自己去选来用，韩信点兵多多益善。MobileNetV2 便设计这样一个结构来达到平衡。</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/d15a0e56517b4f7284a862f1d6eaef9a-17063409923195.png" class="" title="请添加图片描述">
+<p>先通过 Expansion layer 来扩展维度，之后在用深度可分离卷积来提取特征，之后使用 Projection layer 来压缩数据，让网络从新变小。因为 Expansion layer 和 Projection layer 都是有可以学习的参数，所以整个网络结构可以学习到如何更好的扩展数据和从新压缩数据。哪为什么原来的结构不先升再降呢？简单，因为他们中间 3 × 3 3 \times 3 3×3 卷积计算量太大。MobileNetV2 之所以敢这么做，还是源自于 DW 卷积计算量小，如果中间是普通卷积，计算量太大了，就需要先降维再升维来降低计算量和参数量。</p>
+<h3 id="3-1-1-Relu6"><a href="#3-1-1-Relu6" class="headerlink" title="3.1.1 Relu6"></a>3.1.1 Relu6</h3><p>对比与relu激活函数，只是大于6的时候输出6。</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127145217576.png" class="" title="image-20240127145217576">
+<p>为什么要使用relu6呢？原论文指出是relu激活函数对低维信息有大量的损失，而我们的Inverted residual block正好是中间维度高两边维度低，为了减少损失才替换为relu6。</p>
+<p>在原文中，作者针对 Inverted Residuals 结构的最后一个 1 × 1 1 \times 1 1×1 卷积层使用线性激活函数而非 ReLU 激活函数。作者做了一个实验来说明这一点，首先输入是一个二维的矩阵，channel = 1。我们采用不同的 matrix T T T 把它进行升维到更高的维度上，使用激活函数 ReLU，然后再使用 T T T 的逆矩阵 T − 1 T^{-1} T−1 对其进行还原。当 T T T 的维度为 2 或者 3 时，还原回 2 维特征矩阵后丢失了很多信息。但是随着维度的增加，丢失的信息越来越少。可见，ReLU 激活函数对低维特征信息会造成大量损失。因为 Inverted Residuals 结构两头小中间大，在最后输出的时候是一个低维的特征了，所以改为线性激活函数而非 ReLU 激活函数。实验证明，使用 linear bottleneck 可以防止非线性破坏太多信息。</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127145600638.png" class="" title="image-20240127145600638">
+<h2 id="3-2-网络结构"><a href="#3-2-网络结构" class="headerlink" title="3.2 网络结构"></a>3.2 网络结构</h2><p>下图展示了 MobileNetV2 网络结构配置图。其中 t 表示在 Inverted Residuals 结构中 1 × 1 1 \times 1 1×1 卷积升维的倍率 (相较于输入通道而言的)，c 是输出特征矩阵的深度 channel。n 表示 bottleneck (即 Inverted Residuals 结构) 重复的次数。s 表示步距，但是只表示第一个 bottleneck 中 DW 卷积的步距，后面重复 bottleneck 的 stride 都是等于 1 的。</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/image-20240127151256926.png" class="" title="image-20240127151256926">
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/7%20MobileNet/" title="7 MobileNet">http://example.com/DeepLearning/图像分类网络/7 MobileNet/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/6%20ResNeXt/" rel="prev" title="6 ResNeXt">
+                  <i class="fa fa-chevron-left"></i> 6 ResNeXt
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/8%20MobileNetv3/" rel="next" title="8 MobileNetv3">
+                  8 MobileNetv3 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"76ff3c91cce84741c0ba0b95972218b7"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

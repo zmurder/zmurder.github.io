@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="2 定时任务调用串口有一个需求是在定时任务中调用一个程序usart操作串口。程序usart操作的串口是&#x2F;dev&#x2F;ttyUSB0。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux定时任务crontab">
+<meta property="og:url" content="http://example.com/Linux/Linux%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1crontab/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="2 定时任务调用串口有一个需求是在定时任务中调用一个程序usart操作串口。程序usart操作的串口是&#x2F;dev&#x2F;ttyUSB0。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2024-12-01T10:13:45.309Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.309Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/Linux/Linux%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1crontab/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/Linux/Linux%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1crontab/","path":"Linux/Linux定时任务crontab/","title":"Linux定时任务crontab"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Linux定时任务crontab | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%E8%B0%83%E7%94%A8%E4%B8%B2%E5%8F%A3"><span class="nav-text">2 定时任务调用串口</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/Linux/Linux%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1crontab/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Linux定时任务crontab | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux定时任务crontab
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="2-定时任务调用串口"><a href="#2-定时任务调用串口" class="headerlink" title="2 定时任务调用串口"></a>2 定时任务调用串口</h1><p>有一个需求是在定时任务中调用一个程序usart操作串口。程序usart操作的串口是<code>/dev/ttyUSB0</code>。</p>
+<p>首先<code>/dev/ttyUSB0</code>的权限是777，usart的可执行程序在终端中可以执行并操作<code>/dev/ttyUSB0</code>。但是定时任务<code>cron</code>却不能执行程序。</p>
+<p>定时任务如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">crontab -l                                    </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Edit this file to introduce tasks to be run by cron.</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"></span></span><br><span class="line"><span class="language-bash"><span class="comment"># Each task to run has to be defined through a single line</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">indicating with different fields when the task will be run</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">and what <span class="built_in">command</span> to run <span class="keyword">for</span> the task</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"></span></span><br><span class="line"><span class="language-bash"><span class="comment"># To define the time you can provide concrete values for</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">minute (m), hour (h), day of month (dom), month (mon),</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">and day of week (dow) or use <span class="string">&#x27;*&#x27;</span> <span class="keyword">in</span> these fields (<span class="keyword">for</span> <span class="string">&#x27;any&#x27;</span>).</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"></span></span><br><span class="line"><span class="language-bash"><span class="comment"># Notice that tasks will be started based on the cron&#x27;s system</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">daemon<span class="string">&#x27;s notion of time and timezones.</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string"></span></span></span><br><span class="line"><span class="string"><span class="language-bash"># Output of the crontab jobs (including errors) is sent through</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">email to the user the crontab file belongs to (unless redirected).</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string"></span></span></span><br><span class="line"><span class="string"><span class="language-bash"># For example, you can run a backup of all your user accounts</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">at 5 a.m every week with:</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string">0 5 * * 1 tar -zcf /var/backups/home.tgz /home/</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string"></span></span></span><br><span class="line"><span class="string"><span class="language-bash"># For more information see the manual pages of crontab(5) and cron(8)</span></span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="string"></span></span></span><br><span class="line"><span class="string"><span class="language-bash"># m h  dom mon dow   command</span></span></span><br><span class="line">* * * * * ls -al /dev/ttyUSB* &gt;&gt; /home/hippo/zhaoyd/tt2.txt</span><br><span class="line">* * * * * /home/hippo/1T_disk/zhaoyd/visionperceptiontest/Test/Src/usart/usart &gt;&gt; /home/hippo/zhaoyd/tt2.txt</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>每一分钟第一个定时任务将<code>/dev/ttyUSB*</code>的属性输出到<code>tt2.txt</code>中，第二个定时任务执行串口程序操作串口输出指令，并将程序打印重定向到<code>tt2.txt</code>中。</p>
+<p>查看<code>tt2.txt</code>结果如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line">~/zhaoyd  cat tt2.txt    </span><br><span class="line">crwxrwxrwx 1 root dialout 188, 0 3月   9 14:27 /dev/ttyUSB0</span><br><span class="line">open /dev/ttyUSB0 </span><br><span class="line">fcntl=0</span><br><span class="line">standard input is not a terminal device</span><br><span class="line">UART0_Set Error tcgetattr error Bad file descriptor</span><br><span class="line">UART0_Set Error!</span><br><span class="line">Set Port Exactly! 0 </span><br><span class="line">UART0_Set Error tcgetattr error Bad file descriptor</span><br><span class="line">UART0_Set Error!</span><br><span class="line">Set Port Exactly! 1 </span><br><span class="line">UART0_Set Error tcgetattr error Bad file descriptor</span><br><span class="line">UART0_Set Error!</span><br><span class="line">Set Port Exactly! 2 </span><br><span class="line">UART0_Set Error tcgetattr error Bad file descriptor</span><br><span class="line">UART0_Set Error!</span><br><span class="line">Set Port Exactly! 3 </span><br><span class="line">UART0_Set Error tcgetattr error Bad file descriptor</span><br><span class="line">UART0_Set Error!</span><br><span class="line">Set Port Exactly! 4 </span><br><span class="line">UART0_Set Error tcgetattr error Bad file descriptor</span><br><span class="line">UART0_Set Error!</span><br><span class="line">Set Port Exactly! 5 </span><br><span class="line">UART0_Set Error tcgetattr error Bad file descriptor</span><br><span class="line">UART0_Set Error!</span><br><span class="line">Set Port Exactly! 6 </span><br><span class="line">UART0_Set Error tcgetattr error Bad file descriptor</span><br><span class="line">UART0_Set Error!</span><br><span class="line">Set Port Exactly! 7 </span><br><span class="line">UART0_Set Error tcgetattr error Bad file descriptor</span><br><span class="line">UART0_Set Error!</span><br><span class="line">Set Port Exactly! 8 </span><br><span class="line">UART0_Set Error tcgetattr error Bad file descriptor</span><br><span class="line">UART0_Set Error!</span><br><span class="line">Set Port Exactly! 9 </span><br><span class="line">send data failed!</span><br><span class="line">send data failed!</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>可以看到，<code>/dev/ttyUSB0</code>操作权限是777，但是程序打开串口显示<code>Bad file descriptor</code></p>
+<p>在这里：<a target="_blank" rel="noopener" href="https://unix.stackexchange.com/questions/325346/how-to-execute-the-command-in-cronjob-to-display-the-output-in-terminal">https://unix.stackexchange.com/questions/325346/how-to-execute-the-command-in-cronjob-to-display-the-output-in-terminal</a></p>
+<p>看到了一句话：</p>
+<p>All <code>cron</code> jobs are run in non-interactive shells, there is no terminal attachment. Hence the concept of <code>/dev/tty</code> or similar is not available in <code>cron</code>.</p>
+<p>翻译就是所有cron都在非交互式shell中运行，没有终端附件。因此，/dev/tty或类似的概念在cron中不可用。</p>
+<p>那么是不是可以将<code>cron</code>执行的指令转变为<code>interactive shell</code>呢？参考这里<a target="_blank" rel="noopener" href="https://askubuntu.com/questions/503028/how-to-launch-interactive-shell-script-in-bash-hourly-with-cron">How to launch interactive shell script in bash hourly with cron?</a></p>
+<p>参考上面的网址修改我们的定时任务如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">* * * * * DISPLAY=:0 /usr/bin/gnome-terminal --tab -- /home/hippo/zhaoyd/aa.sh</span><br></pre></td></tr></table></figure>
+<p>其中aa.sh脚本是为了方便，如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#!/bin/bash</span><br><span class="line"></span><br><span class="line">cd /home/hippo/1T_disk/zhaoyd/visionperceptiontest/Test/Src/usart</span><br><span class="line">./usart &gt; /home/hippo/zhaoyd/tt3.txt</span><br></pre></td></tr></table></figure>
+<p>这样定时任务就可以执行并操作串口了。</p>
+<p>下面解释一下<code>DISPLAY=:0 /usr/bin/gnome-terminal --tab --</code>的含义</p>
+<p>在Linux/Unix类操作系统上, DISPLAY用来设置将图形显示到何处. 直接登陆图形界面或者登陆命令行界面后使用startx启动图形,  DISPLAY环境变量将自动设置为:0:0, 此时可以打开终端, 输出图形程序的名称(比如xclock)来启动程序, 图形将显示在本地窗口上,  在终端上输入printenv查看当前环境变量, 输出结果中有如下内容:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DISPLAY=:0.0</span><br></pre></td></tr></table></figure>
+<p>DISPLAY  环境变量格式如下host:NumA.NumB,host指Xserver所在的主机主机名或者ip地址, 图形将显示在这一机器上,  可以是启动了图形界面的Linux/Unix机器, 也可以是安装了Exceed,  X-Deep/32等Windows平台运行的Xserver的Windows机器. 如果Host为空, 则表示Xserver运行于本机,  并且图形程序(Xclient)使用unix socket方式连接到Xserver,而不是TCP方式. 使用TCP方式连接时,  NumA为连接的端口减去6000的值, 如果NumA为0, 则表示连接到6000端口; 使用unix socket方式连接时则表示连接的unix socket的路径, 如果为0, 则表示连接到/tmp/.X11-unix/X0 . NumB则几乎总是0.</p>
+<p><code>gnome-terminal</code>命令用于打开一个新的终端。因此上面的命令整体相当于指定了显示和打开终端。这样就有操作<code>/dev/tty</code>的机会了</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/Linux/Linux%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1crontab/" title="Linux定时任务crontab">http://example.com/Linux/Linux定时任务crontab/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Linux/linux%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5/" rel="prev" title="linux调度策略">
+                  <i class="fa fa-chevron-left"></i> linux调度策略
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Linux/Linux%20shell%E9%87%8D%E5%AE%9A%E5%90%91/" rel="next" title="Linux shell重定向">
+                  Linux shell重定向 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"0c89203a5ac20420fe687360ab4ceb46"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

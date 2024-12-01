@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="在学习数据结构和算法的时候，经常会碰到 O(1),O(n)等等用来表示时间和空间复杂度，那这到底是什么意思。我们对于同一个问题经常有不同的解决方式，比如排序算法就有十种经典排序（快排，归并排序等），虽然对于排序的结果相同，但是在排序过程中消耗时间和资源却是不同。 对于不同排序算法之间的衡量方式就是通过程序执行所占用的时间和空间两个维度去考量。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="时间复杂度">
+<meta property="og:url" content="http://example.com/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="在学习数据结构和算法的时候，经常会碰到 O(1),O(n)等等用来表示时间和空间复杂度，那这到底是什么意思。我们对于同一个问题经常有不同的解决方式，比如排序算法就有十种经典排序（快排，归并排序等），虽然对于排序的结果相同，但是在排序过程中消耗时间和资源却是不同。 对于不同排序算法之间的衡量方式就是通过程序执行所占用的时间和空间两个维度去考量。">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/image-20231128132824780.png">
+<meta property="og:image" content="http://example.com/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/image-20231128133410188-17011496510011.png">
+<meta property="og:image" content="http://example.com/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/85d1202946c140bad6acf506b756aa6b.png">
+<meta property="og:image" content="http://example.com/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/3d0826c1b8875e11e0d1cfe098eeea1a.png">
+<meta property="og:image" content="http://example.com/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/image-20231128135403541.png">
+<meta property="og:image" content="http://example.com/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/db31628a34cae674c6bf697e920baad4.png">
+<meta property="og:image" content="http://example.com/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/ce63b2e33080a54aaf24d508c6dba408.png">
+<meta property="og:image" content="http://example.com/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/3b8e848c9e33ea573417e8dfe175525e.png">
+<meta property="og:image" content="http://example.com/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/8cb7a6fe10044233b387a29c4b7faa47.png">
+<meta property="og:image" content="http://example.com/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/7ef9761a89c14af2bd4eeb7344bc7301.png">
+<meta property="og:image" content="http://example.com/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/dc887c58420541c1bc7d277937b1bc6f.png">
+<meta property="og:image" content="http://example.com/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/0f88557387994b29ad5dcfb1a1146a24.png">
+<meta property="og:image" content="http://example.com/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/a73198cb525445bd8ea150323a9e6bfe-170115125474023.png">
+<meta property="og:image" content="http://example.com/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/43f38daa6d8144cc9cf06ff8e3dfa271.png">
+<meta property="article:published_time" content="2024-12-01T10:13:45.660Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.660Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/image-20231128132824780.png">
+
+
+<link rel="canonical" href="http://example.com/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/","path":"fragment/时间复杂度/","title":"时间复杂度"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>时间复杂度 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E6%95%B0%E5%AD%A6%E5%9F%BA%E7%A1%80"><span class="nav-text">1 数学基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-%E5%B9%82%E5%87%BD%E6%95%B0"><span class="nav-text">1.1 幂函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E6%8C%87%E6%95%B0%E5%87%BD%E6%95%B0"><span class="nav-text">1.2 指数函数</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-%E5%AF%B9%E6%95%B0%E5%87%BD%E6%95%B0"><span class="nav-text">1.3 对数函数</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6"><span class="nav-text">2 时间复杂度</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E8%A1%A8%E7%A4%BA%E6%96%B9%E6%B3%95"><span class="nav-text">2.1 表示方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E5%B8%B8%E8%A7%81%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E7%9A%84%E9%98%B6"><span class="nav-text">2.2 常见时间复杂度的阶</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1-%E5%B8%B8%E6%95%B0%E9%98%B6-O-1"><span class="nav-text">2.2.1 常数阶 $O(1)$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2-%E5%AF%B9%E6%95%B0%E9%98%B6-O-logn"><span class="nav-text">2.2.2 对数阶$O(logn)$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-3-%E7%BA%BF%E6%80%A7%E9%98%B6-O-n"><span class="nav-text">2.2.3 线性阶 $O(n)$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-4-%E7%BA%BF%E6%80%A7%E5%AF%B9%E6%95%B0%E9%98%B6-O-nlogn"><span class="nav-text">2.3.4 线性对数阶$ O(nlogn)$</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-5-%E5%B9%B3%E6%96%B9%E9%98%B6-O-n-2"><span class="nav-text">2.3.5 平方阶$ O(n^2)$</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E5%B8%B8%E8%A7%81%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6%E8%AE%A1%E7%AE%97%E4%B8%BE%E4%BE%8B"><span class="nav-text">2.3 常见时间复杂度计算举例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="时间复杂度 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          时间复杂度
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/fragment/" itemprop="url" rel="index"><span itemprop="name">fragment</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>在学习数据结构和算法的时候，经常会碰到 O(1),O(n)等等用来表示时间和空间复杂度，那这到底是什么意思。我们对于同一个问题经常有不同的解决方式，比如排序算法就有十种经典排序（快排，归并排序等），虽然对于排序的结果相同，但是在排序过程中消耗时间和资源却是不同。</p>
+<p>对于不同排序算法之间的衡量方式就是通过程序执行所占用的<strong>时间</strong>和<strong>空间</strong>两个维度去考量。</p>
+<h1 id="1-数学基础"><a href="#1-数学基础" class="headerlink" title="1 数学基础"></a>1 数学基础</h1><h2 id="1-1-幂函数"><a href="#1-1-幂函数" class="headerlink" title="1.1 幂函数"></a>1.1 幂函数</h2><p>$y=x^k$</p>
+<h2 id="1-2-指数函数"><a href="#1-2-指数函数" class="headerlink" title="1.2 指数函数"></a>1.2 指数函数</h2><p>函数$y=a^x(a&gt;0且a\ne 1)$叫做指数函数，自变量叫做指数，a叫做底数。</p>
+<img src="/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/image-20231128132824780.png" class="" title="image-20231128132824780">
+<h2 id="1-3-对数函数"><a href="#1-3-对数函数" class="headerlink" title="1.3 对数函数"></a>1.3 对数函数</h2><p>如果$a(a&gt;0,a\ne1)$的b次幂等于N，即$a^b=N$，那么b叫做以a为底的N的对数，记做$\log_aN=b$，其中a叫做对数的底数，N叫做真数。</p>
+<img src="/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/image-20231128133410188-17011496510011.png" class="" title="image-20231128133410188">
+<h1 id="2-时间复杂度"><a href="#2-时间复杂度" class="headerlink" title="2 时间复杂度"></a>2 时间复杂度</h1><p>若存在函数 $f(n)$，使得当 n 趋近于无穷大时，$T(n)/ f(n)）$的极限值为不等于零的常数，则称$ f(n)$是 $T(n)$的同数量级函数。记作 $T(n)= O(f(n))$，称 $O(f(n))$为算法的渐进时间复杂度，简称时间复杂度。</p>
+<p><strong>简单理解就是一个算法或是一个程序在运行时，所消耗的时间（或者代码被执行的总次数）。</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sum</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">①   <span class="type">int</span> value = <span class="number">0</span>;</span><br><span class="line">②   <span class="type">int</span> i = <span class="number">1</span>;</span><br><span class="line">③   <span class="keyword">while</span> (i &lt;= n) &#123;</span><br><span class="line">④       value = value + i;</span><br><span class="line">⑤       i++;</span><br><span class="line">    &#125;</span><br><span class="line">⑥   <span class="keyword">return</span> value;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">假设n=<span class="number">100</span>，该方法的执行次数为①(<span class="number">1</span>次)、②（<span class="number">1</span>次）、③（<span class="number">100</span>次）、④（<span class="number">100</span>次）、⑤（<span class="number">100</span>次）、⑥（<span class="number">1</span>次）</span><br><span class="line">合计<span class="number">1</span>+<span class="number">1</span>+<span class="number">100</span>+<span class="number">100</span>+<span class="number">100</span>+<span class="number">1</span> = <span class="number">303</span>次</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>上面的结果如果用函数来表示为：$f(n) = 3n+3$，那么在计算机算法中的表示方法如下。</p>
+<h2 id="2-1-表示方法"><a href="#2-1-表示方法" class="headerlink" title="2.1 表示方法"></a>2.1 表示方法</h2><p>大 O 表示法：算法的时间复杂度通常用大 O 来表示，定义为 $T(n) = O(f(n))$，其中 T 表示时间。</p>
+<p>即：$T(n) = O(3n+3)$</p>
+<p>这里有个重要的点就是时间复杂度关心的是<strong>数量级</strong>，其原则是：</p>
+<ol>
+<li>省略常数，如果运行时间是常数量级，用常数 1 表示</li>
+<li>保留最高阶的项</li>
+<li>变最高阶项的系数为 1</li>
+</ol>
+<p>如$2n^3+3n^2+7$ ，省略常数变为 $O(2n^3+3n^2)$，保留最高阶的项为 $O(2n^3)$，变最高阶项的系数为 1 后变为 $O(n^3)$，即为 $O(n^3)$ 的$2n^3+3n^2+7$时间复杂度。</p>
+<p>同理，在上面的程序中$ T(n) = O(3n+3)$，其时间复杂度为 $O(n)$。</p>
+<p>注：只看最高复杂度的运算，也就是上面程序中的内层循环。</p>
+<h2 id="2-2-常见时间复杂度的阶"><a href="#2-2-常见时间复杂度的阶" class="headerlink" title="2.2 常见时间复杂度的阶"></a>2.2 常见时间复杂度的阶</h2><p>时间复杂度的阶主要分为以下几种</p>
+<h3 id="2-2-1-常数阶-O-1"><a href="#2-2-1-常数阶-O-1" class="headerlink" title="2.2.1 常数阶 $O(1)$"></a>2.2.1 常数阶 $O(1)$</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> n = <span class="number">100</span>;</span><br><span class="line">System.out.println(<span class="string">&quot;常数阶：&quot;</span> + n);</span><br></pre></td></tr></table></figure>
+<p>不管 n 等于多少，程序始终只会执行一次，即 $T(n) = O(1)$</p>
+<img src="/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/85d1202946c140bad6acf506b756aa6b.png" class="" title="img">
+<h3 id="2-2-2-对数阶-O-logn"><a href="#2-2-2-对数阶-O-logn" class="headerlink" title="2.2.2 对数阶$O(logn)$"></a>2.2.2 对数阶$O(logn)$</h3><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">public <span class="type">void</span> <span class="title function_">logarithm</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="type">int</span> count = <span class="number">1</span>; <span class="comment">// 执行一次</span></span><br><span class="line">    <span class="keyword">while</span> (count &lt;= n) &#123; <span class="comment">// 执行logn次</span></span><br><span class="line">        count = count*<span class="number">2</span>; <span class="comment">// 执行logn次</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该段代码什么时候会停止执行呢？是当count大于n时。也就是说多少个2相乘后其结果值会大于n，即$2^x=n$。由$2^x=n$可以得到$x=logn$，所以这段代码时间复杂度是$O(logn)$。</p>
+<p>则对数底数大于 1 的象限通用表示为：</p>
+<img src="/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/3d0826c1b8875e11e0d1cfe098eeea1a.png" class="" title="img">
+<h3 id="2-2-3-线性阶-O-n"><a href="#2-2-3-线性阶-O-n" class="headerlink" title="2.2.3 线性阶 $O(n)$"></a>2.2.3 线性阶 $O(n)$</h3><p>线性阶表示代码要执行n次，如下for循环中的代码，第二行和第三行代码都执行n次，即f(n)=2n。根据前面的分析，与最高次项相乘的常数2是可以忽略的，因此这段代码的时间复杂度是O(n)。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">public <span class="type">void</span> <span class="title function_">circle</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123; <span class="comment">// 执行n次</span></span><br><span class="line">        System.out.println(i); <span class="comment">// 执行n次</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<img src="/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/image-20231128135403541.png" class="" title="image-20231128135403541">
+<h3 id="2-3-4-线性对数阶-O-nlogn"><a href="#2-3-4-线性对数阶-O-nlogn" class="headerlink" title="2.3.4 线性对数阶$ O(nlogn)$"></a>2.3.4 线性对数阶$ O(nlogn)$</h3><p>线性对数阶$O(nlogn)$就是将一段时间复杂度为$O(logn)$的代码执行n次，如下代码所示。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">public <span class="type">void</span> <span class="title function_">logarithm</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="type">int</span> count = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++) &#123; <span class="comment">// 执行n次</span></span><br><span class="line">        <span class="keyword">while</span> (count &lt;= n) &#123; <span class="comment">// 执行logn次</span></span><br><span class="line">            count = count*<span class="number">2</span>; <span class="comment">// 执行nlogn次</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<img src="/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/db31628a34cae674c6bf697e920baad4.png" class="" title="img">
+<h3 id="2-3-5-平方阶-O-n-2"><a href="#2-3-5-平方阶-O-n-2" class="headerlink" title="2.3.5 平方阶$ O(n^2)$"></a>2.3.5 平方阶$ O(n^2)$</h3><p>如下代码是个双重for循环，其内循环的时间复杂度是线性阶$O(n)$。对于外循环来说，是将内循环这个时间复杂度为$O(n)$代码在执行n次，所以整个这段代码的时间复杂度为$O(n^2)$。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">public <span class="type">void</span> <span class="title function_">square</span><span class="params">(<span class="type">int</span> n)</span> &#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> i = <span class="number">0</span>; i &lt; n; i++)&#123; <span class="comment">// 执行n次</span></span><br><span class="line">        <span class="keyword">for</span>(<span class="type">int</span> j = <span class="number">0</span>; j &lt;n; j++) &#123; <span class="comment">// 执行n次</span></span><br><span class="line">            System.out.println(i+j); <span class="comment">// 执行n方次</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<img src="/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/ce63b2e33080a54aaf24d508c6dba408.png" class="" title="img">
+<img src="/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/3b8e848c9e33ea573417e8dfe175525e.png" class="" title="img">
+<h2 id="2-3-常见时间复杂度计算举例"><a href="#2-3-常见时间复杂度计算举例" class="headerlink" title="2.3 常见时间复杂度计算举例"></a>2.3 常见时间复杂度计算举例</h2><img src="/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/8cb7a6fe10044233b387a29c4b7faa47.png" class="" title="img">
+<img src="/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/7ef9761a89c14af2bd4eeb7344bc7301.png" class="" title="img">
+<img src="/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/dc887c58420541c1bc7d277937b1bc6f.png" class="" title="img">
+<img src="/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/0f88557387994b29ad5dcfb1a1146a24.png" class="" title="img">
+<img src="/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/a73198cb525445bd8ea150323a9e6bfe-170115125474023.png" class="" title="img">
+<img src="/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/43f38daa6d8144cc9cf06ff8e3dfa271.png" class="" title="img">
+<h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://xie.infoq.cn/article/4f20bb83e3693afc9746d35de">懂了！时间复杂度 O(1)，O(logn) ，O(n)，O(nlogn)…</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/361636579">算法复杂度分析，这次真懂了</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/fragment/%E6%97%B6%E9%97%B4%E5%A4%8D%E6%9D%82%E5%BA%A6/" title="时间复杂度">http://example.com/fragment/时间复杂度/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/" rel="prev" title="Markdown数学公式语法">
+                  <i class="fa fa-chevron-left"></i> Markdown数学公式语法
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/fragment/%E8%BD%AF%E4%BB%B6%E7%89%88%E6%9C%AC%E5%8F%B7/" rel="next" title="软件版本号">
+                  软件版本号 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"2644926f6b2810f60d76d7e036b0d551"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

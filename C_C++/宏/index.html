@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="宏定义#define命令还可以定义带参数的宏定义，用于实现某种特定的功能，其定义型式为：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="宏">
+<meta property="og:url" content="http://example.com/C_C++/%E5%AE%8F/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="宏定义#define命令还可以定义带参数的宏定义，用于实现某种特定的功能，其定义型式为：">
+<meta property="og:locale">
+<meta property="article:published_time" content="2024-12-01T10:13:44.403Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:44.403Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/C_C++/%E5%AE%8F/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/C_C++/%E5%AE%8F/","path":"C_C++/宏/","title":"宏"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>宏 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%8F%E5%AE%9A%E4%B9%89"><span class="nav-text">宏定义</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%8F%AF%E5%8F%98%E5%8F%82%E6%95%B0%E5%AE%8F"><span class="nav-text">1 可变参数宏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E5%AE%8F%E7%9A%84%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-text">1.2 宏的运算符</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-1-%E6%8D%A2%E8%A1%8C%E7%AC%A6"><span class="nav-text">1.2.1 换行符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-2-%E5%AD%97%E7%AC%A6%E4%B8%B2%E5%8C%96%E8%BF%90%E7%AE%97%E7%AC%A6"><span class="nav-text">1.2.2 字符串化运算符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-3-%E7%AC%A6%E5%8F%B7%E8%BF%9E%E6%8E%A5%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-text">1.2.3 符号连接操作符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-4-%E5%8D%95%E5%AD%97%E7%AC%A6%E5%8C%96%E6%93%8D%E4%BD%9C%E7%AC%A6"><span class="nav-text">1.2.4 单字符化操作符</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9D%A1%E4%BB%B6%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="nav-text">条件表达式</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%A9%BA%E8%AF%AD%E5%8F%A5"><span class="nav-text">空语句</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/C_C++/%E5%AE%8F/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="宏 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          宏
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:44" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:44+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/C-C/" itemprop="url" rel="index"><span itemprop="name">C_C++</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="宏定义"><a href="#宏定义" class="headerlink" title="宏定义"></a>宏定义</h1><p>#define命令还可以定义带参数的宏定义，用于实现某种特定的功能，其定义型式为：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//不带参数宏</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> PI 3.14159   <span class="comment">// 定义圆周率pi的值</span></span></span><br><span class="line"><span class="comment">//带参数宏</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> MAX(a,b) ((a)&gt;(b) ? (a) : (b))  <span class="comment">// 求最大值</span></span></span><br><span class="line"><span class="comment">//变参宏</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> eprintf(format, ...) fprintf (stderr, format, ##__VA_ARGS__)</span></span><br></pre></td></tr></table></figure>
+<p>不过，由于C++增加了内联函数(inline)，实现起来比带参数的宏更方便，这样的宏在C++中已经很少使用了。</p>
+<p><strong>优点</strong></p>
+<ul>
+<li>提高了程序的可读性，同时也方便进行修改；</li>
+<li>提高程序的运行效率：使用带参的宏定义既可完成函数调用的功能，又能避免函数的出栈与入栈操作，减少系统开销，提高运行效率；</li>
+<li>宏是由预处理器处理的，通过字符串操作可以完成很多编译器无法实现的功能。比如##连接符。</li>
+</ul>
+<p><strong>缺点</strong></p>
+<ul>
+<li>由于是直接嵌入的，所以代码可能相对多一点</li>
+<li>嵌套定义过多可能会影响程序的可读性，而且很容易出错；</li>
+<li><p>对带参的宏而言，由于是直接替换，并不会检查参数是否合法，存在安全隐患。</p>
+<p>补充：   <strong>预编译语句仅仅是简单的值代替，缺乏类型的检测机制。这样预处理语句就不能享受C++严格的类型检查的好处，从而可能成为引发一系列错误的隐患。</strong></p>
+</li>
+</ul>
+<p><strong>的确，宏定义给我们带来很多方便之处，但是必须正确使用，否则，可能会出现一些意想不到的问题。</strong></p>
+<h2 id="1-可变参数宏"><a href="#1-可变参数宏" class="headerlink" title="1 可变参数宏"></a>1 可变参数宏</h2><p>变参宏可以传递变参，类似于函数，如</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> myprintf(templt,…) fprintf(stderr,templt,__VA_ARGS__)</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> myprintf(templt,args…) fprintf(stderr,templt,args)</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>第一个宏中由于没有对变参起名，我们用默认的宏<strong>VA_ARGS</strong>来替代它。</li>
+<li>第二个宏中，我们显式地命名变参为args，那么我们在宏定义 中就可以用args来代指变参了。</li>
+<li>同C语言的stdcall一样，<strong>变参必须作为参数表的最后一项出现</strong>。</li>
+</ul>
+<p>当上面的宏中我们只能提供第一个参数templt 时，C标准要求我们必须写成：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">myprintf(templt,);</span><br><span class="line"></span><br><span class="line">myprintf(<span class="string">&quot;Error!/n&quot;</span>,);<span class="comment">//只有一个参数</span></span><br><span class="line"><span class="comment">//会被替换为</span></span><br><span class="line"><span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,<span class="string">&quot;Error!/n&quot;</span>,);<span class="comment">//语法错误，不能正常编译</span></span><br><span class="line"><span class="comment">//换一种写法</span></span><br><span class="line">myprintf(templt);</span><br><span class="line"><span class="comment">//会被替换为</span></span><br><span class="line"><span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,<span class="string">&quot;Error!/n&quot;</span>,);<span class="comment">//依然是错误</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//正确的写法如下</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> myprintf(templt, …) fprintf(stderr,templt, ##__VAR_ARGS__)</span></span><br><span class="line"><span class="comment">//##这个连接符号充当的作用就是当__VAR_ARGS__为空的时候，消除前面的那个逗号</span></span><br><span class="line">myprintf(templt);</span><br><span class="line"><span class="comment">//被转换为</span></span><br><span class="line"><span class="built_in">fprintf</span>(<span class="built_in">stderr</span>,templt);</span><br></pre></td></tr></table></figure>
+<p>总结：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//gcc特色的“双井号”（##），是用于解决尾随逗号问题的，例如：</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//错误示例</span></span><br><span class="line"><span class="comment">//如果</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> eprintf(format, args...) fprintf (stderr, format, args)</span></span><br><span class="line"><span class="comment">//或</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> eprintf(format, ...) fprintf (stderr, format, __VA_ARGS__)</span></span><br><span class="line"><span class="comment">//那么</span></span><br><span class="line">eprintf(<span class="string">&quot;%d %d\n&quot;</span>, <span class="number">10</span>, <span class="number">14</span>); </span><br><span class="line"><span class="comment">//扩展成 </span></span><br><span class="line"><span class="built_in">fprintf</span> (<span class="built_in">stderr</span>, <span class="string">&quot;%d %d\n&quot;</span>, <span class="number">10</span>, <span class="number">14</span>);</span><br><span class="line"><span class="comment">//编译通过。</span></span><br><span class="line"><span class="comment">//但是，</span></span><br><span class="line">eprintf(<span class="string">&quot;Hello World\n&quot;</span>); </span><br><span class="line"><span class="comment">//扩展成 </span></span><br><span class="line"><span class="built_in">fprintf</span> (<span class="built_in">stderr</span>, <span class="string">&quot;Hello World\n&quot;</span>, );<span class="comment">//此代码存在尾随逗号，于是编译错误。</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//正确示例</span></span><br><span class="line"><span class="comment">//如果</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> eprintf(format, args...) fprintf (stderr, format, ##args)</span></span><br><span class="line"><span class="comment">//或</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> eprintf(format, ...) fprintf (stderr, format, ##__VA_ARGS__)</span></span><br><span class="line"><span class="comment">//或</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> eprintf(format, ...) fprintf (stderr, format __VA_OPT__(,) __VA_ARGS__)</span></span><br><span class="line"><span class="comment">//那么</span></span><br><span class="line">eprintf(<span class="string">&quot;%d %d\n&quot;</span>, <span class="number">10</span>, <span class="number">14</span>); </span><br><span class="line"><span class="comment">//扩展成 </span></span><br><span class="line"><span class="built_in">fprintf</span> (<span class="built_in">stderr</span>, <span class="string">&quot;%d %d\n&quot;</span>, <span class="number">10</span>, <span class="number">14</span>);</span><br><span class="line"><span class="comment">//编译通过。</span></span><br><span class="line">eprintf(<span class="string">&quot;Hello World\n&quot;</span>); </span><br><span class="line"><span class="comment">//扩展成</span></span><br><span class="line"><span class="built_in">fprintf</span> (<span class="built_in">stderr</span>, <span class="string">&quot;Hello World\n&quot;</span>);<span class="comment">//编译通过。</span></span><br></pre></td></tr></table></figure>
+<h2 id="1-2-宏的运算符"><a href="#1-2-宏的运算符" class="headerlink" title="1.2 宏的运算符"></a>1.2 宏的运算符</h2><h3 id="1-2-1-换行符"><a href="#1-2-1-换行符" class="headerlink" title="1.2.1 换行符"></a>1.2.1 换行符</h3><p>作用：当定义的宏不能用一行表达完整时，可以用<code>\</code>表示下一行继续此宏的定义。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> NAME <span class="string">&quot;Zhang&quot;</span>  \</span></span><br><span class="line"><span class="meta">			   <span class="string">&quot;fei&quot;</span>  \</span></span><br><span class="line"><span class="meta">			  <span class="string">&quot; 你好！&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span> &#123;</span><br><span class="line">     <span class="comment">// 范例1</span></span><br><span class="line">    <span class="built_in">std</span>::<span class="built_in">cout</span> &lt;&lt; NAME &lt;&lt; <span class="built_in">std</span>::<span class="built_in">endl</span>;</span><br><span class="line">    </span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>输出</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Zhangfei 你好</span><br></pre></td></tr></table></figure>
+<h3 id="1-2-2-字符串化运算符"><a href="#1-2-2-字符串化运算符" class="headerlink" title="1.2.2 字符串化运算符"></a>1.2.2 字符串化运算符</h3><p><code>#</code>将宏定义中的传入参数名转换成用一对双引号括起来参数名字符串；</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> example( instr )  printf( <span class="string">&quot;the input string is:\t%s\n&quot;</span>, #instr )</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> example1( instr )  #instr</span></span><br><span class="line"></span><br><span class="line">example( abc ); <span class="comment">// 在编译时将会展开成：printf(&quot;the input string is:\t%s\n&quot;,&quot;abc&quot;)</span></span><br><span class="line"><span class="built_in">string</span> str = example1( abc );  <span class="comment">// 将会展成：string str=&quot;abc&quot;</span></span><br></pre></td></tr></table></figure>
+<p><strong>注意， 对空格的处理：</strong></p>
+<ul>
+<li><p>忽略传入参数名前面和后面的空格。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">如：str=example1(   abc );<span class="comment">//将会被扩展成 str=&quot;abc&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>当传入参数名间存在空格时，编译器将会自动连接各个子字符串，用每个子字符串之间以一个空格连接，忽略剩余空格。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">如：str=exapme( abc    def);<span class="comment">//将会被扩展成 str=&quot;abc def&quot;</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> checkRuntime(op)  __check_cuda_runtime((op), #op, __FILE__, __LINE__)</span></span><br><span class="line"></span><br><span class="line"><span class="type">bool</span> __check_cuda_runtime(cudaError_t code, <span class="type">const</span> <span class="type">char</span>* op, <span class="type">const</span> <span class="type">char</span>* file, <span class="type">int</span> line)&#123;</span><br><span class="line">    <span class="keyword">if</span>(code != cudaSuccess)&#123;    </span><br><span class="line">        <span class="type">const</span> <span class="type">char</span>* err_name = cudaGetErrorName(code);    </span><br><span class="line">        <span class="type">const</span> <span class="type">char</span>* err_message = cudaGetErrorString(code);  </span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;runtime error %s:%d  %s failed. \n  code = %s, message = %s\n&quot;</span>, file, line, op, err_name, err_message);   </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//调用</span></span><br><span class="line">checkRuntime(cudaMalloc(&amp;device_ptr, size));</span><br></pre></td></tr></table></figure>
+<p>分析：</p>
+<ul>
+<li>调用<code>checkRuntime(cudaMalloc(&amp;device_ptr, size));</code>时展开为<code>__check_cuda_runtime(cudaMalloc(&amp;device_ptr, size), &quot;cudaMalloc(&amp;device_ptr, size)&quot;, __FILE__, __LINE__)</code></li>
+</ul>
+<h3 id="1-2-3-符号连接操作符"><a href="#1-2-3-符号连接操作符" class="headerlink" title="1.2.3 符号连接操作符"></a>1.2.3 符号连接操作符</h3><p><code>##</code><strong>作用：将宏定义的多个形参转换成一个实际参数名。</strong> </p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> exampleNum( n )  num##n</span></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> num9 = <span class="number">9</span>;</span><br><span class="line"><span class="type">int</span> num = exampleNum( <span class="number">9</span> ); <span class="comment">// 将会扩展成 int num = num9</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> exampleNum( n )       num ## n         </span></span><br><span class="line"><span class="comment">// 相当于 #define exampleNum( n )      num##n</span></span><br></pre></td></tr></table></figure>
+<h3 id="1-2-4-单字符化操作符"><a href="#1-2-4-单字符化操作符" class="headerlink" title="1.2.4 单字符化操作符"></a>1.2.4 单字符化操作符</h3><p><code>#@</code><strong>将传入单字符参数名转换成字符，以一对单引用括起来。</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> makechar(x)    #@x</span></span><br><span class="line"><span class="type">char</span> a = makechar( b ); <span class="comment">//展开后变成了：a = &#x27;b&#x27;;</span></span><br></pre></td></tr></table></figure>
+<h1 id="条件表达式"><a href="#条件表达式" class="headerlink" title="条件表达式"></a>条件表达式</h1><h2 id="空语句"><a href="#空语句" class="headerlink" title="空语句"></a>空语句</h2><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">(c % <span class="number">2</span> !=<span class="number">0</span>) ? c *= <span class="number">2</span> : **(<span class="type">void</span>)**<span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/C_C++/%E5%AE%8F/" title="宏">http://example.com/C_C++/宏/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/CUDA/%E5%9F%BA%E7%A1%80/cuda%E4%B8%AD%E4%BD%BF%E7%94%A8--wrap/" rel="prev" title="cuda中使用--wrap">
+                  <i class="fa fa-chevron-left"></i> cuda中使用--wrap
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/C_C++/%E5%87%BD%E6%95%B0%E6%8C%87%E9%92%88%E4%B8%8E%E6%8C%87%E9%92%88%E5%87%BD%E6%95%B0/" rel="next" title="函数指针与指针函数">
+                  函数指针与指针函数 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"3497eceb7fed47a619a4cecac64d34ea"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

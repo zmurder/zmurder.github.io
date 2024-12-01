@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="3-TensorRT的CPP接口解析 点此链接加入NVIDIA开发者计划">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3-TensorRT的CPP接口解析">
+<meta property="og:url" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/3-TensorRT%E7%9A%84CPP%E6%8E%A5%E5%8F%A3%E8%A7%A3%E6%9E%90/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="3-TensorRT的CPP接口解析 点此链接加入NVIDIA开发者计划">
+<meta property="og:locale">
+<meta property="article:published_time" content="2024-12-01T10:13:45.380Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.380Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="GPU">
+<meta property="article:tag" content="Tensorrt">
+<meta property="article:tag" content="DeepLearning">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/3-TensorRT%E7%9A%84CPP%E6%8E%A5%E5%8F%A3%E8%A7%A3%E6%9E%90/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/3-TensorRT%E7%9A%84CPP%E6%8E%A5%E5%8F%A3%E8%A7%A3%E6%9E%90/","path":"TensorRT/TensorRT中文版开发手册/3-TensorRT的CPP接口解析/","title":"3-TensorRT的CPP接口解析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>3-TensorRT的CPP接口解析 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#3-TensorRT%E7%9A%84CPP%E6%8E%A5%E5%8F%A3%E8%A7%A3%E6%9E%90"><span class="nav-text">3-TensorRT的CPP接口解析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-The-Build-Phase"><span class="nav-text">3.1. The Build Phase</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-1-Creating-a-Network-Definition"><span class="nav-text">3.1.1. Creating a Network Definition</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-2-Importing-a-Model-using-the-ONNX-Parser"><span class="nav-text">3.1.2. Importing a Model using the ONNX Parser</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-3-Building-an-Engine"><span class="nav-text">3.1.3. Building an Engine</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A%E5%BA%8F%E5%88%97%E5%8C%96%E5%BC%95%E6%93%8E%E4%B8%8D%E8%83%BD%E8%B7%A8%E5%B9%B3%E5%8F%B0%E6%88%96-TensorRT-%E7%89%88%E6%9C%AC%E7%A7%BB%E6%A4%8D%E3%80%82%E5%BC%95%E6%93%8E%E7%89%B9%E5%AE%9A%E4%BA%8E%E5%AE%83%E4%BB%AC%E6%9E%84%E5%BB%BA%E7%9A%84%E7%A1%AE%E5%88%87-GPU-%E6%A8%A1%E5%9E%8B%EF%BC%88%E9%99%A4%E4%BA%86%E5%B9%B3%E5%8F%B0%E5%92%8C-TensorRT-%E7%89%88%E6%9C%AC%EF%BC%89%E3%80%82"><span class="nav-text">注意：序列化引擎不能跨平台或 TensorRT 版本移植。引擎特定于它们构建的确切 GPU 模型（除了平台和 TensorRT 版本）。</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-Deserializing-a-Plan"><span class="nav-text">3.2. Deserializing a Plan</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Performing-Inference"><span class="nav-text">3.3. Performing Inference</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/3-TensorRT%E7%9A%84CPP%E6%8E%A5%E5%8F%A3%E8%A7%A3%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="3-TensorRT的CPP接口解析 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          3-TensorRT的CPP接口解析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/" itemprop="url" rel="index"><span itemprop="name">TensorRT中文版开发手册</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="3-TensorRT的CPP接口解析"><a href="#3-TensorRT的CPP接口解析" class="headerlink" title="3-TensorRT的CPP接口解析"></a>3-TensorRT的CPP接口解析</h1>
+<p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/zh-cn/developer-program">点此链接加入NVIDIA开发者计划</a></p>
+<p>本章说明 C++ API 的基本用法，假设您从 ONNX 模型开始。 <a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/samples/sampleOnnxMNIST">sampleOnnxMNIST</a>更详细地说明了这个用例。</p>
+<p>C++ API 可以通过头文件<code>NvInfer.h</code>访问，并且位于<code>nvinfer1</code>命名空间中。例如，一个简单的应用程序可能以：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> “NvInfer.h”</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> nvinfer1;</span><br></pre></td></tr></table></figure><br>TensorRT C++ API 中的接口类以前缀<code>I</code>开头，例如<code>ILogger</code> 、 <code>IBuilder</code>等。</p>
+<p>CUDA 上下文会在 TensorRT 第一次调用 CUDA 时自动创建，如果在该点之前不存在。通常最好在第一次调用 TensoRT 之前自己创建和配置 CUDA 上下文。<br>为了说明对象的生命周期，本章中的代码不使用智能指针；但是，建议将它们与 TensorRT 接口一起使用。</p>
+<h2 id="3-1-The-Build-Phase"><a href="#3-1-The-Build-Phase" class="headerlink" title="3.1. The Build Phase"></a>3.1. The Build Phase</h2><p>要创建构建器，首先需要实例化ILogger接口。此示例捕获所有警告消息，但忽略信息性消息：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">Logger</span> : <span class="keyword">public</span> ILogger           </span><br><span class="line">&#123;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">log</span><span class="params">(Severity severity, <span class="type">const</span> <span class="type">char</span>* msg)</span> <span class="keyword">noexcept</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="comment">// suppress info-level messages</span></span><br><span class="line">        <span class="keyword">if</span> (severity &lt;= Severity::kWARNING)</span><br><span class="line">            std::cout &lt;&lt; msg &lt;&lt; std::endl;</span><br><span class="line">    &#125;</span><br><span class="line">&#125; logger;</span><br></pre></td></tr></table></figure>
+<p>然后，您可以创建构建器的实例：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">IBuilder* builder = <span class="built_in">createInferBuilder</span>(logger);</span><br></pre></td></tr></table></figure>
+<h3 id="3-1-1-Creating-a-Network-Definition"><a href="#3-1-1-Creating-a-Network-Definition" class="headerlink" title="3.1.1. Creating a Network Definition"></a>3.1.1. Creating a Network Definition</h3><p>创建构建器后，优化模型的第一步是创建网络定义：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">uint32_t</span> flag = <span class="number">1U</span> &lt;&lt;<span class="built_in">static_cast</span>&lt;<span class="type">uint32_t</span>&gt;</span><br><span class="line">    (NetworkDefinitionCreationFlag::kEXPLICIT_BATCH); </span><br><span class="line"></span><br><span class="line">INetworkDefinition* network = builder-&gt;<span class="built_in">createNetworkV2</span>(flag);</span><br></pre></td></tr></table></figure><br>为了使用 ONNX 解析器导入模型，需要<code>kEXPLICIT_BATCH</code>标志。有关详细信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#explicit-implicit-batch">显式与隐式批处理</a>部分。</p>
+<h3 id="3-1-2-Importing-a-Model-using-the-ONNX-Parser"><a href="#3-1-2-Importing-a-Model-using-the-ONNX-Parser" class="headerlink" title="3.1.2. Importing a Model using the ONNX Parser"></a>3.1.2. Importing a Model using the ONNX Parser</h3><p>现在，需要从 ONNX 表示中填充网络定义。 ONNX 解析器 API 位于文件NvOnnxParser.h中，解析器位于<code>nvonnxparser</code> C++ 命名空间中。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> “NvOnnxParser.h”</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> nvonnxparser;</span><br></pre></td></tr></table></figure>
+<p>您可以创建一个 ONNX 解析器来填充网络，如下所示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">IParser*  parser = <span class="built_in">createParser</span>(*network, logger);</span><br></pre></td></tr></table></figure>
+<p>然后，读取模型文件并处理任何错误。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">parser-&gt;<span class="built_in">parseFromFile</span>(modelFile, </span><br><span class="line">    <span class="built_in">static_cast</span>&lt;<span class="type">int32_t</span>&gt;(ILogger::Severity::kWARNING));</span><br><span class="line"><span class="keyword">for</span> (<span class="type">int32_t</span> i = <span class="number">0</span>; i &lt; parser.<span class="built_in">getNbErrors</span>(); ++i)</span><br><span class="line">&#123;</span><br><span class="line">std::cout &lt;&lt; parser-&gt;<span class="built_in">getError</span>(i)-&gt;<span class="built_in">desc</span>() &lt;&lt; std::endl;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>TensorRT 网络定义的一个重要方面是它包含指向模型权重的指针，这些指针由构建器复制到优化的引擎中。由于网络是通过解析器创建的，解析器拥有权重占用的内存，因此在构建器运行之前不应删除解析器对象。</p>
+<h3 id="3-1-3-Building-an-Engine"><a href="#3-1-3-Building-an-Engine" class="headerlink" title="3.1.3. Building an Engine"></a>3.1.3. Building an Engine</h3><p>下一步是创建一个构建配置，指定 TensorRT 应该如何优化模型。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">IBuilderConfig* config = builder-&gt;<span class="built_in">createBuilderConfig</span>();</span><br></pre></td></tr></table></figure><br>这个接口有很多属性，你可以设置这些属性来控制 TensorRT 如何优化网络。一个重要的属性是最大工作空间大小。层实现通常需要一个临时工作空间，并且此参数限制了网络中任何层可以使用的最大大小。如果提供的工作空间不足，TensorRT 可能无法找到层的实现。默认情况下，工作区设置为给定设备的总全局内存大小；必要时限制它，例如，在单个设备上构建多个引擎时。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">config-&gt;<span class="built_in">setMemoryPoolLimit</span>(MemoryPoolType::kWORKSPACE, <span class="number">1U</span> &lt;&lt; <span class="number">20</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>一旦指定了配置，就可以构建引擎。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">IHostMemory*  serializedModel = builder-&gt;<span class="built_in">buildSerializedNetwork</span>(*network, *config);</span><br><span class="line"></span><br></pre></td></tr></table></figure><br>由于序列化引擎包含权重的必要拷贝，因此不再需要解析器、网络定义、构建器配置和构建器，可以安全地删除：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">delete</span> parser;</span><br><span class="line"><span class="keyword">delete</span> network;</span><br><span class="line"><span class="keyword">delete</span> config;</span><br><span class="line"><span class="keyword">delete</span> builder;</span><br></pre></td></tr></table></figure><br>然后可以将引擎保存到磁盘，并且可以删除它被序列化到的缓冲区。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">delete</span> serializedModel</span><br></pre></td></tr></table></figure></p>
+<h4 id="注意：序列化引擎不能跨平台或-TensorRT-版本移植。引擎特定于它们构建的确切-GPU-模型（除了平台和-TensorRT-版本）。"><a href="#注意：序列化引擎不能跨平台或-TensorRT-版本移植。引擎特定于它们构建的确切-GPU-模型（除了平台和-TensorRT-版本）。" class="headerlink" title="注意：序列化引擎不能跨平台或 TensorRT 版本移植。引擎特定于它们构建的确切 GPU 模型（除了平台和 TensorRT 版本）。"></a>注意：序列化引擎不能跨平台或 TensorRT 版本移植。引擎特定于它们构建的确切 GPU 模型（除了平台和 TensorRT 版本）。</h4><h2 id="3-2-Deserializing-a-Plan"><a href="#3-2-Deserializing-a-Plan" class="headerlink" title="3.2. Deserializing a Plan"></a>3.2. Deserializing a Plan</h2><p>假设您之前已经序列化了一个优化模型并希望执行推理，您将需要创建一个运行时接口的实例。与构建器一样，运行时需要一个记录器实例：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">IRuntime* runtime = <span class="built_in">createInferRuntime</span>(logger);</span><br></pre></td></tr></table></figure>
+<p>假设您已将模型从缓冲区中读取，然后可以对其进行反序列化以获得引擎：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ICudaEngine* engine = </span><br><span class="line">  runtime-&gt;<span class="built_in">deserializeCudaEngine</span>(modelData, modelSize);</span><br></pre></td></tr></table></figure>
+<h2 id="3-3-Performing-Inference"><a href="#3-3-Performing-Inference" class="headerlink" title="3.3. Performing Inference"></a>3.3. Performing Inference</h2><p>引擎拥有优化的模型，但要执行推理，我们需要管理中间激活的额外状态。这是通过<code>ExecutionContext</code>接口完成的：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">IExecutionContext *context = engine-&gt;<span class="built_in">createExecutionContext</span>();</span><br></pre></td></tr></table></figure></p>
+<p>一个引擎可以有多个执行上下文，允许一组权重用于多个重叠的推理任务。 （当前的一个例外是使用动态形状时，每个优化配置文件只能有一个执行上下文。）</p>
+<p>要执行推理，您必须为输入和输出传递 TensorRT 缓冲区，TensorRT 要求您在指针数组中指定。您可以使用为输入和输出张量提供的名称查询引擎，以在数组中找到正确的位置：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int32_t</span> inputIndex = engine-&gt;<span class="built_in">getBindingIndex</span>(INPUT_NAME);</span><br><span class="line"><span class="type">int32_t</span> outputIndex = engine-&gt;<span class="built_in">getBindingIndex</span>(OUTPUT_NAME);</span><br></pre></td></tr></table></figure></p>
+<p>使用这些索引，设置一个缓冲区数组，指向 GPU 上的输入和输出缓冲区：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span>* buffers[<span class="number">2</span>];</span><br><span class="line">buffers[inputIndex] = inputBuffer;</span><br><span class="line">buffers[outputIndex] = outputBuffer;</span><br></pre></td></tr></table></figure><br>然后，您可以调用 TensorRT 的 enqueue 方法以使用CUDA 流异步启动推理：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">context-&gt;<span class="built_in">enqueueV2</span>(buffers, stream, <span class="literal">nullptr</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>通常在内核之前和之后将<code>cudaMemcpyAsync()</code> 排入队列以从 GPU 中移动数据（如果数据尚不存在）。 <code>enqueueV2()</code>的最后一个参数是一个可选的 CUDA 事件，当输入缓冲区被消耗时发出信号，并且可以安全地重用它们的内存。</p>
+<p>要确定内核（可能还有<code>memcpy()</code> ）何时完成，请使用标准 CUDA 同步机制，例如事件或等待流。</p>
+<p>如果您更喜欢同步推理，请使用<code>executeV2</code>方法而不是<code>enqueueV2</code>。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/3-TensorRT%E7%9A%84CPP%E6%8E%A5%E5%8F%A3%E8%A7%A3%E6%9E%90/" title="3-TensorRT的CPP接口解析">http://example.com/TensorRT/TensorRT中文版开发手册/3-TensorRT的CPP接口解析/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+              <a href="/tags/Tensorrt/" rel="tag"><i class="fa fa-tag"></i> Tensorrt</a>
+              <a href="/tags/DeepLearning/" rel="tag"><i class="fa fa-tag"></i> DeepLearning</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/2-TensorRT%E7%9A%84%E8%83%BD%E5%8A%9B/" rel="prev" title="2-TensorRT的能力">
+                  <i class="fa fa-chevron-left"></i> 2-TensorRT的能力
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/4-TensorRT%E7%9A%84Python%E6%8E%A5%E5%8F%A3%E8%A7%A3%E6%9E%90/" rel="next" title="4-TensorRT的Python接口解析">
+                  4-TensorRT的Python接口解析 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"8d8ac39d2876f91a544c358e113d438e"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

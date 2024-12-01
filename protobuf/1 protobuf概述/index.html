@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="1 protobuf概述本教程基本上时官方教程的翻译">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1 protobuf概述">
+<meta property="og:url" content="http://example.com/protobuf/1%20protobuf%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="1 protobuf概述本教程基本上时官方教程的翻译">
+<meta property="og:locale">
+<meta property="article:published_time" content="2024-12-01T10:13:45.775Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.775Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="protobuf">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/protobuf/1%20protobuf%E6%A6%82%E8%BF%B0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/protobuf/1%20protobuf%E6%A6%82%E8%BF%B0/","path":"protobuf/1 protobuf概述/","title":"1 protobuf概述"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>1 protobuf概述 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-protobuf%E6%A6%82%E8%BF%B0"><span class="nav-text">1 protobuf概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-text">1.1 是什么</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E4%B8%BA%E4%BB%80%E4%B9%88%E7%94%A8"><span class="nav-text">1.2 为什么用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-%E8%B7%A8%E8%AF%AD%E8%A8%80%E5%85%BC%E5%AE%B9%E6%80%A7"><span class="nav-text">1.3 跨语言兼容性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-%E5%90%91%E5%89%8D%E5%90%91%E5%90%8E%E5%85%BC%E5%AE%B9%E6%96%B0"><span class="nav-text">1.4 向前向后兼容新</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-5-%E7%BC%96%E8%AF%91%E5%AE%89%E8%A3%85"><span class="nav-text">1.5 编译安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-6-%E9%A2%9D%E5%A4%96%E7%9A%84%E6%95%B0%E6%8D%AE%E7%B1%BB%E5%9E%8B%E6%94%AF%E6%8C%81"><span class="nav-text">1.6 额外的数据类型支持</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link"><span class="nav-text"> </span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/protobuf/1%20protobuf%E6%A6%82%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="1 protobuf概述 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          1 protobuf概述
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/protobuf/" itemprop="url" rel="index"><span itemprop="name">protobuf</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-protobuf概述"><a href="#1-protobuf概述" class="headerlink" title="1 protobuf概述"></a>1 protobuf概述</h1><p>本教程基本上时官方教程的翻译</p>
+<h2 id="1-1-是什么"><a href="#1-1-是什么" class="headerlink" title="1.1 是什么"></a>1.1 是什么</h2><p>Google Protocol Buffer(简称 Protobuf)是一种轻便高效的结构化数据存储格式，平台无关、语言无关、可扩展，可用于<strong>通讯协议</strong>和<strong>数据存储</strong>等领域。</p>
+<h2 id="1-2-为什么用"><a href="#1-2-为什么用" class="headerlink" title="1.2 为什么用"></a>1.2 为什么用</h2><ul>
+<li>平台无关，语言无关，可扩展；</li>
+<li>提供了友好的动态库，使用简单；</li>
+<li>解析速度快，比对应的XML快约20-100倍；</li>
+<li>序列化数据非常简洁、紧凑，与XML相比，其序列化之后的数据量约为1/3到1/10。</li>
+</ul>
+<h2 id="1-3-跨语言兼容性"><a href="#1-3-跨语言兼容性" class="headerlink" title="1.3 跨语言兼容性"></a>1.3 跨语言兼容性</h2><p>可以使用一个jave程序序列化数据发送给python程序解析</p>
+<h2 id="1-4-向前向后兼容新"><a href="#1-4-向前向后兼容新" class="headerlink" title="1.4 向前向后兼容新"></a>1.4 向前向后兼容新</h2><p>按照<a target="_blank" rel="noopener" href="https://developers.google.cn/protocol-buffers/docs/proto3#updating">规则</a>进行升级proto后（规则在后面proto3语言指南中由描述），旧的代码可以读取新的消息，忽略新添加的字段。对于旧代码，被删除的字段将具有其默认值，而被删除的重复字段将为空。</p>
+<p>新代码也可以阅读旧消息。旧消息中不会出现新的字段;在这些情况下，protobuf会提供合理的默认值。</p>
+<p>设置可选条件和字段类型后，您会分配字段编号。<strong>字段编号不能重新估算或重复使用。如果删除字段，则应保留其字段编号，以防止某人意外地重用该数字</strong>。</p>
+<p><strong>实际测试proto2和proto3也可以兼容，例如一个主机使用proto2发送另一台主机使用proto3接收，相同的proto文件，分别使用proto2和proto3编译为cc和h，通信成功。</strong></p>
+<h2 id="1-5-编译安装"><a href="#1-5-编译安装" class="headerlink" title="1.5 编译安装"></a>1.5 编译安装</h2><p>源码下载地址： <a target="_blank" rel="noopener" href="https://github.com/google/protobuf">https://github.com/google/protobuf</a><br>安装依赖的库： autoconf automake libtool curl make g++ unzip </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">./autogen.sh</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">./configure</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">make check</span></span><br><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">sudo make install</span></span><br></pre></td></tr></table></figure>
+<h2 id="1-6-额外的数据类型支持"><a href="#1-6-额外的数据类型支持" class="headerlink" title="1.6 额外的数据类型支持"></a>1.6 额外的数据类型支持</h2><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/duration.proto"><code>Duration</code></a>  is a signed, fixed-length span of time, such as 42s. </li>
+<li><a target="_blank" rel="noopener" href="https://github.com/protocolbuffers/protobuf/blob/master/src/google/protobuf/timestamp.proto"><code>Timestamp</code></a>  is a point in time independent of any time zone or calendar, such as 2017-01-15T01:30:15.01Z.</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/googleapis/googleapis/blob/master/google/type/interval.proto"><code>Interval</code></a>  is a time interval independent of time zone or calendar, such as 2017-01-15T01:30:15.01Z - 2017-01-16T02:30:15.01Z. </li>
+<li><a target="_blank" rel="noopener" href="https://github.com/googleapis/googleapis/blob/master/google/type/date.proto"><code>Date</code></a>  is a whole calendar date, such as 2025-09-19.</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/googleapis/googleapis/blob/master/google/type/dayofweek.proto"><code>DayOfWeek</code></a>  is a day of the week, such as Monday.</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/googleapis/googleapis/blob/master/google/type/timeofday.proto"><code>TimeOfDay</code></a>  is a time of day, such as 10:42:23.</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/googleapis/googleapis/blob/master/google/type/latlng.proto"><code>LatLng</code></a>  is a latitude/longitude pair, such as 37.386051 latitude and -122.083855 longitude.</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/googleapis/googleapis/blob/master/google/type/money.proto"><code>Money</code></a>  is an amount of money with its currency type, such as 42 USD.</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/googleapis/googleapis/blob/master/google/type/postal_address.proto"><code>PostalAddress</code></a>  is a postal address, such as 1600 Amphitheatre Parkway Mountain View, CA 94043 USA.</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/googleapis/googleapis/blob/master/google/type/color.proto"><code>Color</code></a>  is a color in the RGBA color space.</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/googleapis/googleapis/blob/master/google/type/month.proto"><code>Month</code></a>  is a month of the year, such as April.</li>
+</ul>
+<h1 id=""><a href="#" class="headerlink" title=" "></a> </h1>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/protobuf/1%20protobuf%E6%A6%82%E8%BF%B0/" title="1 protobuf概述">http://example.com/protobuf/1 protobuf概述/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/protobuf/" rel="tag"><i class="fa fa-tag"></i> protobuf</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/protobuf/2%20protobuf%20proto3%E8%AF%AD%E8%A8%80%E6%8C%87%E5%8D%97/" rel="prev" title="2 protobuf proto3语言指南">
+                  <i class="fa fa-chevron-left"></i> 2 protobuf proto3语言指南
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/zeromq/1%20ZMQ%E5%9F%BA%E7%A1%80/" rel="next" title="1 ZMQ基础">
+                  1 ZMQ基础 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"25464c9bb06526f359b815d17928a597"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

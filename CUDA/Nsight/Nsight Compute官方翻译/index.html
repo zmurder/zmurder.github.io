@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="本文档翻译自官网：Nsight Compute NVIDIA Nsight计算用户界面（UI）手册。有关工具UI中所有视图、控件和工作流的信息。Visual Profiler的转换指南。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nsight Compute官方翻译">
+<meta property="og:url" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="本文档翻译自官网：Nsight Compute NVIDIA Nsight计算用户界面（UI）手册。有关工具UI中所有视图、控件和工作流的信息。Visual Profiler的转换指南。">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/image-20230110094444621.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/image-20230110095640055.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/image-20230110094954160.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/image-20230110101230576.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/image-20230110101426678.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/welcome-page.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-interactive-profiling-connect.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-interactive-profiling-attach.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-interactive-profiling-connected.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-interactive-profiling-api-stream.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-interactive-profiling-next-launch.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-profiling-connect.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-profiling-options-sections.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-system-trace-connect.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-system-trace-options.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-system-trace-timeline.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-report.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-baseline.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-rule.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/connection-dialog.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/add-remote-connection.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/add-remote-connection-private-key.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/progress-log.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/image-20230907160115283.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/main-menu.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/status-banner.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/tool-window-api-statistics.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/tool-window-api-stream.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/tool-window-baselines.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/tool-window-metric-details.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/tool-window-nvtx.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/tool-window-nvtx-resources.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/tool-window-resources.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/tool-window-section-sets.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/tool-window-sections.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-header.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-header-filter-dialog.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-summary.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-summary-table.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-summary-rules.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-section-with-rule.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-details-comments.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-section-bodies.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-section-rooflines.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-details-source-table.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-source.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-source-markers.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-source-collapse.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-source-resolve.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-source-column-chooser.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-fix-column.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-source-heatmap.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-source-rel-abs.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/image-20230917143621604.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-source-register-dependencies.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-callstack.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-nvtx.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/image-20230911162559707.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/baselines.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/baselines-multiple.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/sm-selection-dialog.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/cubin-viewer.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/occupancy-calculator-activity.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/occupancy-calculator-from-header.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/occupancy-calculator-from-section.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/occupancy-calculator-tables.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/occupancy-calculator-graphs.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/occupancy-calculator-gpu-data.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/image-20230831170754116.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/image-20230914173303421.png">
+<meta property="article:published_time" content="2024-12-01T10:13:43.883Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:43.883Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="GPU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/image-20230110094444621.png">
+
+
+<link rel="canonical" href="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/","path":"CUDA/Nsight/Nsight Compute官方翻译/","title":"Nsight Compute官方翻译"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Nsight Compute官方翻译 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="nav-text">1 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-%E6%A6%82%E8%BF%B0"><span class="nav-text">1.1 概述</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B"><span class="nav-text">2 快速开始</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E4%BA%A4%E4%BA%92%E5%BC%8F%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%B4%BB%E5%8A%A8-Interactive-Profile-Activity"><span class="nav-text">2.1. 交互式配置文件活动 Interactive Profile Activity</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-1-%E4%BB%8ENVIDIA-Nsight-Compute%E5%90%AF%E5%8A%A8%E7%9B%AE%E6%A0%87%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="nav-text">2.1.1 从NVIDIA Nsight Compute启动目标应用程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-2-%E4%BB%8E%E5%91%BD%E4%BB%A4%E8%A1%8C%E4%BD%BF%E7%94%A8%E5%B7%A5%E5%85%B7%E6%A3%80%E6%B5%8B%E5%90%AF%E5%8A%A8%E7%9B%AE%E6%A0%87%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="nav-text">2.1.2 从命令行使用工具检测启动目标应用程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-3-%E5%90%AF%E5%8A%A8NVIDIA-Nsight-Compute%E5%B9%B6%E8%BF%9E%E6%8E%A5%E5%88%B0%E7%9B%AE%E6%A0%87%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="nav-text">2.1.3 启动NVIDIA Nsight Compute并连接到目标应用程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-4-%E6%8E%A7%E5%88%B6%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E6%89%A7%E8%A1%8C"><span class="nav-text">2.1.4 控制应用程序执行</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-5-%E9%9A%94%E7%A6%BB%E5%86%85%E6%A0%B8%E5%90%AF%E5%8A%A8"><span class="nav-text">2.1.5 隔离内核启动</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-6-%E8%AF%84%E6%B5%8B%E5%86%85%E6%A0%B8%E5%90%AF%E5%8A%A8"><span class="nav-text">2.1.6 评测内核启动</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E9%9D%9E%E4%BA%A4%E4%BA%92%E5%BC%8F%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%B4%BB%E5%8A%A8-Non-Interactive-Profile-Activity"><span class="nav-text">2.2. 非交互式配置文件活动 Non-Interactive Profile Activity</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1-%E4%BB%8ENVIDIA-Nsight-Compute%E5%90%AF%E5%8A%A8%E7%9B%AE%E6%A0%87%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="nav-text">2.2.1 从NVIDIA Nsight Compute启动目标应用程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-2-%E5%85%B6%E4%BB%96%E5%90%AF%E5%8A%A8%E9%80%89%E9%A1%B9"><span class="nav-text">2.2.2 其他启动选项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E7%B3%BB%E7%BB%9F%E8%B7%9F%E8%B8%AA%E6%B4%BB%E5%8A%A8"><span class="nav-text">2.3.系统跟踪活动</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-1-%E4%BB%8ENVIDIA-Nsight-Compute%E5%90%AF%E5%8A%A8%E7%9B%AE%E6%A0%87%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F"><span class="nav-text">2.3.1 从NVIDIA Nsight Compute启动目标应用程序</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-2-%E5%85%B6%E4%BB%96%E5%90%AF%E5%8A%A8%E9%80%89%E9%A1%B9"><span class="nav-text">2.3.2 其他启动选项</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-%E6%B5%8F%E8%A7%88%E6%8A%A5%E5%91%8A"><span class="nav-text">2.4.浏览报告</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-1-%E6%B5%8F%E8%A7%88%E6%8A%A5%E5%91%8A"><span class="nav-text">2.4.1 浏览报告</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-2-%E4%B8%8D%E5%90%8C%E7%9A%84%E5%A4%9A%E4%B8%AA%E7%BB%93%E6%9E%9C"><span class="nav-text">2.4.2 不同的多个结果</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-3-%E6%89%A7%E8%A1%8C%E8%A7%84%E5%88%99"><span class="nav-text">2.4.3 执行规则</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E8%BF%9E%E6%8E%A5%E5%AF%B9%E8%AF%9D%E6%A1%86"><span class="nav-text">3.连接对话框</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E8%BF%9C%E7%A8%8B%E8%BF%9E%E6%8E%A5"><span class="nav-text">3.1. 远程连接</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E4%BA%A4%E4%BA%92%E5%BC%8F%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E6%B4%BB%E5%8A%A8-Interactive-Profile-Activity"><span class="nav-text">3.2. 交互式配置文件活动 Interactive Profile Activity</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-%E5%A4%8D%E4%BD%8D"><span class="nav-text">3.4.复位</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E4%B8%BB%E8%8F%9C%E5%8D%95%E5%92%8C%E5%B7%A5%E5%85%B7%E6%A0%8F"><span class="nav-text">4.主菜单和工具栏</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E4%B8%BB%E8%8F%9C%E5%8D%95"><span class="nav-text">4.1. 主菜单</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-%E4%B8%BB%E5%B7%A5%E5%85%B7%E6%A0%8F"><span class="nav-text">4.2. 主工具栏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E7%8A%B6%E6%80%81%E6%A8%AA%E5%B9%85"><span class="nav-text">4.3. 状态横幅</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E5%B7%A5%E5%85%B7%E7%AA%97%E5%8F%A3"><span class="nav-text">5. 工具窗口</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-API-%E7%BB%9F%E8%AE%A1"><span class="nav-text">5.1. API 统计</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-API-%E6%B5%81"><span class="nav-text">5.2. API 流</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-3-%E5%9F%BA%E5%87%86%E7%BA%BF"><span class="nav-text">5.3. 基准线</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-%E6%8C%87%E6%A0%87%E8%AF%A6%E6%83%85"><span class="nav-text">5.4. 指标详情</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-5-NVTX"><span class="nav-text">5.5. NVTX</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-7-%E8%B5%84%E6%BA%90%E7%AA%97%E5%8F%A3"><span class="nav-text">5.7. 资源窗口</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-6-%E8%B5%84%E6%BA%90"><span class="nav-text">5.6. 资源</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-6-1-%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="nav-text">5.6.1. 内存分配</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-6-2-Graphviz-DOT-%E5%92%8C-SVG-%E5%AF%BC%E5%87%BA"><span class="nav-text">5.6.2. Graphviz DOT 和 SVG 导出</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-7-%E6%8C%87%E6%A0%87%E9%80%89%E6%8B%A9"><span class="nav-text">5.7. 指标选择</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-Profiler-Report"><span class="nav-text">6 Profiler Report</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-%E6%A0%87%E9%A2%98%E6%A0%8F"><span class="nav-text">6.1. 标题栏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-%E6%8A%A5%E5%91%8A%E9%A1%B5%E9%9D%A2"><span class="nav-text">6.2. 报告页面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-1-Session-Page"><span class="nav-text">6.2.1. Session Page</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-2-Summary-Page"><span class="nav-text">6.2.2. Summary Page</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-3-Details-Page"><span class="nav-text">6.2.3. Details Page</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%A6%82%E8%A7%88"><span class="nav-text">概览</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Rooflines"><span class="nav-text">Rooflines</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-4-%E6%BA%90%E4%BB%A3%E7%A0%81%E9%A1%B5%E9%9D%A2"><span class="nav-text">6.2.4. 源代码页面</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#6-2-4-1-%E5%AF%BC%E8%88%AA-Navigation"><span class="nav-text">6.2.4.1. 导航 Navigation</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-2-4-2-%E6%8C%87%E6%A0%87-Metrics"><span class="nav-text">6.2.4.2. 指标 Metrics</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#6-2-4-3-%E9%99%90%E5%88%B6"><span class="nav-text">6.2.4.3. 限制</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-5-%E8%AF%84%E8%AE%BA%E9%A1%B5%E9%9D%A2"><span class="nav-text">6.2.5. 评论页面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-6-%E8%B0%83%E7%94%A8%E5%A0%86%E6%A0%88-NVTX%E9%A1%B5%E9%9D%A2"><span class="nav-text">6.2.6. 调用堆栈&#x2F;NVTX页面</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-2-7-Raw-Page"><span class="nav-text">6.2.7. Raw Page</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-%E6%8C%87%E6%A0%87%E5%92%8C%E5%8D%95%E4%BD%8D"><span class="nav-text">6.3. 指标和单位</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-%E5%9F%BA%E5%87%86%E7%BA%BF"><span class="nav-text">7. 基准线</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#8-%E7%8B%AC%E7%AB%8B%E6%BA%90%E4%BB%A3%E7%A0%81%E6%9F%A5%E7%9C%8B%E5%99%A8"><span class="nav-text">8. 独立源代码查看器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#9-%E5%8D%A0%E7%94%A8%E7%8E%87%E8%AE%A1%E7%AE%97%E5%99%A8"><span class="nav-text">9. 占用率计算器</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#9-1-%E8%A1%A8%E6%A0%BC"><span class="nav-text">9.1. 表格</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-2-%E5%9B%BE%E8%A1%A8"><span class="nav-text">9.2. 图表</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-3-GPU%E6%95%B0%E6%8D%AE"><span class="nav-text">9.3. GPU数据</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Nsight-Compute%E6%94%AF%E6%8C%81%E7%9A%84GPU"><span class="nav-text">Nsight Compute支持的GPU</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Section"><span class="nav-text">Section</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Nsight Compute官方翻译 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Nsight Compute官方翻译
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/Nsight/" itemprop="url" rel="index"><span itemprop="name">Nsight</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>本文档翻译自官网：<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#abstract">Nsight Compute</a></p>
+<p>NVIDIA Nsight计算用户界面（UI）手册。有关工具UI中所有视图、控件和工作流的信息。Visual Profiler的转换指南。</p>
+<h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h1><p>对于从Visual Profiler迁移到NVIDIA Nsight Compute的用户，请参阅Visual Profiler过渡指南  <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#nvvp-guide">Visual Profiler Transition Guide</a> ，了解功能和工作流程的比较。</p>
+<p>下面是Nsight Compute分析的几个方面主要有几个方面：</p>
+<ul>
+<li>GPU利用率低<ul>
+<li>GPU线程少（修改block和grid）</li>
+<li>寄存器限制</li>
+<li>Shared memory太大</li>
+</ul>
+</li>
+<li>显存瓶颈<ul>
+<li>Cache misses</li>
+<li>带宽限制</li>
+<li>访存类型</li>
+</ul>
+</li>
+<li>指令瓶颈<ul>
+<li>算术指令</li>
+<li>控制流</li>
+</ul>
+</li>
+</ul>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/image-20230110094444621.png" class="" title="image-20230110094444621">
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/image-20230110095640055.png" class="" title="image-20230110095640055">
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/image-20230110094954160.png" class="" title="image-20230110094954160">
+<p> 利用Nsight Comute进行矩阵转置的kernel分析</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/image-20230110101230576.png" class="" title="image-20230110101230576">
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/image-20230110101426678.png" class="" title="image-20230110101426678">
+<h2 id="1-1-概述"><a href="#1-1-概述" class="headerlink" title="1.1 概述"></a>1.1 概述</h2><p>本文档是新一代NVIDIA Nsight Compute分析工具的用户指南。NVIDIA Nsight  Compute是一个用于CUDA应用程序的交互式内核分析器。它通过用户界面和命令行工具提供详细的性能指标和API调试。此外，它的基线特性允许用户在工具内比较结果。NVIDIA Nsight Compute提供了一个可定制的、数据驱动的用户界面和度量收集，并可以通过分析脚本扩展后处理结果。</p>
+<p>重要特征：</p>
+<ul>
+<li>交互式内核剖析器和API调试器</li>
+<li>图形配置文件报告</li>
+<li>工具中一个或多个报告的结果比较</li>
+<li>快速数据收集</li>
+<li>UI和命令行界面</li>
+<li>完全可自定义的报告和分析规则</li>
+</ul>
+<h1 id="2-快速开始"><a href="#2-快速开始" class="headerlink" title="2 快速开始"></a>2 快速开始</h1><p>以下部分提供了如何设置和运行NVIDIA Nsight Compute以收集配置文件信息的简短分步指南。除非另有说明，所有目录都是相对于NVIDIA Nsight Compute的基本目录。</p>
+<p>UI可执行文件称为<code>ncu-ui</code>。具有此名称的快捷方式位于NVIDIA Nsight  Compute安装的基本目录中。实际可执行文件位于windows上的host\windows-desktop-win7-x64文件夹或linux上的<code>host/linux-desktop-glibc_2_11_3-x64</code>文件夹中。默认情况下，从Linux.run文件安装时，NVIDIA Nsight Compute位于<code>/usr/local/cuda-&lt;cuda-version&gt;/Nsight  Compute-&lt;version&gt;</code>中。当从.deb或.rpm包进行安装时，它位于<code>/opt/nvidia/nsight  compute/&lt;version&gt;</code>中，以与nsight Systems保持一致。在Windows中，默认路径为<code>C:\Program  Files\NVIDIA Corporation\Nsight Compute＜version＞</code>。</p>
+<p>启动NVIDIA Nsight  Compute后，默认情况下会打开欢迎页面。“启动”部分允许用户启动新活动、打开现有报告、创建新项目或加载现有项目。“继续”部分提供了指向最近打开的报告和项目的链接。“探索”部分提供了有关最新版本中新增内容的信息，以及其他培训的链接。请参阅环境，了解如何更改启动操作。</p>
+<p>​                           Welcome Page</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/welcome-page.png" class="" title="img">
+<h2 id="2-1-交互式配置文件活动-Interactive-Profile-Activity"><a href="#2-1-交互式配置文件活动-Interactive-Profile-Activity" class="headerlink" title="2.1. 交互式配置文件活动 Interactive Profile Activity"></a>2.1. 交互式配置文件活动 Interactive Profile Activity</h2><h3 id="2-1-1-从NVIDIA-Nsight-Compute启动目标应用程序"><a href="#2-1-1-从NVIDIA-Nsight-Compute启动目标应用程序" class="headerlink" title="2.1.1 从NVIDIA Nsight Compute启动目标应用程序"></a>2.1.1 从NVIDIA Nsight Compute启动目标应用程序</h3><p>启动NVIDIA Nsight  Compute时，会出现欢迎页面。单击“快速启动”打开“连接”对话框。如果未显示“连接”对话框，则可以使用主工具栏中的“连接”按钮打开该对话框，只要您当前未连接即可。从connection（连接）下拉菜单中选择左侧的目标平台和连接目标（机器）。如果您选择了本地目标平台，localhost将成为可用的连接。使用+按钮添加新的连接目标。然后，在Launch（启动）选项卡中填写详细信息，继续操作。在Activity（活动）面板中，选择Interactive Profile（交互式配置文件）活动以启动一个会话，该会话允许控制目标应用程序的执行并以交互方式选择感兴趣的内核。按Launch启动会话。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-interactive-profiling-connect.png" class="" title="img">
+<h3 id="2-1-2-从命令行使用工具检测启动目标应用程序"><a href="#2-1-2-从命令行使用工具检测启动目标应用程序" class="headerlink" title="2.1.2 从命令行使用工具检测启动目标应用程序"></a>2.1.2 从命令行使用工具检测启动目标应用程序</h3><p>ncu可以充当一个简单的包装器，强制目标应用程序加载工具插入所需的库。参数—mode=launch指定应在第一次插入指令的API调用之前启动并挂起目标应用程序。这样，应用程序就会等待，直到我们连接到UI。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">$ </span><span class="language-bash">ncu --mode=launch CuVectorAddDrv.exe</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-1-3-启动NVIDIA-Nsight-Compute并连接到目标应用程序"><a href="#2-1-3-启动NVIDIA-Nsight-Compute并连接到目标应用程序" class="headerlink" title="2.1.3 启动NVIDIA Nsight Compute并连接到目标应用程序"></a>2.1.3 启动NVIDIA Nsight Compute并连接到目标应用程序</h3><img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-interactive-profiling-attach.png" class="" title="img">
+<p>选择对话框顶部的目标计算机以连接并更新可连接应用程序的列表。默认情况下，如果目标与当前本地平台匹配，则会预先选择localhost。选择“附加”选项卡和感兴趣的目标应用程序，然后按“附加”。连接后，NVIDIA Nsight  Compute的布局将变为步进模式，允许您控制对插入指令的API的任何调用的执行。连接时，API流窗口指示目标应用程序在第一个API调用之前等待。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-interactive-profiling-connected.png" class="" title="img">
+<h3 id="2-1-4-控制应用程序执行"><a href="#2-1-4-控制应用程序执行" class="headerlink" title="2.1.4 控制应用程序执行"></a>2.1.4 控制应用程序执行</h3><p>使用API流窗口将调用逐步插入插入指令的API。顶部的下拉列表允许在应用程序的不同CPU线程之间切换。Step In（F11）、Step Over（F10）和Step  Out（Shift+F11）可从Debug（调试）菜单或相应的工具栏按钮获得。步进时，会捕获函数返回值和函数参数。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-interactive-profiling-api-stream.png" class="" title="img">
+<p>使用Resume  (F5)和Pause来允许程序自由运行。冻结控制可用于定义当前不在焦点中的线程的行为，即在线程下拉列表中选中的线程。默认情况下，API流在任何返回错误代码的API调用上停止。这可以在Debug菜单中通过Break On API Error进行切换。</p>
+<h3 id="2-1-5-隔离内核启动"><a href="#2-1-5-隔离内核启动" class="headerlink" title="2.1.5 隔离内核启动"></a>2.1.5 隔离内核启动</h3><p>要快速隔离内核启动以进行评测，请使用API Stream窗口工具栏中的Run To Next kernel按钮跳到下一次内核启动。在执行内核启动之前，执行将停止。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-interactive-profiling-next-launch.png" class="" title="img">
+<h3 id="2-1-6-评测内核启动"><a href="#2-1-6-评测内核启动" class="headerlink" title="2.1.6 评测内核启动"></a>2.1.6 评测内核启动</h3><p>一旦目标应用程序的执行在内核启动时被挂起，UI中就可以使用其他操作。这些操作可以从菜单或工具栏中获得。请注意，如果API流不处于合格状态(不是在内核启动或在不支持的GPU上启动)，这些操作将被禁用。要进行分析，请按profile Kernel并等待结果显示在Profiler Report中。分析进度报告在右下角的状态栏中。</p>
+<p>除了手动选择Profile，还可以从Profile菜单中启用Auto  Profile。如果启用，将使用当前部分配置对匹配当前内核过滤器(如果有的话)的每个内核进行分析。如果要在无人值守的情况下对应用程序进行分析，或者要分析的内核启动数量非常大，那么这一点特别有用。可以使用度量选择工具窗口5.7 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#tool-window-sections-info">Metric Selection</a> 启用或禁用区段。</p>
+<p>配置文件系列允许一次配置一组配置文件结果的集合。集合中的每个结果都使用不同的参数进行概要分析。序列对于在不需要多次重新编译和重新运行应用程序的情况下，跨大量参数集研究内核的行为非常有用。</p>
+<p>有关此活动中可用选项的详细说明，请参阅交互式配置文件活动 3.2 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#connection-activity-interactive">Interactive Profile Activity</a>. 。</p>
+<h2 id="2-2-非交互式配置文件活动-Non-Interactive-Profile-Activity"><a href="#2-2-非交互式配置文件活动-Non-Interactive-Profile-Activity" class="headerlink" title="2.2. 非交互式配置文件活动 Non-Interactive Profile Activity"></a>2.2. 非交互式配置文件活动 Non-Interactive Profile Activity</h2><h3 id="2-2-1-从NVIDIA-Nsight-Compute启动目标应用程序"><a href="#2-2-1-从NVIDIA-Nsight-Compute启动目标应用程序" class="headerlink" title="2.2.1 从NVIDIA Nsight Compute启动目标应用程序"></a>2.2.1 从NVIDIA Nsight Compute启动目标应用程序</h3><p>启动NVIDIA Nsight  Compute时，会出现欢迎页面。单击“快速启动”打开“连接”对话框。如果未显示“连接”对话框，则可以使用主工具栏中的“连接”按钮打开该对话框，只要您当前未连接即可。从Connection下拉列表中选择左侧的目标平台和本地主机。然后，填写发布详细信息。在“Activity”面板中，选择“Profile activity”以启动一个会话，该会话预配置配置文件会话并启动命令行探查器以收集数据。提供“Output File”名称以启用使用“Launch”按钮启动会话。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-profiling-connect.png" class="" title="img">
+<h3 id="2-2-2-其他启动选项"><a href="#2-2-2-其他启动选项" class="headerlink" title="2.2.2 其他启动选项"></a>2.2.2 其他启动选项</h3><p>有关这些选项的详细信息，请参见命令行选项<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightComputeCli/index.html#command-line-options">Command Line Options</a>.。这些选项分为多个选项卡：Filter选项卡显示了用于指定应分析哪些内核的选项。选项包括内核正则表达式过滤器、要跳过的启动次数以及要配置文件的启动总数。Sections选项卡允许您为每次内核启动选择应收集的部分。将鼠标悬停在上，可以将其描述作为工具提示查看。要更改默认情况下启用的截面，请使用 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#tool-window-sections-info">Metric Selection</a>工具窗口。采样选项卡允许您为每次内核启动配置采样选项。其他选项卡包括通过—metrics选项收集NVTX信息或自定义度量的选项。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-profiling-options-sections.png" class="" title="img">
+<p>有关此活动中可用选项的详细说明，请参阅配置文件活动。3.3 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#connection-activity-non-interactive">Profile Activity</a>.  </p>
+<h2 id="2-3-系统跟踪活动"><a href="#2-3-系统跟踪活动" class="headerlink" title="2.3.系统跟踪活动"></a>2.3.系统跟踪活动</h2><h3 id="2-3-1-从NVIDIA-Nsight-Compute启动目标应用程序"><a href="#2-3-1-从NVIDIA-Nsight-Compute启动目标应用程序" class="headerlink" title="2.3.1 从NVIDIA Nsight Compute启动目标应用程序"></a>2.3.1 从NVIDIA Nsight Compute启动目标应用程序</h3><p>启动NVIDIA Nsight  Compute时，会出现欢迎页面。单击“快速启动”打开“连接”对话框。如果未显示“连接”对话框，则可以使用主工具栏中的“连接”按钮打开该对话框，只要您当前未连接即可。从Connection（连接）下拉列表中，选择左侧的本地目标平台和本地主机。然后，填写发布详细信息。在“Activity”面板中，选择“System Trace”活动以启动具有预配置设置的会话。按Launch启动会话。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-system-trace-connect.png" class="" title="img">
+<h3 id="2-3-2-其他启动选项"><a href="#2-3-2-其他启动选项" class="headerlink" title="2.3.2 其他启动选项"></a>2.3.2 其他启动选项</h3><p>有关这些选项的更多详细信息，请参阅   <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-systems/UserGuide/index.html#linux-system-wide-profiling-options">System-Wide Profiling Options</a>.                                                               </p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-system-trace-options.png" class="" title="img">
+<p>会话完成后，Nsight  Systems报告将在新文档中打开。默认情况下，会显示时间轴视图。它提供了CPU和GPU活动的详细信息，并有助于理解应用程序的整体行为和性能。一旦CUDA内核被确定在关键路径上并且没有达到性能预期，右键单击内核启动时间线，然后从上下文菜单中选择Profile kernel。将打开一个新的“连接”对话框，该对话框已预先配置为评测所选内核启动。使用非交互式配置文件活动继续优化所选内核</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-system-trace-timeline.png" class="" title="img">
+<h2 id="2-4-浏览报告"><a href="#2-4-浏览报告" class="headerlink" title="2.4.浏览报告"></a>2.4.浏览报告</h2><h3 id="2-4-1-浏览报告"><a href="#2-4-1-浏览报告" class="headerlink" title="2.4.1 浏览报告"></a>2.4.1 浏览报告</h3><p>配置文件报告默认显示在“详细信息”Details 页面上。您可以使用报表左上角标记为“页面”的下拉列表在报表的不同报表页面之间切换。也可以使用Ctrl+Shift+N和Ctrl+Shift+P快捷键或相应的工具栏按钮分别导航下一页和上一页。报告可以包含任意数量的内核启动结果。“结果”下拉列表允许在报告中的不同结果之间进行切换。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-report.png" class="" title="img">
+<h3 id="2-4-2-不同的多个结果"><a href="#2-4-2-不同的多个结果" class="headerlink" title="2.4.2 不同的多个结果"></a>2.4.2 不同的多个结果</h3><p>在Details（详细信息）页面上，按下Add  Baseline（添加基线）按钮，使当前结果成为该报告中的所有其他结果以及在NVIDIA Nsight  Compute的同一实例中打开的任何其他报告的基线。如果设置了基线 baseline，“详细信息”Details页面上的每个元素都显示两个值：焦点中结果的当前值和基线的相应值或与相应基线值相比的变化百分比。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-baseline.png" class="" title="img">
+<p>使用下拉按钮、配置文件菜单或相应工具栏按钮中的“清除基线”条目可以删除所有基线。有关详细信息，请参见基线 7 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#baselines">Baselines</a>。</p>
+<p>如果是加载两个离线的<code>.ncu-rep</code>文件，作为Baseline，打开 ncu-ui 工具并加载第一个 ncu-rep 文件。你可以通过单击 “File” 菜单并选择 “Open” 命令来加载文件。</p>
+<p>加载第二个 ncu-rep 文件。你可以通过单击 “File” 菜单并选择 “Add Baseline” 命令来加载第二个文件。这将打开一个文件对话框，你可以在其中选择要加载的第二个 ncu-rep 文件。</p>
+<h3 id="2-4-3-执行规则"><a href="#2-4-3-执行规则" class="headerlink" title="2.4.3 执行规则"></a>2.4.3 执行规则</h3><p>在“详细信息”页面上，某些部分可能会提供规则。按Apply按钮执行单个规则。顶部的“应用规则”按钮执行当前焦点结果的所有可用规则。规则也可以由用户定义。有关详细信息，请参见<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/CustomizationGuide/index.html#rule-system">Customization Guide</a>。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/quick-start-rule.png" class="" title="img">
+<h1 id="3-连接对话框"><a href="#3-连接对话框" class="headerlink" title="3.连接对话框"></a>3.连接对话框</h1><p>使用“连接”Connection对话框可以启动并连接到本地和远程平台上的应用程序。首先选择要进行分析的目标平台。默认情况下（如果支持），将选择您的本地平台。选择要在其上启动目标应用程序或连接到正在运行的进程的平台。</p>
+<p>Connection Dialog</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/connection-dialog.png" class="" title="img">
+<p>使用远程平台时，系统会要求您在顶部下拉框中选择或创建连接。要创建新连接，请选择+并输入您的连接详细信息。使用本地平台时，将选择localhost作为默认值，不需要进一步的连接设置。如果评测将在同一平台的远程系统上进行，则您仍然可以创建或选择远程连接。</p>
+<p>根据您的目标平台，选择“Launch”或“Remote Launch”以启动应用程序以在目标上进行分析。请注意，只有在目标平台上支持远程启动时，远程启动才可用。</p>
+<p>填写应用程序的以下启动详细信息：</p>
+<ul>
+<li><strong>Application Executable:</strong> 指定要启动的根应用程序。请注意，这可能不是您想要评测的最终应用程序。它可以是创建其他进程的脚本或启动器。                                                       </li>
+<li><strong>Working Directory:</strong> 启动应用程序的目录。</li>
+<li><strong>Command Line Arguments:</strong> 指定要传递给应用程序可执行文件的参数                                                 </li>
+<li><strong>Environment:</strong> 要为启动的应用程序设置的环境变量                                                  </li>
+</ul>
+<p>选择Attach将分析器附加到已经在目标平台上运行的应用程序上。此应用程序必须使用另一个NVIDIA Nsight Compute CLI实例启动。该列表将显示可以附加的目标系统上运行的所有应用程序进程。选择刷新按钮以重新创建此列表。</p>
+<p>最后，为launched或attached的应用程序选择要在目标上运行的Activity。请注意，并非所有活动都必须与所有目标和连接选项兼容。目前，存在以下活动</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#connection-activity-interactive">Interactive Profile Activity</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#connection-activity-non-interactive">Profile Activity</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#quick-start-system-trace">System Trace Activity</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#occupancy-calculator">Occupancy Calculator</a></li>
+</ul>
+<h2 id="3-1-远程连接"><a href="#3-1-远程连接" class="headerlink" title="3.1. 远程连接"></a>3.1. 远程连接</h2><p>支持SSH的远程设备也可以在“连接”对话框中配置为目标。要配置远程设备，请确保选择支持SSH的目标平台，然后按+按钮。将显示以下配置对话框。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/add-remote-connection.png" class="" title="img">
+<p>NVIDIA Nsight Compute同时支持密码和私钥身份验证方法。在此对话框中，选择身份验证方法并输入以下信息：</p>
+<p><strong>Password</strong> </p>
+<ul>
+<li><strong>IP/Host Name:</strong> The IP address or host name of the target device.                                                                           </li>
+<li><strong>User Name:</strong> The user name to be used for the SSH connection.                                                                           </li>
+<li><strong>Password:</strong> The user password to be used for the SSH connection.                                                                           </li>
+<li><strong>Port:</strong> The port to be used for the SSH connection.  (The default value is 22)                                                                           </li>
+<li><strong>Deployment Directory:</strong> 在目标设备上用于部署支持文件的目录。指定的用户必须具有对该位置的写权限。                                                                       </li>
+<li><p><strong>Connection Name:</strong> The name of the remote connection that will                                       show up in the Connection Dialog. If not set, it will default                                       to &lt;User&gt;@<Host>:<Port>.                                                                           </p>
+<p><strong>Private Key</strong> </p>
+</li>
+</ul>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/add-remote-connection-private-key.png" class="" title="img">
+<ul>
+<li><strong>IP/Host Name:</strong> The IP address or host name of the target device.                                                                           </li>
+<li><strong>User Name:</strong> The user name to be used for the SSH connection.                                                                           </li>
+<li><strong>SSH Private Key:</strong> The private key that is used to authenticate to SSH server.                                                                           </li>
+<li><strong>SSH Key Passphrase:</strong> The passphrase for your private key.                                                                           </li>
+<li><strong>Port:</strong> The port to be used for the SSH connection.  (The default value is 22)                                                                           </li>
+<li><strong>Deployment Directory:</strong> 在目标设备上用于部署支持文件的目录。指定的用户必须具有对该位置的写权限。                                                                       </li>
+<li><strong>Connection Name:</strong> The name of the remote connection that will                                       show up in the Connection Dialog. If not set, it will default                                       to &lt;User&gt;@<Host>:<Port>.                                                                           </li>
+</ul>
+<p>除了路径指定的密钥文件和普通密码认证外，NVIDIA Nsight Compute还支持键盘交互认证、标准密钥文件路径搜索和SSH代理。</p>
+<p>输入所有信息后，单击Add按钮以使用这个新连接。</p>
+<p>当在Connection Dialog中选择远程连接时，Application Executable文件浏览器将使用配置的SSH连接浏览远程文件系统，允许用户在远程设备上选择目标应用程序。</p>
+<p>当在远程设备上启动activity时，将执行以下步骤：</p>
+<ol>
+<li>command line profiler and supporting files 被复制到远程设备上的Deployment Directory 中。(只复制不存在或过期的文件。)</li>
+<li>打开通信通道，为UI和Application Executable之间的通信做准备。<ul>
+<li>对于Interactive Profile活动，将在主机上启动SOCKS代理。</li>
+<li>对于Non-Interactive Profile活动，在目标机器上打开一个远程转发通道，将概要文件信息传输回主机。</li>
+</ul>
+</li>
+<li>Application Executable 在远程设备上执行。<ul>
+<li>对于Interactive Profile活动，将建立到远程应用程序的连接，并开始分析会话。</li>
+<li>对于Non-Interactive Profile活动，远程应用程序在命令行分析器下执行，并生成指定的报告文件。</li>
+</ul>
+</li>
+<li>对于non-interactive分析活动，生成的报告文件被复制回主机并打开。</li>
+</ol>
+<p>每个步骤的进度都显示在Progress Log中。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/progress-log.png" class="" title="img">
+<p>注意，一旦远程启动了任何一种活动类型，就可以在远程设备上的Deployment Directory中找到进一步分析会话所需的工具。</p>
+<p>在Linux和Mac主机平台上，NVIDIA Nsight Compute支持在目标机器上进行SSH远程评测，这些目标机器不能通过ProxyJump和ProxyCommand SSH选项从UI运行的机器直接寻址。</p>
+<p>这些选项可用于指定要连接到的中间主机或要运行的实际命令，以获得连接到目标主机上SSH服务器的套接字，并可添加到SSH配置文件中。</p>
+<p>请注意，对于这两个选项，NVIDIA Nsight Compute都运行外部命令，并且不使用在“连接”对话框中输入的凭据来实现任何向中间主机进行身份验证的机制。这些凭据将仅用于向机器链中的最终目标进行身份验证。</p>
+<p>当使用ProxyJump选项时，NVIDIA Nsight Compute使用OpenSSH客户端与中间主机建立连接。这意味着为了使用ProxyJump或ProxyCommand，必须在主机上安装支持这些选项的OpenSSH版本。</p>
+<p>在这种情况下，向中间主机进行身份验证的一种常用方法是使用SSH代理并让它保存用于身份验证的私钥。</p>
+<p>由于使用了OpenSSH SSH客户端，您还可以使用SSH askpass机制以交互方式处理这些身份验证。</p>
+<p>在慢速网络上，通过SSH进行远程分析的连接可能会超时。如果是这种情况，ConnectTimeout选项可用于设置所需的超时值。</p>
+<p>通过SSH进行远程评测的一个已知限制是，如果NVIDIA Nsight Compute试图通过SSH连接到其运行的同一台机器来进行远程评测，则可能会出现问题。在这种情况下，解决方法是通过localhost进行本地评测。</p>
+<h2 id="3-2-交互式配置文件活动-Interactive-Profile-Activity"><a href="#3-2-交互式配置文件活动-Interactive-Profile-Activity" class="headerlink" title="3.2. 交互式配置文件活动 Interactive Profile Activity"></a>3.2. 交互式配置文件活动 Interactive Profile Activity</h2><p>Interactive Profile活动允许您启动一个会话，该会话控制目标应用程序的执行，类似于调试器。您可以逐步执行API调用和工作负载（CUDA内核）、暂停和恢复，并以交互方式选择感兴趣的内核和要收集的度量。</p>
+<p>此活动当前不支持分析或附加到子进程。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/image-20230907160115283.png" class="" title="image-20230907160115283">
+<ul>
+<li><p><strong>Enable CPU Call Stack</strong></p>
+<p>在每个评测内核启动的位置收集CPU侧的调用堆栈。</p>
+</li>
+<li><p><strong>Enable NVTX Support</strong></p>
+<p>收集应用程序或其库提供的NVTX信息。需要支持进入特定NVTX上下文。</p>
+</li>
+<li><p><strong>Disable Profiling Start/Stop</strong></p>
+<p>忽略应用程序对cu(da)ProfilerStart或cu(da)ProfilerStop的调用。</p>
+</li>
+<li><p><strong>Enable Profiling From Start</strong></p>
+<p>从应用程序开始启用分析。如果应用程序在第一次调用此API之前调用cu(da)ProfilerStart和内核，则禁用此功能很有用。请注意，禁用此功能并不会阻止您手动分析内核。</p>
+</li>
+<li><p><strong>Cache Control</strong></p>
+<p>在分析期间控制GPU缓存的行为。允许值:对于Flush All，在分析期间的每个内核重播迭代之前刷新所有GPU缓存。虽然在不使缓存失效的情况下，应用程序执行环境中的度量值可能略有不同，但这种模式在重播通道和目标应用程序的多次运行中提供了最可重现的度量结果。</p>
+<p>对于Flush None，在分析期间不会刷新GPU缓存。如果度量收集只需要一个内核重放通道，这可以提高性能并更好地复制应用程序行为。然而，一些度量结果将根据先前的GPU工作和重播迭代之间的变化而变化。这可能导致不一致和越界的度量值。</p>
+</li>
+<li><p><strong>Clock Control</strong></p>
+<p>在分析期间控制GPU时钟的行为。允许值:对于Base, GPC和内存时钟在分析期间被锁定到各自的基频。这对热节流没有影响。对于None，在分析期间不会更改GPC或内存频率。</p>
+</li>
+<li><p><strong>Import Source</strong></p>
+<p>启用将可用的源文件永久导入到报表中。在“源查找”文件夹中搜索缺失的源文件。源信息必须嵌入到可执行文件中，例如通过-lineinfo编译器选项。导入的文件在源页面上的CUDA-C视图中使用。</p>
+</li>
+<li><p><strong>Graph Profiling</strong></p>
+<p>设置CUDA图是否应该作为单独的节点或完整的图进行步进和分析。有关此模式的更多信息，请参阅内核分析指南<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#graph-profiling">Kernel Profiling Guide</a>。</p>
+</li>
+<li><p><strong>Additional Options</strong></p>
+<p>所有剩余的选项都映射到对应的命令行分析器。有关详细信息，请参见命令行选项。<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightComputeCli/index.html#command-line-options">Command Line Options</a></p>
+</li>
+</ul>
+<h2 id="3-4-复位"><a href="#3-4-复位" class="headerlink" title="3.4.复位"></a>3.4.复位</h2><p>连接对话框中的条目将保存为当前项目的一部分。在自定义项目中工作时，只需关闭项目即可重置对话框。</p>
+<p>当不在自定义项目中工作时，条目将作为默认项目的一部分存储。您可以通过关闭NVIDIA Nsight Compute，然后从磁盘删除项目文件，从默认项目中删除所有信息。 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#projects">deleting the project file from disk</a></p>
+<h1 id="4-主菜单和工具栏"><a href="#4-主菜单和工具栏" class="headerlink" title="4.主菜单和工具栏"></a>4.主菜单和工具栏</h1><p>主菜单和工具栏上的信息。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/main-menu.png" class="" title="img">
+<h2 id="4-1-主菜单"><a href="#4-1-主菜单" class="headerlink" title="4.1. 主菜单"></a>4.1. 主菜单</h2><ul>
+<li><p>File                                                            </p>
+<ul>
+<li><p><strong>New Project</strong>   Create new profiling <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#projects">Projects</a> with the <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#projects-dialogs__new-project">New Project Dialog</a>.                                                                     </p>
+</li>
+<li><p><strong>Open Project</strong>  Open an existing profiling project.                                                                     </p>
+</li>
+<li><p><strong>Recent Projects</strong> Open an existing profiling project from the list of recently used projects.                                                                     </p>
+</li>
+<li><p><strong>Save Project</strong>  Save the current profiling project.                                                                     </p>
+</li>
+<li><p><strong>Save Project As</strong>  Save the current profiling project with a new filename.                                                                     </p>
+</li>
+<li><p><strong>Close Project</strong>   Close the current profiling project.                                                                     </p>
+</li>
+<li><p><strong>New File</strong>  Create a new file.                                                                     </p>
+</li>
+<li><p><strong>Open File</strong>  Open an existing file.                                                                     </p>
+</li>
+<li><p><strong>Open Remote File </strong>从远程主机下载现有文件并在本地打开它。打开的文件将只存在于内存中，不会写入本地机器的磁盘，除非用户显式地保存它。有关选择要从中下载文件的远程主机的详细信息，请参见远程连接一节。<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#remote-connections">Remote Connections</a></p>
+<p>只能从远程目标打开本地支持的文件类型的子集。下表列出了可以远程打开的文件类型。</p>
+<p>| Extensions           | Description                             | Supported              |<br>| —————————— | ———————————————————- | ——————————— |<br>| ncu-rep              | Nsight Compute Profiler Report          | Yes                    |<br>| ncu-occ              | Occupancy Calculator File               | Yes                    |<br>| ncu-bvh              | OptiX AS Viewer File                    | Yes (except on MacOSX) |<br>| section              | Section Description                     | No                     |<br>| cubin                | Cubin File                              | No                     |<br>| cuh,h,hpp            | Header File                             | No                     |<br>| c,cpp,cu             | Source File                             | No                     |<br>| txt                  | Text file                               | No                     |<br>| nsight-cuprof-report | Nsight Compute Profiler Report (legacy) | Yes                    |</p>
+</li>
+<li><p><strong>Save</strong>   Save the current file</p>
+</li>
+<li><p><strong>Save As</strong>   Save a copy of the current file with a different name or type or in a different location.   </p>
+</li>
+<li><p><strong>Save All Files</strong>     Save all open files.</p>
+</li>
+<li><p><strong>Close</strong>     Close the current file.</p>
+</li>
+<li><p><strong>Close All Files</strong>  Close all open files.</p>
+</li>
+<li><p><strong>Recent Files</strong>  Open an existing file from the list of recently used files.</p>
+</li>
+<li><p><strong>Exit</strong>    Exit Nsight Compute.</p>
+</li>
+</ul>
+</li>
+<li><p>Connection</p>
+<ul>
+<li><strong>Connect</strong> 打开“连接”对话框以启动或连接到目标应用程序。已连接时禁用。</li>
+<li><strong>Disconnect</strong> 断开与当前目标应用程序的连接，允许应用程序正常继续并可能重新连接。</li>
+<li><strong>Terminate</strong> 立即断开与当前目标应用程序的连接并终止该应用程序。</li>
+</ul>
+</li>
+<li><p>Debug                                                            </p>
+<ul>
+<li><p><strong>Pause</strong> 在下一个拦截的 API 调用或启动时暂停目标应用程序。</p>
+</li>
+<li><p><strong>Resume</strong> 继续执行目标应用程序。</p>
+</li>
+<li><p><strong>Step In</strong> 进入当前的 API 调用或启动，直到下一个嵌套调用（如果有）或下一个 API 调用，否则暂停。</p>
+</li>
+<li><p><strong>Step Over</strong> 跳过当前的 API 调用或启动，并在下一个非嵌套的 API 调用或启动处暂停。</p>
+</li>
+<li><p><strong>Step Out</strong> 从当前的嵌套 API 调用或启动跳出，到下一个非父级的 API 调用或启动。</p>
+</li>
+<li><p><strong>Freeze API</strong></p>
+<p>当禁用时，在步进或继续执行时，所有 CPU 线程都是启用的并继续运行，只有当至少一个线程到达下一个 API 调用或启动时，所有线程才会停止。这也意味着在步进或继续执行时，当前选定的线程可能会发生变化，因为旧的选定线程没有向前推进，API 流会自动切换到具有新的 API 调用或启动的线程。当启用时，只有当前选定的 CPU 线程是启用的，所有其他线程都被禁用和阻塞。</p>
+<p>现在，只有当当前线程到达下一个 API 调用或启动时，步进才会完成。选定的线程永远不会更改。然而，如果选定的线程不调用任何进一步的 API 调用或在屏障处等待另一个线程取得进展，则步进可能无法完成并无限期挂起。在这种情况下，暂停，选择另一个线程，并继续步进，直到原始线程解除阻塞。在此模式下，只有选定的线程会向前推进。</p>
+</li>
+<li><p><strong>Break On API Error</strong> 当启用时，在继续执行或步进时，只要一个 API 调用返回错误代码，就会暂停执行。</p>
+</li>
+<li><strong>Run to Next Kernel</strong> 查看 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#tool-window-api-stream">API Stream</a>  工具窗口。</li>
+<li><strong>Run to Next API Call</strong> 查看 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#tool-window-api-stream">API Stream</a> 工具窗口。</li>
+<li><strong>Run to Next Range Start</strong> 查看 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#tool-window-api-stream">API Stream</a>  工具窗口。</li>
+<li><strong>Run to Next Range End</strong> 查看 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#tool-window-api-stream">API Stream</a>  工具窗口。</li>
+<li><strong>API Statistics</strong> 打开 API 统计工具窗口。</li>
+<li><strong>API Stream</strong> 打开 API 流工具窗口。</li>
+<li><strong>Resources</strong> 打开资源工具窗口。</li>
+<li><strong>NVTX</strong> 打开 NVTX 工具窗口。</li>
+</ul>
+</li>
+<li><p>Profile</p>
+<ul>
+<li><p>Profile Kernel: 在内核启动时暂停，使用当前配置选择配置文件。</p>
+</li>
+<li><p>Profile Series: 在内核启动时暂停，打开Profile Series配置对话框以设置和收集一系列的配置结果。</p>
+</li>
+<li><p>Auto Profile: 启用或禁用自动配置文件。如果启用，每个与当前内核过滤器匹配的内核都将使用当前部分配置进行配置文件。</p>
+</li>
+<li><p>Baselines: 打开Baselines工具窗口。</p>
+</li>
+<li><p>Clear Baselines: 清除所有当前基线。</p>
+</li>
+<li><p>Import Source: 永久导入已解析的源文件到报告中。现有内容可能会被覆盖。</p>
+</li>
+<li><p>Section/Rules Info: 打开度量选择工具窗口。<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#tool-window-sections-info">Metric Selection</a></p>
+</li>
+</ul>
+</li>
+<li><p>Tools</p>
+<ul>
+<li><p>Project Explorer: 打开项目资源管理器工具窗口。</p>
+</li>
+<li><p>Output Messages: 打开输出消息工具窗口。</p>
+</li>
+<li><p>Options: 打开选项对话框。</p>
+</li>
+</ul>
+</li>
+<li><p>Window</p>
+<ul>
+<li><p>Save Window Layout: 允许您为当前布局指定名称。布局将保存到文档目录中的Layouts文件夹中，命名为“.nvlayout”文件。</p>
+</li>
+<li><p>Apply Window Layout: 保存布局后，您可以使用“应用窗口布局”菜单项来恢复它们。只需从您想要应用的子菜单中选择条目即可。</p>
+</li>
+<li><p>Manage Window Layout: 允许您删除或重命名旧布局。</p>
+</li>
+<li><p>Restore Default Layout: 将视图恢复到其原始大小和位置。</p>
+</li>
+<li><p>Show Welcome Page: 打开欢迎页面。</p>
+</li>
+</ul>
+</li>
+<li><p>Help</p>
+<ul>
+<li><p>Documentation: 打开最新的NVIDIA Nsight Compute在线文档。</p>
+</li>
+<li><p>Documentation (local): 打开随工具一起提供的本地HTML文档的NVIDIA Nsight Compute文档。</p>
+</li>
+<li><p>Check For Updates: 在线检查是否有可供下载的更新版本的NVIDIA Nsight Compute。</p>
+</li>
+<li><p>Reset Application Data: 重置保存在磁盘上的所有NVIDIA Nsight Compute配置数据，包括选项设置、默认路径、最近的项目引用等。这不会删除保存的报告。</p>
+</li>
+<li><p>Send Feedback: 打开一个对话框，允许您发送错误报告和功能建议。可选地，反馈包括基本系统信息、截图或其他文件（如配置文件报告）。</p>
+</li>
+<li><p>About: 打开关于NVIDIA Nsight Compute版本的信息对话框。</p>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="4-2-主工具栏"><a href="#4-2-主工具栏" class="headerlink" title="4.2. 主工具栏"></a>4.2. 主工具栏</h2><p>主工具栏显示了主菜单中常用的操作。有关它们的描述，请参阅主菜单。</p>
+<h2 id="4-3-状态横幅"><a href="#4-3-状态横幅" class="headerlink" title="4.3. 状态横幅"></a>4.3. 状态横幅</h2><p>状态横幅用于显示重要的消息，例如性能分析器错误。可以通过点击“X”按钮来关闭消息。同时显示的横幅数量有限，如果出现新的消息，旧的消息可能会自动关闭。使用“输出消息”窗口可以查看完整的消息历史记录。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/status-banner.png" class="" title="img">
+<h1 id="5-工具窗口"><a href="#5-工具窗口" class="headerlink" title="5. 工具窗口"></a>5. 工具窗口</h1><h2 id="5-1-API-统计"><a href="#5-1-API-统计" class="headerlink" title="5.1. API 统计"></a>5.1. API 统计</h2><p>当 NVIDIA Nsight Compute 连接到目标应用程序时，API 统计窗口可用。它会在连接建立后默认打开。您可以通过主菜单中的 “Debug &gt; API Statistics” 重新打开它。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/tool-window-api-statistics.png" class="" title="img">
+<p>每当目标应用程序暂停时，API 统计窗口会显示跟踪的 API 调用摘要及一些统计信息，例如调用次数、总时长、平均时长、最短时长和最长时长。请注意，此视图不能替代 Nsight Systems用于优化应用程序的 CPU 性能。</p>
+<p>“Reset” 按钮会删除所有已收集的统计数据，并开始新的收集。使用 “Export to CSV” 按钮将当前统计数据导出为 CSV 文件。</p>
+<h2 id="5-2-API-流"><a href="#5-2-API-流" class="headerlink" title="5.2. API 流"></a>5.2. API 流</h2><p>当 NVIDIA Nsight Compute 连接到目标应用程序时，API 流窗口可用。它会在连接建立后默认打开。您可以通过主菜单中的 “Debug &gt; API Stream” 重新打开它</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/tool-window-api-stream.png" class="" title="img">
+<p>当目标应用程序暂停suspended时，该窗口显示 API 调用和追踪的内核启动的历史记录。当前暂停的 API 调用或内核启动（活动）会用黄色箭头标记。如果暂停在子调用上，父调用会用绿色箭头标记。在执行之前，API 调用或内核会被暂停。</p>
+<p>对于每个活动，还会显示其他信息，如内核名称或函数参数（Func Parameters）和返回值（Func Return）。请注意，只有在跳出或跳过 API 调用后，函数的返回值才会变得可用。</p>
+<p>使用“Current Thread ”下拉菜单在活动线程之间切换。下拉菜单显示线程  ID，后跟当前的 API 名称。触发器下拉菜单提供几个选项，通过相邻的“&gt;&gt;”按钮执行。”Run to Next Kernel”  会继续执行，直到在任何启用的线程中找到下一个内核启动。”Run to Next API Call”  会继续执行，直到在任何启用的线程中找到与下一个触发器匹配的 API 调用。”Run to Next Range Start”  会继续执行，直到找到下一个活动分析器范围的起始点。分析器范围是使用 cu(da)ProfilerStart/Stop API  调用定义的。”Run to Next Range Stop” 会继续执行，直到找到下一个活动分析器范围的结束点。”API Level”  下拉菜单可更改在流中显示的 API 级别。”Export to CSV” 按钮将当前可见的流导出到 CSV 文件。</p>
+<h2 id="5-3-基准线"><a href="#5-3-基准线" class="headerlink" title="5.3. 基准线"></a>5.3. 基准线</h2><p>通过单击 Profile 菜单中的 Baselines 条目，可以打开基准线工具窗口。它提供了一个集中管理配置的基准线的地方。（有关如何从配置文件结果创建基准线的信息，请参阅 Baselines。）</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/tool-window-baselines.png" class="" title="img">
+<p>可以通过单击表格行中的复选框来控制基准线的可见性。当复选框被选中时，基准线将在摘要标题以及所有部分的所有图表中可见。当取消选中时，基准线将被隐藏，并且不会对度量差异计算产生影响。</p>
+<p>可以通过双击表格行中的颜色样本来更改基准线的颜色。打开的颜色对话框提供选择任意颜色的能力，并提供与默认基准线颜色旋转关联的预定义颜色调色板。</p>
+<p>可以通过双击表格行中的名称列来更改基准线的名称。名称不能为空，并且必须小于在选项对话框中指定的最大基准线名称长度。</p>
+<p>可以通过在工具栏中单击“Move Baseline Up”和“Move Baseline Down”按钮来更改所选基准线的 Z 顺序。当基准线向上或向下移动时，其新位置将在报告标题以及每个图表中反映出来。目前，一次只能移动一个基准线。</p>
+<p>可以通过在工具栏中单击“Clear Selected Baselines”按钮来移除所选的基准线。通过单击全局工具栏或工具窗口工具栏中的“Clear All Baselines”按钮，可以一次性移除所有基准线。</p>
+<p>可以通过在工具栏中单击“Save Baselines”按钮将配置的基准线保存到文件中。默认情况下，基准线文件使用 .ncu-bln 扩展名。基准线文件可以在本地打开和/或与其他用户共享。</p>
+<p>可以通过在工具栏中单击“Load Baselines”按钮加载基准线信息。加载基准线文件时，当前配置的基准线将被替换。在必要时，将向用户显示对话框以确认此操作。</p>
+<p>可以使用详细信息页面部分标题中的图形条来可视化当前结果与基准线之间的差异。使用“Difference Bars”下拉菜单选择可视化模式。条形图从左到右延伸，并具有固定的最大值。</p>
+<h2 id="5-4-指标详情"><a href="#5-4-指标详情" class="headerlink" title="5.4. 指标详情"></a>5.4. 指标详情</h2><p>可以通过在 Profile 菜单中选择 Metric Details 条目或相应的工具栏按钮来打开指标详情工具窗口。当报告和工具窗口都打开时，可以在报告中选择一个指标，在工具窗口中显示额外的信息。它还包含一个搜索栏，用于在焦点报告中查找指标。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/tool-window-metric-details.png" class="" title="img">
+<p>可以在“详细信息页”或“原始数据页”中选择报告指标。窗口将显示基本信息（指标名称、单位和原始值），以及其他信息，如扩展描述。</p>
+<p>搜索栏可用于在焦点报告中打开指标。在输入时，它会显示可用的匹配项。输入的字符串必须与指标名称的开头匹配。</p>
+<p>默认情况下，选择或搜索新指标会更新当前的默认选项卡。您可以单击“固定选项卡”按钮创建默认选项卡的副本，除非已经固定了相同的指标。这样可以保存多个选项卡，并快速在它们之间进行切换以比较值。</p>
+<p>某些指标包含实例值。如果可用，它们会列在工具窗口中。实例值可以具有关联 ID，允许将个别值与其关联的实体进行关联，例如函数地址或指令名称。</p>
+<h2 id="5-5-NVTX"><a href="#5-5-NVTX" class="headerlink" title="5.5. NVTX"></a>5.5. NVTX</h2><p>NVTX 窗口在 NVIDIA Nsight Compute  连接到目标应用程序时可用。如果关闭了该窗口，可以通过主菜单中的 Debug &gt; NVTX  重新打开。每当目标应用程序暂停时，该窗口会显示当前选定线程中所有活动 NVTX 域和范围的状态。请注意，仅当启动命令行分析器实例时使用了  —nvtx 参数或在 NVIDIA Nsight Compute 启动对话框中启用了 NVTX 时，才会跟踪 NVTX 信息。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/tool-window-nvtx.png" class="" title="img">
+<p>在 API 流窗口中使用“当前线程”下拉菜单可以更改当前选定的线程。NVIDIA Nsight Compute 支持 NVTX 命名资源，例如线程、CUDA 设备、CUDA 上下文等。如果使用 NVTX 命名资源，相应的 UI 元素将被更新。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/tool-window-nvtx-resources.png" class="" title="img">
+<h2 id="5-7-资源窗口"><a href="#5-7-资源窗口" class="headerlink" title="5.7. 资源窗口"></a>5.7. 资源窗口</h2><p>当 NVIDIA Nsight Compute  连接到目标应用程序时，资源窗口可用。它显示当前已知资源（如 CUDA 设备、CUDA  流或内核）的信息。每当目标应用程序暂停时，窗口都会更新。如果关闭了该窗口，可以通过主菜单中的 Debug &gt; Resources  重新打开。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/tool-window-resources.png" class="" title="img">
+<h2 id="5-6-资源"><a href="#5-6-资源" class="headerlink" title="5.6. 资源"></a>5.6. 资源</h2><p>资源窗口在 NVIDIA Nsight Compute  连接到目标应用程序时可用。它显示当前已知资源（如 CUDA 设备、CUDA  流或内核）的信息。通过顶部的下拉菜单可以选择不同的视图，每个视图都特定于一种资源类型（上下文、流、内核等）。筛选编辑框允许您使用当前选定资源的列标题创建筛选表达式。</p>
+<p>资源表格显示每个资源实例的所有信息。每个实例都有唯一的 ID，创建该资源时的 API 调用 ID，它的句柄、关联句柄和其他参数。当资源被销毁时，它将从表格中移除。</p>
+<h3 id="5-6-1-内存分配"><a href="#5-6-1-内存分配" class="headerlink" title="5.6.1. 内存分配"></a>5.6.1. 内存分配</h3><p>当使用异步的 malloc/free API 时，内存分配的资源视图还会包括以这种方式创建的内存对象。这些内存对象具有非零的内存池句柄。”Mode” 列将指示在分配相应对象时采取了哪种代码路径。这些模式包括：</p>
+<ul>
+<li>REUSE_STREAM_SUBPOOL：内存对象是在先前释放的内存中分配的。该内存由分配所在的流设置为当前的内存池支持。</li>
+<li>USE_EXISTING_POOL_MEMORY：内存对象是在先前释放的内存中分配的。该内存由分配所在的流的默认内存池支持。</li>
+<li>REUSE_EVENT_DEPENDENCIES：内存对象是在先前释放的另一个上下文流中分配的内存中分配的。分配流对释放操作存在流顺序依赖关系。CUDA 事件和空流交互可以创建所需的流顺序依赖关系。</li>
+<li>REUSE_OPPORTUNISTIC：内存对象是在先前释放的同一上下文流的另一个流中分配的内存中分配的。但是，释放和分配之间不存在依赖关系。此模式要求在请求分配时释放已经提交。执行行为的更改可能导致应用程序的多次运行产生不同的模式。</li>
+<li>REUSE_INTERNAL_DEPENDENCIES：内存对象是在先前释放的同一上下文流的另一个流中分配的内存中分配的。为了建立先前释放的内存的流顺序重用，可能已添加新的内部流依赖关系。</li>
+<li>REQUEST_NEW_ALLOCATION：为此内存对象必须分配新的内存，因为没有可行的可重用池内存。分配性能与使用非异步的 malloc/free API 相当。</li>
+</ul>
+<h3 id="5-6-2-Graphviz-DOT-和-SVG-导出"><a href="#5-6-2-Graphviz-DOT-和-SVG-导出" class="headerlink" title="5.6.2. Graphviz DOT 和 SVG 导出"></a>5.6.2. Graphviz DOT 和 SVG 导出</h3><p>一些显示的资源还可以使用 “Export to GraphViz” 或 “Export to SVG” 按钮导出为 GraphViz DOT 或 SVG 文件。</p>
+<p>在导出 OptiX 遍历句柄时，遍历图节点类型将使用下表中描述的形状和颜色进行编码。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Node Type</th>
+<th>Shape</th>
+<th>Color</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>IAS</td>
+<td>Hexagon</td>
+<td>#8DD3C7</td>
+</tr>
+<tr>
+<td>Triangle GAS</td>
+<td>Box</td>
+<td>#FFFFB3</td>
+</tr>
+<tr>
+<td>AABB GAS</td>
+<td>Box</td>
+<td>#FCCDE5</td>
+</tr>
+<tr>
+<td>Curve GAS</td>
+<td>Box</td>
+<td>#CCEBC5</td>
+</tr>
+<tr>
+<td>Sphere GAS</td>
+<td>Box</td>
+<td>#BEBADA</td>
+</tr>
+<tr>
+<td>Static Transform</td>
+<td>Diamond</td>
+<td>#FB8072</td>
+</tr>
+<tr>
+<td>SRT Transform</td>
+<td>Diamond</td>
+<td>#FDB462</td>
+</tr>
+<tr>
+<td>Matrix Motion Transform</td>
+<td>Diamond</td>
+<td>#80B1D3</td>
+</tr>
+<tr>
+<td>Error</td>
+<td>Paralellogram</td>
+<td>#D9D9D9</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="5-7-指标选择"><a href="#5-7-指标选择" class="headerlink" title="5.7. 指标选择"></a>5.7. 指标选择</h2><p>指标选择窗口可以从主菜单中通过 “Profile &gt;  Metric Selection” 打开。它跟踪当前在 NVIDIA Nsight Compute  中加载的所有指标集、部分和规则，与特定的连接或报告无关。可以在 Profile  选项对话框中配置从中加载这些文件的目录。它用于检查可用的集合、部分和规则，以及配置应该收集哪些指标和应用哪些规则。您还可以指定一个逗号分隔的单独指标列表，应该收集哪些指标。该窗口有两个视图，可以使用其标题栏中的下拉菜单进行选择。</p>
+<p>指标集视图显示所有可用的指标集。每个集合与一些指标部分相关联。您可以选择适合您希望收集性能指标的详细级别的集合。收集更详细信息的集合通常在分析期间会产生更高的运行时开销。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/tool-window-section-sets.png" class="" title="img">
+<p>在此视图中启用一个集合时，Metric Sections/Rules 视图中的相关指标部分也会被启用。在此视图中禁用一个集合时，Metric Sections/Rules  视图中的相关部分也会被禁用。如果没有启用任何集合，或者在 Metric Sections/Rules 视图中手动启用/禁用了部分，那么  条目将被标记为活动，表示当前未启用任何部分集合。请注意，默认情况下启用了基本集合。</p>
+<p>每当手动对一个内核进行分析，或者启用了自动分析时，只会收集在 Metric Sections/Rules 视图中启用的部分以及在输入框中指定的单独指标。同样，每当应用规则时，只有在此视图中启用的规则才会生效。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/tool-window-sections.png" class="" title="img">
+<p>部分和规则的启用状态在 NVIDIA Nsight Compute 的启动之间是持久化的。点击 “Reload” 按钮可以重新从磁盘加载所有的部分和规则。如果找到了新的部分或规则，它们将尽可能被启用。如果在加载规则时发生任何错误，这些错误将在一个带有警告图标和错误描述的额外条目中列出。</p>
+<p>使用 “Enable All” 和 “Disable All” 复选框可以一次性启用或禁用所有的部分和规则。”Filter” 文本框可以用来筛选当前在视图中显示的内容。它不会改变任何条目的激活状态。</p>
+<p>表格显示了部分和规则及其激活状态，它们之间的关系和其他参数，如关联的指标或磁盘上的原始文件。与部分相关联的规则显示为其部分条目的子条目。独立于任何部分的规则显示在一个额外的独立规则条目下面。</p>
+<p>在表格的 “Filename” 列中双击一个条目，可以将该文件作为文档打开。可以直接在 NVIDIA Nsight Compute 中进行编辑和保存。编辑文件后，必须选择 “Reload” 来应用这些更改。</p>
+<p>当部分或规则文件被修改时，”State” 列中的条目将显示为 “User Modified”，以反映其已从默认状态进行了修改。当选中 “User Modified” 行时，”Restore” 按钮将被启用。点击 “Restore” 按钮将将条目恢复到其默认状态，并自动重新加载部分和规则。</p>
+<p>类似地，当从配置的 “Sections Directory”（在 Profile 选项对话框中指定）中删除了默认的部分或规则文件时，”State” 列将显示为 “User Deleted”。可以使用 “Restore” 按钮还原 “User Deleted” 文件。</p>
+<p>用户创建的部分和规则文件（未随 NVIDIA Nsight Compute 一起提供）在状态列中显示为 “User Created”。</p>
+<p>有关 NVIDIA Nsight Compute 的默认部分列表和规则列表，请参阅 “Sections and Rules”。</p>
+<h1 id="6-Profiler-Report"><a href="#6-Profiler-Report" class="headerlink" title="6 Profiler Report"></a>6 Profiler Report</h1><p>分析器报告包含了每个内核启动期间收集的所有信息。在用户界面中，它由一个包含常规信息的标题栏组成，以及用于在报告页面或单个收集的启动之间切换的控件。</p>
+<h2 id="6-1-标题栏"><a href="#6-1-标题栏" class="headerlink" title="6.1. 标题栏"></a>6.1. 标题栏</h2><p>“Page” 下拉菜单可用于在可用的报告页面之间进行切换，下一节将详细介绍这些页面。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-header.png" class="" title="img">
+<p>“Launch” 下拉菜单可用于在所有收集的内核启动之间进行切换。每个页面显示的信息通常代表所选的启动实例。在某些页面（例如 Raw 页面），会显示所有启动的信息，并突出显示所选的实例。您可以在此下拉菜单中输入内容，以快速筛选和查找内核启动。</p>
+<p>“Apply Filters”  按钮打开筛选对话框。您可以使用多个筛选器来缩小结果范围。在筛选对话框中，输入筛选参数，然后按下 “OK” 按钮。”Launch”  下拉菜单将相应地进行筛选。选择箭头下拉菜单以访问 “Clear Filters” 按钮，该按钮会删除所有筛选器。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-header-filter-dialog.png" class="" title="img">
+<p>“Add Baseline” 按钮将当前焦点的结果提升为此报告中和同一 NVIDIA Nsight Compute 实例中打开的任何其他报告的基准。选择箭头下拉菜单以访问 “Clear Baselines” 按钮，该按钮会删除当前所有活动的基准。</p>
+<p>“Apply Rules”  按钮应用此报告可用的所有规则。如果之前已经应用了规则，那么这些结果将被替换。默认情况下，规则会在内核启动进行分析后立即应用。可以在 “工具”  &gt; “选项” &gt; “Profile” &gt; “Report UI” &gt; “Apply Applicable Rules  Automatically” 中更改此设置。</p>
+<p>右侧的按钮提供了可以在页面上执行的多个操作。可用的操作包括：</p>
+<ul>
+<li>“Copy as Image” - 将页面内容复制到剪贴板中作为图像。</li>
+<li>“Save as Image” - 将页面内容保存为图像文件。</li>
+<li>“Save as PDF” - 将页面内容保存为 PDF 文件。</li>
+<li>“Export to CSV” - 将页面内容导出为 CSV 格式。</li>
+<li>“Reset to Default” - 将页面重置为默认状态，删除任何已保存的设置。</li>
+</ul>
+<p>请注意，并非所有功能在所有页面上都可用。</p>
+<p>所选内核的信息显示为 “Current”。[+] 和 [-] 按钮可用于显示或隐藏部分内容。使用 “r” 按钮可以切换规则输出的可见性。”i” 按钮切换部分描述的可见性。</p>
+<h2 id="6-2-报告页面"><a href="#6-2-报告页面" class="headerlink" title="6.2. 报告页面"></a>6.2. 报告页面</h2><p>使用标题栏中的 “Page” 下拉菜单可在报告页面之间进行切换。</p>
+<p>默认情况下，当打开包含单个性能分析结果的报告时，会显示 “Details Page”。当打开包含多个结果的报告时，会选择 “Summary Page”。您可以在 Profile 选项中更改默认的报告页面设置。</p>
+<h3 id="6-2-1-Session-Page"><a href="#6-2-1-Session-Page" class="headerlink" title="6.2.1. Session Page"></a>6.2.1. Session Page</h3><p>Session 页面包含有关报告和计算机的基本信息，以及对进行了性能分析的所有设备的设备属性。在切换启动实例时，相应的设备属性会突出显示。</p>
+<h3 id="6-2-2-Summary-Page"><a href="#6-2-2-Summary-Page" class="headerlink" title="6.2.2. Summary Page"></a>6.2.2. Summary Page</h3><p>Summary 页面显示了报告中所有收集的结果的表格，以及按预估加速比排序的最重要的规则输出列表（优先规则）。优先规则默认显示，并可通过页面右上角的 [R] 按钮切换。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-summary.png" class="" title="img">
+<p>Summary Table 提供了对所有分析工作负载的快速比较概览。它包含一些重要的、预先选择的指标，可以根据下面的说明进行自定义。可以通过点击表头来对表格的列进行排序。您可以使用 “Transpose” 按钮来转置表格。当通过单击选择任何条目时，表格下方将显示其优先规则的列表。双击任何条目将使其成为当前活动的结果，并切换到 “Details Page” 页面以查看其性能数据。</p>
+<p>概览指标有助于决定在进一步分析中应该关注哪个结果。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-summary-table.png" class="" title="img">
+<p>您可以在 Profile 选项对话框中配置此表格中包含的指标列表。如果一个指标有多个实例值，则其标准值后面会显示实例数。例如，带有十个实例值的指标可能如下所示：35.48 {10}。在 Profile 选项对话框中，您可以选择显示所有实例值。您还可以在指标详细信息的工具窗口中查看指标结果的实例值。</p>
+<p>除了指标之外，还可以配置表格包含以下任何属性：</p>
+<p>下面是转换为Markdown表格格式的内容：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>属性</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>property__api_call_id</td>
+<td>与此性能分析结果关联的 API 调用的 ID。</td>
+</tr>
+<tr>
+<td>property__block_size</td>
+<td>块大小。</td>
+</tr>
+<tr>
+<td>property__creation_time</td>
+<td>本地收集时间。</td>
+</tr>
+<tr>
+<td>property__demangled_name</td>
+<td>内核解码后的名称。</td>
+</tr>
+<tr>
+<td>property__device_name</td>
+<td>GPU 设备名称。</td>
+</tr>
+<tr>
+<td>property__estimated_speedup</td>
+<td>由引导分析规则估计的此性能分析结果可达到的最大相对加速比。</td>
+</tr>
+<tr>
+<td>property__function_name</td>
+<td>内核函数名称或范围名称。</td>
+</tr>
+<tr>
+<td>property__grid_dimensions</td>
+<td>网格维度。</td>
+</tr>
+<tr>
+<td>property__grid_offset</td>
+<td>网格偏移。</td>
+</tr>
+<tr>
+<td>property__grid_size</td>
+<td>网格大小。</td>
+</tr>
+<tr>
+<td>property__issues_detected</td>
+<td>由引导分析规则检测到的问题数量。</td>
+</tr>
+<tr>
+<td>property__kernel_id</td>
+<td>内核 ID。</td>
+</tr>
+<tr>
+<td>property__mangled_name</td>
+<td>内核混淆后的名称。</td>
+</tr>
+<tr>
+<td>property__process_name</td>
+<td>进程名称。</td>
+</tr>
+<tr>
+<td>property__runtime_improvement</td>
+<td>对应于估计加速比的运行时改进。</td>
+</tr>
+<tr>
+<td>property__series_id</td>
+<td>性能分析系列的 ID。</td>
+</tr>
+<tr>
+<td>property__series_parameters</td>
+<td>性能分析系列参数。</td>
+</tr>
+<tr>
+<td>property__thread_id</td>
+<td>CPU 线程 ID。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>对于 Range Replay 报告，默认情况下只显示较小的一组列，因为并不适用于此类结果的所有列。</p>
+<p>对于当前选定的指标结果，优先规则显示与估计潜在加速比相关的最具影响力的规则结果。单击左侧的任何规则名称可以轻松导航到包含该规则的部分。使用右侧的向下箭头可以切换显示相关关键性能指标的表格。该表格包含了在优化性能时应根据规则指导进行跟踪的指标。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-summary-rules.png" class="" title="img">
+<h3 id="6-2-3-Details-Page"><a href="#6-2-3-Details-Page" class="headerlink" title="6.2.3. Details Page"></a>6.2.3. Details Page</h3><h4 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h4><p>Details 页面是收集的内核启动期间所有指标数据的主要页面。页面被分为各个部分。每个部分由一个标题表格和一个可展开的可选正文组成。部分完全由用户定义，可以通过更新其相应的文件来进行更改。有关自定义部分的更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/CustomizationGuide/index.html#abstract">Customization Guide</a>。有关 NVIDIA Nsight Compute 随附的部分列表，请参阅  <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#sections-and-rules">Sections and Rules</a>。</p>
+<p>默认情况下，一旦收集到新的性能分析结果，所有适用的规则都会被应用。任何规则结果都将显示为此页面上的推荐项。大多数规则结果通常是纯粹的信息性内容，或者带有警告图标，表明存在某些性能问题。带有错误图标的结果通常表示应用规则时出现了错误。</p>
+<p>规则结果经常指出性能问题并引导分析过程。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-section-with-rule.png" class="" title="img">
+<p>如果规则结果引用了其他报告部分，它将以链接形式出现在推荐项中。选择链接以滚动到相应的部分。如果未在同一性能分析结果中收集该部分，请在 Metric Selection 工具窗口中启用该部分。</p>
+<p>您可以在 Details 视图的每个部分中添加或编辑评论，只需点击评论按钮（气泡图标）。在包含评论的部分中，评论图标将突出显示。评论会持久保存在报告中，并在评论页中进行总结。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-details-comments.png" class="" title="img">
+<p>除了标题之外，部分通常还包含一个或多个正文，其中包含额外的图表或表格。单击每个部分左上角的三角形展开图标，以显示或隐藏正文。如果一个部分有多个正文，其右上角的下拉菜单允许您在它们之间切换。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-section-bodies.png" class="" title="img">
+<h4 id="Rooflines"><a href="#Rooflines" class="headerlink" title="Rooflines"></a>Rooflines</h4><p>如果启用了 GPU Speed Of Light Roofline Chart 部分，则该部分包含一个 Roofline 图表，可以帮助您一目了然地了解内核的性能。 （要在报告中启用 roofline 图表，请在进行性能分析时确保启用了该部分。）有关如何使用和阅读此图表的更多信息，请参阅 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#roofline">Roofline Charts</a>。NVIDIA Nsight Compute 随附了几个不同的 roofline 图表定义，包括分层 roofline。这些额外的 roofline 定义在不同的部分文件中定义。虽然不是完整的部分集的一部分，但添加了一个名为 roofline 的新部分集，用于收集和显示所有 roofline 图表。分层 roofline 的概念是它定义了多个天花板，表示硬件层次结构的限制器。例如，一个侧重于内存层次结构的分层 roofline 可以具有 L1 缓存、L2 缓存和设备内存吞吐量的天花板。如果内核的实际性能受到分层 roofline 的某个天花板的限制，这可能表明对应的层次结构单元是潜在的瓶颈。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-section-rooflines.png" class="" title="img">
+<p>可以使用下表中的控件对 roofline 图表进行缩放和平移，以进行更有效的数据分析。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Zoom In</th>
+<th>Zoom Out</th>
+<th>Zoom Reset</th>
+<th>Pan</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Click the Zoom In button in the top right corner of the chart.                                                 Click the left mouse button and drag to create a rectangle that bounds the area of interest.                                                 Press the plus (+) key.                                                 Use Ctrl + MouseWheel (Windows and Linux only)</td>
+<td>Click the Zoom Out button in the top right corner of the chart.                                                 Click the right mouse button.                                                  Press the plus (-) key.                                                 Use Ctrl + MouseWheel (Windows and Linux only)</td>
+<td>Click the Zoom Reset button in the top right corner of the chart.                                                 Press the Escape (Esc) key.</td>
+<td>Use Ctrl (Command on Mac) + LeftMouseButton to grab the chart, then move the mouse.                                                 Use the cursor keys.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>内存</strong></p>
+<p>如果启用，Memory Workload Analysis 分析部分包含一个内存图表，可视化数据传输、缓存命中率、指令和内存请求的情况。有关如何使用和阅读该图表的更多信息，请参阅”内核分析指南”。<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#memory-chart">Kernel Profiling Guide</a>.                                                               </p>
+<p><strong>源代码</strong></p>
+<p>Source Counters等部分可能包含源代码热点表。这些表显示了在您的内核源代码中一个或多个指标的前N个最高或最低值。选择位置链接可直接导航到6.2.4  <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#profiler-report-source-page">Source Page</a>中的该位置。将鼠标悬停在一个值上可以查看贡献给该值的指标。热点表指出了您源代码中的性能问题。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-details-source-table.png" class="" title="img">
+<p><strong>占用率</strong> Occupancy </p>
+<p>您可以通过点击报告标题栏或占用率部分标题栏中的计算器按钮来打开 9 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#occupancy-calculator">Occupancy Calculator</a>。</p>
+<p><strong>范围重放</strong></p>
+<p>请注意，对于<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#range-replay">Range Replay</a>的结果，某些用户界面元素、分析规则、指标或部分内容项（如图表或表格）可能不可用，因为它们仅适用于基于内核启动的结果。筛选器可以在相应的部分文件中进行检查。</p>
+<h3 id="6-2-4-源代码页面"><a href="#6-2-4-源代码页面" class="headerlink" title="6.2.4. 源代码页面"></a><strong>6.2.4. 源代码页面</strong></h3><p>Source page correlates assembly（SASS）与CUDA-C或PTX等高级代码相关联。此外，它显示与指令相关的指标，以帮助准确定位代码中的性能问题。</p>
+<p>Profiler报告的源代码页面是指Profiler Report中的一个页面，用于展示源代码和相关的性能指标。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-source.png" class="" title="img">
+<p>该页面可以在不同的视图之间切换，以便专注于特定的源代码层或并排查看两个层。这包括SASS、PTX和源代码（CUDA-C、Fortran、Python等），以及它们的组合。可用的选项取决于嵌入到可执行文件中的源代码信息。</p>
+<p><strong>如果应用程序使用了<code>-lineinfo</code>或<code>--generate-line-info</code> nvcc标志来关联SASS和源代码</strong>，则可以使用高级源代码（CUDA-C）视图。当在ELF级别进行分离链接时，ELF中没有对应于最终SASS的PTX。因此，即使在可执行文件中静态可用，并且可以使用<code>cuobjdump -all -lptx</code>显示，NVIDIA Nsight Compute也不会显示任何PTX。然而，这是PTX的预链接版本，无法可靠地用于关联。</p>
+<p>不同视图中的代码也可以包含警告、错误或通知，这些信息显示为左侧标题中的源代码标记，如下所示。这些标记可以由多个系统生成，但目前只支持NvRules。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-source-markers.png" class="" title="img">
+<h4 id="6-2-4-1-导航-Navigation"><a href="#6-2-4-1-导航-Navigation" class="headerlink" title="6.2.4.1. 导航 Navigation"></a>6.2.4.1. 导航 Navigation</h4><p>在导航方面，可以使用”View”下拉菜单选择不同的代码（关联）选项：SASS、PTX和源代码（CUDA-C、Fortran、Python等）。</p>
+<p>在并排视图中，当在左侧或右侧选择一行时，相应视图中的关联行将被突出显示。然而，当 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#options-profile">Show Single File For Multi-File Sources</a> 选项设置为”Yes”时，必须在相应的视图中已经选择目标文件或源对象，才能显示这些关联行。</p>
+<p>“Source”下拉菜单允许您在视图中切换文件或函数来显示内容。当选择不同的源代码条目时，视图将滚动到该文件或函数的开头。如果一个视图包含多个源文件或函数，将显示[+]和[-]按钮。这些按钮可用于展开或折叠视图，从而显示或隐藏除标题以外的文件或函数内容。如果折叠，所有指标将被聚合显示，以提供快速概览。<br> 视图折叠/展开按钮。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-source-collapse.png" class="" title="img">
+<p>您可以使用”Find”（源代码）行编辑框搜索每个视图的源代码列。输入要搜索的文本，并使用相关按钮在该列中查找下一个或上一个匹配项。当选中行编辑框时，您也可以使用Enter键或Shift+Enter键分别搜索下一个或上一个匹配项。</p>
+<p>SASS视图被过滤，只显示在启动中执行的函数。您可以切换”S<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#options-profile">Show Only Executed Functions</a>“选项来更改此设置，但对于大型二进制文件，这可能会对页面的性能产生负面影响。可能会有一些SASS指令显示为N/A。这些指令目前不公开。</p>
+<p>在视图中，只显示文件名，如果源文件在其原始位置找不到，还会显示”File Not  Found”错误。这可能发生在报告被移动到另一个系统的情况下。选择一个文件名，然后点击上方的”Resolve”按钮来指定在本地文件系统上可以找到该源文件的位置。但是，如果在分析过程中选择了导入源代码选项并且文件在那时是可用的，视图始终会显示源文件。如果文件在其原始位置或任何源代码查找位置找到，但其属性不匹配，则显示”File Mismatch”错误。请参阅源代码查找选项以更改文件查找行为。<br> CUDA-C源代码的”Resolve”按钮。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-source-resolve.png" class="" title="img">
+<p>如果使用远程分析收集了报告，并且在Profile选项中启用了自动解析远程文件，NVIDIA Nsight Compute将尝试从远程目标加载源代码。如果当前的NVIDIA Nsight  Compute实例中尚未提供连接凭据，将在对话框中提示输入。目前，从远程目标加载仅适用于Linux  x86_64目标和Linux、Windows主机。</p>
+<h4 id="6-2-4-2-指标-Metrics"><a href="#6-2-4-2-指标-Metrics" class="headerlink" title="6.2.4.2. 指标 Metrics"></a>6.2.4.2. 指标 Metrics</h4><p> 指标相关性</p>
+<p>此页面在检查与您的代码相关的性能信息和指标时非常有用。指标显示在列中，可以通过使用列标题右键菜单访问的”Column Chooser”对话框启用或禁用列。<br> “Column Chooser”对话框</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-source-column-chooser.png" class="" title="img">
+<p>为了在水平滚动时不移出视图，可以固定列。默认情况下，”Source”列固定在左侧，方便查看与源代码行相关的所有指标。要更改列的固定状态，右键单击列标题，然后分别选择”Freeze”（固定）或”Unfreeze”（取消固定）。</p>
+<p>固定源代码列的图标在标题中。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-fix-column.png" class="" title="img">
+<p>每个视图右侧的热力图可用于快速识别下拉菜单中当前所选指标的高指标值位置。热力图使用黑体辐射颜色标尺，其中黑色表示最低映射值，白色表示最高映射值。在使用鼠标右键点击并按住热力图时，会显示当前的比例尺。</p>
+<p>源视图热力图颜色标尺</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-source-heatmap.png" class="" title="img">
+<p>默认情况下，适用的指标以相对于整个项目的总和的百分比值显示。一个条形图从左到右填充，表示特定源位置相对于该指标在整个项目中的最大值的数值。按钮“[%]”和“[+-]”可用于在相对和绝对值之间切换显示，以及在缩略绝对值和完整精度绝对值之间切换显示。对于相对值和条形图，按钮“[circle/pie]”可用于在相对于全局（项目）和相对于局部（函数/文件）范围之间切换显示。如果视图被折叠，该按钮将被禁用，因为在这种情况下百分比始终相对于全局项目范围。</p>
+<p>切换指标的相对/绝对值和缩略/完整精度值</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-source-rel-abs.png" class="" title="img">
+<p><strong>预定义源度量指标</strong></p>
+<ul>
+<li><p><strong>活跃寄存器</strong></p>
+<p>编译器需要保持有效的寄存器数量。较高的值表示在此代码位置需要许多寄存器，可能会增加寄存器压力和内核所需的最大寄存器数量。</p>
+<p>报告为<code>launch__registers_per_thread</code>的总寄存器数可能会显著高于最大活跃寄存器数。即使最大活跃寄存器数较小，编译器可能需要分配特定的寄存器，这可能会在分配中创建空洞，从而影响<code>launch__registers_per_thread</code>。这可能是由于ABI限制或特定硬件指令强制实施的限制。编译器可能无法完全了解调用方和被调用方可能使用哪些寄存器，并且必须遵守ABI约定，因此即使某些寄存器在理论上可以被重用，也会分配不同的寄存器。</p>
+</li>
+<li><p><strong>Warp Stall Sampling (All Samples)</strong></p>
+<p>统计采样器在此程序位置的样本数量。This metric was previously called Sampling Data (All).之前叫做Sample Data(All)。在Source界面还是叫Sample Data。<strong>可以看到Stall的地方</strong></p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/image-20230917143621604.png" class="" title="image-20230917143621604">
+</li>
+<li><p><strong>Warp Stall Sampling (Not-issued Samples)2</strong></p>
+<p>统计采样器在此程序位置上，当warp调度程序未发出指令时的样本数量。请注意，(Not Issued)样本可能在与上述(All)样本不同的分析过程中进行采集，因此它们的值不严格相关。同上 之前叫做Sampling Data (Not Issued)</p>
+<p>此度量仅适用于计算能力为7.0或更高的设备。</p>
+</li>
+<li><p><strong>Instructions Executed</strong> <strong>指令执行次数</strong></p>
+<p>源代码（指令）在每个独立warp中执行的次数，与每个warp中参与的线程数量无关。</p>
+</li>
+<li><p><strong>Thread Instructions Executed**</strong>线程指令执行次数**</p>
+<p>任何线程执行源代码（指令）的次数，无论谓词的存在与否或评估结果如何。</p>
+</li>
+<li><p><strong>基于谓词的线程指令执行次数</strong></p>
+<p>任何活动的基于谓词的线程执行源代码（指令）的次数。对于无条件执行的指令（即没有谓词），这是warp中活动线程的数量乘以相应的指令执行次数的值。</p>
+</li>
+<li><p><strong>Avg. Threads Executed**</strong>平均执行线程数**</p>
+<p>每个warp平均执行的线程级指令数量，无论其谓词如何。</p>
+</li>
+<li><p><strong>平均基于谓词的执行线程数</strong></p>
+<p>每个warp平均执行的基于谓词的线程级指令数量。</p>
+</li>
+<li><p><strong>Divergent Branches**</strong>分歧分支**</p>
+<p>分歧分支目标的数量，包括顺序执行。仅当存在两个或更多具有分歧目标的活动线程时才递增。分歧分支可能导致warp停顿，因为需要解析分支或指令缓存未命中。</p>
+</li>
+<li><p><strong>内存操作信息</strong></p>
+<p>| 标签                                    | 名称                                                    | 描述                                                         |<br>| ———————————————————- | ———————————————————————————- | —————————————————————————————— |<br>| Address Space                           | memory_type                                             | 访问的地址空间（全局/本地/共享）。                           |<br>| Access Operation                        | memory_access_type                                      | 访问内存的类型（例如加载或存储）。                           |<br>| Access Size                             | memory_access_size_type                                 | 内存访问的大小，以位为单位。                                 |<br>| L1 Tag Requests Global                  | memory_l1_tag_requests_global                           | 全局内存指令生成的L1标记请求数量。                           |<br>| L1 Conflicts Shared N-Way               | derived<strong>memory_l1_conflicts_shared_nway                | 每个共享内存指令在L1中的平均N路冲突。1路访问没有冲突并且在单个通道中解决。注意：这是一个派生指标，不能直接收集。 |<br>| L1 Wavefronts Shared Excessive          | derived</strong>memory_l1_wavefronts_shared_excessive          | 来自共享内存指令的L1中过多的波前数量，因为并非所有未预测的线程都执行了该操作。注意：这是一个派生指标，不能直接收集。 |<br>| L1 Wavefronts Shared                    | memory_l1_wavefronts_shared                             | 共享内存指令中L1中的波前数量。                               |<br>| L1 Wavefronts Shared Ideal              | memory_l1_wavefronts_shared_ideal                       | 假设每个未预测的线程都执行了操作，共享内存指令中L1中的理想波前数量。 |<br>| L2 Theoretical Sectors Global Excessive | derived__memory_l2_theoretical_sectors_global_excessive | 来自全局内存指令的L2中请求的过多理论扇区数，因为并非所有未预测的线程都执行了该操作。注意：这是一个派生指标，不能直接收集。 |<br>| L2 Theoretical Sectors Global           | memory_l2_theoretical_sectors_global                    | 全局内存指令中请求的L2中的理论扇区数。                       |<br>| L2 Theoretical Sectors Global Ideal     | memory_l2_theoretical_sectors_global_ideal              | 假设每个未预测的线程都执行了操作，全局内存指令中请求的L2中的理想扇区数。 |<br>| L2 Theoretical Sectors Local            | memory_l2_theoretical_sectors_local                     | 从本地内存指令中请求的L2中的理论扇区数。                     |</p>
+</li>
+</ul>
+<p>所有L1/L2扇区/波前/请求<code>L1/L2 Sectors/Wavefronts/Requests</code>指标均给出实际达到（实际需要）、理想和过多（实际达到-理想）扇区/波前/请求的数量。理想指标表示在给定宽度的情况下，每个未预测的线程执行操作所需的数量。过多指标表示理想情况下所需的剩余量。减少线程间的分歧可以减少过多的量，并导致相应硬件单元的工作量减少。 </p>
+<p>上述内存操作中的几个指标在2021.2版本中更名如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>旧名称</th>
+<th>新名称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>memory_l2_sectors_global</td>
+<td>memory_l2_theoretical_sectors_global</td>
+</tr>
+<tr>
+<td>memory_l2_sectors_global_ideal</td>
+<td>memory_l2_theoretical_sectors_global_ideal</td>
+</tr>
+<tr>
+<td>memory_l2_sectors_local</td>
+<td>memory_l2_theoretical_sectors_local</td>
+</tr>
+<tr>
+<td>memory_l1_sectors_global</td>
+<td>memory_l1_tag_requests_global</td>
+</tr>
+<tr>
+<td>memory_l1_sectors_shared</td>
+<td>memory_l1_wavefronts_shared</td>
+</tr>
+<tr>
+<td>memory_l1_sectors_shared_ideal</td>
+<td>memory_l1_wavefronts_shared_ideal</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li><p><strong>L2显式驱逐策略指标</strong></p>
+<p>从NVIDIA  Ampere架构开始，L2缓存的驱逐策略可以调整以匹配内核的访问模式。驱逐策略可以隐式地设置为内存窗口（有关详细信息，请参见 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-runtime-api/structcudaAccessPolicyWindow.html">CUaccessProperty</a>），也可以针对每个执行的内存指令显式设置。如果显式设置，对于L2缓存的命中或未命中情况，所需的驱逐行为将作为输入传递给指令。有关详细信息，请参阅CUDA的<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/parallel-thread-execution/index.html#cache-eviction-priority-hints">Cache Eviction Priority Hints</a>.</p>
+<p>| 标签                                       | 名称                                                         | 描述                                                         |<br>| ————————————————————— | —————————————————————————————— | —————————————————————————————— |<br>| L2 Explicit Evict Policies                 | smsp<strong>inst_executed_memdesc_explicit_evict_type              | 配置的显式驱逐策略列表，以逗号分隔。由于驱逐策略可以在运行时动态设置，因此此列表包括任何已执行指令的所有策略。 |<br>| L2 Explicit Hit Policy Evict First         | smsp</strong>inst_executed_memdesc_explicit_hitprop_evict_first     | 任何warp执行的内存指令的次数，该warp在访问L2时设置了evict_first策略。使用此策略缓存的数据将首先按照驱逐优先级顺序进行驱逐，并且在需要缓存驱逐时可能会被驱逐。此策略适用于流数据。 |<br>| L2 Explicit Hit Policy Evict Last          | smsp<strong>inst_executed_memdesc_explicit_hitprop_evict_last      | 任何warp执行的内存指令的次数，该warp在访问L2时设置了evict_last策略。使用此策略缓存的数据将按照驱逐优先级顺序排在最后，并且只有在其他使用evict_normal或evict_first驱逐策略的数据已被驱逐后才可能被驱逐。此策略适用于应保留在缓存中的数据。 |<br>| L2 Explicit Hit Policy Evict Normal        | smsp</strong>inst_executed_memdesc_explicit_hitprop_evict_normal    | 任何warp执行的内存指令的次数，该warp在访问L2时设置了evict_normal（默认）策略，且访问导致L2缓存命中。 |<br>| L2 Explicit Hit Policy Evict Normal Demote | smsp<strong>inst_executed_memdesc_explicit_hitprop_evict_normal_demote | 任何warp执行的内存指令的次数，该warp在访问L2时设置了evict_normal_demote策略，且访问导致L2缓存命中。 |<br>| L2 Explicit Miss Policy Evict First        | smsp</strong>inst_executed_memdesc_explicit_missprop_evict_first    | 任何warp执行的内存指令的次数，该warp在访问L2时设置了evict_first策略，且访问导致L2缓存未命中。使用此策略缓存的数据将首先按照驱逐优先级顺序进行驱逐，并且在需要缓存驱逐时可能会被驱逐。此策略适用于流数据。 |<br>| L2 Explicit Miss Policy Evict Normal       | smsp__inst_executed_memdesc_explicit_missprop_evict_normal   | 任何warp执行的内存指令的次数，该warp在访问L2时设置了evict_normal（默认）策略，且访问导致L2缓存未命中。 |</p>
+</li>
+</ul>
+<p><strong>单个Warp停顿采样指标</strong></p>
+<p>所有stall_*指标都显示Warp停顿采样中组合的信息。有关它们的描述，请参见统计采样器。<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#statistical-sampler">Statistical Sampler</a><br> 有关如何为此视图添加其他指标的自定义指南，请参见自定义指南，有关可用指标的进一步信息，请参见指标参考。</p>
+<p><strong>寄存器依赖关系</strong></p>
+<p>SASS视图中显示了寄存器之间的依赖关系。当读取寄存器时，会找到它可能被写入的所有潜在地址。这些行之间的链接在视图中绘制。在它们各自的列中显示了寄存器、谓词、统一寄存器和统一谓词的所有依赖关系。<br> 在SASS视图中跟踪寄存器依赖关系</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-source-register-dependencies.png" class="" title="img">
+<p>上图显示了一个简单CUDA内核的一些依赖关系。在第一行，也就是SASS代码的第9行，我们可以看到对寄存器R2和R3的写入，用指向左侧的实心三角形表示。然后在第17、20和23行读取这些寄存器，用指向右侧的普通三角形表示。还有一些行，两种三角形都在同一行，这意味着对同一寄存器进行了读写操作。</p>
+<p>不跟踪源文件和函数之间的依赖关系。</p>
+<p>寄存器依赖关系跟踪功能默认启用，但可以在“工具”&gt;“选项”&gt;“分析”&gt;“报告源页面”&gt;“启用寄存器依赖关系”中完全禁用。</p>
+<h4 id="6-2-4-3-限制"><a href="#6-2-4-3-限制" class="headerlink" title="6.2.4.3. 限制"></a>6.2.4.3. 限制</h4><p><strong>范围回放</strong></p>
+<p>在使用范围回放模式时，无法获取指令级源度量信息。</p>
+<p><strong>图形分析</strong></p>
+<p>在分析完整的CUDA图形时，无法获取指令级源度量信息。</p>
+<p><strong>Cmdlists</strong></p>
+<p>在分析（OptiX）cmdlists时，无法获取指令级源度量信息</p>
+<h3 id="6-2-5-评论页面"><a href="#6-2-5-评论页面" class="headerlink" title="6.2.5. 评论页面"></a>6.2.5. 评论页面</h3><p>评论页面将所有部分评论聚合在一个视图中，并允许用户在任何启动实例或部分以及整个报告上编辑这些评论。评论将与报告一起保留。如果添加了部分评论，则详细信息页面中相应部分的评论图标将被突出显示。</p>
+<h3 id="6-2-6-调用堆栈-NVTX页面"><a href="#6-2-6-调用堆栈-NVTX页面" class="headerlink" title="6.2.6. 调用堆栈/NVTX页面"></a>6.2.6. 调用堆栈/NVTX页面</h3><p>此报告页面的CPU调用堆栈部分显示了执行CPU线程在启动内核时的CPU调用堆栈。为了在分析器报告中显示此信息，必须在 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#connection-dialog">Connection Dialog</a>中启用收集CPU调用堆栈选项或使用相应的NVIDIA Nsight Compute CLI命令行参数。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-callstack.png" class="" title="img">
+<p>此报告页面的NVTX状态部分显示了内核启动时的NVTX上下文。所有线程特定信息都是相对于内核启动API调用的线程。请注意，仅在分析器启用了NVTX支持的情况下，才会收集NVTX信息，可以在连接对话框中启用，也可以使用NVIDIA Nsight Compute CLI命令行参数启用。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/profiler-report-pages-nvtx.png" class="" title="img">
+<h3 id="6-2-7-Raw-Page"><a href="#6-2-7-Raw-Page" class="headerlink" title="6.2.7. Raw Page"></a>6.2.7. Raw Page</h3><p>Raw页面显示了每个分析的内核启动的所有收集指标及其单位的列表。它可以导出为CSV格式，以进行进一步的分析。该页面具有一个过滤器编辑，可快速查找特定指标。您可以使用Transpose按钮转置内核和指标的表格。</p>
+<p>如果一个指标有多个实例值，则标准值后面会显示实例数。例如，该指标有十个实例值：35.48 {10}。您可以在Profile options对话框中选择显示所有实例值，或在Metric Details工具窗口中检查指标结果。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/image-20230911162559707.png" class="" title="image-20230911162559707">
+<h2 id="6-3-指标和单位"><a href="#6-3-指标和单位" class="headerlink" title="6.3. 指标和单位"></a>6.3. 指标和单位</h2><p>报告中的各个位置都显示了数值指标，包括标题、表格和大多数页面上的图表。NVIDIA Nsight Compute支持多种显示这些指标及其值的方式。</p>
+<p>如果适用于UI组件，指标将与其单位一起显示，以明确指标表示的是周期、线程、字节/秒等内容。单位通常以方括号的形式显示，例如指标名称 [字节] 128。</p>
+<p>默认情况下，单位会自动进行缩放，以便以合理的数量级显示指标值。单位使用SI因子进行缩放，即基于字节的单位使用1000作为因子，并使用K、M、G等前缀。基于时间的单位也使用1000作为因子进行缩放，使用n、u和m作为前缀。可以在配置选项中禁用此缩放。</p>
+<p>无法收集的指标将显示为n/a，并分配一个警告图标。如果指标的浮点值超出正常范围（即nan（非数字）或inf（无穷大）），它们也会被分配一个警告图标。例外情况是这些值是预期的且在内部允许的指标。</p>
+<h1 id="7-基准线"><a href="#7-基准线" class="headerlink" title="7. 基准线"></a>7. 基准线</h1><p>NVIDIA Nsight  Compute支持使用基准线在一个或多个报告之间进行结果差异比较。任何报告中的每个结果都可以提升为基准线。这将导致所有报告中的所有结果的指标值显示与基准线的差异。如果同时选择多个基准线，则指标值将与所有当前基准线的平均值进行比较。基准线不会与报告一起存储，只有在打开相同的NVIDIA Nsight Compute实例时才可用，除非将其从基准线工具窗口保存到ncu-bln文件中。<br> 带有一个基准线的分析报告</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/baselines.png" class="" title="img">
+<p>选择”Add  Baseline”将当前焦点结果提升为基准线。如果设置了基准线，详情页、原始页和摘要页上的大多数指标将显示两个值：当前焦点结果的当前值，以及与基准线对应的值或与基准线值相比的变化百分比。（请注意，当指标的基准线值为零而焦点值不为零时，可能会显示无限百分比增益，即inf%。）</p>
+<p>如果选择了多个基准线，每个指标将显示以下注释：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;focus value&gt; (&lt;difference to baselines average [%]&gt;, z=&lt;standard score&gt;@&lt;number of values&gt;)</span><br></pre></td></tr></table></figure>
+<p>标准分数是当前值与所有基准线的平均值之间的差异，通过标准差进行归一化。如果用于计算标准分数的指标值数量等于结果的数量（当前值和所有基准线），则省略@注释。<br> 带有多个基准线的分析报告</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/baselines-multiple.png" class="" title="img">
+<p>双击基准线名称可以编辑显示的名称。按下Enter/Return键或失去焦点时，编辑将被提交；按下Esc键则会取消编辑。将鼠标悬停在基准线颜色图标上，可以从列表中删除该特定的基准线。</p>
+<p>使用下拉按钮、Profile菜单或相应的工具栏按钮中的”Clear Baselines”选项，可以删除所有基准线。</p>
+<p>基准线的更改也可以在”Baselines”工具窗口中进行。</p>
+<h1 id="8-独立源代码查看器"><a href="#8-独立源代码查看器" class="headerlink" title="8. 独立源代码查看器"></a>8. 独立源代码查看器</h1><p>NVIDIA Nsight Compute包含一个独立的源代码查看器，用于查看cubin文件。该视图与Source Page相同，但不包含任何性能指标。</p>
+<p>可以通过”File &gt;  Open”主菜单命令打开cubin文件。在打开独立源代码视图之前，将显示SM选择对话框。如果文件名中存在SM版本信息，将预先选择该版本。例如，如果文件名是mergeSort.sm_80.cubin，则对话框中将预先选择SM 8.0。如果文件名中未包含相应的SM版本信息，请从下拉菜单中选择适当的SM版本。</p>
+<p>SM选择对话框</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/sm-selection-dialog.png" class="" title="img">
+<p>单击“确定”按钮打开“独立源代码查看器”。</p>
+<p>独立源查看器</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/cubin-viewer.png" class="" title="img">
+<h1 id="9-占用率计算器"><a href="#9-占用率计算器" class="headerlink" title="9. 占用率计算器"></a>9. 占用率计算器</h1><p>NVIDIA Nsight Compute提供了一个占用率计算器，可以计算给定CUDA内核在GPU上的多处理器占用率。它与CUDA占用率计算器电子表格具有相同的功能。<a target="_blank" rel="noopener" href="http://docs.nvidia.com/cuda/cuda-occupancy-calculator/index.html">spreadsheet</a>.</p>
+<p>可以直接从性能分析报告或作为新活动打开占用率计算器。可以使用”File &gt; Save”将占用率计算器数据保存到文件中。默认情况下，文件使用.ncu-occ扩展名。可以使用”File &gt; Open File”打开占用率计算器文件。</p>
+<ol>
+<li><p>从连接对话框启动</p>
+<p>在连接对话框中选择”Occupancy Calculator”活动。可以选择性地指定一个占用率计算器数据文件，该文件用于使用保存的数据初始化计算器。点击”Launch”按钮打开占用率计算器。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/occupancy-calculator-activity.png" class="" title="img">
+</li>
+<li><p>从性能分析报告中启动</p>
+<p>可以通过性能分析报告中的计算器按钮来打开占用率计算器。该按钮位于报告标题栏或详细页面中占用率部分的标题栏中。</p>
+<p>详细页面标题栏</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/occupancy-calculator-from-header.png" class="" title="img">
+<p>Occupancy section header</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/occupancy-calculator-from-section.png" class="" title="img">
+</li>
+</ol>
+<p>用户界面由一个输入部分以及显示有关GPU占用率信息的表格和图形组成。要使用计算器，请更改输入部分中的输入值，点击“应用”按钮，并检查表格和图形。</p>
+<h2 id="9-1-表格"><a href="#9-1-表格" class="headerlink" title="9.1. 表格"></a>9.1. 表格</h2><p>这些表格显示了每个多处理器的占用率，以及活动线程、线程束和线程块的数量，以及GPU上活动块的最大数量。</p>
+<p>表格</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/occupancy-calculator-tables.png" class="" title="img">
+<h2 id="9-2-图表"><a href="#9-2-图表" class="headerlink" title="9.2. 图表"></a>9.2. 图表</h2><p>这些图表显示了您选择的块大小的占用率（以蓝色圆圈表示），以及所有其他可能的块大小的占用率（以折线图表示）。</p>
+<p>图表</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/occupancy-calculator-graphs.png" class="" title="img">
+<h2 id="9-3-GPU数据"><a href="#9-3-GPU数据" class="headerlink" title="9.3. GPU数据"></a>9.3. GPU数据</h2><p>GPU数据显示了所有支持的设备的属性。</p>
+<p>GPU数据</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/occupancy-calculator-gpu-data.png" class="" title="img">
+<h1 id="Nsight-Compute支持的GPU"><a href="#Nsight-Compute支持的GPU" class="headerlink" title="Nsight Compute支持的GPU"></a>Nsight Compute支持的GPU</h1><p>先看一下自己的GPU是否支持Nsight Compute，否则会出现错误<code>profiling is not supported on this device</code></p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/image-20230831170754116.png" class="" title="image-20230831170754116">
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Architecture</th>
+<th>Support</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Kepler</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Maxwell</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Pascal</td>
+<td>No</td>
+</tr>
+<tr>
+<td>Volta GV100</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Volta GV11b</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Turing TU1xx</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NVIDIA GA100</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NVIDIA GA10x</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NVIDIA GA10b</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NVIDIA AD10x</td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>NVIDIA GH100</td>
+<td>Yes</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Table 2. GPU architectures supported by NVIDIA Nsight Compute</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ReleaseNotes/index.html#gpu-support">3.2. GPU Support</a></p>
+<h1 id="Section"><a href="#Section" class="headerlink" title="Section"></a>Section</h1><p>Nsigth Compute的界面分为很多的区域，比如Details Page的Memory Workload Analysis section。</p>
+<ul>
+<li>envet：硬件的各种事件</li>
+<li>matric：一系列的event的组合指标，例如<code>gld_efficiency</code></li>
+<li>section：同一属性的<code>matric</code>的组合。例如内存相关的在一起。</li>
+</ul>
+<img src="/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/image-20230914173303421.png" class="" title="image-20230914173303421">
+<p><code>event</code>的定义从<code>nvprof</code>到nsight Compute名称有变化。具体的对应关系如下</p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightComputeCli/index.html#nvprof-metric-comparison">6.3. Metric Comparison</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightComputeCli/index.html#nvprof-event-comparison">6.4. Event Comparison</a></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>nvprof Event</th>
+<th>PerfWorks Metric or Formula (&gt;= SM 7.0)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>active_cycles</td>
+<td>sm__cycles_active.sum</td>
+</tr>
+<tr>
+<td>active_cycles_pm</td>
+<td>sm__cycles_active.sum</td>
+</tr>
+<tr>
+<td>active_cycles_sys</td>
+<td>sys__cycles_active.sum</td>
+</tr>
+<tr>
+<td>active_warps</td>
+<td>sm__warps_active.sum</td>
+</tr>
+<tr>
+<td>active_warps_pm</td>
+<td>sm__warps_active.sum</td>
+</tr>
+<tr>
+<td>atom_count</td>
+<td>smsp__inst_executed_op_generic_atom_dot_alu.sum</td>
+</tr>
+<tr>
+<td>elapsed_cycles_pm</td>
+<td>sm__cycles_elapsed.sum</td>
+</tr>
+<tr>
+<td>elapsed_cycles_sm</td>
+<td>sm__cycles_elapsed.sum</td>
+</tr>
+<tr>
+<td>elapsed_cycles_sys</td>
+<td>sys__cycles_elapsed.sum</td>
+</tr>
+<tr>
+<td>fb_subp0_read_sectors</td>
+<td>dram__sectors_read.sum</td>
+</tr>
+<tr>
+<td>fb_subp1_read_sectors</td>
+<td>dram__sectors_read.sum</td>
+</tr>
+<tr>
+<td>fb_subp0_write_sectors</td>
+<td>dram__sectors_write.sum</td>
+</tr>
+<tr>
+<td>fb_subp1_write_sectors</td>
+<td>dram__sectors_write.sum</td>
+</tr>
+<tr>
+<td>global_atom_cas</td>
+<td>smsp__inst_executed_op_generic_atom_dot_cas.sum</td>
+</tr>
+<tr>
+<td>gred_count</td>
+<td>smsp__inst_executed_op_global_red.sum</td>
+</tr>
+<tr>
+<td>inst_executed</td>
+<td>sm__inst_executed.sum</td>
+</tr>
+<tr>
+<td>inst_executed_fma_pipe_s0</td>
+<td>smsp__inst_executed_pipe_fma.sum</td>
+</tr>
+<tr>
+<td>inst_executed_fma_pipe_s1</td>
+<td>smsp__inst_executed_pipe_fma.sum</td>
+</tr>
+<tr>
+<td>inst_executed_fma_pipe_s2</td>
+<td>smsp__inst_executed_pipe_fma.sum</td>
+</tr>
+<tr>
+<td>inst_executed_fma_pipe_s3</td>
+<td>smsp__inst_executed_pipe_fma.sum</td>
+</tr>
+<tr>
+<td>inst_executed_fp16_pipe_s0</td>
+<td>smsp__inst_executed_pipe_fp16.sum</td>
+</tr>
+<tr>
+<td>inst_executed_fp16_pipe_s1</td>
+<td>smsp__inst_executed_pipe_fp16.sum</td>
+</tr>
+<tr>
+<td>inst_executed_fp16_pipe_s2</td>
+<td>smsp__inst_executed_pipe_fp16.sum</td>
+</tr>
+<tr>
+<td>inst_executed_fp16_pipe_s3</td>
+<td>smsp__inst_executed_pipe_fp16.sum</td>
+</tr>
+<tr>
+<td>inst_executed_fp64_pipe_s0</td>
+<td>smsp__inst_executed_pipe_fp64.sum</td>
+</tr>
+<tr>
+<td>inst_executed_fp64_pipe_s1</td>
+<td>smsp__inst_executed_pipe_fp64.sum</td>
+</tr>
+<tr>
+<td>inst_executed_fp64_pipe_s2</td>
+<td>smsp__inst_executed_pipe_fp64.sum</td>
+</tr>
+<tr>
+<td>inst_executed_fp64_pipe_s3</td>
+<td>smsp__inst_executed_pipe_fp64.sum</td>
+</tr>
+<tr>
+<td>inst_issued1</td>
+<td>sm__inst_issued.sum</td>
+</tr>
+<tr>
+<td>l2_subp0_read_sector_misses</td>
+<td>lts__t_sectors_op_read_lookup_miss.sum</td>
+</tr>
+<tr>
+<td>l2_subp1_read_sector_misses</td>
+<td>lts__t_sectors_op_read_lookup_miss.sum</td>
+</tr>
+<tr>
+<td>l2_subp0_read_sysmem_sector_queries</td>
+<td>lts__t_sectors_aperture_sysmem_op_read.sum</td>
+</tr>
+<tr>
+<td>l2_subp1_read_sysmem_sector_queries</td>
+<td>lts__t_sectors_aperture_sysmem_op_read.sum</td>
+</tr>
+<tr>
+<td>l2_subp0_read_tex_hit_sectors</td>
+<td>lts__t_sectors_srcunit_tex_op_read_lookup_hit.sum</td>
+</tr>
+<tr>
+<td>l2_subp1_read_tex_hit_sectors</td>
+<td>lts__t_sectors_srcunit_tex_op_read_lookup_hit.sum</td>
+</tr>
+<tr>
+<td>l2_subp0_read_tex_sector_queries</td>
+<td>lts__t_sectors_srcunit_tex_op_read.sum</td>
+</tr>
+<tr>
+<td>l2_subp1_read_tex_sector_queries</td>
+<td>lts__t_sectors_srcunit_tex_op_read.sum</td>
+</tr>
+<tr>
+<td>l2_subp0_total_read_sector_queries</td>
+<td>lts<strong>t_sectors_op_read.sum + lts</strong>t_sectors_op_atom.sum + lts__t_sectors_op_red.sum</td>
+</tr>
+<tr>
+<td>l2_subp1_total_read_sector_queries</td>
+<td>lts<strong>t_sectors_op_read.sum + lts</strong>t_sectors_op_atom.sum + lts__t_sectors_op_red.sum</td>
+</tr>
+<tr>
+<td>l2_subp0_total_write_sector_queries</td>
+<td>lts<strong>t_sectors_op_write.sum + lts</strong>t_sectors_op_atom.sum + lts__t_sectors_op_red.sum</td>
+</tr>
+<tr>
+<td>l2_subp1_total_write_sector_queries</td>
+<td>lts<strong>t_sectors_op_write.sum + lts</strong>t_sectors_op_atom.sum + lts__t_sectors_op_red.sum</td>
+</tr>
+<tr>
+<td>l2_subp0_write_sector_misses</td>
+<td>lts__t_sectors_op_write_lookup_miss.sum</td>
+</tr>
+<tr>
+<td>l2_subp1_write_sector_misses</td>
+<td>lts__t_sectors_op_write_lookup_miss.sum</td>
+</tr>
+<tr>
+<td>l2_subp0_write_sysmem_sector_queries</td>
+<td>lts__t_sectors_aperture_sysmem_op_write.sum</td>
+</tr>
+<tr>
+<td>l2_subp1_write_sysmem_sector_queries</td>
+<td>lts__t_sectors_aperture_sysmem_op_write.sum</td>
+</tr>
+<tr>
+<td>l2_subp0_write_tex_hit_sectors</td>
+<td>lts__t_sectors_srcunit_tex_op_write_lookup_hit.sum</td>
+</tr>
+<tr>
+<td>l2_subp1_write_tex_hit_sectors</td>
+<td>lts__t_sectors_srcunit_tex_op_write_lookup_hit.sum</td>
+</tr>
+<tr>
+<td>l2_subp0_write_tex_sector_queries</td>
+<td>lts__t_sectors_srcunit_tex_op_write.sum</td>
+</tr>
+<tr>
+<td>l2_subp1_write_tex_sector_queries</td>
+<td>lts__t_sectors_srcunit_tex_op_write.sum</td>
+</tr>
+<tr>
+<td>not_predicated_off_thread_inst_executed</td>
+<td>smsp__thread_inst_executed_pred_on.sum</td>
+</tr>
+<tr>
+<td>pcie_rx_active_pulse</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>pcie_tx_active_pulse</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>prof_trigger_00</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>prof_trigger_01</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>prof_trigger_02</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>prof_trigger_03</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>prof_trigger_04</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>prof_trigger_05</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>prof_trigger_06</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>prof_trigger_07</td>
+<td>n/a</td>
+</tr>
+<tr>
+<td>inst_issued0</td>
+<td>smsp__issue_inst0.sum</td>
+</tr>
+<tr>
+<td>sm_cta_launched</td>
+<td>sm__ctas_launched.sum</td>
+</tr>
+<tr>
+<td>shared_load</td>
+<td>smsp__inst_executed_op_shared_ld.sum</td>
+</tr>
+<tr>
+<td>shared_store</td>
+<td>smsp__inst_executed_op_shared_st.sum</td>
+</tr>
+<tr>
+<td>generic_load</td>
+<td>smsp__inst_executed_op_generic_ld.sum</td>
+</tr>
+<tr>
+<td>generic_store</td>
+<td>smsp__inst_executed_op_generic_st.sum</td>
+</tr>
+<tr>
+<td>global_load</td>
+<td>smsp__inst_executed_op_global_ld.sum</td>
+</tr>
+<tr>
+<td>global_store</td>
+<td>smsp__inst_executed_op_global_st.sum</td>
+</tr>
+<tr>
+<td>local_load</td>
+<td>smsp__inst_executed_op_local_ld.sum</td>
+</tr>
+<tr>
+<td>local_store</td>
+<td>smsp__inst_executed_op_local_st.sum</td>
+</tr>
+<tr>
+<td>shared_atom</td>
+<td>smsp__inst_executed_op_shared_atom.sum</td>
+</tr>
+<tr>
+<td>shared_atom_cas</td>
+<td>smsp__inst_executed_shared_atom_dot_cas.sum</td>
+</tr>
+<tr>
+<td>shared_ld_bank_conflict</td>
+<td>l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_ld.sum</td>
+</tr>
+<tr>
+<td>shared_st_bank_conflict</td>
+<td>l1tex__data_bank_conflicts_pipe_lsu_mem_shared_op_st.sum</td>
+</tr>
+<tr>
+<td>shared_ld_transactions</td>
+<td>l1tex__data_pipe_lsu_wavefronts_mem_shared_op_ld.sum</td>
+</tr>
+<tr>
+<td>shared_st_transactions</td>
+<td>l1tex__data_pipe_lsu_wavefronts_mem_shared_op_st.sum</td>
+</tr>
+<tr>
+<td>tensor_pipe_active_cycles_s0</td>
+<td>smsp__pipe_tensor_cycles_active.sum</td>
+</tr>
+<tr>
+<td>tensor_pipe_active_cycles_s1</td>
+<td>smsp__pipe_tensor_cycles_active.sum</td>
+</tr>
+<tr>
+<td>tensor_pipe_active_cycles_s2</td>
+<td>smsp__pipe_tensor_cycles_active.sum</td>
+</tr>
+<tr>
+<td>tensor_pipe_active_cycles_s3</td>
+<td>smsp__pipe_tensor_cycles_active.sum</td>
+</tr>
+<tr>
+<td>thread_inst_executed</td>
+<td>smsp__thread_inst_executed.sum</td>
+</tr>
+<tr>
+<td>warps_launched</td>
+<td>smsp__warps_launched.sum</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#abstract">Nsight Compute</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ReleaseNotes/index.html#gpu-support">3.2. GPU Support</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/CUDA/Nsight/Nsight%20Compute%E5%AE%98%E6%96%B9%E7%BF%BB%E8%AF%91/" title="Nsight Compute官方翻译">http://example.com/CUDA/Nsight/Nsight Compute官方翻译/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/8%20GPU%E5%8A%A0%E9%80%9F%E5%BA%93%E5%92%8COpenACC/" rel="prev" title="8 GPU加速库和OpenACC">
+                  <i class="fa fa-chevron-left"></i> 8 GPU加速库和OpenACC
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/7%20%E8%B0%83%E6%95%B4%E6%8C%87%E4%BB%A4%E7%BA%A7%E5%8E%9F%E8%AF%AD/" rel="next" title="7 调整指令级原语">
+                  7 调整指令级原语 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"b1477aed76a6c7fd7cab669573772c04"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

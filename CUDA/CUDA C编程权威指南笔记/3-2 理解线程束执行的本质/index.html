@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="3.2 理解线程束执行的本质启动内核时，从软件的角度你看到了什么？对于你来说，在内核中似乎所有的线程都是并行地运行的。在逻辑上这是正确的，但从硬件的角度来看，不是所有线程在物理上都可以同时并行地执行。本章已经提到了把32个线程划分到一个执行单元中的概念：线程束。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3-2 理解线程束执行的本质">
+<meta property="og:url" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="3.2 理解线程束执行的本质启动内核时，从软件的角度你看到了什么？对于你来说，在内核中似乎所有的线程都是并行地运行的。在逻辑上这是正确的，但从硬件的角度来看，不是所有线程在物理上都可以同时并行地执行。本章已经提到了把32个线程划分到一个执行单元中的概念：线程束。">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/image-20230414111600479.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/image-20230414112353913.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/image-20230414112814354.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/3_12.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/3_13.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/3_14.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/image-20230414171427078.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/image-20230414171601484-16814637625937.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/image-20230414171746000.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/image-20230414194203770.png">
+<meta property="article:published_time" content="2024-12-01T10:13:43.586Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:43.586Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="GPU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/image-20230414111600479.png">
+
+
+<link rel="canonical" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/","path":"CUDA/CUDA C编程权威指南笔记/3-2 理解线程束执行的本质/","title":"3-2 理解线程束执行的本质"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>3-2 理解线程束执行的本质 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#3-2-%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8"><span class="nav-text">3.2 理解线程束执行的本质</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-1-%E7%BA%BF%E7%A8%8B%E6%9D%9F%E5%92%8C%E7%BA%BF%E7%A8%8B%E5%9D%97"><span class="nav-text">3.2.1 线程束和线程块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-2-%E7%BA%BF%E7%A8%8B%E6%9D%9F%E5%88%86%E5%8C%96"><span class="nav-text">3.2.2 线程束分化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-3-%E8%B5%84%E6%BA%90%E5%88%86%E9%85%8D"><span class="nav-text">3.2.3 资源分配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-4-%E5%BB%B6%E8%BF%9F%E9%9A%90%E8%97%8F"><span class="nav-text">3.2.4 延迟隐藏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-5-%E5%8D%A0%E7%94%A8%E7%8E%87"><span class="nav-text">3.2.5 占用率</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-6-%E5%90%8C%E6%AD%A5"><span class="nav-text">3.2.6 同步</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-7-%E5%8F%AF%E6%89%A9%E5%B1%95%E6%80%A7"><span class="nav-text">3.2.7 可扩展性</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="3-2 理解线程束执行的本质 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          3-2 理解线程束执行的本质
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="3-2-理解线程束执行的本质"><a href="#3-2-理解线程束执行的本质" class="headerlink" title="3.2 理解线程束执行的本质"></a>3.2 理解线程束执行的本质</h1><p>启动内核时，从软件的角度你看到了什么？对于你来说，在内核中似乎所有的线程都是并行地运行的。在逻辑上这是正确的，<strong>但从硬件的角度来看，不是所有线程在物理上都可以同时并行地执行</strong>。本章已经提到了把32个线程划分到一个执行单元中的概念：线程束。</p>
+<h2 id="3-2-1-线程束和线程块"><a href="#3-2-1-线程束和线程块" class="headerlink" title="3.2.1 线程束和线程块"></a>3.2.1 线程束和线程块</h2><p>线程束是SM中基本的执行单元。当一个线程块的网格被启动后，网格中的<strong>线程块分布在SM中</strong>。一旦线程块被调度到一个SM上，<strong>线程块中的线程会被进一步划分为线程束</strong>。一个线程束由32个连续的线程组成，在一个线程束中，所有的线程按照单指令多线程（SIMT）方式执行；也就是说，所有线程都执行相同的指令，每个线程在私有数据上进行操作。图3-10展示了线程块的逻辑视图和硬件视图之间的关系。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/image-20230414111600479.png" class="" title="image-20230414111600479">
+<p>然而，<strong>从硬件的角度来看，所有的线程都被组织成了一维的，线程块可以被配置为一维、二维或三维的。</strong>在一个块中，每个线程都有一个唯一的ID。</p>
+<p>用x维度作为最内层的维度，y维度作为第二个维度，z作为最外层的维度，则二维或三维线程块的逻辑布局可以转化为一维物理布局。例如，对于一个给定的二维线程块，在一个块中每个线程的独特标识符都可以用内置变量threadIdx和blockDim来计算：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">threadIdx.y * blockDim.x + threadIdx.x</span><br></pre></td></tr></table></figure>
+<p>对于一个三维线程块，计算如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">threadIdx.z*blockDim.x*blockDim.y+threadIdx.y*blockDim.x+threadIdx.x </span><br></pre></td></tr></table></figure>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/image-20230414112353913.png" class="" title="image-20230414112353913">
+<p>向正无穷取正就是例如9/8 = 2</p>
+<p>如果线程块的大小不是线程束大小的偶数倍，那么在最后的线程束里有些线程就不会活跃。图3-11是一个在x轴中有40个线程、在y轴中有2个线程的二维线程块。从应用程序的角度来看，在一个二维网格中共有80个线程。硬件为这个线程块配置了3个线程束，使总共96个硬件线程去支持80个软件线程。注意，最后半个线程束是不活跃的。即使这些线程未被使用，它们仍然消耗SM的资源，如寄存器。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/image-20230414112814354.png" class="" title="image-20230414112814354">
+<ul>
+<li>从逻辑角度来看，线程块是线程的集合，它们可以被组织为一维、二维或三维布局。</li>
+<li>从硬件角度来看，线程块是一维线程束的集合。在线程块中线程被组织成一维布局，每32个连续线程组成一个线程束。</li>
+</ul>
+<h2 id="3-2-2-线程束分化"><a href="#3-2-2-线程束分化" class="headerlink" title="3.2.2 线程束分化"></a>3.2.2 线程束分化</h2><p>控制流是高级编程语言的基本构造中的一种。GPU支持传统的、C风格的、显式的控制流结构，例如，if…then…else、for和while。<br><strong>CPU拥有复杂的硬件以执行分支预测</strong>，也就是在每个条件检查中预测应用程序的控制流会使用哪个分支。如果预测正确，CPU中的分支只需付出很小的性能代价。<strong>如果预测不正确，CPU可能会停止运行很多个周期，因为指令流水线被清空了</strong>。我们不必完全理解为什么CPU擅长处理复杂的控制流。这个解释只是作为对比的背景。<br><strong>GPU是相对简单的设备，它没有复杂的分支预测机制。一个线程束中的所有线程在同一周期中必须执行相同的指令，如果一个线程执行一条指令，那么线程束中的所有线程都必须执行该指令。如果在同一线程束中的线程使用不同的路径通过同一个应用程序，这可能会产生问题</strong>。例如，思考下面的语句：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span>(cond)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/**/</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">/**/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>假如上面的kernel函数有一半的线程束（16个线程）需要执行if语句块中的指令，而另一半需要执行else语句块中的指令。<strong>在同一线程束中的线程执行不同的指令，被称为线程束分化</strong>。我们已经知道，在一个线程束中所有线程在每个周期中必须执行相同的指令。如<strong>果一个线程束中的线程产生分化，线程束将连续执行每一个分支路径，而禁用不执行这一路径的线程</strong>，也就是第一次指令执行if的分支，第二次指令执行else分支，活跃的线程数就少了一半。线程束分化会导致性能明显地下降。在前面的例子中可以看到，<strong>线程束中并行线程的数量减少了一半：只有16个线程同时活跃地执行，而其他16个被禁用了。条件分支越多，并行性削弱越严重。</strong>图示如下，代码为<code>mathKernel1</code></p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/3_12.png" class="" title="img">
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">__global__ <span class="type">void</span> <span class="title function_">mathKernel1</span><span class="params">(<span class="type">float</span> *c)</span></span><br><span class="line">&#123;</span><br><span class="line">	<span class="type">int</span> tid = blockIdx.x* blockDim.x + threadIdx.x;</span><br><span class="line"></span><br><span class="line">	<span class="type">float</span> a = <span class="number">0.0</span>;</span><br><span class="line">	<span class="type">float</span> b = <span class="number">0.0</span>;</span><br><span class="line">	<span class="keyword">if</span> (tid % <span class="number">2</span> == <span class="number">0</span>)</span><br><span class="line">	&#123;</span><br><span class="line">		a = <span class="number">100.0f</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	&#123;</span><br><span class="line">		b = <span class="number">200.0f</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	c[tid] = a + b;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>如果使用线程束方法（而不是线程方法）来交叉存取数据，可以避免线程束分化，并且设备的利用率可达到100%。条件（tid/warpSize）%2==0使分支粒度是线程束大小的倍数；偶数编号的线程执行if子句，奇数编号的线程执行else子句</strong>。mathKernel2函数与mathKernel1的输出数据排列不一样，但是效率高。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">__global__ <span class="type">void</span> <span class="title function_">mathKernel2</span><span class="params">(<span class="type">float</span> *c)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> tid = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">float</span> ia, ib;</span><br><span class="line">    ia = ib = <span class="number">0.0f</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((tid / warpSize) % <span class="number">2</span> == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        ia = <span class="number">100.0f</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        ib = <span class="number">200.0f</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    c[tid] = ia + ib;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>源代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//chapter03/simpleDivergence.cu</span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;../common/common.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cuda_runtime.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * simpleDivergence demonstrates divergent code on the GPU and its impact on</span></span><br><span class="line"><span class="comment"> * performance and CUDA metrics.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">mathKernel1</span><span class="params">(<span class="type">float</span> *c)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> tid = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">float</span> ia, ib;</span><br><span class="line">    ia = ib = <span class="number">0.0f</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (tid % <span class="number">2</span> == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        ia = <span class="number">100.0f</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        ib = <span class="number">200.0f</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    c[tid] = ia + ib;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">mathKernel2</span><span class="params">(<span class="type">float</span> *c)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> tid = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">float</span> ia, ib;</span><br><span class="line">    ia = ib = <span class="number">0.0f</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((tid / warpSize) % <span class="number">2</span> == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        ia = <span class="number">100.0f</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        ib = <span class="number">200.0f</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    c[tid] = ia + ib;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">mathKernel3</span><span class="params">(<span class="type">float</span> *c)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> tid = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">float</span> ia, ib;</span><br><span class="line">    ia = ib = <span class="number">0.0f</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">bool</span> ipred = (tid % <span class="number">2</span> == <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ipred)</span><br><span class="line">    &#123;</span><br><span class="line">        ia = <span class="number">100.0f</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!ipred)</span><br><span class="line">    &#123;</span><br><span class="line">        ib = <span class="number">200.0f</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    c[tid] = ia + ib;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">mathKernel4</span><span class="params">(<span class="type">float</span> *c)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> tid = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">float</span> ia, ib;</span><br><span class="line">    ia = ib = <span class="number">0.0f</span>;</span><br><span class="line"></span><br><span class="line">    <span class="type">int</span> itid = tid &gt;&gt; <span class="number">5</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (itid &amp; <span class="number">0x01</span> == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        ia = <span class="number">100.0f</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        ib = <span class="number">200.0f</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    c[tid] = ia + ib;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">warmingup</span><span class="params">(<span class="type">float</span> *c)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> tid = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">float</span> ia, ib;</span><br><span class="line">    ia = ib = <span class="number">0.0f</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> ((tid / warpSize) % <span class="number">2</span> == <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        ia = <span class="number">100.0f</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        ib = <span class="number">200.0f</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    c[tid] = ia + ib;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// set up device</span></span><br><span class="line">    <span class="type">int</span> dev = <span class="number">0</span>;</span><br><span class="line">    cudaDeviceProp deviceProp;</span><br><span class="line">    CHECK(cudaGetDeviceProperties(&amp;deviceProp, dev));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%s using Device %d: %s\n&quot;</span>, argv[<span class="number">0</span>], dev, deviceProp.name);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// set up data size</span></span><br><span class="line">    <span class="type">int</span> size = <span class="number">64</span>;</span><br><span class="line">    <span class="type">int</span> blocksize = <span class="number">64</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(argc &gt; <span class="number">1</span>) blocksize = atoi(argv[<span class="number">1</span>]);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(argc &gt; <span class="number">2</span>) size      = atoi(argv[<span class="number">2</span>]);</span><br><span class="line"></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Data size %d &quot;</span>, size);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// set up execution configuration</span></span><br><span class="line">    dim3 <span class="title function_">block</span> <span class="params">(blocksize, <span class="number">1</span>)</span>;</span><br><span class="line">    dim3 <span class="title function_">grid</span>  <span class="params">((size + block.x - <span class="number">1</span>) / block.x, <span class="number">1</span>)</span>;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Execution Configure (block %d grid %d)\n&quot;</span>, block.x, grid.x);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// allocate gpu memory</span></span><br><span class="line">    <span class="type">float</span> *d_C;</span><br><span class="line">    <span class="type">size_t</span> nBytes = size * <span class="keyword">sizeof</span>(<span class="type">float</span>);</span><br><span class="line">    CHECK(cudaMalloc((<span class="type">float</span>**)&amp;d_C, nBytes));</span><br><span class="line"></span><br><span class="line">    <span class="comment">// run a warmup kernel to remove overhead</span></span><br><span class="line">    <span class="type">size_t</span> iStart, iElaps;</span><br><span class="line">    CHECK(cudaDeviceSynchronize());</span><br><span class="line">    iStart = seconds();</span><br><span class="line">    warmingup&lt;&lt;&lt;grid, block&gt;&gt;&gt;(d_C);</span><br><span class="line">    CHECK(cudaDeviceSynchronize());</span><br><span class="line">    iElaps = seconds() - iStart;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;warmup      &lt;&lt;&lt; %4d %4d &gt;&gt;&gt; elapsed %d sec \n&quot;</span>, grid.x, block.x,</span><br><span class="line">           iElaps );</span><br><span class="line">    CHECK(cudaGetLastError());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// run kernel 1</span></span><br><span class="line">    iStart = seconds();</span><br><span class="line">    mathKernel1&lt;&lt;&lt;grid, block&gt;&gt;&gt;(d_C);</span><br><span class="line">    CHECK(cudaDeviceSynchronize());</span><br><span class="line">    iElaps = seconds() - iStart;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;mathKernel1 &lt;&lt;&lt; %4d %4d &gt;&gt;&gt; elapsed %d sec \n&quot;</span>, grid.x, block.x,</span><br><span class="line">           iElaps );</span><br><span class="line">    CHECK(cudaGetLastError());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// run kernel 3</span></span><br><span class="line">    iStart = seconds();</span><br><span class="line">    mathKernel2&lt;&lt;&lt;grid, block&gt;&gt;&gt;(d_C);</span><br><span class="line">    CHECK(cudaDeviceSynchronize());</span><br><span class="line">    iElaps = seconds() - iStart;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;mathKernel2 &lt;&lt;&lt; %4d %4d &gt;&gt;&gt; elapsed %d sec \n&quot;</span>, grid.x, block.x,</span><br><span class="line">           iElaps );</span><br><span class="line">    CHECK(cudaGetLastError());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// run kernel 3</span></span><br><span class="line">    iStart = seconds();</span><br><span class="line">    mathKernel3&lt;&lt;&lt;grid, block&gt;&gt;&gt;(d_C);</span><br><span class="line">    CHECK(cudaDeviceSynchronize());</span><br><span class="line">    iElaps = seconds() - iStart;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;mathKernel3 &lt;&lt;&lt; %4d %4d &gt;&gt;&gt; elapsed %d sec \n&quot;</span>, grid.x, block.x,</span><br><span class="line">           iElaps);</span><br><span class="line">    CHECK(cudaGetLastError());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// run kernel 4</span></span><br><span class="line">    iStart = seconds();</span><br><span class="line">    mathKernel4&lt;&lt;&lt;grid, block&gt;&gt;&gt;(d_C);</span><br><span class="line">    CHECK(cudaDeviceSynchronize());</span><br><span class="line">    iElaps = seconds() - iStart;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;mathKernel4 &lt;&lt;&lt; %4d %4d &gt;&gt;&gt; elapsed %d sec \n&quot;</span>, grid.x, block.x,</span><br><span class="line">           iElaps);</span><br><span class="line">    CHECK(cudaGetLastError());</span><br><span class="line"></span><br><span class="line">    <span class="comment">// free gpu memory and reset divece</span></span><br><span class="line">    CHECK(cudaFree(d_C));</span><br><span class="line">    CHECK(cudaDeviceReset());</span><br><span class="line">    <span class="keyword">return</span> EXIT_SUCCESS;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译执行如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">zmurder@zmurder:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南/CUDAC编程权威指南练习code/chapter03$ sudo nvprof -m branch_efficiency ./simpleDivergence</span><br><span class="line">==2809481== NVPROF is profiling process 2809481, command: ./simpleDivergence</span><br><span class="line">./simpleDivergence using Device 0: Quadro P2000</span><br><span class="line">Data size 64 Execution Configure (block 64 grid 1)</span><br><span class="line">warmup      &lt;&lt;&lt;    1   64 &gt;&gt;&gt; elapsed 0 sec </span><br><span class="line">mathKernel1 &lt;&lt;&lt;    1   64 &gt;&gt;&gt; elapsed 0 sec </span><br><span class="line">mathKernel2 &lt;&lt;&lt;    1   64 &gt;&gt;&gt; elapsed 0 sec </span><br><span class="line">mathKernel3 &lt;&lt;&lt;    1   64 &gt;&gt;&gt; elapsed 0 sec </span><br><span class="line">mathKernel4 &lt;&lt;&lt;    1   64 &gt;&gt;&gt; elapsed 0 sec </span><br><span class="line">==2809481== Profiling application: ./simpleDivergence</span><br><span class="line">==2809481== Profiling result:</span><br><span class="line">==2809481== Metric result:</span><br><span class="line">Invocations                               Metric Name                        Metric Description         Min         Max         Avg</span><br><span class="line">Device &quot;Quadro P2000 (0)&quot;</span><br><span class="line">    Kernel: mathKernel1(float*)</span><br><span class="line">          1                         branch_efficiency                         Branch Efficiency     100.00%     100.00%     100.00%</span><br><span class="line">    Kernel: mathKernel2(float*)</span><br><span class="line">          1                         branch_efficiency                         Branch Efficiency     100.00%     100.00%     100.00%</span><br><span class="line">    Kernel: mathKernel3(float*)</span><br><span class="line">          1                         branch_efficiency                         Branch Efficiency     100.00%     100.00%     100.00%</span><br><span class="line">    Kernel: mathKernel4(float*)</span><br><span class="line">          1                         branch_efficiency                         Branch Efficiency     100.00%     100.00%     100.00%</span><br><span class="line">    Kernel: warmingup(float*)</span><br><span class="line">          1                         branch_efficiency                         Branch Efficiency     100.00%     100.00%     100.00%</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>上面看到执行的线程都是100%，原因是编译器优化了。。。它将短的、有条件的代码段的断定指令取代了分支指令。</p>
+<p>使用下面的命令禁止编译器优化并重新编译</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc -g -G -arch sm_61 simpleDivergence.cu -o simpleDivergence2</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">zmurder@zmurder:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南/CUDAC编程权威指南练习code/chapter03$ sudo nvprof -m branch_efficiency ./simpleDivergence2</span><br><span class="line">==2810233== NVPROF is profiling process 2810233, command: ./simpleDivergence2</span><br><span class="line">./simpleDivergence2 using Device 0: Quadro P2000</span><br><span class="line">Data size 64 Execution Configure (block 64 grid 1)</span><br><span class="line">warmup      &lt;&lt;&lt;    1   64 &gt;&gt;&gt; elapsed 0 sec </span><br><span class="line">mathKernel1 &lt;&lt;&lt;    1   64 &gt;&gt;&gt; elapsed 0 sec </span><br><span class="line">mathKernel2 &lt;&lt;&lt;    1   64 &gt;&gt;&gt; elapsed 0 sec </span><br><span class="line">mathKernel3 &lt;&lt;&lt;    1   64 &gt;&gt;&gt; elapsed 0 sec </span><br><span class="line">mathKernel4 &lt;&lt;&lt;    1   64 &gt;&gt;&gt; elapsed 0 sec </span><br><span class="line">==2810233== Profiling application: ./simpleDivergence2</span><br><span class="line">==2810233== Profiling result:</span><br><span class="line">==2810233== Metric result:</span><br><span class="line">Invocations                               Metric Name                        Metric Description         Min         Max         Avg</span><br><span class="line">Device &quot;Quadro P2000 (0)&quot;</span><br><span class="line">    Kernel: mathKernel1(float*)</span><br><span class="line">          1                         branch_efficiency                         Branch Efficiency      83.33%      83.33%      83.33%</span><br><span class="line">    Kernel: mathKernel2(float*)</span><br><span class="line">          1                         branch_efficiency                         Branch Efficiency     100.00%     100.00%     100.00%</span><br><span class="line">    Kernel: mathKernel3(float*)</span><br><span class="line">          1                         branch_efficiency                         Branch Efficiency     100.00%     100.00%     100.00%</span><br><span class="line">    Kernel: mathKernel4(float*)</span><br><span class="line">          1                         branch_efficiency                         Branch Efficiency     100.00%     100.00%     100.00%</span><br><span class="line">    Kernel: warmingup(float*)</span><br><span class="line">          1                         branch_efficiency                         Branch Efficiency     100.00%     100.00%     100.00%</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>上面的结果依然大于50%，说明编译器还是优化了一部分。只有在条件语句的指令数小于某个阈值时，编译器才用断定指令替换分支指令。因此，一段很长的代码路径肯定会导致线程束分化。</p>
+<p>另外，可以用nvprof获得分支和分化分支的事件计数器，如下所示：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nvprof --events branch,divergent_branch ./simpleDivergence2</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">zmurder@zmurder:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南/CUDAC编程权威指南练习code/chapter03$ sudo nvprof --events branch,divergent_branch ./simpleDivergence2</span><br><span class="line">==2810791== NVPROF is profiling process 2810791, command: ./simpleDivergence2</span><br><span class="line">./simpleDivergence2 using Device 0: Quadro P2000</span><br><span class="line">Data size 64 Execution Configure (block 64 grid 1)</span><br><span class="line">warmup      &lt;&lt;&lt;    1   64 &gt;&gt;&gt; elapsed 0 sec </span><br><span class="line">mathKernel1 &lt;&lt;&lt;    1   64 &gt;&gt;&gt; elapsed 0 sec </span><br><span class="line">mathKernel2 &lt;&lt;&lt;    1   64 &gt;&gt;&gt; elapsed 0 sec </span><br><span class="line">mathKernel3 &lt;&lt;&lt;    1   64 &gt;&gt;&gt; elapsed 0 sec </span><br><span class="line">mathKernel4 &lt;&lt;&lt;    1   64 &gt;&gt;&gt; elapsed 0 sec </span><br><span class="line">==2810791== Profiling application: ./simpleDivergence2</span><br><span class="line">==2810791== Profiling result:</span><br><span class="line">==2810791== Event result:</span><br><span class="line">Invocations                                Event Name         Min         Max         Avg       Total</span><br><span class="line">Device &quot;Quadro P2000 (0)&quot;</span><br><span class="line">    Kernel: mathKernel1(float*)</span><br><span class="line">          1                                    branch          12          12          12          12</span><br><span class="line">          1                          divergent_branch           2           2           2           2</span><br><span class="line">    Kernel: mathKernel2(float*)</span><br><span class="line">          1                                    branch          11          11          11          11</span><br><span class="line">          1                          divergent_branch           0           0           0           0</span><br><span class="line">    Kernel: mathKernel3(float*)</span><br><span class="line">          1                                    branch          16          16          16          16</span><br><span class="line">          1                          divergent_branch           0           0           0           0</span><br><span class="line">    Kernel: mathKernel4(float*)</span><br><span class="line">          1                                    branch           6           6           6           6</span><br><span class="line">          1                          divergent_branch           0           0           0           0</span><br><span class="line">    Kernel: warmingup(float*)</span><br><span class="line">          1                                    branch          11          11          11          11</span><br><span class="line">          1                          divergent_branch           0           0           0           0</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h2 id="3-2-3-资源分配"><a href="#3-2-3-资源分配" class="headerlink" title="3.2.3 资源分配"></a>3.2.3 资源分配</h2><p>对于一个给定的内核，同时存在于同一个SM中的线程块和线程束的数量取决于在SM中可用的且内核所需的<strong>寄存器和共享内存</strong>的数量。<br>图3-13显示了若每个线程消耗的寄存器越多，则可以放在一个SM中的线程束就越少。如果可以减少内核消耗寄存器的数量，那么就可以同时处理更多的线程束。如图3-14所示，若一个线程块消耗的共享内存越多，则在一个SM中可以被同时处理的线程块就会变少。如果每个线程块使用的共享内存数量变少，那么可以同时处理更多的线程块。</p>
+<p><strong>关于寄存器资源的分配：</strong></p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/3_13.png" class="" title="img">
+<p><strong>关于共享内存的分配：</strong></p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/3_14.png" class="" title="img">
+<p>当计算资源（如寄存器和共享内存）已分配给线程块时，线程块被称为活跃的块。它所包含的线程束被称为活跃的线程束。活跃的线程束可以进一步被分为以下3种类型：</p>
+<ul>
+<li>选定的线程束</li>
+<li>阻塞的线程束</li>
+<li>符合条件的线程束</li>
+</ul>
+<p>一个SM上的线程束调度器在每个周期都选择活跃的线程束，然后把它们调度到执行单元。活跃执行的线程束被称为选定的线程束。如果一个活跃的线程束准备执行但尚未执行，它是一个符合条件的线程束。如果一个线程束没有做好执行的准备，它是一个阻塞的线程束。如果同时满足以下两个条件则线程束符合执行条件。</p>
+<ul>
+<li>32个CUDA核心可用于执行</li>
+<li>当前指令中所有的参数都已就绪</li>
+</ul>
+<p>在CUDA编程中需要特别关注计算资源分配：计算资源限制了活跃的线程束的数量。因此必须了解由硬件产生的限制和内核用到的资源。<strong>为了最大程度地利用GPU，需要最大化活跃的线程束数量。</strong></p>
+<h2 id="3-2-4-延迟隐藏"><a href="#3-2-4-延迟隐藏" class="headerlink" title="3.2.4 延迟隐藏"></a>3.2.4 延迟隐藏</h2><p><strong>在指令发出和完成之间的时钟周期被定义为指令延迟</strong>。当每个时钟周期中所有的线程调度器都有一个符合条件的线程束时，可以达到计算资源的完全利用。这就可以保证，通过在其他常驻线程束中发布其他指令，可以隐藏每个指令的延迟。</p>
+<p>指令可以被分为两种基本类型：</p>
+<ul>
+<li>算术指令：算术指令延迟是一个算术操作从开始到它产生输出之间的时间。为10～20个周期</li>
+<li>内存指令：内存指令延迟是指发送出的加载或存储操作和数据到达目的地之间的时间。全局内存访问为400～800个周期</li>
+</ul>
+<p>估算隐藏延迟所需要的活跃线程束的数量。利特尔法则（Little’s<br>Law）可以提供一个合理的近似值。它起源于队列理论中的一个定理，它也可以应用于GPU中：<br>所需线程束数量＝延迟×吞吐量<br>图3-16形象地说明了利特尔法则。假设在内核里一条指令的平均延迟是5个周期。为了保持在每个周期内执行6个线程束的吞吐量，则至少需要30个未完成的线程束。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/image-20230414171427078.png" class="" title="image-20230414171427078">
+<p>计算所需并行的一个简单的公式是，用每个SM核心的数量乘以在该SM上一条算术指令的延迟。例如，Fermi有32个单精度浮点流水线线路，一个算术指令的延迟是20个周期，所以，每个SM至少需要有32×20＝640个线程使设备处于忙碌状态。然而，这只是一个下边界。</p>
+<h2 id="3-2-5-占用率"><a href="#3-2-5-占用率" class="headerlink" title="3.2.5 占用率"></a>3.2.5 占用率</h2><p>当一个线程束阻塞时，SM切换执行其他符合条件的线程束。理想情况下，我们想要有足够的线程束占用设备的核心。占用率是每个SM中活跃的线程束占最大线程束数量的比值</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/image-20230414171601484-16814637625937.png" class="" title="image-20230414171601484">
+<p>CUDA工具包包含了一个电子表格(在 CUDA Toolkit 中)<code>CUDA_Occupancy_Calculator.xls</code>，它被称为CUDA占用率计算器，有助于选择网格和块的维数以使一个内核的占用率最大化。<strong>在确定GPU的计算能力后，物理限制部分的数据是自动填充的</strong>。图3-17展示了占用率计算器的一个截图。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/image-20230414171746000.png" class="" title="image-20230414171746000">
+<p><strong>在确定GPU的计算能力后，物理限制部分的数据是自动填充的。接下来，需要输入以下内核资源信息（也就是上面表格橙色的部分）</strong>：</p>
+<ul>
+<li>每个块的线程（执行配置）</li>
+<li>每个线程的寄存器（资源使用情况）</li>
+<li>每个块的共享内存（资源使用情况）</li>
+</ul>
+<p>每个块的线程是我们程序控制的</p>
+<p>后两个可以通过<code>nvcc</code>查到。nvcc添加下面的参数</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">--ptxas-options=-v</span><br><span class="line">或者使用</span><br><span class="line">--resource-usage</span><br></pre></td></tr></table></figure>
+<p>结果如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">zmurder@zmurder:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南/CUDAC编程权威指南练习code/chapter03$ nvcc -g -G --ptxas-options=-v -arch sm_61 simpleDivergence.cu -o simpleDivergence2</span><br><span class="line">ptxas info    : 0 bytes gmem</span><br><span class="line">ptxas info    : Function properties for cudaMalloc</span><br><span class="line">    8 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads</span><br><span class="line">ptxas info    : Compiling entry function &#x27;_Z11mathKernel1Pf&#x27; for &#x27;sm_61&#x27;</span><br><span class="line">ptxas info    : Function properties for _Z11mathKernel1Pf</span><br><span class="line">    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads</span><br><span class="line">ptxas info    : Used 11 registers, 328 bytes cmem[0]</span><br><span class="line">ptxas info    : Compiling entry function &#x27;_Z11mathKernel2Pf&#x27; for &#x27;sm_61&#x27;</span><br><span class="line">ptxas info    : Function properties for _Z11mathKernel2Pf</span><br><span class="line">    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads</span><br><span class="line">ptxas info    : Used 13 registers, 328 bytes cmem[0]</span><br><span class="line">ptxas info    : Compiling entry function &#x27;_Z11mathKernel3Pf&#x27; for &#x27;sm_61&#x27;</span><br><span class="line">ptxas info    : Function properties for _Z11mathKernel3Pf</span><br><span class="line">    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads</span><br><span class="line">ptxas info    : Used 11 registers, 328 bytes cmem[0]</span><br><span class="line">ptxas info    : Compiling entry function &#x27;_Z11mathKernel4Pf&#x27; for &#x27;sm_61&#x27;</span><br><span class="line">ptxas info    : Function properties for _Z11mathKernel4Pf</span><br><span class="line">    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads</span><br><span class="line">ptxas info    : Used 10 registers, 328 bytes cmem[0]</span><br><span class="line">ptxas info    : Compiling entry function &#x27;_Z9warmingupPf&#x27; for &#x27;sm_61&#x27;</span><br><span class="line">ptxas info    : Function properties for _Z9warmingupPf</span><br><span class="line">    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads</span><br><span class="line">ptxas info    : Used 13 registers, 328 bytes cmem[0]</span><br><span class="line">ptxas info    : Function properties for _ZN4dim3C1Ejjj</span><br><span class="line">    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads</span><br><span class="line">ptxas info    : Function properties for _ZN4dim3C2Ejjj</span><br><span class="line">    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">zmurder@zmurder:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南/CUDAC编程权威指南练习code/chapter03$ nvcc --resource-usage simpleDivergence.cu -arch sm_61</span><br><span class="line">ptxas info    : 0 bytes gmem</span><br><span class="line">ptxas info    : Compiling entry function &#x27;_Z9warmingupPf&#x27; for &#x27;sm_61&#x27;</span><br><span class="line">ptxas info    : Function properties for _Z9warmingupPf</span><br><span class="line">    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads</span><br><span class="line">ptxas info    : Used 10 registers, 328 bytes cmem[0], 4 bytes cmem[2]</span><br><span class="line">ptxas info    : Compiling entry function &#x27;_Z11mathKernel4Pf&#x27; for &#x27;sm_61&#x27;</span><br><span class="line">ptxas info    : Function properties for _Z11mathKernel4Pf</span><br><span class="line">    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads</span><br><span class="line">ptxas info    : Used 4 registers, 328 bytes cmem[0]</span><br><span class="line">ptxas info    : Compiling entry function &#x27;_Z11mathKernel3Pf&#x27; for &#x27;sm_61&#x27;</span><br><span class="line">ptxas info    : Function properties for _Z11mathKernel3Pf</span><br><span class="line">    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads</span><br><span class="line">ptxas info    : Used 4 registers, 328 bytes cmem[0], 4 bytes cmem[2]</span><br><span class="line">ptxas info    : Compiling entry function &#x27;_Z11mathKernel2Pf&#x27; for &#x27;sm_61&#x27;</span><br><span class="line">ptxas info    : Function properties for _Z11mathKernel2Pf</span><br><span class="line">    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads</span><br><span class="line">ptxas info    : Used 10 registers, 328 bytes cmem[0], 4 bytes cmem[2]</span><br><span class="line">ptxas info    : Compiling entry function &#x27;_Z11mathKernel1Pf&#x27; for &#x27;sm_61&#x27;</span><br><span class="line">ptxas info    : Function properties for _Z11mathKernel1Pf</span><br><span class="line">    0 bytes stack frame, 0 bytes spill stores, 0 bytes spill loads</span><br><span class="line">ptxas info    : Used 4 registers, 328 bytes cmem[0], 4 bytes cmem[2]</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>上面的分析：</p>
+<ul>
+<li>gmem：全局内存 global memory </li>
+<li>每个kernel的资源如下<ul>
+<li>Stack frame：此函数使用的每线程堆栈使用情况</li>
+<li>spill loads/stores：溢出存储和加载表示在堆栈内存上执行的存储和加载，这些存储和加载用于存储不能分配给物理寄存器的变量。也就是将寄存器交换到local memory而进行的读写操作（注意你的上文多少字节多少字节是per thread的数据。请注意换算）,溢出了会慢，因为local memory速度慢于寄存器。</li>
+<li>常量内存（cmem）、共享内存（smem）和寄存器数（register）。具体的内存区别可以查看<code>4-1 CUDA内存模型概述</code></li>
+</ul>
+</li>
+</ul>
+<p>按照kernel1的数据填写后（红色方框是需要填写的部分，其他都是固定的和生成的，右侧的图标三角形会移动）</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/image-20230414194203770.png" class="" title="image-20230414194203770">
+<p><strong>网格和线程块大小的准则</strong></p>
+<ul>
+<li>保持每个块中线程数量是线程束大小（32）的倍数</li>
+<li>避免块太小：每个块至少要有128或256个线程</li>
+<li>根据内核资源的需求调整块大小</li>
+<li>块的数量要远远多于SM的数量，从而在设备中可以显示有足够的并行</li>
+<li>通过实验得到最佳执行配置和资源使用情况</li>
+</ul>
+<h2 id="3-2-6-同步"><a href="#3-2-6-同步" class="headerlink" title="3.2.6 同步"></a>3.2.6 同步</h2><p>参考官网<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#synchronization-functions">7.6. Synchronization Functions</a></p>
+<p>在CUDA中，同步可以在两个级别执行：</p>
+<ul>
+<li><p>系统级：等待主机和设备完成所有的工作</p>
+<ul>
+<li>函数为<code>cudaError_t cudaDeviceSunchronize(void);</code></li>
+<li><code>cudaDeviceSunchronize</code>函数可以用来阻塞主机应用程序，直到所有的CUDA操作（复制、核函数等）</li>
+</ul>
+</li>
+<li><p>块级：在设备执行过程中等待一个线程块中所有线程到达同一点</p>
+<ul>
+<li>函数为<code>__device__ void __syncthread(void);</code></li>
+<li>当<code>__syncthreads</code>被调用时，在同一个线程块中每个线程都必须等待直至该线程块中所<br>有其他线程都已经达到这个同步点</li>
+</ul>
+</li>
+<li><p>warp级：将导致执行线程等待，直到 mask 中指定的所有 warp 通道都执行了 __syncwarp() （具有相同的 mask），然后才恢复执行。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> __syncwarp(<span class="type">unsigned</span> mask=<span class="number">0xffffffff</span>);</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="3-2-7-可扩展性"><a href="#3-2-7-可扩展性" class="headerlink" title="3.2.7 可扩展性"></a>3.2.7 可扩展性</h2><p>对于任何并行应用程序而言，可扩展性是一个<strong>理想的特性</strong>。可扩展性意味着为并行应用程序提供了额外的硬件资源，相对于增加的资源，并行应用程序会产生加速。例如，若一个CUDA程序在两个SM中是可扩展的，则与在一个SM中运行相比，在两个SM中运行会使运行时间减半。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/" title="3-2 理解线程束执行的本质">http://example.com/CUDA/CUDA C编程权威指南笔记/3-2 理解线程束执行的本质/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/2-3%20%E7%BB%84%E7%BB%87%E5%B9%B6%E8%A1%8C%E7%BA%BF%E7%A8%8B/" rel="prev" title="2-3 组织并行线程">
+                  <i class="fa fa-chevron-left"></i> 2-3 组织并行线程
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/" rel="next" title="3-1 CUDA执行模型概述">
+                  3-1 CUDA执行模型概述 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"dc005f915ea823a19c0a717a40428cf4"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

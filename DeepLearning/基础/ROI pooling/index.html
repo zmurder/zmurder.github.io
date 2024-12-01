@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="1 简介文章翻译自：https:&#x2F;&#x2F;deepsense.ai&#x2F;region-of-interest-pooling-explained&#x2F;">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ROI pooling">
+<meta property="og:url" content="http://example.com/DeepLearning/%E5%9F%BA%E7%A1%80/ROI%20pooling/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="1 简介文章翻译自：https:&#x2F;&#x2F;deepsense.ai&#x2F;region-of-interest-pooling-explained&#x2F;">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9F%BA%E7%A1%80/ROI%20pooling/diagram_ROI-1024x576.png.pagespeed.ce.cBXXqZy2P4.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9F%BA%E7%A1%80/ROI%20pooling/xregion_proposal_cat.png.pagespeed.ic.d6Y9kV0VXS.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9F%BA%E7%A1%80/ROI%20pooling/x1.jpg.pagespeed.ic.no_yKja9Ko.webp">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9F%BA%E7%A1%80/ROI%20pooling/x2.jpg.pagespeed.ic.3Lf_DPNXND.jpeg">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9F%BA%E7%A1%80/ROI%20pooling/x3.jpg.pagespeed.ic.PtYdkn0RSB.jpeg">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9F%BA%E7%A1%80/ROI%20pooling/xoutput.jpg.pagespeed.ic.-HqZoebrb2.webp">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9F%BA%E7%A1%80/ROI%20pooling/roi_pooling-1.gif.pagespeed.ce.5V5mycIRNu.gif">
+<meta property="article:published_time" content="2024-12-01T10:13:44.731Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:44.732Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="卷积神经网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/DeepLearning/%E5%9F%BA%E7%A1%80/ROI%20pooling/diagram_ROI-1024x576.png.pagespeed.ce.cBXXqZy2P4.png">
+
+
+<link rel="canonical" href="http://example.com/DeepLearning/%E5%9F%BA%E7%A1%80/ROI%20pooling/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/DeepLearning/%E5%9F%BA%E7%A1%80/ROI%20pooling/","path":"DeepLearning/基础/ROI pooling/","title":"ROI pooling"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>ROI pooling | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="nav-text">1 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E7%BB%8F%E5%85%B8%E6%9E%B6%E6%9E%84"><span class="nav-text">2 经典架构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%9C%80%E8%A6%81ROI-pooling"><span class="nav-text">3 为什么需要ROI pooling</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E4%BB%80%E4%B9%88%E6%98%AFROI-pooling"><span class="nav-text">4 什么是ROI pooling</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-ROI-pooling-%E4%BE%8B%E5%AD%90"><span class="nav-text">5 ROI pooling 例子</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/DeepLearning/%E5%9F%BA%E7%A1%80/ROI%20pooling/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="ROI pooling | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          ROI pooling
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:44" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:44+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/DeepLearning/" itemprop="url" rel="index"><span itemprop="name">DeepLearning</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/DeepLearning/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h1><p>文章翻译自：<a target="_blank" rel="noopener" href="https://deepsense.ai/region-of-interest-pooling-explained/">https://deepsense.ai/region-of-interest-pooling-explained/</a></p>
+<p><strong>感兴趣区域池化（Region of interest pooling）</strong>（也称为<strong>RoI pooling</strong>）是使用卷积神经网络在目标检测任务中广泛使用的操作。例如，在单个图像中检测多个汽车和行人。其目的是对非均匀尺寸的输入执行最大池化以获得固定尺寸的特征图（例如7×7）。</p>
+<p>我们刚刚发布了 TensorFlow 的 RoI 池化层的开源实现（ <a target="_blank" rel="noopener" href="https://github.com/deepsense-ai/roi-pooling">here</a>）。在这篇文章中，我们将简单介绍一下这个有趣的神经网络层。但首先，让我们从一些背景开始。</p>
+<p>计算机视觉的两个主要任务是对象分类和对象检测。在第一种情况下，系统应该正确标记图像中的主要对象。在第二种情况下，它应该为图像中的所有对象提供正确的标签和位置。当然，计算机视觉还有其他有趣的领域，例如图像分割，但今天我们将重点关注检测。在此任务中，我们通常应该在先前指定的一组类别中的任何对象周围绘制边界框<strong>bounding boxes</strong>，并为每个对象分配一个类。例如，假设我们正在开发一种自动驾驶汽车算法，我们想使用摄像头来检测其他汽车、行人、骑自行车的人等——我们的数据集可能如<a target="_blank" rel="noopener" href="https://www.youtube.com/watch?v=KXpZ6B1YB_k">this.</a>所示。</p>
+<p>在这种情况下，我们必须在每个重要对象周围画一个框并为其分配一个类。该任务比 MNIST 或 CIFAR  等分类任务更具挑战性。在视频的每一帧上，可能有多个对象，其中一些对象重叠，一些对象不可见或被遮挡。此外，对于这样的算法，性能可能是一个关键问题。特别是对于自动驾驶，我们每秒必须处理数十帧。</p>
+<h1 id="2-经典架构"><a href="#2-经典架构" class="headerlink" title="2 经典架构"></a>2 经典架构</h1><p>我们今天要讨论的目标检测架构分为两个阶段：</p>
+<ul>
+<li><strong>Region proposal</strong> 区域提议：给定输入图像，找到可以放置对象的所有可能位置。此阶段的输出应该是对象可能位置的边界框列表。这些通常称为区域提案或感兴趣区域。有很多方法可以完成此任务，但我们不会在本文中讨论它们。</li>
+<li><strong>Final classification</strong> 最终分类：对于前一阶段的每个区域提案，决定它是属于目标类还是背景类。这里我们可以使用深度卷积网络。</li>
+</ul>
+<img src="/DeepLearning/%E5%9F%BA%E7%A1%80/ROI%20pooling/diagram_ROI-1024x576.png.pagespeed.ce.cBXXqZy2P4.png" class="" title="Object detection pipeline wit region of interest pooling">
+<p>Object detection pipeline with region of interest pooling 具有感兴趣区域池化的目标检测流程</p>
+<h1 id="3-为什么需要ROI-pooling"><a href="#3-为什么需要ROI-pooling" class="headerlink" title="3 为什么需要ROI pooling"></a>3 为什么需要ROI pooling</h1><p>通常在提案阶段(proposal)我们必须生成很多感兴趣的区域(regions of interest)。为什么？如果在第一阶段（区域提议 <strong>region proposal</strong>）期间未检测到对象，则无法在第二阶段对其进行正确分类。这就是为什么区域提案(region proposals)具有高召回率极其重要。这是通过生成大量提案(proposals)（例如每帧几千个）来实现的。其中大多数将在检测算法的第二阶段被归类为背景。</p>
+<p>这种架构存在一些问题：</p>
+<ul>
+<li>生成大量感兴趣区域可能会导致性能问题。这将使实时对象检测难以实现。</li>
+<li>就处理速度而言，它不是最佳的。稍后会详细介绍这一点。</li>
+<li>您无法进行端到端训练，即您无法在一次运行中训练系统的所有组件（这会产生更好的结果）</li>
+</ul>
+<p>这就是感兴趣区域池化(region of interest pooling)发挥作用的地方。</p>
+<h1 id="4-什么是ROI-pooling"><a href="#4-什么是ROI-pooling" class="headerlink" title="4 什么是ROI pooling"></a>4 什么是ROI pooling</h1><p>感兴趣区域池（Region of interest pooling ）是用于对象检测任务的神经网络层。它由 Ross Girshick 于 2015 年 4 月首次提出（文章可以在<a target="_blank" rel="noopener" href="https://deepsense.ai/wp-content/uploads/2017/02/1504.08083.pdf">here</a>找到），它实现了训练和测试的显着加速。它还保持了较高的检测精度。该层有两个输入：</p>
+<ul>
+<li>从具有多个卷积层和最大池化层的深度卷积网络获得的固定大小的特征图。</li>
+<li>表示感兴趣区域列表的 N x 5 矩阵，其中 N 是 RoI 的数量。第一列表示图像索引，其余四列是该区域的左上角和右下角的坐标。</li>
+</ul>
+<img src="/DeepLearning/%E5%9F%BA%E7%A1%80/ROI%20pooling/xregion_proposal_cat.png.pagespeed.ic.d6Y9kV0VXS.png" class="" title="region proposals on a cat image">
+<p>一张来自Pascal VOC数据集的图像，标注有区域提议（粉色矩形）。</p>
+<p>RoI pooling 实际上有什么作用？对于输入列表中的每个感兴趣区域，它会获取与其对应的输入特征图的一部分，并将其缩放到某个预定义的大小（例如，7×7）。缩放是通过以下方式完成的：</p>
+<ul>
+<li>将候选区域划分为大小相等的部分（其数量与输出的维度相同）</li>
+<li>找出每个部分中的最大值</li>
+<li>将这些最大值复制到输出缓冲区</li>
+</ul>
+<p>结果是，从不同大小的矩形列表中，我们可以快速获得具有固定大小的相应特征图列表。请注意，RoI  pooling输出的维度实际上并不取决于输入特征图的大小，也不取决于区域提案的大小。它仅取决于我们将提案划分为的部分数量。  RoI pooling有什么好处？其中之一是处理速度。如果帧上有多个对象提案（通常会有很多），我们仍然可以对所有对象使用相同的输入特征图。由于在处理的早期阶段计算卷积非常昂贵，因此这种方法可以节省我们大量时间。</p>
+<h1 id="5-ROI-pooling-例子"><a href="#5-ROI-pooling-例子" class="headerlink" title="5 ROI pooling 例子"></a>5 ROI pooling 例子</h1><p>让我们考虑一个小例子来看看它是如何工作的。我们将在单个 8×8 特征图、一个region of interest和 2×2 输出大小上执行region of interest pooling 。我们的输入特征图如下所示：</p>
+<img src="/DeepLearning/%E5%9F%BA%E7%A1%80/ROI%20pooling/x1.jpg.pagespeed.ic.no_yKja9Ko.webp" class="" title="Region of interest pooling example (input feature map)">
+<p>假设我们还有一个区域建议（region proposal）（左上、右下坐标）：(0, 3), (7, 8)。在图片中它看起来像这样：</p>
+<img src="/DeepLearning/%E5%9F%BA%E7%A1%80/ROI%20pooling/x2.jpg.pagespeed.ic.3Lf_DPNXND.jpeg" class="" title="Region of interest pooling example (region proposal)">
+<p>通常情况下，每个特征图都会有多个特征图和多个提案，但我们在示例中只是一个简单的例子。</p>
+<p>通过将其分为 (2×2) 个部分（因为输出大小为 2×2），我们得到：</p>
+<img src="/DeepLearning/%E5%9F%BA%E7%A1%80/ROI%20pooling/x3.jpg.pagespeed.ic.PtYdkn0RSB.jpeg" class="" title="Region of interest pooling example (pooling sections)">
+<p>请注意，感兴趣区域的大小不必完全被池化部分的数量整除（在本例中，我们的 RoI 为 7×5，并且我们有 2×2 池化部分）。</p>
+<p>每个部分的最大值为：</p>
+<img src="/DeepLearning/%E5%9F%BA%E7%A1%80/ROI%20pooling/xoutput.jpg.pagespeed.ic.-HqZoebrb2.webp" class="" title="Region of interest pooling example (output)">
+<p>这就是兴趣区域汇集层的输出结果。下面是我们以动画形式展示的示例：</p>
+<img src="/DeepLearning/%E5%9F%BA%E7%A1%80/ROI%20pooling/roi_pooling-1.gif.pagespeed.ce.5V5mycIRNu.gif" class="" title="Region of interest pooling (animation)">
+<p>关于 RoI Pooling，最重要的事项是什么？</p>
+<ul>
+<li>这是用于目标检测任务的</li>
+<li>它允许我们重用卷积网络的特征图</li>
+<li>它可以显著加速训练和测试时间</li>
+<li>它允许以端到端的方式训练目标检测系统</li>
+</ul>
+<p>如果您需要 TensorFlow 中 RoI 池化的开源实现，您可以在<a target="_blank" rel="noopener" href="https://github.com/deepsense-io/roi-pooling">here</a>.找到我们的版本。</p>
+<h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><p><a target="_blank" rel="noopener" href="https://deepsense.ai/region-of-interest-pooling-explained/">https://deepsense.ai/region-of-interest-pooling-explained/</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/DeepLearning/%E5%9F%BA%E7%A1%80/ROI%20pooling/" title="ROI pooling">http://example.com/DeepLearning/基础/ROI pooling/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag"><i class="fa fa-tag"></i> 卷积神经网络</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/DeepLearning/%E5%9F%BA%E7%A1%80/NCHW%E5%92%8CNHWC/" rel="prev" title="NCHW和NHWC">
+                  <i class="fa fa-chevron-left"></i> NCHW和NHWC
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/DeepLearning/%E5%9F%BA%E7%A1%80/%E5%85%B3%E4%BA%8Eonnx%E7%9A%84resize%E5%B1%82/" rel="next" title="关于onnx的resize层">
+                  关于onnx的resize层 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"358f9359f1ba00bce43b223197f8599d"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

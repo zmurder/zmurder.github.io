@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="4.4 核函数可达到的带宽在上一节中，你已经尝试使用两种方法来改进核函数的性能：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="4-4 核函数可达到的带宽">
+<meta property="og:url" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="4.4 核函数可达到的带宽在上一节中，你已经尝试使用两种方法来改进核函数的性能：">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/image-20230427141847854.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/4-4-1.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/image-20230427142552212.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/image-20230427142735648.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/image-20230427142745074.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/202202022337070.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/image-20230427162200935.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/4-4-10.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/4-4-11.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/4-4-12.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/4-4-13.png">
+<meta property="article:published_time" content="2024-12-01T10:13:43.702Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:43.702Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="GPU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/image-20230427141847854.png">
+
+
+<link rel="canonical" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/","path":"CUDA/CUDA C编程权威指南笔记/4-4 核函数可达到的带宽/","title":"4-4 核函数可达到的带宽"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>4-4 核函数可达到的带宽 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#4-4-%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD"><span class="nav-text">4.4 核函数可达到的带宽</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-1-%E5%86%85%E5%AD%98%E5%B8%A6%E5%AE%BD"><span class="nav-text">4.4.1 内存带宽</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-2-%E7%9F%A9%E9%98%B5%E8%BD%AC%E7%BD%AE%E9%97%AE%E9%A2%98"><span class="nav-text">4.4.2 矩阵转置问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-2-1-%E4%B8%BA%E8%BD%AC%E7%BD%AE%E6%A0%B8%E5%87%BD%E6%95%B0%E8%AE%BE%E7%BD%AE%E6%80%A7%E8%83%BD%E7%9A%84%E4%B8%8A%E9%99%90%E5%92%8C%E4%B8%8B%E9%99%90"><span class="nav-text">4.4.2.1 为转置核函数设置性能的上限和下限</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-2-2-%E6%9C%B4%E7%B4%A0%E8%BD%AC%E7%BD%AE%EF%BC%9A%E8%AF%BB%E5%8F%96%E8%A1%8C%E4%B8%8E%E8%AF%BB%E5%8F%96%E5%88%97"><span class="nav-text">4.4.2.2 朴素转置：读取行与读取列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-2-3-%E5%B1%95%E5%BC%80%E8%BD%AC%E7%BD%AE%EF%BC%9A%E8%AF%BB%E5%8F%96%E8%A1%8C%E4%B8%8E%E8%AF%BB%E5%8F%96%E5%88%97"><span class="nav-text">4.4.2.3 展开转置：读取行与读取列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-2-4-%E5%AF%B9%E8%A7%92%E8%BD%AC%E7%BD%AE%EF%BC%9A%E8%AF%BB%E5%8F%96%E8%A1%8C%E4%B8%8E%E8%AF%BB%E5%8F%96%E5%88%97"><span class="nav-text">4.4.2.4 对角转置：读取行与读取列</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-4-2-5-%E7%98%A6%E5%9D%97%E6%9D%A5%E5%A2%9E%E5%8A%A0%E5%B9%B6%E8%A1%8C%E6%80%A7"><span class="nav-text">4.4.2.5 瘦块来增加并行性</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link"><span class="nav-text"> </span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="4-4 核函数可达到的带宽 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          4-4 核函数可达到的带宽
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="4-4-核函数可达到的带宽"><a href="#4-4-核函数可达到的带宽" class="headerlink" title="4.4 核函数可达到的带宽"></a>4.4 核函数可达到的带宽</h1><p>在上一节中，你已经尝试使用两种方法来改进核函数的性能：</p>
+<ul>
+<li>通过最大化并行执行线程束的数量来隐藏内存延迟，通过维持更多正在执行的内存访问来达到更好的总线利用率</li>
+<li>通过适当的对齐和合并内存访问来最大化内存带宽效率</li>
+</ul>
+<p>然而，往往当前问题的本质就是有一个不好的访问模式。对于这样一个核函数来说，什么样的性能才是足够好的呢？</p>
+<h2 id="4-4-1-内存带宽"><a href="#4-4-1-内存带宽" class="headerlink" title="4.4.1 内存带宽"></a>4.4.1 内存带宽</h2><p>理论带宽是当前硬件可以实现的绝对最大带宽，对禁用ECC的Fermi M2090来说，理论上设备内存带宽的峰值为177.6 GB/s。有效带宽是核函数实际达到的带宽，它是测量带宽，可以用下列公式计算：</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/image-20230427141847854.png" class="" title="image-20230427141847854">
+<h2 id="4-4-2-矩阵转置问题"><a href="#4-4-2-矩阵转置问题" class="headerlink" title="4.4.2 矩阵转置问题"></a>4.4.2 矩阵转置问题</h2><p>矩阵的转置意味着每一列与相应的一行进行互换。图4-23所示为一个简单的矩阵和它的转置。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/4-4-1.png" class="" title="4-4-1">
+<p>CPU实现代码如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">transposeHost</span><span class="params">(<span class="type">float</span> *out, <span class="type">float</span> *in, <span class="type">const</span> <span class="type">int</span> nx, <span class="type">const</span> <span class="type">int</span> ny)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">for</span>( <span class="type">int</span> iy = <span class="number">0</span>; iy &lt; ny; ++iy)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>( <span class="type">int</span> ix = <span class="number">0</span>; ix &lt; nx; ++ix)</span><br><span class="line">        &#123;</span><br><span class="line">            out[ix * ny + iy] = in[iy * nx + ix];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在这个函数中有两个用一维数组存储的矩阵：输入矩阵in和转置矩阵out。矩阵维度被定义为nx行ny列。可以用一个一维数组执行转置操作，结果如图4-24所示。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/image-20230427142552212.png" class="" title="image-20230427142552212">
+<p>观察输入和输出布局，你会注意到：</p>
+<ul>
+<li>读：通过原矩阵的行进行访问，结果为合并访问</li>
+<li>写：通过转置矩阵的列进行访问，结果为交叉访问</li>
+</ul>
+<p>交叉访问是使GPU性能变得最差的内存访问模式。但是，在矩阵转置操作中这是不可避免的。<strong>本节的剩余部分将侧重于使用两种转置核函数来提高带宽的利用率：一种是按行读取按列存储，另一种则是按列读取按行存储。</strong></p>
+<p>图4-25所示为第一种方法，图4-26所示为第二种方法。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/image-20230427142735648.png" class="" title="image-20230427142735648">
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/image-20230427142745074.png" class="" title="image-20230427142745074">
+<ul>
+<li>按行读取按列存储：感觉应该是更快的，因为读有内存的合并访问。</li>
+<li>按列读取按行存储：</li>
+</ul>
+<p>但是书中描述如果禁用一级缓存加载，那么这两种实现的性能在理论上是相同的。但是，如果启用一级缓存，那么第二种实现的性能表现会更好。按列读取操作是不合并的（因此带宽将会浪费在未被请求的字节上），将这些额外的字节存入一级缓存意味着下一个读操作可能会在缓存上执行而不在全局内存上执行（<strong>这一句不理解既然按列读时可能在一级缓存中，那么按行读也会在一级缓存啊，为什么？不理解</strong>）。因为写操作不在一级缓存中缓存，所以对按列执行写操作的例子而言，任何缓存都没有意义。</p>
+<p>上面的描述牵涉到了读和写的操作和缓存，这里把4.1和4.3对应的内容搬过来回顾分析一下</p>
+<p>在GPU上有4种缓存：</p>
+<ul>
+<li>一级缓存</li>
+<li>二级缓存</li>
+<li>只读常量缓存</li>
+<li>只读纹理缓存</li>
+</ul>
+<p><strong>在CPU上，内存的加载和存储都可以被缓存。但是，在GPU上只有内存加载操作可以被缓存，内存存储操作不能被缓存</strong>。</p>
+<p>L1和L2缓存的位置如下图</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/202202022337070.png" class="" title="img">
+<p>上图 图灵 TU102 全 GPU 带 72 个 SM 单元，96  KB 的 L1 /共享内存。</p>
+<p>内存<strong>读</strong>时否使用一级缓存决定了读取粒度是128还是32字节（使用一级缓存时128字节的颗粒度）</p>
+<p>内存<strong>写</strong>只经过二级缓存，<strong>存储操作在32个字节的粒度上执行</strong></p>
+<h3 id="4-4-2-1-为转置核函数设置性能的上限和下限"><a href="#4-4-2-1-为转置核函数设置性能的上限和下限" class="headerlink" title="4.4.2.1 为转置核函数设置性能的上限和下限"></a>4.4.2.1 为转置核函数设置性能的上限和下限</h3><p>在转置核函数测试之前，首先要知道我们设备性能的上限和下限用来参照。下面就是一个粗略的计算。</p>
+<ul>
+<li>行读取，行存储来复制矩阵(上限)</li>
+<li>列读取，列存储来复制矩阵(下限)</li>
+</ul>
+<p>对应的两个核函数如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// case 0 copy kernel: access data in rows</span></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">copyRow</span><span class="params">(<span class="type">float</span> *out, <span class="type">float</span> *in, <span class="type">const</span> <span class="type">int</span> nx, <span class="type">const</span> <span class="type">int</span> ny)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> ix = blockDim.x * blockIdx.x + threadIdx.x;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> iy = blockDim.y * blockIdx.y + threadIdx.y;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ix &lt; nx &amp;&amp; iy &lt; ny)</span><br><span class="line">    &#123;</span><br><span class="line">        out[iy * nx + ix] = in[iy * nx + ix];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// case 1 copy kernel: access data in columns</span></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">copyCol</span><span class="params">(<span class="type">float</span> *out, <span class="type">float</span> *in, <span class="type">const</span> <span class="type">int</span> nx, <span class="type">const</span> <span class="type">int</span> ny)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> ix = blockDim.x * blockIdx.x + threadIdx.x;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> iy = blockDim.y * blockIdx.y + threadIdx.y;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ix &lt; nx &amp;&amp; iy &lt; ny)</span><br><span class="line">    &#123;</span><br><span class="line">        out[ix * ny + iy] = in[ix * ny + iy];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nvcc -O3 -arch=sm_61 -Xptxas -dlcm=ca -I ../include/ transpose.cu -o transpose</span><br></pre></td></tr></table></figure>
+<p>测试结果如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">zmurder@zmurder:~/chapter04$ ./transpose 0</span><br><span class="line">./transpose starting transpose at device 0: Quadro P2000  with matrix nx 2048 ny 2048 with kernel 0</span><br><span class="line">warmup         elapsed 0.000402 sec</span><br><span class="line">CopyRow        elapsed 0.000309 sec &lt;&lt;&lt; grid (128,128) block (16,16)&gt;&gt;&gt; effective bandwidth 108.593742 GB</span><br><span class="line">zmurder@zmurder:~/chapter04$ ./transpose 1</span><br><span class="line">./transpose starting transpose at device 0: Quadro P2000  with matrix nx 2048 ny 2048 with kernel 1</span><br><span class="line">warmup         elapsed 0.000378 sec</span><br><span class="line">CopyCol        elapsed 0.000923 sec &lt;&lt;&lt; grid (128,128) block (16,16)&gt;&gt;&gt; effective bandwidth 36.356880 GB</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="4-4-2-2-朴素转置：读取行与读取列"><a href="#4-4-2-2-朴素转置：读取行与读取列" class="headerlink" title="4.4.2.2 朴素转置：读取行与读取列"></a>4.4.2.2 朴素转置：读取行与读取列</h3><p>按行加载按列存储：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// case 2 transpose kernel: read in rows and write in columns</span></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">transposeNaiveRow</span><span class="params">(<span class="type">float</span> *out, <span class="type">float</span> *in, <span class="type">const</span> <span class="type">int</span> nx,</span></span><br><span class="line"><span class="params">                                  <span class="type">const</span> <span class="type">int</span> ny)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> ix = blockDim.x * blockIdx.x + threadIdx.x;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> iy = blockDim.y * blockIdx.y + threadIdx.y;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ix &lt; nx &amp;&amp; iy &lt; ny)</span><br><span class="line">    &#123;</span><br><span class="line">        out[ix * ny + iy] = in[iy * nx + ix];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>按列加载按行存储：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// case 3 transpose kernel: read in columns and write in rows</span></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">transposeNaiveCol</span><span class="params">(<span class="type">float</span> *out, <span class="type">float</span> *in, <span class="type">const</span> <span class="type">int</span> nx,</span></span><br><span class="line"><span class="params">                                  <span class="type">const</span> <span class="type">int</span> ny)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> ix = blockDim.x * blockIdx.x + threadIdx.x;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> iy = blockDim.y * blockIdx.y + threadIdx.y;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ix &lt; nx &amp;&amp; iy &lt; ny)</span><br><span class="line">    &#123;</span><br><span class="line">        out[iy * nx + ix] = in[ix * ny + iy];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试运行如下：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">zmurder@zmurder:~/chapter04$ ./transpose 2</span><br><span class="line">./transpose starting transpose at device 0: Quadro P2000  with matrix nx 2048 ny 2048 with kernel 2</span><br><span class="line">warmup         elapsed 0.000391 sec</span><br><span class="line">NaiveRow       elapsed 0.001149 sec &lt;&lt;&lt; grid (128,128) block (16,16)&gt;&gt;&gt; effective bandwidth 29.204708 GB</span><br><span class="line">zmurder@zmurder:~/chapter04$ ./transpose 3</span><br><span class="line">./transpose starting transpose at device 0: Quadro P2000  with matrix nx 2048 ny 2048 with kernel 3</span><br><span class="line">warmup         elapsed 0.000392 sec</span><br><span class="line">NaiveCol       elapsed 0.000336 sec &lt;&lt;&lt; grid (128,128) block (16,16)&gt;&gt;&gt; effective bandwidth 99.813820 GB</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>结果还的确是列读取更快，下面是书中的解释，没看明白（大概意思还是在一级缓存中，下一次用到了）。。</p>
+<p>缓存交叉读取能够获得最高的加载吞吐量。在缓存读取的情况下，每个内存请求由一个128字节的缓存行来完成。按列读取数据，使得线程束里的每个内存请求都会重复执行32次（因为交叉读取2048个数据元素），一旦数据预先存储到了一级缓存中，那么许多当前全局内存读取就会有良好的隐藏延迟并取得较高的一级缓存命中率。</p>
+<p>使用nvprof查看结果如下，还真是一级缓存起作用了。但是是在不明白为什么。。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/image-20230427162200935.png" class="" title="image-20230427162200935">
+<h3 id="4-4-2-3-展开转置：读取行与读取列"><a href="#4-4-2-3-展开转置：读取行与读取列" class="headerlink" title="4.4.2.3 展开转置：读取行与读取列"></a>4.4.2.3 展开转置：读取行与读取列</h3><p>利用展开技术来提高转置内存带宽的利用率</p>
+<p>展开因子为4的基于行的实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// case 4 transpose kernel: read in rows and write in columns + unroll 4 blocks</span></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">transposeUnroll4Row</span><span class="params">(<span class="type">float</span> *out, <span class="type">float</span> *in, <span class="type">const</span> <span class="type">int</span> nx,</span></span><br><span class="line"><span class="params">                                    <span class="type">const</span> <span class="type">int</span> ny)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> ix = blockDim.x * blockIdx.x * <span class="number">4</span> + threadIdx.x;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> iy = blockDim.y * blockIdx.y + threadIdx.y;</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> ti = iy * nx + ix; <span class="comment">// access in rows</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> to = ix * ny + iy; <span class="comment">// access in columns</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ix + <span class="number">3</span> * blockDim.x &lt; nx &amp;&amp; iy &lt; ny)</span><br><span class="line">    &#123;</span><br><span class="line">        out[to]                   = in[ti];</span><br><span class="line">        out[to + ny * blockDim.x]   = in[ti + blockDim.x];</span><br><span class="line">        out[to + ny * <span class="number">2</span> * blockDim.x] = in[ti + <span class="number">2</span> * blockDim.x];</span><br><span class="line">        out[to + ny * <span class="number">3</span> * blockDim.x] = in[ti + <span class="number">3</span> * blockDim.x];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>展开因子为4的基于列的实现：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// case 5 transpose kernel: read in columns and write in rows + unroll 4 blocks</span></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">transposeUnroll4Col</span><span class="params">(<span class="type">float</span> *out, <span class="type">float</span> *in, <span class="type">const</span> <span class="type">int</span> nx,</span></span><br><span class="line"><span class="params">                                    <span class="type">const</span> <span class="type">int</span> ny)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> ix = blockDim.x * blockIdx.x * <span class="number">4</span> + threadIdx.x;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> iy = blockDim.y * blockIdx.y + threadIdx.y;</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> ti = iy * nx + ix; <span class="comment">// access in rows</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> to = ix * ny + iy; <span class="comment">// access in columns</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (ix + <span class="number">3</span> * blockDim.x &lt; nx &amp;&amp; iy &lt; ny)</span><br><span class="line">    &#123;</span><br><span class="line">        out[ti]                = in[to];</span><br><span class="line">        out[ti +   blockDim.x] = in[to +   blockDim.x * ny];</span><br><span class="line">        out[ti + <span class="number">2</span> * blockDim.x] = in[to + <span class="number">2</span> * blockDim.x * ny];</span><br><span class="line">        out[ti + <span class="number">3</span> * blockDim.x] = in[to + <span class="number">3</span> * blockDim.x * ny];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>测试快了一点点。</p>
+<h3 id="4-4-2-4-对角转置：读取行与读取列"><a href="#4-4-2-4-对角转置：读取行与读取列" class="headerlink" title="4.4.2.4 对角转置：读取行与读取列"></a>4.4.2.4 对角转置：读取行与读取列</h3><p>下面直接应用了博客的文章，看的有点晕，后面打算使用<code>Nsight Compute</code>来分析，就不细分析了。直到有对应的特性就行了</p>
+<p>接下来我们使用一点新技巧，这个技巧的来源是DRAM的特性导致的，还记得我们例子中对原料仓库的描述么，那里面有很多小库房，这些小库房同时可能只允许一台车拿东西，在DRAM中内存是分区规划的，如果过多的访问同一个区，会产生排队的现象，也就是要等待，为了避免这种情况，我们最好均匀的访问DRAM的某一段，DRAM的分区是每256个字节算一个分区，所以我们最好错开同一个分区的访问，方法就是调整块的ID，这时候你可能有问题了，我们并不知道块的执行顺序，那应该怎么调呢，这个问题没有啥官方解释，我自己的理解是，硬件执行线程块必然是按照某种规则进行的，按照123执行，可能要比按照随机执行好，因为想要随机执行，还要有生成随机顺序这一步，根本没必要，我们之所以说块的执行顺序不确定，其实是为了避免大家把它理解为确定顺序，而实际上可能有某些原因导致顺序错乱，但是这个绝对不是硬件设计时故意而为之的。<br>我们这个对角转置的目的就是使得读取DRAM位置均匀一点，别都集中在一个分区上，方法是打乱线程块，因为连续的线程块可能访问相近的DRAM地址。<br>我们的方案是使用一个函数 $f(x,y)=(m,n)$ 一个一一对应的函数，将原始笛卡尔坐标打乱。<br>注意，所有这些线程块的顺序什么的都是在编程模型基础上的，跟硬件没什么关系，这些都是逻辑层面的，实际上线程块ID对应的是哪个线程块也是我们自己规定的而已。<br>说实话，这个代码有点难理解，当然你也不用死记硬背这种用法，似乎没有程序员被代码，甚至入门的过程都不用背，我们要理解的就是线程块ID和线程块之间的对应，以及新ID和原始ID的对应，以及新ID对应的块，<br>原始的线程块ID<br><img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/4-4-10.png" class="" title="4-4-10"></p>
+<p>新设计的线程块ID</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/4-4-11.png" class="" title="4-4-11">
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">__global__ void transformNaiveRowDiagonal(float * MatA,float * MatB,int nx,int ny)</span><br><span class="line">&#123;</span><br><span class="line">    int block_y=blockIdx.x;</span><br><span class="line">    int block_x=(blockIdx.x+blockIdx.y)%gridDim.x;</span><br><span class="line">    int ix=threadIdx.x+blockDim.x*block_x;</span><br><span class="line">    int iy=threadIdx.y+blockDim.y*block_y;</span><br><span class="line">    int idx_row=ix+iy*nx;</span><br><span class="line">    int idx_col=ix*ny+iy;</span><br><span class="line">    if (ix&lt;nx &amp;&amp; iy&lt;ny)</span><br><span class="line">    &#123;</span><br><span class="line">      MatB[idx_col]=MatA[idx_row];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">__global__ void transformNaiveColDiagonal(float * MatA,float * MatB,int nx,int ny)</span><br><span class="line">&#123;</span><br><span class="line">    int block_y=blockIdx.x;</span><br><span class="line">    int block_x=(blockIdx.x+blockIdx.y)%gridDim.x;</span><br><span class="line">    int ix=threadIdx.x+blockDim.x*block_x;</span><br><span class="line">    int iy=threadIdx.y+blockDim.y*block_y;</span><br><span class="line">    int idx_row=ix+iy*nx;</span><br><span class="line">    int idx_col=ix*ny+iy;</span><br><span class="line">    if (ix&lt;nx &amp;&amp; iy&lt;ny)</span><br><span class="line">    &#123;</span><br><span class="line">      MatB[idx_row]=MatA[idx_col];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/4-4-12.png" class="" title="4-4-12">
+<p>这个速度还没有展开的版本快，甚至没有naive的交叉读取速度快，但书上说的是效率有提高，可能是CUDA升级后的原因吧，或者其他原因的影响，但是DRAM分区会出现排队这种现象值得注意。</p>
+<h3 id="4-4-2-5-瘦块来增加并行性"><a href="#4-4-2-5-瘦块来增加并行性" class="headerlink" title="4.4.2.5 瘦块来增加并行性"></a>4.4.2.5 瘦块来增加并行性</h3><p>接下来老套路，调整一下线程块的尺寸我们看看有没有啥变化，当然，我们以naive的列读取作为对照。</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:center">block尺寸</th>
+<th style="text-align:center">测试1</th>
+<th style="text-align:center">测试2</th>
+<th style="text-align:center">测试3</th>
+<th style="text-align:center">平均值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:center">(32,32)</td>
+<td style="text-align:center">0.002166</td>
+<td style="text-align:center">0.002122</td>
+<td style="text-align:center">0.002125</td>
+<td style="text-align:center">0.002138</td>
+</tr>
+<tr>
+<td style="text-align:center">(32,16)</td>
+<td style="text-align:center">0.001677</td>
+<td style="text-align:center">0.001696</td>
+<td style="text-align:center">0.001703</td>
+<td style="text-align:center">0.001692</td>
+</tr>
+<tr>
+<td style="text-align:center">(32,8)</td>
+<td style="text-align:center">0.001925</td>
+<td style="text-align:center">0.001929</td>
+<td style="text-align:center">0.001925</td>
+<td style="text-align:center">0.001926</td>
+</tr>
+<tr>
+<td style="text-align:center">(64,16)</td>
+<td style="text-align:center">0.002117</td>
+<td style="text-align:center">0.002146</td>
+<td style="text-align:center">0.002113</td>
+<td style="text-align:center">0.002125</td>
+</tr>
+<tr>
+<td style="text-align:center">(64,8)</td>
+<td style="text-align:center">0.001949</td>
+<td style="text-align:center">0.001945</td>
+<td style="text-align:center">0.001945</td>
+<td style="text-align:center">0.001946</td>
+</tr>
+<tr>
+<td style="text-align:center">(128,8)</td>
+<td style="text-align:center">0.002228</td>
+<td style="text-align:center">0.002230</td>
+<td style="text-align:center">0.002229</td>
+<td style="text-align:center">0.002229</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>这是简单的实验结果，可见（32，16）的这种模式效率最高</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/4-4-13.png" class="" title="4-4-13">
+<h2 id=""><a href="#" class="headerlink" title=" "></a> </h2>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-4%20%E6%A0%B8%E5%87%BD%E6%95%B0%E5%8F%AF%E8%BE%BE%E5%88%B0%E7%9A%84%E5%B8%A6%E5%AE%BD/" title="4-4 核函数可达到的带宽">http://example.com/CUDA/CUDA C编程权威指南笔记/4-4 核函数可达到的带宽/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-2%20%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86/" rel="prev" title="4-2 内存管理">
+                  <i class="fa fa-chevron-left"></i> 4-2 内存管理
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-5%20%E4%BD%BF%E7%94%A8%E5%90%8C%E4%B8%80%E5%86%85%E5%AD%98%E7%9A%84%E7%9F%A9%E9%98%B5%E5%8A%A0%E6%B3%95/" rel="next" title="4-5 使用同一内存的矩阵加法">
+                  4-5 使用同一内存的矩阵加法 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1aced9b299c805839a12c594fec68425"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

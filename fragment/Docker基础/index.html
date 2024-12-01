@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="1 简介Docker 容器是一种轻量级的、可移植的、自包含的软件打包方式，用于将应用程序及其所有依赖关系打包到一个统一的环境中，以确保应用程序在不同环境中的一致性运行">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker基础">
+<meta property="og:url" content="http://example.com/fragment/Docker%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="1 简介Docker 容器是一种轻量级的、可移植的、自包含的软件打包方式，用于将应用程序及其所有依赖关系打包到一个统一的环境中，以确保应用程序在不同环境中的一致性运行">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/fragment/Docker%E5%9F%BA%E7%A1%80/ffaea2db41db4d14b3a8bd01a85f15b0.jpg">
+<meta property="og:image" content="http://example.com/fragment/Docker%E5%9F%BA%E7%A1%80/3c6cc8b891e94a67b58662b7c576fba4.jpg">
+<meta property="og:image" content="http://example.com/fragment/Docker%E5%9F%BA%E7%A1%80/d03e737b1c324a98a5539ec6d69259a3.png">
+<meta property="og:image" content="http://example.com/fragment/Docker%E5%9F%BA%E7%A1%80/a89dccad5de945839da8b7eedf7708fb.png">
+<meta property="og:image" content="http://example.com/fragment/Docker%E5%9F%BA%E7%A1%80/b86f91dc269b4d5aac53930bfe064f03.png">
+<meta property="article:published_time" content="2024-12-01T10:13:45.616Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.616Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/fragment/Docker%E5%9F%BA%E7%A1%80/ffaea2db41db4d14b3a8bd01a85f15b0.jpg">
+
+
+<link rel="canonical" href="http://example.com/fragment/Docker%E5%9F%BA%E7%A1%80/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/fragment/Docker%E5%9F%BA%E7%A1%80/","path":"fragment/Docker基础/","title":"Docker基础"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Docker基础 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="nav-text">1 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-Docker%E5%AE%B9%E5%99%A8%E7%9A%84%E5%90%AF%E5%8A%A8"><span class="nav-text">2 Docker容器的启动</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-Docker%E5%AE%B9%E5%99%A8%E7%9A%84%E5%81%9C%E6%AD%A2"><span class="nav-text">3 Docker容器的停止</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-Docker%E5%AE%B9%E5%99%A8%E7%9A%84%E9%87%8D%E5%90%AF"><span class="nav-text">4 Docker容器的重启</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8Docker%E5%91%BD%E4%BB%A4"><span class="nav-text">5 其他常用Docker命令</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-%E9%AB%98%E7%BA%A7%E8%AF%9D%E9%A2%98"><span class="nav-text">6 高级话题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-%E5%AE%B9%E5%99%A8%E7%BC%96%E6%8E%92%E5%B7%A5%E5%85%B7%EF%BC%9ADocker-Compose%E4%B8%8EKubernetes"><span class="nav-text">7 容器编排工具：Docker Compose与Kubernetes</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-text">附录</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/fragment/Docker%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Docker基础 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Docker基础
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/fragment/" itemprop="url" rel="index"><span itemprop="name">fragment</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h1><p>Docker 容器是一种轻量级的、可移植的、自包含的软件打包方式，用于将应用程序及其所有依赖关系打包到一个统一的环境中，以确保应用程序在不同环境中的一致性运行</p>
+<p>以下是 Docker 容器的一些关键特性和优点：</p>
+<p>轻量级： Docker 容器与虚拟机相比更轻量级，因为它们共享主机的操作系统内核，避免了虚拟机启动时的额外开销。</p>
+<p>可移植性： Docker 容器可以在任何支持 Docker 的环境中运行，无论是开发、测试还是生产环境。</p>
+<p>快速部署： Docker 容器可以快速部署，因为它们可以在几秒钟内启动，而不是几分钟或几小时。</p>
+<p>隔离性： Docker 容器提供了一定程度的隔离性，使得容器之间的应用程序可以相互独立运行，避免了互相干扰。</p>
+<p>版本控制： Docker 容器可以基于镜像构建，这些镜像可以版本控制，方便管理和回滚。</p>
+<p>弹性伸缩： Docker 容器可以根据负载需求进行水平扩展或收缩，以适应应用程序的需求。</p>
+<h1 id="2-Docker容器的启动"><a href="#2-Docker容器的启动" class="headerlink" title="2 Docker容器的启动"></a>2 Docker容器的启动</h1><p>首先，先搜索镜像，这里以<code>nginx</code>为例</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@master1 ~]<span class="comment"># docker search nginx</span></span><br></pre></td></tr></table></figure>
+<p>选择适合自己的版本，比如，拉取最新版</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@master1 ~]<span class="comment"># docker pull nginx:latest</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#pull 拉取，:latest 代表最新版本</span></span><br></pre></td></tr></table></figure>
+<p>查看镜像是否成功拉取</p>
+<pre><code>[root@master1 ~]# docker images | grep nginx
+</code></pre><img src="/fragment/Docker%E5%9F%BA%E7%A1%80/ffaea2db41db4d14b3a8bd01a85f15b0.jpg" class="" title="ffaea2db41db4d14b3a8bd01a85f15b0">
+<p> 使用docker run命令启动容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@master1 ~]<span class="comment"># docker run -itd --name test nginx:latest</span></span><br><span class="line"><span class="comment">#这条命令的含义如下：</span></span><br><span class="line"><span class="comment"># &#x27;docker run&#x27;：运行一个容器</span></span><br><span class="line"><span class="comment"># &#x27;-itd&#x27;：-i 让容器的标准输入保持打开状态，-t 为容器分配一个伪终端，-d 在后台运行容器</span></span><br><span class="line"><span class="comment">#&#x27;--name&#x27;：为容器指定名称，这里指定的名称是test</span></span><br><span class="line"><span class="comment">#&#x27;nginx:latest&#x27;：指定要运行的镜像为nginx，并使用最新版本</span></span><br></pre></td></tr></table></figure>
+<p> 查看容器是否运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@master1 ~]<span class="comment"># docker ps | grep nginx</span></span><br></pre></td></tr></table></figure>
+<img src="/fragment/Docker%E5%9F%BA%E7%A1%80/3c6cc8b891e94a67b58662b7c576fba4.jpg" class="" title="3c6cc8b891e94a67b58662b7c576fba4">
+<p>为容器添加端口映射</p>
+<p>将容器端口与宿主机端口，使外部用户可以通过宿主机访问到容器服务</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@master1 ~]<span class="comment"># docker run --name test-port -itd -p 8081:80 nginx:latest</span></span><br><span class="line"><span class="comment"># &#x27;-p 8081:80&#x27;：将容器的端口 80 映射到主机的端口8081，如果需要映射多个端口，添加多个&#x27;-p port:port&#x27;即可</span></span><br></pre></td></tr></table></figure>
+<p> 此时通过宿主机IP+8081,就可访问到nginx服务</p>
+<img src="/fragment/Docker%E5%9F%BA%E7%A1%80/d03e737b1c324a98a5539ec6d69259a3.png" class="" title="d03e737b1c324a98a5539ec6d69259a3">
+<p> 为容器添加卷挂载</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@master1 ~]<span class="comment"># docker run --name test-v -itd -v /test:/test nginx:latest</span></span><br><span class="line"> <span class="comment"># &#x27;-v&#x27;：将宿主机的/test目录挂载到容器的/test目录上，在宿主机/test创建的文件，在容器中也可以使用</span></span><br></pre></td></tr></table></figure>
+<h1 id="3-Docker容器的停止"><a href="#3-Docker容器的停止" class="headerlink" title="3 Docker容器的停止"></a>3 Docker容器的停止</h1><p>使用docker stop 命令优雅的停止容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@master1 ~]<span class="comment"># docker stop test</span></span><br><span class="line"><span class="comment"># 停止test容器 </span></span><br></pre></td></tr></table></figure>
+<p>使用docker kill 命令强制停止容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@master1 ~]<span class="comment"># docker kill test-v</span></span><br><span class="line"><span class="comment"># 强制停止容器test-v</span></span><br></pre></td></tr></table></figure>
+<p>停止容器时处理运行中的进程</p>
+<p>在 Docker 中停止容器时，Docker 会发送 SIGTERM 信号给容器中的主进程，然后等待一段时间（默认 10 秒），如果容器内的进程没有在规定的时间内停止，Docker 会发送 SIGKILL 信号来强制终止进程。</p>
+<p>通常情况下，不需要手动处理容器内运行的进程，Docker 会负责处理。但如果需要在容器停止时执行一些特定的操作，可以使用 Docker 的停止钩子（stop hooks）。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@master1 ~]<span class="comment"># docker run --name my-container --stop-signal SIGTERM --stop-timeout 30 -d my-image</span></span><br><span class="line"><span class="comment"># 上面的命令创建了一个名为 my-container 的容器，使用了 my-image 镜像。该命令设置了容器停止信号为 SIGTERM，停止超时时间为 30 秒，并以后台模式（-d 参数）运行容器。</span></span><br></pre></td></tr></table></figure>
+<h1 id="4-Docker容器的重启"><a href="#4-Docker容器的重启" class="headerlink" title="4 Docker容器的重启"></a>4 Docker容器的重启</h1><p>使用docker restart命令重启容器 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@master1 ~]<span class="comment"># docker restart test</span></span><br><span class="line"><span class="comment"># 对名为test的容器执行重启操作</span></span><br></pre></td></tr></table></figure>
+<p> 自动重启的策略</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@master1 ~]<span class="comment"># docker run --name test2 -itd --restart always nginx:latest</span></span><br><span class="line"><span class="comment"># &#x27;--restart always&#x27;：容器退出时总是自动重启。适用于需要容器一直运行的服务。</span></span><br><span class="line"><span class="comment"># 其他重启重启策略，如：</span></span><br><span class="line"><span class="comment"># &#x27;--restart no&#x27;：默认策略，Docker 容器不会自动重启。</span></span><br><span class="line"><span class="comment"># &#x27;--restart unless-stopped&#x27;：除非明确停止容器，否则容器会自动重启。即使 Docker 守护进程启动时不启动容器，也会在守护进程重启时自动启动容器。</span></span><br><span class="line"><span class="comment"># &#x27;--restart on-failure[:max-retries]&#x27;：只在容器非正常退出时（退出代码不等于0）才自动重启。可选的 max-retries 参数指定容器重启的最大次数。如果未指定 max-retries，则默认重试次数为无限次。</span></span><br></pre></td></tr></table></figure>
+<h1 id="5-其他常用Docker命令"><a href="#5-其他常用Docker命令" class="headerlink" title="5 其他常用Docker命令"></a>5 其他常用Docker命令</h1><img src="/fragment/Docker%E5%9F%BA%E7%A1%80/a89dccad5de945839da8b7eedf7708fb.png" class="" title="a89dccad5de945839da8b7eedf7708fb">
+<p><strong>查看容器状态：<code>docker ps</code></strong></p>
+<p>docker ps 是 Docker 命令行工具中的一个命令，用于列出正在运行的容器。它显示容器的一些基本信息，如容器 ID、名称、镜像、创建时间、状态等。</p>
+<p>运行 docker ps 命令时，将显示正在运行的容器的列表。如果没有运行中的容器，该命令不会输出任何内容。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@master1 ~]<span class="comment"># docker ps </span></span><br><span class="line">CONTAINER ID   IMAGE                                               COMMAND                  CREATED             STATUS             PORTS                                   NAMES</span><br><span class="line">9ba874b8a125   nginx:latest                                        <span class="string">&quot;/docker-entrypoint.…&quot;</span>   6 minutes ago       Up 6 minutes       80/tcp                                  test2</span><br><span class="line">a2cc1b2d2b87   nginx:latest                                        <span class="string">&quot;/docker-entrypoint.…&quot;</span>   38 minutes ago      Up 38 minutes      0.0.0.0:8081-&gt;80/tcp, :::8081-&gt;80/tcp   test-port</span><br><span class="line">1ace5d6b7453   nginx:latest                                        <span class="string">&quot;/docker-entrypoint.…&quot;</span>   59 minutes ago      Up 9 minutes       80/tcp                                  <span class="built_in">test</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># CONTAINER ID：容器的唯一标识符。</span></span><br><span class="line"><span class="comment"># IMAGE：容器所使用的镜像。</span></span><br><span class="line"><span class="comment"># COMMAND：容器启动时执行的命令。</span></span><br><span class="line"><span class="comment"># CREATED：容器创建的时间。</span></span><br><span class="line"><span class="comment"># STATUS：容器的状态。</span></span><br><span class="line"><span class="comment"># PORTS：容器映射的端口。</span></span><br><span class="line"><span class="comment"># NAMES：容器的名称。</span></span><br><span class="line"><span class="comment"># docker ps 命令有一些常用的选项，例如：</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -a：显示所有容器，包括停止的容器。</span></span><br><span class="line"><span class="comment"># -q：仅显示容器的 ID。</span></span><br><span class="line"><span class="comment"># 要查看所有容器（包括已停止的），可以运行 docker ps -a。</span></span><br></pre></td></tr></table></figure>
+<p><strong>查看容器日志：<code>docker logs</code></strong></p>
+<p>docker logs 是 Docker 命令行工具中的一个命令，用于查看容器的日志输出。通过该命令，可以检查容器内部的标准输出和标准错误输出。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[root@master1 ~]<span class="comment"># docker logs test</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查看名为test的容器的日志</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 基本语法为：docker logs [OPTIONS] CONTAINER</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 其中 OPTIONS 是可选的参数，用于控制日志的输出格式和其他选项，CONTAINER 是要查看日志的容器的名称或容器 ID</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 常用的 docker logs 命令选项包括：</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -f：跟踪容器的日志输出，类似于 tail -f 命令，持续输出日志内容。</span></span><br><span class="line"><span class="comment"># --tail：仅显示日志的最后几行。</span></span><br><span class="line"><span class="comment"># --since：仅显示指定时间之后的日志。</span></span><br><span class="line"><span class="comment"># --until：仅显示指定时间之前的日志。</span></span><br></pre></td></tr></table></figure>
+<p> <strong>进入容器内部：<code>docker exec</code></strong></p>
+<p>docker exec 是 Docker 命令行工具中的一个命令，用于在运行的容器内部执行命令。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">例如，要以交互式模式（即保持标准输入打开）和为执行的命令分配一个伪终端，进入容器 <span class="built_in">test</span> 的 Bash shell，可以运行以下命令：</span><br><span class="line"></span><br><span class="line">[root@master1 ~]<span class="comment"># docker exec -it test bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 这将进入容器 test 内部的 Bash shell，并允许用户与容器交互执行命令。</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 常用的 docker exec 命令选项包括：</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># -i：保持标准输入打开，即使没有附加到容器中。</span></span><br><span class="line"><span class="comment"># -t：为执行的命令分配一个伪终端。</span></span><br><span class="line"><span class="comment"># --user：指定要执行命令的用户名或 UID。</span></span><br><span class="line"><span class="comment"># --workdir：指定要执行命令的工作目录。</span></span><br><span class="line"><span class="comment"># --env：设置环境变量。</span></span><br></pre></td></tr></table></figure>
+<p><strong>删除容器：<code>docker rm</code></strong></p>
+<p>docker rm 命令用于删除一个或多个容器</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@master1 ~]<span class="comment"># docker rm -f -v test</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 这里删除了一个名为 test的容器， -f 强制删除，-v 同时删除与容器关联的卷</span></span><br></pre></td></tr></table></figure>
+<p><strong>查看容器详细信息：<code>docker inspect</code></strong></p>
+<p>docker inspect 命令用于获取 Docker 容器、镜像或网络等对象的详细信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@master1 ~]<span class="comment"># docker inspect test2</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># docker inspect 命令会以 JSON 格式输出容器的详细信息，包括容器的配置、网络设置、挂载的卷、容器状态等。通过这些信息，可以了解容器的各种属性和配置信息。</span></span><br></pre></td></tr></table></figure>
+<h1 id="6-高级话题"><a href="#6-高级话题" class="headerlink" title="6 高级话题"></a>6 高级话题</h1><p>容器的数据备份与恢复</p>
+<p>备份容器数据<br>1、容器内部备份：</p>
+<ul>
+<li>进入容器内部，并使用常规的备份工具（如 tar）将数据备份到容器内的卷或文件系统中。</li>
+<li><p>将备份文件复制到主机上或者其他地方。    </p>
+<p>2、数据卷</p>
+</li>
+<li><p>如果容器使用了数据卷（Volume），那么容器中的数据已经被持久化了。</p>
+</li>
+<li>使用 docker cp 命令将数据从容器复制到主机上。</li>
+</ul>
+<p>恢复容器数据<br>1、数据卷：</p>
+<ul>
+<li>如果容器使用了数据卷，你只需要重新启动相应的容器，数据会自动恢复。    </li>
+</ul>
+<p>2、容器内部恢复：</p>
+<ul>
+<li>如果你备份了容器内部的数据，可以使用 docker cp 命令将备份文件复制到容器内部。</li>
+<li>然后，在容器内部使用恢复工具（如 tar）将备份文件解压缩或恢复到相应的位置。  </li>
+</ul>
+<p>3、镜像重新构建： </p>
+<ul>
+<li>如果数据可以通过重新构建镜像和重新部署容器来恢复，你可以通过重新构建包含数据的镜像并重新部署容器来实现。</li>
+</ul>
+<h1 id="7-容器编排工具：Docker-Compose与Kubernetes"><a href="#7-容器编排工具：Docker-Compose与Kubernetes" class="headerlink" title="7 容器编排工具：Docker Compose与Kubernetes"></a>7 容器编排工具：Docker Compose与Kubernetes</h1><p>Docker Compose 和 Kubernetes 都是容器编排工具，它们都可以用于部署、管理和扩展容器化应用程序，但在不同的场景下有不同的特点和优势。</p>
+<p>Docker Compose</p>
+<p>简单易用：Docker Compose 是一个基于 YAML 文件的工具，允许你定义和运行多个 Docker 容器的应用程序。它适用于简单的开发和测试环境。<br>单机环境：Docker Compose 通常用于在单个主机上定义和管理多个容器，可以协调它们的启动顺序和通信。<br>快速启动：通过简单的命令就可以启动、停止和重启整个应用程序。<br>适合小型项目：适用于小型项目和开发环境，对于简单的容器化应用场景非常方便。</p>
+<img src="/fragment/Docker%E5%9F%BA%E7%A1%80/b86f91dc269b4d5aac53930bfe064f03.png" class="" title="b86f91dc269b4d5aac53930bfe064f03">
+<p> Kubernetes</p>
+<p>分布式系统：Kubernetes 是一个开源的容器编排平台，用于自动部署、扩展和管理容器化应用程序。它设计用于大规模的生产环境和复杂的应用场景。<br>自动化和自愈：Kubernetes 提供了高度的自动化和自愈能力，可以自动调度容器、自动扩展应用程序、自动恢复故障等。<br>容器编排：Kubernetes 可以在集群中调度和管理大量的容器，并提供了许多功能，如服务发现、负载均衡、存储管理等。<br>云原生应用：Kubernetes 是构建云原生应用的首选平台，提供了丰富的功能和可扩展性，适用于复杂的微服务架构和分布式系统。</p>
+<p> 选择建议：</p>
+<ul>
+<li>如果你正在开发一个小型项目或者只是想在单个主机上运行一些容器，那么 Docker Compose 是一个简单而方便的选择</li>
+<li>如果你需要在生产环境中部署复杂的应用程序，管理大规模的容器集群，并希望自动化管理和高可用性，那么 Kubernetes 是更好的选择。</li>
+</ul>
+<h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><p><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_53269650/article/details/136321868">Docker容器命令大全：启动、停止、重启，你需要的都在这里</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/fragment/Docker%E5%9F%BA%E7%A1%80/" title="Docker基础">http://example.com/fragment/Docker基础/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/cmake/cmake%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" rel="prev" title="cmake学习笔记">
+                  <i class="fa fa-chevron-left"></i> cmake学习笔记
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/fragment/Markdown%E6%95%B0%E5%AD%A6%E5%85%AC%E5%BC%8F%E8%AF%AD%E6%B3%95/" rel="next" title="Markdown数学公式语法">
+                  Markdown数学公式语法 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"04ffe590c78e21e4af02f54e8b439bc7"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="3.4 避免分支分化线程束中的条件执行可能引起线程束分化，这会导致内核性能变差。通过重新组织数据的获取模式，可以减少或避免线程束分化。在本节里，将会以并行归约为例，介绍避免分支分化的基本技术。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3-4 避免分支分化">
+<meta property="og:url" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="3.4 避免分支分化线程束中的条件执行可能引起线程束分化，这会导致内核性能变差。通过重新组织数据的获取模式，可以减少或避免线程束分化。在本节里，将会以并行归约为例，介绍避免分支分化的基本技术。">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/xianglin.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/jiaocuo.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/image-20230418112819330.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/3_22.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/3_23.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/image-20230418164824284.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/image-20230418171944631.png">
+<meta property="article:published_time" content="2024-12-01T10:13:43.618Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:43.618Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="GPU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/xianglin.png">
+
+
+<link rel="canonical" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/","path":"CUDA/CUDA C编程权威指南笔记/3-4 避免分支分化/","title":"3-4 避免分支分化"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>3-4 避免分支分化 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#3-4-%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96"><span class="nav-text">3.4 避免分支分化</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-1-%E5%B9%B6%E8%A1%8C%E5%BD%92%E7%BA%A6%E9%97%AE%E9%A2%98"><span class="nav-text">3.4.1 并行归约问题</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-2-%E5%B9%B6%E8%A1%8C%E5%BD%92%E7%BA%A6%E4%B8%AD%E7%9A%84%E5%88%86%E5%8C%96"><span class="nav-text">3.4.2 并行归约中的分化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-3-%E6%94%B9%E5%96%84%E5%B9%B6%E8%A1%8C%E5%BD%92%E7%BA%A6%E7%9A%84%E5%88%86%E5%8C%96"><span class="nav-text">3.4.3 改善并行归约的分化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-4-%E4%BA%A4%E9%94%99%E9%85%8D%E5%AF%B9%E7%9A%84%E5%BD%92%E7%BA%A6"><span class="nav-text">3.4.4 交错配对的归约</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-text">附录</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="3-4 避免分支分化 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          3-4 避免分支分化
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="3-4-避免分支分化"><a href="#3-4-避免分支分化" class="headerlink" title="3.4 避免分支分化"></a>3.4 避免分支分化</h1><p><strong>线程束中的条件执行可能引起线程束分化</strong>，这会导致内核性能变差。通过重新组织数据的获取模式，可以减少或避免线程束分化。在本节里，将会以并行归约为例，介绍避免分支分化的基本技术。</p>
+<h2 id="3-4-1-并行归约问题"><a href="#3-4-1-并行归约问题" class="headerlink" title="3.4.1 并行归约问题"></a>3.4.1 并行归约问题</h2><p>假设要对一个有N个元素的整数数组求和。如何通过并行计算快速求和呢？鉴于加法的结合律和交换律，数组元素可以以任何顺序求和。所以可以用以下的方法执行并行加法运算：</p>
+<ol>
+<li>将输入向量划分到更小的数据块中。</li>
+<li>用一个线程计算一个数据块的部分和。</li>
+<li>对每个数据块的部分和再求和得出最终结果。</li>
+</ol>
+<p>成对的划分常见的方法有以下两种：</p>
+<p>相邻配对：元素与他们相邻的元素配对</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/xianglin.png" class="" title="img">
+<p>交错配对：元素与一定距离的元素配对</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/jiaocuo.png" class="" title="img">
+<p>下面是CPU版本的<strong>交错配对的实现</strong>：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Recursive Implementation of Interleaved Pair Approach</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">recursiveReduce</span><span class="params">(<span class="type">int</span> *data, <span class="type">int</span> <span class="type">const</span> size)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// terminate check</span></span><br><span class="line">    <span class="keyword">if</span> (size == <span class="number">1</span>) <span class="keyword">return</span> data[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// renew the stride</span></span><br><span class="line">    <span class="type">int</span> <span class="type">const</span> stride = size / <span class="number">2</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// in-place reduction</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; stride; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        data[i] += data[i + stride];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// call recursively</span></span><br><span class="line">    <span class="keyword">return</span> recursiveReduce(data, stride);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><strong>在向量中执行满足交换律和结合律的运算，被称为归约问题</strong>。并行归约问题是这种运算的并行执行</p>
+<h2 id="3-4-2-并行归约中的分化"><a href="#3-4-2-并行归约中的分化" class="headerlink" title="3.4.2 并行归约中的分化"></a>3.4.2 并行归约中的分化</h2><p>图3-21所示的是<strong>相邻配对方法</strong>的内核实现流程（一个线程块内的运算）。每个线程将相邻的两个元素相加产生部分和。<br><img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/image-20230418112819330.png" class="" title="image-20230418112819330"></p>
+<p>核函数代码如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Neighbored Pair Implementation with divergence</span></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">reduceNeighbored</span> <span class="params">(<span class="type">int</span> *g_idata, <span class="type">int</span> *g_odata, <span class="type">unsigned</span> <span class="type">int</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// set thread ID</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> tid = threadIdx.x;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> idx = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// convert global data pointer to the local pointer of this block</span></span><br><span class="line">    <span class="type">int</span> *idata = g_idata + blockIdx.x * blockDim.x;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// boundary check</span></span><br><span class="line">    <span class="keyword">if</span> (idx &gt;= n) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// in-place reduction in global memory</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> stride = <span class="number">1</span>; stride &lt; blockDim.x; stride *= <span class="number">2</span>)<span class="comment">//一个线程块内计算全部数组的一部分数据</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> ((tid % (<span class="number">2</span> * stride)) == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            idata[tid] += idata[tid + stride];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// synchronize within threadblock</span></span><br><span class="line">        __syncthreads();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// write result for this block to global mem</span></span><br><span class="line">    <span class="keyword">if</span> (tid == <span class="number">0</span>) g_odata[blockIdx.x] = idata[<span class="number">0</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>完整的执行逻辑如下</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/3_22.png" class="" title="img">
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// kernel 1: reduceNeighbored</span></span><br><span class="line">CHECK(cudaMemcpy(d_idata, h_idata, bytes, cudaMemcpyHostToDevice));</span><br><span class="line">CHECK(cudaDeviceSynchronize());</span><br><span class="line">iStart = seconds();</span><br><span class="line">reduceNeighbored&lt;&lt;&lt;grid, block&gt;&gt;&gt;(d_idata, d_odata, size);<span class="comment">//kernel计算出一组的结果</span></span><br><span class="line">CHECK(cudaDeviceSynchronize());</span><br><span class="line">iElaps = seconds() - iStart;</span><br><span class="line">CHECK(cudaMemcpy(h_odata, d_odata, grid.x * <span class="keyword">sizeof</span>(<span class="type">int</span>),</span><br><span class="line">                 cudaMemcpyDeviceToHost));</span><br><span class="line">gpu_sum = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = <span class="number">0</span>; i &lt; grid.x; i++) gpu_sum += h_odata[i];<span class="comment">//CPU端将kernel的一组结果再想加</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;gpu Neighbored  elapsed %f sec gpu_sum: %d &lt;&lt;&lt;grid %d block &quot;</span></span><br><span class="line">       <span class="string">&quot;%d&gt;&gt;&gt;\n&quot;</span>, iElaps, gpu_sum, grid.x, block.x);</span><br></pre></td></tr></table></figure>
+<p>有几个点：</p>
+<ul>
+<li>每个线程块处理数组的一部分，如图3-22中的一组橙色点，代表一个线程块的计算</li>
+<li>线程块中每往下计算一行（一组橙色的点从一行运算到下一行）需要进行线程内同步，<code>__syncthreads();</code>保障线程块内的其他线程运算完成。</li>
+<li>所有线程块的计算结果在CPU中再进行求和，如图3-22中蓝色点。</li>
+</ul>
+<h2 id="3-4-3-改善并行归约的分化"><a href="#3-4-3-改善并行归约的分化" class="headerlink" title="3.4.3 改善并行归约的分化"></a>3.4.3 改善并行归约的分化</h2><p>上面的核函数有一个语句</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> ((tid % (<span class="number">2</span> * stride)) == <span class="number">0</span>)</span><br></pre></td></tr></table></figure>
+<p>这句会导致线程分化。在并行归<br>约的第一次迭代中，只有ID为偶数的线程执行这个条件语句的主体，但是所有的线程都必须被调度。在第二次迭代中，只有四分之一的线程是活跃的，但是所有的线程仍然都必须被调度。</p>
+<p>下面是一种解决方案，<strong>注意修改了线程的索引内存位置。</strong></p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/3_23.png" class="" title="img">
+<p>对应的核函数如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Neighbored Pair Implementation with less divergence</span></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">reduceNeighboredLess</span> <span class="params">(<span class="type">int</span> *g_idata, <span class="type">int</span> *g_odata,</span></span><br><span class="line"><span class="params">                                      <span class="type">unsigned</span> <span class="type">int</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// set thread ID</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> tid = threadIdx.x;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> idx = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// convert global data pointer to the local pointer of this block</span></span><br><span class="line">    <span class="type">int</span> *idata = g_idata + blockIdx.x * blockDim.x;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// boundary check</span></span><br><span class="line">    <span class="keyword">if</span>(idx &gt;= n) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// in-place reduction in global memory</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> stride = <span class="number">1</span>; stride &lt; blockDim.x; stride *= <span class="number">2</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// convert tid into local array index</span></span><br><span class="line">        <span class="type">int</span> index = <span class="number">2</span> * stride * tid;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (index &lt; blockDim.x)</span><br><span class="line">        &#123;</span><br><span class="line">            idata[index] += idata[index + stride];<span class="comment">//这里不同，数组的索引不再是线程编号了</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// synchronize within threadblock</span></span><br><span class="line">        __syncthreads();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// write result for this block to global mem</span></span><br><span class="line">    <span class="keyword">if</span> (tid == <span class="number">0</span>) g_odata[blockIdx.x] = idata[<span class="number">0</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>对于一个有512个线程的块来说，前8个线程束执行第一轮归约，<strong>剩下8个线程束什么也不做</strong>（虽然剩下的线程束没有做什么有用的工作，但是应该也会被调用运行啊，但是书中的意思是不运行，可能是内部的优化吧，不清楚为什么）。在第二轮里，前4个线程束执行归约，剩下12个线程束什么也不做。因此，这样就彻底不存在分化了。在最后五轮中，当每一轮的线程总数小于线程束的大小时，分化就会出现。在下一节将会介绍如何处理这一问题。</p>
+<p><strong>理解算法并不难，难在如何写成并行化的程序</strong>，其实需要注意几个点应该就可以写出来。</p>
+<ol>
+<li><p>编写的<code>kernel</code>函数实际上是一个<code>block</code>中运行的一部分线程，例如block(512,1,1)，那么就是512个线程运行这一个<code>kernel</code>函数。当然会再细分为warp（32个线程一组）来执行单指令多线程SIMD。</p>
+</li>
+<li><p><code>kernel</code>函数实际上是对GPU内存的一些操作，因此需要确定的就是线程的索引和内存索引之间的对应关系。</p>
+</li>
+<li><p>以<code>reduceNeighbored</code>为例子说明</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// in-place reduction in global memory</span></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> stride = <span class="number">1</span>; stride &lt; blockDim.x; stride *= <span class="number">2</span>)<span class="comment">//一个线程块内计算全部数组的一部分数据</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">if</span> ((tid % (<span class="number">2</span> * stride)) == <span class="number">0</span>)<span class="comment">//哪些线程是循环多次执行的</span></span><br><span class="line">    &#123;</span><br><span class="line">        idata[tid] += idata[tid + stride];<span class="comment">//线程操作的内存索引要计算正确</span></span><br><span class="line">    &#125;</span><br><span class="line">   </span><br><span class="line">    <span class="comment">// synchronize within threadblock </span></span><br><span class="line">    __syncthreads();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>内存索引和线程索引是一致的。</li>
+<li>block(512,1,1)，因此就是512个线程执行这一个<code>kernel</code>函数，看似没有什么特别的，但是理解这一点很重要。有一些线程会循环多次执行（比如threadIdx.x=0），但是有些线程运行1次（比如threadIdx.x=2）。这就是为什么还会有一个for循环。</li>
+<li>找出线程操作的内存和线程索引之间的关系，并计算。</li>
+</ul>
+</li>
+</ol>
+<h2 id="3-4-4-交错配对的归约"><a href="#3-4-4-交错配对的归约" class="headerlink" title="3.4.4 交错配对的归约"></a>3.4.4 交错配对的归约</h2><p>与相邻配对方法相比，交错配对方法颠倒了元素的跨度。初始跨度是线程块大小的一半，然后在每次迭代中减少一半（如图3-24所示）。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/image-20230418164824284.png" class="" title="image-20230418164824284">
+<p>核函数代码如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Interleaved Pair Implementation with less divergence</span></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">reduceInterleaved</span> <span class="params">(<span class="type">int</span> *g_idata, <span class="type">int</span> *g_odata, <span class="type">unsigned</span> <span class="type">int</span> n)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// set thread ID</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> tid = threadIdx.x;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> idx = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// convert global data pointer to the local pointer of this block</span></span><br><span class="line">    <span class="type">int</span> *idata = g_idata + blockIdx.x * blockDim.x;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// boundary check</span></span><br><span class="line">    <span class="keyword">if</span>(idx &gt;= n) <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// in-place reduction in global memory</span></span><br><span class="line">    <span class="keyword">for</span> (<span class="type">int</span> stride = blockDim.x / <span class="number">2</span>; stride &gt; <span class="number">0</span>; stride &gt;&gt;= <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span> (tid &lt; stride)</span><br><span class="line">        &#123;</span><br><span class="line">            idata[tid] += idata[tid + stride];</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        __syncthreads();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// write result for this block to global mem</span></span><br><span class="line">    <span class="keyword">if</span> (tid == <span class="number">0</span>) g_odata[blockIdx.x] = idata[<span class="number">0</span>];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用nvprof分析如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nvprof --metrics achieved_occupancy,inst_per_warp,gld_efficiency,gld_throughput ./reduceInteger</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br></pre></td><td class="code"><pre><span class="line">zmurder@zmurder:~/chapter03$ sudo nvprof --metrics achieved_occupancy,inst_per_warp,gld_efficiency,gld_throughput ./reduceInteger</span><br><span class="line">==3128305== NVPROF is profiling process 3128305, command: ./reduceInteger</span><br><span class="line">./reduceInteger starting reduction at device 0: Quadro P2000     with array size 16777216  grid 32768 block 512</span><br><span class="line">cpu reduce      elapsed 0.011737 sec cpu_sum: 2139353471</span><br><span class="line">==3128305== Some kernel(s) will be replayed on device 0 in order to collect all events/metrics.</span><br><span class="line">Replaying kernel &quot;reduceNeighbored(int*, int*, unsigned int)&quot; (done)</span><br><span class="line">gpu Neighbored  elapsed 0.465551 sec gpu_sum: 2139353471 &lt;&lt;&lt;grid 32768 block 512&gt;&gt;&gt;</span><br><span class="line">Replaying kernel &quot;reduceNeighboredLess(int*, int*, unsigned int)&quot; (done)</span><br><span class="line">gpu NeighboredLess elapsed 0.195536 sec gpu_sum: 2139353471 &lt;&lt;&lt;grid 32768 block 512&gt;&gt;&gt;</span><br><span class="line">Replaying kernel &quot;reduceInterleaved(int*, int*, unsigned int)&quot; (done)</span><br><span class="line">gpu Interleaved elapsed 0.172634 sec gpu_sum: 2139353471 &lt;&lt;&lt;grid 32768 block 512&gt;&gt;&gt;</span><br><span class="line">Replaying kernel &quot;reduceUnrolling2(int*, int*, unsigned int)&quot; (done)</span><br><span class="line">gpu Unrolling2  elapsed 0.107847 sec gpu_sum: 2139353471 &lt;&lt;&lt;grid 16384 block 512&gt;&gt;&gt;</span><br><span class="line">Replaying kernel &quot;reduceUnrolling4(int*, int*, unsigned int)&quot; (done)</span><br><span class="line">gpu Unrolling4  elapsed 0.073139 sec gpu_sum: 2139353471 &lt;&lt;&lt;grid 8192 block 512&gt;&gt;&gt;</span><br><span class="line">Replaying kernel &quot;reduceUnrolling8(int*, int*, unsigned int)&quot; (done)</span><br><span class="line">gpu Unrolling8  elapsed 0.055908 sec gpu_sum: 2139353471 &lt;&lt;&lt;grid 4096 block 512&gt;&gt;&gt;</span><br><span class="line">Replaying kernel &quot;reduceUnrollWarps8(int*, int*, unsigned int)&quot; (done)</span><br><span class="line">gpu UnrollWarp8 elapsed 0.053658 sec gpu_sum: 2139353471 &lt;&lt;&lt;grid 4096 block 512&gt;&gt;&gt;</span><br><span class="line">Replaying kernel &quot;reduceCompleteUnrollWarps8(int*, int*, unsigned int)&quot; (done)</span><br><span class="line">gpu Cmptnroll8  elapsed 0.053371 sec gpu_sum: 2139353471 &lt;&lt;&lt;grid 4096 block 512&gt;&gt;&gt;</span><br><span class="line">Replaying kernel &quot;void reduceCompleteUnroll&lt;unsigned int=512&gt;(int*, int*, unsigned int)&quot; (done)</span><br><span class="line">gpu Cmptnroll   elapsed 0.052856 sec gpu_sum: 2139353471 &lt;&lt;&lt;grid 4096 block 512&gt;&gt;&gt;</span><br><span class="line">==3128305== Profiling application: ./reduceInteger</span><br><span class="line">==3128305== Profiling result:</span><br><span class="line">==3128305== Metric result:</span><br><span class="line">Invocations                               Metric Name                        Metric Description         Min         Max         Avg</span><br><span class="line">Device &quot;Quadro P2000 (0)&quot;</span><br><span class="line">    Kernel: reduceInterleaved(int*, int*, unsigned int)</span><br><span class="line">          1                        achieved_occupancy                        Achieved Occupancy    0.916347    0.916347    0.916347</span><br><span class="line">          1                             inst_per_warp                     Instructions per warp  117.812500  117.812500  117.812500</span><br><span class="line">          1                            gld_efficiency             Global Memory Load Efficiency      96.15%      96.15%      96.15%</span><br><span class="line">          1                            gld_throughput                    Global Load Throughput  39.495GB/s  39.495GB/s  39.495GB/s</span><br><span class="line">    Kernel: reduceCompleteUnrollWarps8(int*, int*, unsigned int)</span><br><span class="line">          1                        achieved_occupancy                        Achieved Occupancy    0.631070    0.631070    0.631070</span><br><span class="line">          1                             inst_per_warp                     Instructions per warp  119.500000  119.500000  119.500000</span><br><span class="line">          1                            gld_efficiency             Global Memory Load Efficiency      99.43%      99.43%      99.43%</span><br><span class="line">          1                            gld_throughput                    Global Load Throughput  123.77GB/s  123.77GB/s  123.77GB/s</span><br><span class="line">    Kernel: reduceNeighbored(int*, int*, unsigned int)</span><br><span class="line">          1                        achieved_occupancy                        Achieved Occupancy    0.952602    0.952602    0.952602</span><br><span class="line">          1                             inst_per_warp                     Instructions per warp  412.000000  412.000000  412.000000</span><br><span class="line">          1                            gld_efficiency             Global Memory Load Efficiency      25.02%      25.02%      25.02%</span><br><span class="line">          1                            gld_throughput                    Global Load Throughput  71.861GB/s  71.861GB/s  71.861GB/s</span><br><span class="line">    Kernel: reduceUnrolling8(int*, int*, unsigned int)</span><br><span class="line">          1                        achieved_occupancy                        Achieved Occupancy    0.933528    0.933528    0.933528</span><br><span class="line">          1                             inst_per_warp                     Instructions per warp  177.812500  177.812500  177.812500</span><br><span class="line">          1                            gld_efficiency             Global Memory Load Efficiency      99.21%      99.21%      99.21%</span><br><span class="line">          1                            gld_throughput                    Global Load Throughput  112.11GB/s  112.11GB/s  112.11GB/s</span><br><span class="line">    Kernel: reduceUnrolling4(int*, int*, unsigned int)</span><br><span class="line">          1                        achieved_occupancy                        Achieved Occupancy    0.931381    0.931381    0.931381</span><br><span class="line">          1                             inst_per_warp                     Instructions per warp  153.812500  153.812500  153.812500</span><br><span class="line">          1                            gld_efficiency             Global Memory Load Efficiency      98.68%      98.68%      98.68%</span><br><span class="line">          1                            gld_throughput                    Global Load Throughput  92.195GB/s  92.195GB/s  92.195GB/s</span><br><span class="line">    Kernel: reduceUnrolling2(int*, int*, unsigned int)</span><br><span class="line">          1                        achieved_occupancy                        Achieved Occupancy    0.928883    0.928883    0.928883</span><br><span class="line">          1                             inst_per_warp                     Instructions per warp  138.812500  138.812500  138.812500</span><br><span class="line">          1                            gld_efficiency             Global Memory Load Efficiency      98.04%      98.04%      98.04%</span><br><span class="line">          1                            gld_throughput                    Global Load Throughput  70.189GB/s  70.189GB/s  70.189GB/s</span><br><span class="line">    Kernel: void reduceCompleteUnroll&lt;unsigned int=512&gt;(int*, int*, unsigned int)</span><br><span class="line">          1                        achieved_occupancy                        Achieved Occupancy    0.632865    0.632865    0.632865</span><br><span class="line">          1                             inst_per_warp                     Instructions per warp  112.500000  112.500000  112.500000</span><br><span class="line">          1                            gld_efficiency             Global Memory Load Efficiency      99.43%      99.43%      99.43%</span><br><span class="line">          1                            gld_throughput                    Global Load Throughput  124.54GB/s  124.54GB/s  124.54GB/s</span><br><span class="line">    Kernel: reduceUnrollWarps8(int*, int*, unsigned int)</span><br><span class="line">          1                        achieved_occupancy                        Achieved Occupancy    0.643794    0.643794    0.643794</span><br><span class="line">          1                             inst_per_warp                     Instructions per warp  118.000000  118.000000  118.000000</span><br><span class="line">          1                            gld_efficiency             Global Memory Load Efficiency      99.43%      99.43%      99.43%</span><br><span class="line">          1                            gld_throughput                    Global Load Throughput  125.17GB/s  125.17GB/s  125.17GB/s</span><br><span class="line">    Kernel: reduceNeighboredLess(int*, int*, unsigned int)</span><br><span class="line">          1                        achieved_occupancy                        Achieved Occupancy    0.928851    0.928851    0.928851</span><br><span class="line">          1                             inst_per_warp                     Instructions per warp  145.562500  145.562500  145.562500</span><br><span class="line">          1                            gld_efficiency             Global Memory Load Efficiency      25.02%      25.02%      25.02%</span><br><span class="line">          1                            gld_throughput                    Global Load Throughput  120.87GB/s  120.87GB/s  120.87GB/s</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>截图看的完整点</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/image-20230418171944631.png" class="" title="image-20230418171944631">
+<p>汇总表格如下</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>gld_throughput</th>
+<th>gld_efficiency</th>
+<th>inst_per_warp</th>
+<th>achieved_occupancy</th>
+<th>时间</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Neighbored</td>
+<td>2.4549GB/s</td>
+<td>25.02%</td>
+<td>412.000000</td>
+<td>0.952539</td>
+<td>0.016720 sec</td>
+</tr>
+<tr>
+<td>NeighboredLess</td>
+<td>4.9642GB/s</td>
+<td>25.02%</td>
+<td>145.562500</td>
+<td>0.927764</td>
+<td>0.010575 sec</td>
+</tr>
+<tr>
+<td>Interleaved</td>
+<td>1.3862GB/s</td>
+<td>96.15%</td>
+<td>117.812500</td>
+<td>0.916344</td>
+<td>0.006903 sec</td>
+</tr>
+<tr>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>其中achieved_occupancy应该是编译器优化了。</p>
+<h2 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h2><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/profiler-users-guide/index.html">官方nvprof参数说明</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/" title="3-4 避免分支分化">http://example.com/CUDA/CUDA C编程权威指南笔记/3-4 避免分支分化/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-3%20%E5%B9%B6%E8%A1%8C%E6%80%A7%E7%9A%84%E8%A1%A8%E7%8E%B0/" rel="prev" title="3-3 并行性的表现">
+                  <i class="fa fa-chevron-left"></i> 3-3 并行性的表现
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-1%20CUDA%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/" rel="next" title="4-1 CUDA内存模型概述">
+                  4-1 CUDA内存模型概述 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"b9a7413aa3a8c40efc1a2ea5c2d96f27"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="TensorRT中的循环">
+<meta property="og:type" content="article">
+<meta property="og:title" content="10-TensorRT中的循环">
+<meta property="og:url" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/10-TensorRT%E4%B8%AD%E7%9A%84%E5%BE%AA%E7%8E%AF/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="TensorRT中的循环">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/10-TensorRT%E4%B8%AD%E7%9A%84%E5%BE%AA%E7%8E%AF/rdp.jpg">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/10-TensorRT%E4%B8%AD%E7%9A%84%E5%BE%AA%E7%8E%AF/loop.png">
+<meta property="article:published_time" content="2024-12-01T10:13:45.359Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.359Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Tensorrt">
+<meta property="article:tag" content="DeepLearning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/10-TensorRT%E4%B8%AD%E7%9A%84%E5%BE%AA%E7%8E%AF/rdp.jpg">
+
+
+<link rel="canonical" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/10-TensorRT%E4%B8%AD%E7%9A%84%E5%BE%AA%E7%8E%AF/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/10-TensorRT%E4%B8%AD%E7%9A%84%E5%BE%AA%E7%8E%AF/","path":"TensorRT/TensorRT中文版开发手册/10-TensorRT中的循环/","title":"10-TensorRT中的循环"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>10-TensorRT中的循环 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TensorRT%E4%B8%AD%E7%9A%84%E5%BE%AA%E7%8E%AF"><span class="nav-text">TensorRT中的循环</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#10-1-Defining-A-Loop"><span class="nav-text">10.1. Defining A Loop</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-2-Formal-Semantics"><span class="nav-text">10.2. Formal Semantics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-3-Nested-Loops"><span class="nav-text">10.3. Nested Loops</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-4-Limitations"><span class="nav-text">10.4. Limitations</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-5-Replacing-IRNNv2Layer-With-Loops"><span class="nav-text">10.5. Replacing IRNNv2Layer With Loops</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/10-TensorRT%E4%B8%AD%E7%9A%84%E5%BE%AA%E7%8E%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="10-TensorRT中的循环 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          10-TensorRT中的循环
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/" itemprop="url" rel="index"><span itemprop="name">TensorRT中文版开发手册</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="TensorRT中的循环"><a href="#TensorRT中的循环" class="headerlink" title="TensorRT中的循环"></a>TensorRT中的循环</h1><img src="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/10-TensorRT%E4%B8%AD%E7%9A%84%E5%BE%AA%E7%8E%AF/rdp.jpg" class="">
+<p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/zh-cn/developer-program">点击此处加入NVIDIA开发者计划</a></p>
+<p>NVIDIA TensorRT 支持循环结构，这对于循环网络很有用。 TensorRT 循环支持扫描输入张量、张量的循环定义以及“扫描输出”和“最后一个值”输出。</p>
+<h2 id="10-1-Defining-A-Loop"><a href="#10-1-Defining-A-Loop" class="headerlink" title="10.1. Defining A Loop"></a>10.1. Defining A Loop</h2><p>循环由循环边界层(loop boundary layers)定义。</p>
+<ul>
+<li><code>ITripLimitLayer</code>指定循环迭代的次数。</li>
+<li><code>IIteratorLayer</code>使循环能够迭代张量。</li>
+<li><code>IRecurrenceLayer</code>指定一个循环定义。</li>
+<li><code>ILoopOutputLayer</code>指定循环的输出。</li>
+</ul>
+<p>每个边界层都继承自类<code>ILoopBoundaryLayer</code> ，该类有一个方法<code>getLoop()</code>用于获取其关联的<code>ILoop</code> 。 <code>ILoop</code>对象标识循环。具有相同<code>ILoop</code>的所有循环边界层都属于该循环。</p>
+<p>下图描绘了循环的结构和边界处的数据流。循环不变张量可以直接在循环内部使用，例如 FooLayer 所示。</p>
+<img src="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/10-TensorRT%E4%B8%AD%E7%9A%84%E5%BE%AA%E7%8E%AF/loop.png" class="">
+<p>一个循环可以有多个I<code>IteratorLayer</code> 、 <code>IRecurrenceLayer</code>和<code>ILoopOutputLayer</code> ，并且最多可以有两个<code>ITripLimitLayer</code> ，如后面所述。没有<code>ILoopOutputLayer</code>的循环没有输出，并由 TensorRT 优化。</p>
+<p>NVIDIA TensorRT 支持矩阵中的流控制结构层部分描述了<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/support-matrix/index.html#layers-flow-control-constructs">可用于循环内部的 TensorRT 层</a>。</p>
+<p>内部层可以自由使用在循环内部或外部定义的张量。内部可以包含其他循环（请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#nested-loops">嵌套循环</a>）和其他条件构造（请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#nesting-loops">条件嵌套</a>）。</p>
+<p>要定义循环，首先，使用<code>INetworkDefinition ::addLoop</code>方法创建一个<code>ILoop</code>对象。然后添加边界层和内部层。本节的其余部分描述了边界层的特征，使用<code>loop</code>表示<code>INetworkDefinition ::addLoop</code>返回的<code>ILoop*</code> 。</p>
+<p><code>ITripLimitLayer</code>支持计数循环和 <code>while</code> 循环。</p>
+<ul>
+<li><p><code>loop -&gt;addTripLimit( t ,TripLimit::kCOUNT)</code>创建一个<code>ITripLimitLayer</code> ，其输入<code>t</code>是指定循环迭代次数的 0D INT32 张量。</p>
+</li>
+<li><p><code>loop -&gt;addTripLimit( t ,TripLimit::kWHILE)</code>创建一个<code>ITripLimitLayer</code> ，其输入<code>t</code>是一个 0D Bool 张量，用于指定是否应该进行迭代。通常<code>t</code>要么是<code>IRecurrenceLayer</code>的输出，要么是基于所述输出的计算。</p>
+</li>
+</ul>
+<p>一个循环最多可以有一种限制。</p>
+<p><code>IIteratorLayer</code>支持在任何轴上向前或向后迭代。</p>
+<ul>
+<li><p><code>loop -&gt;addIterator( t )</code>添加一个<code>IIteratorLayer</code> ，它在张量t的轴 0 上进行迭代。例如，如果输入是矩阵：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2</span> <span class="number">3</span> <span class="number">5</span></span><br><span class="line"><span class="number">4</span> <span class="number">6</span> <span class="number">8</span></span><br></pre></td></tr></table></figure>
+<p>第一次迭代的一维张量{2, 3, 5}和第二次迭代的{4, 6, 8} 。超出张量范围的迭代是无效的。</p>
+</li>
+<li><p><code>loop -&gt;addIterator( t , axis )</code>类似，但该层在给定的轴上迭代。例如，如果 axis=1 并且输入是矩阵，则每次迭代都会传递矩阵的一列。</p>
+</li>
+<li><p><code>loop -&gt;addIterator( t , axis,reverse )</code>类似，但如果<code>reverse =true</code> ，则该层以相反的顺序产生其输出。</p>
+</li>
+</ul>
+<p><code>ILoopOutputLayer</code>支持三种形式的循环输出：</p>
+<ul>
+<li><code>loop -&gt;addLoopOutput( t, LoopOutput::kLAST_VALUE)</code>输出<code>t</code>的最后一个值，其中<code>t</code>必须是<code>IRecurrenceLayer</code>的输出。</li>
+<li><code>loop-&gt; addLoopOutput( t ,LoopOutput::kCONCATENATE, axis )</code>将每次迭代的输入串联输出到<code>t</code> 。例如，如果输入是一维张量，第一次迭代的值为<code>&#123; a,b,c&#125;</code> ，第二次迭代的值为<code>&#123;d,e,f&#125;</code> ， axis =0 ，则输出为矩阵：</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a b c</span><br><span class="line">d e f</span><br></pre></td></tr></table></figure>
+<p>如果axis =1 ，则输出为：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a d</span><br><span class="line">b e</span><br><span class="line">c f</span><br></pre></td></tr></table></figure></p>
+<ul>
+<li><code>loop-&gt; addLoopOutput( t ,LoopOutput::kREVERSE, axis )</code>类似，但颠倒了顺序。<br><code>kCONCATENATE</code>和<code>kREVERSE</code>形式都需要第二个输入，这是一个 0D INT32 形状张量，用于指定新输出维度的长度。当长度大于迭代次数时，额外的元素包含任意值。第二个输入，例如<code>u</code> ，应使用<code>ILoopOutputLayer::setInput(1, u )</code>设置。</li>
+</ul>
+<p>最后，还有<code>IRecurrenceLayer</code> 。它的第一个输入指定初始输出值，第二个输入指定下一个输出值。第一个输入必须来自循环外；第二个输入通常来自循环内部。例如，这个 C++ 片段的 TensorRT 模拟：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int32_t</span> i = j; ...; i += k) ...</span><br></pre></td></tr></table></figure><br>可以通过这些调用创建，其中j和k是<code>ITensor*</code> 。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">ILoop* loop = n.<span class="built_in">addLoop</span>();</span><br><span class="line">IRecurrenceLayer* iRec = loop-&gt;<span class="built_in">addRecurrence</span>(j);</span><br><span class="line">ITensor* i = iRec-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>);</span><br><span class="line">ITensor* iNext = <span class="built_in">addElementWise</span>(*i, *k, </span><br><span class="line">    ElementWiseOperation::kADD)-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>);</span><br><span class="line">iRec-&gt;<span class="built_in">setInput</span>(<span class="number">1</span>, *iNext);</span><br></pre></td></tr></table></figure><br>第二个输入是TensorRT允许后沿的唯一情况。如果删除了这些输入，则剩余的网络必须是非循环的。</p>
+<h2 id="10-2-Formal-Semantics"><a href="#10-2-Formal-Semantics" class="headerlink" title="10.2. Formal Semantics"></a>10.2. Formal Semantics</h2><p>TensorRT 具有应用语义，这意味着除了引擎输入和输出之外没有可见的副作用。因为没有副作用，命令式语言中关于循环的直觉并不总是有效。本节定义了 TensorRT 循环结构的形式语义。</p>
+<p>形式语义基于张量的惰性序列(lazy sequences)。循环的每次迭代对应于序列中的一个元素。循环内张量X的序列表示为<code>⟨ X 0, X 1, X 2, ... ⟩</code> 。序列的元素被懒惰地评估，意思是根据需要。</p>
+<p><code>IIteratorLayer(X)</code>的输出是<code>⟨ X[0], X[1], X[2], ... ⟩</code>其中<code>X[i]</code>表示在<code>IIteratorLayer</code>指定的轴上的下标。</p>
+<p><code>IRecurrenceLayer(X,Y)</code>的输出是<code>⟨ X, Y0, Y1, Y2, ... ⟩</code> 。<br>的输入和输出取决于LoopOutput的类型。</p>
+<ul>
+<li><code>kLAST_VALUE</code> ：输入是单个张量X ，对于 n-trip 循环，输出是X n 。</li>
+<li><code>kCONCATENATE</code> ：第一个输入是张量<code>X</code>，第二个输入是标量形状张量<code>Y</code>。结果是<code>X0, X1, X2, ... Xn-1</code>与后填充（如有必要）连接到<code>Y</code>指定的长度。如果<code>Y &lt; n</code>则为运行时错误。 <code>Y</code>是构建时间常数。注意与<code>IIteratorLayer</code>的反比关系。 <code>IIteratorLayer</code>将张量映射到一系列子张量；带有<code>kCONCATENATE</code>的<code>ILoopOutputLayer</code>将一系列子张量映射到一个张量。</li>
+<li>kREVERSE ：类似于<code>kCONCATENATE</code> ，但输出方向相反。</li>
+</ul>
+<p><code>ILoopOutputLayer</code>的输出定义中的n值由循环的<code>ITripLimitLayer</code>确定：</p>
+<ul>
+<li>对于计数循环，它是迭代计数，表示ITripLimitLayer的输入。</li>
+<li>对于 while 循环，它是最小的 n 使得$X_n$为假，其中<code>X</code>是<code>ITripLimitLayer</code>的输入张量的序列。</li>
+</ul>
+<p>非循环层的输出是层功能的顺序应用。例如，对于一个二输入非循环层<code>F(X,Y) = ⟨ f(X 0 , Y 0 ), f(X 1 , Y 1 ), f(X 2 , Y 2 )... ⟩</code> .如果一个张量来自循环之外，即是循环不变的，那么它的序列是通过复制张量来创建的。</p>
+<h2 id="10-3-Nested-Loops"><a href="#10-3-Nested-Loops" class="headerlink" title="10.3. Nested Loops"></a>10.3. Nested Loops</h2><p>TensorRT 从数据流中推断出循环的嵌套。例如，如果循环 B 使用在循环 A 中定义的值，则 B 被认为嵌套在 A 中。</p>
+<p>TensorRT 拒绝循环没有干净嵌套的网络，例如如果循环 A 使用循环 B 内部定义的值，反之亦然。</p>
+<h2 id="10-4-Limitations"><a href="#10-4-Limitations" class="headerlink" title="10.4. Limitations"></a>10.4. Limitations</h2><p>引用多个动态维度的循环可能会占用意外的内存量。<br>在一个循环中，内存的分配就像所有动态维度都取任何这些维度的最大值一样。例如，如果一个循环引用两个维度为<code>[4,x,y]</code>和<code>[6,y]</code>的张量，则这些张量的内存分配就像它们的维度是<code>[4,max(x,y),max(x ,y)]</code>和<code>[6,max(x,y)]</code> 。</p>
+<p>带有<code>kLAST_VALUE</code>的<code>LoopOutputLayer</code>的输入必须是<code>IRecurrenceLayer</code>的输出。<br>循环 API 仅支持<code>FP32</code> 和 <code>FP16</code> 精度。</p>
+<h2 id="10-5-Replacing-IRNNv2Layer-With-Loops"><a href="#10-5-Replacing-IRNNv2Layer-With-Loops" class="headerlink" title="10.5. Replacing IRNNv2Layer With Loops"></a>10.5. Replacing IRNNv2Layer With Loops</h2><p><code>IRNNv2Layer</code>在 TensorRT 7.2.1 中已弃用，并将在 TensorRT 9.0 中删除。使用循环 API 合成循环子网络。例如，请参阅sampleCharRNN方法<code>SampleCharRNNLoop::addLSTMCell</code> 。循环 API 让您可以表达一般的循环网络，而不是局限于IRNNLayer和IRNNv2Layer中的预制单元。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/blob/main/samples/sampleCharRNN">sampleCharRNN</a> 。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/10-TensorRT%E4%B8%AD%E7%9A%84%E5%BE%AA%E7%8E%AF/" title="10-TensorRT中的循环">http://example.com/TensorRT/TensorRT中文版开发手册/10-TensorRT中的循环/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/Tensorrt/" rel="tag"><i class="fa fa-tag"></i> Tensorrt</a>
+              <a href="/tags/DeepLearning/" rel="tag"><i class="fa fa-tag"></i> DeepLearning</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E4%B8%8Eonnx/" rel="prev" title="TensorRT与onnx">
+                  <i class="fa fa-chevron-left"></i> TensorRT与onnx
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/11-TensorRT%E4%B9%8B%E4%BD%BF%E7%94%A8%E6%9D%A1%E4%BB%B6/" rel="next" title="11-TensorRT之使用条件">
+                  11-TensorRT之使用条件 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"bcaf23b330f0b6eedbf2cc0e60fdaee6"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

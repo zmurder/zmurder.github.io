@@ -1,0 +1,1207 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="TensorRT网络层详解">
+<meta property="og:type" content="article">
+<meta property="og:title" content="15-TensorRT网络层详解">
+<meta property="og:url" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/15-TensorRT%E7%BD%91%E7%BB%9C%E5%B1%82%E8%AF%A6%E8%A7%A3/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="TensorRT网络层详解">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/15-TensorRT%E7%BD%91%E7%BB%9C%E5%B1%82%E8%AF%A6%E8%A7%A3/rdp.jpg">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/15-TensorRT%E7%BD%91%E7%BB%9C%E5%B1%82%E8%AF%A6%E8%A7%A3/rnnv2.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/15-TensorRT%E7%BD%91%E7%BB%9C%E5%B1%82%E8%AF%A6%E8%A7%A3/image-20230505154642579.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/15-TensorRT%E7%BD%91%E7%BB%9C%E5%B1%82%E8%AF%A6%E8%A7%A3/islice-equation.png">
+<meta property="article:published_time" content="2024-12-01T10:13:45.370Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.370Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Tensorrt">
+<meta property="article:tag" content="DeepLearning">
+<meta property="article:tag" content="Plugin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/15-TensorRT%E7%BD%91%E7%BB%9C%E5%B1%82%E8%AF%A6%E8%A7%A3/rdp.jpg">
+
+
+<link rel="canonical" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/15-TensorRT%E7%BD%91%E7%BB%9C%E5%B1%82%E8%AF%A6%E8%A7%A3/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/15-TensorRT%E7%BD%91%E7%BB%9C%E5%B1%82%E8%AF%A6%E8%A7%A3/","path":"TensorRT/TensorRT中文版开发手册/15-TensorRT网络层详解/","title":"15-TensorRT网络层详解"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>15-TensorRT网络层详解 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TensorRT%E7%BD%91%E7%BB%9C%E5%B1%82%E8%AF%A6%E8%A7%A3"><span class="nav-text">TensorRT网络层详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#A-1-TensorRT-Layers"><span class="nav-text">A.1. TensorRT Layers</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-1-IActivationLayer"><span class="nav-text">A.1.1. IActivationLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-2-IAssertionLayer"><span class="nav-text">A.1.2. IAssertionLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-3-IConcatenationLayer"><span class="nav-text">A.1.3. IConcatenationLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-4-IConditionLayer"><span class="nav-text">A.1.4. IConditionLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-5-IConstantLayer"><span class="nav-text">A.1.5. IConstantLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-6-IConvolutionLayer"><span class="nav-text">A.1.6. IConvolutionLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-7-IDeconvolutionLayer"><span class="nav-text">A.1.7. IDeconvolutionLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-8-IDequantizeLayer"><span class="nav-text">A.1.8. IDequantizeLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-9-IEinsumLayer"><span class="nav-text">A.1.9. IEinsumLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-10-IElementWiseLayer"><span class="nav-text">A.1.10. IElementWiseLayer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#A-1-10-1-ElementWise-Layer-Setup"><span class="nav-text">A.1.10.1. ElementWise Layer Setup</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-11-IFillLayer"><span class="nav-text">A.1.11. IFillLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-12-IFullyConnectedLayer"><span class="nav-text">A.1.12. IFullyConnectedLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-13-IGatherLayer"><span class="nav-text">A.1.13. IGatherLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-14-IIdentityLayer"><span class="nav-text">A.1.14. IIdentityLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-15-IIfConditionalBoundaryLayer"><span class="nav-text">A.1.15. IIfConditionalBoundaryLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-16-IIfConditionalOutputLayer"><span class="nav-text">A.1.16. IIfConditionalOutputLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-17-IIfConditionalInputLayer"><span class="nav-text">A.1.17. IIfConditionalInputLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-18-IIteratorLayer"><span class="nav-text">A.1.18. IIteratorLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-20-ILoopOutputLayer"><span class="nav-text">A.1.20. ILoopOutputLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-21-ILRNLayer"><span class="nav-text">A.1.21. ILRNLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-22-IMatrixMultiplyLayer"><span class="nav-text">A.1.22. IMatrixMultiplyLayer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#A-1-22-1-MatrixMultiply-Layer-Setup"><span class="nav-text">A.1.22.1. MatrixMultiply Layer Setup</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-23-IParametricReluLayer"><span class="nav-text">A.1.23. IParametricReluLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-24-IPaddingLayer"><span class="nav-text">A.1.24. IPaddingLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-25-IPluginV2Layer"><span class="nav-text">A.1.25. IPluginV2Layer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-26-IPoolingLayer"><span class="nav-text">A.1.26. IPoolingLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-28-IRaggedSoftMaxLayer"><span class="nav-text">A.1.28. IRaggedSoftMaxLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-29-IRecurrenceLayer"><span class="nav-text">A.1.29. IRecurrenceLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-30-IReduceLayer"><span class="nav-text">A.1.30. IReduceLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-31-IResizeLayer"><span class="nav-text">A.1.31. IResizeLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-32-IRNNv2Layer"><span class="nav-text">A.1.32. IRNNv2Layer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#A-1-32-1-RNNv2-Layer-Setup"><span class="nav-text">A.1.32.1. RNNv2 Layer Setup</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#A-1-32-2-RNNv2-Layer-Optional-Inputs"><span class="nav-text">A.1.32.2. RNNv2 Layer - Optional Inputs</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-33-IScaleLayer"><span class="nav-text">A.1.33. IScaleLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-34-IScatterLayer"><span class="nav-text">A.1.34. IScatterLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-35-ISelectLayer"><span class="nav-text">A.1.35. ISelectLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-36-IShapeLayer"><span class="nav-text">A.1.36. IShapeLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-37-IShuffleLayer"><span class="nav-text">A.1.37. IShuffleLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-38-ISliceLayer"><span class="nav-text">A.1.38. ISliceLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-39-ISoftMaxLayer"><span class="nav-text">A.1.39. ISoftMaxLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-40-ITopKLayer"><span class="nav-text">A.1.40. ITopKLayer</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#A-1-40-1-TopK-Layer-Setup"><span class="nav-text">A.1.40.1. TopK Layer Setup</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A%E8%AF%A5%E5%B1%82%E6%9C%89%E4%B8%A4%E4%B8%AA%E8%BE%93%E5%87%BA%E3%80%82%E7%AC%AC%E4%B8%80%E4%B8%AA%E8%BE%93%E5%87%BA%E6%98%AF%E5%89%8DK%E4%B8%AA%E5%80%BC%E7%9A%84%E6%95%B0%E7%BB%84%E3%80%82%E7%AC%AC%E4%BA%8C%E4%B8%AA%E6%98%AF%E6%88%91%E4%BB%AC%E6%9B%B4%E6%84%9F%E5%85%B4%E8%B6%A3%E7%9A%84%EF%BC%8C%E6%98%AF%E8%BF%99%E4%BA%9B%E6%9C%80%E5%A4%A7%E5%80%BC%E5%87%BA%E7%8E%B0%E7%9A%84%E7%B4%A2%E5%BC%95%E3%80%82"><span class="nav-text">注意：该层有两个输出。第一个输出是前K个值的数组。第二个是我们更感兴趣的，是这些最大值出现的索引。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-41-ITripLimitLayer"><span class="nav-text">A.1.41. ITripLimitLayer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#A-1-42-IUnaryLayer"><span class="nav-text">A.1.42. IUnaryLayer</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/15-TensorRT%E7%BD%91%E7%BB%9C%E5%B1%82%E8%AF%A6%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="15-TensorRT网络层详解 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          15-TensorRT网络层详解
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/" itemprop="url" rel="index"><span itemprop="name">TensorRT中文版开发手册</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="TensorRT网络层详解"><a href="#TensorRT网络层详解" class="headerlink" title="TensorRT网络层详解"></a>TensorRT网络层详解</h1><img src="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/15-TensorRT%E7%BD%91%E7%BB%9C%E5%B1%82%E8%AF%A6%E8%A7%A3/rdp.jpg" class="">
+<p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/zh-cn/developer-program">点击此处加入NVIDIA开发者计划</a></p>
+<h2 id="A-1-TensorRT-Layers"><a href="#A-1-TensorRT-Layers" class="headerlink" title="A.1. TensorRT Layers"></a>A.1. TensorRT Layers</h2><p>在 TensorRT 中，层代表了不同风格的数学或编程操作。以下部分描述了 TensorRT 支持的每一层。 TensorRT 所需的最小工作空间取决于网络使用的算子。建议的最小构建时间设置为 16 MB。无论提供给构建器的最大工作空间值如何，TensorRT 都将在运行时分配不超过它所需的工作空间。要查看每个层支持的特定属性列表，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/index.html">NVIDIA TensorRT API 参考文档</a>。</p>
+<p>TensorRT 可以通过<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#fusion-types">融合层</a>来优化性能。有关如何启用层融合优化的信息，请参阅融合类型。有关优化单个层性能的信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#optimize-layer">优化层性能</a>。</p>
+<p>有关每层支持的精度类型和功能的详细信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-support-matrix/index.html">NVIDIA TensorRT 支持矩阵</a>。</p>
+<h3 id="A-1-1-IActivationLayer"><a href="#A-1-1-IActivationLayer" class="headerlink" title="A.1.1. IActivationLayer"></a>A.1.1. IActivationLayer</h3><p><code>IActivationLayer</code>实现元素激活函数。</p>
+<p><strong>层描述</strong></p>
+<p>对输入张量A应用激活函数，并生成具有相同维度的输出张量B。</p>
+<p>激活层支持以下操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rectified Linear Unit (ReLU): B = ReLU(A)</span><br><span class="line">Hyperbolic tangent: B = tanh(A)</span><br><span class="line">“s” shaped curve (sigmoid): B = σ(A)</span><br></pre></td></tr></table></figure>
+<p><strong>条件和限制</strong></p>
+<p>没有任何</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_activation_layer.html">C++ 类IActivationLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#iactivationlayer">Python 类IActivationLayer</a> 。</p>
+<h3 id="A-1-2-IAssertionLayer"><a href="#A-1-2-IAssertionLayer" class="headerlink" title="A.1.2. IAssertionLayer"></a>A.1.2. IAssertionLayer</h3><p>如果<code>IAssertionLayer</code>的输入张量包含任何错误值，则<code>IAssertionLayer</code>会导致构建器或运行时报告错误。</p>
+<p><strong>层描述</strong></p>
+<p>该层有一个布尔输入张量，没有输出。输入张量必须是形状张量。如果构建器可以证明任何元素在构建时始终为假，则会报告构建时错误。否则，在运行时计算张量，如果任何元素为假，则报告错误。</p>
+<p>Assert输入维度相等可能有助于优化器。例如，如果网络有两个前导维度必须相等的输入，则使用<code>IGatherLayer</code> （或<code>ISliceLayer</code> ）提取这些维度，将它们与<code>ElementWiseOperation::kEQUAL</code>进行比较，并将输出馈送到<code>IAssertionLayer</code>让 TensorRT 知道维度必须相等。</p>
+<p><strong>条件和限制</strong></p>
+<p>输入张量必须是布尔形状张量。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_assertion_layer.html">C++ 类IAssertionLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#iassertionlayer">Python 类IAssertionLayer</a> 。</p>
+<h3 id="A-1-3-IConcatenationLayer"><a href="#A-1-3-IConcatenationLayer" class="headerlink" title="A.1.3. IConcatenationLayer"></a>A.1.3. IConcatenationLayer</h3><p><code>IConcatenationLayer</code>将多个具有相同非通道大小的张量沿通道维度链接在一起。</p>
+<p><strong>层描述</strong></p>
+<p>m个输入张量$A^i$和通道轴c的数组中传递。</p>
+<p>所有输入张量的所有维度必须在除轴c之外的每个轴上匹配。让每个输入张量都有维度$a^i$ 。连接的输出张量将具有维度b使得</p>
+<p>$b_j ={a_j\ \ \ if \ \ j≠c\ \ \ and\ \ \ \sum {m−1\atop i=0}\ a{i\atop c} \ \ otherwise}$</p>
+<p><strong>条件和限制</strong></p>
+<p>如果非批处理轴少于三个，则默认通道轴假定为最后一个轴的第三个或第一个非批处理轴。使用隐式批处理维度模式时，无法沿批处理轴进行连接。所有输入张量必须是非 <code>INT32</code> 类型，或者都必须是 <code>INT32</code> 类型。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_concatenation_layer.html">C++ 类IConcatenationLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#iconcatenationlayer">Python 类IConcatenationLayer</a> 。</p>
+<h3 id="A-1-4-IConditionLayer"><a href="#A-1-4-IConditionLayer" class="headerlink" title="A.1.4. IConditionLayer"></a>A.1.4. IConditionLayer</h3><p><code>IConditionLayer</code>表示与 Conditional 构造关联的条件边界。它由 TensorRT 在使用<code>IIfConditional::setCondition</code>时创建。 if-conditional 由条件边界层定义。</p>
+<p><strong>层描述</strong></p>
+<p><code>IConditionLayer</code>只有一个输入，它接受一个布尔张量，该张量控制与此<code>IConditionLayer</code>关联的 Conditional 的评估流。</p>
+<p><strong>条件和限制</strong></p>
+<p><code>IConditionLayer</code>的输入必须是布尔标量（零维张量）。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_condition_layer.html">C++ 类IConditionLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#iconditionlayer">Python 类IConditionLayer </a>。</p>
+<h3 id="A-1-5-IConstantLayer"><a href="#A-1-5-IConstantLayer" class="headerlink" title="A.1.5. IConstantLayer"></a>A.1.5. IConstantLayer</h3><p><code>IConstantLayer</code>输出一个张量，其值作为该层的参数提供，从而可以方便地在计算中使用常量。</p>
+<p><strong>层描述</strong></p>
+<p>给定维度<code>d</code>和权重向量<code>w</code> ，Constant层将输出维度为d的张量B ，其中常数值在w中。该层不接受输入张量。权重向量<code>w</code>中的元素数量等于<code>d</code>的volume。</p>
+<p><strong>条件和限制</strong></p>
+<p>输出可以是零到七维的张量。不支持布尔权重。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_constant_layer.html">C++ 类IConstantLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#iconstantlayer">Python 类IConstantLayer</a> 。</p>
+<h3 id="A-1-6-IConvolutionLayer"><a href="#A-1-6-IConvolutionLayer" class="headerlink" title="A.1.6. IConvolutionLayer"></a>A.1.6. IConvolutionLayer</h3><p><code>IConvolutionLayer</code>计算带或不带偏差的2D（通道、高度和宽度）卷积或 3D（通道、深度、高度和宽度）卷积。</p>
+<p>注意： <code>IConvolutionLayer</code>执行的操作实际上是一个correlation。因此，如果您正在格式化权重以通过 API 而不是通过解析器导入，这是一个考虑因素。</p>
+<p><strong>层描述：2D卷积</strong></p>
+<p>4D tensor A上计算与 2D filters 的互相关，尺寸为 a ，以生成 4D 张量B ，尺寸为b 。 B的维度取决于A的维度、输出映射的数量m 、内核大小k 、对称填充p 、步幅s 、扩张d和扩张内核大小 $t = 1+d (k−1)$ ，因此高度和宽度相应调整如下：</p>
+<ul>
+<li>$b =[a_0\ \ \ m\ \ \  b_2\ \ \  b_3]$ </li>
+<li>$b_2 =⌊ (a_2+2p_0−t_0)/s_0⌋ + 1$</li>
+<li>$b_3 =⌊ (a_3+2p_1−t_1)/s_1⌋ + 1$</li>
+</ul>
+<p><code>g</code>的核权重<code>w</code>和偏置权重<code>x</code> （可选）如下：</p>
+<ul>
+<li>w根据形状 $[m\ a_1/g\ r_0\ r1]$排序</li>
+<li>x的长度为m</li>
+</ul>
+<p>让张量K尺寸为$k = [m\ a_1/g\  t_0\  t_1]$被定义为零填充张量，使得：</p>
+<ul>
+<li><p>$k<em>{i, j, {hh}, {ll}}= w</em>{i, j, h, l}$</p>
+</li>
+<li><p>$hh = {0\ \ \ if\  \ \ h = 0, h + d_0 \ \ (h−1) \ \ otherwise}$</p>
+</li>
+<li><p>$ll = {0\ \  if\ \  l = 0, l + d_1 (l−1) \ \ otherwise}$</p>
+</li>
+</ul>
+<p>张量C是A的零填充副本，尺寸为$[a_0\ \  a_1\ \  a_2+p_0 \ \ a_3+p_1]$，则张量B定义为</p>
+<p>$B<em>{i, j, k, l}=\sum(C</em>{i, :, k:kk, l:ll}× K_{j, :, :, :}) +x_j\ \ \ where\ \  kk = k+t_0−1\ \  and\ \  ll = l+t_1−1$</p>
+<p><strong>层描述：3D卷积</strong></p>
+<p>5D tensor A上计算与 3D filter的互相关，以产生尺寸为b的5D 张量B。 B的维度取决于A的维度、输出映射的数量m 、内核大小k 、对称填充p 、步幅s 、扩张d和扩张内核大小$t = 1+d (k−1)$，因此高度和宽度相应调整如下：</p>
+<ul>
+<li>$b =[a_0\ m \ b_2\  b_3\  b_4]$</li>
+<li>$b_2 = (a_2+2p_0−t_0)/s_0+1$</li>
+<li>$b_3 = (a_3+2p_1−t_1)/s_1+1$</li>
+<li>$b_4 = (a_4+2p_2−t_2)/s_1+1$</li>
+</ul>
+<p>g的核权重<code>w</code>和偏置权重<code>x</code> （可选）如下：</p>
+<ul>
+<li><code>w</code>根据形状$[m\ a_1/g\  r_0\  r_1\  r_2]$排序</li>
+<li><code>x</code>的长度为<code>m</code></li>
+</ul>
+<p>让张量K尺寸为$k = [m\  a_1/g\  t_0\  t_1\  t_2]$ 被定义为零填充张量，使得：</p>
+<ul>
+<li>$k<em>{i, j, dd, hh, ll}= w</em>{i, j, d, h, l}$ </li>
+<li>$dd = {0\ \  if\ \  d = 0, d + d_0\ \  (d−1)\ \  otherwise}$</li>
+<li>$hh = {0\  if\  \ h = 0, h + d_1\ \  (h−1) \ otherwise}$</li>
+<li>$ll = {0\ \  if\ \  l = 0, l + d_2\ \  (l−1)\ \  otherwise}$</li>
+</ul>
+<p>张量C是A的零填充副本，尺寸为$[a_0 \ \ a_1\ \  a_2+p_0 \ \ a_3+p_1 \ \ a_4+p_2]$ </p>
+<p>则张量B定义为</p>
+<p>$B<em>{i, j, d, k, l}=\sum(C</em>{i, :, d:dd, k:kk, l:ll} × K_{j, :, :, :, :}) +x_j \ \  where\ \  dd = d+t_0−1 , kk = k+t_1−1 , and\ \  ll = l+t_2−1$ .</p>
+<p><strong>条件和限制</strong></p>
+<p>输入内核维度的数量决定了 2D 或 3D。对于 2D 卷积，输入和输出可能有四个以上的维度；超过四个，所有维度都被视为批量大小的乘数，输入和输出被视为 4D 张量。对于 3D 卷积，类似于 2D 卷积，如果输入或输出的维度超过 5 个，则所有超过 5 个维度都被视为批量大小的乘数。如果指定了组并且使用了 INT8 数据类型，则输入和输出的组大小必须是四的倍数。</p>
+<p><strong>空张量</strong></p>
+<p>与零输入通道（例如[n, 0, h, w] ）的卷积会导致维度为[n, k, p, q]的零张量，因为结果的每个元素都是对一组空的乘积求和。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_convolution_layer.html">C++ 类IConvolutionLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#iconvolutionlayer">Python 类IConvolutionLayer</a> 。</p>
+<h3 id="A-1-7-IDeconvolutionLayer"><a href="#A-1-7-IDeconvolutionLayer" class="headerlink" title="A.1.7. IDeconvolutionLayer"></a>A.1.7. IDeconvolutionLayer</h3><p><code>IDeconvolutionLayer</code>计算带或不带偏差的2D（通道、高度和宽度）或 3D（通道、深度、高度和宽度）反卷积。</p>
+<p>注意：该层实际上在 2D/3D 输入上应用了 2D/3D 转置卷积算子。它也被称为分数步幅卷积或转置卷积。</p>
+<p><strong>层描述：2D反卷积</strong></p>
+<p>4D tensor A上计算与 2D filter的互相关，尺寸为 a ，以生成 4D 张量B ，尺寸为b 。 B的维度取决于A的维度、输出映射的数量m 、内核大小k 、对称填充p 、步幅s 、扩张d和扩张内核大小$t = 1+d (k−1)$ ，因此高度和宽度相应调整如下：</p>
+<ul>
+<li>$b =[a_0\ m\  b_2\  b_3]$ </li>
+<li>$b_2 = (a_2−1)*s_0 + t_0 − 2p_0$</li>
+<li>$b_3 = (a_3−1)*s_1 + t_1 − 2p_1$</li>
+</ul>
+<p><code>g</code>的核权重<code>w</code>和偏置权重<code>x</code> （可选）如下：</p>
+<ul>
+<li>w是根据形状$[a_1/g\  m\  r_0\  r_1]$排序</li>
+<li>x的长度为m</li>
+</ul>
+<p>让张量K尺寸为$k = [m\  b_1/g\  t_0\  t_1]$被定义为零填充张量，使得：</p>
+<ul>
+<li>$k<em>{i, j, hh, ll}= w</em>{i, j, h, l}$</li>
+<li>$hh = {0\ \  if\ \  h = 0, h + d_0 (h−1)\ \  otherwise}$</li>
+<li>$ll = {0\ \  if\ \  l = 0, l + d_1 (l−1) \ \ otherwise}$</li>
+</ul>
+<p>张量<code>C</code>是<code>A</code>的零填充副本，尺寸为 $[a_0 \ a_1 \ a_2+p_0\  a_3+p_1]$ , 则张量B定义为</p>
+<p>$B<em>{i, j, k, l}=\sum </em>{u, v} (C_{i, j, k-u, l-v} \ K) +x_j$</p>
+<p>其中u范围从0到 $min (t_0-1, k)$ , v范围从0到$min (t_1-1, l)$ 。</p>
+<p><strong>层描述：3D反卷积</strong></p>
+<p>5D tensor A上计算与 3D filter 的互相关，以产生尺寸为b的5D 张量B。 B的维度取决于A的维度、输出映射的数量m 、内核大小k 、对称填充p 、步幅s 、扩张d和扩张内核大小$t = 1+d (k−1)$ ，因此高度和宽度相应调整如下：</p>
+<ul>
+<li>$b =[a_0\ m\  b_2\  b_3]$ </li>
+<li>$b_2 = (a_2−1)*s_0 + t_0 − 2p_0$</li>
+<li>$b_3 = (a_3−1)*s_1 + t_1 − 2p_1$</li>
+<li>$b_4 = (a_4−1) *s_2 +t_2 −2p_2$</li>
+</ul>
+<p><code>g</code>的核权重<code>w</code>和偏置权重<code>x</code> （可选）如下：</p>
+<ul>
+<li>w是根据形状$[a_1/g\  m\  r_0\  r_1\ r_2]$排序</li>
+<li>x的长度为m</li>
+</ul>
+<p>让张量K尺寸为$k = [m\  b_1/g\  t_0\  t_1\ t_2]$被定义为零填充张量，使得：</p>
+<ul>
+<li>$k<em>{i, j, dd, hh, ll}= w</em>{i, j, d, h, l}$</li>
+<li>$dd = {0 \ \ if\ \  d = 0, d + d_0 (d−1) \ \ otherwise}$</li>
+<li>$hh = {0\ \  if\ \  h = 0, h + d_1 (h−1)\ \  otherwise}$</li>
+<li>$ll = {0\ \  if\ \  l = 0, l + d_2 (l−1) \ \ otherwise}$</li>
+</ul>
+<p>张量<code>C</code>是<code>A</code>的零填充副本，尺寸为 $[a_0 \ a_1 \ a_2+p_0\  a_3+p_1\  a_4+p_2]$ , 则张量B定义为</p>
+<p>$B<em>{i, j, k, l, m}=\sum </em>{u, v, w} (C_{i, j, k-u, l-v, m-w} \ K) +x_j$</p>
+<p>其中u范围从0到 $min (t_0-1, k)$ , v范围从0到$min (t_1-1, l)$, 其中w范围从0到 $min (t_2-1, m)$ </p>
+<p><strong>条件和限制</strong></p>
+<p>2D 或 3D 由输入内核维度的数量决定。对于 2D 反卷积，输入和输出可能有超过 4 个维度；超过 4，所有维度都被视为批量大小的乘数，输入和输出被视为 4D 张量。对于 3D 反卷积，类似于 2D 反卷积，超过 5 的维度被视为批量大小的乘数。如果指定了组并且使用了 INT8 数据类型，则输入和输出组的大小必须是 4 的倍数。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_deconvolution_layer.html">C++ 类IDeconvolutionLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#ideconvolutionlayer">Python 类IDeconvolutionLayer</a> 。</p>
+<h3 id="A-1-8-IDequantizeLayer"><a href="#A-1-8-IDequantizeLayer" class="headerlink" title="A.1.8. IDequantizeLayer"></a>A.1.8. IDequantizeLayer</h3><p><code>DequantizeLayer</code>实现反量化运算符。</p>
+<p><strong>层描述</strong></p>
+<p><code>IDequantizeLayer</code>层接受带符号的 8 位整数输入张量，并使用配置的比例和零点输入根据以下公式对输入进行反量化：</p>
+<p><code>output = (input - zeroPt) * scale</code></p>
+<p>第一个输入（索引 0 ）是要量化的张量。第二个输入（索引 1 ）和第三个输入（索引 2 ）分别是刻度和零点。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_dequantize_layer.html">C++ 类IDequantizeLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#idequantizelayer">Python 类IDequantizeLayer</a> 。</p>
+<h3 id="A-1-9-IEinsumLayer"><a href="#A-1-9-IEinsumLayer" class="headerlink" title="A.1.9. IEinsumLayer"></a>A.1.9. IEinsumLayer</h3><p><code>IEinsumLayer</code>实现了一个 <code>Einsum</code> 运算符。</p>
+<p><strong>层描述</strong></p>
+<p><code>IEinsumLayer</code>根据<code>Einstein</code> 求和约定，沿方程参数指定的维度对输入元素进行求和。</p>
+<ul>
+<li>该等式以与维度相同的顺序为输入中的每个维度指定 ASCII 小写字母，每个输入用逗号分隔。</li>
+<li>该等式表示为term1,term2…-&gt;output-term ，其中每个项对应于一个操作数张量，项内的字符对应于操作数维度。</li>
+<li>标有相同下标的尺寸必须匹配。</li>
+<li>一个输入中的重复下标标签采用对角线。</li>
+<li>跨多个输入重复标签意味着这些轴将成倍增加</li>
+<li>从输出中省略标签意味着沿这些轴的值将被求和。</li>
+<li>对于某些输入操作数，输出下标必须至少出现一次，而对于输出则至多出现一次。</li>
+<li>在隐式模式下，即如果等式不包含-&gt; ，则表达式中出现一次的索引将成为按字母顺序递增的输出的一部分。</li>
+<li>在显式模式下，可以通过添加箭头 ( -&gt; ) 后跟输出下标来指定输出下标标签来控制输出。例如， <code>ij,jk-&gt;ik</code>等价于<code>ij,jk</code> 。</li>
+<li>空字符串 (“”) 对标量操作数有效。</li>
+<li>该等式可能在不同元素（下标、省略号、箭头和逗号）之间包含空格（<code>SPC-0x20</code>）。</li>
+</ul>
+<p><strong>条件和限制</strong></p>
+<p>TensorRT 不支持 <code>Einsum</code> 的省略号、对角线运算或两个以上的输入。所有输入必须具有相同的数据类型，并且该数据类型必须是<code>DataType::kFLOAT</code>或<code>DataType::kHALF</code> 。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_einsum_layer.html">C++ 类IEinsumLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#ieinsumlayer">Python 类IEinsumLayer </a>。</p>
+<h3 id="A-1-10-IElementWiseLayer"><a href="#A-1-10-IElementWiseLayer" class="headerlink" title="A.1.10. IElementWiseLayer"></a>A.1.10. IElementWiseLayer</h3><p><code>IElementWiseLayer</code>也称为 <code>Eltwise</code> 层，实现了每个元素的操作。</p>
+<p><strong>层描述</strong></p>
+<p>该层计算输入张量A和输入张量B之间的每元素二元运算，以产生输出张量C 。对于每个维度，它们的长度必须匹配，或者其中一个必须是一个。在后一种情况下，张量沿该轴广播。输出张量与输入具有相同的维数。输出张量与输入具有相同的维数。对于每个输出维度，如果它们匹配，则其长度等于相应输入维度的长度；否则，它等于对应的输入维度不是一。</p>
+<p><code>IElementWiseLayer</code>支持以下操作：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">Sum: C = A+B</span><br><span class="line">Product: C = A*B</span><br><span class="line">Minimum: C = min(A, B)</span><br><span class="line">Maximum: C = max(A, B)</span><br><span class="line">Subtraction: C = A-B</span><br><span class="line">Division: C = A/B</span><br><span class="line">Power: C = A^B</span><br><span class="line">Floor division : C = floor(A/B)</span><br><span class="line">And : C = A &amp; B</span><br><span class="line">Or : C = A | B</span><br><span class="line">Xor : C = A xor B</span><br><span class="line">Equal : C = (A == B)</span><br><span class="line">Greater : C = A &gt; B</span><br><span class="line">Less: C = A &lt; B</span><br></pre></td></tr></table></figure>
+<p><strong>条件和限制</strong></p>
+<p>A和B的每个维度的长度必须等于或等于 1。</p>
+<p><code>IElementWiseLayer</code>层可以接受不同的输入数据类型，具体取决于所使用的操作。 <code>IElementWiseLayer</code>支持每个操作的以下类型：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">| Operation   | DataTypes                    |</span><br><span class="line">| ----------- | ---------------------------- |</span><br><span class="line">| kSUM        | kFLOAT, kHALF, kINT8, kINT32 |</span><br><span class="line">| kPROD       | kFLOAT, kHALF, kINT8, kINT32 |</span><br><span class="line">| kMAX        | kFLOAT, kHALF, kINT8, kINT32 |</span><br><span class="line">| kMIN        | kFLOAT, kHALF, kINT8, kINT32 |</span><br><span class="line">| kSUB        | kFLOAT, kHALF, kINT8, kINT32 |</span><br><span class="line">| kDIV        | kFLOAT, kHALF, kINT8, kINT32 |</span><br><span class="line">| kPOW        | kFLOAT, kHALF, kINT8         |</span><br><span class="line">| kFLOOR\_DIV | kFLOAT, kHALF, kINT8, kINT32 |</span><br><span class="line">| kAND        | kBOOL                        |</span><br><span class="line">| kOR         | kBOOL                        |</span><br><span class="line">| kXOR        | kBOOL                        |</span><br><span class="line">| kEQUAL      | kFLOAT, kHALF, kINT8, kINT32 |</span><br><span class="line">| kGREATER    | kFLOAT, kHALF, kINT8, kINT32 |</span><br><span class="line">| kLESS       | kFLOAT, kHALF, kINT8, kINT32 |</span><br></pre></td></tr></table></figure><br>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_element_wise_layer.html">C++ 类IElementWiseLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#ielementwiselayer">Python 类IElementWiseLayer</a> 。</p>
+<h4 id="A-1-10-1-ElementWise-Layer-Setup"><a href="#A-1-10-1-ElementWise-Layer-Setup" class="headerlink" title="A.1.10.1. ElementWise Layer Setup"></a>A.1.10.1. ElementWise Layer Setup</h4><p>ElementWise 层用于执行完全连接层提供的功能的第二步。 <code>fcbias</code>常数层和矩阵乘法层的输出用作 <code>ElementWise</code> 层的输入。然后将该层的输出提供给 <code>TopK</code> 层。下面的代码演示了如何设置图层：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> fcbias = network-&gt;<span class="built_in">addConstant</span>(<span class="built_in">Dims2</span>(VOCAB_SIZE, <span class="number">1</span>), weightMap[FCB_NAME]);</span><br><span class="line"><span class="keyword">auto</span> addBiasLayer = network-&gt;<span class="built_in">addElementWise</span>(</span><br><span class="line">*matrixMultLayer-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>), </span><br><span class="line">*fcbias-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>), ElementWiseOperation::kSUM);</span><br><span class="line"><span class="built_in">assert</span>(addBiasLayer != <span class="literal">nullptr</span>);</span><br><span class="line">addBiasLayer-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>)-&gt;<span class="built_in">setName</span>(<span class="string">&quot;Add Bias output&quot;</span>);</span><br></pre></td></tr></table></figure><br>有关详细信息，请参阅<a target="_blank" rel="noopener" href="http://docs.nvidia.com/deeplearning/sdk/tensorrt-api/index.html">NVIDIA TensorRT API 参考</a>。</p>
+<h3 id="A-1-11-IFillLayer"><a href="#A-1-11-IFillLayer" class="headerlink" title="A.1.11. IFillLayer"></a>A.1.11. IFillLayer</h3><p><code>IFillLayer</code>用于生成具有指定模式的输出张量。</p>
+<p><strong>层描述</strong></p>
+<p>给定输出张量大小，该层将生成具有指定模式的数据并填充张量。 <code>alpha</code>和 <code>beta</code> 作为不同模式的不同参数执行。</p>
+<p>IFillLayer支持以下操作：</p>
+<ul>
+<li>LINSPACE ：Output = alpha(scalar) + beta(different on each axis) * element_index</li>
+<li>RANDOM_UNIFORM ：Output = Random(min = alpha, max = beta)</li>
+</ul>
+<p><strong>条件和限制</strong></p>
+<p>如果使用静态张量大小，该层只能生成一维张量。使用动态张量大小时，<code>alpha</code> 和 <code>beta</code> 的尺寸应符合每种模式的要求。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_fill_layer.html">C++ 类IFillLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Plugin/IPluginV2Ext.html">Python 类IFillLayer</a> 。</p>
+<h3 id="A-1-12-IFullyConnectedLayer"><a href="#A-1-12-IFullyConnectedLayer" class="headerlink" title="A.1.12. IFullyConnectedLayer"></a>A.1.12. IFullyConnectedLayer</h3><p><code>IFullyConnectedLayer</code>实现了一个矩阵向量乘积，有或没有偏差。</p>
+<p><strong>层描述</strong></p>
+<p><code>IFullyConnectedLayer</code>需要三个或更多维度的输入张量A。给定一个尺寸为$a=[a<em>0 … a</em>{n−1}]$ ,  它首先被重新整形为尺寸为 $a^′=[a<em>0 … a</em>{n−4} (a<em>{n−3}*a</em>{n−2}*a_{n−1})]$ 将最后三个维度压缩为一个维度。</p>
+<p>然后，该层执行操作$B^′=WA^′+X$, 其中W是维度$w=[(a<em>{n−3}*a</em>{n−2}*a<em>{n−1}) k]$  , X是沿其他维度广播的维度$x=(k)$ 的偏置张量, k是输出通道，通过<code>setNbOutputChannels()</code>配置。如果未指定<code>X</code> ，则偏差值隐含为<code>0</code> 。结果$B’$是一个尺寸为$b^′=[a_0 … a</em>{n−4} k]$的张量</p>
+<p>最后，将$B’$重新整形为尺寸为$b=[a<em>0 … a</em>{n−4} k \ 1 \ 1]$ 通过插入两个尺寸为1的较低维度。</p>
+<p>总之，对于尺寸为 $a=[a<em>0 … a</em>{n−1}]$ ,输出张量B的维度为$b=[a<em>0 … a</em>{n−4} k\ 1 \ 1]$</p>
+<p><strong>条件和限制</strong></p>
+<p>A必须具有三个或更多维度。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_fully_connected_layer.html">C++ 类IFullyConnectedLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#ifullyconnectedlayer">Python 类IFullyConnectedLayer</a> 。</p>
+<h3 id="A-1-13-IGatherLayer"><a href="#A-1-13-IGatherLayer" class="headerlink" title="A.1.13. IGatherLayer"></a>A.1.13. IGatherLayer</h3><p><code>IGatherLayer</code>实现了聚合操作的三种变体。</p>
+<p><strong>层描述</strong></p>
+<p>默认聚合模式： <code>IGatherLayer</code>的<code>kDEFAULT</code>模式使用零维或更多维的索引张量B沿指定轴x收集每个数据张量A的元素，以生成尺寸为c的输出张量C。</p>
+<p>如果B有零维并且它是一个标量b ，那么$c<em>k = {a_k\ if\  k&lt;x, and\  a</em>{k+1}\  if\  k<x\}$, 并且c的长度等于 a 的长度减一。在这种情况下，$C_i = A_j \ \ \  where\ \ \  j_k = \{b\ \  if\ \  k=x, i_k \ \ if\ \  k<x, \ and \ \ i_{k−1} if k>x}$。</p>
+<p>如果B是维度为b的张量（长度为b ），则$c<em>k = {a_k\ \  if\ \  k&lt;x, b</em>{k−x}\ \  if\ \  k≥x\ \  and\ \  k<x+b, \ and \ \ a_{k−b+1}\ \  otherwise\}$。在这种情况下， $C_i\  =\  A_j \ \  where\ \  j_k = \{B_{X(i)}\ \  if \ \ k=x, i_k\ \  if\ \  k<x, and\ \  i_{k−b}\ \  if\ \  k>x}\ \  and\ \  X(i)=i_{x, .., x+b−1}$ 。</p>
+<p><code>GatherND</code> 模式： <code>IGatherLayer</code>的<code>GatherMode ::kND</code>模式使用维度b的索引张量B收集维度a的数据张量A的元素，以产生维度c的输出C。</p>
+<p>让我们表示输入张量的形状如:<br>$shape (A) = [f<em>1, … f_a], shape (B) = [g_1, … g</em>{b−1}, k]$。 让我们将元素维度的数量表示为n 。那么， $c = a + b − k − 1 − n$</p>
+<ul>
+<li>If $k = a − n$<ul>
+<li>$shape (C) = [g<em>1, … g</em>{b−1}]$</li>
+<li>$C (i<em>1 … i</em>{n−1}, i<em>n, … i</em>{b−1})  = A (i<em>1 … i</em>{n−1}, B (i<em>1, … i</em>{b−1}))$</li>
+</ul>
+</li>
+<li>If $k &lt; a − n$<ul>
+<li>$shape (C) = [g<em>1, … g</em>{b−1}, f_{n+k+1}, … f_a]$</li>
+<li>$C (i<em>1, … i</em>{n−1}, i<em>n, … i</em>{a−1}, i<em>a, … i</em>{a+b-k-1-n})  = A (i<em>1, … i</em>{n−1}, B (i<em>{1, … ib−1}), i_b, … i</em>{a+b-k-1-n})$</li>
+<li>where $B (i<em>1, … i</em>{b−1})$ is a tensor with k dimensions, and $shape (B (i<em>1, … i</em>{b−1})) = [i<em>n, … i</em>{n+k+1}]$ .</li>
+</ul>
+</li>
+<li>If k &gt; a − n<ul>
+<li>This is a build time error.</li>
+</ul>
+</li>
+</ul>
+<p><code>GatherElements</code> 模式： <code>IGatherLayer</code>的<code>GatherMode ::kELEMENT</code>模式使用维度b的索引张量B在指定轴上收集维度a的数据张量A的元素，以产生维度c的输出C。</p>
+<p>输出C具有形状$shape (C) = shape (B)$ 。以下伪代码说明了如何计算C。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">For each element X of B:</span><br><span class="line">Let J denote a sequence <span class="keyword">for</span> the subscripts of X</span><br><span class="line">Let K = sequence J with element [axis] replaced by X</span><br><span class="line">C[J] = A[K]</span><br></pre></td></tr></table></figure>
+<p><strong>条件和限制</strong></p>
+<ul>
+<li>索引张量B必须仅包含 INT32 值。</li>
+<li>如果索引张量中有任何无效的索引元素，则零将存储在输出张量中的适当位置。</li>
+<li>A的轴具有动态长度，则对其使用负索引具有未定义的行为。</li>
+</ul>
+<p>Default Gather Mode：适用于隐式批处理模式：</p>
+<ul>
+<li>不能沿批量大小维度收集元素。</li>
+<li>数据张量A必须至少包含一个非批量维度。</li>
+<li>数据张量A必须至少包含轴+ 1 个非批量维度。</li>
+<li>参数轴是零索引的，从数据张量A的第一个非批量维度开始。</li>
+</ul>
+<p>适用于显式批处理模式：</p>
+<ul>
+<li>数据张量A必须至少包含一维。</li>
+<li>数据张量A必须至少包含轴+ 1 个维度。</li>
+<li>参数轴是零索引的，从数据张量A的第一维开始。</li>
+<li>轴必须大于或等于<code>IGatherLayer::setNbElementWiseDimensions()</code>设置的元素维度数。</li>
+<li>ElementWise 维度的数量只能设置为 0 或 1。</li>
+<li>如果 ElementWise 维数设置为 1，则行为将类似于隐式批处理模式。前导维度将被视为隐式批处理模式中的批处理维度，这不是收集操作的一部分。例如，数据张量A的维度为<code>[N, C, H, W]</code> ，索引张量B的维度为<code>[N, K]</code> 。如果<code>nbElementWiseDimensions</code>为 1 并且轴设置为 1，则结果的维度将为<code>[N, K, H, W]</code> 。如果<code>nbElementWiseDimensions</code>为 0 并且轴设置为 1，则结果的维度将为<code>[N, N, K, H, W]</code> 。</li>
+<li>ElementWise 维度支持像IElementWiseLayer这样的广播。</li>
+</ul>
+<p>GatherND Mode：</p>
+<ul>
+<li>数据张量A必须至少包含一维。</li>
+<li>索引张量B必须至少包含一维。</li>
+<li>A和B的前n 个维度必须相等，其中n是元素维度的数量。</li>
+<li>n必须小于A的维数和B的维数。</li>
+<li>B的最里面的维度应该有一个介于1和a - n之间的值，包括 1 和 a - n 。</li>
+</ul>
+<p>GatherElements Mode：</p>
+<ul>
+<li>数据张量A必须至少包含一维。</li>
+<li>索引张量B必须至少包含一维。</li>
+<li>轴必须介于0和-1之间，包括在内。</li>
+</ul>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_gather_layer.html">C++ 类IGatherLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#igatherlayer">Python 类IGatherLayer</a> 。</p>
+<h3 id="A-1-14-IIdentityLayer"><a href="#A-1-14-IIdentityLayer" class="headerlink" title="A.1.14. IIdentityLayer"></a>A.1.14. IIdentityLayer</h3><p><code>IIdentityLayer</code>实现identity操作。</p>
+<p><strong>层描述</strong></p>
+<p>该层的输出在数学上与输入相同。该层允许您精确控制张量的精度并从一种精度转换为另一种精度。如果输入的精度与输出的精度不同，则该层会将输入张量转换为输出精度。</p>
+<p><strong>条件和限制</strong></p>
+<p>没有任何</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_identity_layer.html">C++ 类IIdentityLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#iidentitylayer">Python 类IIdentityLayer</a> 。</p>
+<h3 id="A-1-15-IIfConditionalBoundaryLayer"><a href="#A-1-15-IIfConditionalBoundaryLayer" class="headerlink" title="A.1.15. IIfConditionalBoundaryLayer"></a>A.1.15. IIfConditionalBoundaryLayer</h3><p><code>IIfConditionalBoundaryLayer</code>是 if 条件相关层的基类，特别是<code>IConditionLayer</code> 、 <code>IIfConditionalOutputLayer</code>和<code>IIfConditionalInputLayer</code> 。 <code>if-conditional</code> 由条件边界层定义。</p>
+<p><strong>层描述</strong></p>
+<p><code>IIfConditionalBoundaryLayer</code>类定义了一个虚拟方法<code>getConditional()</code> ，它返回一个指向关联<code>IIfConditional</code>的指针。</p>
+<p><strong>条件和限制</strong></p>
+<p>没有任何</p>
+<p>有关<code>IIfConditionalBoundaryLayer</code>的更多信息，包括条件如何工作及其限制，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#work-with-conditionals">使用条件</a>。</p>
+<h3 id="A-1-16-IIfConditionalOutputLayer"><a href="#A-1-16-IIfConditionalOutputLayer" class="headerlink" title="A.1.16. IIfConditionalOutputLayer"></a>A.1.16. IIfConditionalOutputLayer</h3><p><code>IfConditionalOutputLayer</code>指定 if 条件的输出。 if-conditional 由条件边界层定义。</p>
+<p><strong>层描述</strong></p>
+<p><code>if-conditional</code> 必须有一个或多个输出，每个输出由<code>IfConditionalOutputLayer</code>的唯一实例定义。 <code>IfConditionalOutputLayer</code>正好有两个输入，一个来自真分支（then-branch），一个来自假分支（else-branch）。当 if-conditional 执行<code>IfConditionalOutputLayer</code>时，它会根据与 if-conditional 关联的条件值选择两个输入中的哪一个复制到输出。</p>
+<p><strong>条件和限制</strong></p>
+<p>必须恰好有两个输入和一个输出。</p>
+<p>有关IfConditionalOutputLayer的更多信息，包括条件如何工作及其限制，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#work-with-conditionals">使用条件</a>。</p>
+<h3 id="A-1-17-IIfConditionalInputLayer"><a href="#A-1-17-IIfConditionalInputLayer" class="headerlink" title="A.1.17. IIfConditionalInputLayer"></a>A.1.17. IIfConditionalInputLayer</h3><p><code>IfConditionalInputLayer</code>指定 if 条件的输入。 <code>if-conditional</code> 由条件边界层定义。</p>
+<p><strong>层描述</strong></p>
+<p><code>IfConditionalInputLayer</code>是 <code>if-conditional</code> 输入的占位符，可由 if-conditional 的一个或两个分支使用。 <code>IfConditionalInputLayer</code>划分了 if 条件的输入边界。</p>
+<p><strong>条件和限制</strong></p>
+<p>必须只有一个输入和一个输出。</p>
+<p>有关<code>IfConditionalOutputLayer</code>的更多信息，包括条件如何工作及其限制，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#work-with-conditionals">使用条件</a>。</p>
+<h3 id="A-1-18-IIteratorLayer"><a href="#A-1-18-IIteratorLayer" class="headerlink" title="A.1.18. IIteratorLayer"></a>A.1.18. IIteratorLayer</h3><p><code>IIteratorLayer</code>使循环能够迭代张量。循环由循环边界层定义。</p>
+<p>有关<code>IIteratorLayer</code>的更多信息，包括循环的工作方式及其限制，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-developer-guide/index.html#work-with-loops">使用循环</a>。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_loop_boundary_layer.html">C++ 类IIteratorLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#iloopboundarylayer">Python 类IIteratorLayer</a> 。</p>
+<h3 id="A-1-20-ILoopOutputLayer"><a href="#A-1-20-ILoopOutputLayer" class="headerlink" title="A.1.20. ILoopOutputLayer"></a>A.1.20. ILoopOutputLayer</h3><p><code>ILoopOutputLayer</code>指定循环的输出。循环由循环边界层定义。</p>
+<p>有关<code>ILoopOutputLayer</code>的更多信息，包括循环的工作方式及其限制，请参阅使用循环。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_loop_output_layer.html">C++ 类ILoopOutputLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#iloopboundarylayer">Python 类ILoopOutputLayer</a> 。</p>
+<h3 id="A-1-21-ILRNLayer"><a href="#A-1-21-ILRNLayer" class="headerlink" title="A.1.21. ILRNLayer"></a>A.1.21. ILRNLayer</h3><p><code>ILRNLayer</code>实现跨通道本地响应归一化（LRN） 。</p>
+<p><strong>层描述</strong></p>
+<p>给定输入A ，LRN 层执行跨通道 LRN 以产生相同维度的输出B。该层的操作取决于四个常数值： w是进行归一化的跨通道窗口的大小， α 、 β和k是归一化参数。这个公式显示了层执行的操作：<br>$BI=\frac{A_I}{(k+aA_j(I)^2)β}$</p>
+<p>其中I表示张量元素的索引，而$j(I)$表示通道维度被j替换的索引。对于C个通道的通道索引c ，索引j的范围从$max (0, c−w)$到$min (C−1, c+w)$   。</p>
+<p><strong>条件和限制</strong></p>
+<p>A必须具有三个或更多维度。以下列表显示了参数的可能值：</p>
+<p>$W ϵ{1, 3, 5, 7, 9, 11, 13, 15}$</p>
+<p>$α ϵ[­1 ×10^{20}, 1 ×10^{20}]$</p>
+<p>$β ϵ[0.01, 1 ×10^5]$</p>
+<p>$k ϵ[1 × 10­^5, 1 ×10^{10}]$</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_l_r_n_layer.html">C++ 类ILRNLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#ilrnlayer">Python 类ILRNLayer</a> 。</p>
+<h3 id="A-1-22-IMatrixMultiplyLayer"><a href="#A-1-22-IMatrixMultiplyLayer" class="headerlink" title="A.1.22. IMatrixMultiplyLayer"></a>A.1.22. IMatrixMultiplyLayer</h3><p><code>IMatrixMultiplyLayer</code>为一组矩阵实现矩阵乘法。</p>
+<p><strong>层描述</strong></p>
+<p><code>IMatrixMultiplyLayer</code>计算输入张量A （尺寸为 a ）和B （尺寸为b ）的矩阵乘法，并生成输出张量C （尺寸为c ）。 A 、 B和C都具有相同的秩 <code>n≥2</code> 。如果 <code>n&gt;2</code> ，则A 、 B和C被视为矩阵的集合； A和B可以选择转置（转置应用于最后两个维度）。令$A^I$和$B^I$为可选转置后的输入张量，则</p>
+<p>$C<em>{i_0, . . , i</em>{n-3}, :, :}=A^I<em>{i_0, . ., i</em>{n−3}, :, :}*B^I<em>{i_0, . ., i</em>{n−3}, :, :}$</p>
+<p>$A^I$ 和$B^I$的对应维度$a^I$和$b^I$ ，则 $C_i={max(a_i,b_i)\ \ \ if\ \ \  i&lt;n−2, a^I_i\ \ \  if\ \ \  i=n−2, and\ \ \  b^I_i \ \ \ if\ \ \  i=n−1}$; 也就是说，结果集合与输入集合具有相同数量的矩阵，并且行和列对应于$A^I$中的行和$B^I$中的列。还要注意在维度上广播的情况下使用最大长度。</p>
+<p><strong>条件和限制</strong></p>
+<p>张量A和B必须至少有两个维度，并且在维度的数量上达成一致。每个维度的长度必须相同，假设广播长度为 1 的维度以匹配对应的长度。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_matrix_multiply_layer.html">C++ 类IMatrixMultiplyLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#imatrixmultiplylayer">Python 类IMatrixMultiplyLayer</a> 。</p>
+<h4 id="A-1-22-1-MatrixMultiply-Layer-Setup"><a href="#A-1-22-1-MatrixMultiply-Layer-Setup" class="headerlink" title="A.1.22.1. MatrixMultiply Layer Setup"></a>A.1.22.1. MatrixMultiply Layer Setup</h4><p>矩阵乘法层用于执行全连接层提供的功能的第一步。如下面的代码所示，需要使用一个常量层，以便可以将全连接权重存储在引擎中。然后将常量和 RNN 层的输出用作矩阵乘法层的输入。 RNN 输出被转置，以便 MatrixMultiply 的维度有效。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">weightMap[<span class="string">&quot;trt_fcw&quot;</span>] = <span class="built_in">transposeFCWeights</span>(weightMap[FCW_NAME]);</span><br><span class="line"><span class="keyword">auto</span> fcwts = network-&gt;<span class="built_in">addConstant</span>(<span class="built_in">Dims2</span>(VOCAB_SIZE, HIDDEN_SIZE), weightMap[<span class="string">&quot;trt_fcw&quot;</span>]);</span><br><span class="line"><span class="keyword">auto</span> matrixMultLayer = network-&gt;<span class="built_in">addMatrixMultiply</span>(</span><br><span class="line">*fcwts-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>), <span class="literal">false</span>, *rnn-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>), <span class="literal">true</span>);</span><br><span class="line"><span class="built_in">assert</span>(matrixMultLayer != <span class="literal">nullptr</span>);</span><br><span class="line">matrixMultLayer-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>)-&gt;<span class="built_in">setName</span>(<span class="string">&quot;Matrix Multiplication output&quot;</span>);</span><br><span class="line"></span><br></pre></td></tr></table></figure><br>有关更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/index.html">TensorRT API 文档</a>。</p>
+<p><strong>空张量</strong></p>
+<p>将维度为<code>[ m ,0]</code>和<code>[0, n ]</code>的矩阵相乘会得到维度为<code>[ m , n ]</code>的零矩阵。它是零，因为结果的每个元素都是空乘积集的总和。</p>
+<p><code>IFullyConnectedLayer</code> 本质上是一个矩阵乘法，因此适用类似的规则。</p>
+<h3 id="A-1-23-IParametricReluLayer"><a href="#A-1-23-IParametricReluLayer" class="headerlink" title="A.1.23. IParametricReluLayer"></a>A.1.23. IParametricReluLayer</h3><p><code>IParametricReluLayer</code>表示参数 <code>ReLU</code> 操作，这意味着 leaky ReLU，其中 x &lt; 0 的斜率对于每个元素可能不同。</p>
+<p><strong>层描述</strong></p>
+<p>用户提供数据张量<code>X</code>和斜率张量<code>S</code> 。在每个元素处，如果<code>x ≥ 0</code>，则该层计算<code>y = x</code> ，如果<code>x &lt; 0</code>则计算 <code>y = x∙s</code>。可以将斜率张量广播到数据张量的大小，反之亦然。</p>
+<p><strong>条件和限制</strong></p>
+<p>许多融合不支持参数化 ReLU；因此，性能可能比标准 ReLU 差。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_parametric_re_l_u_layer.html">C++ 类IParametricReluLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#iparametricrelulayer">Python 类IParametricReluLayer</a> 。</p>
+<h3 id="A-1-24-IPaddingLayer"><a href="#A-1-24-IPaddingLayer" class="headerlink" title="A.1.24. IPaddingLayer"></a>A.1.24. IPaddingLayer</h3><p>IPaddingLayer沿两个最里面的维度实现张量的空间零填充。</p>
+<p>注意： IPaddingLayer在 TensorRT 8.2 中已弃用，并将在 TensorRT 10.0 中删除。使用<code>ISliceLayer</code>填充张量，支持新的非常量，反映填充模式和钳位，支持动态形状的填充输出。</p>
+<p><strong>层描述</strong></p>
+<p><code>IPaddingLayer</code>沿两个最内层维度中的每一个向输入张量A填充零（或修剪边缘），并给出输出张量B 。每个维度上的填充可以是不同的，不对称的，并且可以是正的（导致张量的扩展）或负的（导致修剪）。二维开始和结束处的填充由二维向量x和y指定，分别用于前填充和后填充。</p>
+<p>n维a的输入张量A ，输出B将具有n维b使得$b_i={x_0+a_n−2+y_0\ \ \ if\ \ \  i=n−2; x_1+a_n−1+y_1\ \ \  if\ \ \  i=n−1; and\ \ \  a_i\ \ \  otherwise}$ 。</p>
+<p>因此，如果$w<em>{n−2}&lt;x_0 \ \ \ or\ \ \  x_0+a</em>{n−2}≤w<em>{n−2}\ \ \  or\ \ \  w</em>{n−1}&lt;x<em>1\ \ \  or\ \ \  x_1+a</em>{n−2}≤w<em>{n−1}$，则$B_w$的值为零。否则，如果$z</em>{n−2}=w<em>{n−2}+x_0, z</em>{n−1}=w_{n−1}+x_1$, 则$B_w=A_z$。并且$z_i = w_i$对于所有其他维度i 。</p>
+<p>条件和限制</p>
+<ul>
+<li>A必须具有三个或更多维度。</li>
+<li>填充只能沿两个最里面的维度应用。</li>
+<li>仅支持零填充。</li>
+</ul>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_padding_layer.html">C++ 类IPaddingLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#ipaddinglayer">Python 类IPaddingLayer</a> 。</p>
+<h3 id="A-1-25-IPluginV2Layer"><a href="#A-1-25-IPluginV2Layer" class="headerlink" title="A.1.25. IPluginV2Layer"></a>A.1.25. IPluginV2Layer</h3><p><code>IPluginV2Layer</code>提供了通过对不受支持的层使用自定义实现来扩展 TensorRT 功能的能力。</p>
+<p><strong>层描述</strong></p>
+<p><code>IPluginV2Layer</code>用于设置和配置插件。有关 API 的更多详细信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#ipluginv2">IPluginV2 API 说明</a>。 TensorRT 还支持插件注册表，它是网络中所有插件的单一注册点。为了向注册表注册插件，请为您的插件实现IPluginV2类和IPluginCreator类。</p>
+<p><strong>条件和限制</strong></p>
+<p>没有任何</p>
+<p><strong>空张量</strong></p>
+<p>需要处理空张量的插件必须使用<code>IPluginV2Ext</code> 、 <code>IPluginV2IOExt</code>或<code>IPluginV2DynamicExt</code> 编写。</p>
+<p>警告：空张量可以具有非空张量看不到的属性：</p>
+<ul>
+<li>volume为零</li>
+<li>一个或多个步幅为零</li>
+</ul>
+<p>零volume可能会破坏内核启动逻辑，因为一种常见的方法是设置与正在处理的volume成比例的 CUDA 块的数量。 CUDA 报告启动零块内核的错误。因此插件应该小心避免此类启动。</p>
+<p>步长的计算应与非空张量相同。例如，给定一个尺寸为<code>[N,C,H,W]</code>的张量，对应于沿C轴的增量的内存表示的步幅为<code>H*W</code> 。如果H或W为零，则无关紧要。尽管确保您的代码不会除以可能为零的步幅或维度。例如，以下片段中的assertion 有可能在两个分区中都被零除：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> volume = N*C*H*W;</span><br><span class="line"><span class="type">int</span> cStride = H*W;</span><br><span class="line">...</span><br><span class="line"><span class="built_in">assert</span>(C == volume/N/cStride);</span><br></pre></td></tr></table></figure>
+<p>对于某些插件，一个有效的策略是在所有输出为空的情况下使插件的方法入队提前返回，从而在考虑零长度维度的情况下不使其余逻辑复杂化。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_plugin_v2_layer.html">C++ 类IPluginV2Layer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#ipluginv2layer">Python 类IPluginV2Layer</a> 。</p>
+<h3 id="A-1-26-IPoolingLayer"><a href="#A-1-26-IPoolingLayer" class="headerlink" title="A.1.26. IPoolingLayer"></a>A.1.26. IPoolingLayer</h3><p><code>IPoolingLayer</code>在通道内实现池化。支持的池化类型是<code>maximum</code> 、 <code>average</code>和<code>maximum-average blend</code> 。</p>
+<p><strong>层描述：2D pooling</strong></p>
+<p>张量A上使用 2D filters计算池化，尺寸为 a ，以生成张量B ，尺寸为b 。 B的尺寸取决于A的尺寸、窗口大小r 、对称填充p和步幅s ，使得：</p>
+<ul>
+<li>$b =[a<em>0\ \  a_1… a</em>{n−3} b<em>{n−2} b</em>{n−1}]$</li>
+<li>$b<em>{n−2} =( a</em>{n−2}+2p_0+ r_0) /s_0+1$</li>
+<li>$b<em>{n−1} =( a</em>{n−1}+2p_1+ r_1) /s_1+1$</li>
+</ul>
+<p>让张量C是A的零填充拷贝，尺寸为$[a<em>0 a_1… a</em>{n−2}+2p<em>0 a</em>{n−1}+2p<em>1]$。 那么， $B</em>{j……kl}=func (C_{j… . k:kk l:ll})\ \ \   where\ \ \  kk = k+r_0−1\ \ \  and\ \ \  ll = l+r_1−1$.</p>
+<p>其中func由池类型t之一定义：</p>
+<p>PoolingType::kMAX</p>
+<p>窗口中元素的最大值。</p>
+<p>PoolingType::kAVERAGE</p>
+<p>窗口中元素的平均值。</p>
+<p>PoolingType::kMAX_AVERAGE_BLEND</p>
+<p>最大和平均池的混合。最大池化和平均池化的结果与混合因子结合为<code>(1-blendFactor)*maximumPoolingResult + blendFactor*averagePoolingResult</code>以产生结果。 <code>blendFactor</code>可以设置为 0 到 1 之间的值。</p>
+<p>默认情况下，平均池化是在池化窗口和填充输入之间的重叠处执行的。如果<code>Exclusive</code>参数设置为<code>true</code> ，则对池化窗口和未填充输入之间的重叠区域执行平均池化。</p>
+<p><strong>层描述：3D池化</strong></p>
+<p>尺寸为 a的张量A计算池化，以生成尺寸为b的张量B。 B的尺寸取决于A的尺寸、窗口大小r 、对称填充p和步幅s ，使得：</p>
+<ul>
+<li>$b =[a<em>0\ \  a_1… a</em>{n−4} b<em>{n−3} b</em>{n−2}b_{n−1}]$</li>
+<li>$b<em>{n−3} =( a</em>{n−3}+2p_0+ r_0) /s_0+1$</li>
+<li>$b<em>{n−2} =( a</em>{n−2}+2p_1+ r_1) /s_1+1$</li>
+<li>$b<em>{n−1} =( a</em>{n−1}+2p_2+ r_2) /s_2+1$</li>
+</ul>
+<p>让张量C是A的零填充拷贝，尺寸为$[a<em>0 a_1… a</em>{n−3}+2p<em>0 a</em>{n−2}+2p<em>1a</em>{n−1}+2p<em>2]$。 那么， $B</em>{j……klm}=func (C_{j… . k:kk l:ll m:mm})\ \ \   where\ \ \  kk = k+r_0−1\ \ \  ll = l+r_1−1\ \ \ and\ \ \ mm = m+r_2−1$.</p>
+<p>其中func由池类型t之一定义：</p>
+<p>PoolingType::kMAX</p>
+<p>窗口中元素的最大值。</p>
+<p>PoolingType::kAVERAGE</p>
+<p>窗口中元素的平均值。</p>
+<p>PoolingType::kMAX_AVERAGE_BLEND</p>
+<p>最大和平均池的混合。最大池化和平均池化的结果与混合因子结合为<code>(1-blendFactor)*maximumPoolingResult + blendFactor*averagePoolingResult</code>以产生结果。 <code>blendFactor</code>可以设置为 0 到 1 之间的值。</p>
+<p>默认情况下，平均池化是在池化窗口和填充输入之间的重叠处执行的。如果<code>Exclusive</code>参数设置为true ，则对池化窗口和未填充输入之间的重叠区域执行平均池化。</p>
+<p><strong>条件和限制</strong></p>
+<p>输入内核维度的数量决定了 2D 或 3D。对于 2D 池化，输入和输出张量应该具有三个或更多维度。对于 3D 池化，输入和输出张量应该有四个或更多维度。</p>
+<p>如果使用<code>PoolingType::kMAX</code>并且填充大小等于或大于任何维度上的窗口大小，则输出张量的边界（对应于完全位于输入张量之外的输入窗口）将填充<code>FP32/FP16</code> 的负无穷 ( <code>-inf</code> ) 或 INT8 的<code>-128</code> 。这可能会导致后续层中出现 NaN。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_pooling_layer.html">C++ 类IPoolingLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#iquantizelayer">Python 类IPoolingLayer</a> 。</p>
+<p>A.1.27. IQuantizeLayer<br>此<code>IQuantizeLayer</code>层实现量化运算符。</p>
+<p><strong>层描述</strong></p>
+<p><code>IQuantizeLayer</code>层接受浮点数据输入张量，并使用比例和零点输入将数据量化为 8 位有符号整数，根据：</p>
+<p><code>output = clamp(round(input / scale) +  zeroPt)</code></p>
+<p>舍入类型是舍入到最近的 <code>tie-to-even</code>。钳位在<code>[-128, 127]</code>范围内。第一个输入（索引 0 ）是要量化的张量。第二个（索引 1 ）和第三个（索引 2 ）分别是刻度和零点。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_quantize_layer.html">C++ 类IQuantizeLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#iquantizelayer">Python 类IQuantizeLayer</a> 。</p>
+<h3 id="A-1-28-IRaggedSoftMaxLayer"><a href="#A-1-28-IRaggedSoftMaxLayer" class="headerlink" title="A.1.28. IRaggedSoftMaxLayer"></a>A.1.28. IRaggedSoftMaxLayer</h3><p><code>RaggedSoftMaxLayer</code>在用户指定的序列长度上对序列的输入张量应用 SoftMax 函数。</p>
+<p><strong>层描述</strong></p>
+<p>该层有两个输入：形状为<code>zs</code>的 2D 输入张量A包含<code>z</code>数据序列，以及形状为<code>z</code>的 1D 边界张量B ，其中包含A中每个<code>z</code>序列的长度。生成的输出张量C与输入张量A具有相同的维度。</p>
+<p>SoftMax 函数S定义在z数据值序列中的每个i上， $A_{i , 0 : Bi}$就像在 SoftMax 层中一样。</p>
+<p><strong>条件和限制</strong></p>
+<p>没有任何</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_ragged_soft_max_layer.html">C++ 类IRaggedSoftMaxLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#iraggedsoftmaxlayer">Python 类IRaggedSoftMaxLayer</a> 。</p>
+<h3 id="A-1-29-IRecurrenceLayer"><a href="#A-1-29-IRecurrenceLayer" class="headerlink" title="A.1.29. IRecurrenceLayer"></a>A.1.29. IRecurrenceLayer</h3><p><code>IRecurrenceLayer</code>指定一个循环定义。循环由循环边界层定义。</p>
+<p>有关IRecurrenceLayer的更多信息，包括循环的工作方式及其限制，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#work-with-loops">使用循环</a>。</p>
+<p>，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_recurrence_layer.html">C++ 类IRecurrenceLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#irecurrencelayer">Python 类IRecurrenceLayer</a> 。</p>
+<h3 id="A-1-30-IReduceLayer"><a href="#A-1-30-IReduceLayer" class="headerlink" title="A.1.30. IReduceLayer"></a>A.1.30. IReduceLayer</h3><p><code>IReduceLayer</code>使用 <code>reduce</code> 运算符实现张量的降维。</p>
+<p><strong>层描述</strong></p>
+<p><code>IReduceLayer</code>计算维度a的输入张量A的归约，以在归约维度r的集合上生成维度b的输出张量B。归约算子 op 是<code>max</code> 、 <code>min</code> 、 <code>product</code> 、 <code>sum</code>和<code>average</code>之一。减少可以保留或不保留A的维数。如果保留尺寸，则$b<em>i={1\ \ \ if\ \ \  iϵr,\ \  and\ \ \  a_i \ \ \ otherwise}$  ; 如果不保留维度，则$b</em>{j−m(j)}=a_j\ \ \   where\ \ \  jϵr$ 并且 $m(j)$是r中的归约索引数小于或等于j.</p>
+<p>对于索引i的序列，$B_i=op(A_j)$ ,其中索引j的序列使得$j_k={:\ \ \  if\ \ \  kϵr,\ \  and\ \ \  i_k\ \ \  otherwise}$  </p>
+<p><strong>条件和限制</strong></p>
+<p>输入必须至少有一个非批量维度。批量大小维度无法减小。</p>
+<p><strong>空张量</strong></p>
+<p>如果一个层的所有输入都为空，则输出通常为空，但也有例外。例外来自数学中如何定义空集的归约：空集的归约产生操作的单位元素。</p>
+<p>下表显示了与 TensorRT 相关的案例：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Reduction Operation</th>
+<th>kFLOAT and kHALF</th>
+<th>kINT32</th>
+<th>kINT8</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>kSUM</td>
+<td>0</td>
+<td>0</td>
+<td>0</td>
+</tr>
+<tr>
+<td>kPROD</td>
+<td>1</td>
+<td>1</td>
+<td>1</td>
+</tr>
+<tr>
+<td>kMAX</td>
+<td>∞</td>
+<td>INT_MAX</td>
+<td>-128</td>
+</tr>
+<tr>
+<td>kMIN</td>
+<td>-∞</td>
+<td>INT_MIN</td>
+<td>127</td>
+</tr>
+<tr>
+<td>kAVG</td>
+<td>NaN</td>
+<td>0</td>
+<td>-128</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>平均空集在数学上是不明确的。显而易见的定义（元素的总和）/（元素的数量）产生 0/0。对于浮点，它由 <code>Not a Number (NaN)</code> 表示。空集<code>kINT32</code>上的<code>kAVG</code>的 0没有数学依据，选择它是为了与 TensorFlow 兼容。</p>
+<p>TensorRT 通常通过<code>kFLOAT</code>或<code>kHALF</code>对<code>kINT8</code>执行归约。 <code>kINT8</code>值显示浮点值的量化表示，而不是它们的去量化值。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_reduce_layer.html">C++ 类IReduceLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#ireducelayer">Python 类IReduceLayer</a> 。</p>
+<h3 id="A-1-31-IResizeLayer"><a href="#A-1-31-IResizeLayer" class="headerlink" title="A.1.31. IResizeLayer"></a>A.1.31. IResizeLayer</h3><p><code>IResizeLayer</code>在输入张量上实现调整大小操作。</p>
+<p><strong>层描述</strong></p>
+<p><code>IResizeLayer</code>使用给定的调整大小模式m调整尺寸为 a 的输入张量A以生成尺寸为b的输出张量B 。输出维度b可以直接提供，也可以使用 <code>resize scales s</code>计算。如果提供了 <code>resize scales s</code> , $bi={floor (ai * si)}$</p>
+<p>调整大小操作支持最近和线性等插值模式。最近的模式调整了ND张量的最内层d维的大小，其中$dϵ (0, min (8, N))\  \ \ and\ \ \  N &gt; 0$. 线性模式调整N-D张量的最内层d维的大小，其中 $dϵ (0, min (3, N))\ \ \  and\ \ \  N &gt; 0$.</p>
+<p>坐标变换映射功能，在插值时，可以配置为对齐角点、不对称和半像素。当调整为单个像素时，我们支持使用坐标变换或使用左上角像素。当 <code>resize mode</code> 为<code>Nearest</code>时，我们支持不同的舍入模式，如half down, half up, round to floor, and round to ceiling。</p>
+<p><strong>条件和限制</strong></p>
+<p>输出维度b或调整大小比例s必须是已知且有效的。比例数必须等于输入维数。输出维数必须等于输入维数。<br>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_resize_layer.html">C++ 类IResizeLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#tensorrt.IResizeLayer">Python 类IResizeLayer</a> 。</p>
+<h3 id="A-1-32-IRNNv2Layer"><a href="#A-1-32-IRNNv2Layer" class="headerlink" title="A.1.32. IRNNv2Layer"></a>A.1.32. IRNNv2Layer</h3><p><code>IRNNv2Layer</code>实现了循环层，例如循环神经网络 (RNN)、门控循环单元 (GRU) 和长短期记忆 (LSTM)。支持的类型是 <code>RNN</code>、<code>GRU</code> 和 <code>LSTM</code>。它执行循环操作，其中操作由几个众所周知的循环神经网络 (RNN) “单元”之一定义。</p>
+<p>注意：不推荐使用<code>IRNNv2Layer</code>以支持循环 API；但是，它仍可用于向后兼容。有关循环 API 的更多信息，请参阅带有—Iloop选项的<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/samples/opensource/sampleCharRNN">sampleCharRNN</a> 。</p>
+<p><strong>层描述</strong></p>
+<p>该层接受输入序列X ，初始隐藏状态$H_0$ ，如果单元是长短期记忆 (LSTM) 单元，则初始单元状态$C_0$ ，并产生一个输出Y ，它代表最终 RNN 的输出“子层”跨T个时间步计算（参见下文）。可选地，该层还可以产生表示最终隐藏状态的输出$h_T$ ，并且如果单元是 LSTM 单元，则输出$c_T$表示最终单元状态。</p>
+<p>让单元(cell)的操作被定义为函数$G ( x , h , c )$。此函数接受向量输入<code>x</code> 、 <code>h</code>和<code>c</code> ，并产生最多两个向量输出<code>h&#39;</code>和<code>c&#39;</code> ，表示执行单元操作后的隐藏状态和单元状态。</p>
+<p>在默认（单向）配置中，RNNv2 层应用G ，如下图所示：</p>
+<img src="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/15-TensorRT%E7%BD%91%E7%BB%9C%E5%B1%82%E8%AF%A6%E8%A7%A3/rnnv2.png" class="">
+<p>G’是 G 的变体。<br>进入方框的箭头是函数输入，离开方框的箭头是函数输出。</p>
+<ul>
+<li>$X = [x_0, x_1, …, x_T]$</li>
+<li>$Y = [y_0, y_1, …, y_T]$</li>
+<li>$H<em>i = [h_i, 0, h_i, 1, …, h</em>{i, L}]$</li>
+<li>$C<em>i = [c_i, 0, c_i, 1, …, c</em>{i, L}]$</li>
+</ul>
+<p>只有当 RNN 对<code>G</code>和<code>G&#39;</code>使用 LSTM 单元时，才会出现灰色的c边缘。</p>
+<p>注意：上述结构有L个“子层”（ G的水平行），矩阵$H_i$和$C_i$的维度为<code>L</code>。</p>
+<p>可选地，序列长度T可以指定为 RNNv2 层的输入，允许客户端指定一批不同长度的输入序列。</p>
+<p>Bidirectional RNNs (BiRNNs):  可以配置为双向的。在这种情况下，每个子层由一个“前向”层和一个“后向”层组成。前向层使用从0到T的$x_i$迭代应用G ，后向层使用从T到0的$x_i$迭代应用G ，如下图所示：</p>
+
+<p>上图中的黑条表示串联。完全隐藏状态$h<em>t$由前向隐藏状态$h</em>{tf}$和后向隐藏状态$h_{tb}$的串联定义:</p>
+<ul>
+<li>$h<em>{t, i} = [h</em>{tf,i}, h_{tb,i}]$</li>
+<li>$h<em>t = [h</em>{t, 0}, h<em>{t, 1}, …, h</em>{t, L}]$</li>
+</ul>
+<p>类似地，对于单元状态（未显示），每个$h_{t,i}$都用作下一个子层的输入，如上所示。</p>
+<p>RNN 操作： RNNv2 层支持以下单元操作：</p>
+<ul>
+<li>$ReLU: G (x, h, c) := max (W_ix + R_ih + W_b + R_b, 0)  (c not used)$</li>
+<li>$tanh: G (x, h, c) := tanh (W_ix + R_ih + W_b + R_b) (c not used)$</li>
+<li>$GRU: Z := sigmoid (W<em>zx + R_zh + W</em>{bz} + R_{bz})$</li>
+<li>$GRU: M := sigmoid (W<em>rx + R_rh + W</em>{br} + R_{br})$</li>
+<li>$GRU: G (x, h, c) := tanh (W<em>hx + M (h + R</em>{bh}) + * Wbh) (c not used)$</li>
+<li>$LSTM: I := sigmoid (W<em>Ix + R_Ih + W</em>{bi} + R_{bi})$</li>
+<li>$LSTM: F := sigmoid (W<em>fx + R_fh + W</em>{bf} + R_{bf})$</li>
+<li>$LSTM: O := sigmoid (W<em>ox + R_oh + W</em>{bo} + R_{bo})$</li>
+<li>$LSTM: C := tanh (W<em>cx + R_ch + W</em>{bc} + R_{bc})$</li>
+<li>$LSTM: C´ := F × C$</li>
+<li>$LSTM: H := O × tanh (C´)$</li>
+<li>$LSTM: G (x, h, c) := {H, C´}$</li>
+</ul>
+<p>对于GRU和LSTM，Z 、 M 、 I 、 F的中间计算称为“门”。</p>
+<p>在单向情况下， W矩阵的维度对于第一层是<code>HxE</code> ，对于后续层是<code>HxH</code> （除非设置了跳过模式(Skip mode)，请参阅下文）。在双向情况下，第一个前向/后向层的W矩阵的维数为<code>HxE</code> ，后续层的维数为<code>Hx2H</code> 。</p>
+<p>R矩阵的维数始终为<code>HxH</code> 。偏差$W<em>{bx}$和$R</em>{bx}$具有维度<code>H</code> 。</p>
+<p><strong>Skip mode:</strong> RNNv2 使用的默认模式是“线性模式”。在这种模式下，RNNv2 层的第一个子层使用单元格$G´ ( x , h , c )$ ，它接受大小为E （嵌入大小）的向量x ，以及大小为H （隐藏状态大小）的向量h和c ，并由单元运算公式定义。后续层使用单元格$G ( x , h , c )$，其中x 、 h和c都是大小为H的向量，也由单元运算公式定义。</p>
+<p>可选地，RNN 可以配置为在“跳过模式”下运行，这意味着第一层的输入权重矩阵是隐式单位矩阵，并且x的大小预计为H。</p>
+<p><strong>条件和限制</strong></p>
+<p>数据 ( X ) 输入和初始隐藏/单元状态 ( $H_0$和$C_0$ ) 张量至少有两个非批量维度。附加维度被视为批次维度。<br>，可选的序列长度输入T为0维（标量）。</p>
+<p>数据 ( Y ) 输出和最终隐藏/单元状态 ( $H<em>T$和$C_T$ ) 张量至少有两个非批量维度。附加维度被视为批次维度。如果提供了序列长度输入，则将批次中的每个输出填充到最大序列长度$T</em>{max}$ 。</p>
+<p>IRNNv2Layer支持：</p>
+<ul>
+<li>FP32 和 FP16 数据类型，用于输入和输出、隐藏和单元张量。</li>
+<li>INT32 数据类型仅适用于序列长度张量。</li>
+</ul>
+<p>定义网络后，您可以标记所需的输出。未标记为网络输出或用作另一层输入的 RNNv2 输出张量将被丢弃。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">network-&gt;<span class="built_in">markOutput</span>(*pred-&gt;<span class="built_in">getOutput</span>(<span class="number">1</span>));</span><br><span class="line">pred-&gt;<span class="built_in">getOutput</span>(<span class="number">1</span>)-&gt;<span class="built_in">setType</span>(DataType::kINT32);</span><br><span class="line">rnn-&gt;<span class="built_in">getOutput</span>(<span class="number">1</span>)-&gt;<span class="built_in">setName</span>(HIDDEN_OUT_BLOB_NAME);</span><br><span class="line">network-&gt;<span class="built_in">markOutput</span>(*rnn-&gt;<span class="built_in">getOutput</span>(<span class="number">1</span>));</span><br><span class="line"><span class="keyword">if</span> (rnn-&gt;<span class="built_in">getOperation</span>() == RNNOperation::kLSTM)</span><br><span class="line">&#123;</span><br><span class="line">rnn-&gt;<span class="built_in">getOutput</span>(<span class="number">2</span>)-&gt;<span class="built_in">setName</span>(CELL_OUT_BLOB_NAME);</span><br><span class="line">network-&gt;<span class="built_in">markOutput</span>(*rnn-&gt;<span class="built_in">getOutput</span>(<span class="number">2</span>));</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_r_n_nv2_layer.html">C++ 类IRNNv2Layer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#irnnv2layer">Python 类IRNNv2Layer</a> 。</p>
+<h4 id="A-1-32-1-RNNv2-Layer-Setup"><a href="#A-1-32-1-RNNv2-Layer-Setup" class="headerlink" title="A.1.32.1. RNNv2 Layer Setup"></a>A.1.32.1. RNNv2 Layer Setup</h4><p>网络中的第一层是 RNN 层。这是在<code>addRNNv2Layer()</code>函数中添加和配置的。该层由以下配置参数组成。</p>
+<p><strong>Operation</strong></p>
+<p>这定义了 RNN 单元的操作。目前支持的操作是relu、LSTM、GRU和tanh 。</p>
+<p><strong>Direction</strong></p>
+<p>这定义了 RNN 是单向的还是双向的 (BiRNN)。</p>
+<p><strong>Input mode</strong></p>
+<p>这定义了RNN的第一层是进行矩阵乘法（线性模式），还是跳过矩阵乘法（跳过模式）。</p>
+<p>例如，在 <code>sampleCharRNN</code> 中使用的网络中，我们使用了一个线性单向<code>LSTM</code>单元，其中包含<code>LAYER_COUNT</code>个层。下面的代码展示了如何创建这个 RNNv2 层。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> rnn = network-&gt;<span class="built_in">addRNNv2</span>(*data, LAYER_COUNT, HIDDEN_SIZE, SEQ_SIZE, RNNOperation::kLSTM);</span><br></pre></td></tr></table></figure>
+<p>注意：对于 RNNv2 层，需要单独设置权重和偏差。有关更多信息，请参<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#optinputs1">阅RNNv2 层 - 可选输入</a>。</p>
+<p>有关更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/index.html">TensorRT API 文档</a>。</p>
+<h4 id="A-1-32-2-RNNv2-Layer-Optional-Inputs"><a href="#A-1-32-2-RNNv2-Layer-Optional-Inputs" class="headerlink" title="A.1.32.2. RNNv2 Layer - Optional Inputs"></a>A.1.32.2. RNNv2 Layer - Optional Inputs</h4><p>如果存在需要将隐藏状态和单元状态预初始化为非零值的情况，则可以通过<code>setHiddenState</code>和<code>setCellState</code>调用对其进行预初始化。这些是 RNN 的可选输入。</p>
+<p><strong>C++ code snippet</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rnn-&gt;<span class="built_in">setHiddenState</span>(*hiddenIn);</span><br><span class="line"><span class="keyword">if</span> (rnn-&gt;<span class="built_in">getOperation</span>() == RNNOperation::kLSTM)</span><br><span class="line">    rnn-&gt;<span class="built_in">setCellState</span>(*cellIn);</span><br></pre></td></tr></table></figure></p>
+<p><strong>Python code snippet</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">rnn.hidden_state = hidden_in</span><br><span class="line"><span class="keyword">if</span> rnn.op == trt.RNNOperation.LSTM:</span><br><span class="line">rnn.cell_state = cell_in</span><br></pre></td></tr></table></figure></p>
+<p><strong>空张量</strong></p>
+<p><code>IRNNv2Layer</code>适用于空张量，但在 TensorRT 7.2.1 中已弃用，并在 TensorRT 9.0 中删除。使用循环来合成循环子网络，如<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#work-with-loops">使用循环</a>部分所述。</p>
+<h3 id="A-1-33-IScaleLayer"><a href="#A-1-33-IScaleLayer" class="headerlink" title="A.1.33. IScaleLayer"></a>A.1.33. IScaleLayer</h3><p><code>IScaleLayer</code>通过常数值实现每个张量、每个通道或每个元素的仿射变换和取幂。</p>
+<p><strong>层描述</strong></p>
+<p>给定输入张量A ， <code>IScaleLayer</code>执行每个张量、每个通道或每个元素的转换，以生成相同维度的输出张量B。每种模式对应的变换是：</p>
+<p><strong>ScaleMode::kUNIFORM tensor-wise transformation</strong></p>
+<p>$B = (A * scale + shift)^{power}$</p>
+<p><strong>ScaleMode::kCHANNEL channel-wise transformation</strong></p>
+<img src="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/15-TensorRT%E7%BD%91%E7%BB%9C%E5%B1%82%E8%AF%A6%E8%A7%A3/image-20230505154642579.png" class="" title="image-20230505154642579">
+<p><strong>ScaleMode::kELEMENTWISE element-wise transformation</strong></p>
+<p>$B_I = (A_I * scale_I + shift_I)^{^{power}I}$</p>
+<p>其中I表示张量元素的索引， $c_{(I)}$是 <code>I</code>中的通道维度。</p>
+<p><strong>条件和限制</strong></p>
+<p>A在隐式批处理模式下必须至少具有三个维度，在显式批处理模式下必须至少具有四个维度。</p>
+<p>如果为<code>scale</code> 、 <code>shift</code>或<code>power</code>提供了一个空权重对象，则使用默认值。默认情况下， <code>scale</code>的值为1.0 ， <code>shift</code>的值为0.0 ， <code>power</code> 的值为1.0 。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_scale_layer.html">C++ 类IScaleLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#iscalelayer">Python 类IScaleLayer</a> 。</p>
+<h3 id="A-1-34-IScatterLayer"><a href="#A-1-34-IScatterLayer" class="headerlink" title="A.1.34. IScatterLayer"></a>A.1.34. IScatterLayer</h3><p><code>IScatterLayer</code>具有三个输入张量： Data $D$ , Indices $I$ , and Updates $U$ 、一个输出张量 $S$和一个scatter模式。使用<code>kELEMENT</code>模式时，可选的轴参数可用。</p>
+<p><strong>层描述</strong></p>
+<p>数据张量的秩为$r&gt;= 1$并且具有与输出张量相同的形状。通常，该层根据索引张量将数据张量或更新张量写入输出张量。指数张量和操作模式的解释取决于散射模式。<br>如果<code>mode == kELEMENT</code> ，对于更新中的每个值，其输出索引由其在维度 != 轴的更新中的索引和维度 = 轴的索引中的相应值指定。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">Pseudocode:</span><br><span class="line">output = data;</span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">auto</span> read_idx : <span class="built_in">Grid</span>(data.extent))</span><br><span class="line">&#123;</span><br><span class="line">	<span class="keyword">auto</span> write_idx = read_idx[axis];</span><br><span class="line">	write_idx[axis] = indices[read_idx];</span><br><span class="line">	output[write_idx] = updates[read_idx];</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">return</span> output;</span><br></pre></td></tr></table></figure>
+<p>如果<code>mode == kND</code> ，假设：</p>
+<ul>
+<li>$tensor\ \ \  D\ \ \  of\ \ \  rank\ r &gt;= 1\ \ \  and\ \ \  shape (D) = [k_1…k_r]$ ,</li>
+<li>$indices\ \ \  tensor\ \ \  I \ \ \ of\ \ \  rank\ \ q &gt;= 1 \ \ \ and\ \ \  shape (I) = [k1…kq]$ , and</li>
+<li>$updates\ \ \  tensor\ \ \  U\ \ \  of\ \ \  rank\ \ \  q + r − kq −1$</li>
+</ul>
+<p>操作的输出是一个张量G, 它的秩为r和 $shape (G) = [k_1…k_r]$ </p>
+<p>操作模式由以下等式定义： $G = D$ </p>
+<ul>
+<li>$If\ \ \ k<em>q =r ,\ \  then\ \ \  G (I (ɑ_1 … ɑ</em>{q−1})) = U (ɑ<em>1 … ɑ</em>{q−1})$</li>
+<li>$If\ \ \  k<em>q &lt;r ,\ \  then\ \ \  G (I (ɑ_1 … ɑ</em>{q−1}), ɑ<em>{r−K_q} … ɑ_r) = U (ɑ_1 … ɑ</em>{q−1},ɑ_{r−K_q},…, ɑ_r)$</li>
+</ul>
+<p><strong>条件和限制</strong></p>
+<p>对于两种模式：</p>
+<ul>
+<li>I 中的重复索引会导致未定义的行为，</li>
+<li>如果使用动态形状，则使用负索引具有未定义的行为，</li>
+<li>只有数据张量可以具有动态形状。</li>
+</ul>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_scatter_layer.html">C++ 类IScatterLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#iscatterlayer">Python 类IScatterLayer</a> 。</p>
+<h3 id="A-1-35-ISelectLayer"><a href="#A-1-35-ISelectLayer" class="headerlink" title="A.1.35. ISelectLayer"></a>A.1.35. ISelectLayer</h3><p><code>ISelectLayer</code>根据条件返回两个输入中的任何一个。</p>
+<p><strong>层描述</strong></p>
+<p>根据条件张量A返回从输入张量B ( thenInput ) 或C ( elseInput ) 中选择的元素。</p>
+<p><strong>条件和限制</strong></p>
+<p>所有三个输入张量必须具有相同的维数；沿每个轴，每个轴必须具有相同的长度或长度为 1。如果长度为 1，则沿该轴广播张量。应用广播规则后，输出张量具有输入的维度。条件张量必须是布尔类型。其他两个输入可能是 <code>FP32</code>、<code>FP16</code> 或 <code>INT32</code>。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_select_layer.html">C++ 类ISelectLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#iselectlayer">Python 类ISelectLayer</a> 。</p>
+<h3 id="A-1-36-IShapeLayer"><a href="#A-1-36-IShapeLayer" class="headerlink" title="A.1.36. IShapeLayer"></a>A.1.36. IShapeLayer</h3><p><code>IShapeLayer</code>获得张量的形状。</p>
+<p><strong>层描述</strong></p>
+<p><code>IShapeLayer</code>输出其输入张量的维度。输出是 <code>INT32</code> 类型的一维张量。</p>
+<p><strong>条件和限制</strong></p>
+<p>输入张量必须至少具有一维。输出张量是一个“形状张量”，它只能用作处理形状张量的层的输入。有关更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#exe_shape_tensors">执行张量与形状张量</a>。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_shape_layer.html">C++ 类IShapeLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#tensorrt.IShapeLayer">Python 类IShapeLayer</a> 。</p>
+<h3 id="A-1-37-IShuffleLayer"><a href="#A-1-37-IShuffleLayer" class="headerlink" title="A.1.37. IShuffleLayer"></a>A.1.37. IShuffleLayer</h3><p><code>IShuffleLayer</code>实现了张量的整形和转置运算符。</p>
+<p><strong>层描述</strong></p>
+<p><code>IShuffleLayer</code>实现了张量的重新洗牌以置换张量或重塑它。通过应用转置来转换尺寸为 a的输入张量A ，然后是具有重塑尺寸r的重塑操作，然后是另一个转置操作以生成尺寸为b的输出数据张量B。</p>
+<p>要将转置操作应用于A ，必须指定置换顺序。指定的置换<code>p1</code>用于按以下方式置换A的元素，以产生维度为$c<em>i = a</em>{p1 ( i )}$ 和$c<em>i = A</em>{p1 ( I )}$用于索引序列$I$ 。默认情况下，假设排列是一个恒等式（输入张量没有变化）。</p>
+<p>reshape 操作不会改变元素的顺序并将张量C重塑为形状为$r^I$的张量R ，使得$r^I_i={r_i\ \ \ if\ \ \  r_i&gt;0, \ \ c_i\ \ \  if\ \ \  r_i=0, inferred\ \ \  if\ \ \  r_i=−1 }$ 。只能推断出一个维度，即$∏ r^I_i = ∏ a_i$ 。</p>
+<p>$r_i = 0$作为占位符的特殊解释，而不是实际尺寸，可以通过在层上调用方法<code>setZeroIsPlaceholder(false)</code>来关闭。如果使用动态形状，强烈建议关闭0的占位符，因为它会干扰对空张量的正确处理，并且会降低 TensorRT 的优化。例如，考虑一个尺寸为<code>[2,x]</code>的张量C ，需要将其重塑为尺寸为<code>[x,2]</code>的张量R。使用占位符，当x=0时，重塑尺寸扩展到<code>[2,2]</code> ，而不是预期的<code>[0,2]</code> 。</p>
+<p>重塑尺寸可以指定为层中的构建时间常数，也可以通过向层提供第二个输入来指定为运行时值，该输入必须是 INT32 类型的一维张量。在运行时出现在第二个输入中的占位符0或通配符-1的解释方式与它们是构建时常量时的解释方式相同。</p>
+<p>在整形操作之后应用第二个转置操作。它遵循与第一个转置操作相同的规则，并且需要指定一个排列（比如<code>p2</code> ）。这种排列产生一个维度为b的输出张量B ，使得对于索引序列I的$b<em>i = r</em>{p2(I)}$和$B_{p2 ( I )} = R_I$。</p>
+<p><strong>条件和限制</strong></p>
+<p>维度$r^I$的乘积必须等于输入维度a的乘积。</p>
+<p><strong>空张量</strong></p>
+<p>默认情况下， <code>IShuffleLayer</code>将 <code>reshape</code> 维度中的0视为特殊占位符，而不是零。占位符的意思是“复制相应的输入维度”。保留此默认行为是为了与早期版本的 TensorRT 兼容，但在使用<strong>空张量时会很危险</strong>。</p>
+<p>如果您要整形到可能包含零长度尺寸的尺寸，请使用<code>IShuffleLayer::setZeroIsPlaceholder</code>方法禁用零占位符处理。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">IShuffleLayer* s = ...;</span><br><span class="line">s-&gt;<span class="built_in">setZeroIsPlaceholder</span>(<span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+<p>例如，考虑以下代码，该代码旨在将张量输入重塑为形状张量<code>reshapeDims</code>指定的尺寸。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">IShuffleLayer* s = network.<span class="built_in">addShuffle</span>(input);</span><br><span class="line">s-&gt;<span class="built_in">setInput</span>(<span class="number">1</span>, reshapeDims);</span><br><span class="line"><span class="meta">#<span class="keyword">if</span> CORRECT</span></span><br><span class="line">s-&gt;<span class="built_in">setZeroIsPlaceholder</span>(<span class="literal">false</span>);</span><br><span class="line"><span class="meta">#<span class="keyword">endif</span></span></span><br><span class="line">output = *s-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<p>假设在运行时，输入的维度为<code>[3,0]</code>，第二个输入<code>reshapeDims</code>包含<code>[0,0]</code> 。如果引擎是使用<code>CORRECT==0</code>构建的，则<code>reshapeDims</code>中的零被解释为输入尺寸的占位符，并且输出的尺寸为<code>[3,0]</code> ，而不是预期的<code>[0,0]</code> 。使用<code>CORRECT==1</code>构建片段可确保<code>IShuffleLayer</code>将零视为零。除非您知道需要占位符功能，否则建议使用<code>setZeroIsPlaceholder(false)</code>将其关闭。</p>
+<p>在重塑维度中使用<code>-1</code>通配符时，空张量还引入了一种新错误的可能性。通配符表示TensorRT 使用以下等式求解的未知维度x ：</p>
+<p>$x * (volume\ \ of\ \  other\ \  reshape \ \ dimension) = volume (\ \ input\ \  tensor\ \ )$</p>
+<p>如果其他重塑维度的volume为零，则会出现以下两个错误之一：</p>
+<ul>
+<li>输入张量的volume为零。那么x是不确定的。</li>
+<li>输入张量的volume不为零。那么x没有解。</li>
+</ul>
+<p>TensorRT 在任何一种情况下都会报告错误，可能在构建时或运行时。</p>
+<p>，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_shuffle_layer.html">C++ 类IShuffleLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#ishufflelayer">Python 类IShuffleLayer</a> 。</p>
+<h3 id="A-1-38-ISliceLayer"><a href="#A-1-38-ISliceLayer" class="headerlink" title="A.1.38. ISliceLayer"></a>A.1.38. ISliceLayer</h3><p>ISliceLayer实现了Slice 操作的五种变体。</p>
+<p><strong>层描述</strong></p>
+<p>给定一个输入n维张量A ，Slice 层生成一个输出张量B ，其中包含从A中提取的元素。让我们将 a 、 b 、 s 、 o 、 d 、 f分别表示为A中的元素坐标、 B中的元素坐标、步幅、起始偏移量、 A中每个维度的范围和要填充的常数值。步幅可以是正数、负数或零。 A和B的对应映射为：</p>
+<img src="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/15-TensorRT%E7%BD%91%E7%BB%9C%E5%B1%82%E8%AF%A6%E8%A7%A3/islice-equation.png" class="">
+<p>其中: $x_i = b_i * s_i + o_i$</p>
+<p><strong>条件和限制</strong></p>
+<p>B中每个元素的对应A坐标不得超出范围。</p>
+<p><strong>空张量</strong></p>
+<p><code>ISliceLayer</code>对空张量的行为遵循对其语义的严格解释。具体来说，考虑使用参数 start、size 和 stride对长度为L的维度进行切片。</p>
+<p>为所有i使用生成的<code>start+i*stride</code>形式的索引为半开区间<code>[0,L)</code>下标，这样<code>0 ≤ i &lt; size</code> 。所有生成的索引都必须在范围内。但是，使用<code>size=0</code>时，不会生成索引，因此不会应用边界检查。因此对于<code>size=0</code> ，<code>start</code> 和 <code>stride</code> 参数无关紧要，可以是任何值。</p>
+<p>相反，如果<code>L=0</code>且<code>size≠0</code> ，则 TensorRT 会报告错误，因为半开区间<code>[0,L)</code>变为空，并且生成的索引本质上是超出范围的。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_slice_layer.html">C++ 类ISliceLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#islicelayer">Python 类ISliceLayer</a> 。</p>
+<h3 id="A-1-39-ISoftMaxLayer"><a href="#A-1-39-ISoftMaxLayer" class="headerlink" title="A.1.39. ISoftMaxLayer"></a>A.1.39. ISoftMaxLayer</h3><p><code>ISoftMaxLayer</code>沿用户指定的输入维度对输入张量应用 <code>SoftMax</code> 函数。</p>
+<p><strong>层描述</strong></p>
+<p>给定一个形状为 a的输入张量A和一个输入维度i ，该层在每个切片上应用 SoftMax 函数， $A_{a0, …, ai−1, :, ai+1, …, an−1}$沿A 的维度i 。生成的输出张量C与输入张量A具有相同的维度。</p>
+<p>切片x的 SoftMax 函数S定义为 $S(x) = exp (x_j)/∑exp (x_j)$</p>
+<p>SoftMax 函数重新调整输入，使得输出中的每个值都位于<code>[0, 1]</code>范围内，并且每个切片的值$C_{a0, …, ai−1, :, ai+1, …, an−1}$沿C的维度i总和为1 。</p>
+<p><strong>条件和限制</strong></p>
+<p>对于n是a的长度，输入维度i应该是 $i ε [ 0 , n − 1 ]$ 。如果用户没有提供输入维度，那么$i =max (0, n−3)$  。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_soft_max_layer.html">C++ 类ISoftMaxLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#isoftmaxlayer">Python 类ISoftMaxLayer</a> 。</p>
+<h3 id="A-1-40-ITopKLayer"><a href="#A-1-40-ITopKLayer" class="headerlink" title="A.1.40. ITopKLayer"></a>A.1.40. ITopKLayer</h3><p><code>ITopKLayer</code>沿着一个维度查找前K个最大（或最小）元素，返回一个缩减的张量和一个索引位置的张量。</p>
+<p><strong>层描述</strong></p>
+<p>尺寸为 a的输入张量A ，给定一个轴i ，一个为max或min的运算符，以及一个k的值，产生一个值张量V和一个尺寸为v的索引张量，使得$v_j={k\ \ \ if\ \ \  i≠j, \ \ and\ \ \  a_i\ \ \  otherwise}$ 。</p>
+<p>输出值为：</p>
+<ul>
+<li>$V<em>{a0, …, ai−1, :, ai+1, …, an−1} = sort (A</em>{a0, …, ai−1, :, ai+1, …, an−1}):K$ </li>
+<li>$I<em>{a0, …, ai−1, :, ai+1, …, an−1} = argsort (A</em>{a0, …, ai−1, :, ai+1, …, an−1}):K$</li>
+</ul>
+<p>其中sort对于 <code>operator max</code>是降序排列，对于 <code>operator min</code>是升序排列。</p>
+<p>在排序过程中关系被打破，对于运算符max 而言，较低的索引被认为较大，而对于 operator min ，较低的索引被认为较小。</p>
+<p><strong>条件和限制</strong></p>
+<p>K值必须为 3840 或更小。只能搜索一个轴找到前K个最小值或最大值；该轴不能是批次维度。</p>
+<p>请参阅C++ 类<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_top_k_layer.html">ITopKLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#itopklayer">Python 类ITopKLayer</a> 。</p>
+<h4 id="A-1-40-1-TopK-Layer-Setup"><a href="#A-1-40-1-TopK-Layer-Setup" class="headerlink" title="A.1.40.1. TopK Layer Setup"></a>A.1.40.1. TopK Layer Setup</h4><p>TopK层用于识别接下来出现的概率最大的字符。</p>
+<h4 id="注意：该层有两个输出。第一个输出是前K个值的数组。第二个是我们更感兴趣的，是这些最大值出现的索引。"><a href="#注意：该层有两个输出。第一个输出是前K个值的数组。第二个是我们更感兴趣的，是这些最大值出现的索引。" class="headerlink" title="注意：该层有两个输出。第一个输出是前K个值的数组。第二个是我们更感兴趣的，是这些最大值出现的索引。"></a>注意：该层有两个输出。第一个输出是前K个值的数组。第二个是我们更感兴趣的，是这些最大值出现的索引。</h4><p>下面的代码设置 <code>TopK</code> 层并将<code>OUTPUT_BLOB_NAME</code>分配给该层的第二个输出。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> pred =  network-&gt;<span class="built_in">addTopK</span>(*addBiasLayer-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>),                                     	 	nvinfer1::TopKOperation::kMAX, <span class="number">1</span>, reduceAxis);</span><br><span class="line"><span class="built_in">assert</span>(pred != <span class="literal">nullptr</span>);</span><br><span class="line">pred-&gt;<span class="built_in">getOutput</span>(<span class="number">1</span>)-&gt;<span class="built_in">setName</span>(OUTPUT_BLOB_NAME);</span><br></pre></td></tr></table></figure><br>有关详细信息，请参阅<a target="_blank" rel="noopener" href="http://docs.nvidia.com/deeplearning/sdk/tensorrt-api/index.html">NVIDIA TensorRT API 参考</a>。</p>
+<h3 id="A-1-41-ITripLimitLayer"><a href="#A-1-41-ITripLimitLayer" class="headerlink" title="A.1.41. ITripLimitLayer"></a>A.1.41. ITripLimitLayer</h3><p><code>ITripLimitLayer</code>指定循环迭代的次数。循环由循环边界层定义。</p>
+<p>有关<code>ITripLimitLayer</code>的更多信息，包括循环的工作方式及其限制，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#work-with-loops">使用循环</a>。</p>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_trip_limit_layer.html">C++ 类ITripLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#itriplimitlayer">Python 类ITripLayer</a> 。</p>
+<h3 id="A-1-42-IUnaryLayer"><a href="#A-1-42-IUnaryLayer" class="headerlink" title="A.1.42. IUnaryLayer"></a>A.1.42. IUnaryLayer</h3><p><code>IUnaryLayer</code>支持<code>PointWise</code>一元运算。</p>
+<p><strong>层描述</strong></p>
+<p><code>IUnaryLayer</code>对输入张量A执行<code>PointWise</code>操作，从而得到相同维度的输出张量B。支持以下功能：</p>
+<ul>
+<li>$exp: B = e^A$ </li>
+<li>$abs: B = |A|$</li>
+<li>$log: B = ln (A)$</li>
+<li>$sqrt: B = \sqrt {A}  \ (rounded\ \ \  to nearest\ \ \  even\ \ \  mode)$</li>
+<li>$neg: B = -A$</li>
+<li>$recip: B = 1 / A \ (reciprocal)\ \ \  in\ \ \  rounded\ \ \  to\ \ \  nearest\ \ \  even\ \ \  mode$</li>
+<li>$sine : B = sin (A)$</li>
+<li>$Cos : B = cos (A)$</li>
+<li>$Tan : B = tan (A)$</li>
+<li>$Tanh : B = tanh (A)$</li>
+<li>$Sinh : B = sinh (A)$</li>
+<li>$Cosh : B = cosh (A)$</li>
+<li>$Asin : B = asin (A)$</li>
+<li>$Acos : B = acos (A)$</li>
+<li>$Atan : B = tan (A)$</li>
+<li>$Asinh : B = asinh (A)$</li>
+<li>$Acosh : B = acosh (A)$</li>
+<li>$Atanh : B = atanh (A)$</li>
+<li>$Ceil : B = ceil (A)$</li>
+<li>$Floor : B = floor (A)$</li>
+<li>$ERF : B = erf (A)$</li>
+<li>$NOT : B = ~A$</li>
+<li>$Sign : B = If A &gt; 0, 1;\ \ if \ \ A &lt; 0, −1;\ \  if\ \  A == 0, 0.$</li>
+<li>$Round : B = Round\ \  to\ \  nearest\ \  even (A)$</li>
+</ul>
+<p><strong>条件和限制</strong></p>
+<p>输入和输出可以是 0 到 7 维张量。</p>
+<p><code>IUnaryLayer</code>层可以接受不同的输入数据类型，具体取决于所使用的操作。 <code>IUnaryLayer</code>支持每个操作的以下类型：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Operation</th>
+<th>DataTypes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>kEXP</td>
+<td>kFLOAT, kHALF, kINT8</td>
+</tr>
+<tr>
+<td>kLOG</td>
+<td>kFLOAT, kHALF, kINT8</td>
+</tr>
+<tr>
+<td>kSQRT</td>
+<td>kFLOAT, kHALF, kINT8</td>
+</tr>
+<tr>
+<td>kRECIP</td>
+<td>kFLOAT, kHALF, kINT8</td>
+</tr>
+<tr>
+<td>kABS</td>
+<td>kFLOAT, kHALF, kINT8</td>
+</tr>
+<tr>
+<td>kNEG</td>
+<td>kFLOAT, kHALF, kINT8</td>
+</tr>
+<tr>
+<td>kSIN</td>
+<td>kFLOAT, kHALF, kINT8</td>
+</tr>
+<tr>
+<td>kCOS</td>
+<td>kFLOAT, kHALF, kINT8</td>
+</tr>
+<tr>
+<td>kTAN</td>
+<td>kFLOAT, kHALF, kINT8</td>
+</tr>
+<tr>
+<td>kSINH</td>
+<td>kFLOAT, kHALF, kINT8</td>
+</tr>
+<tr>
+<td>kCOSH</td>
+<td>kFLOAT, kHALF, kINT8</td>
+</tr>
+<tr>
+<td>kASIN</td>
+<td>kFLOAT, kHALF, kINT8</td>
+</tr>
+<tr>
+<td>kACOS</td>
+<td>kFLOAT, kHALF, kINT8</td>
+</tr>
+<tr>
+<td>kATAN</td>
+<td>kFLOAT, kHALF, kINT8</td>
+</tr>
+<tr>
+<td>kASINH</td>
+<td>kFLOAT, kHALF, kINT8</td>
+</tr>
+<tr>
+<td>kACOSH</td>
+<td>kFLOAT, kHALF, kINT8</td>
+</tr>
+<tr>
+<td>kATANH</td>
+<td>kFLOAT, kHALF, kINT8</td>
+</tr>
+<tr>
+<td>kCEIL</td>
+<td>kFLOAT, kHALF, kINT8</td>
+</tr>
+<tr>
+<td>kFLOOR</td>
+<td>kFLOAT, kHALF, kINT8</td>
+</tr>
+<tr>
+<td>kERF</td>
+<td>kFLOAT, kHALF, kINT8</td>
+</tr>
+<tr>
+<td>kNOT</td>
+<td>kBOOL</td>
+</tr>
+<tr>
+<td>kSIGN</td>
+<td>kFLOAT, kHALF, kINT8, kINT32</td>
+</tr>
+<tr>
+<td>kROUND</td>
+<td>kFLOAT, kHALF, kINT8</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_unary_layer.html">C++ 类IUnaryLayer</a>或<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/python_api/infer/Graph/Layers.html#iunarylayer">Python 类IUnaryLayer</a> 。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/15-TensorRT%E7%BD%91%E7%BB%9C%E5%B1%82%E8%AF%A6%E8%A7%A3/" title="15-TensorRT网络层详解">http://example.com/TensorRT/TensorRT中文版开发手册/15-TensorRT网络层详解/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/Tensorrt/" rel="tag"><i class="fa fa-tag"></i> Tensorrt</a>
+              <a href="/tags/DeepLearning/" rel="tag"><i class="fa fa-tag"></i> DeepLearning</a>
+              <a href="/tags/Plugin/" rel="tag"><i class="fa fa-tag"></i> Plugin</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/14-TensorRT%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" rel="prev" title="14-TensorRT中的常见问题">
+                  <i class="fa fa-chevron-left"></i> 14-TensorRT中的常见问题
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/16-TensorRT%E7%9A%84%E6%95%B0%E6%8D%AE%E6%A0%BC%E5%BC%8F%E5%AE%9A%E4%B9%89%E8%AF%A6%E8%A7%A3/" rel="next" title="16-TensorRT的数据格式定义详解">
+                  16-TensorRT的数据格式定义详解 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"be816a14784cda8eccb59fb423315986"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="说明： 本文当是官方CUDA for Tegra的翻译">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CUDA_Tegra">
+<meta property="og:url" content="http://example.com/CUDA/%E5%9F%BA%E7%A1%80/CUDA_Tegra/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="说明： 本文当是官方CUDA for Tegra的翻译">
+<meta property="og:locale">
+<meta property="article:published_time" content="2024-12-01T10:13:44.387Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:44.387Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="GPU">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/CUDA/%E5%9F%BA%E7%A1%80/CUDA_Tegra/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/CUDA/%E5%9F%BA%E7%A1%80/CUDA_Tegra/","path":"CUDA/基础/CUDA_Tegra/","title":"CUDA_Tegra"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>CUDA_Tegra | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-CUDA-for-Tegra"><span class="nav-text">1 CUDA for Tegra</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%A6%82%E8%BF%B0"><span class="nav-text">2 概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86"><span class="nav-text">3. 内存管理</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-I-O%E4%B8%80%E8%87%B4%E6%80%A7"><span class="nav-text">3.1 I&#x2F;O一致性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E4%BC%B0%E7%AE%97%E9%9B%86%E6%88%90GPU%E8%AE%BE%E5%A4%87%E4%B8%8A%E7%9A%84%E6%80%BB%E5%8F%AF%E5%88%86%E9%85%8D%E8%AE%BE%E5%A4%87%E5%86%85%E5%AD%98"><span class="nav-text">3.2. 估算集成GPU设备上的总可分配设备内存</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E7%A7%BB%E6%A4%8D%E6%B3%A8%E6%84%8F%E4%BA%8B%E9%A1%B9"><span class="nav-text">4. 移植注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#4-1-%E5%86%85%E5%AD%98%E9%80%89%E6%8B%A9"><span class="nav-text">4.1 内存选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-2-Pinned-Memory"><span class="nav-text">4.2. Pinned Memory</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-3-%E5%9C%A8-Tegra-%E4%B8%8A%E6%9C%89%E6%95%88%E4%BD%BF%E7%94%A8%E7%BB%9F%E4%B8%80%E5%86%85%E5%AD%98"><span class="nav-text">4.3. 在 Tegra 上有效使用统一内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-4-GPU%E9%80%89%E6%8B%A9"><span class="nav-text">4.4 GPU选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-5-%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6%E9%80%89%E6%8B%A9"><span class="nav-text">4.5 同步机制选择</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-6-Tegra-%E4%B8%8D%E6%94%AF%E6%8C%81%E7%9A%84-CUDA-%E5%8A%9F%E8%83%BD"><span class="nav-text">4.6. Tegra 不支持的 CUDA 功能</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-EGL%E4%BA%92%E6%93%8D%E4%BD%9C%E6%80%A7"><span class="nav-text">5.EGL互操作性</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-EGLStream"><span class="nav-text">5.1. EGLStream</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-1-EGLStream-Flow"><span class="nav-text">5.1.1. EGLStream Flow</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-2-CUDA-%E4%BD%9C%E4%B8%BA%E7%94%9F%E4%BA%A7%E8%80%85"><span class="nav-text">5.1.2. CUDA 作为生产者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-3-CUDA%E4%BD%9C%E4%B8%BA%E6%B6%88%E8%B4%B9%E8%80%85"><span class="nav-text">5.1.3. CUDA作为消费者</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-4-%E9%9A%90%E5%BC%8F%E5%90%8C%E6%AD%A5"><span class="nav-text">5.1.4. 隐式同步</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-5-%E7%94%9F%E4%BA%A7%E8%80%85%E5%92%8C%E6%B6%88%E8%B4%B9%E8%80%85%E4%B9%8B%E9%97%B4%E7%9A%84%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93"><span class="nav-text">5.1.5.生产者和消费者之间的数据传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-6-EGLStream%E7%AE%A1%E9%81%93"><span class="nav-text">5.1.6.EGLStream管道</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-2-EGL%E5%9B%BE%E5%83%8F"><span class="nav-text">5.2 EGL图像</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-1-CUDA%E4%B8%8EEGLImage%E7%9A%84%E4%BA%92%E6%93%8D%E4%BD%9C"><span class="nav-text">5.2.1.CUDA与EGLImage的互操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-EGLSync"><span class="nav-text">5.3. EGLSync</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-1-CUDA%E4%B8%8EEGLSync%E7%9A%84%E4%BA%92%E6%93%8D%E4%BD%9C"><span class="nav-text">5.3.1.CUDA与EGLSync的互操作</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-2-%E4%BB%8ECUDA%E4%BA%8B%E4%BB%B6%E5%88%9B%E5%BB%BAEGLSync"><span class="nav-text">5.3.2.从CUDA事件创建EGLSync</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-3-3-%E4%BB%8E-EGLSync-%E5%88%9B%E5%BB%BA-CUDA-%E4%BA%8B%E4%BB%B6"><span class="nav-text">5.3.3. 从 EGLSync 创建 CUDA 事件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#6-Jetson-CUDA%E5%8D%87%E7%BA%A7%E5%8C%85-TODO"><span class="nav-text">6.Jetson CUDA升级包 TODO</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#7-cuDLA-TODO"><span class="nav-text">7. cuDLA TODO</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/%E5%9F%BA%E7%A1%80/CUDA_Tegra/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="CUDA_Tegra | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          CUDA_Tegra
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:44" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:44+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/%E5%9F%BA%E7%A1%80/" itemprop="url" rel="index"><span itemprop="name">基础</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>说明：</p>
+<p>本文当是官方<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-for-tegra-appnote/index.html">CUDA for Tegra</a>的翻译</p>
+<h1 id="1-CUDA-for-Tegra"><a href="#1-CUDA-for-Tegra" class="headerlink" title="1 CUDA for Tegra"></a>1 CUDA for Tegra</h1><p>说明概述了NVIDIA®Tegra®内存体系结构，以及将代码从连接到x86系统的分立GPU（dGPU）移植到Tegra™集成GPU（iGPU）的注意事项。它还讨论了EGL互操作性。</p>
+<h1 id="2-概述"><a href="#2-概述" class="headerlink" title="2 概述"></a>2 概述</h1><p>本文档提供了NVIDIA Tegra内存架构的概述，以及将连接到x86系统的独立GPU (dGPU)的代码移植到Tegra集成GPU (iGPU)的注意事项。它还讨论了EGL互操作性。</p>
+<p>本指南适用于已经熟悉CUDA®和C/C++编程并希望为Tegra®SoC开发应用程序的开发人员。</p>
+<p>CUDA C++编程指南和CUDA C最佳实践指南可从以下网站获得：</p>
+<p><em>CUDA C++ Programming Guide:</em></p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html">https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html</a></p>
+<p><em>CUDA C++ Best Practices Guide:</em></p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html">https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html</a></p>
+<h1 id="3-内存管理"><a href="#3-内存管理" class="headerlink" title="3. 内存管理"></a>3. 内存管理</h1><p>在 Tegra® 设备中，CPU（主机）和 iGPU 共享 SoC DRAM 内存。具有独立DRAM内存的dGPU可以通过PCIe或NVLink连接到Tegra设备。它目前仅在 NVIDIA DRIVE 平台上受支持。</p>
+<p>图1显示了与dGPU连接的Tegra®内存系统的概览。</p>
+
+<p>在Tegra中，设备内存、主机内存和统一内存分配在同一物理SoC DRAM上。在dGPU上，设备内存分配在dGPU DRAM上。Tegra系统中的缓存行为与具有dGPU的x86系统不同。Tegra系统中不同内存类型的缓存和访问行为如表1所示。</p>
+<p>Table 1. Characteristics of Different Memory Types in a Tegra System</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>Memory Type</strong></th>
+<th><strong>CPU</strong></th>
+<th><strong>iGPU</strong></th>
+<th><strong>Tegra-connected dGPU</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Device memory</td>
+<td>Not directly accessible</td>
+<td>Cached</td>
+<td>Cached</td>
+</tr>
+<tr>
+<td>Pageable host memory</td>
+<td>Cached</td>
+<td>Not directly accessible</td>
+<td>Not directly accessible</td>
+</tr>
+<tr>
+<td>Pinned host memory</td>
+<td>Uncached where compute capability is less than 7.2. Cached where compute capability is greater than or equal to 7.2.</td>
+<td>Uncached</td>
+<td>Uncached</td>
+</tr>
+<tr>
+<td>Unified memory</td>
+<td>Cached</td>
+<td>Cached</td>
+<td>Not supported</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>在Tegra上，由于设备内存、主机内存和统一内存分配在同一物理SoC DRAM上，因此可以避免重复的内存分配和数据传输。</p>
+<h2 id="3-1-I-O一致性"><a href="#3-1-I-O一致性" class="headerlink" title="3.1 I/O一致性"></a>3.1 I/O一致性</h2><p>I/O  一致性（也称为单向一致性）是 I/O 设备（如 GPU）可以读取 CPU 缓存中的最新更新的功能。当 CPU 和 GPU  之间共享相同的物理内存时，它消除了执行 CPU 缓存管理操作的需要。仍然需要执行 GPU  缓存管理操作，因为一致性是单向的。请注意，当使用托管内存或互操作内存时，CUDA 驱动程序在内部执行 GPU 缓存管理操作。</p>
+<p>从 Xavier SOC 开始的 Tegra 设备支持 I/O 一致性。 应用程序应从此硬件功能中获益，而无需更改应用程序的代码（请参阅下面的第 2 点）。</p>
+<p>以下功能依赖于 I/O 一致性支持：</p>
+<ol>
+<li><code>cudaHostRegister（）/cuMemHostRegister（）</code>仅在 I/O 一致的平台上受支持。主机寄存器支持可以使用设备属性  <code>cudaDevAttrHostRegisterSupported /  CU_DEVICE_ATTRIBUTE_HOST_REGISTER_SUPPORTED</code>进行查询。</li>
+<li>使用 <code>cudaMallocHost（）/cuMemHostAlloc（）/cuMemAllocHost（）</code> 分配的固定内存的 CPU 缓存仅在 I/O 一致的平台上启用。</li>
+</ol>
+<h2 id="3-2-估算集成GPU设备上的总可分配设备内存"><a href="#3-2-估算集成GPU设备上的总可分配设备内存" class="headerlink" title="3.2. 估算集成GPU设备上的总可分配设备内存"></a>3.2. 估算集成GPU设备上的总可分配设备内存</h2><p><code>cudaMemGetInfo（）</code>API 返回可用于为 GPU 分配的可用内存和总内存量的快照。如果任何其他客户端分配内存，则可用内存可能会更改。</p>
+<p>独立GPU具有称为VIDMEM的专用DRAM，它与CPU内存分开。离散 GPU 中可用内存的快照由 <code>cudaMemGetInfo</code> API 返回。</p>
+<p>Tegra  SoC上的集成GPU与CPU和其他Tegra引擎共享DRAM。CPU可以通过将DMAR的内容移动到SWAP区域来控制DRAM的内容和释放DRAM内存，反之亦然。<code>cudaMemGetInfo</code>API 目前不考虑 SWAP 内存区域。<code>cudaMemGetInfo</code>API 可能返回比实际可分配内存更小的大小，因为 CPU  可能能够通过将页面移动到 SWAP 区域来释放一些 DRAM 区域。为了估计可分配设备内存的数量，CUDA 应用程序开发人员应考虑以下几点：</p>
+<p>在Linux和Android平台上：Linux和Android上的设备可分配内存主要取决于交换空间和主内存的总大小和可用大小。以下几点可以帮助用户估计各种情况下设备可分配内存的总量：</p>
+<ul>
+<li>主机分配的内存=总使用的物理内存–设备分配的内存</li>
+<li>如果（主机分配的内存&lt;可用交换空间），则设备可分配内存=总物理内存–已分配的设备内存</li>
+<li>如果（主机分配的内存&gt;可用交换空间），则设备可分配内存 = 总物理内存 -（主机分配的内存 - 可用交换空间）</li>
+</ul>
+<p>其中</p>
+<ul>
+<li>设备分配的内存是设备上已分配的内存。它可以从 /proc/meminfo 中的 NvMapMemUsed 字段或 /sys/kernel/debug/nvmap/iovmm/clients 的总字段获得。</li>
+<li>可以使用 free -m 命令获取已用物理内存总量。Mem 行中used的字段表示此信息。</li>
+<li>总物理内存是从 /proc/meminfo 中的 MemTotal 字段获取的。</li>
+<li>可以使用 free -m 命令找到可用交换空间。swap行中的free字段表示此信息。</li>
+<li>如果 free 命令不可用，可以从 /proc/meminfo 获得与以下内容相同的信息：<ul>
+<li>总使用物理内存=MemTotal–MemFree</li>
+<li>空闲交换空间= SwapFree</li>
+</ul>
+</li>
+</ul>
+<p><strong>在QNX平台上：QNX不使用交换空间</strong>，因此，cudaMemGetInfo.free将是可分配设备内存的合理估计，因为没有交换空间将内存页移动到交换区域。</p>
+<h1 id="4-移植注意事项"><a href="#4-移植注意事项" class="headerlink" title="4. 移植注意事项"></a>4. 移植注意事项</h1><p>最初为连接到 x86 系统的  dGPU 开发的 CUDA 应用程序可能需要修改才能在 Tegra 系统上高效执行。本节介绍将此类应用程序移植到 Tegra  系统的注意事项，例如选择适当的内存缓冲区类型（固定内存、统一内存等）以及在 iGPU 和 dGPU 之间进行选择，以实现应用程序的高效性能。</p>
+<h2 id="4-1-内存选择"><a href="#4-1-内存选择" class="headerlink" title="4.1 内存选择"></a>4.1 内存选择</h2><p>CUDA 应用程序可以使用各种内存缓冲区，例如设备内存、可分页主机内存、固定内存和统一内存(<code>device memory, pageable host memory, pinned memory, and unified memory</code>)。即使这些内存缓冲区类型是在同一物理设备上分配的，每种类型都有不同的访问和缓存行为，如表 1 所示。选择最合适的内存缓冲区类型以实现高效的应用程序执行非常重要。</p>
+<p><strong>Device Memory</strong></p>
+<p>将设备内存用于可访问性仅限于 iGPU 的缓冲区。例如，在具有多个内核的应用程序中，可能存在仅由应用程序的中间内核用作输入或输出的缓冲区。这些缓冲区只能由 iGPU 访问。此类缓冲区应与设备内存一起分配。</p>
+<p><strong>Pageable Host Memory 可分页主机内存</strong></p>
+<p>将可分页主机内存用于可访问性仅限于 CPU 的缓冲区。</p>
+<p><strong>Pinned Memory 固定内存</strong> </p>
+<p>具有不同计算能力的  Tegra® 系统在 I/O 一致性方面表现出不同的行为。例如，计算能力大于或等于 7.2 的 Tegra® 系统是 I/O  相干的，而其他系统不是 I/O 相干的。在具有 I/O 一致性的 Tegra® 系统上，固定内存的 CPU  访问时间与可分页主机内存一样好，因为它缓存在 CPU 上。但是，在没有 I/O 一致性的 Tegra® 系统上，固定内存的 CPU  访问时间更高，因为它未缓存在 CPU 上。</p>
+<p>建议对小型缓冲区使用固定内存，因为此类缓冲区的缓存效果可以忽略不计，并且与统一内存不同，固定内存不涉及任何额外的开销。如果没有额外的开销，如果访问模式在 iGPU 上缓存不友好，则固定内存也更适合大型缓冲区。对于大型缓冲区，当缓冲区在 iGPU 上以合并方式仅访问一次时，iGPU 上的性能可以与 iGPU 上的统一内存一样好。</p>
+<p><strong>Unified Memory 统一内存</strong></p>
+<p>统一内存缓存在 iGPU 和  CPU 上。在 Tegra® 上，在应用程序中使用统一内存需要在内核启动、同步和预取提示调用期间执行额外的一致性和缓存维护操作。在计算能力低于  7.2 的 Tegra® 系统上，这种一致性维护开销略高，因为它们缺乏 I/O 一致性。</p>
+<p>在具有 I/O  一致性（计算能力为 7.2 或更高）的 Tegra® 设备上，统一内存同时缓存在 CPU 和 iGPU 上，对于 iGPU 和 CPU  经常访问的大型缓冲区，并且 iGPU 上的访问是重复的，统一内存更可取，因为重复访问可以抵消缓存维护成本。在没有 I/O 一致性的 Tegra® 设备上（计算能力低于 7.2），对于 CPU 和 iGPU 经常访问的大型缓冲区，并且 iGPU  上的访问不重复，统一内存仍然优于固定内存，因为固定内存不会同时缓存在 CPU 和 iGPU 上。这样，应用程序就可以利用 CPU  上的统一内存缓存。</p>
+<p>固定内存或统一内存(<code>Pinned memory or unified memory</code>)可用于减少 CPU 和 iGPU 之间的数据传输开销，因为这两个内存都可以从 CPU 和 iGPU 直接访问。在应用程序中，可以使用统一内存或固定内存分配必须在主机和 iGPU 上均可访问的输入和输出缓冲区。</p>
+<p>注意：</p>
+<p><strong>统一内存模型要求驱动程序和系统软件在当前Tegra SOC上管理一致性。软件管理一致性本质上是不确定性的，不建议在安全环境中使用。零拷贝内存（固定内存）在这些应用中是首选的。</strong></p>
+<p>评估应用程序中统一内存开销、固定内存缓存未命中和设备内存数据传输的影响，以确定正确的内存选择。</p>
+<h2 id="4-2-Pinned-Memory"><a href="#4-2-Pinned-Memory" class="headerlink" title="4.2. Pinned Memory"></a>4.2. Pinned Memory</h2><p>本节提供有关将具有 dGPU 的 x86 系统中使用固定内存分配的应用程序移植到 Tegra® 的指南。为连接到 x86 系统的 dGPU 开发的 CUDA  应用程序使用固定内存来减少数据传输时间，并将数据传输与内核执行时间重叠。有关本主题的特定信息，请参阅以下网站上的“主机和设备之间的数据传输”和“使用计算的异步和重叠传输”。</p>
+<p>“Data Transfer Between Host and Device”:</p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#data-transfer-between-host-and-device">https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#data-transfer-between-host-and-device</a></p>
+<p>“Asynchronous and Overlapping Transfers with Computation”:</p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#asynchronous-transfers-and-overlapping-transfers-with-computation">https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#asynchronous-transfers-and-overlapping-transfers-with-computation</a></p>
+<p>在没有 I/O 一致性的 Tegra® 系统上，重复访问固定内存会降低应用程序性能，因为固定内存不会缓存在此类系统中的 CPU 上。</p>
+<p>下面显示了一个示例应用程序，其中一组筛选器和操作（k1、k2 和 k3）应用于图像。分配固定内存以减少具有 dGPU 的 x86 系统上的数据传输时间，从而提高整体应用程序速度。但是，以具有相同代码的  Tegra® 设备为目标会导致 readImage（） 函数的执行时间急剧增加，因为它会重复访问未缓存的缓冲区。这增加了整体应用时间。如果  readImage（） 所花费的时间明显高于内核执行时间，建议使用统一内存来减少 readImage（）  时间。否则，通过删除不必要的数据传输调用来评估具有固定内存和统一内存的应用程序，以确定最适合的内存。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Sample code for an x86 system with a discrete GPU</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> *h_a,*d_a,*d_b,*d_c,*d_d,*h_d;</span><br><span class="line">    <span class="type">int</span> height = <span class="number">1024</span>;</span><br><span class="line">    <span class="type">int</span> width = <span class="number">1024</span>;</span><br><span class="line">    <span class="type">size_t</span> sizeOfImage = width * height * <span class="keyword">sizeof</span>(<span class="type">int</span>); <span class="comment">// 4MB image</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//Pinned memory allocated to reduce data transfer time</span></span><br><span class="line">    cudaMallocHost(h_a, sizeOfImage);</span><br><span class="line">    cudaMallocHost(h_d, sizeOfImage);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Allocate buffers on GPU</span></span><br><span class="line">    cudaMalloc(&amp;d_a, sizeOfImage);</span><br><span class="line">    cudaMalloc(&amp;d_b, sizeOfImage);</span><br><span class="line">    cudaMalloc(&amp;d_c, sizeOfImage);</span><br><span class="line">    cudaMalloc(&amp;d_d, sizeOfImage);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//CPU reads Image;</span></span><br><span class="line">    readImage(h_a); <span class="comment">// Intialize the h_a buffer</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Transfer image to GPU</span></span><br><span class="line">    cudaMemcpy(d_a, h_a, sizeOfImage, cudaMemcpyHostToDevice);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Data transfer is fast as we used pinned memory</span></span><br><span class="line">    <span class="comment">// ----- CUDA Application pipeline start ----</span></span><br><span class="line">    k1&lt;&lt;&lt;..&gt;&gt;&gt;(d_a,d_b) <span class="comment">// Apply filter 1</span></span><br><span class="line">    k2&lt;&lt;&lt;..&gt;&gt;&gt;(d_b,d_c)<span class="comment">// Apply filter 2</span></span><br><span class="line">    k3&lt;&lt;&lt;..&gt;&gt;&gt;(d_c,d_d)<span class="comment">// Some operation on image data</span></span><br><span class="line">    <span class="comment">// ----- CUDA Application pipeline end ----</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Transfer processed image to CPU</span></span><br><span class="line">    cudaMemcpy(h_d, d_d, sizeOfImage, cudaMemcpyDeviceToHost);</span><br><span class="line">    <span class="comment">// Data transfer is fast as we used pinned memory</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Use processed Image i.e h_d in later computations on CPU.</span></span><br><span class="line">    UseImageonCPU(h_d);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Porting the code on Tegra</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> *h_a,*d_b,*d_c,*h_d;</span><br><span class="line">    <span class="type">int</span> height = <span class="number">1024</span>;</span><br><span class="line">    <span class="type">int</span> width = <span class="number">1024</span>;</span><br><span class="line">    <span class="type">size_t</span> sizeOfImage = width * height * <span class="keyword">sizeof</span>(<span class="type">int</span>); <span class="comment">// 4MB image</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//Unified memory allocated for input and output</span></span><br><span class="line">    <span class="comment">//buffer of application pipeline</span></span><br><span class="line">    cudaMallocManaged(h_a, sizeOfImage,cudaMemAttachHost);</span><br><span class="line">    cudaMallocManaged(h_d, sizeOfImage);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Intermediate buffers not needed on CPU side.</span></span><br><span class="line">    <span class="comment">//So allocate them on device memory</span></span><br><span class="line">    cudaMalloc(&amp;d_b, sizeOfImage);</span><br><span class="line">    cudaMalloc(&amp;d_c, sizeOfImage);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//CPU reads Image;</span></span><br><span class="line">    readImage (h_a); <span class="comment">// Intialize the h_a buffer</span></span><br><span class="line">    <span class="comment">// ----- CUDA Application pipeline start ----</span></span><br><span class="line">    <span class="comment">// Prefetch input image data to GPU</span></span><br><span class="line">    cudaStreamAttachMemAsync(<span class="literal">NULL</span>, h_a, <span class="number">0</span>, cudaMemAttachGlobal);</span><br><span class="line">    k1&lt;&lt;&lt;..&gt;&gt;&gt;(h_a,d_b)</span><br><span class="line">    k2&lt;&lt;&lt;..&gt;&gt;&gt;(d_b,d_c)</span><br><span class="line">    k3&lt;&lt;&lt;..&gt;&gt;&gt;(d_c,h_d)</span><br><span class="line">    <span class="comment">// Prefetch output image data to CPU</span></span><br><span class="line">    cudaStreamAttachMemAsync(<span class="literal">NULL</span>, h_d, <span class="number">0</span>, cudaMemAttachHost);</span><br><span class="line">    cudaStreamSynchronize(<span class="literal">NULL</span>);</span><br><span class="line">    <span class="comment">// ----- CUDA Application pipeline end ----</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Use processed Image i.e h_d on CPU side.</span></span><br><span class="line">    UseImageonCPU(h_d);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>The<code>cudaHostRegister()</code> function</p>
+<p>在计算能力低于 7.2 的  Tegra® 设备上不支持 <code>cudaHostRegister（）</code> 函数，因为这些设备没有 I/O 一致性。如果设备上不支持  <code>cudaHostRegister（）</code>，请使用其他固定内存分配函数，例如<code>cudaMallocHost（） 和 cudaHostAlloc（）</code>。</p>
+<p>固定内存上的GNU原子操作</p>
+<p>Tegra®CPU不支持未缓存内存上的GNU原子操作。由于固定内存不缓存在计算能力低于7.2的Tegra®设备上，因此固定内存不支持GNU原子操作。</p>
+<h2 id="4-3-在-Tegra-上有效使用统一内存"><a href="#4-3-在-Tegra-上有效使用统一内存" class="headerlink" title="4.3. 在 Tegra 上有效使用统一内存"></a>4.3. 在 Tegra 上有效使用统一内存</h2><p>在应用程序中使用统一内存需要在内核启动、同步和预取提示调用时执行额外的一致性和缓存维护操作。这些操作与其他GPU工作同步执行，这可能会在应用程序中导致不可预测的延迟。</p>
+<p>通过提供数据预取提示，可以提高Tegra®上统一内存的性能。驱动程序可以使用这些预取提示来优化一致性操作。为了预取数据，除了CUDA C编程指南的“一致性和并发性”部分中描述的技术外，还可以使用<code>cudaStreamAttachMemAsync（）</code>函数，链接如下：</p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#um-coherency-hd">https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#um-coherency-hd</a></p>
+<p>以预取数据。表2显示了由附件标志的状态变化触发的统一内存的预取行为。</p>
+<p>Table 2. Unified Memory Prefetching Behavior per Changing Attachment Flag States</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>Previous Flag</strong></th>
+<th><strong>Current Flag</strong></th>
+<th><strong>Prefetching Behavior</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>cudaMemAttachGlobal/cudaMemAttachSingle</td>
+<td>cudaMemAttachHost</td>
+<td>Causes prefetch to CPU</td>
+</tr>
+<tr>
+<td>cudaMemAttachHost</td>
+<td>cudaMemAttachGlobal/ cudaMemAttachSingle</td>
+<td>Causes prefetch to GPU</td>
+</tr>
+<tr>
+<td>cudaMemAttachGlobal</td>
+<td>cudaMemAttachSingle</td>
+<td>No prefetch to GPU</td>
+</tr>
+<tr>
+<td>cudaMemAttachSingle</td>
+<td>cudaMemAttachGlobal</td>
+<td>No prefetch to GPU</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>以下示例显示了 <code>cudaStreamAttachMemAsync（）</code> 预取数据的用法。</p>
+<p>但是，Tegra®设备不支持使用cudaMemPrefetchAsync（）的数据预取技术，如以下网站上《CUDA C++编程指南》的“性能调整”部分所述：<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#um-performance-tuning">https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#um-performance-tuning</a></p>
+<p>QNX 系统软件存在一些限制，无法实施所有 UVM 优化。因此，使用 <code>cudaStreamAttachMemAsync（）</code> 在 QNX 上预取提示不会影响性能。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">__global__ <span class="type">void</span> <span class="title function_">matrixMul</span><span class="params">(<span class="type">int</span> *p, <span class="type">int</span> *q, <span class="type">int</span>*r, <span class="type">int</span> hp, <span class="type">int</span> hq, <span class="type">int</span> wp, <span class="type">int</span> wq)</span></span><br><span class="line">&#123;</span><br><span class="line"><span class="comment">// Matrix multiplication kernel code</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">MatrixMul</span><span class="params">(<span class="type">int</span> hp, <span class="type">int</span> hq, <span class="type">int</span> wp, <span class="type">int</span> wq)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">int</span> *p,*q,*r;</span><br><span class="line">    <span class="type">int</span> i;</span><br><span class="line">    <span class="type">size_t</span> sizeP = hp*wp*<span class="keyword">sizeof</span>(<span class="type">int</span>);</span><br><span class="line">    <span class="type">size_t</span> sizeQ = hq*wq*<span class="keyword">sizeof</span>(<span class="type">int</span>);</span><br><span class="line">    <span class="type">size_t</span> sizeR = hp*wq*<span class="keyword">sizeof</span>(<span class="type">int</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//Attach buffers &#x27;p&#x27; and &#x27;q&#x27; to CPU and buffer &#x27;r&#x27; to GPU</span></span><br><span class="line">    cudaMallocManaged(&amp;p, sizeP, cudaMemAttachHost);</span><br><span class="line">    cudaMallocManaged(&amp;q, sizeQ, cudaMemAttachHost);</span><br><span class="line">    cudaMallocManaged(&amp;r, sizeR);</span><br><span class="line">    <span class="comment">//Intialize with random values</span></span><br><span class="line">    randFill(p,q,hp,wp,hq,wq);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Prefetch p,q to GPU as they are needed in computation</span></span><br><span class="line">    cudaStreamAttachMemAsync(<span class="literal">NULL</span>, p, <span class="number">0</span>, cudaMemAttachGlobal);</span><br><span class="line">    cudaStreamAttachMemAsync(<span class="literal">NULL</span>, q, <span class="number">0</span>, cudaMemAttachGlobal);</span><br><span class="line">    matrixMul&lt;&lt;&lt;....&gt;&gt;&gt;(p,q,r, hp,hq,wp,wq);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Prefetch &#x27;r&#x27; to CPU as only &#x27;r&#x27; is needed</span></span><br><span class="line">    cudaStreamAttachMemAsync(<span class="literal">NULL</span>, r, <span class="number">0</span>, cudaMemAttachHost);</span><br><span class="line">    cudaStreamSynchronize(<span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Print buffer &#x27;r&#x27; values</span></span><br><span class="line">    <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; hp*wq; i++)</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d &quot;</span>, r[i]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以在 matrixMul 内核代码之后添加一个额外的 <code>cudaStreamSynchronize（NULL）</code> 调用，以避免在 cudaStreamAttachMemAsync（） 调用中导致不可预测性的回调线程。</p>
+<h2 id="4-4-GPU选择"><a href="#4-4-GPU选择" class="headerlink" title="4.4 GPU选择"></a>4.4 GPU选择</h2><p>在具有 dGPU 的  Tegra 系统上，决定 CUDA 应用程序是在 iGPU 还是 dGPU  上运行可能会影响应用程序的性能。做出此类决策时需要考虑的一些因素是内核执行时间、数据传输时间、数据局部性和延迟。例如，要在 dGPU  上运行应用程序，必须在 SoC 和 dGPU 之间传输数据。如果应用程序在 iGPU 上运行，则可以避免此数据传输。</p>
+<h2 id="4-5-同步机制选择"><a href="#4-5-同步机制选择" class="headerlink" title="4.5 同步机制选择"></a>4.5 同步机制选择</h2><p>cudaSetDeviceFlags API 用于控制 CPU 线程的同步行为。在 CUDA 10.1 之前，默认情况下，iGPU 上的同步机制使用  <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html#group__CUDART__TYPES_1g130ddae663f1873258fee5a6e0808b71">cudaDeviceBlockingSync</a> 标志，该标志在等待设备完成工作时阻止同步原语上的 CPU  线程。<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html#group__CUDART__TYPES_1g130ddae663f1873258fee5a6e0808b71">cudaDeviceBlockingSync</a>  标志适用于具有电源限制的平台。但是在需要低延迟的平台上， <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__TYPES.html#group__CUDART__TYPES_1gf01347c3dafebf07e1a0b4321a030a63">cudaDeviceScheduleSpin</a>标志需要手动设置。自 CUDA 10.1  起，对于每个平台，默认同步标志是根据针对该平台优化的内容确定的。有关同步标志的更多信息，请参见  <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__DEVICE.html#group__CUDART__DEVICE_1g69e73c7dda3fc05306ae7c811a690fac">cudaSetDeviceFlags</a> API  文档。</p>
+<h2 id="4-6-Tegra-不支持的-CUDA-功能"><a href="#4-6-Tegra-不支持的-CUDA-功能" class="headerlink" title="4.6. Tegra 不支持的 CUDA 功能"></a>4.6. Tegra 不支持的 CUDA 功能</h2><p>CUDA 的所有核心功能在 Tegra 平台上都受支持。下面列出了例外情况。</p>
+<ul>
+<li><p>QNX 系统不支持 <code>cudaHostRegister（）</code> 函数。这是由于 QNX 操作系统的限制。计算能力大于或等于 7.2 的 Linux 系统支持此功能。</p>
+</li>
+<li><p>计算能力低于 7.2 的 Tegra 设备不支持系统范围的原子。</p>
+</li>
+<li><p>连接到 Tegra 的 dGPU 不支持统一内存。</p>
+</li>
+<li><p>不支持<code>cudaMemPrefetchAsync（）</code> 函数，因为 iGPU 尚不支持具有并发访问的统一内存。</p>
+</li>
+<li><p>NVIDIA 管理库 （NVML） 库在 Tegra 上不受支持。但是，作为监视资源利用率的替代方法，可以使用 tegrastats。参考<a target="_blank" rel="noopener" href="https://developer.nvidia.com/docs/drive/drive-os/latest/linux/sdk/common/topics/util_setup/tegrastatsUtility1.html">tegrastats Utility</a>文档《NVIDIA DRIVE Utilities.md》描述了使用方法。板子实测如下：</p>
+
+</li>
+<li><p>从 CUDA 11.5  开始，L4T 和具有 7.x 及更高计算能力的嵌入式 Linux Tegra 设备仅支持事件共享 IPC API。内存共享 IPC API 在  Tegra 平台上仍然不受支持。EGLStream、NvSci 或 cuMemExportToShareableHandle（） /  cuMemImportFromShareableHandle（） API 可用于在两个进程中的 CUDA 上下文之间进行通信。</p>
+</li>
+<li>远程直接内存访问 （RDMA） 仅在运行 L4T 或嵌入式 Linux 的 Tegra 设备上受支持。</li>
+<li>JIT 编译可能需要大量的  CPU 和带宽资源，这可能会干扰系统中的其他工作负载。因此，不建议将 PTX-JIT 和 NVRTC JIT 等 JIT  编译用于确定性汽车应用，并且可以通过针对特定 GPU 目标进行编译来完全绕过。在安全上下文中，Tegra 设备上不支持 JIT 编译。</li>
+<li>Tegra不支持多进程服务（MPS）。</li>
+<li>Tegra不支持对等（P2P）通信呼叫。</li>
+<li>运行QNX的Tegra系统不支持cuSOLVER库。</li>
+<li>不支持 nvGRAPH 库。</li>
+</ul>
+<p>有关这些功能的更多信息，请访问以下网站：</p>
+<p>IPC:</p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#interprocess-communication">https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#interprocess-communication</a></p>
+<p>NVSCI:</p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#nvidia-softwarcommunication-interface-interoperability-nvsci">https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#nvidia-softwarcommunication-interface-interoperability-nvsci</a></p>
+<p>RDMA:</p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/gpudirect-rdma/index.html">https://docs.nvidia.com/cuda/gpudirect-rdma/index.html</a></p>
+<p>MPS:</p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deploy/pdf/CUDA_Multi_Process_Service_Overview.pdf">https://docs.nvidia.com/deploy/pdf/CUDA_Multi_Process_Service_Overview.pdf</a></p>
+<p>P2P:</p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#peer-to-peer-memory-access">https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#peer-to-peer-memory-access</a></p>
+<h1 id="5-EGL互操作性"><a href="#5-EGL互操作性" class="headerlink" title="5.EGL互操作性"></a>5.EGL互操作性</h1><p>互操作是在两个 API 之间共享资源的有效机制。要与多个 API 共享数据，API 必须为每个 API 实现单独的互操作。</p>
+<p>EGL  提供互操作扩展，使其能够充当连接 API 的中心，无需多个互操作，并封装共享资源。API 必须实现这些扩展才能通过 EGL 与任何其他 API  进行互操作。CUDA 支持的 EGL 互操作是 EGLStream、EGLImage 和 EGLSync。</p>
+<p>EGL 互操作扩展允许应用程序在 API 之间切换，而无需重写代码。例如，一个基于 EGLStream 的应用程序，其中 NvMedia 是生产者，CUDA 是消费者，可以修改为使用 OpenGL 作为消费者，而无需修改生产者代码。</p>
+<p><strong>在DRIVE OS平台上，NVSCI是作为EGL互操作性的替代方案提供的，用于安全关键应用</strong>。有关更多详细信息，请参阅 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#nvidia-softwarcommunication-interface-interoperability-nvsci">NVSCI</a>。</p>
+<h2 id="5-1-EGLStream"><a href="#5-1-EGLStream" class="headerlink" title="5.1. EGLStream"></a>5.1. EGLStream</h2><p>EGLStream 互操作性有助于将一系列帧从一个 API 有效地传输到另一个 API，允许使用多个 Tegra® 引擎，如 CPU、GPU、ISP 等。</p>
+<p>考虑一个应用程序，其中相机连续捕获图像，与 CUDA 共享它们进行处理，然后使用 OpenGL 渲染这些图像。在此应用程序中，图像帧在NvMedia，CUDA和OpenGL之间共享。缺少 EGLStream 互操作性将要求应用程序在 API 之间包括多个互操作和冗余数据传输。EGLStream有一个生产者和一个消费者。</p>
+<p>EGLStream提供以下好处：</p>
+<ul>
+<li>在生产者和消费者之间有效地传输帧。</li>
+<li>隐式同步处理。</li>
+<li>跨进程支持。</li>
+<li>dGPU 和 iGPU 支持。</li>
+<li>Linux、QNX和Android操作系统支持。</li>
+</ul>
+<h3 id="5-1-1-EGLStream-Flow"><a href="#5-1-1-EGLStream-Flow" class="headerlink" title="5.1.1. EGLStream Flow"></a>5.1.1. EGLStream Flow</h3><p>EGLStream 流程包含以下步骤：</p>
+<ol>
+<li><p>初始化生产者和消费者API</p>
+</li>
+<li><p>创建EGLStream并连接消费者和生产者。</p>
+<p>EGLStream使用eglCreateStreamKHR（）创建，并使用eglDestroyStreamKHR）销毁。</p>
+<p>消费者应始终在生产者之前连接到EGLStream。</p>
+<p>有关详细信息，请参阅以下网站上的 EGLStream 规范<a target="_blank" rel="noopener" href="https://www.khronos.org/registry/EGL/extensions/KHR/EGL_KHR_stream.txt">https://www.khronos.org/registry/EGL/extensions/KHR/EGL_KHR_stream.txt</a></p>
+</li>
+<li><p>分配用于 EGL 帧的内存。</p>
+</li>
+<li><p>生产者填充 EGL 帧并将其呈现给 EGLStream。</p>
+</li>
+<li><p>消费者从EGLStream获取帧，并在处理后将其释放回EGLStream。</p>
+</li>
+<li><p>生产者从EGLStream收集消费者发布的帧。</p>
+</li>
+<li><p>生产者向EGLStream提供相同的帧或新帧。</p>
+</li>
+<li><p>使用旧帧或新帧重复步骤4-7直到任务完成。</p>
+</li>
+<li><p>消费者和生产者与EGLStream断开连接。</p>
+</li>
+<li><p>释放用于EGL帧的内存。</p>
+</li>
+<li><p>去初始化生产者和消费者api。</p>
+</li>
+</ol>
+<p>EGLStream 应用程序流程如图 2 所示。</p>
+
+<p>CUDA 生产者和消费者功能列于表 3 中。</p>
+<p>Table 3. CUDA Producer and Consumer Functions</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>Role</strong></th>
+<th><strong>Functionality</strong></th>
+<th><strong>API</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Producer</td>
+<td>To connect a producer to EGLStream</td>
+<td><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-driver-api/group__CUDA__EGL.html#group__CUDA__EGL_1g5d181803d994a06f1bf9b05f52757bef">cuEGLStreamProducerConnect</a>() <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-driver-api/group__CUDA__EGL.html#group__CUDA__EGL_1g5d181803d994a06f1bf9b05f52757bef">cudaEGLStreamProducerConnect</a>()</td>
+</tr>
+<tr>
+<td></td>
+<td>To present frame to EGLStream</td>
+<td>cuEGLStreamProducerPresentFrame() cudaEGLStreamProducerPresentFrame()</td>
+</tr>
+<tr>
+<td></td>
+<td>Obtain released frames</td>
+<td>cuEGLStreamProducerReturnFrame() cudaEGLStreamProducerReturnFrame()</td>
+</tr>
+<tr>
+<td></td>
+<td>To disconnect from EGLStream</td>
+<td><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-driver-api/group__CUDA__EGL.html#group__CUDA__EGL_1gbdc9664bfb17dd3fa1e0a3ca68a8cafd">cuEGLStreamProducerDisconnect</a>() <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-driver-api/group__CUDA__EGL.html#group__CUDA__EGL_1gbdc9664bfb17dd3fa1e0a3ca68a8cafd">cudaEGLStreamProducerDisconnect</a>()</td>
+</tr>
+<tr>
+<td>Consumer</td>
+<td>To connect a consumer to EGLStream</td>
+<td>cuEGLStreamConsumerConnect() cuEGLStreamConsumeConnectWithFlags() <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__EGL.html#group__CUDART__EGL_1g7993b0e3802420547e3f403549be65a1">cudaEGLStreamConsumerConnect</a>() cudaEGLStreamConsumerConnectWithFlags()</td>
+</tr>
+<tr>
+<td></td>
+<td>To acquire frame from EGLStream</td>
+<td>cuEGLStreamConsumerAcquireFrame() <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__EGL.html#group__CUDART__EGL_1g83dd1bfea48c093d3f0b247754970f58">cudaEGLStreamConsumerAcquireFrame</a>()</td>
+</tr>
+<tr>
+<td></td>
+<td>To release the consumed frame</td>
+<td>cuEGLStreamConsumerReleaseFrame() cudaEGLStreamConsumerReleaseFrame()</td>
+</tr>
+<tr>
+<td></td>
+<td>To disconnect from EGLStream</td>
+<td><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-driver-api/group__CUDA__EGL.html#group__CUDA__EGL_1g3ab15cff9be3b25447714101ecda6a61">cuEGLStreamConsumerDisconnect</a>() <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__EGL.html#group__CUDART__EGL_1gb2ef252e72ad2419506f3cf305753c6a">cudaEGLStreamConsumerDisconnect</a>()</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="5-1-2-CUDA-作为生产者"><a href="#5-1-2-CUDA-作为生产者" class="headerlink" title="5.1.2. CUDA 作为生产者"></a>5.1.2. CUDA 作为生产者</h3><p>当CUDA是生产者时，支持的消费者是CUDA，NvMedia和OpenGL。表 3 列出了 CUDA 作为生产者时要使用的 API 函数。除了连接和断开与EGLStream的连接外，所有API调用都是非阻塞的。</p>
+<p>以下示例代码中显示了以下生产者端步骤：</p>
+<ol>
+<li>准备一个帧（第 3-19 行）。</li>
+<li>将生产者连接到EGLStream（第21行）。</li>
+<li>填充帧并呈现给EGLStream（第23-25行）。</li>
+<li>从EGLStream获取释放的帧（第27行）。</li>
+<li>任务完成后断开使用者的连接。(31行)。</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">ProducerThread</span><span class="params">(EGLStreamKHR eglStream)</span> &#123;</span><br><span class="line"> <span class="comment">//Prepares frame</span></span><br><span class="line"> cudaEglFrame* cudaEgl = (cudaEglFrame *)<span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(cudaEglFrame));</span><br><span class="line"> cudaEgl-&gt;planeDesc[<span class="number">0</span>].width = WIDTH;</span><br><span class="line"> cudaEgl-&gt;planeDesc[<span class="number">0</span>].depth = <span class="number">0</span>;</span><br><span class="line"> cudaEgl-&gt;planeDesc[<span class="number">0</span>].height = HEIGHT;</span><br><span class="line"> cudaEgl-&gt;planeDesc[<span class="number">0</span>].numChannels = <span class="number">4</span>;</span><br><span class="line"> cudaEgl-&gt;planeDesc[<span class="number">0</span>].pitch = WIDTH * cudaEgl-&gt;planeDesc[<span class="number">0</span>].numChannels;</span><br><span class="line"> cudaEgl-&gt;frameType = cudaEglFrameTypePitch;</span><br><span class="line"> cudaEgl-&gt;planeCount = <span class="number">1</span>;</span><br><span class="line"> cudaEgl-&gt;eglColorFormat = cudaEglColorFormatARGB;</span><br><span class="line"> cudaEgl-&gt;planeDesc[<span class="number">0</span>].channelDesc.f=cudaChannelFormatKindUnsigned</span><br><span class="line"> cudaEgl-&gt;planeDesc[<span class="number">0</span>].channelDesc.w = <span class="number">8</span>;</span><br><span class="line"> cudaEgl-&gt;planeDesc[<span class="number">0</span>].channelDesc.x = <span class="number">8</span>;</span><br><span class="line"> cudaEgl-&gt;planeDesc[<span class="number">0</span>].channelDesc.y = <span class="number">8</span>;</span><br><span class="line"> cudaEgl-&gt;planeDesc[<span class="number">0</span>].channelDesc.z = <span class="number">8</span>;</span><br><span class="line"> <span class="type">size_t</span> numElem = cudaEgl-&gt;planeDesc[<span class="number">0</span>].pitch * cudaEgl-&gt;planeDesc[<span class="number">0</span>].height;</span><br><span class="line"> <span class="comment">// Buffer allocated by producer</span></span><br><span class="line"> cudaMalloc(&amp;(cudaEgl-&gt;pPitch[<span class="number">0</span>].ptr), numElem);</span><br><span class="line"> <span class="comment">//CUDA producer connects to EGLStream</span></span><br><span class="line"> cudaEGLStreamProducerConnect(&amp;conn, eglStream, WIDTH, HEIGHT))</span><br><span class="line"> <span class="comment">// Sets all elements in the buffer to 1</span></span><br><span class="line"> K1&lt;&lt;&lt;...&gt;&gt;&gt;(cudaEgl-&gt;pPitch[<span class="number">0</span>].ptr, <span class="number">1</span>, numElem);</span><br><span class="line"> <span class="comment">// Present frame to EGLStream</span></span><br><span class="line"> cudaEGLStreamProducerPresentFrame(&amp;conn, *cudaEgl, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line"> cudaEGLStreamProducerReturnFrame(&amp;conn, cudaEgl, eglStream);</span><br><span class="line"> .</span><br><span class="line"> .</span><br><span class="line"> <span class="comment">//clean up</span></span><br><span class="line"> cudaEGLStreamProducerDisconnect(&amp;conn);</span><br><span class="line"></span><br><span class="line"> .</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>帧表示为<code>cudaEglFramestructure</code>。cudaEglFrame中的frameType参数指示帧的内存布局。支持的内存布局是CUDA阵列和设备指针。框架的宽度和高度值与<code>cudaEGLStreamProducerConnect（）</code>中指定的值不匹配会导致未定义的行为。在示例中，CUDA生产者发送一个帧，但它可以通过一个循环发送多个帧。CUDA向EGLStream提供的活动帧不能超过64个。</p>
+<p><code>cudaEGLStreamProducerReturnFrame（）</code> 调用会一直等到它从使用者那里收到释放的帧。一旦 CUDA 生产者向 EGLstream  提供第一帧，至少有一个帧始终可供消费者获取，直到生产者断开连接。这可以防止从 EGLStream 中删除最后一帧，这会阻止  <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-driver-api/group__CUDA__EGL.html#group__CUDA__EGL_1g70c84d9d01f343fc07cd632f9cfc3a06">cudaEGLStreamProducerReturnFrame</a>()</p>
+<p>使用 <code>EGL_NV_stream_reset</code>扩展名将 EGLStream 属性<code>EGL_SUPPORT_REUSE_NV</code>设置为 false，以允许从 EGLStream 中删除最后一帧。这允许从 EGLStream 中删除或返回最后一帧。</p>
+<h3 id="5-1-3-CUDA作为消费者"><a href="#5-1-3-CUDA作为消费者" class="headerlink" title="5.1.3. CUDA作为消费者"></a>5.1.3. CUDA作为消费者</h3><p>当CUDA是消费者时，支持的生产者是CUDA，OpenGL，NvMedia，Argus和Camera。表 3 列出了 CUDA 作为使用者时要使用的 API 函数。除了连接和断开与EGLStream的连接外，所有API调用都是非阻塞的。</p>
+<p>下面的示例代码显示了使用者端步骤</p>
+<ol>
+<li>将消费者连接到EGLStream（第5行）。</li>
+<li>从EGLStream获取帧（第8-10行）。</li>
+<li>在消费者上处理帧(第16行)。</li>
+<li>将帧释放回EGLStream（第19行）。</li>
+<li>任务完成后断开使用者连接(第22行)。</li>
+</ol>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">ConsumerThread</span><span class="params">(EGLStreamKHR eglStream)</span> &#123;</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line"><span class="comment">//Connect consumer to EGLStream</span></span><br><span class="line">cudaEGLStreamConsumerConnect(&amp;conn, eglStream);</span><br><span class="line"><span class="comment">// consumer acquires a frame</span></span><br><span class="line"><span class="type">unsigned</span> <span class="type">int</span> timeout = <span class="number">16000</span>;</span><br><span class="line">cudaEGLStreamConsumerAcquireFrame(&amp; conn, &amp;cudaResource, eglStream, timeout);</span><br><span class="line"><span class="comment">//consumer gets a cuda object pointer</span></span><br><span class="line">cudaGraphicsResourceGetMappedEglFrame(&amp;cudaEgl, cudaResource, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"><span class="type">size_t</span> numElem = cudaEgl-&gt;planeDesc[<span class="number">0</span>].pitch * cudaEgl-&gt;planeDesc[<span class="number">0</span>].height;</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line"><span class="type">int</span> checkIfOne = <span class="number">1</span>;</span><br><span class="line"><span class="comment">// Checks if each value in the buffer is 1, if any value is not 1, it sets checkIfOne = 0.</span></span><br><span class="line">K2&lt;&lt;&lt;...&gt;&gt;&gt;(cudaEgl-&gt;pPitch[<span class="number">0</span>].ptr, <span class="number">1</span>, numElem, checkIfOne);</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">cudaEGLStreamConsumerReleaseFrame(&amp;conn, cudaResource, &amp;eglStream);</span><br><span class="line">.</span><br><span class="line">.</span><br><span class="line">cudaEGLStreamConsumerDisconnect(&amp;conn);</span><br><span class="line">.</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在示例代码中，CUDA消费者接收单个帧，但它也可以通过循环接收多个帧。如果CUDA消费者使用<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-runtime-api/group__CUDART__EGL.html#group__CUDART__EGL_1g83dd1bfea48c093d3f0b247754970f58">cudaEGLStreamConsumerAcquireFrame()</a>在指定的时间限制内没有接收到新的帧，它会从EGLStream中重新获取之前的帧。时间限制由timeout参数表示。</p>
+<p>应用程序可以使用<code>eglQueryStreamKHR（</code>）查询新帧的可用性。如果使用者使用已发布的帧，则会导致未定义的行为。使用者行为仅为读取操作定义。当使用者写入帧时，行为未定义。</p>
+<p>如果在连接到 EGLStream 时 CUDA 上下文被破坏，则流将处于<code>EGL_STREAM_STATE_DISCONNECTED_KHR</code>状态，并且连接句柄将失效。</p>
+<h3 id="5-1-4-隐式同步"><a href="#5-1-4-隐式同步" class="headerlink" title="5.1.4. 隐式同步"></a>5.1.4. 隐式同步</h3><p>EGLStream  在应用程序中提供隐式同步。例如，在前面的代码示例中，生产者线程和使用线程并行运行，K1 和 K2 内核进程访问同一帧，但使用者线程中的 K2  执行保证仅在生产者线程中的内核 K1 完成后发生。<code>cudaEGLStreamConsumerAcquireFrame（）</code> 函数在 GPU  端等待，直到 K1 完成并确保生产者和消费者之间的同步。变量 checkIfOne 永远不会在使用者线程的 K2 内核内设置为 0。</p>
+<p>类似地，生产者线程中的<code>cudaEGLStreamProducerReturnFrame（）</code> 保证仅在 K2 完成并且使用者释放帧后才能获取帧。这些非阻塞调用允许 CPU 在两者之间执行其他计算，因为同步是在 GPU 端处理的。</p>
+<p><code>EGLStreams_CUDA_Interop</code>CUDA示例代码详细展示了 EGLStream 的用法。</p>
+<h3 id="5-1-5-生产者和消费者之间的数据传输"><a href="#5-1-5-生产者和消费者之间的数据传输" class="headerlink" title="5.1.5.生产者和消费者之间的数据传输"></a>5.1.5.生产者和消费者之间的数据传输</h3><p>当生产者和消费者存在于同一设备上时，可以避免它们之间的数据传输。然而，在包含dGPU的Tegra®平台中，例如NVIDIA DRIVE™ PX 2，生产者和消费者可以出现在不同的设备上。在这种情况下，内部需要一个额外的内存副本来在Tegra® SoC  DRAM和dGPU DRAM之间移动帧。EGLStream允许生产者和消费者在任何GPU上运行，而无需修改代码。</p>
+<p>在 Tegra® 设备连接到 dGPU 的系统上，如果生产者帧使用 CUDA 阵列，则生产者和消费者应位于同一 GPU 上。但是，如果生产者框架使用 CUDA 设备指针，则使用者可以出现在任何 GPU 上。</p>
+<h3 id="5-1-6-EGLStream管道"><a href="#5-1-6-EGLStream管道" class="headerlink" title="5.1.6.EGLStream管道"></a>5.1.6.EGLStream管道</h3><p>应用程序可以在管道中使用多个 EGL 流将帧从一个 API 传递到另一个 API。对于 NvMedia 将帧发送到 CUDA 进行计算的应用程序，CUDA 将同一帧发送到 OpenGL 以便在计算后进行渲染。</p>
+<p>EGLStream 管道如图 3 所示。</p>
+
+<p>NvMedia和CUDA分别作为生产者和消费者连接到一个EGLStream。CUDA和OpenGL分别作为生产者和消费者连接到另一个EGLStream。</p>
+<p>以流水线方式使用多个 EGLStreams 可以灵活地跨多个 API 发送帧，而无需分配额外的内存或需要显式数据传输。通过上述 EGLStream 管道发送帧涉及以下步骤。</p>
+<ol>
+<li>NvMedia 将帧发送到 CUDA 进行处理。</li>
+<li>CUDA 使用帧进行计算，并发送到 OpenGL 进行渲染。</li>
+<li>OpenGL消耗帧并将其释放回CUDA。</li>
+<li>CUDA将帧释放回NvMedia。</li>
+</ol>
+<p>上述步骤可以在循环中执行，以方便在 EGLStream 管道中传输多个帧。</p>
+<h2 id="5-2-EGL图像"><a href="#5-2-EGL图像" class="headerlink" title="5.2 EGL图像"></a>5.2 EGL图像</h2><p>EGLImage 互操作允许  EGL 客户端 API 与其他 EGL 客户端 API 共享图像数据。例如，应用程序可以使用 EGLImage 互操作与 CUDA 共享  OpenGL 纹理，而无需分配任何额外的内存。单个 EGLImage 对象可以在多个客户端 API 之间共享以进行修改。</p>
+<p>EGLImage互操作不提供隐式同步。应用程序必须保持同步以避免竞争条件。</p>
+<p>EGLImage使用<code>eglCreateImageKHR（）</code>创建，并使用<code>eglDestroyImageKHR()</code>销毁。</p>
+<p>有关详细信息，请参阅以下网站上的 EGLImage 规范：</p>
+<p><a target="_blank" rel="noopener" href="https://www.khronos.org/registry/EGL/extensions/KHR/EGL_KHR_image_base.txt">https://www.khronos.org/registry/EGL/extensions/KHR/EGL_KHR_image_base.txt</a></p>
+<h3 id="5-2-1-CUDA与EGLImage的互操作"><a href="#5-2-1-CUDA与EGLImage的互操作" class="headerlink" title="5.2.1.CUDA与EGLImage的互操作"></a>5.2.1.CUDA与EGLImage的互操作</h3><p>CUDA 支持与  EGLImage 的互操作，允许 CUDA 读取或修改 EGLImage 的数据。EGLImage 可以是单个或多个平面资源。在 CUDA  中，单平面 EGLImage 对象表示为 CUDA 数组或设备指针。同样，多平面 EGLImage 对象表示为设备指针或 CUDA  数组的数组。EGLImage 在运行 Linux、QNX 或 Android 操作系统的 Tegra® 设备上受支持。</p>
+<p>使用<code>cudaGraphicsEGLRegisterImage（）</code>API向CUDA注册EGLImage对象。向CUDA注册EGLImage将创建图形资源对象。应用程序可以使用<code>cudaGraphicsResourceGetMappedEglFrame（）</code>从图形资源对象获取帧。在CUDA中，帧表示为cudaEglFrame结构。cudaEglFrame中的frameType参数指示帧是CUDA设备指针还是CUDA数组。对于单个平面图形资源，应用程序可以分别使用<code>cudaGraphicsResourceGetMappedPointer（）或cudaGraphicsSubResourceGetMapedArray（）</code>直接获取设备指针或CUDA数组。CUDA数组可以绑定到纹理或曲面引用以在内核内部访问。此外，多维CUDA数组可以通过<code>cudaMemcpy3D（）</code>进行读写。</p>
+<p>无法从CUDA对象创建EGLImage。<code>cudaGraphicsEGLRegisterImage（）</code>函数仅在Tegra®设备上受支持。此外，<code>cudaGraphicsEGLRegisterImage（）</code>只需要“0”标志，因为其他API标志供将来使用。</p>
+<p>以下示例代码显示了  EGLImage 互操作性。在代码中，EGLImage 对象 eglImage 是使用 OpenGL 纹理创建的。eglImage 对象在  CUDA 中映射为 CUDA 数组 pArray。pArray 数组绑定到表面对象，以允许修改 changeTexture 中的 OpenGL  纹理。函数 checkBuf（） 检查纹理是否使用新值更新。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> width = <span class="number">256</span>;</span><br><span class="line"><span class="type">int</span> height = <span class="number">256</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line"> .</span><br><span class="line"> .</span><br><span class="line"> <span class="type">unsigned</span> <span class="type">char</span> *hostSurf;</span><br><span class="line"> <span class="type">unsigned</span> <span class="type">char</span> *pSurf;</span><br><span class="line"> CUarray pArray;</span><br><span class="line"> <span class="type">unsigned</span> <span class="type">int</span> bufferSize = WIDTH * HEIGHT * <span class="number">4</span>;</span><br><span class="line"> pSurf= (<span class="type">unsigned</span> <span class="type">char</span> *)<span class="built_in">malloc</span>(bufferSize); hostSurf = (<span class="type">unsigned</span> <span class="type">char</span> *)<span class="built_in">malloc</span>(bufferSize);</span><br><span class="line"> <span class="comment">// Initialize the buffer</span></span><br><span class="line"> <span class="keyword">for</span>(<span class="type">int</span> y = <span class="number">0</span>; y &lt; HEIGHT; y++)</span><br><span class="line"> &#123;</span><br><span class="line">    <span class="keyword">for</span>(<span class="type">int</span> x = <span class="number">0</span>; x &lt; WIDTH; x++)</span><br><span class="line">    &#123;</span><br><span class="line">    pSurf[(y*WIDTH + x) * <span class="number">4</span> ] = <span class="number">0</span>; pSurf[(y*WIDTH + x) * <span class="number">4</span> + <span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">    pSurf[(y*WIDTH + x) * <span class="number">4</span> + <span class="number">2</span>] = <span class="number">0</span>; pSurf[(y*WIDTH + x) * <span class="number">4</span> + <span class="number">3</span>] = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="comment">// NOP call to error-check the above glut calls</span></span><br><span class="line"> GL_SAFE_CALL(&#123;&#125;);</span><br><span class="line"></span><br><span class="line"> <span class="comment">//Init texture</span></span><br><span class="line"> GL_SAFE_CALL(glGenTextures(<span class="number">1</span>, &amp;tex));</span><br><span class="line"> GL_SAFE_CALL(glBindTexture(GL_TEXTURE_2D, tex));</span><br><span class="line"> GL_SAFE_CALL(glTexImage2D(GL_TEXTURE_2D, <span class="number">0</span>, GL_RGBA, WIDTH, HEIGHT, <span class="number">0</span>, GL_RGBA, GL_UNSIGNED_BYTE, pSurf));</span><br><span class="line"></span><br><span class="line"> EGLDisplay eglDisplayHandle = eglGetCurrentDisplay();</span><br><span class="line"> EGLContext eglCtx = eglGetCurrentContext();</span><br><span class="line"></span><br><span class="line"> <span class="comment">// Create the EGL_Image</span></span><br><span class="line"> EGLint eglImgAttrs[] = &#123; EGL_IMAGE_PRESERVED_KHR, EGL_FALSE, EGL_NONE, EGL_NONE &#125;;</span><br><span class="line"> EGLImageKHR eglImage = eglCreateImageKHR(eglDisplayHandle, eglCtx, EGL_GL_TEXTURE_2D_KHR, (EGLClientBuffer)(<span class="type">intptr_t</span>)tex, eglImgAttrs);</span><br><span class="line"> glFinish();</span><br><span class="line"> glTexSubImage2D(GL_TEXTURE_2D, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, WIDTH, HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, pSurf);</span><br><span class="line"> glFinish();</span><br><span class="line"></span><br><span class="line"> <span class="comment">// Register buffer with CUDA</span></span><br><span class="line">cuGraphicsEGLRegisterImage(&amp;pResource, eglImage,<span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"> <span class="comment">//Get CUDA array from graphics resource object</span></span><br><span class="line"> cuGraphicsSubResourceGetMappedArray( &amp;pArray, pResource, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"> cuCtxSynchronize();</span><br><span class="line"></span><br><span class="line"> <span class="comment">//Create a CUDA surface object from pArray</span></span><br><span class="line"> CUresult status = CUDA_SUCCESS;</span><br><span class="line"> CUDA_RESOURCE_DESC wdsc;</span><br><span class="line"> <span class="built_in">memset</span>(&amp;wdsc, <span class="number">0</span>, <span class="keyword">sizeof</span>(wdsc));</span><br><span class="line"> wdsc.resType = CU_RESOURCE_TYPE_ARRAY; wdsc.res.<span class="built_in">array</span>.hArray = pArray;</span><br><span class="line"> CUsurfObject writeSurface;</span><br><span class="line"> cuSurfObjectCreate(&amp;writeSurface, &amp;wdsc);</span><br><span class="line"></span><br><span class="line"> dim3 <span class="title function_">blockSize</span><span class="params">(<span class="number">32</span>,<span class="number">32</span>)</span>;</span><br><span class="line"> dim3 <span class="title function_">gridSize</span><span class="params">(width/blockSize.x,height/blockSize.y)</span>;</span><br><span class="line"> <span class="comment">// Modifies the OpenGL texture using CUDA surface object</span></span><br><span class="line"> changeTexture&lt;&lt;&lt;gridSize, blockSize&gt;&gt;&gt;(writeSurface, width, height);</span><br><span class="line"> cuCtxSynchronize();</span><br><span class="line"></span><br><span class="line"> CUDA_MEMCPY3D cpdesc;</span><br><span class="line"> <span class="built_in">memset</span>(&amp;cpdesc, <span class="number">0</span>, <span class="keyword">sizeof</span>(cpdesc));</span><br><span class="line"> cpdesc.srcXInBytes = cpdesc.srcY = cpdesc.srcZ = cpdesc.srcLOD = <span class="number">0</span>;</span><br><span class="line"> cpdesc.dstXInBytes = cpdesc.dstY = cpdesc.dstZ = cpdesc.dstLOD = <span class="number">0</span>;</span><br><span class="line"> cpdesc.srcMemoryType = CU_MEMORYTYPE_ARRAY; cpdesc.dstMemoryType = CU_MEMORYTYPE_HOST;</span><br><span class="line"> cpdesc.srcArray = pArray; cpdesc.dstHost = (<span class="type">void</span> *)hostSurf;</span><br><span class="line"> cpdesc.WidthInBytes = WIDTH * <span class="number">4</span>; cpdesc.Height = HEIGHT; cpdesc.Depth = <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line"> <span class="comment">//Copy CUDA surface object values to hostSurf</span></span><br><span class="line"> cuMemcpy3D(&amp;cpdesc);</span><br><span class="line"></span><br><span class="line"> cuCtxSynchronize();</span><br><span class="line"></span><br><span class="line"> <span class="type">unsigned</span> <span class="type">char</span>* temp = (<span class="type">unsigned</span> <span class="type">char</span>*)(<span class="built_in">malloc</span>(bufferSize * <span class="keyword">sizeof</span>(<span class="type">unsigned</span> <span class="type">char</span>)));</span><br><span class="line"> <span class="comment">// Get the modified texture values as</span></span><br><span class="line"> GL_SAFE_CALL(glGetTexImage(GL_TEXTURE_2D, <span class="number">0</span>, GL_RGBA, GL_UNSIGNED_BYTE,(<span class="type">void</span>*)temp));</span><br><span class="line"> glFinish();</span><br><span class="line"> <span class="comment">// Check if the OpenGL texture got modified values</span></span><br><span class="line"> checkbuf(temp,hostSurf);</span><br><span class="line"></span><br><span class="line"> <span class="comment">// Clean up CUDA</span></span><br><span class="line"> cuGraphicsUnregisterResource(pResource);</span><br><span class="line"> cuSurfObjectDestroy(writeSurface);</span><br><span class="line"> .</span><br><span class="line"> .</span><br><span class="line">&#125;</span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">changeTexture</span><span class="params">(cudaSurfaceObject_t arr, <span class="type">unsigned</span> <span class="type">int</span> width, <span class="type">unsigned</span> <span class="type">int</span> height)</span>&#123;</span><br><span class="line"> <span class="type">unsigned</span> <span class="type">int</span> x = threadIdx.x + blockIdx.x * blockDim.x;</span><br><span class="line"> <span class="type">unsigned</span> <span class="type">int</span> y = threadIdx.y + blockIdx.y * blockDim.y;</span><br><span class="line"> uchar4 data = make_uchar4(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>);</span><br><span class="line"> surf2Dwrite(data, arr, x * <span class="number">4</span>, y);</span><br><span class="line">&#125;</span><br><span class="line"><span class="type">void</span> <span class="title function_">checkbuf</span><span class="params">(<span class="type">unsigned</span> <span class="type">char</span> *ref, <span class="type">unsigned</span> <span class="type">char</span> *hostSurf)</span> &#123;</span><br><span class="line"> <span class="keyword">for</span>(<span class="type">int</span> y = <span class="number">0</span>; y &lt; height*width*<span class="number">4</span>; y++)&#123;</span><br><span class="line"> <span class="keyword">if</span> (ref[y] != hostSurf[y])</span><br><span class="line"> <span class="built_in">printf</span>(<span class="string">&quot;mis match at %d\n&quot;</span>,y);</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于 EGLImage  不提供隐式同步，因此上面的示例应用程序使用 glFinish（） 和 cudaThreadSync（） 调用来实现同步。这两个调用都会阻塞  CPU 线程。若要避免阻塞 CPU 线程，请使用 EGLSync 提供同步。下一节显示了使用 EGLImage 和 EGLSync 的示例。</p>
+<h3 id="5-3-EGLSync"><a href="#5-3-EGLSync" class="headerlink" title="5.3. EGLSync"></a>5.3. EGLSync</h3><p>EGLSync是一个跨api的同步原语。它允许EGL客户端API与其他EGL客户端API共享其同步对象。例如，应用程序可以使用EGLSync互操作与CUDA共享OpenGL同步对象。</p>
+<p>EGLSync对象使用<code>eglCreateSyncKHR（）</code>创建，并使用<code>eglDestroySyncKHR()</code>销毁。</p>
+<p>有关更多信息，请参阅以下网站上的EGLSync规范：</p>
+<p><a target="_blank" rel="noopener" href="https://www.khronos.org/registry/EGL/extensions/KHR/EGL_KHR_fence_sync.txt">https://www.khronos.org/registry/EGL/extensions/KHR/EGL_KHR_fence_sync.txt</a></p>
+<h3 id="5-3-1-CUDA与EGLSync的互操作"><a href="#5-3-1-CUDA与EGLSync的互操作" class="headerlink" title="5.3.1.CUDA与EGLSync的互操作"></a>5.3.1.CUDA与EGLSync的互操作</h3><p>在成像应用程序中，两个客户端在GPU上运行并共享一个资源，由于缺少跨API  GPU同步对象，客户端必须使用CPU端同步以避免竞争条件。带有EGLSync的CUDA互操作允许应用程序直接在CUDA和其他客户端API之间交换同步对象。这避免了CPU端同步的需要，并允许CPU完成其他任务。在CUDA中，EGLSync对象被映射为CUDA事件。</p>
+<p>目前，只有Tegra®设备支持CUDA interop和EGLSync。</p>
+<h3 id="5-3-2-从CUDA事件创建EGLSync"><a href="#5-3-2-从CUDA事件创建EGLSync" class="headerlink" title="5.3.2.从CUDA事件创建EGLSync"></a>5.3.2.从CUDA事件创建EGLSync</h3><p>从 CUDA 事件创建 EGLSync 对象显示在以下示例代码中。请注意，从 CUDA 事件创建 EGLSync 对象应在记录 CUDA 事件后立即发生。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">EGLDisplay dpy = eglGetCurrentDisplay();</span><br><span class="line"><span class="comment">// Create CUDA event</span></span><br><span class="line">cudaEvent_t event;</span><br><span class="line">cudaStream_t *stream;</span><br><span class="line">cudaEventCreate(&amp;event);</span><br><span class="line">cudaStreamCreate(&amp;stream);</span><br><span class="line"><span class="comment">// Record the event with cuda event</span></span><br><span class="line">cudaEventRecord(event, stream);</span><br><span class="line"><span class="type">const</span> EGLAttrib attribs[] = &#123;</span><br><span class="line"> EGL_CUDA_EVENT_HANDLE_NV, (EGLAttrib )event,</span><br><span class="line"> EGL_NONE</span><br><span class="line">&#125;;</span><br><span class="line"><span class="comment">//Create EGLSync from the cuda event</span></span><br><span class="line">eglsync = eglCreateSync(dpy, EGL_NV_CUDA_EVENT_NV, attribs);</span><br><span class="line"><span class="comment">//Wait on the sync</span></span><br><span class="line">eglWaitSyncKHR(...);</span><br></pre></td></tr></table></figure>
+<p>在创建EGLSync对象之前初始化CUDA事件，以避免未定义的行为。</p>
+<h3 id="5-3-3-从-EGLSync-创建-CUDA-事件"><a href="#5-3-3-从-EGLSync-创建-CUDA-事件" class="headerlink" title="5.3.3. 从 EGLSync 创建 CUDA 事件"></a>5.3.3. 从 EGLSync 创建 CUDA 事件</h3><p>以下示例代码显示了从 EGLSync 对象创建 CUDA 事件</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">EGLSync eglsync;</span><br><span class="line">EGLDisplay dpy = eglGetCurrentDisplay();</span><br><span class="line"><span class="comment">// Create an eglSync object from openGL fense sync object</span></span><br><span class="line">eglsync = eglCreateSyncKHR(dpy, EGL_SYNC_FENCE_KHR, <span class="literal">NULL</span>);</span><br><span class="line">cudaEvent_t event;</span><br><span class="line">cudaStream_t* stream;</span><br><span class="line">cudaStreamCreate(&amp;stream);</span><br><span class="line"><span class="comment">// Create CUDA event from eglSync</span></span><br><span class="line">cudaEventCreateFromEGLSync(&amp;event, eglSync, cudaEventDefault);</span><br><span class="line"><span class="comment">// Wait on the cuda event. It waits on GPU till OpenGL finishes its</span></span><br><span class="line"><span class="comment">// task</span></span><br><span class="line">cudaStreamWaitEvent(stream, event, <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+<p>从 EGLSync 对象创建的事件不支持 cudaEventRecord（） 和 cudaEventElapsedTime（） 函数。</p>
+<p>下面重新编写EGLImage部分中给出的相同示例，以说明EGLSync interop的用法。在示例代码中，将glFinish（）和cudaThreadSynchronize（）等CPU阻塞调用替换为EGLSync interop调用。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> width = <span class="number">256</span>;</span><br><span class="line"><span class="type">int</span> height = <span class="number">256</span>;</span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line"> .</span><br><span class="line"> .</span><br><span class="line"> <span class="type">unsigned</span> <span class="type">char</span> *hostSurf;</span><br><span class="line"> <span class="type">unsigned</span> <span class="type">char</span> *pSurf;</span><br><span class="line"> cudaArray_t pArray;</span><br><span class="line"> <span class="type">unsigned</span> <span class="type">int</span> bufferSize = WIDTH * HEIGHT * <span class="number">4</span>;</span><br><span class="line"> pSurf= (<span class="type">unsigned</span> <span class="type">char</span> *)<span class="built_in">malloc</span>(bufferSize); hostSurf = (<span class="type">unsigned</span> <span class="type">char</span> *)<span class="built_in">malloc</span>(bufferSize);</span><br><span class="line"> <span class="comment">// Intialize the buffer</span></span><br><span class="line"> <span class="keyword">for</span>(<span class="type">int</span> y = <span class="number">0</span>; y &lt; bufferSize; y++)</span><br><span class="line"> pSurf[y] = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"> <span class="comment">//Init texture</span></span><br><span class="line"> GL_SAFE_CALL(glGenTextures(<span class="number">1</span>, &amp;tex));</span><br><span class="line"> GL_SAFE_CALL(glBindTexture(GL_TEXTURE_2D, tex));</span><br><span class="line"> GL_SAFE_CALL(glTexImage2D(GL_TEXTURE_2D, <span class="number">0</span>, GL_RGBA, WIDTH, HEIGHT, <span class="number">0</span>, GL_RGBA, GL_UNSIGNED_BYTE, pSurf));</span><br><span class="line"> EGLDisplay eglDisplayHandle = eglGetCurrentDisplay();</span><br><span class="line"> EGLContext eglCtx = eglGetCurrentContext();</span><br><span class="line"></span><br><span class="line"> cudaEvent_t cuda_event;</span><br><span class="line"> cudaEventCreateWithFlags(cuda_event, cudaEventDisableTiming);</span><br><span class="line"> EGLAttribKHR eglattrib[] = &#123; EGL_CUDA_EVENT_HANDLE_NV, (EGLAttrib) cuda_event, EGL_NONE&#125;;</span><br><span class="line"> cudaStream_t* stream;</span><br><span class="line"> cudaStreamCreateWithFlags(&amp;stream,cudaStreamDefault);</span><br><span class="line"></span><br><span class="line"> EGLSyncKHR eglsync1, eglsync2;</span><br><span class="line"> cudaEvent_t egl_event;</span><br><span class="line"></span><br><span class="line"> <span class="comment">// Create the EGL_Image</span></span><br><span class="line"> EGLint eglImgAttrs[] = &#123; EGL_IMAGE_PRESERVED_KHR, EGL_FALSE, EGL_NONE, EGL_NONE &#125;;</span><br><span class="line"> EGLImageKHR eglImage = eglCreateImageKHR(eglDisplayHandle, eglCtx, EGL_GL_TEXTURE_2D_KHR, (EGLClientBuffer)(<span class="type">intptr_t</span>)tex, eglImgAttrs);</span><br><span class="line"></span><br><span class="line"> glTexSubImage2D(GL_TEXTURE_2D, <span class="number">0</span>, <span class="number">0</span>, <span class="number">0</span>, WIDTH, HEIGHT, GL_RGBA, GL_UNSIGNED_BYTE, pSurf);</span><br><span class="line"> <span class="comment">//Creates an EGLSync object from GL Sync object to track</span></span><br><span class="line"> <span class="comment">//finishing of copy.</span></span><br><span class="line"> eglsync1 = eglCreateSyncKHR(eglDisplayHandle, EGL_SYNC_FENCE_KHR, <span class="literal">NULL</span>);</span><br><span class="line"></span><br><span class="line"> <span class="comment">//Create CUDA event object from EGLSync obejct</span></span><br><span class="line"> cuEventCreateFromEGLSync(&amp;egl_event, eglsync1, cudaEventDefault);</span><br><span class="line"></span><br><span class="line"> <span class="comment">//Waiting on GPU to finish GL copy</span></span><br><span class="line"> cuStreamWaitEvent(stream, egl_event, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line"> <span class="comment">// Register buffer with CUDA</span></span><br><span class="line"> cudaGraphicsEGLRegisterImage(&amp;pResource, eglImage, cudaGraphicsRegisterFlagsNone);</span><br><span class="line"> <span class="comment">//Get CUDA array from graphics resource object</span></span><br><span class="line"> cudaGraphicsSubResourceGetMappedArray( &amp;pArray, pResource, <span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line"> .</span><br><span class="line"> .</span><br><span class="line"> <span class="comment">//Create a CUDA surface object from pArray</span></span><br><span class="line"> <span class="class"><span class="keyword">struct</span> <span class="title">cudaResourceDesc</span> <span class="title">resDesc</span>;</span></span><br><span class="line"> <span class="built_in">memset</span>(&amp;resDesc, <span class="number">0</span>, <span class="keyword">sizeof</span>(resDesc));</span><br><span class="line"> resDesc.resType = cudaResourceTypeArray; resDesc.res.<span class="built_in">array</span>.<span class="built_in">array</span> = pArray;</span><br><span class="line"> cudaSurfaceObject_t inputSurfObj = <span class="number">0</span>;</span><br><span class="line"> cudaCreateSurfaceObject(&amp;inputSurfObj, &amp;resDesc);</span><br><span class="line"></span><br><span class="line"> dim3 <span class="title function_">blockSize</span><span class="params">(<span class="number">32</span>,<span class="number">32</span>)</span>;</span><br><span class="line"> dim3 <span class="title function_">gridSize</span><span class="params">(width/blockSize.x,height/blockSize.y)</span>;</span><br><span class="line"> <span class="comment">// Modifies the CUDA array using CUDA surface object</span></span><br><span class="line"> changeTexture&lt;&lt;&lt;gridSize, blockSize&gt;&gt;&gt;(inputSurfObj, width, height);</span><br><span class="line"> cuEventRecord(cuda_event, stream);</span><br><span class="line"> <span class="comment">//Create EGLsync object from CUDA event cuda_event</span></span><br><span class="line"> eglsync2 = eglCreateSync64KHR(dpy, EGL_SYNC_CUDA_EVENT_NV, eglattrib);</span><br><span class="line"> <span class="comment">//waits till kernel to finish</span></span><br><span class="line"> eglWaitSyncKHR(eglDisplayHandle, eglsync2, <span class="number">0</span>);</span><br><span class="line"> .</span><br><span class="line"> <span class="comment">//Copy modified pArray values to hostSurf</span></span><br><span class="line"> .</span><br><span class="line"> <span class="type">unsigned</span> <span class="type">char</span>* temp = (<span class="type">unsigned</span> <span class="type">char</span>*)(<span class="built_in">malloc</span>(bufferSize * <span class="keyword">sizeof</span>(<span class="type">unsigned</span> <span class="type">char</span>)));</span><br><span class="line"> <span class="comment">// Get the modified texture values</span></span><br><span class="line"> GL_SAFE_CALL(glGetTexImage(GL_TEXTURE_2D, <span class="number">0</span>, GL_RGBA, GL_UNSIGNED_BYTE,(<span class="type">void</span>*)temp));</span><br><span class="line"> .</span><br><span class="line"> .</span><br><span class="line"> <span class="comment">// This function check if the OpenGL texture got modified values</span></span><br><span class="line"> checkbuf(temp,hostSurf);</span><br><span class="line"></span><br><span class="line"> <span class="comment">// Clean up CUDA</span></span><br><span class="line"> cudaGraphicsUnregisterResource(pResource);</span><br><span class="line"> cudaDestroySurfaceObject(inputSurfObj);</span><br><span class="line"> eglDestroySyncKHR(eglDisplayHandle, eglsync1);</span><br><span class="line"> eglDestroySyncKHR(eglDisplayHandle, eglsync2);</span><br><span class="line"> cudaEventDestroy(egl_event);</span><br><span class="line"> cudaEventDestroy(cuda_event);</span><br><span class="line"> .</span><br><span class="line"> .</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h1 id="6-Jetson-CUDA升级包-TODO"><a href="#6-Jetson-CUDA升级包-TODO" class="headerlink" title="6.Jetson CUDA升级包 TODO"></a>6.Jetson CUDA升级包 TODO</h1><h1 id="7-cuDLA-TODO"><a href="#7-cuDLA-TODO" class="headerlink" title="7. cuDLA TODO"></a>7. cuDLA TODO</h1><h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><p>官方参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-for-tegra-appnote/index.html">CUDA for Tegra</a></li>
+<li>Drive OS 6.0 <a target="_blank" rel="noopener" href="https://developer.nvidia.com/docs/drive/drive-os/latest/linux/sdk/common/topics/util_setup/tegrastatsUtility1.html">tegrastats Utility</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/CUDA/%E5%9F%BA%E7%A1%80/CUDA_Tegra/" title="CUDA_Tegra">http://example.com/CUDA/基础/CUDA_Tegra/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/CUDA/%E5%9F%BA%E7%A1%80/cuda-gdb/" rel="prev" title="cuda-gdb">
+                  <i class="fa fa-chevron-left"></i> cuda-gdb
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/CUDA/%E5%9F%BA%E7%A1%80/CUDA%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF/" rel="next" title="CUDA常见错误">
+                  CUDA常见错误 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"c1f57309b94b5b5f5d24ac3a20fc75a9"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

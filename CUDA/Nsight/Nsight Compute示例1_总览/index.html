@@ -1,0 +1,988 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="理论看了很多，但是感觉脑袋空空，为什么？因为没有实际应用。那么这一节开始使用Nsight Compute来在orin上进行Kernel的分析。来真正的看看如何结合工具来优化一个kernel。 首先需要知道Nsight Compute都会告诉我们哪些内容。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nsight Compute示例1_总览">
+<meta property="og:url" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="理论看了很多，但是感觉脑袋空空，为什么？因为没有实际应用。那么这一节开始使用Nsight Compute来在orin上进行Kernel的分析。来真正的看看如何结合工具来优化一个kernel。 首先需要知道Nsight Compute都会告诉我们哪些内容。">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230912153338164.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230912153509771.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230912153605148.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230912154716711.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230913153902715.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230913154054292.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230913161156633.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230913162347641.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230913162303090.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230914193820333.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230914193411195.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230914193535712.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230914193717763.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230914194703767.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230914210758031.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230914195659083.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230914203324851.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230914210654027.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230915163927590.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/c04c9a1430884bd4bd755be72dc072ed.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/ac69aa1ed5704876b351e13c3b0241da.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/b94929366caf4cc0a900ba6a22f7685b.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230915162811021.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230916172340956.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230916172308190.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230916174647145.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230916195909677.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230916201502092.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917141748754.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917142938722.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917143915844.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917151909519.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917151951281.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917155350521.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917160821329.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917161108124.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917161440793.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917161638067.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917162404948.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917163533427.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917170148307.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917170319656.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917170812563.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917175537046.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917175057529.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917180504272.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917180825619.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917180926869.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917181111556.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917181121848.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917181132454.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917181158645.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917181437332.png">
+<meta property="article:published_time" content="2024-12-01T10:13:43.956Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:43.956Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="GPU">
+<meta property="article:tag" content="cmake">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230912153338164.png">
+
+
+<link rel="canonical" href="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/","path":"CUDA/Nsight/Nsight Compute示例1_总览/","title":"Nsight Compute示例1_总览"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Nsight Compute示例1_总览 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E4%BD%BF%E7%94%A8ncu%E8%BF%90%E8%A1%8C%E7%A8%8B%E5%BA%8F"><span class="nav-text">1 使用ncu运行程序</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-%E6%8C%82%E8%BD%BD%E7%9B%AE%E5%BD%95"><span class="nav-text">1.1 挂载目录</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E6%8B%B7%E8%B4%9DNsight-Compute%E5%88%B0orin"><span class="nav-text">2.2 拷贝Nsight Compute到orin</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E4%BD%BF%E7%94%A8%E5%91%BD%E4%BB%A4%E8%A1%8C%E8%BF%90%E8%A1%8Cncu"><span class="nav-text">2.3 使用命令行运行ncu</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-1-%E4%BF%9D%E5%AD%98%E5%88%86%E6%9E%90%E7%BB%93%E6%9E%9C%E5%88%B0%E6%96%87%E4%BB%B6"><span class="nav-text">2.3.1 保存分析结果到文件</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-2-%E7%BB%88%E7%AB%AF%E8%BE%93%E5%87%BA%E5%88%86%E6%9E%90%E7%BB%93%E6%9E%9C"><span class="nav-text">2.3.2 终端输出分析结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-%E6%9F%A5%E7%9C%8Bncu%E5%88%86%E6%9E%90%E7%BB%93%E6%9E%9C"><span class="nav-text">2.4 查看ncu分析结果</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Section-GPU-Speed-Of-Light-Throughput"><span class="nav-text">Section: GPU Speed Of Light Throughput</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Section-Compute-Workload-Analysis"><span class="nav-text">Section: Compute Workload Analysis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Section-Memory-Workload-Analysis"><span class="nav-text">Section: Memory Workload Analysis</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Section-Scheduler-Statistics"><span class="nav-text">Section: Scheduler Statistics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Section-Warp-State-Statistics"><span class="nav-text">Section: Warp State Statistics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Section-Instruction-Statistics"><span class="nav-text">Section: Instruction Statistics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Section-Launch-Statistics"><span class="nav-text">Section: Launch Statistics</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Section-Occupancy"><span class="nav-text">Section: Occupancy</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Section-Source-Counters"><span class="nav-text">Section: Source Counters</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#GUI%E4%B8%8A%E7%9A%84%E7%BB%93%E6%9E%9C"><span class="nav-text">GUI上的结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-%E5%88%9D%E6%AD%A5%E5%88%86%E6%9E%90"><span class="nav-text">2.5 初步分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-1-%E5%88%86%E6%9E%90%E7%BA%BF%E7%A8%8B%E6%9D%9F%E5%88%86%E5%8C%96"><span class="nav-text">2.5.1 分析线程束分化</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%8A%A5%E5%91%8A%E5%86%85%E5%AE%B9"><span class="nav-text">2 报告内容</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-GPU-Speed-Of-Light-Throughput"><span class="nav-text">2.1 GPU Speed Of Light Throughput</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-1-%E6%88%91%E7%9A%84%E7%BB%93%E6%9E%9C"><span class="nav-text">3.1.1 我的结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-Compute-Workload-Analysis"><span class="nav-text">2.2 Compute Workload Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-1-%E6%88%91%E7%9A%84%E7%BB%93%E6%9E%9C"><span class="nav-text">2.2.1 我的结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-Scheduler-Statistics"><span class="nav-text">2.3 Scheduler Statistics</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-1-%E6%88%91%E7%9A%84%E7%BB%93%E6%9E%9C"><span class="nav-text">2.3.1 我的结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-Warp-State-Statistics"><span class="nav-text">2.4 Warp State Statistics</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-1-%E6%88%91%E7%9A%84%E7%BB%93%E6%9E%9C"><span class="nav-text">2.4.1 我的结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-Memory-Workload-Analysis"><span class="nav-text">2.5 Memory Workload Analysis</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-5-1-%E6%88%91%E7%9A%84%E7%BB%93%E6%9E%9C"><span class="nav-text">2.5.1 我的结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-6-Launch-Statistics"><span class="nav-text">2.6 Launch Statistics</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-7-Occupancy"><span class="nav-text">2.7 Occupancy</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-7-1-%E6%88%91%E7%9A%84%E7%BB%93%E6%9E%9C"><span class="nav-text">2.7.1 我的结果</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-8-Source-Counters"><span class="nav-text">2.8 Source Counters</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-UNDERSTAND-STALL-REASON"><span class="nav-text">3 UNDERSTAND STALL REASON</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Long-Scoreboard"><span class="nav-text">3.1 Long Scoreboard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-LG-Throttle"><span class="nav-text">3.2 LG Throttle</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-Short-Scoreboard"><span class="nav-text">3.3 Short Scoreboard</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-4-MIO-Throttle"><span class="nav-text">3.4 MIO Throttle</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E4%B8%80%E4%B8%AA%E7%9F%A9%E9%98%B5%E8%BD%AC%E7%BD%AE%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="nav-text">4 一个矩阵转置的例子</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-text">附录</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Nsight Compute示例1_总览 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Nsight Compute示例1_总览
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/Nsight/" itemprop="url" rel="index"><span itemprop="name">Nsight</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>理论看了很多，但是感觉脑袋空空，为什么？因为没有实际应用。那么这一节开始使用Nsight Compute来在orin上进行Kernel的分析。来真正的看看如何结合工具来优化一个kernel。</p>
+<p>首先需要知道Nsight Compute都会告诉我们哪些内容。</p>
+<p>先使用<code>3-4 避免分支分化</code>的例子在orin上使用<code>ncu</code>运行并保存结果。</p>
+<h1 id="1-使用ncu运行程序"><a href="#1-使用ncu运行程序" class="headerlink" title="1 使用ncu运行程序"></a>1 使用ncu运行程序</h1><p>因为我是在orin上进行测试的（因为自带的显卡是Pascal架构的，Nsight Compute不支持）。因此首先交叉编译<code>reduceInteger.cu</code>为orin版本。具体的源码可以查看<code>3-4 避免分支分化</code>，这里就不再贴了。这里已经编译好了orin版本的可执行程序<code>reduceInteger</code>。并上传到orin上。</p>
+<h2 id="1-1-挂载目录"><a href="#1-1-挂载目录" class="headerlink" title="1.1 挂载目录"></a>1.1 挂载目录</h2><p>在orin上执行<code>ncu</code>需要一些系统目录的权限（因为我们的系统权限被限制了），因此需要重新挂载给予写权限。参考<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/NsightCompute/index.html#remote-connections">3.1. Remote Connections</a>中的<strong>Deployment Directory</strong>，应该是分析需要的一些必要部署文件。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">umount -f /dev/vblk_ufsb0  #根据自己的情况选择</span><br><span class="line">mount /dev/vblk_ufsb0 /    #根据自己的情况选择 为了使根目录可以读写</span><br><span class="line">mkdir /tmp /opt /root /opt/nvidia</span><br></pre></td></tr></table></figure>
+<h2 id="2-2-拷贝Nsight-Compute到orin"><a href="#2-2-拷贝Nsight-Compute到orin" class="headerlink" title="2.2 拷贝Nsight Compute到orin"></a>2.2 拷贝Nsight Compute到orin</h2><p>因为我们的<code>orin</code>上默认没有安装Nsight Compute，因此需要对应的的Nsight Compute拷贝到板子上。</p>
+<p>我这边对应的目录信息如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">.</span><br><span class="line">├── nsight-compute</span><br><span class="line">│   └── 2021.2.5</span><br><span class="line">│       ├── docs</span><br><span class="line">│       ├── EULA.txt</span><br><span class="line">│       ├── extras</span><br><span class="line">│       ├── host</span><br><span class="line">│       ├── ncu</span><br><span class="line">│       ├── ncu-ui</span><br><span class="line">│       ├── nv-nsight-cu</span><br><span class="line">│       ├── nv-nsight-cu-cli</span><br><span class="line">│       ├── sections</span><br><span class="line">│       └── target</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>我将<code>nsight-compute</code>全部拷贝了，按理说应该只拷贝<code>target</code>目录就可以了，但是其实<code>sections</code>中有共用的脚本。因次还是全部拷贝了。</p>
+<h2 id="2-3-使用命令行运行ncu"><a href="#2-3-使用命令行运行ncu" class="headerlink" title="2.3 使用命令行运行ncu"></a>2.3 使用命令行运行ncu</h2><p>因为我是嵌入式orin，qnx操作系统。没有界面，因此只能在orin上执行命令行来分析。</p>
+<h3 id="2-3-1-保存分析结果到文件"><a href="#2-3-1-保存分析结果到文件" class="headerlink" title="2.3.1 保存分析结果到文件"></a>2.3.1 保存分析结果到文件</h3><p>上面已经靠拷贝了Nsight Compute到<code>orin</code>上。目录如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">/data/zhaoyd/nsight-compute/2021.2.5/target/qnx-700-t210-a64</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">ls</span></span></span><br><span class="line">TreeLauncherSubreaper                             libTreeLauncherPlaceholder.so                     libcuda-injection.so                              libnvperfapi64.so</span><br><span class="line">TreeLauncherTargetLdPreloadHelper                 libTreeLauncherTargetInjection.so                 libnvperf_host.soncu</span><br><span class="line">libInterceptorInjectionTarget.so                  libTreeLauncherTargetUpdatePreloadInjection.so    libnvperf_target.so</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>在这个目录下有<code>ncu</code>可执行程序（脚本）</p>
+<p>只这个目录下执行下面的指令会把保存分析结果为<code>/data/zhaoyd/test/reduceInteger.ncu-rep</code>，将这个文件拷贝到PC上可以使用Nsight Compute的UI来查看。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./ncu --set full -o /data/zhaoyd/test/reduceInteger /data/zhaoyd/test/reduceInteger</span><br></pre></td></tr></table></figure>
+<h3 id="2-3-2-终端输出分析结果"><a href="#2-3-2-终端输出分析结果" class="headerlink" title="2.3.2 终端输出分析结果"></a>2.3.2 终端输出分析结果</h3><p>执行下面的指令，ncu的分析结果会在终端输出。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./ncu --set full  /data/zhaoyd/test/reduceInteger</span><br></pre></td></tr></table></figure>
+<h2 id="2-4-查看ncu分析结果"><a href="#2-4-查看ncu分析结果" class="headerlink" title="2.4 查看ncu分析结果"></a>2.4 查看ncu分析结果</h2><p>使用ui界面和终端输出的是一样的。只不过会有一些辅助功能，比如UI可以Add  Baseline来对比多个结果。</p>
+<p>先看一下终端输出的内容。比较长，只截取了两个函数的分析，其他格式都是一样的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br><span class="line">313</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash"><span class="built_in">cd</span> nsight-compute/2021.2.5/target/qnx-700-t210-a64/</span> </span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">./ncu --<span class="built_in">set</span> full -o /data/zhaoyd/test/reduceInteger /data/zhaoyd/test/reduceInteger</span>  </span><br><span class="line">==PROF== Connected to process 133812351 (/data/zhaoyd/test/reduceInteger)</span><br><span class="line">/data/zhaoyd/test/reduceInteger starting reduction at device 0: Orin     with array size 16777216  grid 32768 block 512</span><br><span class="line">cpu reduce      elapsed 0.062001 sec cpu_sum: 2139095040</span><br><span class="line">==PROF== Profiling &quot;reduceNeighbored&quot; - 1: 0%....50%....100% - 35 passes</span><br><span class="line">gpu Neighbored  elapsed 6.251958 sec gpu_sum: 2139095040 &lt;&lt;&lt;grid 32768 block 512&gt;&gt;&gt;</span><br><span class="line">==PROF== Profiling &quot;reduceNeighboredLess&quot; - 2: 0%....50%....100% - 35 passes</span><br><span class="line">gpu Neighbored2 elapsed 1.328906 sec gpu_sum: 2139095040 &lt;&lt;&lt;grid 32768 block 512&gt;&gt;&gt;</span><br><span class="line">==PROF== Profiling &quot;reduceInterleaved&quot; - 3: 0%....50%....100% - 35 passes</span><br><span class="line">gpu Interleaved elapsed 1.301933 sec gpu_sum: 2139095040 &lt;&lt;&lt;grid 32768 block 512&gt;&gt;&gt;</span><br><span class="line">==PROF== Profiling &quot;reduceUnrolling2&quot; - 4: 0%....50%....100% - 35 passes</span><br><span class="line">gpu Unrolling2  elapsed 1.197036 sec gpu_sum: 2139095040 &lt;&lt;&lt;grid 16384 block 512&gt;&gt;&gt;</span><br><span class="line">==PROF== Profiling &quot;reduceUnrolling4&quot; - 5: 0%....50%....100% - 35 passes</span><br><span class="line">gpu Unrolling4  elapsed 1.102009 sec gpu_sum: 2139095040 &lt;&lt;&lt;grid 8192 block 512&gt;&gt;&gt;</span><br><span class="line">==PROF== Profiling &quot;reduceUnrolling8&quot; - 6: 0%....50%....100% - 35 passes</span><br><span class="line">gpu Unrolling8  elapsed 1.083914 sec gpu_sum: 2139095040 &lt;&lt;&lt;grid 4096 block 512&gt;&gt;&gt;</span><br><span class="line">==PROF== Profiling &quot;reduceUnrollWarps8&quot; - 7: 0%....50%....100% - 35 passes</span><br><span class="line">gpu UnrollWarp8 elapsed 1.071951 sec gpu_sum: 2139095040 &lt;&lt;&lt;grid 4096 block 512&gt;&gt;&gt;</span><br><span class="line">==PROF== Profiling &quot;reduceCompleteUnrollWarps8&quot; - 8: 0%....50%....100% - 35 passes</span><br><span class="line">gpu Cmptnroll8  elapsed 1.097999 sec gpu_sum: 2139095040 &lt;&lt;&lt;grid 4096 block 512&gt;&gt;&gt;</span><br><span class="line">==PROF== Profiling &quot;reduceCompleteUnroll&quot; - 9: 0%....50%....100% - 35 passes</span><br><span class="line">gpu Cmptnroll   elapsed 1.076019 sec gpu_sum: 2139095040 &lt;&lt;&lt;grid 4096 block 512&gt;&gt;&gt;</span><br><span class="line">==PROF== Disconnected from process 133812351</span><br><span class="line">==PROF== Report: /data/zhaoyd/test/reduceInteger.ncu-rep</span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">./ncu --<span class="built_in">set</span> full  /data/zhaoyd/test/reduceInteger</span>   </span><br><span class="line">==PROF== Connected to process 159719551 (/data/zhaoyd/test/reduceInteger)</span><br><span class="line">/data/zhaoyd/test/reduceInteger starting reduction at device 0: Orin     with array size 16777216  grid 32768 block 512</span><br><span class="line">cpu reduce      elapsed 0.061995 sec cpu_sum: 2139095040</span><br><span class="line">==PROF== Profiling &quot;reduceNeighbored&quot; - 1: 0%....50%....100% - 35 passes</span><br><span class="line">gpu Neighbored  elapsed 6.304959 sec gpu_sum: 2139095040 &lt;&lt;&lt;grid 32768 block 512&gt;&gt;&gt;</span><br><span class="line">==PROF== Profiling &quot;reduceNeighboredLess&quot; - 2: 0%....50%....100% - 35 passes</span><br><span class="line">gpu Neighbored2 elapsed 1.332940 sec gpu_sum: 2139095040 &lt;&lt;&lt;grid 32768 block 512&gt;&gt;&gt;</span><br><span class="line">==PROF== Profiling &quot;reduceInterleaved&quot; - 3: 0%....50%....100% - 35 passes</span><br><span class="line">gpu Interleaved elapsed 1.301003 sec gpu_sum: 2139095040 &lt;&lt;&lt;grid 32768 block 512&gt;&gt;&gt;</span><br><span class="line">==PROF== Profiling &quot;reduceUnrolling2&quot; - 4: 0%....50%....100% - 35 passes</span><br><span class="line">gpu Unrolling2  elapsed 1.184980 sec gpu_sum: 2139095040 &lt;&lt;&lt;grid 16384 block 512&gt;&gt;&gt;</span><br><span class="line">==PROF== Profiling &quot;reduceUnrolling4&quot; - 5: 0%....50%....100% - 35 passes</span><br><span class="line">gpu Unrolling4  elapsed 1.115895 sec gpu_sum: 2139095040 &lt;&lt;&lt;grid 8192 block 512&gt;&gt;&gt;</span><br><span class="line">==PROF== Profiling &quot;reduceUnrolling8&quot; - 6: 0%....50%....100% - 35 passes</span><br><span class="line">gpu Unrolling8  elapsed 1.092040 sec gpu_sum: 2139095040 &lt;&lt;&lt;grid 4096 block 512&gt;&gt;&gt;</span><br><span class="line">==PROF== Profiling &quot;reduceUnrollWarps8&quot; - 7: 0%....50%....100% - 35 passes</span><br><span class="line">gpu UnrollWarp8 elapsed 1.096919 sec gpu_sum: 2139095040 &lt;&lt;&lt;grid 4096 block 512&gt;&gt;&gt;</span><br><span class="line">==PROF== Profiling &quot;reduceCompleteUnrollWarps8&quot; - 8: 0%....50%....100% - 35 passes</span><br><span class="line">gpu Cmptnroll8  elapsed 1.094868 sec gpu_sum: 2139095040 &lt;&lt;&lt;grid 4096 block 512&gt;&gt;&gt;</span><br><span class="line">==PROF== Profiling &quot;reduceCompleteUnroll&quot; - 9: 0%....50%....100% - 35 passes</span><br><span class="line">gpu Cmptnroll   elapsed 1.087993 sec gpu_sum: 2139095040 &lt;&lt;&lt;grid 4096 block 512&gt;&gt;&gt;</span><br><span class="line">==PROF== Disconnected from process 159719551</span><br><span class="line">[159719551] reduceInteger@127.0.0.1</span><br><span class="line">  reduceNeighbored(int *, int *, unsigned int), 2019-Oct-01 01:40:17, Context 1, Stream 7</span><br><span class="line">    Section: GPU Speed Of Light Throughput</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    SM Frequency                   cycle/nsecond                           1.25</span><br><span class="line">    Elapsed Cycles                         cycle                        4029545</span><br><span class="line">    Memory [%]%                          43.81</span><br><span class="line">    Duration                             msecond                           3.22</span><br><span class="line">    L1/TEX Cache Throughput                    %                          18.48</span><br><span class="line">    L2 Cache Throughput                        %                          43.81</span><br><span class="line">    SM Active Cycles                       cycle                     4026706.81</span><br><span class="line">    Compute (SM) [%]                           %                          59.95</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    WRN   This kernel exhibits low compute throughput and memory bandwidth utilization relative to the peak performance </span><br><span class="line">          of this device. Achieved compute throughput and/or memory bandwidth below 60.0% of peak typically indicate    </span><br><span class="line">          latency issues. Look at Scheduler Statistics and Warp State Statistics for potential reasons.                 </span><br><span class="line"></span><br><span class="line">    INF   The ratio of peak float (fp32) to double (fp64) performance on this device is 64:1. The kernel achieved 0% of </span><br><span class="line">          this device&#x27;s fp32 peak performance and 0% of its fp64 peak performance.     </span><br><span class="line"></span><br><span class="line">    Section: Compute Workload Analysis</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    Executed Ipc Active               inst/cycle                           2.40</span><br><span class="line">    Executed Ipc Elapsed              inst/cycle                           2.40</span><br><span class="line">    Issue Slots Busy                           %                          59.99</span><br><span class="line">    Issued Ipc Active                 inst/cycle                           2.40</span><br><span class="line">    SM Busy   %                          59.99</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">          No pipeline is over-utilized.      </span><br><span class="line"></span><br><span class="line">    Section: Memory Workload Analysis</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    Mem Busy  %                          17.41</span><br><span class="line">    Max Bandwidth                              %                          43.81</span><br><span class="line">    L1/TEX Hit Rate                            %                          91.59</span><br><span class="line">    L2 Compression Success Rate                %                              0</span><br><span class="line">    L2 Compression Ratio            0</span><br><span class="line">    L2 Hit Rate                                %                          80.00</span><br><span class="line">    Mem Pipes Busy                             %                          16.26</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line"></span><br><span class="line">    WRN   The memory access pattern for stores from L1TEX to L2 is not optimal. The granularity of an L1TEX request to  </span><br><span class="line">          L2 is a 128 byte cache line. That is 4 consecutive 32-byte sectors per L2 request. However, this kernel only  </span><br><span class="line">          accesses an average of 2.7 sectors out of the possible 4 sectors per cache line. Check the Source Counters    </span><br><span class="line">          section for uncoalesced stores and try to minimize how many cache lines need to be accessed per memory        </span><br><span class="line">          request.                  </span><br><span class="line"></span><br><span class="line">    Section: Scheduler Statistics</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    One or More Eligible                       %                          60.00</span><br><span class="line">    Issued Warp Per Scheduler    0.60</span><br><span class="line">    No Eligible                                %                          40.00</span><br><span class="line">    Active Warps Per Scheduler              warp                          11.48</span><br><span class="line">    Eligible Warps Per Scheduler            warp                           1.67</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    WRN   Every scheduler is capable of issuing one instruction per cycle, but for this kernel each scheduler only      </span><br><span class="line">          issues an instruction every 1.7 cycles. This might leave hardware resources underutilized and may lead to     </span><br><span class="line">          less optimal performance. Out of the maximum of 12 warps per scheduler, this kernel allocates an average of   </span><br><span class="line">          11.48 active warps per scheduler, but only an average of 1.67 warps were eligible per cycle. Eligible warps   </span><br><span class="line">          are the subset of active warps that are ready to issue their next instruction. Every cycle with no eligible   </span><br><span class="line">          warp results in no instruction being issued and the issue slot remains unused. To increase the number of      </span><br><span class="line">          eligible warps, avoid possible load imbalances due to highly different execution durations per warp.          </span><br><span class="line">          Reducing stalls indicated on the Warp State Statistics and Source Counters sections can help, too.            </span><br><span class="line"></span><br><span class="line">    Section: Warp State Statistics</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    Warp Cycles Per Issued Instruction     cycle                          19.13</span><br><span class="line">    Warp Cycles Per Executed Instruction   cycle                          19.13</span><br><span class="line">    Avg. Active Threads Per Warp28.11</span><br><span class="line">    Avg. Not Predicated Off Threads Per Warp                              24.85</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line"></span><br><span class="line">    Section: Instruction Statistics</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    Avg. Executed Instructions Per Schedulerinst                        2415616</span><br><span class="line">    Executed Instructions                   inst                      154599424</span><br><span class="line">    Avg. Issued Instructions Per Scheduler  inst                     2415661.80</span><br><span class="line">    Issued Instructions                     inst                      154602355</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line"></span><br><span class="line">    Section: Launch Statistics</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    Block Size                    512</span><br><span class="line">    Function Cache Configuration                        cudaFuncCachePreferNone</span><br><span class="line">    Grid Size                   32768</span><br><span class="line">    Registers Per Thread         register/thread                             17</span><br><span class="line">    Shared Memory Configuration Size       Kbyte                           8.19</span><br><span class="line">    Driver Shared Memory Per Block   Kbyte/block                           1.02</span><br><span class="line">    Dynamic Shared Memory Per Block   byte/block                              0</span><br><span class="line">    Static Shared Memory Per Block    byte/block                              0</span><br><span class="line">    Threads                               thread                       16777216</span><br><span class="line">    Waves Per SM               682.67</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line"></span><br><span class="line">    Section: Occupancy</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    Block Limit SM                         block                             16</span><br><span class="line">    Block Limit Registers                  block                              5</span><br><span class="line">    Block Limit Shared Mem                 block                            164</span><br><span class="line">    Block Limit Warps                      block                              3</span><br><span class="line">    Theoretical Active Warps per SM         warp                             48</span><br><span class="line">    Theoretical Occupancy                      %                            100</span><br><span class="line">    Achieved Occupancy                         %                          96.04</span><br><span class="line">    Achieved Active Warps Per SM            warp                          46.10</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    INF   This kernel&#x27;s theoretical occupancy is not impacted by any block limit.      </span><br><span class="line"></span><br><span class="line">    Section: Source Counters</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    Branch Instructions Ratio                  %                           0.13</span><br><span class="line">    Branch Instructions                     inst                       19398656</span><br><span class="line">    Branch Efficiency                          %                          70.31</span><br><span class="line">    Avg. Divergent Branches     48640</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    WRN   Uncoalesced global access, expected 3637248 sectors, got 8355840 (2.30x) at PC 0x201dac890                    </span><br><span class="line">    ----- --------------------------------------------------------------------------------------------------------------</span><br><span class="line">    WRN   Uncoalesced global access, expected 3637248 sectors, got 8355840 (2.30x) at PC 0x201dac8b0                    </span><br><span class="line">    ----- --------------------------------------------------------------------------------------------------------------</span><br><span class="line">    WRN   Uncoalesced global access, expected 3637248 sectors, got 8355840 (2.30x) at PC 0x201dac8d0                    </span><br><span class="line"></span><br><span class="line">  reduceNeighboredLess(int *, int *, unsigned int), 2019-Oct-01 01:40:18, Context 1, Stream 7</span><br><span class="line">    Section: GPU Speed Of Light Throughput</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    SM Frequency                   cycle/nsecond                           1.20</span><br><span class="line">    Elapsed Cycles                         cycle                        2331105</span><br><span class="line">    Memory [%]%                          74.50</span><br><span class="line">    Duration                             msecond                           1.94</span><br><span class="line">    L1/TEX Cache Throughput                    %                          31.75</span><br><span class="line">    L2 Cache Throughput                        %                          74.50</span><br><span class="line">    SM Active Cycles                       cycle                     2321733.06</span><br><span class="line">    Compute (SM) [%]                           %                          41.25</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    WRN   Memory is more heavily utilized than Compute: Look at the Memory Workload Analysis report section to see      </span><br><span class="line">          where the memory system bottleneck is. Check memory replay (coalescing) metrics to make sure you&#x27;re           </span><br><span class="line">          efficiently utilizing the bytes transferred. Also consider whether it is possible to do more work per memory  </span><br><span class="line">          access (kernel fusion) or whether there are values you can (re)compute.      </span><br><span class="line"></span><br><span class="line">    INF   The ratio of peak float (fp32) to double (fp64) performance on this device is 64:1. The kernel achieved 0% of </span><br><span class="line">          this device&#x27;s fp32 peak performance and 0% of its fp64 peak performance.     </span><br><span class="line"></span><br><span class="line">    Section: Compute Workload Analysis</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    Executed Ipc Active               inst/cycle                           1.66</span><br><span class="line">    Executed Ipc Elapsed              inst/cycle                           1.65</span><br><span class="line">    Issue Slots Busy                           %                          41.42</span><br><span class="line">    Issued Ipc Active                 inst/cycle                           1.66</span><br><span class="line">    SM Busy   %                          41.42</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">          No pipeline is over-utilized.      </span><br><span class="line"></span><br><span class="line">    Section: Memory Workload Analysis</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    Mem Busy  %                          30.33</span><br><span class="line">    Max Bandwidth                              %                          74.50</span><br><span class="line">    L1/TEX Hit Rate                            %                          91.59</span><br><span class="line">    L2 Compression Success Rate                %                              0</span><br><span class="line">    L2 Compression Ratio            0</span><br><span class="line">    L2 Hit Rate                                %                          80.00</span><br><span class="line">    Mem Pipes Busy                             %                          28.11</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line"></span><br><span class="line">    WRN   The memory access pattern for global stores in L1TEX might not be optimal. On average, this kernel accesses   </span><br><span class="line">          4.0 bytes per thread per memory request; but the address pattern, possibly caused by the stride between       </span><br><span class="line">          threads, results in 12.2 sectors per request, or 12.2*32 = 390.1 bytes of cache data transfers per request.   </span><br><span class="line">          The optimal thread address pattern for 4.0 byte accesses would result in 4.0*32 = 128.0 bytes of cache data   </span><br><span class="line">          transfers per request, to maximize L1TEX cache performance.Check the Source Counters section for uncoalesced  </span><br><span class="line">          global stores.            </span><br><span class="line">    ----- --------------------------------------------------------------------------------------------------------------</span><br><span class="line">    WRN   The memory access pattern for global loads in L1TEX might not be optimal. On average, this kernel accesses    </span><br><span class="line">          4.0 bytes per thread per memory request; but the address pattern, possibly caused by the stride between       </span><br><span class="line">          threads, results in 12.5 sectors per request, or 12.5*32 = 398.8 bytes of cache data transfers per request.   </span><br><span class="line">          The optimal thread address pattern for 4.0 byte accesses would result in 4.0*32 = 128.0 bytes of cache data   </span><br><span class="line">          transfers per request, to maximize L1TEX cache performance.Check the Source Counters section for uncoalesced  </span><br><span class="line">          global loads.             </span><br><span class="line">    ----- --------------------------------------------------------------------------------------------------------------</span><br><span class="line">    WRN   The memory access pattern for stores from L1TEX to L2 is not optimal. The granularity of an L1TEX request to  </span><br><span class="line">          L2 is a 128 byte cache line. That is 4 consecutive 32-byte sectors per L2 request. However, this kernel only  </span><br><span class="line">          accesses an average of 2.7 sectors out of the possible 4 sectors per cache line. Check the Source Counters    </span><br><span class="line">          section for uncoalesced stores and try to minimize how many cache lines need to be accessed per memory        </span><br><span class="line">          request.                  </span><br><span class="line"></span><br><span class="line">    Section: Scheduler Statistics</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    One or More Eligible                       %                          41.34</span><br><span class="line">    Issued Warp Per Scheduler    0.41</span><br><span class="line">    No Eligible                                %                          58.66</span><br><span class="line">    Active Warps Per Scheduler              warp                          11.09</span><br><span class="line">    Eligible Warps Per Scheduler            warp                           0.78</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    WRN   Every scheduler is capable of issuing one instruction per cycle, but for this kernel each scheduler only      </span><br><span class="line">          issues an instruction every 2.4 cycles. This might leave hardware resources underutilized and may lead to     </span><br><span class="line">          less optimal performance. Out of the maximum of 12 warps per scheduler, this kernel allocates an average of   </span><br><span class="line">          11.09 active warps per scheduler, but only an average of 0.78 warps were eligible per cycle. Eligible warps   </span><br><span class="line">          are the subset of active warps that are ready to issue their next instruction. Every cycle with no eligible   </span><br><span class="line">          warp results in no instruction being issued and the issue slot remains unused. To increase the number of      </span><br><span class="line">          eligible warps, avoid possible load imbalances due to highly different execution durations per warp.          </span><br><span class="line">          Reducing stalls indicated on the Warp State Statistics and Source Counters sections can help, too.            </span><br><span class="line"></span><br><span class="line">    Section: Warp State Statistics</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    Warp Cycles Per Issued Instruction     cycle                          26.82</span><br><span class="line">    Warp Cycles Per Executed Instruction   cycle                          26.82</span><br><span class="line">    Avg. Active Threads Per Warp31.35</span><br><span class="line">    Avg. Not Predicated Off Threads Per Warp                              30.27</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    WRN   On average, each warp of this kernel spends 12.9 cycles being stalled waiting for sibling warps at a CTA      </span><br><span class="line">          barrier. This represents about 48.1% of the total average of 26.8 cycles between issuing two instructions. A  </span><br><span class="line">          high number of warps waiting at a barrier is commonly caused by diverging code paths before a barrier that    </span><br><span class="line">          causes some warps to wait a long time until other warps reach the synchronization point. Whenever possible    </span><br><span class="line">          try to divide up the work into blocks of uniform workloads. Use the Source View&#x27;s sampling columns to         </span><br><span class="line">          identify which barrier instruction causes the most stalls and optimize the code executed before that          </span><br><span class="line">          synchronization point first.       </span><br><span class="line">    ----- --------------------------------------------------------------------------------------------------------------</span><br><span class="line">    INF   Check the Source Counters section for the top stall locations in your source based on sampling data.          </span><br><span class="line"></span><br><span class="line">    Section: Instruction Statistics</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    Avg. Executed Instructions Per Schedulerinst                         961536</span><br><span class="line">    Executed Instructions                   inst                       61538304</span><br><span class="line">    Avg. Issued Instructions Per Scheduler  inst                      961589.94</span><br><span class="line">    Issued Instructions                     inst                       61541756</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line"></span><br><span class="line">    Section: Launch Statistics</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    Block Size                    512</span><br><span class="line">    Function Cache Configuration                        cudaFuncCachePreferNone</span><br><span class="line">    Grid Size                   32768</span><br><span class="line">    Registers Per Thread         register/thread                             16</span><br><span class="line">    Shared Memory Configuration Size       Kbyte                           8.19</span><br><span class="line">    Driver Shared Memory Per Block   Kbyte/block                           1.02</span><br><span class="line">    Dynamic Shared Memory Per Block   byte/block                              0</span><br><span class="line">    Static Shared Memory Per Block    byte/block                              0</span><br><span class="line">    Threads                               thread                       16777216</span><br><span class="line">    Waves Per SM               682.67</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line"></span><br><span class="line">    Section: Occupancy</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    Block Limit SM                         block                             16</span><br><span class="line">    Block Limit Registers                  block                              8</span><br><span class="line">    Block Limit Shared Mem                 block                            164</span><br><span class="line">    Block Limit Warps                      block                              3</span><br><span class="line">    Theoretical Active Warps per SM         warp                             48</span><br><span class="line">    Theoretical Occupancy                      %                            100</span><br><span class="line">    Achieved Occupancy                         %                          93.22</span><br><span class="line">    Achieved Active Warps Per SM            warp                          44.75</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    INF   This kernel&#x27;s theoretical occupancy is not impacted by any block limit.      </span><br><span class="line"></span><br><span class="line">    Section: Source Counters</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    Branch Instructions Ratio                  %                           0.27</span><br><span class="line">    Branch Instructions                     inst                       16449536</span><br><span class="line">    Branch Efficiency                          %                          98.44</span><br><span class="line">    Avg. Divergent Branches      2560</span><br><span class="line">    ---------------------------------------------------------------------- --------------- ------------------------------</span><br><span class="line">    WRN   Uncoalesced global access, expected 2162688 sectors, got 8355840 (3.86x) at PC 0x201dabaa0                    </span><br><span class="line">    ----- --------------------------------------------------------------------------------------------------------------</span><br><span class="line">    WRN   Uncoalesced global access, expected 2162688 sectors, got 8355840 (3.86x) at PC 0x201dabab0                    </span><br><span class="line">    ----- --------------------------------------------------------------------------------------------------------------</span><br><span class="line">    WRN   Uncoalesced global access, expected 2162688 sectors, got 8355840 (3.86x) at PC 0x201dabad0                    </span><br><span class="line"></span><br><span class="line"><span class="meta prompt_">  </span></span><br><span class="line"><span class="meta prompt_"># </span></span><br></pre></td></tr></table></figure>
+<p>下面是每个部分的详细解释：</p>
+<h3 id="Section-GPU-Speed-Of-Light-Throughput"><a href="#Section-GPU-Speed-Of-Light-Throughput" class="headerlink" title="Section: GPU Speed Of Light Throughput"></a><strong>Section: GPU Speed Of Light Throughput</strong></h3><ul>
+<li><p><code>SM Frequency</code>：SM（Streaming Multiprocessor）的频率，以每秒时钟周期数为单位。</p>
+</li>
+<li><p><code>Elapsed Cycles</code>：经过的时钟周期数。</p>
+</li>
+<li><p><code>Memory [%]</code>：内存使用率的百分比。</p>
+</li>
+<li><p><code>Duration</code>：执行时间的毫秒数。</p>
+</li>
+<li><p><code>L1/TEX Cache Throughput</code>：L1/TEX（纹理缓存）的吞吐量的百分比。</p>
+</li>
+<li><p><code>L2 Cache Throughput</code>：L2 缓存的吞吐量的百分比。</p>
+</li>
+<li><p><code>SM Active Cycles</code>：SM 处于活跃状态的时钟周期数。</p>
+</li>
+<li><p><code>Compute (SM) [%]</code>：SM 的计算使用率的百分比。</p>
+<ol>
+<li><p><code>WRN   This kernel exhibits low compute throughput and memory bandwidth utilization relative to the peak performance of this device. Achieved compute throughput and/or memory bandwidth below 60.0% of peak typically indicate latency issues. Look at Scheduler Statistics and Warp State Statistics for potential reasons.</code></p>
+<p>这个警告表示该内核的计算吞吐量和内存带宽利用率相对于设备的峰值性能较低。计算吞吐量和/或内存带宽的实际利用率低于峰值的60.0%通常表示存在延迟问题。建议查看调度器统计信息（Scheduler Statistics）和线程束状态统计信息（Warp State Statistics）以找出潜在的原因。</p>
+</li>
+<li><p><code>INF   The ratio of peak float (fp32) to double (fp64) performance on this device is 64:1. The kernel achieved 0% of this device&#39;s fp32 peak performance and 0% of its fp64 peak performance.</code></p>
+<p>这个信息表示在该设备上，浮点操作（fp32）相对于双精度操作（fp64）的峰值性能比例为64:1。该内核的实际性能达到了设备的fp32峰值性能的0%和fp64峰值性能的0%。</p>
+</li>
+</ol>
+</li>
+</ul>
+<h3 id="Section-Compute-Workload-Analysis"><a href="#Section-Compute-Workload-Analysis" class="headerlink" title="Section: Compute Workload Analysis"></a><strong>Section: Compute Workload Analysis</strong></h3><ul>
+<li><code>Executed Ipc Active</code>：活跃状态下的指令每周期执行数。</li>
+<li><code>Executed Ipc Elapsed</code>：经过的周期数下的指令每周期执行数。</li>
+<li><code>Issue Slots Busy</code>：发射槽位的占用率。</li>
+<li><code>Issued Ipc Active</code>：活跃状态下发射的指令每周期执行数。</li>
+<li><code>SM Busy</code>：SM 的占用率。</li>
+</ul>
+<h3 id="Section-Memory-Workload-Analysis"><a href="#Section-Memory-Workload-Analysis" class="headerlink" title="Section: Memory Workload Analysis"></a><strong>Section: Memory Workload Analysis</strong></h3><ul>
+<li><p><code>Mem Busy</code>：内存的占用率。</p>
+</li>
+<li><p><code>Max Bandwidth</code>：最大带宽的百分比。</p>
+</li>
+<li><p><code>L1/TEX Hit Rate</code>：L1/TEX 命中率的百分比。</p>
+</li>
+<li><p><code>L2 Compression Success Rate</code>：L2 压缩成功率的百分比。</p>
+</li>
+<li><p><code>L2 Compression Ratio</code>：L2 压缩比率。</p>
+</li>
+<li><p><code>L2 Hit Rate</code>：L2 命中率的百分比。</p>
+</li>
+<li><p><code>Mem Pipes Busy</code>：内存管道的占用率。</p>
+<p><code>WRN   The memory access pattern for stores from L1TEX to L2 is not optimal. The granularity of an L1TEX request to  L2 is a 128 byte cache line. That is 4 consecutive 32-byte sectors per L2 request. However, this kernel only  accesses an average of 2.7 sectors out of the possible 4 sectors per cache line. Check the Source Counters  section for uncoalesced stores and try to minimize how many cache lines need to be accessed per memory  request.</code></p>
+<p>此警告表示从 L1TEX 到 L2 的存储器访问模式不是最优的。L1TEX 请求到 L2 的粒度是 128 字节的缓存行。每个 L2 请求包含了连续的 4 个 32 字节的扇区。然而，该内核平均只访问了每个缓存行可能的 4 个扇区中的 2.7 个扇区。检查“Source Counters”部分以查找未合并的存储器访问，并尽量减少每个内存请求需要访问的缓存行数。</p>
+</li>
+</ul>
+<h3 id="Section-Scheduler-Statistics"><a href="#Section-Scheduler-Statistics" class="headerlink" title="Section: Scheduler Statistics"></a><strong>Section: Scheduler Statistics</strong></h3><ul>
+<li><p><code>One or More Eligible</code>：至少一个线程束有资格执行的百分比。</p>
+</li>
+<li><p><code>Issued Warp Per Scheduler</code>：每个调度器发射的线程束数。</p>
+</li>
+<li><p><code>No Eligible</code>：没有线程束有资格执行的百分比。</p>
+</li>
+<li><p><code>Active Warps Per Scheduler</code>：每个调度器活跃的线程束数。</p>
+</li>
+<li><p><code>Eligible Warps Per Scheduler</code>：每个调度器有资格执行的线程束数。</p>
+<p><code>WRN   Every scheduler is capable of issuing one instruction per cycle, but for this kernel each scheduler only  issues an instruction every 1.7 cycles. This might leave hardware resources underutilized and may lead to less optimal performance. Out of the maximum of 12 warps per scheduler, this kernel allocates an average of 11.48 active warps per scheduler, but only an average of 1.67 warps were eligible per cycle. Eligible warps  are the subset of active warps that are ready to issue their next instruction. Every cycle with no eligible  warp results in no instruction being issued and the issue slot remains unused. To increase the number of  eligible warps, avoid possible load imbalances due to highly different execution durations per warp.  Reducing stalls indicated on the Warp State Statistics and Source Counters sections can help, too.</code></p>
+<p>每个调度器本应每个周期能够发射一条指令，但是对于这个内核，每个调度器平均每 1.7 个周期才发射一条指令。这可能导致硬件资源利用率不足，并可能导致性能不佳。在每个调度器的最大 12 个线程束中，该内核平均分配了 11.48 个活跃线程束，但每个周期只有平均 1.67 个线程束有资格发射指令。有资格发射指令的线程束是准备发射下一条指令的活跃线程束的子集。每个没有有资格发射指令的线程束的周期都不会发射指令，发射位置保持未使用状态。为了增加有资格发射指令的线程束数量，应避免由于线程束之间执行时间差异过大而可能导致的负载不平衡。减少 Warp State Statistics 和 Source Counters 部分所示的停顿也可以有所帮助。</p>
+</li>
+</ul>
+<h3 id="Section-Warp-State-Statistics"><a href="#Section-Warp-State-Statistics" class="headerlink" title="Section: Warp State Statistics"></a><strong>Section: Warp State Statistics</strong></h3><ul>
+<li><code>Warp Cycles Per Issued Instruction</code>：发射指令的线程束执行所需的平均时钟周期数。如果这个值过高，说明指令的执行效率较低，可以考虑进行优化。您可以尝试优化指令级并行性、数据局部性以及减少指令数等方法来提高指令执行效率。</li>
+<li><code>Warp Cycles Per Executed Instruction</code>：执行指令的线程束执行所需的平均时钟周期数。同上</li>
+<li><code>Avg. Active Threads Per Warp</code>：表示每个线程束中平均活动（正在执行）的线程数。线程束是 GPU 中的基本执行单元，通常包含多个线程。较高的 “Avg. Active  Threads Per Warp”  值表示线程束中的大多数线程都在活动状态，即正在执行指令。这是一个重要的指标，因为较高的活动线程数通常意味着更好的并行性和利用率。</li>
+<li><code>Avg. Not Predicated Off Threads Per Warp</code>：表示每个线程束中平均非条件执行的线程数。非条件执行的线程是指不受条件语句（如 if 语句）控制的线程，它们在执行过程中不会被跳过。较高的  “Avg. Not Predicated Off Threads Per Warp”  值表示线程束中的大多数线程都在非条件执行，即它们没有被跳过。这也是一个重要的指标，因为较高的非条件执行线程数通常表示更高的指令级并行性。</li>
+</ul>
+<h3 id="Section-Instruction-Statistics"><a href="#Section-Instruction-Statistics" class="headerlink" title="Section: Instruction Statistics"></a><strong>Section: Instruction Statistics</strong></h3><ul>
+<li><code>Avg. Executed Instructions Per Scheduler</code>：每个调度器执行的平均指令数。</li>
+<li><code>Executed Instructions</code>：执行的指令总数。</li>
+<li><code>Avg. Issued Instructions Per Scheduler</code>：每个调度器发射的平均指令数。</li>
+<li><code>Issued Instructions</code>：发射的指令总数。</li>
+</ul>
+<h3 id="Section-Launch-Statistics"><a href="#Section-Launch-Statistics" class="headerlink" title="Section: Launch Statistics"></a><strong>Section: Launch Statistics</strong></h3><ul>
+<li><code>Block Size</code>：块大小。</li>
+<li><code>Function Cache Configuration</code>：函数缓存配置。</li>
+<li><code>Grid Size</code>：网格大小。</li>
+<li><code>Registers Per Thread</code>：每个线程的寄存器数。</li>
+<li><code>Shared Memory Configuration Size</code>：共享内存配置大小。</li>
+<li><code>Driver Shared Memory Per Block</code>：每个块的驱动程序共享内存。</li>
+<li><code>Dynamic Shared Memory Per Block</code>：每个块的动态共享内存。</li>
+<li><code>Static Shared Memory Per Block</code>：每个块的静态共享内存。</li>
+<li><code>Threads</code>：线程数。</li>
+<li><code>Waves Per SM</code>：SM 每秒的波数。</li>
+</ul>
+<h3 id="Section-Occupancy"><a href="#Section-Occupancy" class="headerlink" title="Section: Occupancy"></a><strong>Section: Occupancy</strong></h3><ul>
+<li><code>Block Limit SM</code>：SM 的块限制。</li>
+<li><code>Block Limit Registers</code>：寄存器的块限制。</li>
+<li><code>Block Limit Shared Mem</code>：共享内存的块限制。</li>
+<li><code>Block Limit Warps</code>：线程束的块限制。</li>
+<li><code>Theoretical Active Warps per SM</code>：每个 SM 的理论活跃线程束数。</li>
+<li><code>Theoretical Occupancy</code>：理论上的占用率。</li>
+<li><code>Achieved Occupancy</code>：实际的占用率。</li>
+<li><code>Achieved Active Warps Per SM</code>：每个 SM 实际的活跃线程束数。</li>
+</ul>
+<h3 id="Section-Source-Counters"><a href="#Section-Source-Counters" class="headerlink" title="Section: Source Counters"></a><strong>Section: Source Counters</strong></h3><ul>
+<li><p><code>Branch Instructions Ratio</code>：分支指令所占的比例</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">这个指标可以用来评估程序中分支指令的占比情况。较高的比例表示程序中存在较多的分支指令，而较低的比例则表示分支指令相对较少。</span><br><span class="line">分支指令的比例对程序性能有一定的影响。较高的分支指令比例可能导致分支预测错误增加，从而降低程序的执行效率和并行性。较低的分支指令比例可以减少分支预测的负担，提高程序的执行效率。</span><br><span class="line">优化分支指令比例的方法与优化分支指令数量的方法类似，可以考虑简化分支逻辑、分支合并、循环展开和分支预测优化等技术。</span><br><span class="line">需要注意的是，分支指令比例并不是唯一的衡量指标，还需要结合其他因素综合考虑。例如，某些类型的程序可能需要较多的条件判断和循环结构，因此分支指令比例可能较高，但仍然可以通过其他优化手段提高程序的性能。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Branch Instructions</code>：分支指令的总数</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">较多的分支指令意味着程序中存在较多的条件语句和循环结构，需要进行分支预测和分支分歧的处理。</span><br><span class="line">分支指令的数量对程序的性能和执行效率有影响。较多的分支指令可能导致分支预测错误增加，从而导致线程束中的线程在不同的路径上执行不同的指令，降低了并行性和执行效率。因此，减少不必要的分支指令可以提高程序的性能。</span><br><span class="line">**要优化分支指令的数量，可以考虑以下方法：**</span><br><span class="line">1. 简化分支逻辑：尽量简化程序中的条件语句和循环结构，减少不必要的分支。</span><br><span class="line">2. 分支合并：如果条件语句中的不同路径执行的指令计算量相对较小，可以考虑将不同路径的指令合并为一个统一的计算路径，通过条件判断来选择执行。</span><br><span class="line">3. 循环展开：对于一些循环结构，可以考虑进行循环展开，减少分支的数量。</span><br><span class="line">4. 分支预测优化：合理使用分支预测指令，以提高分支预测的准确性和效率。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Branch Efficiency</code>：分支指令的效率，即成功预测分支的百分比</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">分支预测是一种技术，用于根据历史分支行为和模式来预测分支的执行路径，以提高程序的执行效率。</span><br><span class="line">&quot;Branch Efficiency&quot; 指标反映了分支指令中成功预测的分支所占的比例。较高的数值表示分支预测的准确性较高，较少的分支预测错误发生，从而提高程序的执行效率。</span><br><span class="line">分支指令的执行效率对于程序的性能至关重要。如果分支预测错误较多，那么程序将会经常出现分支分歧，导致线程束中的线程在不同的路径上执行不同的指令，从而降低了并行性和执行效率。</span><br><span class="line">要优化分支效率，可以考虑以下方法：</span><br><span class="line">1. 简化分支逻辑：尽可能简化条件语句和循环结构，减少分支的数量和复杂度。</span><br><span class="line">2. 分支预测友好的编码风格：编写分支预测友好的代码，避免复杂的嵌套条件和多层循环。</span><br><span class="line">3. 循环展开：对于一些循环结构，可以考虑进行循环展开，减少分支的数量。</span><br><span class="line">4. 分支预测指令优化：根据具体的硬件架构和编译器支持，合理使用分支预测指令，以提高分支预测的准确性。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>Avg. Divergent Branches</code>：平均每个时钟周期的分支分歧数。</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">在 GPU 计算中，分支分歧指的是当不同线程在同一个分支语句中选择不同路径时的情况。这种情况会导致线程在执行不同的指令路径时发生分支分歧。</span><br><span class="line">&quot;Avg. Divergent Branches&quot; 指标反映了程序中分支分歧的频率和程度。较高的值表示在每个时钟周期中有更多的分支分歧发生，这可能会影响程序的性能。</span><br><span class="line">分支分歧可能导致线程束（warp）中线程的执行效率下降，因为当线程在分支语句中选择不同路径时，它们需要分别执行不同的指令，从而导致部分线程处于空闲状态。这种情况可能会降低线程束的并行性和效率。</span><br><span class="line">要优化分支分歧，可以考虑以下方法：</span><br><span class="line">1. 代码重构：尽量减少分支语句的使用，尤其是在线程束内部。可以使用条件语句的短路求值、循环展开等技术来减少分支的数量。</span><br><span class="line">2. 分支合并：如果分支语句中的不同路径执行的指令计算量相对较小，可以考虑将不同路径的指令合并为一个统一的计算路径，通过条件判断来选择执行。</span><br><span class="line">3. 分支预测优化：合理使用分支预测指令，以提高分支预测的准确性和效率。</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>WRN   Uncoalesced global access, expected 3637248 sectors, got 8355840 (2.30x) at PC 0x201dac890</code>：警告，全局访问未合并，预期为3637248个扇区，实际为8355840个扇区，相当于2.30倍。发生在PC地址0x201dac890处。</p>
+</li>
+<li><p><code>WRN   Uncoalesced global access, expected 3637248 sectors, got 8355840 (2.30x) at PC 0x201dac8b0</code>：警告，全局访问未合并，预期为3637248个扇区，实际为8355840个扇区，相当于2.30倍。发生在PC地址0x201dac8b0处。</p>
+</li>
+<li><p><code>WRN   Uncoalesced global access, expected 3637248 sectors, got 8355840 (2.30x) at PC 0x201dac8d0</code>：警告，全局访问未合并，预期为3637248个扇区，实际为8355840个扇区，相当于2.30倍。发生在PC地址0x201dac8d0处。</p>
+</li>
+</ul>
+<h3 id="GUI上的结果"><a href="#GUI上的结果" class="headerlink" title="GUI上的结果"></a>GUI上的结果</h3><img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230912153338164.png" class="" title="image-20230912153338164">
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230912153509771.png" class="" title="image-20230912153509771">
+<p>可以添加两个kernel的对比</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230912153605148.png" class="" title="image-20230912153605148">
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230912154716711.png" class="" title="image-20230912154716711">
+<ol>
+<li>“Sampling Data (All)”: 这是指所有指令的采样数据，包括已发出和未发出的指令。它提供了对内核执行期间所有指令的分析，包括指令的执行时间、延迟等信息。这些数据可以帮助开发人员了解内核的整体性能和指令执行的情况。</li>
+<li>“Sampling Data (Not Issued)”: 这是指未发出的指令的采样数据。未发出的指令是由于某些原因（例如资源限制或依赖关系）而无法立即执行的指令。这些数据提供了关于未发出指令的信息，可以帮助开发人员识别和优化内核中的瓶颈或延迟。</li>
+<li>“Most Instructions Executed”: 这是指执行最多次数的指令。它显示了内核执行期间最频繁执行的指令，这些指令可能是内核的关键部分。通过分析这些指令，开发人员可以了解哪些指令对内核的性能产生了最大的影响，并进行相应的优化。</li>
+</ol>
+<p>这里可以查看代码来具体的定位到代码的位置，默认的话是打开汇编代码。如果需要看源代码，需要编译程序的时候加上编译选项<code>-lineinfo</code>。我这边加了这个选项，就可以看到下下图了</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设置编译选项 源代码反汇编视图用于在源代码和汇编指令级别显示内核的分析结果。为了能够查看内核源代码，您需要使用-lineinfo选项编译代码。如果不使用此编译器选项，则只显示反汇编视图。</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CUDA_FLAGS <span class="string">&quot;-lineinfo&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>只有汇编源码分析：</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230913153902715.png" class="" title="image-20230913153902715">
+<p>包含源代码的源码分析：</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230913154054292.png" class="" title="image-20230913154054292">
+<h2 id="2-5-初步分析"><a href="#2-5-初步分析" class="headerlink" title="2.5 初步分析"></a>2.5 初步分析</h2><p>看了上面的分析结果，一头雾水。。。无从下手。。</p>
+<p><code>3-4 避免分支分化</code>中主要是说明线程束分化影响kernel的性能，那么我就先从上面的分析结果看能不能看到线程束分化的影响。</p>
+<h3 id="2-5-1-分析线程束分化"><a href="#2-5-1-分析线程束分化" class="headerlink" title="2.5.1 分析线程束分化"></a>2.5.1 分析线程束分化</h3><p>线程束分化的提示应该是在<strong>Section: Source Counters</strong>中，其中具体项的含义上面解释过了，这里将两个kernel做了一个对比。但是实际上让我自己看报告我根本不知道改去哪里看。。。。下面会继续提到</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230913161156633.png" class="" title="image-20230913161156633">
+<p>reduceNeighboredLess与reduceNeighbored可以看出</p>
+<ul>
+<li><code>Branch Efficiency</code>：分支指令的效率，即成功预测分支的百分比 提高了40%</li>
+<li><code>Avg. Divergent Branches</code>：平均每个时钟周期的分支分歧数。 降低了94%</li>
+</ul>
+<p>应该就是这两个参数直接对程序影响比较大了。（reduceNeighbored耗时3.22ms reduceNeighboredLess耗时1.94ms）</p>
+<p>这个结果在source Page也有体现，Divergent Branches 在reduceNeighboredLess 中更少</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230913162347641.png" class="" title="image-20230913162347641">
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230913162303090.png" class="" title="image-20230913162303090">
+<h1 id="2-报告内容"><a href="#2-报告内容" class="headerlink" title="2 报告内容"></a>2 报告内容</h1><h2 id="2-1-GPU-Speed-Of-Light-Throughput"><a href="#2-1-GPU-Speed-Of-Light-Throughput" class="headerlink" title="2.1 GPU Speed Of Light Throughput"></a>2.1 GPU Speed Of Light Throughput</h2><p>描述如下：</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">High-level overview of the throughput for compute and memory resources of the GPU. For each unit, the throughput reports the achieved percentage of utilization with respect to the theoretical maximum. Breakdowns show the throughput for each individual sub-metric of Compute and Memory to clearly identify the highest contributor. High-level overview of the utilization for compute and memory resources of the GPU presented as a roofline chart.</span><br><span class="line">对GPU的计算和内存资源的吞吐量进行高级概述。对于每个单元，吞吐量报告了相对于理论最大值的实际利用率百分比。细分报告显示了计算和内存的每个子指标的吞吐量，以清楚地确定最大的贡献者。对GPU的计算和内存资源的利用率进行高级概述，以屋顶线图的形式呈现。</span><br></pre></td></tr></table></figure>
+<p>第一次拿到报告根本不知道是哪里可以优化，但是看B站的视频中讲到一个比较泛泛的概念。</p>
+<ul>
+<li>Compute Bound ：SM利用率高，Memory利用率低</li>
+<li>Memory Bound：SM利用率低，Memory利用率高</li>
+<li>Latency Bound：warp的问题，SM和Memory的利用率都不高</li>
+</ul>
+<p>其实在界面中也有体现，下图就是提示的<code>reduceNeighbored</code>这一个<code>kernel</code>存在Latency Bound。我们就可以看一下线程束是不是少还是利用率低。提示如下</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">This kernel exhibits low compute throughput and memory bandwidth utilization relative to the peak performance of this device. Achieved compute throughput and/or memory bandwidth below 60.0<span class="comment">% of peak typically indicate latency issues. Look at Scheduler Statistics and Warp State Statistics for potential reasons.</span></span><br><span class="line">相对于该设备的峰值性能，该内核表现出较低的计算吞吐量和内存带宽利用率。所实现的计算吞吐量和/或内存带宽低于峰值的60.0<span class="comment">%通常表明存在延迟问题。查看“Scheduler Statistics”和“Warp State Statistics”以了解潜在原因。</span></span><br></pre></td></tr></table></figure>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230914193820333.png" class="" title="image-20230914193820333">
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230914193411195.png" class="" title="image-20230914193411195">
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230914193535712.png" class="" title="image-20230914193535712">
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230914193717763.png" class="" title="image-20230914193717763">
+<p><strong>这些图表中的值实际上是各matric的最大值</strong></p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230914194703767.png" class="" title="image-20230914194703767">
+<p>看报告会有很多的简称，含义如下，参考<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-decoder">3.3. Metrics Decoder</a></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>单元</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>dram</td>
+<td>Device (main) memory, where the GPUs global and local memory resides.<br />设备（主要）内存，用于存储GPU的全局和本地内存。</td>
+</tr>
+<tr>
+<td>fbpa</td>
+<td>The FrameBuffer Partition is a memory controller which sits between the level 2 cache (LTC) and the DRAM.The number of FBPAs varies across GPUs.      <br />帧缓冲分区是一个位于二级缓存（LTC）和DRAM之间的内存控制器。FBPA的数量在不同的GPU上会有所变化。</td>
+</tr>
+<tr>
+<td>fe</td>
+<td>The Frontend unit is responsible for the overall flow of workloads sent by the driver.FE also facilitates a number of synchronization operations.<br />前端单元负责驱动程序发送的工作负载的整体流程。FE还支持多种同步操作。</td>
+</tr>
+<tr>
+<td>gpc</td>
+<td>The General Processing Cluster contains SM, Texture and L1 in the form of TPC(s).It is replicated several times across a chip.<br />通用处理集群以TPC的形式包含SM、Texture和L1。它在一个芯片上被复制了好几次。</td>
+</tr>
+<tr>
+<td>gpu</td>
+<td>The entire Graphics Processing Unit.<br />整个图形处理单元。</td>
+</tr>
+<tr>
+<td>gr</td>
+<td>Graphics Engine is responsible for all 2D and 3D graphics, compute work, and synchronous graphics copying work.<br />图形引擎负责所有2D和3D图形、计算工作以及同步图形复制工作。</td>
+</tr>
+<tr>
+<td>idc</td>
+<td>The InDexed Constant Cache is a subunit of the SM responsible for caching constants that are indexed with a register.<br />索引常量缓存是SM的一个子单元，负责缓存使用寄存器索引的常量。</td>
+</tr>
+<tr>
+<td>l1tex</td>
+<td>The Level 1 (L1)/Texture Cache is located within the GPC.It can be used as  directed-mapped shared memory and/or store global, local and texture  data in its cache portion.l1tex<strong>t refers to its Tag  stage. l1tex</strong>m refers to its Miss stage. l1tex<strong>d refers to its Data  stage.<br />一级（L1）/纹理缓存位于GPC内。可以用作直接映射的共享内存，也可以将全局、本地和纹理数据存储在其缓存部分。l1tex</strong>t指的是其标签阶段。l1tex<strong>m指的是其丢失阶段。l1tex</strong>d指的是其数据阶段。</td>
+</tr>
+<tr>
+<td>ltc</td>
+<td>The Level 2 cache.<br />二级缓存。</td>
+</tr>
+<tr>
+<td>ltcfabric</td>
+<td>The LTC fabric is the communication fabric for the L2 cache partitions.<br />LTC传输线是二级缓存分区的通信线路。</td>
+</tr>
+<tr>
+<td>lts</td>
+<td>A Level 2 (L2) Cache Slice is a sub-partition of the Level 2 cache.lts<strong>t refers to its Tag  stage. lts</strong>m refers to its Miss stage. lts<strong>d refers to its Data stage.<br />二级（L2）缓存切片是二级缓存的一个子分区。lts</strong>t指的是其标签阶段。lts<strong>m指的是其丢失阶段。lts</strong>d指的是其数据阶段。</td>
+</tr>
+<tr>
+<td>mcc</td>
+<td>Memory controller channel of MSS. The Memory Subsystem (MSS) provides  access to local DRAM, SysRAM, and provides a SyncPointInterface for interprocessor  signaling. MCC includes the row sorter/arbiter and DRAM controllers.<br />MSS的内存控制器通道。内存子系统（MSS）提供对本地DRAM、SysRAM的访问，并为处理器之间的信令提供了SyncPoint接口。MCC包括行排序器/仲裁器和DRAM控制器。</td>
+</tr>
+<tr>
+<td>sm</td>
+<td>The Streaming Multiprocessor handles execution of a kernel as groups of 32 threads, called warps.Warps are further grouped into cooperative thread arrays (CTA), called blocks in CUDA.All warps of a CTA execute on the same SM.CTAs share various resources across their threads, e.g. the shared memory.<br />流式多处理器处理以32个线程一组的内核执行，称为warp。warp进一步分组成协作线程数组（CTA），在CUDA中称为块。CTA的所有warp在同一个SM上执行。CTA在其线程之间共享各种资源，如共享内存。</td>
+</tr>
+<tr>
+<td>smsp</td>
+<td>Each SM is partitioned into four processing blocks, called SM sub partitions.The SM sub partitions are the primary processing elements on the SM.A sub partition manages a fixed size pool of warps.<br />每个SM分为四个处理块，称为SM子分区。SM子分区是SM上的主要处理单元。一个子分区管理一个固定大小的warp池。</td>
+</tr>
+<tr>
+<td>sys</td>
+<td>Logical grouping of several units.<br />多个单元的逻辑分组。</td>
+</tr>
+<tr>
+<td>tpc</td>
+<td>Thread Processing Clusters are units in the GPC.They contain one or more SM, Texture and L1 units,the Instruction Cache (ICC) and the Indexed Constant Cache (IDC).<br />线程处理集群是GPC中的单元。它们包含一个或多个SM、纹理和L1单元、指令缓存（ICC）和索引常量缓存（IDC）。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="3-1-1-我的结果"><a href="#3-1-1-我的结果" class="headerlink" title="3.1.1 我的结果"></a>3.1.1 我的结果</h3><p>结合我自己的结果如下，reduceNeighbored（棕色）是基准，也是最慢的。reduceNeighboredLess（蓝色）与他对比</p>
+<p>先重点看红框的部分</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230914210758031.png" class="" title="image-20230914210758031">
+<p>提示如下</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Memory is more heavily utilized than Compute: Look at the Memory Workload Analysis report section to see where the memory system bottleneck is. Check memory replay (coalescing) metrics to make sure you&#x27;re efficiently utilizing the bytes transferred. Also consider whether it is possible to do more work per memory access (kernel fusion) or whether there are values you can (re)compute.</span><br><span class="line">内存的利用率比计算更高：查看内存工作负载分析报告部分，了解内存系统的瓶颈所在。检查内存回放（合并）指标，确保你有效地利用了传输的字节数。同时考虑是否可以在每次内存访问中完成更多的工作（内核融合），或者是否可以（重新）计算某些值。</span><br></pre></td></tr></table></figure>
+<p>总结就是：</p>
+<ul>
+<li>内存没有有效的利用</li>
+</ul>
+<h2 id="2-2-Compute-Workload-Analysis"><a href="#2-2-Compute-Workload-Analysis" class="headerlink" title="2.2 Compute Workload Analysis"></a>2.2 Compute Workload Analysis</h2><p>描述如下：</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Detailed analysis of the compute resources of the streaming multiprocessors (SM), including the achieved instructions per clock (IPC) and the utilization of each available pipeline. Pipelines with very high utilization might limit the overall performance.</span><br><span class="line">对流多处理器（SM）的计算资源进行详细分析，包括每个可用流水线的每个时钟周期实现的指令数（IPC）和利用率。利用率非常高的流水线可能会限制整体性能。</span><br></pre></td></tr></table></figure>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230914195659083.png" class="" title="image-20230914195659083">
+<p>其中的含义如下</p>
+<p><strong>Pipelines</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th style="text-align:left"><code>adu</code></th>
+<th>Address Divergence Unit.The ADU is responsible for address divergence handling for branches/jumps.It also provides support for constant loads and block-level barrier instructions.      <br />地址分歧单元。ADU负责处理分支/跳转的地址分歧。它还支持常量加载和块级屏障指令。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left"><code>alu</code></td>
+<td>Arithmetic Logic Unit.The ALU is responsible for  execution of most bit manipulation and logic instructions.It also executes integer  instructions, excluding IMAD and IMUL.On NVIDIA Ampere architecture  chips, the ALU pipeline performs fast FP32-to-FP16 conversion.<br />算术逻辑单元。ALU负责执行大多数位操作和逻辑指令。它还执行整数指令，不包括IMAD和IMUL。在NVIDIA Ampere架构芯片上，ALU管道执行快速的FP32到FP16转换。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>cbu</code></td>
+<td>Convergence Barrier Unit.The CBU is responsible for warp-level convergence, barrier, and branch instructions.      <br />一致性屏障单元。CBU负责warp级别的一致性、屏障和分支指令。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>fma</code></td>
+<td>Fused Multiply Add/Accumulate.The FMA pipeline processes  most FP32 arithmetic (FADD, FMUL, FMAD).It also performs integer  multiplication operations (IMUL, IMAD), as well as integer dot products.On GA10x, FMA is a logical  pipeline that indicates peak FP32 and FP16x2 performance.It is composed of the FMAHeavy and FMALite physical pipelines.      <br />融合乘加/累积。FMA管道处理大多数FP32算术（FADD、FMUL、FMAD）。它还执行整数乘法操作（IMUL、IMAD），以及整数点积。在GA10x上，FMA是一个逻辑管道，表示峰值FP32和FP16x2性能。它由FMAHeavy和FMALite物理管道组成。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>fmaheavy</code></td>
+<td>Fused Multiply Add/Accumulate Heavy. FMAHeavy performs FP32 arithmetic (FADD, FMUL, FMAD), FP16 arithmetic (HADD2, HMUL2,HFMA2), and integer dot products.      <br />融合乘加/累积Heavy。FMAHeavy执行FP32算术（FADD、FMUL、FMAD），FP16算术（HADD2、HMUL2、HFMA2）和整数点积。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>fmalite</code></td>
+<td>Fused Multiply Add/Accumulate Lite. FMALite performs FP32 arithmetic (FADD, FMUL, FMA) and FP16 arithmetic (HADD2, HMUL2,HFMA2).      <br />融合乘加/累积Lite。FMALite执行FP32算术（FADD、FMUL、FMA）和FP16算术（HADD2、HMUL2、HFMA2）。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>fp16</code></td>
+<td>Half-precision floating-point.On Volta, Turing and NVIDIA  GA100, the FP16 pipeline performs paired FP16 instructions (FP16x2).It also contains a fast  FP32-to-FP16 and FP16-to-FP32 converter.Starting with GA10x chips,  this functionality is part of the FMA pipeline.      <br />半精度浮点数。在Volta、Turing和NVIDIA GA100上，FP16管道执行成对的FP16指令（FP16x2）。它还包含快速的FP32到FP16和FP16到FP32转换器。从GA10x芯片开始，此功能是FMA管道的一部分。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>fp64</code></td>
+<td>Double-precision floating-point. The implementation of FP64 varies greatly per chip.<br />双精度浮点数。FP64的实现在各芯片上有很大的变化。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>lsu</code></td>
+<td>Load Store Unit.The LSU pipeline issues load,  store, atomic, and reduction instructions to the L1TEX unit for global,  local, and shared memory.It also issues special  register reads (S2R), shuffles, and CTA-level arrive/wait barrier  instructions to the L1TEX unit.      <br />加载存储单元。LSU管道向L1TEX单元发出全局、本地和共享内存的加载、存储、原子和归约指令。它还向L1TEX单元发出特殊寄存器读取（S2R）、洗牌和CTA级别的到达/等待屏障指令。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>tex</code></td>
+<td>Texture Unit.The SM texture pipeline  forwards texture and surface instructions to the L1TEX unit’s TEXIN  stage.On GPUs where FP64 or Tensor  pipelines are decoupled, the texture pipeline forwards those types of  instructions, too.      <br />纹理单元。SM纹理管道将纹理和表面指令转发到L1TEX单元的TEXIN阶段。在支持FP64或Tensor管道分离的GPU上，纹理管道也会转发这些类型的指令。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>tma</code></td>
+<td>Tensor Memory Access Unit.Provides efficient data  transfer mechanisms between global and shared memories with the ability  to understand and traversemultidimensional data layouts.      <br />张量内存访问单元。提供高效的全局和共享内存之间的数据传输机制，具有理解和遍历多维数据布局的能力。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>uniform</code></td>
+<td>Uniform Data Path.This scalar unit executes  instructions where all threads use the same input and generate the same  output.      <br />统一数据路径。此标量单元执行所有线程使用相同输入并生成相同输出的指令。</td>
+</tr>
+<tr>
+<td style="text-align:left"><code>xu</code></td>
+<td>Transcendental and Data Type Conversion Unit.The XU pipeline is responsible for special functions such as sin, cos, and reciprocal square root.It is also responsible for  int-to-float, and float-to-int type conversions.      <br />三角函数和数据类型转换单元。XU管道负责特殊函数，如sin、cos和倒数平方根。它还负责整数到浮点和浮点到整数的类型转换。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="2-2-1-我的结果"><a href="#2-2-1-我的结果" class="headerlink" title="2.2.1 我的结果"></a>2.2.1 我的结果</h3><p>结合我自己的结果如下，reduceNeighbored（棕色）是基准，也是最慢的。reduceNeighboredLess（蓝色）与他对比</p>
+<p>大概可以看出来棕色的LSU比较高，也就是加载存储单元比较忙，其他的我还不懂。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230914203324851.png" class="" title="image-20230914203324851">
+<p>没有提示</p>
+<h2 id="2-3-Scheduler-Statistics"><a href="#2-3-Scheduler-Statistics" class="headerlink" title="2.3 Scheduler Statistics"></a>2.3 Scheduler Statistics</h2><p>想要硬件单元忙起来，就考虑每一个时钟周期都往后端发送一个指令数据。</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Summary of the activity of the schedulers issuing instructions. Each scheduler maintains a pool of warps that it can issue instructions for. The upper bound of warps in the pool (Theoretical Warps) is limited by the launch configuration. On every cycle each scheduler checks the state of the allocated warps in the pool (Active Warps). Active warps that are not stalled (Eligible Warps) are ready to issue their next instruction. From the set of eligible warps the scheduler selects a single warp from which to issue one or more instructions (Issued Warp). On cycles with no eligible warps, the issue slot is skipped and no instruction is issued. Having many skipped issue slots indicates poor latency hiding.</span><br><span class="line">调度程序发出指令的活动总结。每个调度程序维护一个可以发出指令的warp池。warp池中的warp上限（理论warp）由启动配置限制。每个周期，每个调度程序检查池中分配的warp的状态（活动warp）。未停顿的活动warp（合格warp）准备发出其下一条指令。从合格warp集合中，调度程序选择一个warp发出一个或多个指令（发出warp）。在没有合格warp的周期中，发出插槽被跳过，不发出指令。许多跳过的发出插槽表示潜在的延迟隐藏较差。</span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>Active Warps Per Scheduler</code>：每个调度器活跃的线程束数。</li>
+<li><code>Eligible Warps Per Scheduler</code>：每个调度器有资格执行的线程束数。</li>
+<li><code>Issued Warp Per Scheduler</code>：每个调度器发射的线程束数。</li>
+<li><code>One or More Eligible</code>：至少一个线程束有资格执行的百分比。</li>
+<li><code>No Eligible</code>：没有线程束有资格执行的百分比。</li>
+</ul>
+<h3 id="2-3-1-我的结果"><a href="#2-3-1-我的结果" class="headerlink" title="2.3.1 我的结果"></a>2.3.1 我的结果</h3><img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230914210654027.png" class="" title="image-20230914210654027">
+<p>其中的提示如下，</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Every scheduler is capable of issuing one instruction per cycle, but for this kernel each scheduler only issues an instruction every 2.4 cycles. This might leave hardware resources underutilized and may lead to less optimal performance. Out of the maximum of 12 warps per scheduler, this kernel allocates an average of 11.14 active warps per scheduler, but only an average of 0.78 warps were eligible per cycle. Eligible warps are the subset of active warps that are ready to issue their next instruction. Every cycle with no eligible warp results in no instruction being issued and the issue slot remains unused. To increase the number of eligible warps, avoid possible load imbalances due to highly different execution durations per warp. Reducing stalls indicated on the Warp State Statistics and Source Counters sections can help, too.</span><br><span class="line">每个调度器每个周期可以发出一条指令，但对于这个内核来说，每个调度器每2.4个周期只发出一条指令。这可能导致硬件资源利用不足，从而导致性能不够优化。在每个调度器的最大12个warp中，这个内核平均分配了11.14个活跃warp，但每个周期只有平均0.78个warp符合条件。符合条件的warp是准备发出下一条指令的活跃warp的子集。每个没有符合条件的warp的周期都不会发出指令，发射槽保持未使用状态。为了增加符合条件的warp的数量，需要避免由于不同warp的执行持续时间差异而可能导致的负载不平衡。减少Warp State Statistics和Source Counters部分所示的停顿也会有所帮助。</span><br></pre></td></tr></table></figure>
+<p>总结就是：</p>
+<ul>
+<li>本来一个周期可以发送一条指令，但是现在2.4个周期才发一个</li>
+<li>本来调度期最大12个warp，其中11.14个是活跃的，但是只有0.78个warp符合条件，发送了指令。</li>
+</ul>
+<h2 id="2-4-Warp-State-Statistics"><a href="#2-4-Warp-State-Statistics" class="headerlink" title="2.4 Warp State Statistics"></a>2.4 Warp State Statistics</h2><p>描述如下</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Analysis of the states in which all warps spent cycles during the kernel execution. The warp states describe a warp&#x27;s readiness or inability to issue its next instruction. The warp cycles per instruction define the latency between two consecutive instructions. The higher the value, the more warp parallelism is required to hide this latency. For each warp state, the chart shows the average number of cycles spent in that state per issued instruction. Stalls are not always impacting the overall performance nor are they completely avoidable. Only focus on stall reasons if the schedulers fail to issue every cycle. When executing a kernel with mixed library and user code, these metrics show the combined values.</span><br><span class="line">分析所有warp在内核执行期间所花费的周期状态。warp状态描述了warp准备或无法发出下一条指令的情况。每条指令的warp周期定义了两条连续指令之间的延迟。数值越高，需要更多的warp并行性来隐藏这个延迟。对于每个warp状态，图表显示了在每条发出的指令中在该状态下花费的平均周期数。停顿并不总是对整体性能产生影响，也不完全可以避免。只有在调度程序无法每个周期发出指令时才关注停顿原因。在执行包含混合库代码和用户代码的内核时，这些指标显示了合并值。</span><br></pre></td></tr></table></figure>
+<p>先解释一下warp scheduler</p>
+<p>下图中每一个SM有4个warp scheduler。每个时钟周期可以运行1个wrap。另外一个warp中根据架构不同会有不同数量的slots。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230915163927590.png" class="" title="image-20230915163927590">
+<p>在cuda中，每32个线程会被『捆』成一束(线程束)，英文是<code>warp</code>, 一个warp执行一个指令，换句话说32个线程每次都是执行相同的指令。指令发射任务是由warp scheduler来完成的，具体工作原理如下：</p>
+<p><strong>warp scheduler</strong><br><strong>warp slot</strong></p>
+<p>假如sm中有1个warp scheduler(线程束调度器)，调度器最多可以管理8个warp。下图做简单的展示，这里的slot个数就是调度器可以管理的warp最大值，为了方便后面解释，用涂有颜色的块表示某个slot被使用，空白则表示没有被使用。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/c04c9a1430884bd4bd755be72dc072ed.png" class="" title="在这里插入图片描述">
+<p>warp的状态</p>
+<p>在上面的warp slots解释中，其实可以理解其就是一个存放warp的池子，在cuda中凡是进入这些池子的warp，都被称作active warp。在active中的warp还可以被分为三个状态，分别是stalled, eligible, selected，具体是啥意思呢？根据我自己的理解，stalled顾名思义就是困住的，当下warp的指令没法被发射，造成stalled主要有以下5中情况：</p>
+<ul>
+<li>在取指令</li>
+<li>依赖内存指令的访存结果</li>
+<li>依赖之前指令的执行结果</li>
+<li>pipeline正在忙</li>
+<li>同步barrier</li>
+</ul>
+<p>那么eligible就比较好理解，就是各项指标都符合，可以被发射，selected就是当下被选择发射的warp。这里分别用三个颜色表示三种状态。</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/ac69aa1ed5704876b351e13c3b0241da.png" class="" title="在这里插入图片描述">
+<p>状态切换和指令发射</p>
+<p>对于一个warp scheduler(指令发射器)，每个时钟周期可以发射出一个指令（因为只有一个issue slot)。对下面的四个时钟周期进行解释。</p>
+<ul>
+<li>在时钟周期1的时候，有5个激活的warp， 其中3是eligible, 4号被选中发射，5，6，7是stalled。</li>
+<li>在时钟周期2的时候，由于4号在运行中所以这里是stalled(可能依赖当下指令的完成)，3号被选中发射，所以3号是selected。</li>
+<li>在时钟周期3的时候，有个warp估计是执行完了退出了，而且没有可发射的， 所以时钟周期3的时候，发射槽闲置了。</li>
+<li>在时钟周期4的时候，warp slots中的warp又有状态更新，这里5和6都是可以执行的，所以5被运到发射槽，状态标记为selected, 6标记为eligible。</li>
+</ul>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/b94929366caf4cc0a900ba6a22f7685b.png" class="" title="在这里插入图片描述">
+<p>在做性能分析的时候，会有相关指标来衡量，我们可以看到在4个时钟周期内，一共有20个active warps(20= 5+5+4+6), 那么平均每一个时钟周期有5个active warps, 而warp slots有8个槽，所以利用率（achieved_occupancy）是62.5%。而在4个时钟周期内，warps_stalled=15, warps_eligible=5,warp_issued(selected)=3, 所以发射槽的利用率为75%（issue_slot_utilization）。对标nisght compute的相关指标我们就知道是什么意思了，该如何去做优化。</p>
+<h3 id="2-4-1-我的结果"><a href="#2-4-1-我的结果" class="headerlink" title="2.4.1 我的结果"></a>2.4.1 我的结果</h3><p>Warp State Statistics<br><img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230915162811021.png" class="" title="image-20230915162811021"></p>
+<p>其中的提示如下，</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">On average, each warp of this kernel spends 12.9 cycles being stalled waiting for sibling warps at a CTA barrier. This represents about 47.9<span class="comment">% of the total average of 27.0 cycles between issuing two instructions. A high number of warps waiting at a barrier is commonly caused by diverging code paths before a barrier that causes some warps to wait a long time until other warps reach the synchronization point. Whenever possible try to divide up the work into blocks of uniform workloads. Use the Source View&#x27;s sampling columns to identify which barrier instruction causes the most stalls and optimize the code executed before that synchronization point first.</span></span><br><span class="line">在这个内核中，平均每个warp在CTA屏障处等待兄弟warp时会花费12.9个周期。这大约占发出两条指令之间总平均27.0个周期的47.9<span class="comment">%。大量warp在屏障处等待通常是由于在屏障之前存在分歧的代码路径，导致一些warp等待很长时间，直到其他warp达到同步点。尽可能将工作划分为均匀的工作负载块。使用源代码视图的采样列，确定哪个屏障指令导致了最多的停顿，并首先优化在该同步点之前执行的代码。</span></span><br></pre></td></tr></table></figure>
+<p>结果中为什么运行更快的reduceNeighboredLess（蓝色）比reduceNeighbored（棕色）有更多的stall barrier。我不知道。。。</p>
+<p>具体stall barrier的含义可以参考<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-reference">4. Metrics Reference</a>。有点太多了，就不放这里了</p>
+<h2 id="2-5-Memory-Workload-Analysis"><a href="#2-5-Memory-Workload-Analysis" class="headerlink" title="2.5 Memory Workload Analysis"></a>2.5 Memory Workload Analysis</h2><p>描述如下</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"> Detailed analysis of the memory resources of the GPU. Memory can become a limiting factor for the overall kernel performance when fully utilizing the involved hardware units (Mem Busy), exhausting the available communication bandwidth between those units (Max Bandwidth), or by reaching the maximum throughput of issuing memory instructions (Mem Pipes Busy). Detailed chart of the memory units. Detailed tables with data for each memory unit.</span><br><span class="line">GPU内存资源的详细分析。当充分利用所涉及的硬件单元（Mem Busy）、耗尽这些单元之间的可用通信带宽（Max bandwidth）或达到发出内存指令的最大吞吐量（Mem Pipes Busy）时，内存可能会成为整个内核性能的限制因素。内存单元的详细图表。包含每个内存单元数据的详细表格。</span><br></pre></td></tr></table></figure>
+<p><em>*内存的分析是优化的重点</em>，优化访问的pattern(模型)*</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230916172340956.png" class="" title="image-20230916172340956">
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230916172308190.png" class="" title="image-20230916172308190">
+<ul>
+<li>Instruction number:访问 Global、Local、Texture等的指令分别是多少，以warps为单位，一个warp中只需执行的指令数统计</li>
+<li>request number:比如Global从L1中读/写的请求次数</li>
+<li>bytes transfered:内存传输的数量，可以将这个数据和我们理论上需要的数据进行比较来发现我们是否有多余的传输。</li>
+</ul>
+<p>下面的表说明了详细的数据</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230916174647145.png" class="" title="image-20230916174647145">
+<p><strong>优化首先考虑的是</strong></p>
+<ul>
+<li>优化Bank Conflicts，尽量避免，最好是0</li>
+<li>计算Global Load 先算一下理论的传输，再根据report中的结果对比，尽可能的相近</li>
+</ul>
+<p>这里面有一些概念要参考<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-decoder">3.3. Metrics Decoder</a>中的Quantities</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><code>instruction</code></th>
+<th>An assembly (SASS) instruction.Each executed instruction may generate zero or more requests.<br />汇编(SASS)指令。每条执行的指令可能生成零个或多个请求。</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>request</code></td>
+<td>A command into a HW unit to perform some action, e.g. load data from some memory location.Each request accesses one or more sectors.<br />向硬件单元输入的命令，以执行某些操作，例如，从某个内存位置加载数据。每个请求访问一个或多个扇区。</td>
+</tr>
+<tr>
+<td><code>sector</code></td>
+<td>Aligned 32 byte-chunk of memory in a cache line or device memory.An L1 or L2 cache line is four sectors, i.e. 128 bytes.Sector accesses are classified as hits if the tag is present and the sector-data is present within the cache line.Tag-misses and  tag-hit-data-misses are all classified as misses.<br />在高速缓存线路或设备内存中对齐的32字节块内存。。如果标记存在并且扇区数据存在于缓存行中，则扇区访问被分类为命中。标记未命中和标记命中数据未命中都被归类为未命中。</td>
+</tr>
+<tr>
+<td><code>tag</code></td>
+<td>Unique key to a cache line.A request may look up multiple tags, if the thread addresses do not all fall within a single cache  line-aligned region.The L1 and L2 both have 128  byte cache lines.Tag accesses may be classified as hits or misses.<br />缓存线路的唯一键。如果线程地址不都在一个缓存行对齐区域内，一个请求可能会查找多个标签。L1和L2都有128字节的缓存线。标签访问可分为命中或未命中。</td>
+</tr>
+<tr>
+<td><code>wavefront</code></td>
+<td>Unique “work package” generated at the end of the processing stage for  requests.All work items of a wavefront  are processed in parallel, while work items of different wavefronts are  serialized and processedon different cycles.At least one wavefront is  generated for each request.<br />在请求处理阶段结束时生成的唯一“工作包”。一个wavefronts的所有工作项并行处理，而不同wavefronts的工作项在不同的周期内序列化和处理。每个请求至少生成一个wavefronts。</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>然后我们再详细看每一项的内容含义</p>
+<ul>
+<li><p>Shared Memory 参考<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#memory-tables-smem">10.1. Shared Memory</a></p>
+<p>| <code>Instructions</code>   | For each access type, the total number of all actually executed assembly (SASS) <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-decoder__metrics-quantities">instructions</a> per warp.Predicated-off instructions are not included.E.g., the instruction STS would be counted towards Shared Store.<br />对于每种访问类型，每个warp的所有实际执行的程序集（SASS）指令的总数。不包括谓词为off的指令。例如，指令STS将被计入共享存储。 |<br>| ———————— | —————————————————————————————— |<br>| <code>Requests</code>       | The total number of all <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-decoder__metrics-quantities">requests</a> to shared memory.On SM 7.0 (Volta) and newer  architectures, each shared memory instruction generates exactly one  request.<br />对共享内存的所有请求的总数。在SM 7.0（Volta）和更新的体系结构上，每个共享内存指令只生成一个请求。 |<br>| <code>Wavefronts</code>     | Number of <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-decoder__metrics-quantities">wavefronts</a> required to service the requested shared memory data.Wavefronts are serialized and processed on different cycles.<br />为请求的共享内存数据提供服务所需的wavefronts数。wavefrints在不同的周期上被序列化和处理。 |<br>| <code>% Peak</code>         | Percentage of peak utilization.Higher values imply a higher  utilization of the unit and can show potential bottlenecks, as it does  not necessarily indicateefficient usage.<br />峰值利用率百分比。更高的值意味着更高的单元利用率，并且可能显示潜在的瓶颈，因为它不一定表示有效的使用。 |<br>| <code>Bank Conflicts</code> | If multiple threads’ requested  addresses map to different offsets in the same memory bank, the accesses are serialized.The hardware splits a conflicting  memory request into as many separate conflict-free requests as  necessary,decreasing the effective bandwidth  by a factor equal to the number of colliding memory requests.<br />如果多个线程请求的地址映射到同一内存库中的不同偏移量，则访问将被序列化。硬件根据需要将一个冲突的内存请求拆分为尽可能多的独立的无冲突请求，从而减少有效带宽，减少的因素等于冲突内存请求的数量。<br /><strong>优先考虑，优化到0</strong> |</p>
+</li>
+<li><p>L1/TEX Cache</p>
+<p>| <code>Instructions</code>        | For each access type, the total number of all actually executed assembly (SASS) <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-decoder__metrics-quantities">instructions</a> per warp.Predicated-off instructions are not included.E.g., the instruction LDG would be counted towards Global Loads.<br />对于每种访问类型，每个warp的所有实际执行的程序集（SASS）指令的总数。不包括谓词为off的指令。例如，指令LDG将计入全局负载。 |<br>| ——————————- | —————————————————————————————— |<br>| <code>Requests</code>            | The total number of all <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-decoder__metrics-quantities">requests</a> to L1, generated for each instruction type.On SM 7.0 (Volta) and newer  architectures, each instruction generates exactly one request for LSU  traffic (global, local,…).For texture (TEX) traffic, more  than one request may be generated.In the example, each of the 65536 global load instructions generates exactly one request.<br />为每种指令类型生成的对L1的所有请求的总数。在SM 7.0（Volta）和更新的体系结构上，每条指令只生成一个LSU流量请求（全局、本地…）。对于纹理（TEX）流量，可能会生成多个请求。 |<br>| <code>Wavefronts</code>          | Number of <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-decoder__metrics-quantities">wavefronts</a> required to service the requested memory operation.   Wavefronts are serialized and processed on different cycles.            <br />为请求的共享内存数据提供服务所需的wavefronts数。wavefrints在不同的周期上被序列化和处理。 |<br>| <code>Wavefront % Peak</code>    | Percentage of peak utilization for the units processing <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-decoder__metrics-quantities">wavefronts</a>.   High numbers can imply that the  processing pipelines are saturated and can become a bottleneck.<br />处理wavefront单元的峰值利用率百分比。较高的数字可能意味着处理管道饱和，并可能成为瓶颈。 |<br>| <code>Sectors</code>             | The total number of all L1 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-decoder__metrics-quantities">sectors</a> accesses sent to L1.   Each load or store request accesses one or more sectors in the L1 cache.   Atomics and reductions are passed through to the L2 cache.       <br />发送到L1的所有L1扇区访问的总数。每个加载或存储请求访问L1高速缓存中的一个或多个扇区。原子和减少被传递到二级缓存。<br /><strong>目前L1和L2一个Sectors的大小都是32字节</strong>   参考 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-decoder__metrics-quantities">sectors</a> |<br>| <code>Sectors/Req</code>         | The average ratio of sectors to  requests for the L1 cache.For the same number of active  threads in a warp, smaller numbers imply a more efficient memory access  pattern.For warps with 32 active threads, the optimal ratios per access size are: 32-bit: 4, 64-bit: 8, 128-bit:  16.Smaller ratios indicate some  degree of uniformity or overlapped loads within a cache line.Higher numbers can imply <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#device-memory-accesses">uncoalesced memory accesses</a>and will result in increased memory traffic.In the example, the average ratio for global loads is 32 sectors per request, which implies that each  thread needs to accessa different sector.Ideally, for warps with 32 active threads, with each thread accessing a single, aligned 32-bit value, the ratio would be 4,as every 8 consecutive threads  access the same sector.<br />扇区与L1缓存请求的平均比率。对于相同数量的活动线程，较小的数量意味着更有效的内存访问模式。对于具有32个活动线程的warp，<strong>每次访问大小的最佳比率为:32-bit: 4, 64-bit: 8, 128-bit:  16</strong>（应该是每一个线程访问的大小是32-bit）（应该是因为上面Quantities提到的“Sectorsde 大小是32字节，L1或L2高速缓存线路是四个扇区，即128字节，举一个例子，为什么最佳比例32-bit: 4呢？，<code>32*32/(32*8)=4</code>，第一个32是每个线程访问32bit 第二个32是一个warp有32个线程，两者相乘就是一个warp访问的大小,<code>（32*8）</code>就是一个Sectors大小，单位是bit。有点晕，但是知道优化的目标是参考值就行了）。较小的比率表示缓存线路内的某种程度的均匀性或重叠负载。<strong>较高的数字可能意味着未合并的内存访问，并将导致内存流量增加</strong>。在这个示例中，全局负载的平均比率是每个请求32个扇区，这意味着每个线程需要访问一个扇区 |<br>| <code>Hit Rate</code>            | <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-decoder__metrics-quantities">Sector</a> hit rate (percentage of requested sectors that do not miss) in the L1 cache.   Sectors that miss need to be requested from L2, thereby contributing to Sector Misses to L2.   Higher hit rates imply better  performance due to lower access latencies, as the request can be served  by L1 instead of a later   stage.   Not to be confused with Tag Hit Rate (not shown).    <br />L1缓存中的扇区命中率(未丢失请求扇区的百分比)。缺少扇区需要从L2请求，从而导致扇区缺少到L2。由于访问延迟较低，更高的命中率意味着更好的性能，因为请求可以由L1而不是后面的阶段提供服务。不要与标签命中率(未显示)混淆。 |<br>| <code>Bytes</code>               | Total number of bytes requested from L1.   This is identical to the number of  sectors multiplied by 32 byte, since the minimum access size in L1 is  one sector.                              <br />从L1请求的总字节数。这与扇区数乘以32字节相同，因为L1中的最小访问大小是一个扇区。 |<br>| <code>Sector Misses to L2</code> | Total number of sectors that miss in L1 and generate subsequent requests in the <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#memory-tables-l2">L2 Cache</a>.In this example, the 262144  sector misses for global and local loads can be computed as the  miss-rate of 12.5%, multipliedby the number of 2097152 sectors.<br />一级缓存中未命中并在二级缓存中生成后续请求的扇区总数。 |<br>| <code>% Peak to L2</code>        | Percentage of peak utilization of  the L1-to-XBAR interface, used to send L2 cache requests.   If this number is high, the workload is likely dominated by scattered {writes, atomics, reductions}, which  can increase the   latency and cause   <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#statistical-sampler__warp-scheduler-states">warp stalls</a>.                          <br />用于发送L2缓存请求的L1-to-XBAR接口的峰值利用率百分比。如果这个数字很高，则工作负载可能被分散的{写、原子、缩减}所主导，这可能会增加延迟并导致warp停滞。 |<br>| <code>Returns to SM</code>       | Number of return packets sent from the L1 cache back to the SM.   Larger request access sizes result in higher number of returned packets.                         <br />从L1缓存返回到SM的报文数。更大的请求访问大小导致返回的数据包数量更多。 |<br>| <code>% Peak to SM</code>        | Percentage of peak utilization of the XBAR-to-L1 return path (compare Returns to SM).   If this number is high, the workload is likely dominated by scattered reads, thereby causing   <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#statistical-sampler__warp-scheduler-states">warp stalls</a>.   Improving read-coalescing or the L1 hit rate could reduce this utilization.                              <br />xbar到l1返回路径的峰值利用率百分比(比较返回到SM的百分比)。如果这个数字很高，则工作负载可能被分散的读取所主导，从而导致warp停滞。改进读合并或L1命中率可以降低这种利用率。 |</p>
+</li>
+<li><p>L2 Cache</p>
+<p>| <code>Requests</code>                | For each access type, the total number of <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-decoder__metrics-quantities">requests</a> made to the L2 cache.This correlates with the <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#memory-tables-l1__memory-tables-l1-columns">Sector Misses to L2</a> for the L1 cache.Each request targets one 128 byte cache line.<br />对于每种访问类型，向L2缓存发出的请求总数。这与L1缓存到L2的扇区缺失有关。每个请求的目标是一条128字节的缓存线。 |<br>| ————————————- | —————————————————————————————— |<br>| <code>Sectors</code>                 | For each access type, the total number of <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-decoder__metrics-quantities">sectors</a> requested from the L2 cache.Each request accesses one or more sectors.<br />对于每种访问类型，从二级缓存请求的扇区总数。每个请求访问一个或多个扇区。 |<br>| <code>Sectors/Req</code>             | The average ratio of sectors to  requests for the L2 cache.For the same number of active  threads in a warp, smaller numbers imply a more efficient memory access  pattern.For warps with 32 active threads,  the optimal ratios per access size are: 32-bit: 4, 64-bit: 8, 128-bit:  16.Smaller ratios indicate some degree  of uniformity or overlapped loads within a cache line.Higher numbers can imply <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#device-memory-accesses">uncoalesced memory accesses</a>and will result in increased memory traffic.<br />扇区与二级缓存请求的平均比率。对于相同数量的活动线程，较小的数量意味着更有效的内存访问模式。对于具有32个活动线程的warp，每次访问大小的最佳比率为:32位:4,64位:8,128位:16。较小的比率表示缓存线路内的某种程度的均匀性或重叠负载。较高的数字可能意味着未合并的内存访问，并将导致内存流量增加。 |<br>| <code>% Peak</code>                  | Percentage of peak sustained number  of sectors.The “work package” in the L2 cache  is a sector.Higher values imply a higher  utilization of the unit and can show potential bottlenecks, as it does  not necessarily indicateefficient usage.<br />峰值持续扇区数的百分比。二级缓存中的“工作包”是一个扇区。更高的值意味着更高的单元利用率，并且可能显示潜在的瓶颈，因为它不一定表示有效的使用。 |<br>| <code>Hit Rate</code>                | Hit rate (percentage of requested sectors that do not miss) in the L2 cache.Sectors that miss need to be requested from a later stage, thereby contributing to one of Sector Misses to Device, Sector Misses to System, or Sector Misses to Peer.Higher hit rates imply better  performance due to lower access latencies, as the request can be served  by L2 instead of a laterstage.<br />在二级缓存中的命中率(请求扇区未丢失的百分比)。丢失的扇区需要在稍后阶段请求，从而导致设备扇区丢失、系统扇区丢失或对等扇区丢失。由于访问延迟较低，更高的命中率意味着更好的性能，因为请求可以由L2而不是后期处理。 |<br>| <code>Bytes</code>                   | Total number of bytes requested from L2.This is identical to the number of  sectors multiplied by 32 byte, since the minimum access size in L2 is  one sector.<br />从L2请求的字节总数。这与扇区数乘以32字节相同，因为L2中的最小访问大小是一个扇区。 |<br>| <code>Throughput</code>              | Achieved L2 cache throughput in bytes per second.High values indicate high utilization of the unit.<br />实现了以字节每秒为单位的二级缓存吞吐量。数值高表示设备利用率高。 |<br>| <code>Sector Misses to Device</code> | Total number of sectors that miss in L2 and generate <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#memory-tables-dram">subsequent requests</a>in <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-hw-model__metrics-hw-memory">device memory</a>.<br />在L2中丢失并在设备内存中生成后续请求的扇区总数。 |<br>| <code>Sector Misses to System</code> | Total number of sectors that miss in L2 and generate subsequent requestsin <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-hw-model__metrics-hw-memory">system memory</a>.<br />在L2中丢失并在系统内存中生成后续请求的扇区总数。 |<br>| <code>Sector Misses to Peer</code>   | Total number of sectors that miss in L2 and generate subsequent requestsin <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-hw-model__metrics-hw-memory">peer memory</a>.<br />在L2中丢失并在对等内存中生成后续请求的扇区总数。 |</p>
+<p>| <code>(Access Types)</code>  | The various access types, e.g. loads or reductions originating from L1 cache.                <br />各种访问类型，例如，从L1缓存开始的负载或减少。 |<br>| ————————- | —————————————————————————————— |<br>| <code>L1/TEX Total</code>    | Total for all operations originating from the L1 cache.<br />源自L1缓存的所有操作的总数。 |<br>| <code>ECC Total</code>       | Total for all operations caused by  ECC (Error Correction Code).If ECC is enabled, L2 write requests that partially modify a sector cause a corresponding sector load from  DRAM.These additional load operations  increase the sector misses of L2.<br />ECC (Error Correction Code)导致的所有操作的总和。如果启用ECC，部分修改扇区的L2写请求会导致DRAM中相应的扇区负载。这些额外的负载操作增加了L2的扇区丢失。 |<br>| <code>L2 Fabric Total</code> | Total for all operations across the L2 fabric connecting the two L2 partitions.This row is only shown for kernel launches on CUDA devices with L2 fabric.<br />连接两个L2分区的L2结构上所有操作的总和。这一行只显示在具有L2结构的CUDA设备上的内核启动。 |<br>| <code>GPU Total</code>       | Total for all operations across all clients of the L2 cache.Independent of having them split out separately in this table.<br />在二级缓存的所有客户端上的所有操作的总和。而不是把它们分开放在这张表里。 |</p>
+</li>
+<li><p>Device Memory</p>
+<p>| <code>Sectors</code>    | For each access type, the total number of <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-decoder__metrics-quantities">sectors</a> requested from device memory.<br />对于每种访问类型，从设备内存请求的扇区总数。 |<br>| —————— | —————————————————————————————— |<br>| <code>% Peak</code>     | Percentage of peak device memory  utilization.Higher values imply a higher  utilization of the unit and can show potential bottlenecks, as it does  not necessarily indicateefficient usage.<br />峰值设备内存利用率的百分比。更高的值意味着更高的单元利用率，并且可能显示潜在的瓶颈，因为它不一定表示有效的使用。 |<br>| <code>Bytes</code>      | Total number of bytes transferred between <a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#memory-tables-l2">L2 Cache</a> and device memory.<br />在L2 Cache和设备内存之间传输的总字节数。 |<br>| <code>Throughput</code> | Achieved device memory throughput in bytes per second.High values indicate high utilization of the unit.<br />以字节每秒为单位实现设备内存吞吐量。数值高表示设备利用率高。 |</p>
+</li>
+</ul>
+<h3 id="2-5-1-我的结果"><a href="#2-5-1-我的结果" class="headerlink" title="2.5.1 我的结果"></a>2.5.1 我的结果</h3><img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230916195909677.png" class="" title="image-20230916195909677">
+<p>其中的提示如下，</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">The memory access pattern for global loads in L1TEX might not be optimal. On average, this kernel accesses 4.0 bytes per thread per memory request; but the address pattern, possibly caused by the stride between threads, results in 12.5 sectors per request, or 12.5*32 = 398.8 bytes of cache data transfers per request. The optimal thread address pattern for 4.0 byte accesses would result in 4.0*32 = 128.0 bytes of cache data transfers per request, to maximize L1TEX cache performance.Check the Source Counters section for uncoalesced global loads.</span><br><span class="line">L1TEX中全局load的内存访问模式可能不是最优的。这个内核在每个线程的每次内存请求中平均访问4.0字节;但是地址模式(可能是由线程之间的跨越引起的)导致每个请求12.5扇区，或者每个请求12.5*32 = 398.8字节的缓存数据传输。4.0字节访问的最佳线程地址模式将导致每个请求传输4.0*32 = 128.0字节的缓存数据，以最大化L1TEX缓存性能。检查源计数器部分以查看未合并的全局load。</span><br><span class="line"></span><br><span class="line">The memory access pattern for global stores in L1TEX might not be optimal. On average, this kernel accesses 4.0 bytes per thread per memory request; but the address pattern, possibly caused by the stride between threads, results in 12.2 sectors per request, or 12.2*32 = 390.1 bytes of cache data transfers per request. The optimal thread address pattern for 4.0 byte accesses would result in 4.0*32 = 128.0 bytes of cache data transfers per request, to maximize L1TEX cache performance.Check the Source Counters section for uncoalesced global stores.</span><br><span class="line">L1TEX中全局存储的内存访问模式可能不是最优的。这个内核在每个线程的每次内存请求中平均访问4.0字节;但是地址模式(可能是由线程之间的跨越引起的)导致每个请求有12.2个扇区，或者每个请求有12.2*32 = 390.1字节的缓存数据传输。4.0字节访问的最佳线程地址模式将导致每个请求传输4.0*32 = 128.0字节的缓存数据，以最大化L1TEX缓存性能。查看未合并的全局存储的Source Counters部分。</span><br><span class="line"></span><br><span class="line">The memory access pattern for stores from L1TEX to L2 is not optimal. The granularity of an L1TEX request to L2 is a 128 byte cache line. That is 4 consecutive 32-byte sectors per L2 request. However, this kernel only accesses an average of 2.7 sectors out of the possible 4 sectors per cache line. Check the Source Counters section for uncoalesced stores and try to minimize how many cache lines need to be accessed per memory request.</span><br><span class="line">从L1TEX到L2的存储的内存访问模式不是最优的。到L2的L1TEX请求的粒度是128字节的缓存线。即每个L2请求有4个连续的32字节扇区。然而，这个内核平均只访问2.7个扇区，而每个缓存行可能有4个扇区。检查未合并存储的源计数器部分，并尽量减少每个内存请求需要访问的缓存行数。</span><br></pre></td></tr></table></figure>
+<h2 id="2-6-Launch-Statistics"><a href="#2-6-Launch-Statistics" class="headerlink" title="2.6 Launch Statistics"></a>2.6 Launch Statistics</h2><p>描述如下</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Summary of the configuration used to launch the kernel. The launch configuration defines the size of the kernel grid, the division of the grid into blocks, and the GPU resources needed to execute the kernel. Choosing an efficient launch configuration maximizes device utilization.</span><br><span class="line">用于启动内核的配置摘要。启动配置定义内核网格的大小、网格块的划分以及执行内核所需的GPU资源。选择一个有效的启动配置可以最大限度地提高设备利用率。</span><br></pre></td></tr></table></figure>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230916201502092.png" class="" title="image-20230916201502092">
+<p>“Number of waves per SM” 是指在 GPU 的计算单元中，每个多处理器（SM）可以同时执行的波束（wave）的数量。在 GPU  中，波束是一组并行执行的线程，它们以一定的步调（wavefront  size）在多个处理单元上执行相同的指令。每个多处理器（SM）有一定数量的波束槽（wave slots），用于存放波束。”Number of  waves per SM” 表示每个多处理器（SM）可以同时容纳的波束数量。</p>
+<p>较高的 “Number of waves per SM” 意味着在每个多处理器（SM）上可以同时执行更多的波束，从而提高了并行度和计算能力。这通常有助于提高 GPU 的性能和效率。</p>
+<h2 id="2-7-Occupancy"><a href="#2-7-Occupancy" class="headerlink" title="2.7 Occupancy"></a>2.7 Occupancy</h2><figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Occupancy is the ratio of the number of active warps per multiprocessor to the maximum number of possible active warps. Another way to view occupancy is the percentage of the hardware&#x27;s ability to process warps that is actively in use. Higher occupancy does not always result in higher performance, however, low occupancy always reduces the ability to hide latencies, resulting in overall performance degradation. Large discrepancies between the theoretical and the achieved occupancy during execution typically indicates highly imbalanced workloads.</span><br><span class="line">占用率是每个多处理器的活动warp数与可能的最大活动warp数的比率。查看占用率的另一种方法是硬件处理正在使用的warp的能力的百分比。更高的占用率并不总是带来更高的性能，但是，低占用率总是会降低隐藏延迟的能力，从而导致整体性能下降。在执行期间，理论占用率和实际占用率之间的巨大差异通常表明工作负载高度不平衡。</span><br></pre></td></tr></table></figure>
+<h3 id="2-7-1-我的结果"><a href="#2-7-1-我的结果" class="headerlink" title="2.7.1 我的结果"></a>2.7.1 我的结果</h3><img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917141748754.png" class="" title="image-20230917141748754">
+<h2 id="2-8-Source-Counters"><a href="#2-8-Source-Counters" class="headerlink" title="2.8 Source Counters"></a>2.8 Source Counters</h2><p>描述如下：</p>
+<figure class="highlight tex"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Source metrics, including branch efficiency and sampled warp stall reasons. Sampling Data metrics are periodically sampled over the kernel runtime. They indicate when warps were stalled and couldn&#x27;t be scheduled. See the documentation for a description of all stall reasons. Only focus on stalls if the schedulers fail to issue every cycle.</span><br><span class="line">源指标，包括分支效率和采样warp停顿原因。采样数据指标会在内核运行期间定期进行采样。它们指示了warp的停顿情况和无法被调度的情况。请参阅文档以获取所有停顿原因的描述。只有在调度器无法每个周期发出指令时才关注停顿情况。</span><br></pre></td></tr></table></figure>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917142938722.png" class="" title="image-20230917142938722">
+<p>点开上面的链接，可以看到对应的源码位置（需要在编译程序时加上nvcc的编译选项 -lineinfo）参考<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/profiler-users-guide/index.html#source-disassembly-view">2.4.3. Source-Disassembly View</a></p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917143915844.png" class="" title="image-20230917143915844">
+<p>stall的原因还是上面说的</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917151909519.png" class="" title="image-20230917151909519">
+<p>比较常见的stall如下</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917151951281.png" class="" title="image-20230917151951281">
+<h1 id="3-UNDERSTAND-STALL-REASON"><a href="#3-UNDERSTAND-STALL-REASON" class="headerlink" title="3 UNDERSTAND STALL REASON"></a>3 UNDERSTAND STALL REASON</h1><p>上面提到了几个最常见的stall reason。这里举例说明一下</p>
+<h2 id="3-1-Long-Scoreboard"><a href="#3-1-Long-Scoreboard" class="headerlink" title="3.1 Long Scoreboard"></a>3.1 Long Scoreboard</h2><p>这个例子中就是<strong>下一条指令的执行需要等待上一条指令load global的结果</strong>。因此造成了Long Scoreboard</p>
+<p>解决思路：</p>
+<ul>
+<li>有足够的warps，可以让scheduler来选择</li>
+<li>global load之后的数据先不着急使用，做一些其他的指令，来隐藏global load</li>
+</ul>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917155350521.png" class="" title="image-20230917155350521">
+<p>这里也可以减少循环的次数来降低</p>
+<h2 id="3-2-LG-Throttle"><a href="#3-2-LG-Throttle" class="headerlink" title="3.2 LG Throttle"></a>3.2 LG Throttle</h2><p>下面这个例子是非合并的内存访问和访问次数多导致的。</p>
+<p><strong>注意非合并内存访问是指的一个warp中不同的线程之间内存读写地址的对比。</strong></p>
+<p>解决思路：</p>
+<ul>
+<li>合并的内存访问</li>
+<li>加大线程的内存访问力度，减少指令。</li>
+</ul>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917160821329.png" class="" title="image-20230917160821329">
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917161108124.png" class="" title="image-20230917161108124">
+<p>下面是第一种优化方案，改为合并的内存访问</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917161440793.png" class="" title="image-20230917161440793">
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917161638067.png" class="" title="image-20230917161638067">
+<p><strong>继续优化方案，减少每个线程访问次数（在合并访问的基础上修改的）。</strong></p>
+<p><strong>每个程序运行的内存访问总量数固定的，先要减少指令数，就需要加大每个线程访问的力度。</strong></p>
+<p>之前每个线程访问一个字节，变为每个线程访问2、4、8等字节数来减少指令数</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917162404948.png" class="" title="image-20230917162404948">
+<p>优化后的时间如下</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917163533427.png" class="" title="image-20230917163533427">
+<h2 id="3-3-Short-Scoreboard"><a href="#3-3-Short-Scoreboard" class="headerlink" title="3.3 Short Scoreboard"></a>3.3 Short Scoreboard</h2><p>下面的例子和Long Scoreboard的类似，都是循环依赖了上一次的结果，只不过这个结果是在shared memory中</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917170148307.png" class="" title="image-20230917170148307">
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917170319656.png" class="" title="image-20230917170319656">
+<h2 id="3-4-MIO-Throttle"><a href="#3-4-MIO-Throttle" class="headerlink" title="3.4 MIO Throttle"></a>3.4 MIO Throttle</h2><p>下面的例子使用share memory有bank conflicts和没有bank conflicts来说明</p>
+<ul>
+<li>左侧的bad存在bank confilcts。一个线程一次访问32列。比如一个warp的0线程，访问的是sem中0行32列（32个 bank），线程1访问sem中1行的32列（32个bank）</li>
+<li>右侧的good不存在bank conflicts。一个线程一次访问32行。一个warp的0线程，访问的是sem中的0列32行（bank0）。线程1访问的是sem中1列的32行（bank1）</li>
+</ul>
+<p><strong>其实就是需要每个线程访问不同的bank来避免bank conflicts。也就是二维数组的列和thread的idx相关就可以了。</strong></p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917170812563.png" class="" title="image-20230917170812563">
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917175537046.png" class="" title="image-20230917175537046">
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917175057529.png" class="" title="image-20230917175057529">
+<h1 id="4-一个矩阵转置的例子"><a href="#4-一个矩阵转置的例子" class="headerlink" title="4 一个矩阵转置的例子"></a>4 一个矩阵转置的例子</h1><p>比如一个矩阵转置的例子，理论的计算如下</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917180504272.png" class="" title="image-20230917180504272">
+<p>优化前的kernel如下</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917180825619.png" class="" title="image-20230917180825619">
+<p><strong>下图分析，箭头的位置应该是128M才是最理想的，读数据是128MB，没有问题，但是写是1GB，远远大于需要的128MB。存在问题</strong></p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917180926869.png" class="" title="image-20230917180926869">
+<p>优化思路如下</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917181111556.png" class="" title="image-20230917181111556">
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917181121848.png" class="" title="image-20230917181121848">
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917181132454.png" class="" title="image-20230917181132454">
+<p>注意下面的技巧，33不是32，具体原因可以看<code>5-1 CUDA共享内存概述</code> 的描述</p>
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917181158645.png" class="" title="image-20230917181158645">
+<img src="/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/image-20230917181437332.png" class="" title="image-20230917181437332">
+<h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-decoder">3.3. Metrics Decoder</a>：报告中的简称</p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#metrics-reference">4. Metrics Reference</a>：报告中的含义</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/CUDA/Nsight/Nsight%20Compute%E7%A4%BA%E4%BE%8B1_%E6%80%BB%E8%A7%88/" title="Nsight Compute示例1_总览">http://example.com/CUDA/Nsight/Nsight Compute示例1_总览/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+              <a href="/tags/cmake/" rel="tag"><i class="fa fa-tag"></i> cmake</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/7%20%E8%B0%83%E6%95%B4%E6%8C%87%E4%BB%A4%E7%BA%A7%E5%8E%9F%E8%AF%AD/" rel="prev" title="7 调整指令级原语">
+                  <i class="fa fa-chevron-left"></i> 7 调整指令级原语
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/CUDA/Nsight/Nsight%20Systems%E5%AE%98%E6%96%B9%E5%85%A5%E9%97%A8/" rel="next" title="Nsight Systems官方入门">
+                  Nsight Systems官方入门 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"702cfde176abd57cc60153b1371ec5f8"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="1.2 异构计算同构计算使用的是同一架构下的一个或多个处理器来执行一个应用。而异构计算则使用一个处理器架构来执行一个应用，为任务选择适合它的架构，使其最终对性能有所改进。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="1-2 异构计算">
+<meta property="og:url" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/1-2%20%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="1.2 异构计算同构计算使用的是同一架构下的一个或多个处理器来执行一个应用。而异构计算则使用一个处理器架构来执行一个应用，为任务选择适合它的架构，使其最终对性能有所改进。">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/1-2%20%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97/image-20230112101902214.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/1-2%20%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97/image-20230112102352251.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/1-2%20%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97/image-20230112102755611.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/1-2%20%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97/image-20230112103919223.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/1-2%20%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97/image-20230112104054056.png">
+<meta property="article:published_time" content="2024-12-01T10:13:43.518Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:43.518Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="GPU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/1-2%20%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97/image-20230112101902214.png">
+
+
+<link rel="canonical" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/1-2%20%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/1-2%20%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97/","path":"CUDA/CUDA C编程权威指南笔记/1-2 异构计算/","title":"1-2 异构计算"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>1-2 异构计算 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97"><span class="nav-text">1.2 异构计算</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-1-%E5%BC%82%E6%9E%84%E6%9E%B6%E6%9E%84"><span class="nav-text">1.2.1 异构架构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-2-%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97%E8%8C%83%E4%BE%8B"><span class="nav-text">1.2.2 异构计算范例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-3-CUDA%EF%BC%9A%E4%B8%80%E7%A7%8D%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97%E5%B9%B3%E5%8F%B0"><span class="nav-text">1.2.3 CUDA：一种异构计算平台</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-%E7%94%A8GPU%E8%BE%93%E5%87%BAHello-World"><span class="nav-text">1.3 用GPU输出Hello World</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-4-%E4%BD%BF%E7%94%A8CUDA-C%E7%BC%96%E7%A8%8B%E9%9A%BE%E5%90%97"><span class="nav-text">1.4 使用CUDA C编程难吗</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/1-2%20%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="1-2 异构计算 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          1-2 异构计算
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h2 id="1-2-异构计算"><a href="#1-2-异构计算" class="headerlink" title="1.2 异构计算"></a>1.2 异构计算</h2><p>同构计算使用的是同一架构下的一个或多个处理器来执行一个应用。而异构计算则使用一个处理器架构来执行一个应用，为任务选择适合它的架构，使其最终对性能有所改进。</p>
+<h3 id="1-2-1-异构架构"><a href="#1-2-1-异构架构" class="headerlink" title="1.2.1 异构架构"></a>1.2.1 异构架构</h3><p>GPU不是一个独立运行的平台而是CPU的协处理器。因此，GPU必须通过PCIe总线与基于CPU的主机相连来进行操作，如图1-9所示。这就是为什么CPU所在的位置被称作主机端而GPU所在的位置被称作设备端。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/1-2%20%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97/image-20230112101902214.png" class="" title="image-20230112101902214">
+<p>一个异构应用包括两个部分。</p>
+<ul>
+<li>主机代码</li>
+<li>设备代码</li>
+</ul>
+<p>主机代码在CPU上运行，设备代码在GPU上运行。异构平台上执行的应用通常由CPU初始化。在设备端加载计算密集型任务之前，CPU代码负责管理设备端的环境、代码和数据。</p>
+<p>以下是描述GPU容量的两个重要特征。</p>
+<ul>
+<li>CUDA核心数量</li>
+<li>内存大小</li>
+</ul>
+<p>相应的，有两种不同的指标来评估GPU的性能。</p>
+<ul>
+<li>峰值计算性能</li>
+<li>内存带宽</li>
+</ul>
+<p>峰值计算性能是用来评估计算容量的一个指标，通常定义为每秒能处理的单精度或双精度浮点运算的数量。峰值性能通常用GFlops（每秒十亿次浮点运算）或TFlops（每秒万亿次浮点运算）来表示。内存带宽是从内存中读取或写入数据的比率。内存带宽通常用GB/s表示。表1-1所示为Fermi架构和Kepler架构的一些性能指标。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/1-2%20%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97/image-20230112102352251.png" class="" title="image-20230112102352251">
+<p>计算能力<br>NVIDIA使用一个术语“计算能力”（compute capability）来描述整个Tesla系列的GPU加速器的硬件版本。表1-2给出了Tesla产品的各个版本及其计算能力。<strong>具有相同主版本号的设备具有相同的核心架构</strong>。</p>
+<ul>
+<li>主版本NO.3是Kepler类架构。</li>
+<li>主版本NO.2是Fermi类架构。</li>
+<li>主版本NO.1是Tesla类架构。</li>
+</ul>
+<h3 id="1-2-2-异构计算范例"><a href="#1-2-2-异构计算范例" class="headerlink" title="1.2.2 异构计算范例"></a>1.2.2 异构计算范例</h3><p>CPU计算适合处理控制密集型任务，GPU计算适合处理包含数据并行的计算密集型任务。GPU与CPU结合后，能有效提高大规模计算问题的处理速度与性能</p>
+<p>因为CPU和GPU的功能互补性导致了CPU＋GPU的异构并行计算架构的发展，这两种处理器的类型能使应用程序获得最佳的运行效果。因此，为获得最佳性能，你可以同时使用CPU和GPU来执行你的应用程序，在CPU上执行串行部分或任务并行部分，在GPU上执行数据密集型并行部分，如图1-11所示</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/1-2%20%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97/image-20230112102755611.png" class="" title="image-20230112102755611">
+<p>为了支持使用CPU＋GPU异构系统架构来执行应用程序，NVIDIA设计了一个被称为CUDA的编程模型。这个新的编程模型是本书将要介绍的重点。</p>
+<h3 id="1-2-3-CUDA：一种异构计算平台"><a href="#1-2-3-CUDA：一种异构计算平台" class="headerlink" title="1.2.3 CUDA：一种异构计算平台"></a>1.2.3 CUDA：一种异构计算平台</h3><p>通过使用CUDA，你可以像在CPU上那样，通过GPU来进行计算。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/1-2%20%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97/image-20230112103919223.png" class="" title="image-20230112103919223">
+<p>NVIDIA的CUDA nvcc编译器在编译过程中将设备代码从主机代码中分离出来。如图1-14所示</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/1-2%20%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97/image-20230112104054056.png" class="" title="image-20230112104054056">
+<h2 id="1-3-用GPU输出Hello-World"><a href="#1-3-用GPU输出Hello-World" class="headerlink" title="1.3 用GPU输出Hello World"></a>1.3 用GPU输出Hello World</h2><p>如果这是你第一次使用CUDA，在Linux系统中，你可能想使用以下命令来检查CUDA编译器是否正确安装</p>
+<p>通常的结果可能是：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">zmurder@zmurder:~/WorkSpace/zyd/newaddr$ which nvcc</span><br><span class="line">/usr/local/cuda/bin/nvcc</span><br><span class="line">zmurder@zmurder:~/WorkSpace/zyd/newaddr$</span><br></pre></td></tr></table></figure>
+<p>写一个CUDA C程序，你需要以下几个步骤：</p>
+<ol>
+<li>用专用扩展名.cu来创建一个源文件。</li>
+<li>使用CUDA nvcc编译器来编译程序。</li>
+<li>从命令行运行可执行文件，这个文件有可在GPU上运行的内核代码。</li>
+</ol>
+<p>把代码保存到hello.cu中，然后使用nvcc编译器来编译。CUDA nvcc编译器和gcc编译器及其他编译器有相似的语义。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;../common/common.h&quot;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> * A simple introduction to programming in CUDA. This program prints &quot;Hello</span></span><br><span class="line"><span class="comment"> * World from GPU! from 10 CUDA threads running on the GPU.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">helloFromGPU</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Hello World from GPU!\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> **argv)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;Hello World from CPU!\n&quot;</span>);</span><br><span class="line"></span><br><span class="line">    helloFromGPU&lt;&lt;&lt;<span class="number">1</span>, <span class="number">10</span>&gt;&gt;&gt;();</span><br><span class="line">    CHECK(cudaDeviceReset());</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>编译</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">nvcc -arch sm_20 hello.cu -o hello</span><br><span class="line"><span class="meta prompt_">#</span><span class="language-bash">自己的电脑使用 sm_61来编译</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>修饰符<code>__global__</code>告诉编译器这个函数将会从CPU中调用，然后在GPU上执行。</li>
+<li>三重尖括号意味着从主线程到设备端代码的调用。一个内核函数通过一组线程来执行，所有线程执行相同的代码。三重尖括号里面的参数是执行配置，用来说明使用多少线程来执行内核函数。在这个例子中，有10个GPU线程被调用。</li>
+<li>函数cudaDeviceRest（）用来显式地释放和清空当前进程中与当前设备有关的所有资源。</li>
+<li>开关语句-arch sm_20使编译器为Fermi架构生成设备代码。</li>
+</ul>
+<p>运行</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">zmurder@zmurder:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南练习code/chapter01$ make</span><br><span class="line">nvcc -O2 -arch=sm_61 -o hello hello.cu</span><br><span class="line">zmurder@zmurder:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南练习code/chapter01$ ls</span><br><span class="line">hello  hello.cu  Makefile</span><br><span class="line">zmurder@zmurder:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南练习code/chapter01$ ./hello </span><br><span class="line">Hello World from CPU!</span><br><span class="line">Hello World from GPU!</span><br><span class="line">Hello World from GPU!</span><br><span class="line">Hello World from GPU!</span><br><span class="line">Hello World from GPU!</span><br><span class="line">Hello World from GPU!</span><br><span class="line">Hello World from GPU!</span><br><span class="line">Hello World from GPU!</span><br><span class="line">Hello World from GPU!</span><br><span class="line">Hello World from GPU!</span><br><span class="line">Hello World from GPU!</span><br><span class="line">zmurder@zmurder:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南练习code/chapter01$ </span><br></pre></td></tr></table></figure>
+<p>CUDA编程结构</p>
+<p>一个典型的CUDA编程结构包括5个主要步骤。</p>
+<ol>
+<li>分配GPU内存。</li>
+<li>从CPU内存中拷贝数据到GPU内存。</li>
+<li>调用CUDA内核函数来完成程序指定的运算。</li>
+<li>将数据从GPU拷回CPU内存。</li>
+<li>释放GPU内存空间。</li>
+</ol>
+<p>在hello.cu中，你只看到了第三步：调用内核。</p>
+<h2 id="1-4-使用CUDA-C编程难吗"><a href="#1-4-使用CUDA-C编程难吗" class="headerlink" title="1.4 使用CUDA C编程难吗"></a>1.4 使用CUDA C编程难吗</h2><p>CPU编程和GPU编程的主要区别是程序员<strong>对GPU架构的熟悉程度</strong>。用并行思维进行思考并对GPU架构有了基本的了解</p>
+<p>CUDA中有内存层次和线程层次的概念，使用如下结构，有助于你对线程执行进行更高层次的控制和调度：</p>
+<ul>
+<li>内存层次结构</li>
+<li>线程层次结构</li>
+</ul>
+<p>例如，在CUDA编程模型中使用的共享内存（一个特殊的内存）。共享内存可以视为一个被软件管理的高速缓存，<strong>通过为主内存节省带宽来大幅度提高运行速度</strong>。有了共享内存，你可以直接控制代码的数据局部性。</p>
+<p>CUDA核中有3个关键抽象：线程组的层次结构，内存的层次结构以及障碍同步。</p>
+<p>CUDA开发环境</p>
+<p>NVIDIA为C和C++开发人员提供了综合的开发环境以创建GPU加速应用程序，包括以下几种。</p>
+<ul>
+<li>NVIDIA Nsight集成开发环境</li>
+<li>CUDA-GDB命令行调试器</li>
+<li>用于性能分析的可视化和命令行分析器</li>
+<li>CUDA-MEMCHECK内存分析器</li>
+<li>GPU设备管理工具</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/1-2%20%E5%BC%82%E6%9E%84%E8%AE%A1%E7%AE%97/" title="1-2 异构计算">http://example.com/CUDA/CUDA C编程权威指南笔记/1-2 异构计算/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+            </div>
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/1-1%20%E5%B9%B6%E8%A1%8C%E8%AE%A1%E7%AE%97/" rel="next" title="1-1 并行计算">
+                  1-1 并行计算 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"314717868512dc80f48b5030593ece0f"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

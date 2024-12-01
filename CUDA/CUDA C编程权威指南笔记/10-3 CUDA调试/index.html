@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="10.3 CUDA调试分为两个部分，内核调试和内存调试。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="10-3 CUDA调试">
+<meta property="og:url" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/10-3%20CUDA%E8%B0%83%E8%AF%95/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="10.3 CUDA调试分为两个部分，内核调试和内存调试。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2024-12-01T10:13:43.539Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:43.539Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="GPU">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/10-3%20CUDA%E8%B0%83%E8%AF%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/10-3%20CUDA%E8%B0%83%E8%AF%95/","path":"CUDA/CUDA C编程权威指南笔记/10-3 CUDA调试/","title":"10-3 CUDA调试"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>10-3 CUDA调试 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#10-3-CUDA%E8%B0%83%E8%AF%95"><span class="nav-text">10.3 CUDA调试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#10-3-1-%E5%86%85%E6%A0%B8%E8%B0%83%E8%AF%95"><span class="nav-text">10.3.1 内核调试</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#10-3-1-1-%E4%BD%BF%E7%94%A8cuda-gdb"><span class="nav-text">10.3.1.1 使用cuda-gdb</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-3-1-2-cuda%E4%B8%AD%E7%9A%84printf"><span class="nav-text">10.3.1.2 cuda中的printf</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#10-3-1-3-CUDA%E7%9A%84assert%E5%B7%A5%E5%85%B7"><span class="nav-text">10.3.1.3 CUDA的assert工具</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#10-3-2-%E5%86%85%E5%AD%98%E8%B0%83%E8%AF%95"><span class="nav-text">10.3.2 内存调试</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/10-3%20CUDA%E8%B0%83%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="10-3 CUDA调试 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          10-3 CUDA调试
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="10-3-CUDA调试"><a href="#10-3-CUDA调试" class="headerlink" title="10.3 CUDA调试"></a>10.3 CUDA调试</h1><p>分为两个部分，内核调试和内存调试。</p>
+<h2 id="10-3-1-内核调试"><a href="#10-3-1-内核调试" class="headerlink" title="10.3.1 内核调试"></a>10.3.1 内核调试</h2><p>内核调试是通过检查一个或多个线程的执行和状态来确定内核的正确性。在CUDA里内核调试有3种主要的方法：cuda-gdb、printf和assert。</p>
+<h3 id="10-3-1-1-使用cuda-gdb"><a href="#10-3-1-1-使用cuda-gdb" class="headerlink" title="10.3.1.1 使用cuda-gdb"></a>10.3.1.1 使用cuda-gdb</h3><p>与gdb类似，cuda有对应的cuda-gdb</p>
+<p><strong>编译</strong></p>
+<p>如果需要使用cuda-gdb调试cuda程序， 编译程序时要添加两个标志到nvcc中：-g和-G</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ nvcc -g -G foo.cu -o foo</span><br></pre></td></tr></table></figure>
+<p><strong>调试</strong></p>
+<p>只要使用调试标志编译了应用程序，就能像用gdb那样用cuda-gdb启动一个CUDA应用程序了。给定一个编译和链接应用程序foo，可以通过以下方法将可执行文件传给cuda-gdb：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ cuda-gdb foo</span><br><span class="line">...</span><br><span class="line">(cuda-gdb)</span><br></pre></td></tr></table></figure>
+<p>虽然CUDA程序能包含多个主机线程和许多CUDA线程，但是cuda-gdb调试会话一次只处理一个线程。为了能在同一应用程序中调试多个设备线程，cuda-gdb提供了一种功能，即可以指定被检查的上下文（即设备线程）。</p>
+<p><strong>当前焦点</strong></p>
+<p>设备线程属于一个block，而block又属于一个kernel。thread、block、kernel是软件的焦点坐标。设备thread在lane上运行。lane属于warp，warp属于 SM，而 SM  又属于device。 Lane、warp、SM、device是焦点的硬件坐标。软件和硬件坐标可以互换并同时使用，只要它们保持一致即可。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(cuda-gdb) cuda device sm warp lane block thread</span><br><span class="line">block (0,0,0), thread (0,0,0), device 0, sm 0, warp 0, lane 0</span><br><span class="line">(cuda-gdb) cuda kernel block thread</span><br><span class="line">kernel 1, block (0,0,0), thread (0,0,0)</span><br><span class="line">(cuda-gdb) cuda kernel</span><br><span class="line">kernel 1</span><br></pre></td></tr></table></figure>
+<p><strong>切换焦点</strong></p>
+<p>要切换当前焦点，请使用 cuda 命令，后跟要更改的坐标：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(cuda-gdb) cuda device <span class="number">0</span> sm <span class="number">1</span> warp <span class="number">2</span> lane <span class="number">3</span></span><br><span class="line">[Switching focus to CUDA kernel <span class="number">1</span>, grid <span class="number">2</span>, block (<span class="number">8</span>,<span class="number">0</span>,<span class="number">0</span>), thread</span><br><span class="line">(<span class="number">67</span>,<span class="number">0</span>,<span class="number">0</span>), device <span class="number">0</span>, sm <span class="number">1</span>, warp <span class="number">2</span>, lane <span class="number">3</span>]</span><br><span class="line"><span class="number">374</span> <span class="type">int</span> totalThreads = gridDim.x * blockDim.x;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(cuda-gdb) cuda <span class="title function_">thread</span> <span class="params">(<span class="number">15</span>)</span></span><br><span class="line">[Switching focus to CUDA kernel 1, grid 2, <span class="title function_">block</span> <span class="params">(<span class="number">8</span>,<span class="number">0</span>,<span class="number">0</span>)</span>, <span class="title function_">thread</span></span><br><span class="line"><span class="params">(<span class="number">15</span>,<span class="number">0</span>,<span class="number">0</span>)</span>, device 0, sm 1, warp 0, lane 15]</span><br><span class="line">374 <span class="type">int</span> totalThreads = gridDim.x * blockDim.x;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(cuda-gdb) cuda block <span class="number">1</span> thread <span class="number">3</span></span><br><span class="line">[Switching focus to CUDA kernel <span class="number">1</span>, grid <span class="number">2</span>, block (<span class="number">1</span>,<span class="number">0</span>,<span class="number">0</span>), thread (<span class="number">3</span>,<span class="number">0</span>,<span class="number">0</span>),</span><br><span class="line">device <span class="number">0</span>, sm <span class="number">3</span>, warp <span class="number">0</span>, lane <span class="number">3</span>]</span><br><span class="line"><span class="number">374</span> <span class="type">int</span> totalThreads = gridDim.x * blockDim.</span><br></pre></td></tr></table></figure>
+<p><strong>检查CUDA内存</strong></p>
+<p>与gdb一样，cuda-gdb支持检查变量，在堆（即CUDA全局内存）和寄存器中使用print语句：</p>
+<p>根据变量类型和用法，变量可以存储在寄存器中，也可以存储在本地、共享、const 或全局内存中。您可以打印任何变量的地址以找出它的存储位置并直接访问关联的内存。</p>
+<p>下面的示例显示了如何直接访问共享 int * 类型的变量数组，以查看数组中存储的值。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(cuda-gdb) print &amp;<span class="built_in">array</span></span><br><span class="line">$<span class="number">1</span> = (@shared <span class="type">int</span> (*)[<span class="number">0</span>]) <span class="number">0x20</span></span><br><span class="line">(cuda-gdb) print <span class="built_in">array</span>[<span class="number">0</span>]@<span class="number">4</span></span><br><span class="line">$<span class="number">2</span> = &#123;<span class="number">0</span>, <span class="number">128</span>, <span class="number">64</span>, <span class="number">192</span>&#125;</span><br></pre></td></tr></table></figure>
+<p>您还可以访问索引到起始偏移量的共享内存，以查看存储的值是什么：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(cuda-gdb) print *(@shared <span class="type">int</span>*)<span class="number">0x20</span></span><br><span class="line">$<span class="number">3</span> = <span class="number">0</span></span><br><span class="line">(cuda-gdb) print *(@shared <span class="type">int</span>*)<span class="number">0x24</span></span><br><span class="line">$<span class="number">4</span> = <span class="number">128</span></span><br><span class="line">(cuda-gdb) print *(@shared <span class="type">int</span>*)<span class="number">0x28</span></span><br><span class="line">$<span class="number">5</span> = <span class="number">64</span></span><br></pre></td></tr></table></figure>
+<p>下面的例子展示了如何访问内核输入参数的起始地址。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">(cuda-gdb) print &amp;data</span><br><span class="line">$<span class="number">6</span> = (<span class="type">const</span> @global <span class="type">void</span> * <span class="type">const</span> @parameter *) <span class="number">0x10</span></span><br><span class="line">(cuda-gdb) print *(@global <span class="type">void</span> * <span class="type">const</span> @parameter *) <span class="number">0x10</span></span><br><span class="line">$<span class="number">7</span> = (@global <span class="type">void</span> * <span class="type">const</span> @parameter) <span class="number">0x110000</span>&lt;/&gt;</span><br></pre></td></tr></table></figure>
+<p>具体的内容可以参考附录的官方文档，还是比较好理解的。</p>
+<h3 id="10-3-1-2-cuda中的printf"><a href="#10-3-1-2-cuda中的printf" class="headerlink" title="10.3.1.2 cuda中的printf"></a>10.3.1.2 cuda中的printf</h3><p>基于CUDA的printf接口，与我们在主机上C/C++研发中习惯使用的一样（甚至有着相同的头文件，stdio.h），这使得我们能直接过渡到基于CUDA的printf中。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">__global__ <span class="type">void</span> <span class="title function_">kernel</span><span class="params">()</span> &#123;</span><br><span class="line"><span class="type">int</span> tid = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line"><span class="built_in">printf</span>(<span class="string">&quot;Hello from CUDA thread %d\n&quot;</span>, tid);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="10-3-1-3-CUDA的assert工具"><a href="#10-3-1-3-CUDA的assert工具" class="headerlink" title="10.3.1.3 CUDA的assert工具"></a>10.3.1.3 CUDA的assert工具</h3><p>另一个常见的主机错误检查工具是assert。assert能让我们声明某一的条件，在程序正确执行时该条件必须为真。如果assert失败，则应用程序执行有以下两种情况中的一种：1）有assert失败的消息时，立即中止；2）如果在cuda-gdb会话中运行，控制将会传到cuda-gdb，以便可以在assert失败的位置检查应用程序的状态。和printf一样，只有GPU计算能力为2.0及以上时才提供assert功能。它依赖和主机相同的头文件，assert.h。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">__global__ <span class="type">void</span> <span class="title function_">kernel</span><span class="params">(...)</span> &#123;</span><br><span class="line"><span class="type">int</span> *ptr = <span class="literal">NULL</span>;</span><br><span class="line">...</span><br><span class="line">assert(ptr != <span class="literal">NULL</span>);</span><br><span class="line">*ptr = ...</span><br><span class="line">...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>与主机的assert一样，通过使用在包含assert.h头文件前定义的NDEBUG预处理器宏编译，可以对代码发行版本禁用assert评估。</p>
+<h2 id="10-3-2-内存调试"><a href="#10-3-2-内存调试" class="headerlink" title="10.3.2 内存调试"></a>10.3.2 内存调试</h2><p>关于cuda-memcheck 还是参考官网吧。后面单独出一篇文章讲解。</p>
+<h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-gdb/index.html">官方cuda-gdb</a></li>
+<li><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/archive/11.4.4/cuda-memcheck/index.html#cuda-memcheck-tool-examples">官方cuda-memcheck</a> </li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/10-3%20CUDA%E8%B0%83%E8%AF%95/" title="10-3 CUDA调试">http://example.com/CUDA/CUDA C编程权威指南笔记/10-3 CUDA调试/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/2-1%20CUDA%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/" rel="prev" title="2-1 CUDA编程模型概述">
+                  <i class="fa fa-chevron-left"></i> 2-1 CUDA编程模型概述
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/10-1%20CUDA%20C%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B/" rel="next" title="10-1 CUDA C开发过程">
+                  10-1 CUDA C开发过程 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"a59458afdbb34e46a41cf108cb050f36"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

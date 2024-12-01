@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="5.1 CUDA共享内存概述废话：">
+<meta property="og:type" content="article">
+<meta property="og:title" content="5-1 CUDA共享内存概述">
+<meta property="og:url" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="5.1 CUDA共享内存概述废话：">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/image-20230520142958705.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/48ac7a5ea1d8497e92ac70d1888aea1a.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/5-2.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/5-3.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/5-4.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/image-20230523113150939.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/image-20230523113648010.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/5-7.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/5-8.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/5-9.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/5-10.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/image-20230523114736932.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/image-20230523133313913.png">
+<meta property="article:published_time" content="2024-12-01T10:13:43.756Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:43.756Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="GPU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/image-20230520142958705.png">
+
+
+<link rel="canonical" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/","path":"CUDA/CUDA C编程权威指南笔记/5-1 CUDA共享内存概述/","title":"5-1 CUDA共享内存概述"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>5-1 CUDA共享内存概述 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#5-1-CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0"><span class="nav-text">5.1 CUDA共享内存概述</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-1-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98"><span class="nav-text">5.1.1 共享内存</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-2-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D"><span class="nav-text">5.1.2 共享内存分配</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-3-%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E5%AD%98%E5%82%A8%E4%BD%93%E5%92%8C%E8%AE%BF%E9%97%AE%E6%A8%A1%E5%BC%8F"><span class="nav-text">5.1.3 共享内存存储体和访问模式</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-3-1-%E5%86%85%E5%AD%98%E5%AD%98%E5%82%A8%E4%BD%93"><span class="nav-text">5.1.3.1 内存存储体</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-3-2-%E5%AD%98%E5%82%A8%E4%BD%93%E5%86%B2%E7%AA%81"><span class="nav-text">5.1.3.2 存储体冲突</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-3-3-%E8%AE%BF%E9%97%AE%E6%A8%A1%E5%BC%8F"><span class="nav-text">5.1.3.3 访问模式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-3-4-%E5%86%85%E5%AD%98%E5%A1%AB%E5%85%85"><span class="nav-text">5.1.3.4 内存填充</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-3-5-%E8%AE%BF%E9%97%AE%E6%A8%A1%E5%BC%8F%E9%85%8D%E7%BD%AE"><span class="nav-text">5.1.3.5 访问模式配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-4-%E9%85%8D%E7%BD%AE%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E9%87%8F"><span class="nav-text">5.1.4 配置共享内存量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-1-5-%E5%90%8C%E6%AD%A5"><span class="nav-text">5.1.5 同步</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-5-1-%E5%BC%B1%E6%8E%92%E5%BA%8F%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B"><span class="nav-text">5.1.5.1 弱排序内存模型</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-5-2-%E6%98%BE%E5%BC%8F%E9%9A%9C%E7%A2%8D"><span class="nav-text">5.1.5.2 显式障碍</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-5-3-%E5%86%85%E5%AD%98%E6%A0%85%E6%A0%8F"><span class="nav-text">5.1.5.3 内存栅栏</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-5-4-Volatile%E4%BF%AE%E9%A5%B0%E7%AC%A6"><span class="nav-text">5.1.5.4 Volatile修饰符</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="5-1 CUDA共享内存概述 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          5-1 CUDA共享内存概述
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="5-1-CUDA共享内存概述"><a href="#5-1-CUDA共享内存概述" class="headerlink" title="5.1 CUDA共享内存概述"></a>5.1 CUDA共享内存概述</h1><p>废话：</p>
+<p>前面有些内容并没有完全理解，尤其是第四章，但是先冲着头皮看下去，最起码有一个印象，后面可以回头再回顾下。</p>
+<p>每一章前面都会有一节是章节的内容介绍，但是我很多时候的都没有重视，今天回头看一下这部分内容其实很有必要介绍一下，主要就是本章的内容和为什么会有这一部分的内容，是为了解决什么问题的。</p>
+<p>在前面的章节中，已经介绍了几种全局内存的访问模式。通过安排全局内存访问模式（它们是合并的），我们学会了如何实现良好的性能并且避免了浪费事务。未对齐的内存访问是没有问题的，因为现代的GPU硬件都有一级缓存，但在跨全局内存的非合并内存访问，仍然会导致带宽利用率不会达到最佳标准。根据算法性质和相应的访问模式，非合并访问可能是无法避免的。然而，在许多情况下，使用共享内存来提高全局内存合并访问是有可能的。共享内存是许多高性能计算应用程序的关键驱动力。</p>
+<p>GPU中有两种类型的内存：</p>
+<ul>
+<li>板载内存，全局内存就属于板载内存。相对较高的延迟</li>
+<li>片上内存，共享内存是较小的片上内存，具有相对较低的延迟，关键是可以编程管理。</li>
+</ul>
+<p>共享内存通常的用途有：</p>
+<ul>
+<li>块内线程通信的通道</li>
+<li>用于全局内存数据的可编程管理的缓存</li>
+<li>高速暂存存储器，用于转换数据以优化全局内存访问模式</li>
+</ul>
+<h2 id="5-1-1-共享内存"><a href="#5-1-1-共享内存" class="headerlink" title="5.1.1 共享内存"></a>5.1.1 共享内存</h2><p>共享内存（shared memory，SMEM）是GPU的一个关键部件。物理上，每个SM都有一个小的低延迟内存池，这个内存池被当前正在该SM上执行的线程块中的所有线程所共享。共享内存使同一个线程块中的线程能够互相协作，便于重用片上数据，并可以大大降低核函数所需的全局内存带宽。</p>
+<p>如图5-1所示，全局内存的所有加载和存储请求都要经过二级缓存，这是SM单元之间数据统一的基本点。注意，相较于二级缓存和全局内存，共享内存和一级缓存在物理上更接近SM。因此，共享内存相较于全局内存而言，延迟要低大约20～30倍，而带宽高其大约10倍。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/image-20230520142958705.png" class="" title="image-20230520142958705">
+<p>当每个线程块开始执行时，会分配给它一定数量的共享内存。这个共享内存的地址空间被线程块中所有的线程共享。它的内容和创建时所在的线程块具有相同生命周期。</p>
+<p>共享内存被SM中的所有常驻线程块划分，因此，共享内存是限制设备并行性的关键资源。一个核函数使用的共享内存越多，处于并发活跃状态的线程块就越少。</p>
+<p><strong>可编程管理的缓存</strong></p>
+<p>在C语言中，循环转换是一种常用的缓存优化方法。通过重新安排迭代顺序，循环转换可以在循环遍历的过程中提高缓存局部性。在算法层面上，在考虑缓存大小的同时，需要手动调整循环，以实现更好的空间局部性。缓存对程序而言是透明的，编译器可以处理所有的数据移动。我们不能控制缓存的释放。</p>
+<p>共享内存是一个可编程管理的缓存。在CUDA中允许手动管理共享内存。</p>
+<h2 id="5-1-2-共享内存分配"><a href="#5-1-2-共享内存分配" class="headerlink" title="5.1.2 共享内存分配"></a>5.1.2 共享内存分配</h2><p>可以静态或动态地分配共享内存变量。CUDA支持一维、二维和三维共享内存数组的声明。</p>
+<p>声明共享内存通过关键字：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__shared__</span><br></pre></td></tr></table></figure>
+<p><strong>静态分配：</strong></p>
+<p>下面声明一个<strong>静态</strong>二维浮点数共享内存数组，<strong>如果在核函数中进行声明，那么这个变量的作用域就局限在该内核中。如果在文件的任何核函数外进行声明，那么这个变量的作用域对所有核函数来说都是全局的</strong>。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__shared__ <span class="type">float</span> a[size_x][size_y];</span><br></pre></td></tr></table></figure>
+<p>这里的size_x,size_y和声明c++数组一样，要是一个编译时确定的数字，不能是变量。</p>
+<p><strong>动态分配（只能动态分配一维数组）：</strong></p>
+<p>如果共享内存的大小在编译时是未知的，那么可以用extern关键字声明一个未知大小的数组。例如，下<strong>面的代码段声明了共享内存中一个未知大小的一维整型数组。这个声明可以在某个核函数的内部或所有核函数的外部进行。</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> __shared__ <span class="type">int</span> tile[];</span><br></pre></td></tr></table></figure>
+<p>因为这个数组的大小在编译时是未知的，所以在每个核函数被调用时，需要动态分配共享内存，将所需的大小按字节数作为三重括号内的第三个参数</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">kernel&lt;&lt;&lt;grid,block,isize*<span class="title function_">sizeof</span><span class="params">(<span class="type">int</span>)</span>&gt;&gt;&gt;<span class="params">(...)</span></span><br></pre></td></tr></table></figure>
+<p><strong>测试示例</strong></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;cuda_runtime.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> checkRuntime(op)  __check_cuda_runtime((op), #op, __FILE__, __LINE__)</span></span><br><span class="line"></span><br><span class="line"><span class="type">bool</span> __check_cuda_runtime(cudaError_t code, <span class="type">const</span> <span class="type">char</span>* op, <span class="type">const</span> <span class="type">char</span>* file, <span class="type">int</span> line)&#123;</span><br><span class="line">    <span class="keyword">if</span>(code != cudaSuccess)&#123;    </span><br><span class="line">        <span class="type">const</span> <span class="type">char</span>* err_name = cudaGetErrorName(code);    </span><br><span class="line">        <span class="type">const</span> <span class="type">char</span>* err_message = cudaGetErrorString(code);  </span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;runtime error %s:%d  %s failed. \n  code = %s, message = %s\n&quot;</span>, file, line, op, err_name, err_message);   </span><br><span class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">//demo1 //</span></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">demo1 主要为了展示查看静态和动态共享变量的地址</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="type">const</span> <span class="type">size_t</span> static_shared_memory_num_element = <span class="number">6</span> * <span class="number">1024</span>; <span class="comment">// 6KB</span></span><br><span class="line">__shared__ <span class="type">char</span> static_shared_memory[static_shared_memory_num_element]; </span><br><span class="line">__shared__ <span class="type">char</span> static_shared_memory2[<span class="number">2</span>]; </span><br><span class="line"></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">demo1_kernel</span><span class="params">()</span>&#123;</span><br><span class="line">    <span class="keyword">extern</span> __shared__ <span class="type">char</span> dynamic_shared_memory[];      <span class="comment">// 静态共享变量和动态共享变量在kernel函数内/外定义都行，没有限制</span></span><br><span class="line">    <span class="keyword">extern</span> __shared__ <span class="type">char</span> dynamic_shared_memory2[];</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;static_shared_memory = %p\n&quot;</span>,   static_shared_memory);   <span class="comment">// 静态共享变量，定义几个地址随之叠加</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;static_shared_memory2 = %p\n&quot;</span>,  static_shared_memory2); </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;dynamic_shared_memory = %p\n&quot;</span>,  dynamic_shared_memory);  <span class="comment">// 动态共享变量，无论定义多少个，地址都一样</span></span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;dynamic_shared_memory2 = %p\n&quot;</span>, dynamic_shared_memory2); </span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span>(blockIdx.x == <span class="number">0</span> &amp;&amp; threadIdx.x == <span class="number">0</span>) <span class="comment">// 第一个thread</span></span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">&quot;Run kernel.\n&quot;</span>);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">/demo2<span class="comment">//</span></span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">demo2 主要是为了演示的是如何给 共享变量进行赋值</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="comment">// 定义共享变量，但是不能给初始值，必须由线程或者其他方式赋值</span></span><br><span class="line">__shared__ <span class="type">int</span> shared_value1;</span><br><span class="line"></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">demo2_kernel</span><span class="params">()</span>&#123;</span><br><span class="line">    </span><br><span class="line">    __shared__ <span class="type">int</span> shared_value2;</span><br><span class="line">    <span class="keyword">if</span>(threadIdx.x == <span class="number">0</span>)&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 在线程索引为0的时候，为shared value赋初始值</span></span><br><span class="line">        <span class="keyword">if</span>(blockIdx.x == <span class="number">0</span>)&#123;</span><br><span class="line">            shared_value1 = <span class="number">123</span>;</span><br><span class="line">            shared_value2 = <span class="number">55</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">            shared_value1 = <span class="number">331</span>;</span><br><span class="line">            shared_value2 = <span class="number">8</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 等待block内的所有线程执行到这一步</span></span><br><span class="line">    __syncthreads();</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;%d.%d. shared_value1 = %d[%p], shared_value2 = %d[%p]\n&quot;</span>, </span><br><span class="line">        blockIdx.x, threadIdx.x,</span><br><span class="line">        shared_value1, &amp;shared_value1, </span><br><span class="line">        shared_value2, &amp;shared_value2</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">launch</span><span class="params">()</span>&#123;</span><br><span class="line">    </span><br><span class="line">    demo1_kernel&lt;&lt;&lt;<span class="number">1</span>, <span class="number">1</span>, <span class="number">12</span>, nullptr&gt;&gt;&gt;();</span><br><span class="line">    demo2_kernel&lt;&lt;&lt;<span class="number">2</span>, <span class="number">5</span>, <span class="number">0</span>, nullptr&gt;&gt;&gt;();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span>&#123;</span><br><span class="line"></span><br><span class="line">    cudaDeviceProp prop;</span><br><span class="line">    checkRuntime(cudaGetDeviceProperties(&amp;prop, <span class="number">0</span>));</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;prop.sharedMemPerBlock = %.2f KB\n&quot;</span>, prop.sharedMemPerBlock / <span class="number">1024.0f</span>);</span><br><span class="line"></span><br><span class="line">    launch();</span><br><span class="line">    checkRuntime(cudaPeekAtLastError());</span><br><span class="line">    checkRuntime(cudaDeviceSynchronize());</span><br><span class="line">    <span class="built_in">printf</span>(<span class="string">&quot;done\n&quot;</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>运行结果如下：</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/48ac7a5ea1d8497e92ac70d1888aea1a.png" class="" title="在这里插入图片描述">
+<p>在主函数中我们通过调用 cudaGetDeviceProperties 函数获取当前设备的属性，并打印出设备的共享内存的大小，一般为 48KB。</p>
+<p>上述示例代码依次展示了使用共享内存 （shared memory）的两个示例：demo1_kernel 和 demo2_kernel</p>
+<p>demo1_kernel：</p>
+<p>这个示例主要用于展示静态共享变量和动态共享变量的地址。在这个示例中，我们使用了两个静态共享变量和两个动态共享变量，二者在 kernel 函数内外定义都行，没有限制。我们启动的核函数只有一个线程块，每个线程块只有一个线程，因此只有一个线程会执行这个 kernel 函数，并打印对应的共享变量的地址。</p>
+<p>通过打印语句，<strong>我们可以看到静态共享变量的地址会依次增加，而动态共享变量的地址始终是一样的。</strong></p>
+<p>第一个 block 对应的共享变量赋值为 123 和 55，第二个 block 对应的共享变量赋值为 331 和 8，<strong>又由于共享内存（shared memory）是在块（block）级别上进行共享的</strong>，因此第一个 block 中所有线程打印的共享变量结果为 123 和 55，第二个 block 中所有线程打印的共享变量结果为 331 和 8，这点可以从运行结果中看到。</p>
+<ul>
+<li><p>共享内存是片上内存，更靠近计算单元，因此比 globalMem 速度更快，通常可以充当缓存使用</p>
+<ul>
+<li>数据先读入到 sharedMem，做各类计算时，使用 sharedMem 而非 globalMem</li>
+</ul>
+</li>
+<li><p>demo_kernel&lt;&lt;<1, 1, 12, nullptr>&gt;&gt;()；其中第三个参数 12，是指定动态共享内存 dynamic_shared_memory 的大小</p>
+<ul>
+<li>dynamic<em>shared<em>memory 变量必须使用`extern __shared</em></em>` 开头</li>
+<li>并且定义为不确定大小的数组 []</li>
+<li>12 的单位是 bytes，也就是可以安全存放 3 个 float</li>
+<li>变量放在函数外面和里面是一样的</li>
+<li>其指针由 cuda 调度器执行时赋值</li>
+</ul>
+</li>
+<li><p>static_shared_memory 作为静态分配的共享内存</p>
+<ul>
+<li>不加 extern，以 <strong>shared</strong> 开头</li>
+<li>定义时需要明确数组的大小</li>
+<li>静态分配的地址比动态分配的地址低</li>
+</ul>
+</li>
+<li>动态共享变量，无论定义多少个，地址都一样</li>
+<li>静态共享变量，定义几个地址随之叠加</li>
+<li>如果配置的各类共享内存总和大于 sharedMemPerBlock，则核函数执行错误，Invalid argument<ul>
+<li>不同类型的静态共享变量定义，其内存划分并不一定是连续的</li>
+<li>中间会有内存对齐策略，使得第一个和第二个变量之间可能存在间隙</li>
+<li>因此你的变量之间如果存在空隙，可能小于全部大于的共享内存就会报错</li>
+</ul>
+</li>
+</ul>
+<h2 id="5-1-3-共享内存存储体和访问模式"><a href="#5-1-3-共享内存存储体和访问模式" class="headerlink" title="5.1.3 共享内存存储体和访问模式"></a>5.1.3 共享内存存储体和访问模式</h2><p>优化内存性能时要度量的两个关键属性是：延迟和带宽。第4章解释了由不同的全局内存访问模式引起的延迟和带宽对核函数性能的影响。共享内存可以用来隐藏全局内存延迟和带宽对性能的影响。</p>
+<h3 id="5-1-3-1-内存存储体"><a href="#5-1-3-1-内存存储体" class="headerlink" title="5.1.3.1 内存存储体"></a>5.1.3.1 内存存储体</h3><p>为了获得高内存带宽，共享内存被分为32个同样大小的内存模型，它们被称为存储体，它们可以被同时访问。<strong>有32个存储体是因为一个线程束中有32个线程</strong>。共享内存是一个一维地址空间。</p>
+<p>如果通过线程束发布共享内存加载或存储操作，且在每个存储体<br>上只访问不多于一个的内存地址，那么该操作可由一个内存事务来完成。否则，该操作由多个内存事务来完成，这样就降低了内存带宽的利用率。</p>
+<h3 id="5-1-3-2-存储体冲突"><a href="#5-1-3-2-存储体冲突" class="headerlink" title="5.1.3.2 存储体冲突"></a>5.1.3.2 存储体冲突</h3><p>在共享内存中当多个地址请求落在相同的内存存储体中时，就会发生存储体冲突，这会导致请求被重复执行。</p>
+<p>当线程束发出共享内存请求时，有以下3种典型的模式：</p>
+<ul>
+<li>并行访问：多个地址访问多个存储体</li>
+<li>串行访问：多个地址访问同一个存储体</li>
+<li>广播访问：单一地址读取单一存储体</li>
+</ul>
+<p>并行访问是最常见的模式，它是被一个线程束访问的多个地址落在多个存储体中。这种模式意味着，如果不是所有的地址，那么至少有一些地址可以在一个单一的内存事务中被服务。最佳情况是，当每个地址都位于一个单独的存储体中时，执行无冲突的共享内存<br>访问。<br>串行访问是最坏的模式，当多个地址属于同一个存储体时，必须以串行的方式进行请求。如果线程束中32个线程全都访问同一存储体中不同的内存地址，那么将需要32个内存事务，并且满足这些访问所消耗的时间是单一请求的32倍。<br>在广播访问的情况下，线程束中所有的线程都读取同一存储体中相同的地址。若一个内存事务被执行，那么被访问的字就会被广播到所有请求的线程中。虽然一个单一的内存事务只需要一个广播访问，但是因为只有一小部分字节被读取，所以带宽利用率很差。</p>
+<p>图5-2显示了最优的<strong>并行访问模式</strong>。每个线程访问一个32位字（为什么是32字，下面的访问模式会讲到）。因为每个线程访问不同存储体中的地址，所以没有存储体冲突。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/5-2.png" class="" title="5-2">
+<p>图5-3显示了不规则的随机访问模式。因为每个线程访问不同的存储体，所以也没有存储体冲突。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/5-3.png" class="" title="5-3">
+<p>图5-4显示了另一种不规则的访问模式，在这里几个线程访问同一存储体。对于这样一个请求，会产生两种可能的行为：</p>
+<ul>
+<li>如果线程访问同一个存储体中相同的地址，广播访问无冲突</li>
+<li>如果线程访问同一个存储体中不同的地址，会发生存储体冲突</li>
+</ul>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/5-4.png" class="" title="5-4">
+<h3 id="5-1-3-3-访问模式"><a href="#5-1-3-3-访问模式" class="headerlink" title="5.1.3.3 访问模式"></a>5.1.3.3 访问模式</h3><p>这一章节看的有点晕，参考官网<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#shared-memory-5-x">16.4.3. Shared Memory</a>的内容进行理解。</p>
+<p>内存存储体的宽度随设备计算能力的不同而变化。有两种不同的存储体宽度：</p>
+<ul>
+<li><p>计算能力2.x的设备中为4字节（32位）</p>
+</li>
+<li><p>计算能力3.x的设备中为8字节（64位）</p>
+</li>
+</ul>
+<p>官网看到的都是32位的。暂时按照官网的理解吧。</p>
+<p><code>Shared memory has 32 banks that are organized such that successive  32-bit words map to successive banks. Each bank has a bandwidth of 32  bits per clock cycle.</code></p>
+<p>翻译过来就是共享存储器具有32个存储体，这些存储体被组织为使得连续的32位字映射到连续的存储体。每个存储体具有每个时钟周期32比特的带宽。简单来数就是共享内存有32个存储体，一个存储体的内存宽度是32bit。结合下面的图再理解一下。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/image-20230523113150939.png" class="" title="image-20230523113150939">
+<p>左图：线性寻址，步长为一个32位字（无存储体冲突）。</p>
+<p>中间的图：以两个32位字为步长的线性寻址（双向存储体冲突（在一个bank中访问了两个地址，这两个地址不在一个32bit内））。</p>
+<p>右侧的图：线性寻址，步长为三个32位字（无存储体冲突）。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/image-20230523113648010.png" class="" title="image-20230523113648010">
+<p>左边：通过随机排列实现无冲突访问。</p>
+<p>中间：无冲突访问，因为线程3、4、6、7和9访问组5中的同一个字。</p>
+<p>右边：无冲突广播访问（线程访问银行内的同一个bank）。</p>
+<p>下面是书中的例子（64位宽）</p>
+<p>下图显示64位宽的存储体无冲突访问的一种情况，每个bank被划分成了两部分</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/5-7.png" class="" title="5-7">
+<p>下图是另一种无冲突方式：</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/5-8.png" class="" title="5-8">
+<p>一种冲突方式，两个线程访问同一个bank：</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/5-9.png" class="" title="5-9">
+<p>另一种冲突方式，三个线程访问同一个bank</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/5-10.png" class="" title="5-10">
+<h3 id="5-1-3-4-内存填充"><a href="#5-1-3-4-内存填充" class="headerlink" title="5.1.3.4 内存填充"></a>5.1.3.4 内存填充</h3><p><strong>内存填充是避免存储体冲突的一种方法</strong>。图5-11所示为通过一个简单的例子来说明内存填充。假设只有5个共享内存存储体。如果所有线程访问bank 0的不同地址，那么会发生一个五向的存储体冲突。解决这种存储体冲突的一个方法是在每N个元素之后添加一个字，这里的N是存储体的数量。这就改变了从字到存储体的映射，如图5-11的右侧所示。由于填充，之前所有属于bank 0的字，现在被传播到了不同的存储体中。<br>填充的内存不能用于数据存储。其唯一的作用是移动数据元素，以便将原来属于同一个存储体中的数据分散到不同存储体中。这样，线程块可用的总的共享内存的数量将减少。填充之后，还需要重新计算数组索引以确保能访问到正确的数据元素。<br>虽然Fermi和Kepler都有32个存储体，但它们的存储体宽度不同。在这些不同的架构上填充共享内存时，必须要小心。Fermi架构中的某些内存填充模式可能会导致Kepler中的存储体冲突。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/image-20230523114736932.png" class="" title="image-20230523114736932">
+<h3 id="5-1-3-5-访问模式配置"><a href="#5-1-3-5-访问模式配置" class="headerlink" title="5.1.3.5 访问模式配置"></a>5.1.3.5 访问模式配置</h3><p>访问模式查询：可以通过以下语句，查询是4字节还是8字节：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaDeviceGetSharedMemConfig</span><span class="params">(cudaSharedMemConfig * pConfig)</span>;</span><br></pre></td></tr></table></figure>
+<p>返回的pConfig可以是下面的结果：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cudaSharedMemBankSizeFourByte</span><br><span class="line">cudaSharedMemBankSizeEightByte</span><br></pre></td></tr></table></figure>
+<p>在可以配置的设备上，可以用下面函数来配置新的存储体大小：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaDeviceSetShareMemConfig</span><span class="params">(cudaSharedMemConfig config)</span>;</span><br></pre></td></tr></table></figure>
+<p>其中 config可以是：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cudaSharedMemBankSizeDefault</span><br><span class="line">cudaSharedMemBankSizeFourByte</span><br><span class="line">cudaSharedMemBankSizeEightByte</span><br></pre></td></tr></table></figure>
+<p>不同的核函数启动之间，更改共享内存的配置，可能需要一个隐式的设备同步点，更改共享内存存储体的大小不会增加共享内存的使用，也不会影响内核函数的占用率，但其对性能可能有重大的影响。大的存储体可能有更高的带宽，但可能导致更多的冲突，要根据具体情况进行分析。</p>
+<h2 id="5-1-4-配置共享内存量"><a href="#5-1-4-配置共享内存量" class="headerlink" title="5.1.4 配置共享内存量"></a>5.1.4 配置共享内存量</h2><p>查看官方文档的表格，共享内存大小根据计算能力不同</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/image-20230523133313913.png" class="" title="image-20230523133313913">
+<p>可以参考官网关于Turing架构的描述<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/turing-tuning-guide/index.html#unified-shared-memory-l1-texture-cache">1.4.3.1. Unified Shared Memory/L1/Texture Cache</a> The total size of the unified L1 / Shared Memory cache in Turing is 96 KB. </p>
+<p>书中描述每个SM上有64KB的片上内存，共享内存和L1共享这64KB，并且可以配置。CUDA为配置一级缓存和共享内存提供以下两种方法：</p>
+<ol>
+<li>按设备进行配置</li>
+<li>按核函数进行配置</li>
+</ol>
+<p>配置函数：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaDeviceSetCacheConfig</span><span class="params">(cudaFuncCache cacheConfig)</span>;</span><br></pre></td></tr></table></figure>
+<p>其中配置参数如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cudaFuncCachePreferNone: no <span class="title function_">preference</span><span class="params">(<span class="keyword">default</span>)</span></span><br><span class="line">cudaFuncCachePreferShared: prefer 48KB shared memory and 16 KB L1 cache</span><br><span class="line">cudaFuncCachePreferL1: prefer 48KB L1 cache and 16 KB shared memory</span><br><span class="line">cudaFuncCachePreferEqual: prefer 32KB L1 cache and 32 KB shared memory</span><br></pre></td></tr></table></figure>
+<p>那种更好全看核函数：</p>
+<ol>
+<li>共享内存使用较多，那么更多的共享内存更好</li>
+<li>更多的寄存器使用，L1更多更好。</li>
+</ol>
+<p>另一个函数是通过不同核函数自动配置的。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cudaError_t <span class="title function_">cudaFuncSetCacheConfig</span><span class="params">(<span class="type">const</span> <span class="type">void</span>* func,<span class="keyword">enum</span> cudaFuncCacheca cheConfig)</span>;</span><br></pre></td></tr></table></figure>
+<p>这里的func是核函数指针，当我们调用某个核函数时，次核函数已经配置了对应的L1和共享内存，那么其如果和当前配置不同，则会重新配置，否则直接执行。</p>
+<h2 id="5-1-5-同步"><a href="#5-1-5-同步" class="headerlink" title="5.1.5 同步"></a>5.1.5 同步</h2><p>共享内存可以同时被线程块中的多个线程访问。当不同步的多个线程修改同一个共享内存地址时，将导致线程内的冲突。CUDA提供了几个运行时函数来执行块内同步。同步的两个基本方法如下所示：</p>
+<ul>
+<li>障碍：所有调用的线程等待其余调用的线程到达障碍点</li>
+<li>内存栅栏：所有调用的线程必须等到全部内存修改对其余调用线程可见时才能继续执行</li>
+</ul>
+<h3 id="5-1-5-1-弱排序内存模型"><a href="#5-1-5-1-弱排序内存模型" class="headerlink" title="5.1.5.1 弱排序内存模型"></a>5.1.5.1 弱排序内存模型</h3><p>GPU线程在不同内存（如共享内存、全局内存、锁页主机内存或对等设备的内存）中写入数据的顺序，不一定和这些数据在源代码中访问的顺序相同。一个线程的写入顺序对其他线程可见时，它可能和写操作被执行的实际顺序不一致。<br>如果指令之间是相互独立的，线程从不同内存中读取数据的顺序和读指令在程序中出现的顺序不一定相同。</p>
+<p>为了显式地强制程序以一个确切的顺序执行，必须在应用程序代码中插入内存栅栏和障碍。这是保证与其他线程共享资源的核函数行为正确的唯一途径。</p>
+<h3 id="5-1-5-2-显式障碍"><a href="#5-1-5-2-显式障碍" class="headerlink" title="5.1.5.2 显式障碍"></a>5.1.5.2 显式障碍</h3><p>在CUDA中，障碍只能在同一线程块的线程间执行。在核函数中，可以通过调用下面的函数来指定一个障碍点：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> __syncthreads();</span><br></pre></td></tr></table></figure>
+<p><code>__syncthreads</code>作为一个障碍点来发挥作用，它要求块中的线程必须等待直到所有线程都到达该点。<code>__syncthreads</code>还确保在障碍点之前，被这些线程访问的所有全局和共享内存对同一块中的所有线程都可见。<br><code>__syncthreads</code>用于<strong>协调同一块中线程间的通信</strong>。当块中的某些线程访问共享内存或全局内存中的同一地址时，会有潜在问题（写后读、读后写、写后写），这将导致在那些内存位置产生未定义的应用程序行为和未定义的状态。可以通过利用冲突访问间的同步线程来避免这种情况。<br>在条件代码中使用<code>__syncthreads</code>时，必须要特别小心。如果一个条件能保证对整个线程块进行同等评估，则它是调用<code>__syncthreads</code>的唯一有效条件。<strong>否则执行很可能会挂起或产生意想不到的问题</strong>。例如，下面的代码可能会导致块中的线程无限期地等待对方，因为块中的所有线程没有达到相同的障碍点。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (threadID % <span class="number">2</span> == <span class="number">0</span>) &#123;</span><br><span class="line">    __syncthreads();</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    __syncthreads();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="5-1-5-3-内存栅栏"><a href="#5-1-5-3-内存栅栏" class="headerlink" title="5.1.5.3 内存栅栏"></a>5.1.5.3 内存栅栏</h3><p>内存栅栏能保证栅栏前的内核内存写操作对栅栏后的其他线程都是可见的，有以下三种栅栏：块，网格，系统。</p>
+<p>这一部分不是很理解，后期可以参考官网理解一下<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#memory-fence-functions">7.5. Memory Fence Functions</a>。大概意思是<code>__threadfence</code>一般用于block间有竞争且竞争成功后要用到其它block的前面的全局写的结果的场合而block内还是直接用<code>__syncthreads</code>。官方的例子用的是<code>void __threadfence();</code></p>
+<ul>
+<li>线程块内：</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> __threadfence_block();</span><br></pre></td></tr></table></figure>
+<p>保证同一块中的其他线程对于栅栏前的内存写操作可见</p>
+<ul>
+<li>网格级内存栅栏</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> __threadfence();</span><br></pre></td></tr></table></figure>
+<p>挂起调用线程，直到全局内存中所有写操作对相同的网格内的所有线程可见</p>
+<ul>
+<li>系统级栅栏，夸系统，包括主机和设备，</li>
+</ul>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">void</span> __threadfence_system();</span><br></pre></td></tr></table></figure>
+<p>挂起调用线程，以保证该线程对全局内存，锁页主机内存和其他设备内存中的所有写操作对全部设备中的线程和主机线程可见。</p>
+<h3 id="5-1-5-4-Volatile修饰符"><a href="#5-1-5-4-Volatile修饰符" class="headerlink" title="5.1.5.4 Volatile修饰符"></a>5.1.5.4 Volatile修饰符</h3><p>在全局或共享内存中使用volatile修饰符声明一个变量，可以防止编译器优化，编译器优化可能会将数据暂时缓存在寄存器或本地内存中。当使用volatile修饰符时，编译器假定任何其他线程在任何时间都可以更改或使用该变量的值。</p>
+<h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><p>官方文档：</p>
+<ul>
+<li>共享内存介绍<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#shared-memory-5-x">16.4.3. Shared Memory</a></li>
+<li>共享内存大小 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#features-and-technical-specifications">16.2. Features and Technical Specifications</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-1%20CUDA%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E6%A6%82%E8%BF%B0/" title="5-1 CUDA共享内存概述">http://example.com/CUDA/CUDA C编程权威指南笔记/5-1 CUDA共享内存概述/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-5%20%E4%BD%BF%E7%94%A8%E5%90%8C%E4%B8%80%E5%86%85%E5%AD%98%E7%9A%84%E7%9F%A9%E9%98%B5%E5%8A%A0%E6%B3%95/" rel="prev" title="4-5 使用同一内存的矩阵加法">
+                  <i class="fa fa-chevron-left"></i> 4-5 使用同一内存的矩阵加法
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-6%20%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E6%80%BB%E7%BB%93/" rel="next" title="4-6 全局内存总结">
+                  4-6 全局内存总结 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"910dfd8ced1baff251694a44ce576354"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

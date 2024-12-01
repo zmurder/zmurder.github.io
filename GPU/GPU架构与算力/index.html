@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="1 GPU架构与算力1.1 计算能力含义">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GPU架构与算力">
+<meta property="og:url" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="1 GPU架构与算力1.1 计算能力含义">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-342976d22f13815fbdae5f79c46039ef_r.jpg">
+<meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-70492c96b9a553aec66eae5a44fcd77e_r.jpg">
+<meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-0f152f10a4f9d1fd6ab0725b6d7e13a6_r.jpg">
+<meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-6e7066f52db50db255a4b1d6f02511ed_r.jpg">
+<meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-5aaf90a4f9cb41af90833a978d735c89_r.jpg">
+<meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-ac9d6be077b4fbda03a321eadd1473de_r.jpg">
+<meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-8130651bd394205a5f9fb9c736085b96_r.jpg">
+<meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-356bed204d9265bc863d51fb9566322e_r.jpg">
+<meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-a27341fb67e8440c3d8c6b96676a48f2_r.jpg">
+<meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-3cd6ea7b8bfd5830760e022393da0b1a_r.jpg">
+<meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-db3b0bf04555903a73091ca59b106590_r.jpg">
+<meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-3b778fe574465729c48845a65a5c3a6f_r.jpg">
+<meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-05dcf828cc7c523dd019ef10e02cdcd0_r.jpg">
+<meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-ab5cc1ac8a897332cdb9d6565cf9c7af_r.jpg">
+<meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-ad35c378dd647c7321e3e86439c1fafc_r.jpg">
+<meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-e4b50206dd02b96fccbd6b95a00a0d49_r.jpg">
+<meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-eb596de1da67c6e2eb3f0bc78f0d687b_r.jpg">
+<meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-ab9a493303f4902b1dace22df0fb652d_r.jpg">
+<meta property="og:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-cd6cc236eb80311b5a3c551250ccf870_r.jpg">
+<meta property="article:published_time" content="2024-12-01T10:13:45.190Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.190Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="GPU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-342976d22f13815fbdae5f79c46039ef_r.jpg">
+
+
+<link rel="canonical" href="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/","path":"GPU/GPU架构与算力/","title":"GPU架构与算力"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>GPU架构与算力 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B"><span class="nav-text">1 GPU架构与算力</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-%E8%AE%A1%E7%AE%97%E8%83%BD%E5%8A%9B%E5%90%AB%E4%B9%89"><span class="nav-text">1.1 计算能力含义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E4%B8%8D%E5%90%8C%E6%98%BE%E5%8D%A1%E7%9A%84%E8%AE%A1%E7%AE%97%E8%83%BD%E5%8A%9B"><span class="nav-text">1.2 不同显卡的计算能力</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-%E7%BC%96%E8%AF%91%E7%9A%84%E7%AE%97%E5%8A%9B%E9%80%89%E9%A1%B9"><span class="nav-text">1.3 编译的算力选项</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Fermi-cards-CUDA-3-2-until-CUDA-8"><span class="nav-text">Fermi cards (CUDA 3.2 until CUDA 8)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Kepler-cards-CUDA-5-until-CUDA-10"><span class="nav-text">Kepler cards (CUDA 5 until CUDA 10)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Maxwell-cards-CUDA-6-until-CUDA-11"><span class="nav-text">Maxwell cards (CUDA 6 until CUDA 11)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Pascal-CUDA-8-and-later"><span class="nav-text">Pascal (CUDA 8 and later)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Volta-CUDA-9-and-later"><span class="nav-text">Volta (CUDA 9 and later)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Turing-CUDA-10-and-later"><span class="nav-text">Turing (CUDA 10 and later)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Ampere-CUDA-11-1-and-later"><span class="nav-text">Ampere (CUDA 11.1 and later)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Lovelace-CUDA-11-8-and-later"><span class="nav-text">Lovelace (CUDA 11.8 and later)</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Hopper-CUDA-12-and-later"><span class="nav-text">Hopper (CUDA 12 and later)</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-GPU%E6%9E%B6%E6%9E%84"><span class="nav-text">2 GPU架构</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-Tesla-%E6%9E%B6%E6%9E%84"><span class="nav-text">2.1 Tesla 架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-Fermi%E6%9E%B6%E6%9E%84"><span class="nav-text">2.2 Fermi架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-Kepler%E6%9E%B6%E6%9E%84"><span class="nav-text">2.3 Kepler架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-Maxwell%E6%9E%B6%E6%9E%84"><span class="nav-text">2.4 Maxwell架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-Pascal%E6%9E%B6%E6%9E%84"><span class="nav-text">2.5 Pascal架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-6-Volta%E6%9E%B6%E6%9E%84"><span class="nav-text">2.6 Volta架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-7-Turing%E6%9E%B6%E6%9E%84"><span class="nav-text">2.7 Turing架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-8-Ampere%E6%9E%B6%E6%9E%84"><span class="nav-text">2.8 Ampere架构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-text">附录</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="GPU架构与算力 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          GPU架构与算力
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/GPU/" itemprop="url" rel="index"><span itemprop="name">GPU</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-GPU架构与算力"><a href="#1-GPU架构与算力" class="headerlink" title="1 GPU架构与算力"></a>1 GPU架构与算力</h1><h2 id="1-1-计算能力含义"><a href="#1-1-计算能力含义" class="headerlink" title="1.1 计算能力含义"></a>1.1 计算能力含义</h2><p>参考：<a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#compute-capability">2.6. Compute Capability</a></p>
+<p>计算能力不是描述GPU设备计算能力强弱的绝对指标，他是相对的。准确的说他是一个架构的版本号。也不是指cuda软件平台的版本号（如cuda7.0，cuda8.0等）</p>
+<p>如TX1，版本号为5.3，实际上指的是：</p>
+<ul>
+<li>5:SM的主版本号，指maxwell架构</li>
+<li>3:SM的次版本号，拥有一些在该架构前提下的一些优化特性</li>
+</ul>
+
+<p> 如上所述计算能力的含义应该解释清楚了。那么这些版本号代表了什么呢？</p>
+<p> 每一种计算能力都拥有着不同的特点，主版本号和次版本号在硬件细节上究竟有着什么不同呢？</p>
+<p> 如下图所示，在浮点运算能力上的区别如下：</p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#arithmetic-instructions">5.4.1. Arithmetic Instructions</a></p>
+
+<h2 id="1-2-不同显卡的计算能力"><a href="#1-2-不同显卡的计算能力" class="headerlink" title="1.2 不同显卡的计算能力"></a>1.2 不同显卡的计算能力</h2><p>参考：<a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-gpus">https://developer.nvidia.com/cuda-gpus</a></p>
+
+<h2 id="1-3-编译的算力选项"><a href="#1-3-编译的算力选项" class="headerlink" title="1.3 编译的算力选项"></a>1.3 编译的算力选项</h2><p>对于编译并行计算程序（用nvcc编译）需要制定SM</p>
+<p>对于opencv这种提供GPU版本的库，在编译的时候需要指定SM的版本</p>
+<p>参考 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/ampere-compatibility-guide/index.html#building-ampere-compatible-apps-using-cuda-11-0">https://docs.nvidia.com/cuda/ampere-compatibility-guide/index.html#building-ampere-compatible-apps-using-cuda-11-0</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#binary-compatibility">3.1.2. Binary Compatibility</a></p>
+
+
+<p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-gpus">算力查询</a></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>Fermi</th>
+<th>Kepler</th>
+<th>Maxwell</th>
+<th>Pascal</th>
+<th>Volta</th>
+<th>Turing</th>
+<th>Ampere</th>
+<th>Ada (Lovelace)</th>
+<th><a target="_blank" rel="noopener" href="https://www.nvidia.com/en-us/data-center/hopper-architecture/">Hopper</a></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>sm_20</td>
+<td>sm_30</td>
+<td>sm_50</td>
+<td>sm_60</td>
+<td>sm_70</td>
+<td>sm_75</td>
+<td>sm_80</td>
+<td>sm_89</td>
+<td>sm_90</td>
+</tr>
+<tr>
+<td></td>
+<td>sm_35</td>
+<td>sm_52</td>
+<td>sm_61</td>
+<td>sm_72</td>
+<td></td>
+<td>sm_86</td>
+<td></td>
+<td>sm_90a</td>
+</tr>
+<tr>
+<td></td>
+<td>sm_37</td>
+<td>sm_53</td>
+<td>sm_62</td>
+<td></td>
+<td></td>
+<td>sm_87 (Jetson Orin)</td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="Fermi-cards-CUDA-3-2-until-CUDA-8"><a href="#Fermi-cards-CUDA-3-2-until-CUDA-8" class="headerlink" title="Fermi cards (CUDA 3.2 until CUDA 8)"></a>Fermi cards (CUDA 3.2 until CUDA 8)</h3><p>Deprecated from CUDA 9, support completely dropped from CUDA 10.</p>
+<ul>
+<li><strong>SM20 or SM_20, compute_30</strong> –<br>GeForce 400, 500, 600, GT-630.<br><strong><em>Completely dropped from CUDA 10 onwards.\</em></strong></li>
+</ul>
+<h3 id="Kepler-cards-CUDA-5-until-CUDA-10"><a href="#Kepler-cards-CUDA-5-until-CUDA-10" class="headerlink" title="Kepler cards (CUDA 5 until CUDA 10)"></a>Kepler cards (CUDA 5 until CUDA 10)</h3><p>Deprecated from CUDA 11.</p>
+<ul>
+<li><strong>SM30 or <code>SM_30, compute_30</code> –</strong><br>Kepler architecture (e.g. generic Kepler, GeForce 700, GT-730).<br>Adds support for unified memory programming<br><strong>*Completely dropped from CUDA 11 onwards</strong>.*</li>
+<li><strong>SM35 or <code>SM_35, compute_35</code></strong> –<br>Tesla K40.<br>Adds support for dynamic parallelism.<br><strong>Deprecated from CUDA 11, will be dropped in future versions</strong>.</li>
+<li><strong>SM37 or <code>SM_37, compute_37</code></strong> –<br>Tesla K80.<br>Adds a few more registers.<br><strong><em>Deprecated from CUDA 11, will be dropped in future versions</em></strong>, strongly suggest replacing with a <a target="_blank" rel="noopener" href="https://www.amazon.com/gp/product/B07JVNHFFX/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B07JVNHFFX&amp;linkCode=as2&amp;tag=arnonshimoni-20&amp;linkId=039f38074e50b581e71d500cd08bca85">32GB PCIe Tesla V100</a>.</li>
+</ul>
+<h3 id="Maxwell-cards-CUDA-6-until-CUDA-11"><a href="#Maxwell-cards-CUDA-6-until-CUDA-11" class="headerlink" title="Maxwell cards (CUDA 6 until CUDA 11)"></a>Maxwell cards (CUDA 6 until CUDA 11)</h3><ul>
+<li><strong>SM50 or <code>SM_50, compute_50</code></strong> –<br>Tesla/Quadro M series.<br><strong><em>Deprecated from CUDA 11, will be dropped in future versions</em></strong>, strongly suggest replacing with a <a target="_blank" rel="noopener" href="https://www.amazon.com/gp/product/B07P6CDHS5/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B07P6CDHS5&amp;linkCode=as2&amp;tag=arnonshimoni-20&amp;linkId=fe1f6fa6ad408060f634a35bad4271ce">Quadro RTX 4000</a> or <a target="_blank" rel="noopener" href="https://www.amazon.com/PNY-VCNRTXA6000-PB-NVIDIA-RTX-A6000/dp/B09BDH8VZV?crid=3QY8KCKXO3FB8&amp;keywords=rtx+a6000&amp;qid=1647969665&amp;sprefix=rtx+a6000%2Caps%2C174&amp;sr=8-1&amp;linkCode=ll1&amp;tag=arnonshimoni-20&amp;linkId=d292ba4d995d2b034a27441321668ffb&amp;language=en_US&amp;ref_=as_li_ss_tl">A6000</a>.</li>
+<li><strong>SM52 or <code>SM_52, compute_52</code></strong> –<br>Quadro M6000 , GeForce 900, GTX-970, GTX-980, GTX Titan X.</li>
+<li><strong>SM53 or <code>SM_53, compute_53</code></strong> –<br>Tegra (Jetson) TX1 / Tegra X1, Drive CX, Drive PX, Jetson Nano.</li>
+</ul>
+<h3 id="Pascal-CUDA-8-and-later"><a href="#Pascal-CUDA-8-and-later" class="headerlink" title="Pascal (CUDA 8 and later)"></a><strong>Pascal (CUDA 8 and later)</strong></h3><ul>
+<li><strong>SM60 or <code>SM_60, compute_60</code></strong> –<br>Quadro GP100, Tesla P100, DGX-1 (Generic Pascal)</li>
+<li><strong>SM61 or <code>SM_61, compute_61</code></strong>–<br>GTX  1080, GTX 1070, GTX 1060, GTX 1050, GTX 1030 (GP108), GT 1010 (GP108)  Titan Xp, Tesla P40, Tesla P4, Discrete GPU on the NVIDIA Drive PX2</li>
+<li><strong>SM62 or <code>SM_62, compute_62</code></strong> –<br>Integrated GPU on the NVIDIA Drive PX2, Tegra (Jetson) TX2 </li>
+</ul>
+<h3 id="Volta-CUDA-9-and-later"><a href="#Volta-CUDA-9-and-later" class="headerlink" title="Volta (CUDA 9 and later)"></a>Volta (CUDA 9 and later)</h3><ul>
+<li><strong>SM70 or <code>SM_70, compute_70</code></strong> –<br>DGX-1 with Volta, Tesla V100, GTX 1180 (GV104), Titan V, Quadro GV100</li>
+<li><strong>SM72 or <code>SM_72, compute_72</code></strong> –<br>Jetson AGX Xavier, Drive AGX Pegasus, Xavier NX </li>
+</ul>
+<h3 id="Turing-CUDA-10-and-later"><a href="#Turing-CUDA-10-and-later" class="headerlink" title="Turing (CUDA 10 and later)"></a>Turing (CUDA 10 and later)</h3><ul>
+<li><strong>SM75 or <code>SM_75, compute_75</code></strong> –<br>GTX/RTX Turing – GTX 1660 Ti, RTX 2060, <a target="_blank" rel="noopener" href="https://www.amazon.com/gp/product/B082P1BF7H/ref=as_li_tl?ie=UTF8&amp;camp=1789&amp;creative=9325&amp;creativeASIN=B082P1BF7H&amp;linkCode=as2&amp;tag=arnonshimoni-20&amp;linkId=68e78b128dd90f652eb7796404e2126f">RTX 2070</a>, RTX 2080, Titan RTX, Quadro RTX 4000, Quadro RTX 5000, Quadro RTX 6000, Quadro RTX 8000, Quadro T1000/T2000, Tesla T4 </li>
+</ul>
+<h3 id="Ampere-CUDA-11-1-and-later"><a href="#Ampere-CUDA-11-1-and-later" class="headerlink" title="Ampere (CUDA 11.1 and later)"></a>Ampere (CUDA 11.1 and later)</h3><ul>
+<li><strong>SM80 or <code>SM_80, compute_80</code></strong> –<br>NVIDIA A100 (the name “Tesla” has been dropped – GA100), NVIDIA DGX-A100</li>
+<li><p><strong><em>\</em>SM86 or <code>SM_86, compute_86</code>\</strong> –** (from <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/ptx-compiler-api/index.html">CUDA 11.1 onwards</a>)<br>Tesla GA10x cards, RTX Ampere – RTX 3080, GA102 – RTX 3090, RTX A2000, A3000, <a target="_blank" rel="noopener" href="https://www.amazon.com/PNY-NVIDIA-Quadro-A6000-Graphics/dp/B08NWGS4X1?msclkid=45987a9faa0411ec98c321cb30a0780e&amp;linkCode=ll1&amp;tag=arnonshimoni-20&amp;linkId=ccac0fed7c3cac61b4373d7dac6e7136&amp;language=en_US&amp;ref_=as_li_ss_tl">RTX A4000</a>, A5000, <a target="_blank" rel="noopener" href="https://www.amazon.com/PNY-VCNRTXA6000-PB-NVIDIA-RTX-A6000/dp/B09BDH8VZV?crid=3QY8KCKXO3FB8&amp;keywords=rtx+a6000&amp;qid=1647969665&amp;sprefix=rtx+a6000%2Caps%2C174&amp;sr=8-1&amp;linkCode=ll1&amp;tag=arnonshimoni-20&amp;linkId=d292ba4d995d2b034a27441321668ffb&amp;language=en_US&amp;ref_=as_li_ss_tl">A6000</a>, NVIDIA A40, GA106 – <a target="_blank" rel="noopener" href="https://www.amazon.com/gp/product/B08W8DGK3X/ref=as_li_qf_asin_il_tl?ie=UTF8&amp;tag=arnonshimoni-20&amp;creative=9325&amp;linkCode=as2&amp;creativeASIN=B08W8DGK3X&amp;linkId=5cb5bc6a11eb10aab6a98ad3f6c00cb9">RTX 3060</a>, GA104 – RTX 3070, GA107 – RTX 3050, RTX A10, RTX A16, RTX A40, A2 Tensor Core GPU</p>
+</li>
+<li><p><strong><em>\</em>SM87 or <code>SM_87, compute_87</code>\</strong> –** (from <a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/ptx-compiler-api/index.html">CUDA 11.4 onwards</a>, introduced with PTX ISA 7.4 / Driver r470 and newer) – for Jetson AGX Orin and Drive AGX Orin only</p>
+</li>
+</ul>
+<blockquote>
+<p>“<em>Devices of compute capability 8.6 have 2x more FP32 operations  per cycle per SM than devices of compute capability 8.0. While a binary  compiled for 8.0 will run as is on 8.6, it is recommended to compile  explicitly for 8.6 to benefit from the increased FP32 throughput.</em>“</p>
+<p><a target="_blank" rel="noopener" href="https://docs.nvidia.com/cuda/ampere-tuning-guide/index.html#improved_fp32">https://docs.nvidia.com/cuda/ampere-tuning-guide/index.html#improved_fp32</a></p>
+</blockquote>
+<h3 id="Lovelace-CUDA-11-8-and-later"><a href="#Lovelace-CUDA-11-8-and-later" class="headerlink" title="Lovelace (CUDA 11.8 and later)"></a>Lovelace (CUDA 11.8 and later)</h3><ul>
+<li><strong>SM89 or <code>SM_89, compute_</code>89</strong> –<br>NVIDIA GeForce RTX 4090, RTX 4080, RTX 6000, Tesla L40</li>
+</ul>
+<h3 id="Hopper-CUDA-12-and-later"><a href="#Hopper-CUDA-12-and-later" class="headerlink" title="Hopper (CUDA 12 and later)"></a>Hopper (CUDA 12 and later)</h3><ul>
+<li><strong>SM90 or <code>SM_90, compute_90</code></strong> –<br>NVIDIA H100 (GH100)</li>
+<li><strong>SM90a or <code>SM_90a, compute_90a</code></strong> – (for PTX ISA version 8.0) – adds acceleration for features like wgmma and setmaxnreg</li>
+</ul>
+<h1 id="2-GPU架构"><a href="#2-GPU架构" class="headerlink" title="2 GPU架构"></a>2 GPU架构</h1><h2 id="2-1-Tesla-架构"><a href="#2-1-Tesla-架构" class="headerlink" title="2.1 Tesla 架构"></a>2.1 Tesla 架构</h2><p>Tesla 架构的资料在官网也没找到多少，不过这是英伟达第一个实现<strong>统一着色器模型</strong>的微架构。</p>
+<img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-342976d22f13815fbdae5f79c46039ef_r.jpg" class="" title="img">
+<p>经典型号是<strong>G80</strong>，在Fermi架构白皮书的开篇部分有对G80的简要介绍：</p>
+<ul>
+<li>G80 是第一款支持 C 语言的 GPU，让程序员无需学习新的编程语言即可使用GPU的强大功能。</li>
+<li>G80 是第一款用单一、统一的处理器取代独立的顶点和像素管道的 GPU，该处理器可以执行顶点、几何、像素和计算程序。</li>
+<li>G80 是第一款使用标量线程处理器的 GPU，无需程序员手动管理向量寄存器</li>
+<li>G80 引入了单指令多线程 (SIMT) 执行模型，即多个独立线程使用一条指令并发执行。</li>
+<li>G80 为线程间通信引入了共享内存(shared memory)和屏障同步(barrier synchronization)。</li>
+</ul>
+<img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-70492c96b9a553aec66eae5a44fcd77e_r.jpg" class="" title="img">
+<p>G80 显卡</p>
+<h2 id="2-2-Fermi架构"><a href="#2-2-Fermi架构" class="headerlink" title="2.2 Fermi架构"></a>2.2 Fermi架构</h2><p>Fermi 架构是NVIDIA GPU 架构自初代 G80 以来最重大的飞跃。</p>
+<p>NVIDIA的GPU研发团队从G80和GT200两个型号上汲取经验，采用全新的设计方法来创建世界上第一个计算 GPU。在这个过程中，专注于提高以下关键领域：</p>
+<ul>
+<li><strong>提高双精度性能</strong>——虽然单精度浮点性能大约是桌面 CPU 性能的十倍，但一些 GPU 计算应用程序也需要更高的双精度性能。</li>
+<li><strong>ECC 支持</strong>——ECC 允许 GPU 计算用户在数据中心安装中安全地部署大量 GPU，并确保医疗成像和金融期权定价等数据敏感应用程序免受内存错误的影响。</li>
+<li><strong>True Cache Hierarchy</strong>—— 一些并行算法无法使用 GPU 的共享内存，用户需要一个真正的缓存架构来帮助他们。</li>
+<li><strong>更多共享内存</strong>——许多 CUDA 程序员要求超过 16 KB 的 SM 共享内存来加速他们的应用程序。</li>
+<li><strong>更快的上下文切换</strong>——用户要求在应用程序和更快的图形和计算互操作之间进行更快的上下文切换。</li>
+<li><strong>更快的原子操作</strong>(Atomic Operations)——用户要求为他们的并行算法提供更快的读-修改-写原子操作。</li>
+</ul>
+<p>基于以上出发点，Fermi架构有以下四大亮点：</p>
+<p>第三代流式多处理器 (SM)</p>
+<ul>
+<li>每个 SM 有 32 个 CUDA 内核，是 GT200 的 4 倍</li>
+<li>8 倍于 GT200 的峰值双精度浮点性能</li>
+<li>Dual Warp Scheduler 同时调度和分派来自两个独立 warp 的指令</li>
+<li>64 KB RAM，可配置共享内存和  L1 cache</li>
+</ul>
+<p>第二代并行线程执行 ISA</p>
+<ul>
+<li>具有完整 C++ 支持的统一地址空间</li>
+<li>针对 OpenCL 和 DirectCompute 进行了优化</li>
+<li>完整的 IEEE 754-2008 32 位和 64 位精度</li>
+<li>带有 64 位扩展的完整 32 位整数路径</li>
+<li>支持过渡到 64 位寻址的内存访问指令</li>
+<li>通过预测提高性能</li>
+</ul>
+<p>改进的内存子系统</p>
+<ul>
+<li>具有可配置 L1 和Unified L2 Caches 的 NVIDIA Parallel DataCache TM 层次结构</li>
+<li>第一个支持 ECC 内存的 GPU</li>
+<li>大幅提升原子内存操作性能</li>
+</ul>
+<p>NVIDIA GigaThread TM 引擎</p>
+<ul>
+<li>应用程序上下文切换速度提高 10 倍</li>
+<li>并发内核执行</li>
+<li>乱序线程块执行</li>
+<li>双重叠内存传输引擎</li>
+</ul>
+<p>以上是Fermi 架构相较于初代架构提升的地方</p>
+<p>下面具体看看Fermi 架构的配置</p>
+<img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-0f152f10a4f9d1fd6ab0725b6d7e13a6_r.jpg" class="" title="img">
+<p>Fermi 架构</p>
+<p>第一个基于Fermi架构的GPU，使用 30 亿个晶体管实现，共计512个CUDA内核。</p>
+<p>这512 个 CUDA 内核被组织成 16 个 SM，每个 SM 是一个<strong>垂直的矩形条带</strong>(红框中的内容)，分别位于一个普通的 L2 cache周围，每个 SM 有32 个CUDA 内核。 </p>
+<p><strong>一个CUDA 内核为一个线程在每个时钟周期里执行一条浮点或整数指令</strong>。</p>
+<p>6个64-bit显存分区，组成一个384-bit的显存接口，总共支持高达 6GB 的 GDDR5 DRAM显存。</p>
+<blockquote>
+<p>GDDR5：第五版图形用双倍数据传输率存储器<br>DRAM：动态随机存取存储器</p>
+</blockquote>
+<p>主机接口(host interface )通过 PCI-Express 将 GPU 连接到 CPU。 Giga Thread 全局调度器将线程块分发给 SM 线程调度器。</p>
+<img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-6e7066f52db50db255a4b1d6f02511ed_r.jpg" class="" title="img">
+<p>Fermi图形渲染架构</p>
+<p>整个 GPU 有多个 GPC(图形处理集群)，单个GPC包含一个光栅引擎(Raster Engine)，四个 SM（流式多处理器），GPC 可以被认为是一个独立的 GPU。所有从 Fermi 开始的 NVIDIA GPU，都有 GPC。</p>
+<img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-5aaf90a4f9cb41af90833a978d735c89_r.jpg" class="" title="img">
+<p>Fermi Streaming Multiprocessor (SM)</p>
+<p>上图是将16个SM中的 1 个拿出来放大后的详细结构图，其中包含：</p>
+<ul>
+<li>橙色部分：2 个 Warp Scheduler/Dispatch Unit</li>
+<li>绿色部分：32 个 CUDA 内核，分在两条 lane 上，每条分别是 16 个</li>
+<li>浅蓝色部分：register file-寄存器文件和 L1 cache</li>
+<li>16 个 Load/Store units (LD/ST Unit)</li>
+<li>4 个 Special Function Units (SFU)</li>
+</ul>
+<p><strong>每个 SM 具有 32 个 CUDA 内核</strong>，就是图中写着Core的绿色小方块儿，每个 CUDA 内核都有一个完全流水线化的整数算术逻辑单元 (ALU) 和浮点单元 (FPU)：</p>
+<img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-ac9d6be077b4fbda03a321eadd1473de_r.jpg" class="" title="img">
+<p>CUDA 内核</p>
+<p>SM（Streaming Multiprocessors）是GPU架构中非常重要的部分，GPU硬件的并行性就是由SM决定的。</p>
+<h2 id="2-3-Kepler架构"><a href="#2-3-Kepler架构" class="headerlink" title="2.3 Kepler架构"></a>2.3 Kepler架构</h2><img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-8130651bd394205a5f9fb9c736085b96_r.jpg" class="" title="img">
+<p>Kepler架构的思路是：减少SM单元数(在这一代中叫SMX单元)，增加每组SM单元中的CUDA内核数。在Kepler架构中，每个SM单元的CUDA内核数由Fermi架构的32个激增至192个。</p>
+<img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-356bed204d9265bc863d51fb9566322e_r.jpg" class="" title="img">
+<p>在每个SMX中：</p>
+<ul>
+<li>4 个 Warp Scheduler，8 个 Dispatch Unit</li>
+<li>绿色：192个 CUDA 内核，分在12条 lane 上，每条分别是 16 个</li>
+<li>黄色：64 个DP双精度运算单元，分在4条 lane 上，每条 lane 上 16 个</li>
+<li>32 个 LD/ST Unit </li>
+<li>32 个 SFU  </li>
+</ul>
+<h2 id="2-4-Maxwell架构"><a href="#2-4-Maxwell架构" class="headerlink" title="2.4 Maxwell架构"></a>2.4 Maxwell架构</h2><p>Maxwell架构的SM单元和Kepler架构相比，又有很大变化，这一代的SM单元更像是把4个Fermi 架构的SM单元，按照2x2的方式排列在一起，这一代称为SMM单元：</p>
+<img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-a27341fb67e8440c3d8c6b96676a48f2_r.jpg" class="" title="img">
+<img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-3cd6ea7b8bfd5830760e022393da0b1a_r.jpg" class="" title="img">
+<p>SMM 使用基于象限的设计，具有四个 32 核处理块(processing blocks)，每个处理块都有一个专用的 warp 调度程序，能够在每个时钟分派两条指令。 </p>
+<p>每个 SMM 单元提供</p>
+<ul>
+<li>八个纹理单元(texture units)</li>
+<li>一个多态引擎(polymorph engine-图形的几何处理)</li>
+<li>专用寄存器文件和共享内存。</li>
+</ul>
+<p>每个处理块中：</p>
+<ul>
+<li>1个 Warp Scheduler，2 个 Dispatch Unit</li>
+<li>绿色：32个 CUDA 内核</li>
+<li>8个 LD/ST Unit </li>
+<li>8个 SFU  </li>
+</ul>
+<p>CUDA内核总数 从Kpler时代的每组SM单元192个减少到了每组128个，但是每个SMM单元将拥有更多的逻辑控制电路，便于精确控制。</p>
+<blockquote>
+<p>参考：<br><a target="_blank" rel="noopener" href="https://developer.nvidia.com/blog/maxwell-most-advanced-cuda-gpu-ever-made/">Maxwell: The Most Advanced CUDA GPU Ever Made | NVIDIA Developer Blog</a></p>
+</blockquote>
+<h2 id="2-5-Pascal架构"><a href="#2-5-Pascal架构" class="headerlink" title="2.5 Pascal架构"></a><strong>2.5 Pascal架构</strong></h2><img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-db3b0bf04555903a73091ca59b106590_r.jpg" class="" title="img">
+<p>pascal架构的GP100核心</p>
+<p>这里有一个新概念：<strong>核心</strong></p>
+<p>NVIDIA不同的架构会有几种不同的核心，Pascal架构有GP100、GP102两种大核心：</p>
+<ul>
+<li>GP100：3840个CUDA核心，60组SM单元；</li>
+<li>GP102：3584个CUDA核心，28组SM单元；</li>
+</ul>
+<blockquote>
+<p>第2组数据存疑</p>
+</blockquote>
+<p><strong>核心</strong>是一个完整的GPU模组，上图展示了一个pascal架构的GP100核心，带有 60 个 SM 单元。</p>
+<p>不同的显卡产品可以使用不同的 GP100 配置，一般是满配或者减配，比如Tesla P100 使用了 56 个 SM 单元。</p>
+<img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-3b778fe574465729c48845a65a5c3a6f_r.jpg" class="" title="img">
+<p>GP100核心的SM单元</p>
+<p>每个SM单元中，分为2个Process Block，每个Process Block中：</p>
+<ul>
+<li>1个 Warp Scheduler，2 个 Dispatch Unit</li>
+<li>绿色：32个 CUDA 内核</li>
+<li><strong>黄色：16 个DP双精度运算单元，分在2条 lane 上，每条 lane 上 8个</strong></li>
+<li>8个 LD/ST Unit </li>
+<li>8个 SFU  </li>
+</ul>
+<p>CUDA内核总数从Maxwell时代的每组SM单元128个减少到了每组64个，这一代最大的特点是又把DP双精度运算单元加回来了。</p>
+<p>制程工艺升级到了16nm，性能大幅提升，功耗却不增加。</p>
+<h2 id="2-6-Volta架构"><a href="#2-6-Volta架构" class="headerlink" title="2.6 Volta架构"></a><strong>2.6 Volta架构</strong></h2><img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-05dcf828cc7c523dd019ef10e02cdcd0_r.jpg" class="" title="img">
+<p>Volta架构的GV100核心</p>
+<img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-ab5cc1ac8a897332cdb9d6565cf9c7af_r.jpg" class="" title="img">
+<p>GV100核心的SM单元</p>
+<p>每个SM单元中，分为4个Process Block，每个Process Block中：</p>
+<ul>
+<li>1个 Warp Scheduler，1个 Dispatch Unit</li>
+<li>8 个 FP64 Core</li>
+<li>16 个 INT32 Core</li>
+<li>16 个 FP32 Core</li>
+<li>2 个 Tensor Core</li>
+<li>8个 LD/ST Unit </li>
+<li>4个 SFU </li>
+</ul>
+<p>在前几代架构中：</p>
+<p><strong>一个CUDA 内核在每个时钟周期里只能为一个线程执行一条浮点或整数指令</strong>。</p>
+<p>但是从Volta架构开始，将一个CUDA 内核拆分为两部分：FP32 和 INT32，好处是在同一个时钟周期里，可以同时执行浮点和整数指令，提高计算速度。</p>
+<p>Volta架构在传统的单双精度计算之外还增加了专用的<strong>Tensor Core</strong>张量单元，用于深度学习、AI运算等。</p>
+<h2 id="2-7-Turing架构"><a href="#2-7-Turing架构" class="headerlink" title="2.7 Turing架构"></a><strong>2.7 Turing架构</strong></h2><img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-ad35c378dd647c7321e3e86439c1fafc_r.jpg" class="" title="img">
+<p>Turing架构的TU102核心</p>
+<p>Turing架构目前一共有三种核心：</p>
+<ul>
+<li>TU102核心</li>
+<li>TU104核心</li>
+<li>TU106核心</li>
+</ul>
+<img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-e4b50206dd02b96fccbd6b95a00a0d49_r.jpg" class="" title="img">
+<p>TU102核心的SM单元</p>
+<p>每个SM单元有4个处理块，每个处理块中：</p>
+<ul>
+<li>1 个 Warp Scheduler，1 个 Dispath Unit</li>
+<li>16 个 INT32 Core</li>
+<li>16 个 FP32 Core</li>
+<li>2 个 Tensor Core</li>
+<li>4 个 LD/ST Unit</li>
+<li>4 个 SFU</li>
+</ul>
+<p>这一代架构去掉了对FP64的支持。</p>
+<h2 id="2-8-Ampere架构"><a href="#2-8-Ampere架构" class="headerlink" title="2.8 Ampere架构"></a><strong>2.8 Ampere架构</strong></h2><img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-eb596de1da67c6e2eb3f0bc78f0d687b_r.jpg" class="" title="img">
+<p>Ampere架构的GA102核心</p>
+<img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-ab9a493303f4902b1dace22df0fb652d_r.jpg" class="" title="img">
+<p>GA102核心的SM单元</p>
+<p>每个SM单元分成4个处理块，每个处理块中：</p>
+<ul>
+<li>1 个 Warp Scheduler，1 个 Dispatch Unit</li>
+<li>8 个 FP64 Core</li>
+<li>16 个 FP32 Core</li>
+<li>16 个 INT32 Core</li>
+<li>1 个 Tensor Core</li>
+<li>8 个 LD/ST Unit</li>
+<li>4 个 SFU</li>
+</ul>
+<p>这一代架构又把FP64 Core加回来了，同时也是自Volta架构以来的，NVIDIA第三代Tensor技术，保持一代架构更新一次Tensor。</p>
+<img src="/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/v2-cd6cc236eb80311b5a3c551250ccf870_r.jpg" class="" title="img">
+<p>暂时写到这里，还有好多不足的地方，在后面的学习过程中慢慢补充。</p>
+<h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/cuda-gpus">算力查询</a></p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/GPU/GPU%E6%9E%B6%E6%9E%84%E4%B8%8E%E7%AE%97%E5%8A%9B/" title="GPU架构与算力">http://example.com/GPU/GPU架构与算力/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/4%20FPN/" rel="prev" title="4 FPN">
+                  <i class="fa fa-chevron-left"></i> 4 FPN
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/GPU/nvidia-smi%E5%91%BD%E4%BB%A4/" rel="next" title="nvidia-smi命令">
+                  nvidia-smi命令 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1da4a6aeca4789955649fb5dbeaefa2c"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

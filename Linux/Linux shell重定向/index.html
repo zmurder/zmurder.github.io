@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="1 简介在 Linux 的 shell 中，重定向是将命令的输入和输出重定向到不同的位置（如文件、设备或其他命令）。这使得 shell 可以灵活地处理数据流和日志记录。重定向主要涉及以下几种类型：标准输入（stdin）、标准输出（stdout）和标准错误输出（stderr）。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux shell重定向">
+<meta property="og:url" content="http://example.com/Linux/Linux%20shell%E9%87%8D%E5%AE%9A%E5%90%91/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="1 简介在 Linux 的 shell 中，重定向是将命令的输入和输出重定向到不同的位置（如文件、设备或其他命令）。这使得 shell 可以灵活地处理数据流和日志记录。重定向主要涉及以下几种类型：标准输入（stdin）、标准输出（stdout）和标准错误输出（stderr）。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2024-12-01T10:13:45.309Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.309Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/Linux/Linux%20shell%E9%87%8D%E5%AE%9A%E5%90%91/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/Linux/Linux%20shell%E9%87%8D%E5%AE%9A%E5%90%91/","path":"Linux/Linux shell重定向/","title":"Linux shell重定向"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Linux shell重定向 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="nav-text">1 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E8%BE%93%E5%87%BA%E9%87%8D%E5%AE%9A%E5%90%91"><span class="nav-text">2 输出重定向</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-dev-null"><span class="nav-text">2.1  &#x2F;dev&#x2F;null</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-2-gt-amp-1"><span class="nav-text">2.2 2&gt;&amp;1</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E8%BE%93%E5%85%A5%E9%87%8D%E5%AE%9A%E5%90%91"><span class="nav-text">3 输入重定向</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BE%93%E5%85%A5%E9%87%8D%E5%AE%9A%E5%90%91%E5%91%BD%E4%BB%A4%E5%8F%8A%E5%85%B6%E8%AF%B4%E6%98%8E"><span class="nav-text">输入重定向命令及其说明</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/Linux/Linux%20shell%E9%87%8D%E5%AE%9A%E5%90%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Linux shell重定向 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Linux shell重定向
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h1><p>在 Linux 的 shell 中，重定向是将命令的输入和输出重定向到不同的位置（如文件、设备或其他命令）。这使得 shell 可以灵活地处理数据流和日志记录。重定向主要涉及以下几种类型：标准输入（stdin）、标准输出（stdout）和标准错误输出（stderr）。</p>
+<p><strong>文件描述符</strong></p>
+<p>当执行shell命令时，会默认打开3个文件，每个文件有对应的文件描述符来方便我们使用：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>文件描述符</th>
+<th>默认情况</th>
+<th>对应文件句柄位置</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>标准输入（standard input）</td>
+<td>0</td>
+<td>从键盘获得输入</td>
+<td>/proc/self/fd/0</td>
+</tr>
+<tr>
+<td>标准输出（standard output）</td>
+<td>1</td>
+<td>输出到屏幕（即控制台）</td>
+<td>/proc/self/fd/1</td>
+</tr>
+<tr>
+<td>错误输出（error output）</td>
+<td>2</td>
+<td>输出到屏幕（即控制台）</td>
+<td>/proc/self/fd/2</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>所以我们平时在执行shell命令中，都默认是从键盘获得输入，并且将结果输出到控制台上。但是我们可以通过更改文件描述符默认的指向，从而实现输入输出的重定向。比如我们将1指向文件，那么标准的输出就会输出到文件中。</p>
+<h1 id="2-输出重定向"><a href="#2-输出重定向" class="headerlink" title="2 输出重定向"></a>2 输出重定向</h1><p>输出重定向的使用方式很简单，基本的一些命令如下：</p>
+<p>输出重定向命令及其说明</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>介绍</th>
+<th>示例</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>把标准输出重定向到新文件中，若文件已存在则覆盖</td>
+<td><code>ls &gt; output.txt</code></td>
+<td>将 <code>ls</code> 命令的标准输出写入 <code>output.txt</code>，若文件已存在则覆盖其内容</td>
+</tr>
+<tr>
+<td>同上，明确指定标准输出</td>
+<td><code>ls 1&gt; output.txt</code></td>
+<td>同上，明确指定标准输出</td>
+</tr>
+<tr>
+<td>把标准输出追加到文件中，若文件不存在则创建</td>
+<td><code>ls &gt;&gt; output.txt</code></td>
+<td>将 <code>ls</code> 命令的标准输出追加到 <code>output.txt</code>，若文件不存在则创建</td>
+</tr>
+<tr>
+<td>同上，明确指定标准输出</td>
+<td><code>ls 1&gt;&gt; output.txt</code></td>
+<td>同上，明确指定标准输出</td>
+</tr>
+<tr>
+<td>把标准错误重定向到新文件中，若文件已存在则覆盖</td>
+<td><code>ls non_existing_file 2&gt; error.txt</code></td>
+<td>将 <code>ls</code> 命令的标准错误写入 <code>error.txt</code>，若文件已存在则覆盖其内容</td>
+</tr>
+<tr>
+<td>把标准错误追加到文件中，若文件不存在则创建</td>
+<td><code>ls non_existing_file 2&gt;&gt; error.txt</code></td>
+<td>将 <code>ls</code> 命令的标准错误追加到 <code>error.txt</code>，若文件不存在则创建</td>
+</tr>
+<tr>
+<td>把标准输出和标准错误都重定向到同一个新文件中</td>
+<td><code>ls non_existing_file &gt; output.txt 2&gt;&amp;1</code></td>
+<td>将 <code>ls</code> 命令的标准输出和标准错误都写入 <code>output.txt</code>，若文件已存在则覆盖其内容</td>
+</tr>
+<tr>
+<td>把标准输出和标准错误都追加到同一个文件中</td>
+<td><code>ls non_existing_file &gt;&gt; output.txt 2&gt;&amp;1</code></td>
+<td>将 <code>ls</code> 命令的标准输出和标准错误都追加到 <code>output.txt</code>，若文件不存在则创建</td>
+</tr>
+<tr>
+<td>把标准输出和标准错误都重定向到新文件中（Bash特有）</td>
+<td><code>ls non_existing_file &amp;&gt; output.txt</code></td>
+<td>将 <code>ls</code> 命令的标准输出和标准错误都写入 <code>output.txt</code>，若文件已存在则覆盖其内容（Bash特有）</td>
+</tr>
+<tr>
+<td>把标准输出和标准错误都追加到文件中（Bash特有）</td>
+<td><code>ls non_existing_file &amp;&gt;&gt; output.txt</code></td>
+<td>将 <code>ls</code> 命令的标准输出和标准错误都追加到 <code>output.txt</code>，若文件不存在则创建（Bash特有）</td>
+</tr>
+<tr>
+<td>把标准错误重定向到标准输出，然后将标准输出重定向到文件</td>
+<td><code>ls non_existing_file 2&gt;&amp;1 &gt; output.txt</code></td>
+<td>先将 <code>ls</code> 命令的标准错误重定向到标准输出，然后将标准输出写入 <code>output.txt</code></td>
+</tr>
+<tr>
+<td>把标准输出重定向到标准错误</td>
+<td><code>ls 1&gt;&amp;2</code></td>
+<td>将 <code>ls</code> 命令的标准输出重定向到标准错误</td>
+</tr>
+<tr>
+<td>把标准输出重定向到空设备，丢弃输出</td>
+<td><code>ls &gt; /dev/null</code></td>
+<td>将 <code>ls</code> 命令的标准输出重定向到 <code>/dev/null</code>，丢弃所有输出</td>
+</tr>
+<tr>
+<td>把标准错误重定向到空设备，丢弃错误输出</td>
+<td><code>ls non_existing_file 2&gt; /dev/null</code></td>
+<td>将 <code>ls</code> 命令的标准错误重定向到 <code>/dev/null</code>，丢弃所有错误输出</td>
+</tr>
+<tr>
+<td>把标准输出和标准错误都重定向到空设备，丢弃所有输出</td>
+<td><code>ls non_existing_file &gt; /dev/null 2&gt;&amp;1</code></td>
+<td>将 <code>ls</code> 命令的标准输出和标准错误都重定向到 <code>/dev/null</code>，丢弃所有输出</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>我们使用&gt;或者&gt;&gt;对输出进行重定向。符号的左边表示文件描述符，如果没有的话表示1，也就是标准输出，符号的右边可以是一个文件，也可以是一个输出设备。当使用&gt;时，会判断右边的文件存不存在，如果存在的话就先删除，然后创建一个新的文件，不存在的话则直接创建。但是当使用&gt;&gt;进行追加时，则不会删除原来已经存在的文件。</p>
+<h2 id="2-1-dev-null"><a href="#2-1-dev-null" class="headerlink" title="2.1  /dev/null"></a>2.1  <code>/dev/null</code></h2><p><code>/dev/null</code> 是一个特殊的文件，通常被称为“空设备”。将输出重定向到 <code>/dev/null</code> 可以有效地丢弃不需要的输出。</p>
+<h2 id="2-2-2-gt-amp-1"><a href="#2-2-2-gt-amp-1" class="headerlink" title="2.2 2&gt;&amp;1"></a>2.2 <code>2&gt;&amp;1</code></h2><p><code>2&gt;&amp;1</code> 用于将标准错误（文件描述符 2）重定向到标准输出（文件描述符 1）。这意味着错误消息将与标准输出混合在一起。</p>
+<h1 id="3-输入重定向"><a href="#3-输入重定向" class="headerlink" title="3 输入重定向"></a>3 输入重定向</h1><h3 id="输入重定向命令及其说明"><a href="#输入重定向命令及其说明" class="headerlink" title="输入重定向命令及其说明"></a>输入重定向命令及其说明</h3><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>命令</th>
+<th>介绍</th>
+<th>示例</th>
+<th>解释</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>command &lt; filename</code></td>
+<td>将文件内容作为命令的标准输入</td>
+<td><code>sort &lt; unsorted.txt</code></td>
+<td>将 <code>unsorted.txt</code> 的内容作为 <code>sort</code> 命令的输入，输出排序后的内容</td>
+</tr>
+<tr>
+<td><code>command &lt;&lt; EOF</code></td>
+<td>Here Document，将多行文本作为命令的标准输入</td>
+<td><code>cat &lt;&lt; EOF\nHello\nWorld\nEOF</code></td>
+<td>将多行文本 “Hello\nWorld\n” 作为 <code>cat</code> 命令的输入，输出 “Hello\nWorld\n”</td>
+</tr>
+<tr>
+<td><code>command &lt;&lt;&lt; &quot;string&quot;</code></td>
+<td>Here String，将字符串作为命令的标准输入</td>
+<td><code>grep &quot;Hello&quot; &lt;&lt;&lt; &quot;Hello World&quot;</code></td>
+<td>将字符串 “Hello World” 作为 <code>grep</code> 命令的输入，查找 “Hello” 子字符串</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/Linux/Linux%20shell%E9%87%8D%E5%AE%9A%E5%90%91/" title="Linux shell重定向">http://example.com/Linux/Linux shell重定向/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Linux/Linux%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1crontab/" rel="prev" title="Linux定时任务crontab">
+                  <i class="fa fa-chevron-left"></i> Linux定时任务crontab
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/TensorRT/QAT/" rel="next" title="QAT">
+                  QAT <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"114168e64a46520fabad21dcc8ba9311"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

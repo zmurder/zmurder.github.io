@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="1 简介本文对linux系统的调度进行简单的介绍，参考文章见下面附录">
+<meta property="og:type" content="article">
+<meta property="og:title" content="linux调度策略">
+<meta property="og:url" content="http://example.com/Linux/linux%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="1 简介本文对linux系统的调度进行简单的介绍，参考文章见下面附录">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/Linux/linux%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5/v2-77bea80c8cbd82bc5717dfe5dd300591_720w.webp">
+<meta property="og:image" content="http://example.com/Linux/linux%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5/20201110150745784.png">
+<meta property="og:image" content="http://example.com/Linux/linux%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5/20201110150819822.png">
+<meta property="og:image" content="http://example.com/Linux/linux%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5/20201110150824490.png">
+<meta property="article:published_time" content="2024-12-01T10:13:45.309Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.310Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/Linux/linux%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5/v2-77bea80c8cbd82bc5717dfe5dd300591_720w.webp">
+
+
+<link rel="canonical" href="http://example.com/Linux/linux%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/Linux/linux%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5/","path":"Linux/linux调度策略/","title":"linux调度策略"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>linux调度策略 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="nav-text">1 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-linux%E8%B0%83%E5%BA%A6%E6%9C%BA%E5%88%B6"><span class="nav-text">2 linux调度机制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5%E4%BB%8B%E7%BB%8D"><span class="nav-text">3 调度策略介绍</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E8%B0%83%E5%BA%A6%E7%9B%B8%E5%85%B3%E7%9A%84%E7%94%A8%E6%88%B7%E7%A9%BA%E9%97%B4%E6%8E%A5%E5%8F%A3"><span class="nav-text">4 调度相关的用户空间接口</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-linux%E5%AE%9E%E6%97%B6%E8%A1%A5%E4%B8%81"><span class="nav-text">5 linux实时补丁</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/Linux/linux%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="linux调度策略 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          linux调度策略
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h1><p>本文对linux系统的调度进行简单的介绍，参考文章见下面附录</p>
+<h1 id="2-linux调度机制"><a href="#2-linux调度机制" class="headerlink" title="2 linux调度机制"></a>2 linux调度机制</h1><p>参考资料：</p>
+<ol>
+<li>man手册man 7 sched</li>
+<li>内核文档 Documentation/scheduler。</li>
+</ol>
+<p>首先需要说明，我们常说的进程调度器是传统的说法，但是实际上进程是资源管理的单位，<strong>线程才是调度的单位</strong>.有时也会说任务调度等。</p>
+<p>linux的调度机制由调度策略(policies)和优先级(priority)两个属性共同决定.其中调度策略又可以分为实时调度策略和通用调度策略(非实时)。其中通用调度策略的优先级值为0.而实时调度策略的优先级取值范围为1~99.可以看出，实时调度策略的优先级总是大于通用调度策略。而优先级高线程的总是会被调度器优先调用。其中实时调度策略包含SCHED_RR,SCHED_FIFO调度策略。通用调度策略包含SCHED_OTHER、SCHED_IDLE、SCHED_BATCH调度策略。即如下关系：<br>linux的调度机制由调度策略(policies)和优先级(priority)共同决定:</p>
+<ol>
+<li>优先级:确定哪个线程被优先调度。实时调度策略的优先级总是大于通用调度策略。</li>
+<li>调度策略(policies)分如下几种:<ol>
+<li>基于截止时间（deadline）的实时调度策略：优先级最高；在<code>SCHED_DEADLINE</code>调度策略中，任务的优先级是通过截止时间（deadline）来确定的，而不是传统的优先级概念。较早截止时间的任务将具有更高的”优先级”，因为它们需要更早地完成。在<code>SCHED_DEADLINE</code>中，优先级的比较是基于截止时间的大小。<ol>
+<li>SCHED_DEADLINE</li>
+</ol>
+</li>
+<li>实时调度策略:spriority值的取值范围为0~99.当线程间的优先级不同时，按照优先级高的先调度原则。当优先级相同时，分为如下两种方式:<ol>
+<li>SCHED_RR:优先级相同的线程按固定的时间片循环调度。下面会详细讲解。</li>
+<li>SCHED_FIFO:与SCHED_RR相似，优先级相同的线程也是循环调度。不过没有时间片的概念。下面会详细讲解。</li>
+</ol>
+</li>
+<li>通用调度策略(非实时):spriority值为0.<ol>
+<li>SCHED_OTHER</li>
+<li>SCHED_IDLE:</li>
+<li>SCHED_BATCH:</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<p>所有的调度策略最后通过链表的方式组合成一个调度类。由linux内核调度。</p>
+<img src="/Linux/linux%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5/v2-77bea80c8cbd82bc5717dfe5dd300591_720w.webp" class="" title="v2-77bea80c8cbd82bc5717dfe5dd300591_720w">
+<h1 id="3-调度策略介绍"><a href="#3-调度策略介绍" class="headerlink" title="3 调度策略介绍"></a>3 调度策略介绍</h1><p><strong>实时调度策略之SCHED_RR：Round-robin scheduling</strong></p>
+<ul>
+<li>当线程间的优先级不同时，优先级高的先调度。当优先级相同时，固定的时间片循环调度。被调用的线程满足如下条件时会让出CPU：<ul>
+<li>调度期间的时间片使用完了。</li>
+<li>自动放弃CPU。如调用了阻塞相关的接口函数或调用了sched_yield()。</li>
+<li>被一个优先级更高的线程抢占了</li>
+<li>线程终止了。</li>
+</ul>
+</li>
+<li>如果因为时间片使用完了或自愿放弃CPU而导致线程让出CPU，此时此线程将会被放置在与其优 先级级别对应的队列的队尾。如果因为被抢占而让出CPU，则会放置到队头，等更高优先级让出cpu时，继续执行此线程。</li>
+</ul>
+<p><strong>实时调度策略之SCHED_FIFO：First in-first out scheduling</strong></p>
+<ul>
+<li>与SCHED_RR实时调度策略相似，不过它没有时间片的概念。被调用的线程让出CPU条件与SCHED_RR类似，只是没有时间片使用完的情况</li>
+</ul>
+<p><strong>通用调度策略之SCHED_OTHER：time-sharing scheduling</strong></p>
+<ul>
+<li>分时循环调度策略。也就是我们常说的CFS(Completely Fair Scheduler)完全公平调度器。是系统的默认调度策略。按动态时间片循环调度。动态时间片由nice属性值决定。每个SCHED_OTHER策略的线程都拥有一个nice值，其取值范围为−20～19,默认值为0.nice值是一个权重因子，值越小，权重越大。CPU为其分配的动态时间片会越多。</li>
+</ul>
+<p><strong>通用调度策略之SCHED_BATCH</strong></p>
+<ul>
+<li>此策略会让频繁被唤醒的线程在调度时次数会变少。其他与SCHED_OTHER策略类似。</li>
+</ul>
+<p><strong>通用调度策略之SCHED_IDLE</strong></p>
+<ul>
+<li>可以理解为nice=19的SCHED_OTHER策略。当系统中没有其他线程需要使用CPU时才会大量使用CPU。</li>
+</ul>
+<p><strong>调度策略之SCHED_DEADLINE</strong></p>
+<ul>
+<li>自从3.14版本以来，Linux提供了一个截止日期调度策略(SCHED_DEADLINE)。</li>
+</ul>
+<h1 id="4-调度相关的用户空间接口"><a href="#4-调度相关的用户空间接口" class="headerlink" title="4 调度相关的用户空间接口"></a>4 调度相关的用户空间接口</h1><ul>
+<li><p>修改nice值相关的函数接口：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">nice</span><span class="params">(<span class="type">int</span> inc)</span></span><br><span class="line">      所属头文件:`&lt;unistd.h&gt;`</span><br><span class="line">      描述:修改当前进程的nice值。此函数已经被更通用的<span class="title function_">setpriority</span><span class="params">()</span>取代。</span><br><span class="line">      inc:在当前nice的基础上加inc.</span><br><span class="line">      <span class="keyword">return</span>: 如果成功，返回新设置的nice值。</span><br><span class="line">      eg:<span class="title function_">nice</span><span class="params">(<span class="number">3</span>)</span>、<span class="title function_">nice</span><span class="params">(<span class="number">-5</span>)</span></span><br><span class="line"><span class="type">int</span> <span class="title function_">setpriority</span><span class="params">(<span class="type">int</span> which, <span class="type">int</span> who, <span class="type">int</span> prio)</span></span><br><span class="line">      描述: 设置通用进程的nice值。这里的priority不要与上边讲到的优先级混淆。</span><br><span class="line">      which:决定who传入的参数含义，which可选值:</span><br><span class="line">          PRIO_PROCESS:表明who为进程id.如果等于零，则为当前进程</span><br><span class="line">          PRIO_PGRP:表明who为进程组id.如果等于零，则为当前进程组</span><br><span class="line">          PRIO_USER:表明who为用户<span class="params">(real user)</span>id.如果等于零，则为当前用户</span><br><span class="line">      prio:-20~19之间的nice值。</span><br><span class="line">      <span class="keyword">return</span>: 成功返回0。失败返回-1.。</span><br><span class="line"><span class="type">int</span> <span class="title function_">getpriority</span><span class="params">(<span class="type">int</span> which, <span class="type">int</span> who)</span></span><br><span class="line">      所属头文件:&lt;sys/time.h&gt;,&lt;sys/resource.h&gt;</span><br><span class="line">      描述:获取进程的nice值。</span><br><span class="line">      <span class="keyword">return</span>: 返回进程调度优先级<span class="params">(<span class="number">-20</span>~<span class="number">19</span>)</span>。</span><br><span class="line">      eg: <span class="title function_">getpriority</span><span class="params">(PRIO_PROCESS, getpid())</span>;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<ul>
+<li><p>修改优先级与调度策略相关的函数接口：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sched_get_priority_max</span><span class="params">(<span class="type">int</span> policy)</span></span><br><span class="line">    描述: 查看调度策略最大优先级。</span><br><span class="line">    policy 可指定的值如下:</span><br><span class="line">        SCHED_OTHER</span><br><span class="line">        SCHED_BATCH</span><br><span class="line">        SCHED_IDLE</span><br><span class="line">        SCHED_FIFO</span><br><span class="line">        SCHED_RR</span><br><span class="line">    <span class="keyword">return</span>: 成功返回最大优先级值。失败返回-1.</span><br><span class="line"><span class="type">int</span> <span class="title function_">sched_get_priority_min</span><span class="params">(<span class="type">int</span> policy)</span></span><br><span class="line">    查看调度策略最小优先级。其他同<span class="title function_">sched_get_priority_max</span><span class="params">()</span>.</span><br><span class="line"><span class="type">int</span> <span class="title function_">sched_setscheduler</span><span class="params">(<span class="type">pid_t</span> pid, <span class="type">int</span> policy,<span class="type">const</span> <span class="keyword">struct</span> sched_param *param)</span></span><br><span class="line">    描述: 设置进程的调度策略和优先级。</span><br><span class="line">    policy 可指定的值如下:</span><br><span class="line">        SCHED_OTHER</span><br><span class="line">        SCHED_BATCH</span><br><span class="line">        SCHED_IDLE 对于这三种策略,param-&gt;sched_priority的值必须为0.</span><br><span class="line">        SCHED_FIFO</span><br><span class="line">        SCHED_RR 对于这两种策略，需要指定param-&gt;sched_priority的值。</span><br><span class="line">    param:指定调度策略的优先级。<span class="keyword">struct</span> sched_param的结构体如下：</span><br><span class="line"></span><br><span class="line">    <span class="keyword">struct</span> sched_param &#123;</span><br><span class="line">        <span class="type">int</span> sched_priority; <span class="comment">//优先级1~99</span></span><br><span class="line">    &#125;;</span><br><span class="line">        <span class="number">1</span></span><br><span class="line">        <span class="number">2</span></span><br><span class="line">        <span class="number">3</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span>: 成功返回<span class="number">0</span>。失败返回<span class="number">-1.</span></span><br><span class="line"><span class="type">int</span> sched_getscheduler(<span class="type">pid_t</span> pid)</span><br><span class="line">    所属头文件:&lt;sched.h&gt;</span><br><span class="line">    描述: 获取进程的调度策略。</span><br><span class="line">    pid 进程id.如果为<span class="number">0</span>，表示为本线程。</span><br><span class="line">    <span class="keyword">return</span>: 成功返回调度策略值(非负整数)。失败返回<span class="number">-1.</span></span><br><span class="line">        SCHED_OTHER <span class="number">0</span></span><br><span class="line">        SCHED_FIFO <span class="number">1</span></span><br><span class="line">        SCHED_RR <span class="number">2</span></span><br><span class="line">        SCHED_BATCH <span class="number">3</span></span><br><span class="line">        SCHED_IDLE <span class="number">5</span></span><br><span class="line"><span class="type">int</span> sched_setparam(<span class="type">pid_t</span> pid, <span class="type">const</span> <span class="keyword">struct</span> sched_param *param)</span><br><span class="line">    描述: 设置进程的优先级。sched_setscheduler()函数的子集。</span><br><span class="line">    param:见sched_setscheduler()函数中的描述。</span><br><span class="line">    <span class="keyword">return</span>: 成功返回<span class="number">0</span>。失败返回<span class="number">-1.</span></span><br><span class="line"><span class="type">int</span> sched_getparam(<span class="type">pid_t</span> pid, <span class="keyword">struct</span> sched_param *param)</span><br><span class="line">    描述: 获取进程的优先级。</span><br><span class="line">    param:见sched_setscheduler()函数中的描述。用于接收要获取的优先级值。</span><br><span class="line">    <span class="keyword">return</span>: 成功返回<span class="number">0</span>。失败返回<span class="number">-1.</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>linux特有的函数接口，可用于修改上边提到的所有属性：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sched_setattr</span><span class="params">(<span class="type">pid_t</span> pid, <span class="keyword">struct</span> sched_attr *attr,<span class="type">unsigned</span> <span class="type">int</span> flags)</span></span><br><span class="line">    描述: 设置进程的调度策略。</span><br><span class="line">    <span class="keyword">struct</span> sched_attr结构体如下:</span><br><span class="line"></span><br><span class="line">    <span class="keyword">struct</span> sched_attr &#123;</span><br><span class="line">           u32 size;              <span class="comment">//结构体大小</span></span><br><span class="line">           u32 sched_policy;      <span class="comment">//调度策略</span></span><br><span class="line">           u64 sched_flags;       <span class="comment">//可选属性:SCHED_FLAG_RESET_ON_FORK 表示子进程创建时不继承此策略。</span></span><br><span class="line">           s32 sched_nice;        <span class="comment">//通用调度策略的nice值</span></span><br><span class="line">           u32 sched_priority;    <span class="comment">//优先级</span></span><br><span class="line">           <span class="comment">/* Remaining fields are for SCHED_DEADLINE */</span></span><br><span class="line">           u64 sched_runtime;</span><br><span class="line">           u64 sched_deadline;</span><br><span class="line">           u64 sched_period;</span><br><span class="line">       &#125;;</span><br><span class="line">    flags 目前为<span class="number">0.</span></span><br><span class="line">    <span class="keyword">return</span>: 成功返回<span class="number">0</span>。</span><br><span class="line"><span class="type">int</span> sched_getattr(<span class="type">pid_t</span> pid, <span class="keyword">struct</span> sched_attr *attr,<span class="type">unsigned</span> <span class="type">int</span> size, <span class="type">unsigned</span> <span class="type">int</span> flags)</span><br><span class="line">    描述: 获取进程的调度策略。</span><br><span class="line">    size: attr结构体的大小。</span><br><span class="line">    其他参数同sched_setattr().</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>其他接口:</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int</span> <span class="title function_">sched_yield</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">    描述:进程主动放弃cpu.</span><br><span class="line"><span class="type">int</span> <span class="title function_">sched_rr_get_interval</span><span class="params">(<span class="type">pid_t</span> pid, <span class="keyword">struct</span> timespec *tp)</span></span><br><span class="line">    获取SCHED_RR调度策略的进程在每次使用CPU时分配到时间片的长度。</span><br><span class="line">    tp:获取到的时间长度。</span><br><span class="line">    成功返回0，失败返回-1.</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>线程相关的调度设置函数：相关线程属性设置。</p>
+<h1 id="5-linux实时补丁"><a href="#5-linux实时补丁" class="headerlink" title="5 linux实时补丁"></a>5 linux实时补丁</h1><p>为了满足实时性和可预测性的要求，通常会使用实时补丁。一个常见的实时补丁是PREEMPT-RT。PREEMPT-RT是一组Linux内核的补丁，<strong>旨在提高内核的实时性能，减小中断和任务切换的延迟</strong>，以支持对响应性能有严格要求的应用，例如自动驾驶系统。</p>
+<p>实时补丁需要配置内核和构建内核，这里就不介绍了，引用一下网上的测试结果对比一下</p>
+<p>利用cyclictest进行性能测试：</p>
+<p>将编译完成的cyclictest加载到板卡上，并增加其可执行权限，就可以利用cyclictest命令来进行linux内核实时性能测试，测试命令为：</p>
+<p><code>./cyclictest -t8 -p 80 -n -i 10000 -l 10000</code></p>
+<p>常用参数<br>-p    —prio=PRIO    最高优先级线程的优先级  使用时方法为： -p 90 /  —prio=90<br>-m    —mlockall     锁定当前和将来的内存分配<br>-c    —clock=CLOCK     选择时钟  cyclictest -c 1      0 = CLOCK_MONOTONIC (默认)    1 = CLOCK_REALTIME<br>-i    —interval=INTV    基本线程间隔，默认为1000（单位为us）<br>-l    —loops=LOOPS    循环的个数，默认为0（无穷个），与 -i 间隔数结合可大致算出整个测试的时间，比如 -i 1000  -l 1000000 ,总的循环时间为1000*1000000=1000000000 us =1000s ，所以大致为16分钟多<br>-n    —nanosleep    使用 clock_nanosleep<br>-h     —histogram=US     在执行完后在标准输出设备上画出延迟的直方图（很多线程有相同的权限）US为最大的跟踪时间限制<br>-q     —quiet     使用-q 参数运行时不打印信息，只在退出时打印概要内容，结合-h HISTNUM参数会在退出时打印HISTNUM 行统计信息以及一个总的概要信息<br>-f     —ftrace    ftrace函数跟踪（通常与-b 配套使用，其实通常使用 -b 即可，不使用 -f ）<br>-b     —breaktrace=USEC    当延时大于USEC指定的值时，发送停止跟踪。USEC,单位为谬秒（us）</p>
+<p><strong>运行结果含义</strong></p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>T: 0</th>
+<th>序号为0的线程</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P: 0</td>
+<td>线程优先级为0</td>
+</tr>
+<tr>
+<td>C: 9397</td>
+<td>计数器。线程的时间间隔每达到一次，计数器加1</td>
+</tr>
+<tr>
+<td>I: 1000</td>
+<td>时间间隔为1000微秒(us)</td>
+</tr>
+<tr>
+<td>Min:</td>
+<td>最小延时(us)</td>
+</tr>
+<tr>
+<td>Act:</td>
+<td>最近一次的延时(us)</td>
+</tr>
+<tr>
+<td>Avg：</td>
+<td>平均延时(us)</td>
+</tr>
+<tr>
+<td>Max：</td>
+<td>最大延时(us)</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>在我们的板卡上进行实时性测试，先对非实时系统进行测试，得到测试结果如下：</p>
+<img src="/Linux/linux%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5/20201110150745784.png" class="" width="20201110150745784">
+<p>对实时性系统进行测试，得到的测试结果如下：</p>
+<img src="/Linux/linux%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5/20201110150819822.png" class="" width="20201110150819822">
+<img src="/Linux/linux%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5/20201110150824490.png" class="" width="20201110150824490">
+<h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_23274715/article/details/110941434">linux 的调度策略与优先级</a></li>
+<li><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/460055814">玩转Linux内核进程调度，这一篇就够(所有的知识点)</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/m0_37765662/article/details/109595439">linux打实时补丁以及实时性能测试</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/Linux/linux%E8%B0%83%E5%BA%A6%E7%AD%96%E7%95%A5/" title="linux调度策略">http://example.com/Linux/linux调度策略/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/GPU/ubuntu%E4%B8%8B%E7%9A%84GPU%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="prev" title="ubuntu下的GPU环境配置">
+                  <i class="fa fa-chevron-left"></i> ubuntu下的GPU环境配置
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/Linux/Linux%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1crontab/" rel="next" title="Linux定时任务crontab">
+                  Linux定时任务crontab <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"473cd1633e76d923f9783d2239627c00"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

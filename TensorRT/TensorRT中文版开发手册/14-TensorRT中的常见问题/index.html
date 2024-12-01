@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="TensorRT中的常见问题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="14-TensorRT中的常见问题">
+<meta property="og:url" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/14-TensorRT%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="TensorRT中的常见问题">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/14-TensorRT%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/rdp.jpg">
+<meta property="article:published_time" content="2024-12-01T10:13:45.369Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.369Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="GPU">
+<meta property="article:tag" content="Tensorrt">
+<meta property="article:tag" content="DeepLearning">
+<meta property="article:tag" content="Plugin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/14-TensorRT%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/rdp.jpg">
+
+
+<link rel="canonical" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/14-TensorRT%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/14-TensorRT%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/","path":"TensorRT/TensorRT中文版开发手册/14-TensorRT中的常见问题/","title":"14-TensorRT中的常见问题"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>14-TensorRT中的常见问题 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TensorRT%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-text">TensorRT中的常见问题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#14-1-FAQs"><span class="nav-text">14.1. FAQs</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14-2-Understanding-Error-Messages"><span class="nav-text">14.2.Understanding Error Messages</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#14-3-Code-Analysis-Tools"><span class="nav-text">14.3. Code Analysis Tools</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#14-3-1-Compiler-Sanitizers"><span class="nav-text">14.3.1. Compiler Sanitizers</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#14-3-1-1-Issues-With-dlopen-And-Address-Sanitizer"><span class="nav-text">14.3.1.1. Issues With dlopen And Address Sanitizer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#14-3-1-2-Issues-With-dlopen-And-Thread-Sanitizer"><span class="nav-text">14.3.1.2. Issues With dlopen And Thread Sanitizer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#14-3-1-3-Issues-With-CUDA-And-Address-Sanitizer"><span class="nav-text">14.3.1.3. Issues With CUDA And Address Sanitizer</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#14-3-1-4-Issues-With-Undefined-Behavior-Sanitizer"><span class="nav-text">14.3.1.4. Issues With Undefined Behavior Sanitizer</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#14-3-2-Valgrind"><span class="nav-text">14.3.2. Valgrind</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#14-3-3-Compute-Sanitizer"><span class="nav-text">14.3.3. Compute Sanitizer</span></a></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/14-TensorRT%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="14-TensorRT中的常见问题 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          14-TensorRT中的常见问题
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/" itemprop="url" rel="index"><span itemprop="name">TensorRT中文版开发手册</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="TensorRT中的常见问题"><a href="#TensorRT中的常见问题" class="headerlink" title="TensorRT中的常见问题"></a>TensorRT中的常见问题</h1><img src="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/14-TensorRT%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/rdp.jpg" class="">
+<p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/zh-cn/developer-program">点击此处加入NVIDIA开发者计划</a></p>
+<p>以下部分有助于回答有关 NVIDIA TensorRT 典型用例的最常见问题。</p>
+<h2 id="14-1-FAQs"><a href="#14-1-FAQs" class="headerlink" title="14.1. FAQs"></a>14.1. FAQs</h2><p>本部分旨在帮助解决问题并回答我们最常问的问题。</p>
+<p>问：如何创建针对多种不同批次大小进行优化的引擎？</p>
+<p>答：虽然 TensorRT 允许针对给定批量大小优化的引擎以任何较小的大小运行，但这些较小大小的性能无法得到很好的优化。要针对多个不同的批量大小进行优化，请在分配给<code>OptProfilerSelector::kOPT</code>的维度上创建优化配置文件。</p>
+<p>问：引擎和校准表是否可以跨TensorRT版本移植？</p>
+<p>答：不会。内部实现和格式会不断优化，并且可以在版本之间更改。因此，不保证引擎和校准表与不同版本的TensorRT二进制兼容。使用新版本的TensorRT时，应用程序必须构建新引擎和 INT8 校准表。</p>
+<p>问：如何选择最佳的工作空间大小？</p>
+<p>答：一些 TensorRT 算法需要 GPU 上的额外工作空间。方法<code>IBuilderConfig::setMemoryPoolLimit()</code>控制可以分配的最大工作空间量，并防止构建器考虑需要更多工作空间的算法。在运行时，创建<code>IExecutionContext</code>时会自动分配空间。即使在<code>IBuilderConfig::setMemoryPoolLimit()</code>中设置的数量要高得多，分配的数量也不会超过所需数量。因此，应用程序应该允许 TensorRT 构建器尽可能多的工作空间；在运行时，TensorRT 分配的数量不超过这个，通常更少。</p>
+<p>问：如何在多个 GPU 上使用TensorRT ？</p>
+<p>答：每个<code>ICudaEngine</code>对象在实例化时都绑定到特定的 GPU，无论是由构建器还是在反序列化时。要选择 GPU，请在调用构建器或反序列化引擎之前使用<code>cudaSetDevice()</code> 。每个<code>IExecutionContext</code>都绑定到与创建它的引擎相同的 GPU。调用<code>execute()</code>或<code>enqueue()</code>时，如有必要，请通过调用<code>cudaSetDevice()</code>确保线程与正确的设备相关联。</p>
+<p>问：如何从库文件中获取TensorRT的版本？</p>
+<p>A: 符号表中有一个名为<code>tensorrt_version_#_#_#_#</code>的符号，其中包含TensorRT版本号。在 Linux 上读取此符号的一种可能方法是使用nm命令，如下例所示：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ nm -D libnvinfer.so.* | grep tensorrt_version</span><br><span class="line"><span class="number">00000000</span>abcd1234 B tensorrt_version_#_#_#_#</span><br></pre></td></tr></table></figure></p>
+<p>问：如果我的网络产生了错误的答案，我该怎么办？<br>答：您的网络生成错误答案的原因有多种。以下是一些有助于诊断问题的故障排除方法：</p>
+<ul>
+<li>打开日志流中的VERBOSE级别消息并检查 TensorRT 报告的内容。</li>
+<li>检查您的输入预处理是否正在生成网络所需的输入格式。</li>
+<li>如果您使用降低的精度，请在 FP32 中运行网络。如果它产生正确的结果，则较低的精度可能对网络的动态范围不足。</li>
+<li>尝试将网络中的中间张量标记为输出，并验证它们是否符合您的预期。</li>
+<li>注意：将张量标记为输出会抑制优化，因此会改变结果。</li>
+</ul>
+<p>您可以使用<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/tools/Polygraphy">Polygraphy</a>来帮助您进行调试和诊断。</p>
+<p>问：如何在TensorRT中实现批量标准化？</p>
+<p>答：批量标准化可以使用TensorRT中的<code>IElementWiseLayer</code>序列来实现。进一步来说：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">adjustedScale = scale / <span class="built_in">sqrt</span>(variance + epsilon) </span><br><span class="line">batchNorm = (input + bias - (adjustedScale * mean)) * adjustedScale</span><br></pre></td></tr></table></figure></p>
+<p>问：为什么我的网络在使用 DLA 时比不使用 DLA 时运行得更慢？</p>
+<p>答：DLA 旨在最大限度地提高能源效率。根据 DLA 支持的功能和 GPU 支持的功能，任何一种实现都可以提高性能。使用哪种实现取决于您的延迟或吞吐量要求以及您的功率预算。由于所有 DLA 引擎都独立于 GPU 并且彼此独立，因此您还可以同时使用这两种实现来进一步提高网络的吞吐量。</p>
+<p>问：TensorRT支持INT4量化还是INT16量化？</p>
+<p>答：TensorRT 目前不支持 INT4 和 INT16 量化。</p>
+<p>问：TensorRT 何时会在 UFF 解析器中支持我的网络所需的层 XYZ？</p>
+<p>答：UFF 已弃用。我们建议用户将他们的工作流程切换到 ONNX。 TensorRT ONNX 解析器是一个开源项目。</p>
+<p>问：我可以使用多个 TensorRT 构建器在不同的目标上进行编译吗？</p>
+<p>答：TensorRT 假设它所构建的设备的所有资源都可用于优化目的。同时使用多个 TensorRT 构建器（例如，多个<code>trtexec</code>实例）在不同的目标（<code>DLA0</code>、<code>DLA1</code> 和 GPU）上进行编译可能会导致系统资源超额订阅，从而导致未定义的行为（即计划效率低下、构建器失败或系统不稳定）。</p>
+<p>建议使用带有 <code>--saveEngine</code> 参数的<code>trtexec</code>分别为不同的目标（DLA 和 GPU）编译并保存它们的计划文件。然后可以重用此类计划文件进行加载（使用带有 <code>--loadEngine</code> 参数的<code>trtexec</code>）并在各个目标（<code>DLA0、DLA1、GPU</code>）上提交多个推理作业。这个两步过程在构建阶段缓解了系统资源的过度订阅，同时还允许计划文件的执行在不受构建器干扰的情况下继续进行。</p>
+<p>问：张量核心(tensor core)加速了哪些层？</p>
+<p>大多数数学绑定运算将通过张量核(tensor core)加速 - 卷积、反卷积、全连接和矩阵乘法。在某些情况下，特别是对于小通道数或小组大小，另一种实现可能更快并且被选择而不是张量核心实现。</p>
+<h2 id="14-2-Understanding-Error-Messages"><a href="#14-2-Understanding-Error-Messages" class="headerlink" title="14.2.Understanding Error Messages"></a>14.2.Understanding Error Messages</h2><p>如果在执行过程中遇到错误，TensorRT 会报告一条错误消息，旨在帮助调试问题。以下部分讨论了开发人员可能遇到的一些常见错误消息。</p>
+<p><strong>UFF 解析器错误消息</strong></p>
+<p>下表捕获了常见的 UFF 解析器错误消息。</p>
+<div class="tablenoborder"><a name="error-messaging__table_mjd_hzj_1gb" shape="rect">
+                                    <!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="error-messaging__table_mjd_hzj_1gb" class="table" frame="border" border="1" rules="all">
+                                    <thead class="thead" align="left">
+                                       <tr class="row">
+                                          <th class="entry" valign="top" width="50%" id="d54e15081" rowspan="1" colspan="1">Error Message</th>
+                                          <th class="entry" valign="top" width="50%" id="d54e15084" rowspan="1" colspan="1">Description</th>
+                                       </tr>
+                                    </thead>
+                                    <tbody class="tbody">
+                                       <tr class="row">
+                                          <td class="entry" valign="top" width="50%" headers="d54e15081" rowspan="1" colspan="1"><pre class="pre screen" xml:space="preserve"><kbd class="ph userinput">The input to the Scale Layer is required to have a minimum of 3 dimensions.</kbd></pre></td>
+                                          <td class="entry" rowspan="3" valign="top" width="50%" headers="d54e15084" colspan="1">This error message can occur due to incorrect
+                                             input dimensions. In UFF, input dimensions should always be
+                                             specified with the implicit batch dimension <em class="ph i">not</em> included
+                                             in the specification.
+                                          </td>
+                                       </tr>
+                                       <tr class="row">
+                                          <td class="entry" valign="top" width="50%" headers="d54e15081" rowspan="1" colspan="1"><pre class="pre screen" xml:space="preserve"><kbd class="ph userinput">Invalid scale mode, nbWeights: &lt;X&gt;</kbd></pre></td>
+                                       </tr>
+                                       <tr class="row">
+                                          <td class="entry" valign="top" width="50%" headers="d54e15081" rowspan="1" colspan="1"><pre class="pre screen" xml:space="preserve"><kbd class="ph userinput">kernel weights has count &lt;X&gt; but &lt;Y&gt; was expected</kbd></pre></td>
+                                       </tr>
+                                       <tr class="row">
+                                          <td class="entry" valign="top" width="50%" headers="d54e15081" rowspan="1" colspan="1"><pre class="pre screen" xml:space="preserve"><kbd class="ph userinput">&lt;NODE&gt; Axis node has op &lt;OP&gt;, expected Const. The axis must be specified as a Const node.</kbd></pre></td>
+                                          <td class="entry" valign="top" width="50%" headers="d54e15084" rowspan="1" colspan="1">As indicated by the error message, the axis must be a
+                                             build-time constant in order for UFF to parse the node
+                                             correctly.
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </div>
+
+
+
+<p><strong>ONNX 解析器错误消息</strong></p>
+<p>下表捕获了常见的 ONNX 解析器错误消息。有关特定 ONNX 节点支持的更多信息，请参阅<a target="_blank" rel="noopener" href="https://github.com/onnx/onnx/blob/main/docs/Operators.md"> operators支持</a>文档。</p>
+<div class="tablenoborder"><a name="error-messaging__table_dvp_5qd_3rb" shape="rect">
+                                    <!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="error-messaging__table_dvp_5qd_3rb" class="table" frame="border" border="1" rules="all">
+                                    <thead class="thead" align="left">
+                                       <tr class="row">
+                                          <th class="entry" valign="top" width="50%" id="d54e15167" rowspan="1" colspan="1">Error Message</th>
+                                          <th class="entry" valign="top" width="50%" id="d54e15170" rowspan="1" colspan="1">Description</th>
+                                       </tr>
+                                    </thead>
+                                    <tbody class="tbody">
+                                       <tr class="row">
+                                          <td class="entry" valign="top" width="50%" headers="d54e15167" rowspan="1" colspan="1"><samp class="ph codeph">&lt;X&gt; must be an initializer!</samp></td>
+                                          <td class="entry" rowspan="2" valign="top" width="50%" headers="d54e15170" colspan="1">These error messages signify that an ONNX node
+                                             input tensor is expected to be an initializer in TensorRT. A
+                                             possible fix is to run constant folding on the model using
+                                             TensorRT’s <a class="xref" href="https://github.com/NVIDIA/TensorRT/tree/main/tools/Polygraphy" target="_blank" shape="rect"><u class="ph u">Polygraphy
+                                                   </u></a>tool:<pre class="pre screen" xml:space="preserve"><kbd class="ph userinput">polygraphy surgeon sanitize model.onnx --fold-constants --output model_folded.onnx</kbd></pre></td>
+                                       </tr>
+                                       <tr class="row">
+                                          <td class="entry" valign="top" width="50%" headers="d54e15167" rowspan="1" colspan="1"><samp class="ph codeph">!inputs.at(X).is_weights()</samp></td>
+                                       </tr>
+                                       <tr class="row">
+                                          <td class="entry" valign="top" width="50%" headers="d54e15167" rowspan="1" colspan="1"><pre xml:space="preserve">getPluginCreator() could not find Plugin &lt;operator name&gt; version
+    1</pre></td>
+                                          <td class="entry" valign="top" width="50%" headers="d54e15170" rowspan="1" colspan="1">This is an error stating that the ONNX parser does not have
+                                             an import function defined for a particular operator, and did
+                                             not find a corresponding plugin in the loaded registry for the
+                                             operator.
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </div>
+
+
+<p><strong>TensorRT 核心库错误消息</strong></p>
+<p>下表捕获了常见的 TensorRT 核心库错误消息。</p>
+<div class="tablenoborder"><a name="error-messaging__table_ybv_cdk_1gb" shape="rect">
+                                    <!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="error-messaging__table_ybv_cdk_1gb" class="table" frame="border" border="1" rules="all">
+                                    <thead class="thead" align="left">
+                                       <tr class="row">
+                                          <th class="entry" valign="top" width="33.33333333333333%" id="d54e15238" rowspan="1" colspan="1">&nbsp;</th>
+                                          <th class="entry" valign="top" width="33.33333333333333%" id="d54e15240" rowspan="1" colspan="1">Error Message</th>
+                                          <th class="entry" valign="top" width="33.33333333333333%" id="d54e15243" rowspan="1" colspan="1">Description</th>
+                                       </tr>
+                                    </thead>
+                                    <tbody class="tbody">
+                                       <tr class="row">
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15238" rowspan="1" colspan="1"><strong class="ph b">Installation Errors</strong></td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15240" rowspan="1" colspan="1"><samp class="ph codeph">Cuda initialization failure with error &lt;code&gt;.
+                                                Please check cuda installation: </samp><a class="xref" href="http://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html" target="_blank" shape="rect"><samp class="ph codeph"><u class="ph u">http://docs.nvidia.com/cuda/cuda-installation-guide-linux/index.html</u></samp></a><samp class="ph codeph">.</samp></td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15243" rowspan="1" colspan="1">This error message can occur if the CUDA or NVIDIA driver
+                                             installation is corrupt. Refer to the URL for instructions on
+                                             installing CUDA and the NVIDIA driver on your operating
+                                             system.
+                                          </td>
+                                       </tr>
+                                       <tr class="row">
+                                          <td class="entry" rowspan="4" valign="top" width="33.33333333333333%" headers="d54e15238" colspan="1"><strong class="ph b">Builder Errors</strong></td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15240" rowspan="1" colspan="1"><pre xml:space="preserve">Internal error: could not find any implementation for node &lt;name&gt;. Try increasing the workspace size with IBuilderConfig::setMemoryPoolLimit().</pre></td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15243" rowspan="1" colspan="1">This error message occurs because there is no layer
+                                             implementation for the given node in the network that can
+                                             operate with the given workspace size. This usually occurs
+                                             because the workspace size is insufficient but could also
+                                             indicate a bug. If increasing the workspace size as suggested
+                                             doesn’t help, report a bug (refer to <a class="xref" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#bug-reporting" target="_blank" shape="rect"><u class="ph u">How Do I Report A
+                                                   Bug?</u></a>).
+                                          </td>
+                                       </tr>
+                                       <tr class="row">
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15240" rowspan="1" colspan="1"><samp class="ph codeph">&lt;layer-name&gt;: (kernel|bias) weights has non-zero
+                                                count but null
+                                                values</samp><pre xml:space="preserve">&lt;layer-name&gt;: (kernel|bias) weights has zero count but non-null
+    values</pre></td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15243" rowspan="1" colspan="1">This error message occurs when there is a mismatch between
+                                             the values and count fields in a Weights data structure passed
+                                             to the builder. If the count is <samp class="ph codeph">0</samp>, then the
+                                             values field must contain a null pointer; otherwise, the count
+                                             must be non-zero, and values must contain a non-null
+                                             pointer.
+                                          </td>
+                                       </tr>
+                                       <tr class="row">
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15240" rowspan="1" colspan="1"><samp class="ph codeph">Builder was created on device different from current
+                                                device.</samp></td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15243" rowspan="1" colspan="1">This error message can show up if you:<a name="error-messaging__ol_rz1_xdk_1gb" shape="rect">
+                                                <!-- --></a><ol class="ol" id="error-messaging__ol_rz1_xdk_1gb">
+                                                <li class="li">Created an IBuilder targeting one GPU, then</li>
+                                                <li class="li">Called <samp class="ph codeph">cudaSetDevice()</samp> to target a
+                                                   different GPU, then
+                                                </li>
+                                                <li class="li">Attempted to use the IBuilder to create an engine.</li>
+                                             </ol>
+                                             Ensure you only use the <samp class="ph codeph">IBuilder</samp> when
+                                             targeting the GPU that was used to create the
+                                             <samp class="ph codeph">IBuilder</samp>.
+                                          </td>
+                                       </tr>
+                                       <tr class="row">
+                                          <td class="entry" colspan="2" valign="top" headers="d54e15240 d54e15243" rowspan="1">You can encounter error messages
+                                             indicating that the tensor dimensions do not match the semantics
+                                             of the given layer. Carefully read the documentation on <a class="xref" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/namespacenvinfer1.html" target="_blank" shape="rect"><u class="ph u">NvInfer.h</u></a> on
+                                             the usage of each layer and the expected dimensions of the
+                                             tensor inputs and outputs to the layer.
+                                          </td>
+                                       </tr>
+                                       <tr class="row">
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15238" rowspan="1" colspan="1"><strong class="ph b">INT8 Calibration Errors</strong></td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15240" rowspan="1" colspan="1"><pre class="pre screen" xml:space="preserve"><kbd class="ph userinput">Tensor &lt;X&gt; is uniformly zero.</kbd></pre></td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15243" rowspan="1" colspan="1">This warning occurs and should be treated as an error when
+                                             data distribution for a tensor is uniformly zero. In a network,
+                                             the output tensor distribution can be uniformly zero under the
+                                             following scenarios:<a name="error-messaging__ol_kgr_dxl_1gb" shape="rect">
+                                                <!-- --></a><ol class="ol" id="error-messaging__ol_kgr_dxl_1gb">
+                                                <li class="li">Constant tensor with all zero values; not an error.</li>
+                                                <li class="li">Activation (ReLU) output with all negative inputs: not
+                                                   an error.
+                                                </li>
+                                                <li class="li">Data distribution is forced to all zero due to
+                                                   computation error in the previous layer; emit a warning
+                                                   here.<a name="fnsrc_1" href="#fntarg_1" shape="rect"><sup>1</sup></a></li>
+                                                <li class="li">User does not provide any calibration images; emit a
+                                                   warning here.<sup class="ph sup">1</sup></li>
+                                             </ol>
+                                          </td>
+                                       </tr>
+                                       <tr class="row">
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15238" rowspan="1" colspan="1">&nbsp;</td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15240" rowspan="1" colspan="1"><pre class="pre screen" xml:space="preserve"><kbd class="ph userinput">Could not find scales for tensor &lt;X&gt;.</kbd></pre></td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15243" rowspan="1" colspan="1">This error message indicates that a calibration failure
+                                             occurred with no scaling factors detected. This could be due to
+                                             no INT8 calibrator or insufficient custom scales for network
+                                             layers. For more information, refer to <a class="xref" href="https://github.com/NVIDIA/TensorRT/tree/main/samples/sampleINT8" target="_blank" shape="rect"><u class="ph u">sampleINT8</u></a>
+                                             located in the<samp class="ph codeph"> opensource/sampleINT8</samp> directory
+                                             in the GitHub repository to set up calibration
+                                             correctly.
+                                          </td>
+                                       </tr>
+                                       <tr class="row">
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15238" rowspan="1" colspan="1">&nbsp;</td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15240" rowspan="1" colspan="1"><pre class="pre screen" xml:space="preserve"><kbd class="ph userinput">The engine plan file is not compatible with this version of TensorRT, expecting (format|library) version &lt;X&gt; got &lt;Y&gt;, please rebuild.</kbd></pre></td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15243" rowspan="1" colspan="1">This error message can occur if you are running TensorRT
+                                             using an engine PLAN file that is incompatible with the current
+                                             version of TensorRT. Ensure you use the same version of TensorRT
+                                             when generating the engine and running it.
+                                          </td>
+                                       </tr>
+                                       <tr class="row">
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15238" rowspan="1" colspan="1">&nbsp;</td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15240" rowspan="1" colspan="1"><pre class="pre screen" xml:space="preserve"><kbd class="ph userinput">The engine plan file is generated on an incompatible device, expecting compute &lt;X&gt; got compute &lt;Y&gt;, please rebuild.</kbd></pre></td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15243" rowspan="1" colspan="1">This error message can occur if you build an engine on a
+                                             device of a different compute capability than the device that is
+                                             used to run the engine. 
+                                          </td>
+                                       </tr>
+                                       <tr class="row">
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15238" rowspan="1" colspan="1">&nbsp;</td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15240" rowspan="1" colspan="1"><pre class="pre screen" xml:space="preserve"><kbd class="ph userinput">Using an engine plan file across different models of devices is not recommended and is likely to affect performance or even cause errors.</kbd></pre></td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15243" rowspan="1" colspan="1">
+                                             <p class="p">This warning message can occur if you build an engine on a
+                                                device with the same compute capability but is not identical
+                                                to the device that is used to run the engine.
+                                             </p>
+                                             <p class="p">As indicated by the warning, it is highly recommended to use
+                                                a device of the same model when generating the engine and
+                                                deploying it to avoid compatibility issues.
+                                             </p>
+                                          </td>
+                                       </tr>
+                                       <tr class="row">
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15238" rowspan="1" colspan="1">&nbsp;</td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15240" rowspan="1" colspan="1"><pre class="pre screen" xml:space="preserve"><kbd class="ph userinput">GPU memory allocation failed during initialization of (tensor|layer): &lt;name&gt;
+GPU memory</kbd></pre></td>
+                                          <td class="entry" rowspan="3" valign="top" width="33.33333333333333%" headers="d54e15243" colspan="1">These error messages can occur if there is
+                                             insufficient GPU memory available to instantiate a given <span class="ph">TensorRT</span> engine. Verify that the GPU has
+                                             sufficient available memory to contain the required layer
+                                             weights and activation tensors.
+                                          </td>
+                                       </tr>
+                                       <tr class="row">
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15238" rowspan="1" colspan="1">&nbsp;</td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15240" rowspan="1" colspan="1"><pre class="pre screen" xml:space="preserve"><kbd class="ph userinput">Allocation failed during deserialization of weights.</kbd></pre></td>
+                                       </tr>
+                                       <tr class="row">
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15238" rowspan="1" colspan="1">&nbsp;</td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15240" rowspan="1" colspan="1"><pre class="pre screen" xml:space="preserve"><kbd class="ph userinput">GPU does not meet the minimum memory requirements to run this engine …</kbd></pre></td>
+                                       </tr>
+                                       <tr class="row">
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15238" rowspan="1" colspan="1">&nbsp;</td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15240" rowspan="1" colspan="1"><pre class="pre screen" xml:space="preserve"><kbd class="ph userinput">Network needs native FP16 and platform does not have native FP16</kbd></pre></td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15243" rowspan="1" colspan="1">This error message can occur if you attempt to deserialize an
+                                             engine that uses FP16 arithmetic on a GPU that does not support
+                                             FP16 arithmetic. You either need to rebuild the engine without
+                                             FP16 precision inference or upgrade your GPU to a model that
+                                             supports FP16 precision inference.
+                                          </td>
+                                       </tr>
+                                       <tr class="row">
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15238" rowspan="1" colspan="1">&nbsp;</td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15240" rowspan="1" colspan="1"><pre class="pre screen" xml:space="preserve"><kbd class="ph userinput">Custom layer &lt;name&gt; returned non-zero initialization</kbd></pre></td>
+                                          <td class="entry" valign="top" width="33.33333333333333%" headers="d54e15243" rowspan="1" colspan="1">This error message can occur if the
+                                             <samp class="ph codeph">initialize()</samp> method of a given plugin layer
+                                             returns a non-zero value. Refer to the implementation of that
+                                             layer to debug this error further. For more information, refer
+                                             to <a class="xref" href="index.html#layers" shape="rect">TensorRT Layers</a>.
+                                          </td>
+                                       </tr>
+                                    </tbody>
+                                 </table>
+                              </div>
+
+
+<h2 id="14-3-Code-Analysis-Tools"><a href="#14-3-Code-Analysis-Tools" class="headerlink" title="14.3. Code Analysis Tools"></a>14.3. Code Analysis Tools</h2><h3 id="14-3-1-Compiler-Sanitizers"><a href="#14-3-1-Compiler-Sanitizers" class="headerlink" title="14.3.1. Compiler Sanitizers"></a>14.3.1. Compiler Sanitizers</h3><p>Google sanitizers 是一组<a target="_blank" rel="noopener" href="https://github.com/google/sanitizers">代码分析工具</a>。</p>
+<h4 id="14-3-1-1-Issues-With-dlopen-And-Address-Sanitizer"><a href="#14-3-1-1-Issues-With-dlopen-And-Address-Sanitizer" class="headerlink" title="14.3.1.1. Issues With dlopen And Address Sanitizer"></a>14.3.1.1. Issues With dlopen And Address Sanitizer</h4><p><code>Sanitizer</code>存在一个已知问题，在<a target="_blank" rel="noopener" href="https://github.com/google/sanitizers/issues/89">此处</a>记录。在 <code>sanitizer</code>下在 TensorRT 上使用<code>dlopen</code>时，会报告内存泄漏，除非采用以下两种解决方案之一：</p>
+<ol>
+<li>在<code>Sanitizer</code>下运行时不要调用<code>dlclose</code> 。</li>
+<li>将标志<code>RTLD_NODELETE</code>传递给<code>dlopen</code> 。</li>
+</ol>
+<h4 id="14-3-1-2-Issues-With-dlopen-And-Thread-Sanitizer"><a href="#14-3-1-2-Issues-With-dlopen-And-Thread-Sanitizer" class="headerlink" title="14.3.1.2. Issues With dlopen And Thread Sanitizer"></a>14.3.1.2. Issues With dlopen And Thread Sanitizer</h4><p>从多个线程使用<code>dlopen</code>时，线程清理程序可以列出错误。为了抑制此警告，请创建一个名为<code>tsan.supp</code>的文件并将以下内容添加到文件中：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">race::dlopen</span><br></pre></td></tr></table></figure></p>
+<p>在 thread sanitizer 下运行应用程序时，使用以下命令设置环境变量：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> TSAN_OPTIONS=”suppressions=tsan.supp”</span><br></pre></td></tr></table></figure>
+<h4 id="14-3-1-3-Issues-With-CUDA-And-Address-Sanitizer"><a href="#14-3-1-3-Issues-With-CUDA-And-Address-Sanitizer" class="headerlink" title="14.3.1.3. Issues With CUDA And Address Sanitizer"></a>14.3.1.3. Issues With CUDA And Address Sanitizer</h4><p>在<a target="_blank" rel="noopener" href="https://github.com/google/sanitizers/issues/629">此处</a>记录的 CUDA 应用程序中存在一个已知问题。为了在地址清理器下成功运行 CUDA 库（例如 TensorRT），请将选项<code>protect_shadow_gap=0</code>添加到<code>ASAN_OPTIONS</code>环境变量中。</p>
+<p>在 CUDA 11.4 上，有一个已知错误可能会在地址清理程序中触发不匹配的分配和释放错误。将<code>alloc_dealloc_mismatch=0</code>添加到<code>ASAN_OPTIONS</code>以禁用这些错误。</p>
+<h4 id="14-3-1-4-Issues-With-Undefined-Behavior-Sanitizer"><a href="#14-3-1-4-Issues-With-Undefined-Behavior-Sanitizer" class="headerlink" title="14.3.1.4. Issues With Undefined Behavior Sanitizer"></a>14.3.1.4. Issues With Undefined Behavior Sanitizer</h4><p><a target="_blank" rel="noopener" href="https://clang.llvm.org/docs/UndefinedBehaviorSanitizer.html">UndefinedBehaviorSanitizer (UBSan)</a>使用 <code>-fvisibility=hidden</code> 选项报告误报，如<a target="_blank" rel="noopener" href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=80963">此处</a>所述。您必须添加<code>-fno-sanitize=vptr</code>选项以避免 <code>UBSan</code> 报告此类误报。</p>
+<h3 id="14-3-2-Valgrind"><a href="#14-3-2-Valgrind" class="headerlink" title="14.3.2. Valgrind"></a>14.3.2. Valgrind</h3><p><code>Valgrind</code>是一个动态分析工具框架，可用于自动检测应用程序中的内存管理和线程错误。</p>
+<p>某些版本的 <code>valgrind</code> 和 <code>glibc</code> 受到错误的影响，该错误会导致在使用<code>dlopen</code>时报告错误的内存泄漏，这可能会在 <code>valgrind</code> 的<code>memcheck</code>工具下运行 TensorRT 应用程序时产生虚假错误。要解决此问题，请将以下内容添加到此处记录的 <code>valgrind</code>抑制文件中：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">   Memory leak errors with dlopen</span><br><span class="line">   Memcheck:Leak</span><br><span class="line">   match-leak-kinds: definite</span><br><span class="line">   ...</span><br><span class="line">   fun:*dlopen*</span><br><span class="line">   ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在 CUDA 11.4 上，有一个已知错误可能会在 <code>valgrind</code> 中触发不匹配的分配和释放错误。将选项<code>--show-mismatched-frees=no</code>添加到 <code>valgrind</code> 命令行以抑制这些错误。</p>
+<h3 id="14-3-3-Compute-Sanitizer"><a href="#14-3-3-Compute-Sanitizer" class="headerlink" title="14.3.3. Compute Sanitizer"></a>14.3.3. Compute Sanitizer</h3><p>在计算清理程序下运行 TensorRT 应用程序时， cuGetProcAddress可能会因缺少函数而失败，错误代码为 500。可以使用<code>--report-api-errors no</code>选项忽略或抑制此错误。这是由于 CUDA 向后兼容性检查功能是否可用于 CUDA 工具包/驱动程序组合。这些功能在 CUDA 的更高版本中引入，但在当前平台上不可用。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/14-TensorRT%E4%B8%AD%E7%9A%84%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98/" title="14-TensorRT中的常见问题">http://example.com/TensorRT/TensorRT中文版开发手册/14-TensorRT中的常见问题/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+              <a href="/tags/Tensorrt/" rel="tag"><i class="fa fa-tag"></i> Tensorrt</a>
+              <a href="/tags/DeepLearning/" rel="tag"><i class="fa fa-tag"></i> DeepLearning</a>
+              <a href="/tags/Plugin/" rel="tag"><i class="fa fa-tag"></i> Plugin</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/13-TensorRT%E7%9A%84%E6%9C%80%E4%BD%B3%E6%80%A7%E8%83%BD%E5%AE%9E%E8%B7%B5/" rel="prev" title="13-TensorRT的最佳性能实践">
+                  <i class="fa fa-chevron-left"></i> 13-TensorRT的最佳性能实践
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/15-TensorRT%E7%BD%91%E7%BB%9C%E5%B1%82%E8%AF%A6%E8%A7%A3/" rel="next" title="15-TensorRT网络层详解">
+                  15-TensorRT网络层详解 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"1a1342ddac6db147def15cb4a99a4c30"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

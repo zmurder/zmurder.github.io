@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="1 前言最近在b站发现了一个非常好的 计算机视觉 + pytorch 的教程，相见恨晚，能让初学者少走很多弯路。因此决定按着up给的教程路线：图像分类→目标检测→…一步步学习用pytorch实现深度学习在cv上的应用，并做笔记整理和总结。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="5 ResNet">
+<meta property="og:url" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="1 前言最近在b站发现了一个非常好的 计算机视觉 + pytorch 的教程，相见恨晚，能让初学者少走很多弯路。因此决定按着up给的教程路线：图像分类→目标检测→…一步步学习用pytorch实现深度学习在cv上的应用，并做笔记整理和总结。">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/20200719204103322.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/20200719205325378.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/20200805095831298.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/20200423164533200.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/20200423165747663.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/image-20240126172843789.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/20200805143600781.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/image-20240126173417823.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/20200805112731312.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/20200805112656263.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/image-20240126175409743.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/image-20240126175830839.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/20200815095455312.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/20200815101406219.png">
+<meta property="article:published_time" content="2024-12-01T10:13:44.538Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:44.538Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="卷积神经网络">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/20200719204103322.png">
+
+
+<link rel="canonical" href="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/","path":"DeepLearning/图像分类网络/5 ResNet/","title":"5 ResNet"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>5 ResNet | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%89%8D%E8%A8%80"><span class="nav-text">1 前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-ResNet-%E8%AF%A6%E8%A7%A3"><span class="nav-text">2  ResNet 详解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-Why-residual"><span class="nav-text">2.1 Why residual?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-What-is-residual%EF%BC%9F"><span class="nav-text">2.2 What is residual？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-ResNet%E4%B8%AD%E7%9A%84residual%E7%BB%93%E6%9E%84"><span class="nav-text">2.3 ResNet中的residual结构</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-BN%E5%B1%82"><span class="nav-text">3 BN层</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E8%BF%81%E7%A7%BB%E5%AD%A6%E4%B9%A0"><span class="nav-text">4 迁移学习</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="5 ResNet | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          5 ResNet
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:44" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:44+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/DeepLearning/" itemprop="url" rel="index"><span itemprop="name">DeepLearning</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">图像分类网络</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-前言"><a href="#1-前言" class="headerlink" title="1 前言"></a>1 前言</h1><p>最近在b站发现了一个非常好的 计算机视觉 + pytorch 的教程，相见恨晚，能让初学者少走很多弯路。<br>因此决定按着up给的教程路线：图像分类→目标检测→…一步步学习用pytorch实现深度学习在cv上的应用，并做笔记整理和总结。</p>
+<p>up主教程给出了pytorch和tensorflow两个版本的实现，我暂时只记录pytorch版本的笔记。</p>
+<p>参考内容来自：</p>
+<ul>
+<li>up主的b站链接：<a target="_blank" rel="noopener" href="https://space.bilibili.com/18161609/channel/index">https://space.bilibili.com/18161609/channel/index</a></li>
+<li>up主将代码和ppt都放在了github：<a target="_blank" rel="noopener" href="https://github.com/WZMIAOMIAO/deep-learning-for-image-processing\">https://github.com/WZMIAOMIAO/deep-learning-for-image-processing\</a></li>
+<li>up主的CSDN博客：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_37541097/article/details/103482003">https://blog.csdn.net/qq_37541097/article/details/103482003</a></li>
+</ul>
+<h1 id="2-ResNet-详解"><a href="#2-ResNet-详解" class="headerlink" title="2  ResNet 详解"></a>2  ResNet 详解</h1><p>原论文地址：Deep Residual Learning for Image Recognition（作者是CV大佬何凯明团队）</p>
+<p>ResNet 网络是在 2015年 由微软实验室提出，斩获当年ImageNet竞赛中分类任务第一名，目标检测第一名。获得COCO数据集中目标检测第一名，图像分割第一名。</p>
+<p>在ResNet网络的创新点：</p>
+<ul>
+<li>提出 Residual 结构（残差结构），并搭建超深的网络结构（可突破1000层）（之前的只有十几层）</li>
+<li>使用 Batch Normalization 加速训练（丢弃dropout）</li>
+</ul>
+<p>下图是ResNet34层模型的结构简图：</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/20200719204103322.png" class="" title="在这里插入图片描述">
+<h2 id="2-1-Why-residual"><a href="#2-1-Why-residual" class="headerlink" title="2.1 Why residual?"></a>2.1 Why residual?</h2><p>在ResNet网络提出之前，传统的卷积神经网络都是通过将一系列卷积层与池化层进行堆叠得到的。</p>
+<p>一般我们会觉得网络越深，特征信息越丰富，模型效果应该越好。但是实验证明，当网络堆叠到一定深度时，会出现两个问题：</p>
+<p><strong>梯度消失或梯度爆炸</strong></p>
+<ul>
+<li>关于梯度消失和梯度爆炸，其实看名字理解最好：\</li>
+<li>若每一层的误差梯度小于1，反向传播时，网络越深，梯度越趋近于0</li>
+<li>反之，若每一层的误差梯度大于1，反向传播时，网路越深，梯度越来越大</li>
+</ul>
+<p><strong>退化问题</strong>(degradation problem)：在解决了梯度消失、爆炸问题后，仍然存在深层网络的效果可能比浅层网络差的现象</p>
+<p>总结就是，<strong>当网络堆叠到一定深度时，反而会出现深层网络比浅层网络效果差的情况</strong>。</p>
+<p>如下图所示，20层网络 反而比 56层网络 的误差更小：</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/20200719205325378.png" class="" title="在这里插入图片描述">
+<ul>
+<li><p>对于梯度消失或梯度爆炸问题，ResNet论文提出通过数据的预处理以及在网络中使用 BN（Batch Normalization）层来解决。</p>
+</li>
+<li><p>对于退化问题，ResNet论文提出了 residual结构（残差结构）来减轻退化问题，下图是使用residual结构的卷积网络，可以看到随着网络的不断加深，效果并没有变差，而是变的更好了。（虚线是train error，实线是test error）</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/20200805095831298.png" class="" title="在这里插入图片描述">
+</li>
+</ul>
+<h2 id="2-2-What-is-residual？"><a href="#2-2-What-is-residual？" class="headerlink" title="2.2 What is residual？"></a>2.2 What is residual？</h2><p>为了解决深层网络中的退化问题，可以人为地让神经网络某些层跳过下一层神经元的连接，隔层相连，弱化每层之间的强联系。这种神经网络被称为 残差网络 (ResNets)。</p>
+<p>残差网络由许多隔层相连的神经元子模块组成，我们称之为 残差块 Residual block。单个残差块的结构如下图所示：</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/20200423164533200.png" class="" title="在这里插入图片描述">
+<p>上图中红色部分称为 short cut 或者 skip connection（也称 捷径分支），直接建立 $a^{[l]}$  与 $ a^{[l+2]} $之间的隔层联系。</p>
+<p>由多个 残差块 组成的神经网络就是 残差网络 。其结构如下图所示：</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/20200423165747663.png" class="" title="在这里插入图片描述">
+<p>实验表明，这种模型结构对于训练非常深的神经网络,效果很好。另外，为了便于区分，我们把 <strong>非残差网络</strong> 称为 <strong>Plain Network。</strong></p>
+<h2 id="2-3-ResNet中的residual结构"><a href="#2-3-ResNet中的residual结构" class="headerlink" title="2.3 ResNet中的residual结构"></a>2.3 ResNet中的residual结构</h2><p>跟VggNet类似，ResNet也有多个不同层的版本，而残差结构也有两种对应浅层和深层网络：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th></th>
+<th>ResNet</th>
+<th>残差结构</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>浅层网络</td>
+<td>ResNet18/34</td>
+<td>BasicBlock</td>
+</tr>
+<tr>
+<td>深层网络</td>
+<td>ResNet50/101/152</td>
+<td>Bottleneck</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>下图中左侧残差结构称为 BasicBlock，右侧残差结构称为 Bottleneck（<strong>注意下面的相加不是深度方向的拼接，是特征矩阵的相加（矩阵加法）</strong>）</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/image-20240126172843789.png" class="" title="image-20240126172843789">
+<p><strong>上图中右侧多了一个1×1的卷积层，主要是改变深度。</strong></p>
+<p>可以计算一下，假设两个残差结构的输入特征和输出特征矩阵的深度都是256维，如下</p>
+<p>那么两个残差结构所需的参数为：</p>
+<p>左侧： $3×3×256×256+3×3×256×256=1,179,648$<br>右侧： $1×1×256×64+3×3×64×64+1×1×64×256=69,632$</p>
+<p>注：CNN参数个数 = 卷积核尺寸×卷积核深度 × 卷积核组数 = 卷积核尺寸 × 输入特征矩阵深度 × 输出特征矩阵深度<br>明显搭建深层网络时，使用右侧的残差结构更合适。</p>
+<p>观察下图的 ResNet18层网络，可以发现有些残差块的 short cut 是实线的，而有些则是虚线的。</p>
+<p>这些虚线的 short cut 上通过1×1的卷积核进行了维度处理（特征矩阵在长宽方向降采样，深度方向调整成下一层残差结构所需要的channel）。</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/20200805143600781.png" class="" title="在这里插入图片描述">
+<p> 下图是原论文给出的不同深度的ResNet网络结构配置，注意表中的残差结构给出了主分支上卷积核的大小与卷积核个数，表中 残差块×N 表示将该残差结构重复N次。</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/image-20240126173417823.png" class="" title="image-20240126173417823">
+<p>原文的表注中已说明，conv3_x, conv4_x, conv5_x所对应的一系列残差结构的第一层残差结构都是虚线残差结构。因为这一系列残差结构的第一层都有调整输入特征矩阵shape的使命（将特征矩阵的高和宽缩减为原来的一半，将深度channel调整成下一层残差结构所需要的channel）</p>
+<p>需要注意的是，对于ResNet50/101/152，其实conv2_x所对应的一系列残差结构的第一层也是虚线残差结构，因为它需要调整输入特征矩阵的channel。根据表格可知通过3x3的max pool之后输出的特征矩阵shape应该是[56, 56, 64]，但conv2_x所对应的一系列残差结构中的实线残差结构它们期望的输入特征矩阵shape是[56, 56, 256]（因为这样才能保证输入输出特征矩阵shape相同，才能将捷径分支的输出与主分支的输出进行相加）。所以第一层残差结构需要将shape从[56, 56, 64] —&gt; [56, 56, 256]。注意，这里只调整channel维度，高和宽不变（而conv3_x, conv4_x, conv5_x所对应的一系列残差结构的第一层虚线残差结构不仅要调整channel还要将高和宽缩减为原来的一半）。</p>
+<p>下面是 ResNet 18/34 和 ResNet 50/101/152 具体的实线/虚线残差结构图：</p>
+<p><strong>ResNet 18/34</strong></p>
+<p>例如针对34-layer的conv3_x来说，输入的shape为[56,56,64]，输出shape为[28,28,128]，因此需要虚线得到的输出也是[28,28,128]。因此通过stride=2改变56为28,在通过128通道改变通道数64为128.</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/20200805112731312.png" class="" title="在这里插入图片描述">
+<p><strong>ResNet 50/101/152s</strong></p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/20200805112656263.png" class="" title="在这里插入图片描述">
+<h1 id="3-BN层"><a href="#3-BN层" class="headerlink" title="3 BN层"></a>3 BN层</h1><p>就是针对feature map进行处理（是针对<strong>batch的处理</strong>，不是一张照片的feture map进行处理）</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/image-20240126175409743.png" class="" title="image-20240126175409743">
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/image-20240126175830839.png" class="" title="image-20240126175830839">
+<h1 id="4-迁移学习"><a href="#4-迁移学习" class="headerlink" title="4 迁移学习"></a>4 迁移学习</h1><p>迁移学习是一个比较大的领域，我们这里说的迁移学习是指神经网络训练中使用到的迁移学习。</p>
+<p>在迁移学习中，我们希望利用源任务（Source Task）学到的知识帮助学习目标任务 (Target Task)。例如，一个训练好的图像分类网络能够被用于另一个图像相关的任务。再比如，一个网络在仿真环境学习的知识可以被迁移到真实环境的网络。迁移学习一个典型的例子就是载入训练好VGG网络，这个大规模分类网络能将图像分到1000个类别，然后把这个网络用于另一个任务，如医学图像分类。</p>
+<p>为什么可以这么做呢？如下图所示，神经网络逐层提取图像的深层信息，这样，预训练网络就相当于一个特征提取器。</p>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/20200815095455312.png" class="" title="在这里插入图片描述">
+<p>使用迁移学习的优势：</p>
+<ul>
+<li>能够快速的训练出一个理想的结果</li>
+<li>当数据集较小时也能训练出理想的效果</li>
+</ul>
+<p>   注意：使用别人预训练好的模型参数时，要注意别人的预处理方式。</p>
+<p>常见的迁移学习方式：</p>
+<ul>
+<li>载入权重后训练所有参数</li>
+<li>载入权重后只训练最后几层参数</li>
+<li>载入权重后在原网络基础上再添加一层全连接层，仅训练最后一个全连接层</li>
+</ul>
+<img src="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/20200815101406219.png" class="" title="在这里插入图片描述">
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/5%20ResNet/" title="5 ResNet">http://example.com/DeepLearning/图像分类网络/5 ResNet/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag"><i class="fa fa-tag"></i> 卷积神经网络</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/4%20GoogleNet/" rel="prev" title="4 GoogleNet">
+                  <i class="fa fa-chevron-left"></i> 4 GoogleNet
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/DeepLearning/%E5%9B%BE%E5%83%8F%E5%88%86%E7%B1%BB%E7%BD%91%E7%BB%9C/6%20ResNeXt/" rel="next" title="6 ResNeXt">
+                  6 ResNeXt <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"912e3987acae5b1b2fc40afb0ce1035d"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="说明开始使用Hexo搭建博客，搭建的教程参考网上的，这篇主要是说明一下使用过程的细节">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hexo的基本使用">
+<meta property="og:url" content="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="说明开始使用Hexo搭建博客，搭建的教程参考网上的，这篇主要是说明一下使用过程的细节">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225162330497.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225162703363.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225163722787.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225164156414.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225164211972.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225165647057.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225175358543.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225162703363.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230228192226913.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230228192504729.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225191657691.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225191750953.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225192346840.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225192430180.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/1620.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225192720187.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225195205007.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230329112926676.png">
+<meta property="og:image" content="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20231015175213732.png">
+<meta property="article:published_time" content="2024-12-01T10:13:45.743Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.743Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="GPU">
+<meta property="article:tag" content="Typora">
+<meta property="article:tag" content="Plugin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225162330497.png">
+
+
+<link rel="canonical" href="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/","path":"hexo/Hexo的基本使用/","title":"Hexo的基本使用"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Hexo的基本使用 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AF%B4%E6%98%8E"><span class="nav-text">说明</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%8D%9A%E5%AE%A2%E5%88%86%E7%B1%BB-category"><span class="nav-text">1 博客分类  category</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-%E5%88%9B%E5%BB%BA%E5%88%86%E7%B1%BB%E9%A1%B5%E9%9D%A2"><span class="nav-text">1.1 创建分类页面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-%E6%89%8B%E5%8A%A8%E7%BB%99%E5%8D%9A%E5%AE%A2%E6%B7%BB%E5%8A%A0%E5%88%86%E7%B1%BB"><span class="nav-text">1.2 手动给博客添加分类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-%E6%A0%B9%E6%8D%AE%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84%E8%87%AA%E5%8A%A8%E7%94%9F%E6%88%90%E5%88%86%E7%B1%BB"><span class="nav-text">1.3 根据目录结构自动生成分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-1-hexo-auto-category-%E6%8F%92%E4%BB%B6"><span class="nav-text">1.3.1 hexo-auto-category 插件</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-1-1-%E5%AE%89%E8%A3%85-hexo-auto-category"><span class="nav-text">1.3.1.1 安装 hexo-auto-category</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-1-2-%E9%85%8D%E7%BD%AE"><span class="nav-text">1.3.1.2 配置</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-1-3-%E7%BC%96%E8%AF%91-amp-%E9%83%A8%E7%BD%B2"><span class="nav-text">1.3.1.3 编译 &amp; 部署</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-1-4-%E9%AB%98%E7%BA%A7%E9%85%8D%E7%BD%AE"><span class="nav-text">1.3.1.4 高级配置</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-3-2-hexo-enhancer-%E6%8F%92%E4%BB%B6"><span class="nav-text">1.3.2 hexo-enhancer 插件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%A0%87%E7%AD%BE-Tag"><span class="nav-text">2 标签 Tag</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E5%88%9B%E5%BB%BA%E6%A0%87%E7%AD%BE%E9%A1%B5%E9%9D%A2"><span class="nav-text">2.1 创建标签页面</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-%E6%89%8B%E5%8A%A8%E7%BB%99%E5%8D%9A%E5%AE%A2%E6%B7%BB%E5%8A%A0tag"><span class="nav-text">2.2 手动给博客添加tag</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-%E8%87%AA%E5%8A%A8%E6%B7%BB%E5%8A%A0%E6%A0%87%E7%AD%BE"><span class="nav-text">2.3 自动添加标签</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E9%85%8D%E5%90%88%E4%BD%BF%E7%94%A8typora-%E5%9B%BE%E7%89%87%E6%98%BE%E7%A4%BA"><span class="nav-text">3 配合使用typora 图片显示</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-%E9%85%8D%E7%BD%AE-Typora-%E5%9B%BE%E7%89%87%E8%B7%AF%E5%BE%84"><span class="nav-text">3.1  配置 Typora 图片路径</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E9%85%8D%E7%BD%AE-Hexo-%E5%9B%BE%E7%89%87%E6%96%87%E4%BB%B6%E5%A4%B9"><span class="nav-text">3.2 配置 Hexo 图片文件夹</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E5%AE%89%E8%A3%85%E6%8F%92%E4%BB%B6"><span class="nav-text">3.3 安装插件</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-canvas-nest%E5%8A%A8%E7%94%BB%E8%83%8C%E6%99%AF"><span class="nav-text">3 canvas_nest动画背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%AD%97%E4%BD%93%E4%B8%8E%E9%A2%9C%E8%89%B2"><span class="nav-text">4 字体与颜色</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#5-%E6%96%87%E7%AB%A0%E6%8E%92%E5%BA%8F"><span class="nav-text">5 文章排序</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Hexo的基本使用 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Hexo的基本使用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/hexo/" itemprop="url" rel="index"><span itemprop="name">hexo</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><p>开始使用Hexo搭建博客，搭建的教程参考网上的，这篇主要是说明一下使用过程的细节</p>
+<h1 id="1-博客分类-category"><a href="#1-博客分类-category" class="headerlink" title="1 博客分类  category"></a>1 博客分类  category</h1><p>为什么要分类和标签？</p>
+<p>我这里使用的是next主题，首页显示如下</p>
+<img src="/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225162330497.png" class="" title="image-20230225162330497">
+<p>这里没有一个统一分类导航（不知道是不是可以在首页设置，后面学到了再补充吧）。这就导致博客文章毫无条理的放在这里，无法快速定位。因此我们需要依赖分类和标签的功能来组织我们的文章。</p>
+<h2 id="1-1-创建分类页面"><a href="#1-1-创建分类页面" class="headerlink" title="1.1 创建分类页面"></a>1.1 创建分类页面</h2><p>初次使用发布网页后点击“分类”标签会出现类似下面的页面（这里使用点击标签的替代）。</p>
+<img src="/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225162703363.png" class="" title="image-20230225162703363">
+<p>里面是空的，因此需要生成一个分类的页面。</p>
+<p>在主文件夹下使用命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new page categories</span><br></pre></td></tr></table></figure>
+<p>提示如下：也就是生成了对应的md文件</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">huolin@huolin:/media/zyd/blog/zydblog$ hexo new page categories</span><br><span class="line">INFO  Validating config</span><br><span class="line">INFO  Created: /media/zyd/blog/zydblog/source/categories/index.md</span><br></pre></td></tr></table></figure>
+<p>打开<code>source/categories/index.md</code>文件并编辑如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">title: 文章分类</span><br><span class="line">date: <span class="number">2023</span><span class="number">-02</span><span class="number">-25</span> <span class="number">16</span>:<span class="number">09</span>:<span class="number">32</span></span><br><span class="line">type: <span class="string">&quot;categories&quot;</span></span><br></pre></td></tr></table></figure>
+<p>使用下面指令生成并启动本地服务</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+<p>打开浏览器<code>http://localhost:4000</code>点击分类显示如下，只有一个标题，还没有具体的分类。</p>
+<img src="/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225163722787.png" class="" title="image-20230225163722787">
+<h2 id="1-2-手动给博客添加分类"><a href="#1-2-手动给博客添加分类" class="headerlink" title="1.2 手动给博客添加分类"></a>1.2 手动给博客添加分类</h2><p>有了分类的页面，下一步就是给我们的文章进行分类了。</p>
+<p>打开我们要发布的博文的md文件，在文件开始添加以下内容</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#title:  # 标题</span></span><br><span class="line"><span class="meta">#date: 2019/3/26 hh:mm:ss # 时间</span></span><br><span class="line">categories: # 分类</span><br><span class="line">- 测试分类</span><br><span class="line">tags: # 测试标签</span><br><span class="line">- GPU</span><br><span class="line">- test</span><br></pre></td></tr></table></figure>
+<p>重新发布</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hexo g</span><br><span class="line">hexo s</span><br></pre></td></tr></table></figure>
+<p>可以看到我们的分类页面就会有内容了</p>
+<img src="/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225164156414.png" class="" title="image-20230225164156414">
+<img src="/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225164211972.png" class="" title="image-20230225164211972">
+<h2 id="1-3-根据目录结构自动生成分类"><a href="#1-3-根据目录结构自动生成分类" class="headerlink" title="1.3 根据目录结构自动生成分类"></a>1.3 根据目录结构自动生成分类</h2><p>上面可以编写博客的分类，但是容易出错也麻烦，找到两个插件，可以实现根据目录来自动分类。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/xu-song/hexo-auto-category">hexo-auto-category</a>:Generates categories automatically by folder name</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/sisyphsu/hexo-enhancer">hexo-enhancer</a>:a feature enhancement plugin for Hexo, includes auto-title, auto-date, auto-categories, auto-tags, auto-abbrlink. </p>
+<p>推荐使用<code>hexo-enhancer</code>。</p>
+<h3 id="1-3-1-hexo-auto-category-插件"><a href="#1-3-1-hexo-auto-category-插件" class="headerlink" title="1.3.1 hexo-auto-category 插件"></a>1.3.1 hexo-auto-category 插件</h3><p>这个插件可以根据目录名称建立分类。</p>
+<p>对于博客  <code>source/_post/web/framework/hexo.md</code>，该插件会自动生成以下<code>categories</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">categories:</span><br><span class="line">  - web</span><br><span class="line">  - framework</span><br></pre></td></tr></table></figure>
+<h4 id="1-3-1-1-安装-hexo-auto-category"><a href="#1-3-1-1-安装-hexo-auto-category" class="headerlink" title="1.3.1.1 安装 hexo-auto-category"></a>1.3.1.1 安装 hexo-auto-category</h4><p>使用下面命令安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-auto-category --save</span><br></pre></td></tr></table></figure>
+<h4 id="1-3-1-2-配置"><a href="#1-3-1-2-配置" class="headerlink" title="1.3.1.2 配置"></a>1.3.1.2 配置</h4><p>在站点根目录下的<code>_config.yml</code>添加：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Generate categories from directory-tree</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">Dependencies: https://github.com/xu-song/hexo-auto-category</span></span><br><span class="line"><span class="meta prompt_"># </span><span class="language-bash">depth: the depth of directory-tree you want to generate, should &gt; 0</span></span><br><span class="line">auto_category:</span><br><span class="line"> enable: true</span><br><span class="line"> depth:</span><br></pre></td></tr></table></figure>
+<h4 id="1-3-1-3-编译-amp-部署"><a href="#1-3-1-3-编译-amp-部署" class="headerlink" title="1.3.1.3 编译 &amp; 部署"></a>1.3.1.3 编译 &amp; 部署</h4><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean &amp;&amp; hexo g &amp;&amp; hexo d</span><br></pre></td></tr></table></figure>
+<h4 id="1-3-1-4-高级配置"><a href="#1-3-1-4-高级配置" class="headerlink" title="1.3.1.4 高级配置"></a>1.3.1.4 高级配置</h4><p>如果只想生成第一级目录分类，可以设置<code>depth</code>属性，比如：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">auto_category:</span><br><span class="line"> enable: true</span><br><span class="line"> depth: 1</span><br></pre></td></tr></table></figure>
+<p>我这里的自动生成的分类如下</p>
+<img src="/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225165647057.png" class="" title="image-20230225165647057">
+<h3 id="1-3-2-hexo-enhancer-插件"><a href="#1-3-2-hexo-enhancer-插件" class="headerlink" title="1.3.2 hexo-enhancer 插件"></a>1.3.2 hexo-enhancer 插件</h3><p>这个插件功能非常多，可以自动生成标签、文章title、tag等等。<strong>我这里就是使用这个</strong>。</p>
+<p><code>hexo-enhancer</code>是一个Hexo功能增强插件。</p>
+<p>此插件支持的功能较多，并且未来会继续增加，可以理解为<code>插件包</code>。到目前为止，此插件支持的功能如下：</p>
+<ul>
+<li>自动生成<code>title</code>：根据文件名自动生成标题。</li>
+<li>自动生成<code>date</code>：根据文件名自动生成日期，具体策略类似<code>Jekyll</code>。</li>
+<li>自动生成<code>abbrlink</code>：根据标题进行<code>base32</code>和<code>crc32</code>生成短链接。</li>
+<li>自动生成<code>categories</code>：根据文件的路径解析文章所属分类。</li>
+<li>自动生成<code>tags</code>：根据配置在<code>_config.yml</code>中的可用<code>tags</code>和<code>keywords</code>自动扫描文章中出现的标签。</li>
+</ul>
+<p>1.3.2.1 安装</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-enhancer -–save</span><br></pre></td></tr></table></figure>
+<p><code>_config.yml</code> 配置的标签可以是这样的:</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">keywords:</span> <span class="string">HTML,</span> <span class="string">JavaScript,</span> <span class="string">Hexo</span></span><br><span class="line"><span class="attr">tags:</span> <span class="string">Java,</span> <span class="string">Golang,</span> <span class="string">React,</span> <span class="string">Vue</span></span><br></pre></td></tr></table></figure>
+<p><code>hexo-enhancer</code> 会扫描您的<code>.md</code> 文章，如果文章内出现以上关键词，则自动将其分配如文章的 <code>tags</code> 属性中。</p>
+<p>需要特别指出的是，<code>keywords</code> 是标准配置，它最终会出现在网页 <code>meta</code> 中，而 <code>tags</code> 是自定义的属性，只会被本插件使用。</p>
+<p>效果如下：有分类还有标题。</p>
+<img src="/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225175358543.png" class="" title="image-20230225175358543">
+<h1 id="2-标签-Tag"><a href="#2-标签-Tag" class="headerlink" title="2 标签 Tag"></a>2 标签 Tag</h1><p>标签和分类一样可以对文章进行快速的索引。</p>
+<h2 id="2-1-创建标签页面"><a href="#2-1-创建标签页面" class="headerlink" title="2.1 创建标签页面"></a>2.1 创建标签页面</h2><p>和分类页面一样如果不添加，点击标签显示的是空，如下</p>
+<img src="/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225162703363.png" class="" title="image-20230225162703363">
+<p>需要创建一个页面来显示。</p>
+<p>在根目录（Hexo的<code>_config.yml</code>同级目录中）使用下面命令</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hexo new page tags</span><br></pre></td></tr></table></figure>
+<p>提示如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">huolin@huolin:/media/zyd/blog/hexoBlog/zmurder.github.io$ hexo new page tags</span><br><span class="line">INFO  Validating config</span><br><span class="line">INFO  Created: /media/zyd/blog/hexoBlog/zmurder.github.io/source/tags/index.md</span><br></pre></td></tr></table></figure>
+<p>打开上面的<code>source/tags/index.md</code>文件，默认内容如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">title: tags</span><br><span class="line">date: 2023-02-28 17:33:50</span><br></pre></td></tr></table></figure>
+<p>添加一行如下</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">title: tags</span><br><span class="line">date: 2023-02-28 17:33:50</span><br><span class="line">type: &quot;tags&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="2-2-手动给博客添加tag"><a href="#2-2-手动给博客添加tag" class="headerlink" title="2.2 手动给博客添加tag"></a>2.2 手动给博客添加tag</h2><p>打开我们要发布的博文的md文件，在文件开始添加以下内容</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#title:  # 标题</span></span><br><span class="line"><span class="meta">#date: 2019/3/26 hh:mm:ss # 时间</span></span><br><span class="line">categories: # 分类</span><br><span class="line">- 测试分类</span><br><span class="line">tags: # 测试标签</span><br><span class="line">- GPU</span><br><span class="line">- test</span><br></pre></td></tr></table></figure>
+<p>上面的<code>GPU</code>和<code>test</code>就是这个博文的标签了。</p>
+<h2 id="2-3-自动添加标签"><a href="#2-3-自动添加标签" class="headerlink" title="2.3 自动添加标签"></a>2.3 自动添加标签</h2><p>类似分类的套路，自己写标签太麻烦了，还是以来上面的插件<code>hexo-enhancer</code>来自动生成标签。</p>
+<p>参考1.3安装完成后，在Hexo的<code>_config.yml</code>文件中添加一行如下，这样<code>hexo-enhancer</code>就会自动在文章中搜索，找到对应的关键字就会打上标签。</p>
+<img src="/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230228192226913.png" class="" title="image-20230228192226913">
+<p>重新发布后显示如下</p>
+<img src="/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230228192504729.png" class="" title="image-20230228192504729">
+<h1 id="3-配合使用typora-图片显示"><a href="#3-配合使用typora-图片显示" class="headerlink" title="3 配合使用typora 图片显示"></a>3 配合使用typora 图片显示</h1><p>平时习惯使用typora进行markdown文档的编辑。但是配合Hexo和github的时候图片显示不出来。需要一定的配置，摸索了半天才搞定。</p>
+<p>参考：<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/1970544">https://cloud.tencent.com/developer/article/1970544</a></p>
+<h2 id="3-1-配置-Typora-图片路径"><a href="#3-1-配置-Typora-图片路径" class="headerlink" title="3.1  配置 Typora 图片路径"></a>3.1  配置 Typora 图片路径</h2><p>在typora的<code>文件-&gt;偏好设置</code>中设置图片的相对路经</p>
+<img src="/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225191657691.png" class="" title="image-20230225191657691">
+<p>这样每次插入图片就会在同名文件夹下有对应的图片，如下图</p>
+<img src="/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225191750953.png" class="" title="image-20230225191750953">
+<h2 id="3-2-配置-Hexo-图片文件夹"><a href="#3-2-配置-Hexo-图片文件夹" class="headerlink" title="3.2 配置 Hexo 图片文件夹"></a>3.2 配置 Hexo 图片文件夹</h2><img src="/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225192346840.png" class="" title="image-20230225192346840">
+<p>在 Hexo 根目录打开配置文件 <code>_config.yml</code></p>
+<p>搜索 <code>post_asset_folder</code>，<code>false</code> 改为 <code>true</code></p>
+<img src="/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225192430180.png" class="" title="image-20230225192430180">
+<p> 这样修改后，每次 ‘hexo new page’ 生成新文章，都会在文章文件同级目录创建一个与文章文件名同名的文件夹，我们就在这里存放此文章的图片。 </p>
+<img src="/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/1620.png" class="" title="img">
+<blockquote>
+<p>PS: 这被称为<code>文章资源文件夹</code>, 参考官方文档： <a target="_blank" rel="noopener" href="https://hexo.io/zh-cn/docs/asset-folders">https://hexo.io/zh-cn/docs/asset-folders</a></p>
+</blockquote>
+<h2 id="3-3-安装插件"><a href="#3-3-安装插件" class="headerlink" title="3.3 安装插件"></a>3.3 安装插件</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-asset-img --save</span><br></pre></td></tr></table></figure>
+<p>然后重新部署即可，github也可以看到图片了。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hexo clean</span><br><span class="line">hexo g</span><br><span class="line">hexo s # 本地预览</span><br></pre></td></tr></table></figure>
+<img src="/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225192720187.png" class="" title="image-20230225192720187">
+<h1 id="3-canvas-nest动画背景"><a href="#3-canvas-nest动画背景" class="headerlink" title="3 canvas_nest动画背景"></a>3 canvas_nest动画背景</h1><p>网上的教程都是在next/_config.yml<code>中的</code>canvas_nest<code>改为</code>true。但是我的没有着一个选项，那时旧版本的方法。因此没办法设定。</p>
+<p>为了使背景不那么单调，加入了一个几乎不影响性能的背景动画，配置细节参考<a target="_blank" rel="noopener" href="https://github.com/theme-next/theme-next-canvas-nest">官方说明</a>。 在 <code>source/_data</code> 目录 (若不存在则新建一个) 下新建文件 <code>footer.njk</code>，内容（默认来自 jsdelivr 但是最近似乎国内访问出现问题，故改成了来自一个国内的 cdnjs 镜像 baomitu）：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;script color=<span class="string">&quot;0,0,255&quot;</span> opacity=<span class="string">&quot;0.5&quot;</span> zIndex=<span class="string">&quot;-1&quot;</span> count=<span class="string">&quot;99&quot;</span> src=<span class="string">&quot;https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js&quot;</span>&gt;&lt;/script&gt;</span><br></pre></td></tr></table></figure>
+<p>然后在 NexT 的配置文件中找到 <code>custom_file_path</code> 一项将 footer 一行取消注释： </p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">custom_file_path:</span><br><span class="line">  footer: source/_data/footer.njk</span><br></pre></td></tr></table></figure>
+<p>效果如下</p>
+<img src="/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230225195205007.png" class="" title="image-20230225195205007">
+<h1 id="4-字体与颜色"><a href="#4-字体与颜色" class="headerlink" title="4 字体与颜色"></a>4 字体与颜色</h1><p>先看效果</p>
+<img src="/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20230329112926676.png" class="" title="image-20230329112926676">
+<p>原本的menu的背景是灰色，字体也很小，看着不清楚。因此修改一下</p>
+<p>背景颜色在</p>
+<p>themes/next/source/css/_variables/Mist.styl中，修改为自己喜欢的颜色，我这里修改的是<code>bule</code></p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$content-bg-color        = $blue;</span><br></pre></td></tr></table></figure>
+<p>字体大小在</p>
+<p>themes/next/source/css/_common/outline/header/menu.styl,<code>font-size:</code>修改为自己希望的</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">a &#123;</span><br><span class="line">  border-bottom: <span class="number">0</span>;</span><br><span class="line">  display: block;</span><br><span class="line">  font-size: $font-size-large;</span><br><span class="line">  transition: border-color $transition-ease;</span><br><span class="line"></span><br><span class="line">  &amp;:hover, &amp;.menu-item-active &#123;</span><br><span class="line">    background: var(--menu-item-bg-color);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h1 id="5-文章排序"><a href="#5-文章排序" class="headerlink" title="5 文章排序"></a>5 文章排序</h1><p>默认情况下Hexo文章是按照创建时间排序的。但是比如我的文章希望是按照名称排序的，那么就需要进行修改了。</p>
+<p>我这边修改的是分类标签下的文章排序，如下图，原本是<code>-date</code>修改为了<code>-title</code>。</p>
+<img src="/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/image-20231015175213732.png" class="" title="image-20231015175213732">
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/hexo/Hexo%E7%9A%84%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8/" title="Hexo的基本使用">http://example.com/hexo/Hexo的基本使用/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/Hexo/" rel="tag"><i class="fa fa-tag"></i> Hexo</a>
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+              <a href="/tags/Typora/" rel="tag"><i class="fa fa-tag"></i> Typora</a>
+              <a href="/tags/Plugin/" rel="tag"><i class="fa fa-tag"></i> Plugin</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/hello-world/" rel="prev" title="hello-world">
+                  <i class="fa fa-chevron-left"></i> hello-world
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/hexo/Hexo%E8%AF%84%E8%AE%BAGitalk/" rel="next" title="Hexo评论Gitalk">
+                  Hexo评论Gitalk <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"40c29e482de2eef40b03fde7819e71f7"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

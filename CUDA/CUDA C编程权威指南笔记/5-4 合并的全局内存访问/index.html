@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="5.4 合并的全局内存访问上一节介绍的是通过共享内存减少对全局内存的访问，这一部分是介绍使用共享内存避免对未合并的全局内存的访问。矩阵转置就是一个典型的例子：读操作被自然合并，但写操作是按照交叉访问的。在共享内存的帮助下，可以先在共享内存中进行转置操作，然后再对全局内存进行合并写操作。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="5-4 合并的全局内存访问">
+<meta property="og:url" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="5.4 合并的全局内存访问上一节介绍的是通过共享内存减少对全局内存的访问，这一部分是介绍使用共享内存避免对未合并的全局内存的访问。矩阵转置就是一个典型的例子：读操作被自然合并，但写操作是按照交叉访问的。在共享内存的帮助下，可以先在共享内存中进行转置操作，然后再对全局内存进行合并写操作。">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/image-20230620134927006.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/image-20230707094345722.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/image-20230707100217165.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/image-20230707103901958.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/image-20230707141039872.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/image-20230707141336236.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/image-20230707141351174-16887104319351.png">
+<meta property="og:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/image-20230707141428343.png">
+<meta property="article:published_time" content="2024-12-01T10:13:43.803Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:43.803Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="GPU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/image-20230620134927006.png">
+
+
+<link rel="canonical" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/","path":"CUDA/CUDA C编程权威指南笔记/5-4 合并的全局内存访问/","title":"5-4 合并的全局内存访问"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>5-4 合并的全局内存访问 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#5-4-%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE"><span class="nav-text">5.4 合并的全局内存访问</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-1-%E5%9F%BA%E5%87%86%E8%BD%AC%E7%BD%AE%E5%86%85%E6%A0%B8"><span class="nav-text">5.4.1 基准转置内核</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-2-%E4%BD%BF%E7%94%A8%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E7%9A%84%E7%9F%A9%E9%98%B5%E8%BD%AC%E7%BD%AE"><span class="nav-text">5.4.2 使用共享内存的矩阵转置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-3-%E4%BD%BF%E7%94%A8%E5%A1%AB%E5%85%85%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E7%9A%84%E7%9F%A9%E9%98%B5%E8%BD%AC%E7%BD%AE"><span class="nav-text">5.4.3 使用填充共享内存的矩阵转置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-4-%E4%BD%BF%E7%94%A8%E5%B1%95%E5%BC%80%E7%9A%84%E7%9F%A9%E9%98%B5%E8%BD%AC%E7%BD%AE"><span class="nav-text">5.4.4 使用展开的矩阵转置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-4-5-%E5%A2%9E%E5%A4%A7%E5%B9%B6%E8%A1%8C%E6%80%A7"><span class="nav-text">5.4.5 增大并行性</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="5-4 合并的全局内存访问 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          5-4 合并的全局内存访问
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="5-4-合并的全局内存访问"><a href="#5-4-合并的全局内存访问" class="headerlink" title="5.4 合并的全局内存访问"></a>5.4 合并的全局内存访问</h1><p>上一节介绍的是通过共享内存减少对全局内存的访问，这一部分是介绍使用共享内存避免对未合并的全局内存的访问。矩阵转置就是一个典型的例子：读操作被自然合并，但写操作是按照交叉访问的。在共享内存的帮助下，可以先在共享内存中进行转置操作，然后再对全局内存进行合并写操作。</p>
+<h2 id="5-4-1-基准转置内核"><a href="#5-4-1-基准转置内核" class="headerlink" title="5.4.1 基准转置内核"></a>5.4.1 基准转置内核</h2><p>作为对比的基准，下面的核函数是一个仅使用全局内存的矩阵转置的实现。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">__global__ <span class="type">void</span> <span class="title function_">naiveGmem</span><span class="params">(<span class="type">float</span> *out, <span class="type">float</span> *in, <span class="type">const</span> <span class="type">int</span> nx, <span class="type">const</span> <span class="type">int</span> ny)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// matrix coordinate (ix,iy)</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> ix = blockIdx.y * blockDim.y + threadIdx.y;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> iy = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// transpose with boundary test</span></span><br><span class="line">    <span class="keyword">if</span> (ix &lt; nx &amp;&amp; iy &lt; ny)</span><br><span class="line">    &#123;</span><br><span class="line">        out[ix*ny+iy] = in[iy*nx+ix];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面图示可以更好的理解。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/image-20230620134927006.png" class="" title="image-20230620134927006">
+<ul>
+<li><p>一个绿色的框是一个block</p>
+</li>
+<li><p>一个block内有多个thread（箭头表示）</p>
+</li>
+<li><p>nx是矩阵的宽，ny是矩阵的高，ix是线程的x索引，iy是线程的y索引，通过这两个索引可以算出全局线性内存的索引。</p>
+<ul>
+<li>```C<pre><code>unsigned int ix = blockIdx.y * blockDim.y + threadIdx.y;
+unsigned int iy = blockIdx.x * blockDim.x + threadIdx.x;
+</code></pre><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">* 全局线程内存转置后就是`out[ix*ny+iy] = in[iy*nx+ix];`如下图所示</span><br><span class="line"></span><br><span class="line">&#123;% asset_img image-20230620140017398.png image-20230620140017398 %&#125;</span><br><span class="line"></span><br><span class="line">**因为ix是这个核函数二维线程配置的最内层维度，全局内存读操作在线程束内是被合并的，而全局内存写操作在相邻线程间是交叉访问的。**</span><br><span class="line"></span><br><span class="line">下面的核函数只是实现了一个矩阵的拷贝，读写都是合并的访问，因此可以看作是性能的上限。</span><br><span class="line"></span><br><span class="line">```C</span><br><span class="line">#define INDEX(ROW, COL, INNER) ((ROW) * (INNER) + (COL))</span><br><span class="line"></span><br><span class="line">__global__ void copyGmem(float *out, float *in, const int nrows, const int ncols)</span><br><span class="line">&#123;</span><br><span class="line">    // matrix coordinate (ix,iy)</span><br><span class="line">    unsigned int row = blockIdx.y * blockDim.y + threadIdx.y;</span><br><span class="line">    unsigned int col = blockIdx.x * blockDim.x + threadIdx.x;</span><br><span class="line"></span><br><span class="line">    // transpose with boundary test</span><br><span class="line">    if (row &lt; nrows &amp;&amp; col &lt; ncols)</span><br><span class="line">    &#123;</span><br><span class="line">		    // NOTE this is a transpose, not a copy</span><br><span class="line">        out[INDEX(col, row, nrows)] = in[INDEX(row, col, ncols)];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ul>
+<p>nvprof查看时间</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">           Type  <span class="title function_">Time</span><span class="params">(%)</span>      Time     Calls       Avg       Min       Max  Name</span><br><span class="line">GPU activities:   54.09%  20.629ms         3  6.8764ms  6.8645ms  6.8945ms  [CUDA <span class="built_in">memcpy</span> DtoH]</span><br><span class="line">                  20.30%  7.7420ms         1  7.7420ms  7.7420ms  7.7420ms  [CUDA <span class="built_in">memcpy</span> HtoD]</span><br><span class="line">                  11.67%  4.4511ms         1  4.4511ms  4.4511ms  4.4511ms  <span class="title function_">naiveGmem</span><span class="params">(<span class="type">float</span>*, <span class="type">float</span>*, <span class="type">int</span>, <span class="type">int</span>)</span></span><br><span class="line">                   3.55%  1.3557ms         1  1.3557ms  1.3557ms  1.3557ms  <span class="title function_">copyGmem</span><span class="params">(<span class="type">float</span>*, <span class="type">float</span>*, <span class="type">int</span>, <span class="type">int</span>)</span></span><br></pre></td></tr></table></figure>
+<p>按照书中描述的，全局内存的读可能是32或者128字节的颗粒度，写是32字节的颗粒度。</p>
+<p>加载和存储全局内存请求的平均事务的次数的测试结果如下（因为测试结果与书中差异太大了，因此再看看gld_efficiency和gst_efficiency 全局内存的加载和存储效率）。但是有一点是一致的，就是转置的存储内存请求事务数（gst_transactions_per_request）由拷贝的4变为了转置的32。明显的增多了，需要优化。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">huolin@huolin:~/WorkSpace/zyd/note/cuda/CUDAC编程权威指南/CUDAC编程权威指南练习code/chapter05$ sudo nvprof --metrics gld_transactions_per_request,gst_transactions_per_request,gld_efficiency,gst_efficiency ./transposeRectangle</span><br><span class="line">==127053== NVPROF is profiling process 127053, command: ./transposeRectangle</span><br><span class="line">./transposeRectangle starting transpose at device 0: Quadro P2000  with matrix nrows 4096 ncols 4096</span><br><span class="line">==127053== Some kernel(s) will be replayed on device 0 in order to collect all events/metrics.</span><br><span class="line">Replaying kernel &quot;copyGmem(float*, float*, int, int)&quot; (done)</span><br><span class="line">copyGmem elapsed 0.135785 sec &lt;&lt;&lt; grid (128,256) block (32,16)&gt;&gt;&gt; effective bandwidth 0.988457 GB</span><br><span class="line">Replaying kernel &quot;naiveGmem(float*, float*, int, int)&quot; (done)</span><br><span class="line">naiveGmem elapsed 0.142126 sec &lt;&lt;&lt; grid (128,256) block (32,16)&gt;&gt;&gt; effective bandwidth 0.944357 GB</span><br><span class="line">==127053== Profiling application: ./transposeRectangle</span><br><span class="line">==127053== Profiling result:</span><br><span class="line">==127053== Metric result:</span><br><span class="line">Invocations                               Metric Name                        Metric Description         Min         Max         Avg</span><br><span class="line">Device &quot;Quadro P2000 (0)&quot;</span><br><span class="line">    Kernel: copyGmem(float*, float*, int, int)</span><br><span class="line">          1              gld_transactions_per_request      Global Load Transactions Per Request   16.000004   16.000004   16.000004</span><br><span class="line">          1              gst_transactions_per_request     Global Store Transactions Per Request    4.000000    4.000000    4.000000</span><br><span class="line">          1                            gld_efficiency             Global Memory Load Efficiency     100.00%     100.00%     100.00%</span><br><span class="line">          1                            gst_efficiency            Global Memory Store Efficiency     100.00%     100.00%     100.00%</span><br><span class="line">    Kernel: naiveGmem(float*, float*, int, int)</span><br><span class="line">          1              gld_transactions_per_request      Global Load Transactions Per Request   16.000004   16.000004   16.000004</span><br><span class="line">          1              gst_transactions_per_request     Global Store Transactions Per Request   32.000000   32.000000   32.000000</span><br><span class="line">          1                            gld_efficiency             Global Memory Load Efficiency     100.00%     100.00%     100.00%</span><br><span class="line">          1                            gst_efficiency            Global Memory Store Efficiency      12.50%      12.50%      12.50%</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>书中的测试结果如下</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/image-20230707094345722.png" class="" title="image-20230707094345722">
+<p>不知道为什么两个差异这么大。找资料没找到，先放一放吧。</p>
+<h2 id="5-4-2-使用共享内存的矩阵转置"><a href="#5-4-2-使用共享内存的矩阵转置" class="headerlink" title="5.4.2 使用共享内存的矩阵转置"></a>5.4.2 使用共享内存的矩阵转置</h2><p>上一节的矩阵转置存储操作明显存在全局内存的交叉访问。为了避免交叉全局内存访问，可以使用二维共享内存来缓存原始矩阵的数据。从二维共享内存中读取的一列可以被转移到转置矩阵行中，它被存储在全局内存中。虽然下面的实现导致共享内存存储体冲突，但这个结果将比非合并的全局内存访问好得多。图5-15显<br>示了在矩阵转置中是如何使用共享内存的。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/image-20230707100217165.png" class="" title="image-20230707100217165">
+<p>对应的核函数如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> BDIMX 32</span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> BDIMY 16</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> INDEX(ROW, COL, INNER) ((ROW) * (INNER) + (COL))    </span></span><br><span class="line"><span class="comment">// nrows = 1 &lt;&lt; 12   ncols = 1 &lt;&lt; 12;</span></span><br><span class="line"></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">transposeSmem</span><span class="params">(<span class="type">float</span> *out, <span class="type">float</span> *in, <span class="type">int</span> nrows, <span class="type">int</span> ncols)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// static shared memory</span></span><br><span class="line">    __shared__ <span class="type">float</span> tile[BDIMY][BDIMX];<span class="comment">//一个线程块读取的全局内存，存放到共享内存中，注意长和宽</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// coordinate in original matrix</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> row = blockDim.y * blockIdx.y + threadIdx.y;<span class="comment">//全局内存中的行列</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> col = blockDim.x * blockIdx.x + threadIdx.x;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// linear global memory index for original matrix</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> offset = INDEX(row, col, ncols);<span class="comment">//全局内存中的索引</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (row &lt; nrows &amp;&amp; col &lt; ncols)</span><br><span class="line">    &#123;</span><br><span class="line">      <span class="comment">// load data from global memory to shared memory</span></span><br><span class="line">      tile[threadIdx.y][threadIdx.x] = in[offset];<span class="comment">//全局内存索引后给到共享内存。</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// thread index in transposed block</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> bidx, irow, icol;</span><br><span class="line">    bidx = threadIdx.y * blockDim.x + threadIdx.x;<span class="comment">//block内的内存索引</span></span><br><span class="line">    irow = bidx / blockDim.y;<span class="comment">//block转置后在block内的行</span></span><br><span class="line">    icol = bidx % blockDim.y;<span class="comment">//block转置后在block内的列</span></span><br><span class="line"></span><br><span class="line">	  <span class="comment">// NOTE - need to transpose row and col on block and thread-block level:</span></span><br><span class="line">	  <span class="comment">// 1. swap blocks x-y</span></span><br><span class="line">	  <span class="comment">// 2. swap thread x-y assignment (irow and icol calculations above)</span></span><br><span class="line">	  <span class="comment">// note col still has continuous threadIdx.x -&gt; coalesced gst</span></span><br><span class="line">	  col = blockIdx.y * blockDim.y + icol;<span class="comment">//转置后全局内存中的行列</span></span><br><span class="line">	  row = blockIdx.x * blockDim.x + irow;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// linear global memory index for transposed matrix</span></span><br><span class="line">	  <span class="comment">// NOTE nrows is stride of result, row and col are transposed</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> transposed_offset = INDEX(row, col, nrows);<span class="comment">//转置后全局内存的索引</span></span><br><span class="line">    <span class="comment">// thread synchronization</span></span><br><span class="line">    __syncthreads();</span><br><span class="line"></span><br><span class="line">	  <span class="comment">// NOTE invert sizes for write check</span></span><br><span class="line">    <span class="keyword">if</span> (row &lt; ncols &amp;&amp; col &lt; nrows)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// store data to global memory from shared memory</span></span><br><span class="line">        out[transposed_offset] = tile[icol][irow]; <span class="comment">// NOTE icol,irow not irow,icol//将共享内存的一列给到转置后的全局内存</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>kerneltransposeSmem函数可被分解为以下几个步骤：</p>
+<ol>
+<li>线程束执行合并读取一行，该行存储在全局内存中的原始矩阵块中。</li>
+<li>该线程束按行主序将该数据写入共享内存中，因此，这个写操作没有存储体冲突。</li>
+<li>因为线程块的读/写操作是同步的，所以会有一个填满全局内存数据的二维共享内存数组。</li>
+<li>该线程束从二维共享内存数组中读取一列。由于共享内存没有被填充，所以会发生存储体冲突。</li>
+<li>然后该线程束执行数据的合并写入操作，将其写入到全局内存的转置矩阵中的某行。</li>
+</ol>
+<p>上面最难理解的就是各种索引的转换了。下图方便理解</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/image-20230707103901958.png" class="" title="image-20230707103901958">
+<p>nvprof查看时间</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">           Type  <span class="title function_">Time</span><span class="params">(%)</span>      Time     Calls       Avg       Min       Max  Name</span><br><span class="line">GPU activities:   54.09%  20.629ms         3  6.8764ms  6.8645ms  6.8945ms  [CUDA <span class="built_in">memcpy</span> DtoH]</span><br><span class="line">                  20.30%  7.7420ms         1  7.7420ms  7.7420ms  7.7420ms  [CUDA <span class="built_in">memcpy</span> HtoD]</span><br><span class="line">                  11.67%  4.4511ms         1  4.4511ms  4.4511ms  4.4511ms  <span class="title function_">naiveGmem</span><span class="params">(<span class="type">float</span>*, <span class="type">float</span>*, <span class="type">int</span>, <span class="type">int</span>)</span></span><br><span class="line">                   6.11%  2.3309ms         1  2.3309ms  2.3309ms  2.3309ms  <span class="title function_">transposeSmem</span><span class="params">(<span class="type">float</span>*, <span class="type">float</span>*, <span class="type">int</span>, <span class="type">int</span>)</span></span><br><span class="line">                   3.55%  1.3557ms         1  1.3557ms  1.3557ms  1.3557ms  <span class="title function_">copyGmem</span><span class="params">(<span class="type">float</span>*, <span class="type">float</span>*, <span class="type">int</span>, <span class="type">int</span>)</span></span><br></pre></td></tr></table></figure>
+<p>可以看出共享内存版本的比一般的转置快了一倍。</p>
+<p>下面看看其他的数据，全局内存存贮和内存事务与拷贝已经一致了。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta prompt_">chapter05$ </span><span class="language-bash">sudo nvprof --metrics gld_transactions_per_request,gst_transactions_per_request,gld_efficiency,gst_efficiency ./transposeRectangle</span></span><br><span class="line">[sudo] password for huolin: </span><br><span class="line">==150723== NVPROF is profiling process 150723, command: ./transposeRectangle</span><br><span class="line">./transposeRectangle starting transpose at device 0: Quadro P2000  with matrix nrows 4096 ncols 4096</span><br><span class="line">==150723== Some kernel(s) will be replayed on device 0 in order to collect all events/metrics.</span><br><span class="line">Replaying kernel &quot;copyGmem(float*, float*, int, int)&quot; (done)</span><br><span class="line">copyGmem elapsed 0.135283 sec &lt;&lt;&lt; grid (128,256) block (32,16)&gt;&gt;&gt; effective bandwidth 0.992126 GB</span><br><span class="line">Replaying kernel &quot;naiveGmem(float*, float*, int, int)&quot; (done)</span><br><span class="line">naiveGmem elapsed 0.149418 sec &lt;&lt;&lt; grid (128,256) block (32,16)&gt;&gt;&gt; effective bandwidth 0.898271 GB</span><br><span class="line">Replaying kernel &quot;transposeSmem(float*, float*, int, int)&quot; (done)</span><br><span class="line">transposeSmem elapsed 0.115023 sec &lt;&lt;&lt; grid (128,256) block (32,16)&gt;&gt;&gt; effective bandwidth 1.166876 GB</span><br><span class="line">==150723== Profiling application: ./transposeRectangle</span><br><span class="line">==150723== Profiling result:</span><br><span class="line">==150723== Metric result:</span><br><span class="line">Invocations                               Metric Name                        Metric Description         Min         Max         Avg</span><br><span class="line">Device &quot;Quadro P2000 (0)&quot;</span><br><span class="line">    Kernel: copyGmem(float*, float*, int, int)</span><br><span class="line">          1              gld_transactions_per_request      Global Load Transactions Per Request   16.000004   16.000004   16.000004</span><br><span class="line">          1              gst_transactions_per_request     Global Store Transactions Per Request    4.000000    4.000000    4.000000</span><br><span class="line">          1                            gld_efficiency             Global Memory Load Efficiency     100.00%     100.00%     100.00%</span><br><span class="line">          1                            gst_efficiency            Global Memory Store Efficiency     100.00%     100.00%     100.00%</span><br><span class="line">    Kernel: naiveGmem(float*, float*, int, int)</span><br><span class="line">          1              gld_transactions_per_request      Global Load Transactions Per Request   16.000004   16.000004   16.000004</span><br><span class="line">          1              gst_transactions_per_request     Global Store Transactions Per Request   32.000000   32.000000   32.000000</span><br><span class="line">          1                            gld_efficiency             Global Memory Load Efficiency     100.00%     100.00%     100.00%</span><br><span class="line">          1                            gst_efficiency            Global Memory Store Efficiency      12.50%      12.50%      12.50%</span><br><span class="line">    Kernel: transposeSmem(float*, float*, int, int)</span><br><span class="line">          1              gld_transactions_per_request      Global Load Transactions Per Request   16.000004   16.000004   16.000004</span><br><span class="line">          1              gst_transactions_per_request     Global Store Transactions Per Request    4.000000    4.000000    4.000000</span><br><span class="line">          1                            gld_efficiency             Global Memory Load Efficiency     100.00%     100.00%     100.00%</span><br><span class="line">          1                            gst_efficiency            Global Memory Store Efficiency     100.00%     100.00%     100.00%</span><br></pre></td></tr></table></figure>
+<h2 id="5-4-3-使用填充共享内存的矩阵转置"><a href="#5-4-3-使用填充共享内存的矩阵转置" class="headerlink" title="5.4.3 使用填充共享内存的矩阵转置"></a>5.4.3 使用填充共享内存的矩阵转置</h2><p>为了消除共享内存的存储体冲突，添加列来操作。<code>IPAD</code>来指定填充的列数，需要根据不同的显卡来定，可以测试1或者2.看看效果。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">__shared__ <span class="type">float</span> tile[BDIMY][BDIMX + IPAD];</span><br></pre></td></tr></table></figure>
+<p>书中给出的结果如下</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/image-20230707141039872.png" class="" title="image-20230707141039872">
+<h2 id="5-4-4-使用展开的矩阵转置"><a href="#5-4-4-使用展开的矩阵转置" class="headerlink" title="5.4.4 使用展开的矩阵转置"></a>5.4.4 使用展开的矩阵转置</h2><p>下面的核函数展开两个数据块的同时处理：每个线程现在转置了被一个数据块跨越的两个数据元素。这种转化的目标是通过创造更多的同时加载和存储以提高设备内存带宽利用率。</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">__global__ <span class="type">void</span> <span class="title function_">transposeSmemUnrollPad</span><span class="params">(<span class="type">float</span> *out, <span class="type">float</span> *in, <span class="type">const</span> <span class="type">int</span> nrows,</span></span><br><span class="line"><span class="params">                                       <span class="type">const</span> <span class="type">int</span> ncols)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// static 1D shared memory with padding</span></span><br><span class="line">    __shared__ <span class="type">float</span> tile[BDIMY][BDIMX * <span class="number">2</span> + IPAD];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// coordinate in original matrix</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> row = blockIdx.y * blockDim.y + threadIdx.y;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> col = (<span class="number">2</span> * blockIdx.x * blockDim.x) + threadIdx.x;</span><br><span class="line"></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> row2 = row;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> col2 = col + blockDim.x;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// linear global memory index for original matrix</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> offset = INDEX(row, col, ncols);</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> offset2 = INDEX(row2, col2, ncols);</span><br><span class="line"></span><br><span class="line">    <span class="comment">// thread index in transposed block</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> bidx = threadIdx.y * blockDim.x + threadIdx.x;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> irow = bidx / blockDim.y;</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> icol = bidx % blockDim.y;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// linear global memory index for transposed matrix</span></span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> transposed_offset = INDEX(col, row, nrows);</span><br><span class="line">    <span class="type">unsigned</span> <span class="type">int</span> transposed_offset2 = INDEX(col2, row2, nrows);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (row &lt; nrows &amp;&amp; col &lt; ncols)</span><br><span class="line">    &#123;</span><br><span class="line">        tile[threadIdx.y][threadIdx.x] = in[offset];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (row2 &lt; nrows &amp;&amp; col2 &lt; ncols)</span><br><span class="line">    &#123;</span><br><span class="line">        tile[threadIdx.y][blockDim.x + threadIdx.x] = in[offset2];</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    __syncthreads();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (row &lt; nrows &amp;&amp; col &lt; ncols)</span><br><span class="line">    &#123;</span><br><span class="line">        out[transposed_offset] = tile[irow][icol];</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (row2 &lt; nrows &amp;&amp; col2 &lt; ncols)</span><br><span class="line">    &#123;</span><br><span class="line">        out[transposed_offset2] = tile[irow][blockDim.x + icol];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/image-20230707141336236.png" class="" title="image-20230707141336236">
+<p>书中的测试结果如下</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/image-20230707141351174-16887104319351.png" class="" title="image-20230707141351174">
+<h2 id="5-4-5-增大并行性"><a href="#5-4-5-增大并行性" class="headerlink" title="5.4.5 增大并行性"></a>5.4.5 增大并行性</h2><p>一个简单而有效的优化技术是调整线程块的维度，以找出最佳的执行配置。</p>
+<img src="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/image-20230707141428343.png" class="" title="image-20230707141428343">
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-4%20%E5%90%88%E5%B9%B6%E7%9A%84%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/" title="5-4 合并的全局内存访问">http://example.com/CUDA/CUDA C编程权威指南笔记/5-4 合并的全局内存访问/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-2%20%E5%85%B1%E4%BA%AB%E5%86%85%E5%AD%98%E7%9A%84%E6%95%B0%E6%8D%AE%E5%B8%83%E5%B1%80/" rel="prev" title="5-2 共享内存的数据布局">
+                  <i class="fa fa-chevron-left"></i> 5-2 共享内存的数据布局
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/5-3%20%E5%87%8F%E5%B0%91%E5%85%A8%E5%B1%80%E5%86%85%E5%AD%98%E8%AE%BF%E9%97%AE/" rel="next" title="5-3 减少全局内存访问">
+                  5-3 减少全局内存访问 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"0c408530ffd09eafe0e083a0d94c3485"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

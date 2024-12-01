@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="1 前言最近在b站发现了一个非常好的 计算机视觉 + pytorch实战 的教程，相见恨晚，能让初学者少走很多弯路。因此决定按着up给的教程路线：图像分类→目标检测→…一步步学习用pytorch实现深度学习在cv上的应用，并做笔记整理和总结。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3 FasterRCNN">
+<meta property="og:url" content="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="1 前言最近在b站发现了一个非常好的 计算机视觉 + pytorch实战 的教程，相见恨晚，能让初学者少走很多弯路。因此决定按着up给的教程路线：图像分类→目标检测→…一步步学习用pytorch实现深度学习在cv上的应用，并做笔记整理和总结。">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129164821619.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129165631137.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129165950969.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129170025368.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129170550890.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129171238307.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129171529501.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129172552971.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129172835984.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129173221363.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129173243492.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129173451224.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129173621470.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129173930173.png">
+<meta property="og:image" content="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129173955472.png">
+<meta property="article:published_time" content="2024-12-01T10:13:45.119Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.119Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="GPU">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129164821619.png">
+
+
+<link rel="canonical" href="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/","path":"DeepLearning/目标检测网络/3 FasterRCNN/","title":"3 FasterRCNN"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>3 FasterRCNN | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E5%89%8D%E8%A8%80"><span class="nav-text">1 前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-FasterRCNN"><span class="nav-text">2 FasterRCNN</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-RPN%E7%BD%91%E7%BB%9C%E7%BB%93%E6%9E%84"><span class="nav-text">2.1 RPN网络结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-RPN%E6%8D%9F%E5%A4%B1"><span class="nav-text">2.2 RPN损失</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-Faster-R-CNN-%E8%AE%AD%E7%BB%83"><span class="nav-text">2.3 Faster R-CNN 训练</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E6%80%BB%E7%BB%93"><span class="nav-text">3 总结</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="3 FasterRCNN | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          3 FasterRCNN
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/DeepLearning/" itemprop="url" rel="index"><span itemprop="name">DeepLearning</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/" itemprop="url" rel="index"><span itemprop="name">目标检测网络</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-前言"><a href="#1-前言" class="headerlink" title="1 前言"></a>1 前言</h1><p>最近在b站发现了一个非常好的 计算机视觉 + pytorch实战 的教程，相见恨晚，能让初学者少走很多弯路。<br>因此决定按着up给的教程路线：图像分类→目标检测→…一步步学习用pytorch实现深度学习在cv上的应用，并做笔记整理和总结。</p>
+<p>up主教程给出了pytorch和tensorflow两个版本的实现，我暂时只记录pytorch版本的笔记。</p>
+<p>参考内容来自：</p>
+<ul>
+<li>up主的b站链接：<a target="_blank" rel="noopener" href="https://space.bilibili.com/18161609/channel/index">https://space.bilibili.com/18161609/channel/index</a></li>
+<li>up主将代码和ppt都放在了github：<a target="_blank" rel="noopener" href="https://github.com/WZMIAOMIAO/deep-learning-for-image-processing">https://github.com/WZMIAOMIAO/deep-learning-for-image-processing</a></li>
+<li>up主的CSDN博客：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_37541097/article/details/103482003">https://blog.csdn.net/qq_37541097/article/details/103482003</a></li>
+</ul>
+<h1 id="2-FasterRCNN"><a href="#2-FasterRCNN" class="headerlink" title="2 FasterRCNN"></a>2 FasterRCNN</h1><p>Faster R-CNN 是作者 Ross Girshick 继 Fast R-CNN 后的又一力作，同样使用 VGG16 作为 backbone，推理速度在 GPU 上达到 5fps（每秒检测五张图，包括候选区域生成），准确度也有一定的进步。核心在于 RPN 区域生成网络（Region Proposal Network）。</p>
+<p>Faster R-CNN 算法流程分三个步骤：</p>
+<ul>
+<li>将图像输入网络得到相应的特征图</li>
+<li>使用RPN结构生成候选框，将 RPN 生成的候选框投影到特征图上获得相应的特征矩阵。<strong>也就是使用RPN代替之前的SS生成候选框</strong>。</li>
+<li>将每个特征矩阵通过 ROI pooling 层（可以看做是SPPNet的简化版本，了解可参考 此处）缩放为 7×7 大小的特征图，接着将特征图展平通过一系列全连接层获得预测结果。</li>
+</ul>
+<img src="/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129164821619.png" class="" title="image-20240129164821619">
+<h2 id="2-1-RPN网络结构"><a href="#2-1-RPN网络结构" class="headerlink" title="2.1 RPN网络结构"></a>2.1 RPN网络结构</h2><p>Region Proposal NetWork</p>
+<p>相比与fastRCNN只是候选框的生成方式不一样，这里就之是将一下RNP就可以了。</p>
+<p>在特征图上使用滑动窗口，每滑动到一个位置生成一个一维的向量， 在向量的基础上通过两个全连接层去输出目标概率和边界框回归参数。2k 中的 k 指的是 k 个 anchor boxes，2是指为背景的概率和为前景的概率。每个 anchor 有 4 个边界框回归参数。这里一维向量（256-d）的维度是根据使用<strong>backbone的通道数来定的</strong>，比如VGG16为512个通道，而使用ZF网络则是256个通道。</p>
+<p>对于每个3×3 的滑动窗口计算中心点在原图中的位置（根据比例计算）。然后特征图点的k 个 anchor boxes 对应着原图对应点为中心计算 k 个（下图是给出了3个） anchor boxes。每个都给定了大小和形状，例如下图中给出来了三个示例。</p>
+<img src="/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129165631137.png" class="" title="image-20240129165631137">
+<p>注意这里只预测每个 anchor boxes 是前景还是背景，没有具体的类别。因为是滑动窗口，所以 anchor boxes 中可能有目标物体也可能没有。然后给出了中心位置的偏移量和大小调整，训练希望能够尽可能准确的框选出目标。所检测物体的大小和长宽比都可能是不同的，所以给出了一系列的 anchor 来预测目标的位置。</p>
+<img src="/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129165950969.png" class="" title="image-20240129165950969">
+<p>如下图第一组cls是0.1 0.9 就代表这一个anchor预测是背景的概率是0.1,预测是前景的概率是0.9（注意并没有分类）</p>
+<img src="/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129170025368.png" class="" title="image-20240129170025368">
+<p>接下来讲讲 Faster R-CNN 中给出了哪些尺度和比例的 anchor boxes。不同尺度不同比例对应着蓝色，红色，绿色的九个 anchor。也就是实际上每个地方都会生成 2×9=18 个类别分数和 4×9=36 个边界框回归参数。 3×3 的滑动窗口在 ZF 网络中感受野为 171，而在 VGG16 中为 228。为什么还能预测 256 甚至 512 感受野呢？作者在论文中提出的观点是通过小感受野预测比他大的感受野是有可能的。例如通过经验我们看到物体的一部分就大概猜出了全貌。实际使用中这个也是有效的。</p>
+<img src="/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129170550890.png" class="" title="image-20240129170550890">
+<p>下图给出了ZF网络如何计算感受野的：</p>
+<img src="/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129171238307.png" class="" title="image-20240129171238307">
+<p>对于一个1000×600×3 的图像，特征图大约就是 60×40 大小。获得大量的候选框有很多的重叠，基于候选框的cls得分，采用非极大值抑制，设定 iou 为 0.7（也就是说找到最大cls的，删除和它iou大于等于0.7的候选框，然后找下一个…），就获得近似原始 SS 算法个数的 2k 个候选框。注意：<strong>anchor 和候选框不一样，anchor 加上四个边界框回归参数才能成为候选框</strong>。</p>
+<img src="/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129171529501.png" class="" title="image-20240129171529501">
+<p>多说一下滑动窗口怎么实现的？其实就是使用步长为1，padding也为 1 的 3×3 卷积。卷积后得到的和特征图尺寸深度都是一样的。得到的特征矩阵上并联两个 1×1 的卷积层，就能得到类别回归的预测和边界框回归的预测。</p>
+<p>实际上生成的这么多 anchor 并不是每个都用来训练 RPN 网络。对于每张图片我们从上万个 anchor 当中采样 256 个 anchor，这些 anchor 由正样本和负样本 1:1 组成的。如果正样本不足 128，就用负样本进行填充。两种定义正样本的方式：（1）anchor 与 ground-truth 的 iou 超过 0.7，（2）某个 anchor 与 ground-truth 拥有最大的 iou。负样本是与所有的 ground-truth 的 iou 都小于 0.3 的。</p>
+<img src="/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129172552971.png" class="" title="image-20240129172552971">
+<h2 id="2-2-RPN损失"><a href="#2-2-RPN损失" class="headerlink" title="2.2 RPN损失"></a>2.2 RPN损失</h2><p>RPN的损失也分为两个部分，分类损失和边界框回归损失。其中注意，anchor 位置的个数其实就是特征图大小，也就是 60×40 近似于 2400。 λ 是一个平衡系数，论文中取 10。</p>
+<img src="/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129172835984.png" class="" title="image-20240129172835984">
+<p>注意分类损失这里其实用的是类似多分类的 softmax cross-entropy，而不是二分类的 sigmoid cross-entropy。在下图中，第一项损失为 −log0.9，第二项因为真实标签为 0，所以为  −log0.2，依此类推。</p>
+<img src="/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129173221363.png" class="" title="image-20240129173221363">
+<p>如果使用二分类的交叉熵损失，就是 k 个预测得分，而不是 2k 了。经过 sigmoid 输出后，如果是接近 1 则是前景，如果是接近 0 则是背景。此时 loss 依然是 −(log0.9+log0.8+…)。pytorch 官方实现的 Faster R-CNN 就是使用的二分类的交叉熵损失</p>
+<img src="/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129173243492.png" class="" title="image-20240129173243492">
+<p>边界框回归损失和 Fast R-CNN 是一样的。 $p_i^<em>$  保证只对真实的边界框才计算损失。 t 是直接预测出来的， $ t^</em> $ 则要根据 ground-truth 计算出来。</p>
+<img src="/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129173451224.png" class="" title="image-20240129173451224">
+<h2 id="2-3-Faster-R-CNN-训练"><a href="#2-3-Faster-R-CNN-训练" class="headerlink" title="2.3 Faster R-CNN 训练"></a>2.3 Faster R-CNN 训练</h2><p>现在是联合训练（pytorch官方实现的方法也是联合训练），原来论文是分别训练。</p>
+<img src="/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129173621470.png" class="" title="image-20240129173621470">
+<h1 id="3-总结"><a href="#3-总结" class="headerlink" title="3 总结"></a>3 总结</h1><img src="/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129173930173.png" class="" title="image-20240129173930173">
+<p>对比如下</p>
+<img src="/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/image-20240129173955472.png" class="" title="image-20240129173955472">
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/3%20FasterRCNN/" title="3 FasterRCNN">http://example.com/DeepLearning/目标检测网络/3 FasterRCNN/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/2%20FastRCNN/" rel="prev" title="2 FastRCNN">
+                  <i class="fa fa-chevron-left"></i> 2 FastRCNN
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/DeepLearning/%E7%9B%AE%E6%A0%87%E6%A3%80%E6%B5%8B%E7%BD%91%E7%BB%9C/4%20FPN/" rel="next" title="4 FPN">
+                  4 FPN <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"9d7317bc2226725efe7cf2e4352d8867"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

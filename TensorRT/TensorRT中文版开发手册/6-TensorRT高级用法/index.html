@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="6-TensorRT 进阶用法">
+<meta property="og:type" content="article">
+<meta property="og:title" content="6-TensorRT高级用法">
+<meta property="og:url" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/6-TensorRT%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="6-TensorRT 进阶用法">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/6-TensorRT%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/rdp.jpg">
+<meta property="article:published_time" content="2024-12-01T10:13:45.383Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.384Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="GPU">
+<meta property="article:tag" content="Tensorrt">
+<meta property="article:tag" content="DeepLearning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/6-TensorRT%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/rdp.jpg">
+
+
+<link rel="canonical" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/6-TensorRT%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/6-TensorRT%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/","path":"TensorRT/TensorRT中文版开发手册/6-TensorRT高级用法/","title":"6-TensorRT高级用法"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>6-TensorRT高级用法 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#6-TensorRT-%E8%BF%9B%E9%98%B6%E7%94%A8%E6%B3%95"><span class="nav-text">6-TensorRT 进阶用法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#6-1-The-Timing-Cache"><span class="nav-text">6.1. The Timing Cache</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-2-Refitting-An-Engine"><span class="nav-text">6.2. Refitting An Engine</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-3-Algorithm-Selection-and-Reproducible-Builds"><span class="nav-text">6.3. Algorithm Selection and Reproducible Builds</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-4-Creating-A-Network-Definition-From-Scratch"><span class="nav-text">6.4. Creating A Network Definition From Scratch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-4-1-C"><span class="nav-text">6.4.1. C++</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-4-2-Python"><span class="nav-text">6.4.2. Python</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-5-Reduced-Precision"><span class="nav-text">6.5. Reduced Precision</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#6-5-1-Network-level-Control-of-Precision"><span class="nav-text">6.5.1. Network-level Control of Precision</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-5-2-Layer-level-Control-of-Precision"><span class="nav-text">6.5.2. Layer-level Control of Precision</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-5-3-Enabling-TF32-Inference-Using-C"><span class="nav-text">6.5.3. Enabling TF32 Inference Using C++</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%AD%A6%E5%91%8A%EF%BC%9A%E5%9C%A8%E5%BC%95%E6%93%8E%E8%BF%90%E8%A1%8C%E6%97%B6%E5%B0%86%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8FNVIDIA-TF32-OVERRIDE%E8%AE%BE%E7%BD%AE%E4%B8%BA%E4%B8%8D%E5%90%8C%E7%9A%84%E5%80%BC%E5%8F%AF%E8%83%BD%E4%BC%9A%E5%AF%BC%E8%87%B4%E6%97%A0%E6%B3%95%E9%A2%84%E6%B5%8B%E7%9A%84%E7%B2%BE%E5%BA%A6-%E6%80%A7%E8%83%BD%E5%BD%B1%E5%93%8D%E3%80%82%E5%BC%95%E6%93%8E%E8%BF%90%E8%BD%AC%E6%97%B6%E6%9C%80%E5%A5%BD%E4%B8%8D%E8%A6%81%E8%AE%BE%E7%BD%AE%E3%80%82"><span class="nav-text">警告：在引擎运行时将环境变量NVIDIA_TF32_OVERRIDE设置为不同的值可能会导致无法预测的精度&#x2F;性能影响。引擎运转时最好不要设置。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A%E9%99%A4%E9%9D%9E%E6%82%A8%E7%9A%84%E5%BA%94%E7%94%A8%E7%A8%8B%E5%BA%8F%E9%9C%80%E8%A6%81-TF32-%E6%8F%90%E4%BE%9B%E7%9A%84%E6%9B%B4%E9%AB%98%E5%8A%A8%E6%80%81%E8%8C%83%E5%9B%B4%EF%BC%8C%E5%90%A6%E5%88%99-FP16-%E5%B0%86%E6%98%AF%E6%9B%B4%E5%A5%BD%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88%EF%BC%8C%E5%9B%A0%E4%B8%BA%E5%AE%83%E5%87%A0%E4%B9%8E%E6%80%BB%E8%83%BD%E4%BA%A7%E7%94%9F%E6%9B%B4%E5%BF%AB%E7%9A%84%E6%80%A7%E8%83%BD%E3%80%82"><span class="nav-text">注意：除非您的应用程序需要 TF32 提供的更高动态范围，否则 FP16 将是更好的解决方案，因为它几乎总能产生更快的性能。</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-6-I-O-Formats"><span class="nav-text">6.6. I&#x2F;O Formats</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-7-Compatibility-of-Serialized-Engines"><span class="nav-text">6.7.Compatibility of Serialized Engines</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-8-Explicit-vs-Implicit-Batch"><span class="nav-text">6.8. Explicit vs Implicit Batch</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-9-Sparsity"><span class="nav-text">6.9. Sparsity</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-10-Empty-Tensors"><span class="nav-text">6.10. Empty Tensors</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-11-Reusing-Input-Buffers"><span class="nav-text">6.11. Reusing Input Buffers</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-12-Engine-Inspector"><span class="nav-text">6.12. Engine Inspector</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/6-TensorRT%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="6-TensorRT高级用法 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          6-TensorRT高级用法
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/" itemprop="url" rel="index"><span itemprop="name">TensorRT中文版开发手册</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="6-TensorRT-进阶用法"><a href="#6-TensorRT-进阶用法" class="headerlink" title="6-TensorRT 进阶用法"></a>6-TensorRT 进阶用法</h1><img src="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/6-TensorRT%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/rdp.jpg" class="">
+<p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/zh-cn/developer-program">点击此处加入NVIDIA开发者计划</a></p>
+<h2 id="6-1-The-Timing-Cache"><a href="#6-1-The-Timing-Cache" class="headerlink" title="6.1. The Timing Cache"></a>6.1. The Timing Cache</h2><p>为了减少构建器时间，TensorRT 创建了一个层时序缓存，以在构建器阶段保存层分析信息。它包含的信息特定于目标构建器设备、CUDA 和 TensorRT 版本，以及可以更改层实现的 <code>BuilderConfig</code> 参数，例如<code>BuilderFlag::kTF32或BuilderFlag::kREFIT</code> 。</p>
+<p>如果有其他层具有相同的输入/输出张量配置和层参数，则 TensorRT 构建器会跳过分析并重用重复层的缓存结果。如果缓存中的计时查询未命中，则构建器会对该层计时并更新缓存。</p>
+<p>时序缓存可以被序列化和反序列化。您可以通过<code>IBuilderConfig::createTimingCache</code>从缓冲区加载序列化缓存：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ITimingCache* cache = </span><br><span class="line"> config-&gt;<span class="built_in">createTimingCache</span>(cacheFile.<span class="built_in">data</span>(), cacheFile.<span class="built_in">size</span>());</span><br></pre></td></tr></table></figure>
+<p>将缓冲区大小设置为0会创建一个新的空时序缓存。</p>
+<p>然后，在构建之前将缓存附加到构建器配置。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">config-&gt;<span class="built_in">setTimingCache</span>(*cache, <span class="literal">false</span>);</span><br></pre></td></tr></table></figure>
+<p>在构建期间，由于缓存未命中，时序缓存可以增加更多信息。在构建之后，它可以被序列化以与另一个构建器一起使用。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">IHostMemory* serializedCache = cache-&gt;<span class="built_in">serialize</span>();</span><br></pre></td></tr></table></figure>
+<p>如果构建器没有附加时间缓存，构建器会创建自己的临时本地缓存并在完成时将其销毁。</p>
+<p>缓存与算法选择不兼容（请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#algorithm-select">算法选择和可重现构建部分</a>）。可以通过设置<code>BuilderFlag</code>来禁用它。</p>
+<h2 id="6-2-Refitting-An-Engine"><a href="#6-2-Refitting-An-Engine" class="headerlink" title="6.2. Refitting An Engine"></a>6.2. Refitting An Engine</h2><p>TensorRT 可以用新的权重改装引擎而无需重建它，但是，在构建时必须指定这样做的选项：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">config-&gt;<span class="built_in">setFlag</span>(BuilderFlag::kREFIT) </span><br><span class="line">builder-&gt;<span class="built_in">buildSerializedNetwork</span>(network, config);</span><br></pre></td></tr></table></figure>
+<p>稍后，您可以创建一个<code>Refitter</code>对象：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ICudaEngine* engine = ...;</span><br><span class="line">IRefitter* refitter = <span class="built_in">createInferRefitter</span>(*engine,gLogger)</span><br></pre></td></tr></table></figure>
+<p>然后更新权重。例如，要更新名为“<code>MyLayer</code>”的卷积层的内核权重：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Weights newWeights = ...;</span><br><span class="line">refitter-&gt;<span class="built_in">setWeights</span>(<span class="string">&quot;MyLayer&quot;</span>,WeightsRole::kKERNEL,</span><br><span class="line">                    newWeights);</span><br></pre></td></tr></table></figure><br>新的权重应该与用于构建引擎的原始权重具有相同的计数。如果出现问题，例如错误的层名称或角色或权重计数发生变化， <code>setWeights</code>返回 <code>false</code>。</p>
+<p>由于引擎优化的方式，如果您更改一些权重，您可能还必须提供一些其他权重。该界面可以告诉您需要提供哪些额外的权重。</p>
+<p>您可以使用<code>INetworkDefinition::setWeightsName()</code>在构建时命名权重 - ONNX 解析器使用此 API 将权重与 ONNX 模型中使用的名称相关联。然后，您可以使用<code>setNamedWeights</code>更新权重：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Weights newWeights = ...;</span><br><span class="line">refitter-&gt;<span class="built_in">setNamedWeights</span>(<span class="string">&quot;MyWeights&quot;</span>, newWeights);</span><br></pre></td></tr></table></figure><br><code>setNamedWeights</code>和<code>setWeights</code>可以同时使用，即，您可以通过<code>setNamedWeights</code>更新具有名称的权重，并通过<code>setWeights</code>更新那些未命名的权重。</p>
+<p>这通常需要两次调用<code>IRefitter::getMissing</code> ，首先获取必须提供的权重对象的数量，然后获取它们的层和角色。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int32_t</span> n = refitter-&gt;<span class="built_in">getMissing</span>(<span class="number">0</span>, <span class="literal">nullptr</span>, <span class="literal">nullptr</span>);</span><br><span class="line"><span class="function">std::vector&lt;<span class="type">const</span> <span class="type">char</span>*&gt; <span class="title">layerNames</span><span class="params">(n)</span></span>;</span><br><span class="line"><span class="function">std::vector&lt;WeightsRole&gt; <span class="title">weightsRoles</span><span class="params">(n)</span></span>;</span><br><span class="line">refitter-&gt;<span class="built_in">getMissing</span>(n, layerNames.<span class="built_in">data</span>(), </span><br><span class="line">                        weightsRoles.<span class="built_in">data</span>());</span><br></pre></td></tr></table></figure>
+<p>或者，要获取所有缺失权重的名称，请运行：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">const</span> <span class="type">int32_t</span> n = refitter-&gt;<span class="built_in">getMissingWeights</span>(<span class="number">0</span>, <span class="literal">nullptr</span>);</span><br><span class="line"><span class="function">std::vector&lt;<span class="type">const</span> <span class="type">char</span>*&gt; <span class="title">weightsNames</span><span class="params">(n)</span></span>;</span><br><span class="line">refitter-&gt;<span class="built_in">getMissingWeights</span>(n, weightsNames.<span class="built_in">data</span>());</span><br></pre></td></tr></table></figure><br>您可以按任何顺序提供缺失的权重：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="type">int32_t</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">    refitter-&gt;<span class="built_in">setWeights</span>(layerNames[i], weightsRoles[i],</span><br><span class="line">                         Weights&#123;...&#125;);</span><br></pre></td></tr></table></figure>
+<p>返回的缺失权重集是完整的，从某种意义上说，仅提供缺失的权重不会产生对任何更多权重的需求。</p>
+<p>提供所有权重后，您可以更新引擎：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">bool</span> success = refitter-&gt;<span class="built_in">refitCudaEngine</span>();</span><br><span class="line"><span class="built_in">assert</span>(success);</span><br></pre></td></tr></table></figure>
+<p>如果 <code>refit</code> 返回 <code>false</code>，请检查日志以获取诊断信息，可能是关于仍然丢失的权重。<br>然后，您可以删除<code>refitter</code>：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">delete</span> refitter;</span><br></pre></td></tr></table></figure><br>更新后的引擎的行为就像它是从使用新权重更新的网络构建的一样。</p>
+<p>要查看引擎中的所有可改装权重，请使用<code>refitter-&gt;getAll(...)</code>或<code>refitter-&gt;getAllWeights(...)</code> ；类似于上面使用<code>getMissing</code>和<code>getMissingWeights</code>的方式。</p>
+<h2 id="6-3-Algorithm-Selection-and-Reproducible-Builds"><a href="#6-3-Algorithm-Selection-and-Reproducible-Builds" class="headerlink" title="6.3. Algorithm Selection and Reproducible Builds"></a>6.3. Algorithm Selection and Reproducible Builds</h2><p>TensorRT 优化器的默认行为是选择全局最小化引擎执行时间的算法。它通过定时每个实现来做到这一点，有时，当实现具有相似的时间时，系统噪声可能会决定在构建器的任何特定运行中将选择哪个。不同的实现通常会使用不同的浮点值累加顺序，两种实现可能使用不同的算法，甚至以不同的精度运行。因此，构建器的不同调用通常不会导致引擎返回位相同的结果。</p>
+<p>有时，确定性构建或重新创建早期构建的算法选择很重要。通过提供<code>IAlgorithmSelector</code>接口的实现并使用<code>setAlgorithmSelector</code>将其附加到构建器配置，您可以手动指导算法选择。</p>
+<p>方法<code>IAlgorithmSelector::selectAlgorithms</code>接收一个<code>AlgorithmContext</code> ，其中包含有关层算法要求的信息，以及一组满足这些要求的算法选择。它返回 TensorRT 应该为层考虑的算法集。</p>
+<p>构建器将从这些算法中选择一种可以最小化网络全局运行时间的算法。如果未返回任何选项并且<code>BuilderFlag::kREJECT_EMPTY_ALGORITHMS</code>未设置，则 TensorRT 将其解释为意味着任何算法都可以用于该层。要覆盖此行为并在返回空列表时生成错误，请设置<code>BuilderFlag::kREJECT_EMPTY_ALGORITHMSS</code>标志。</p>
+<p>在 TensorRT 完成对给定配置文件的网络优化后，它会调用<code>reportAlgorithms</code> ，它可用于记录为每一层做出的最终选择。</p>
+<p><code>selectAlgorithms</code>返回一个选项。要重播早期构建中的选择，请使用<code>reportAlgorithms</code>记录该构建中的选择，并在<code>selectAlgorithms</code>中返回它们。</p>
+<p><code>sampleAlgorithmSelector</code>演示了如何使用算法选择器在构建器中实现确定性和可重复性。</p>
+<p>注意：</p>
+<ul>
+<li><p>算法选择中的“层”概念与<code>INetworkDefinition</code>中的<code>ILayer</code>不同。由于融合优化，前者中的“层”可以等同于多个网络层的集合。</p>
+</li>
+<li><p><code>selectAlgorithms</code>中选择最快的算法可能不会为整个网络产生最佳性能，因为它可能会增加重新格式化的开销。</p>
+</li>
+<li><p>如果 TensorRT 发现该层是空操作，则 <code>IAlgorithm</code>的时间在<code>selectAlgorithms</code>中为0 。</p>
+</li>
+<li><p><code>reportAlgorithms</code>不提供提供给<code>selectAlgorithms</code>的<code>IAlgorithm</code>的时间和工作空间信息。</p>
+</li>
+</ul>
+<h2 id="6-4-Creating-A-Network-Definition-From-Scratch"><a href="#6-4-Creating-A-Network-Definition-From-Scratch" class="headerlink" title="6.4. Creating A Network Definition From Scratch"></a>6.4. Creating A Network Definition From Scratch</h2><p>除了使用解析器，您还可以通过网络定义 API 将网络直接定义到 TensorRT。此场景假设每层权重已在主机内存中准备好在网络创建期间传递给 TensorRT。</p>
+<p>以下示例创建了一个简单的网络，其中包含 <code>Input</code>、<code>Convolution</code>、<code>Pooling</code>、 <code>MatrixMultiply</code>、<code>Shuffle</code> 、<code>Activation</code> 和 <code>Softmax</code> 层。</p>
+<h2 id="6-4-1-C"><a href="#6-4-1-C" class="headerlink" title="6.4.1. C++"></a>6.4.1. C++</h2><p>本节对应的代码可以在<code>sampleMNISTAPI</code>中找到。在此示例中，权重被加载到以下代码中使用的<code>weightMap</code>数据结构中。</p>
+<p>首先创建构建器和网络对象。请注意，在以下示例中，记录器通过所有 C++ 示例通用的<code>logger.cpp</code>文件进行初始化。 C++ 示例帮助程序类和函数可以在<code>common.h</code>头文件中找到。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> builder = <span class="built_in">SampleUniquePtr</span>&lt;nvinfer1::IBuilder&gt;(nvinfer1::<span class="built_in">createInferBuilder</span>(sample::gLogger.<span class="built_in">getTRTLogger</span>()));</span><br><span class="line"><span class="type">const</span> <span class="keyword">auto</span> explicitBatchFlag = <span class="number">1U</span> &lt;&lt; <span class="built_in">static_cast</span>&lt;<span class="type">uint32_t</span>&gt;(nvinfer1::NetworkDefinitionCreationFlag::kEXPLICIT_BATCH);</span><br><span class="line"><span class="keyword">auto</span> network = <span class="built_in">SampleUniquePtr</span>&lt;nvinfer1::INetworkDefinition&gt;(builder-&gt;<span class="built_in">createNetworkV2</span>(explicitBatchFlag));</span><br></pre></td></tr></table></figure></p>
+<p><code>kEXPLICIT_BATCH</code>标志的更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#explicit-implicit-batch">显式与隐式批处理</a>部分。</p>
+<p>通过指定输入张量的名称、数据类型和完整维度，将输入层添加到网络。一个网络可以有多个输入，尽管在这个示例中只有一个：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> data = network-&gt;<span class="built_in">addInput</span>(INPUT_BLOB_NAME, datatype, Dims4&#123;<span class="number">1</span>, <span class="number">1</span>, INPUT_H, INPUT_W&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>添加带有隐藏层输入节点、步幅和权重的卷积层，用于过滤器和偏差。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> conv1 = network-&gt;<span class="built_in">addConvolution</span>(</span><br><span class="line">*data-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>), <span class="number">20</span>, DimsHW&#123;<span class="number">5</span>, <span class="number">5</span>&#125;, weightMap[<span class="string">&quot;conv1filter&quot;</span>], weightMap[<span class="string">&quot;conv1bias&quot;</span>]);</span><br><span class="line">conv1-&gt;<span class="built_in">setStride</span>(DimsHW&#123;<span class="number">1</span>, <span class="number">1</span>&#125;);</span><br></pre></td></tr></table></figure>
+<p>注意：传递给 TensorRT 层的权重在主机内存中。</p>
+<p>添加池化层；请注意，前一层的输出作为输入传递。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> pool1 = network-&gt;<span class="built_in">addPooling</span>(*conv1-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>), PoolingType::kMAX, DimsHW&#123;<span class="number">2</span>, <span class="number">2</span>&#125;);</span><br><span class="line">pool1-&gt;<span class="built_in">setStride</span>(DimsHW&#123;<span class="number">2</span>, <span class="number">2</span>&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>添加一个 Shuffle 层来重塑输入，为矩阵乘法做准备：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">int32_t</span> <span class="type">const</span> batch = input-&gt;<span class="built_in">getDimensions</span>().d[<span class="number">0</span>];</span><br><span class="line"><span class="type">int32_t</span> <span class="type">const</span> mmInputs = input.<span class="built_in">getDimensions</span>().d[<span class="number">1</span>] * input.<span class="built_in">getDimensions</span>().d[<span class="number">2</span>] * input.<span class="built_in">getDimensions</span>().d[<span class="number">3</span>]; </span><br><span class="line"><span class="keyword">auto</span> inputReshape = network-&gt;<span class="built_in">addShuffle</span>(*input);</span><br><span class="line">inputReshape-&gt;<span class="built_in">setReshapeDimensions</span>(Dims&#123;<span class="number">2</span>, &#123;batch, mmInputs&#125;&#125;);</span><br></pre></td></tr></table></figure></p>
+<p>现在，添加一个 <code>MatrixMultiply</code> 层。在这里，模型导出器提供了转置权重，因此为这些权重指定了<code>kTRANSPOSE</code>选项。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">IConstantLayer* filterConst = network-&gt;<span class="built_in">addConstant</span>(Dims&#123;<span class="number">2</span>, &#123;nbOutputs, mmInputs&#125;&#125;, mWeightMap[<span class="string">&quot;ip1filter&quot;</span>]);</span><br><span class="line"><span class="keyword">auto</span> mm = network-&gt;<span class="built_in">addMatrixMultiply</span>(*inputReshape-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>), MatrixOperation::kNONE, *filterConst-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>), MatrixOperation::kTRANSPOSE);</span><br></pre></td></tr></table></figure>
+<p>添加偏差，它将在批次维度上广播。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> biasConst = network-&gt;<span class="built_in">addConstant</span>(Dims&#123;<span class="number">2</span>, &#123;<span class="number">1</span>, nbOutputs&#125;&#125;, mWeightMap[<span class="string">&quot;ip1bias&quot;</span>]);</span><br><span class="line"><span class="keyword">auto</span> biasAdd = network-&gt;<span class="built_in">addElementWise</span>(*mm-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>), *biasConst-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>), ElementWiseOperation::kSUM);</span><br></pre></td></tr></table></figure>
+<p>添加 ReLU 激活层：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> relu1 = network-&gt;<span class="built_in">addActivation</span>(*ip1-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>), ActivationType::kRELU);</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>添加 SoftMax 层以计算最终概率：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> prob = network-&gt;<span class="built_in">addSoftMax</span>(*relu1-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>));</span><br></pre></td></tr></table></figure><br>为 SoftMax 层的输出添加一个名称，以便在推理时可以将张量绑定到内存缓冲区：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">prob-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>)-&gt;<span class="built_in">setName</span>(OUTPUT_BLOB_NAME);</span><br></pre></td></tr></table></figure><br>将其标记为整个网络的输出：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">network-&gt;<span class="built_in">markOutput</span>(*prob-&gt;<span class="built_in">getOutput</span>(<span class="number">0</span>));</span><br></pre></td></tr></table></figure><br>代表 MNIST 模型的网络现已完全构建。请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#build_engine_c">构建引擎</a>和<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#perform_inference_c">反序列化文件</a>部分，了解如何构建引擎并使用此网络运行推理。</p>
+<h3 id="6-4-2-Python"><a href="#6-4-2-Python" class="headerlink" title="6.4.2. Python"></a>6.4.2. Python</h3><p>此部分对应的代码可以在<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/samples/python/network_api_pytorch_mnist">network_api_pytorch_mnist</a>中找到。</p>
+<p>这个例子使用一个帮助类来保存一些关于模型的元数据：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ModelData</span>(<span class="title class_ inherited__">object</span>):</span><br><span class="line">    INPUT_NAME = <span class="string">&quot;data&quot;</span></span><br><span class="line">    INPUT_SHAPE = (<span class="number">1</span>, <span class="number">1</span>, <span class="number">28</span>, <span class="number">28</span>)</span><br><span class="line">    OUTPUT_NAME = <span class="string">&quot;prob&quot;</span></span><br><span class="line">    OUTPUT_SIZE = <span class="number">10</span></span><br><span class="line">    DTYPE = trt.float32</span><br></pre></td></tr></table></figure>
+<p>在此示例中，权重是从 Pytorch MNIST 模型导入的。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">weights = mnist_model.get_weights()</span><br></pre></td></tr></table></figure><br>创建记录器、构建器和网络类。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">TRT_LOGGER = trt.Logger(trt.Logger.ERROR)</span><br><span class="line">builder = trt.Builder(TRT_LOGGER)</span><br><span class="line">EXPLICIT_BATCH = <span class="number">1</span> &lt;&lt; (<span class="built_in">int</span>)(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH)</span><br><span class="line">network = builder.create_network(common.EXPLICIT_BATCH)</span><br></pre></td></tr></table></figure><br><code>kEXPLICIT_BATCH</code>标志的更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#explicit-implicit-batch">显式与隐式批处理</a>部分。</p>
+<p>接下来，为网络创建输入张量，指定张量的名称、数据类型和形状。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">input_tensor = network.add_input(name=ModelData.INPUT_NAME, dtype=ModelData.DTYPE, shape=ModelData.INPUT_SHAPE)</span><br><span class="line"></span><br></pre></td></tr></table></figure><br>添加一个卷积层，指定输入、输出图的数量、内核形状、权重、偏差和步幅：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">conv1_w = weights[<span class="string">&#x27;conv1.weight&#x27;</span>].numpy()</span><br><span class="line">    conv1_b = weights[<span class="string">&#x27;conv1.bias&#x27;</span>].numpy()</span><br><span class="line">    conv1 = network.add_convolution(<span class="built_in">input</span>=input_tensor, num_output_maps=<span class="number">20</span>, kernel_shape=(<span class="number">5</span>, <span class="number">5</span>), kernel=conv1_w, bias=conv1_b)</span><br><span class="line">    conv1.stride = (<span class="number">1</span>, <span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<p>添加一个池化层，指定输入（前一个卷积层的输出）、池化类型、窗口大小和步幅：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">pool1 = network.add_pooling(<span class="built_in">input</span>=conv1.get_output(<span class="number">0</span>), <span class="built_in">type</span>=trt.PoolingType.MAX, window_size=(<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line">    pool1.stride = (<span class="number">2</span>, <span class="number">2</span>)</span><br></pre></td></tr></table></figure><br>添加下一对卷积和池化层：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">conv2_w = weights[<span class="string">&#x27;conv2.weight&#x27;</span>].numpy()</span><br><span class="line">conv2_b = weights[<span class="string">&#x27;conv2.bias&#x27;</span>].numpy()</span><br><span class="line">conv2 = network.add_convolution(pool1.get_output(<span class="number">0</span>), <span class="number">50</span>, (<span class="number">5</span>, <span class="number">5</span>), conv2_w, conv2_b)</span><br><span class="line">conv2.stride = (<span class="number">1</span>, <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">pool2 = network.add_pooling(conv2.get_output(<span class="number">0</span>), trt.PoolingType.MAX, (<span class="number">2</span>, <span class="number">2</span>))</span><br><span class="line">pool2.stride = (<span class="number">2</span>, <span class="number">2</span>)</span><br></pre></td></tr></table></figure><br>添加一个 Shuffle 层来重塑输入，为矩阵乘法做准备：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">batch = <span class="built_in">input</span>.shape[<span class="number">0</span>]</span><br><span class="line">mm_inputs = np.prod(<span class="built_in">input</span>.shape[<span class="number">1</span>:])</span><br><span class="line">input_reshape = net.add_shuffle(<span class="built_in">input</span>)</span><br><span class="line">input_reshape.reshape_dims = trt.Dims2(batch, mm_inputs)</span><br></pre></td></tr></table></figure><br>现在，添加一个 <code>MatrixMultiply</code> 层。在这里，模型导出器提供了转置权重，因此为这些权重指定了<code>kTRANSPOSE</code>选项。<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">filter_const = net.add_constant(trt.Dims2(nbOutputs, k), weights[<span class="string">&quot;fc1.weight&quot;</span>].numpy())</span><br><span class="line">mm = net.add_matrix_multiply(input_reshape.get_output(<span class="number">0</span>), trt.MatrixOperation.NONE, filter_const.get_output(<span class="number">0</span>), trt.MatrixOperation.TRANSPOSE);</span><br></pre></td></tr></table></figure><br>添加将在批次维度广播的偏差添加：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">bias_const = net.add_constant(trt.Dims2(<span class="number">1</span>, nbOutputs), weights[<span class="string">&quot;fc1.bias&quot;</span>].numpy())</span><br><span class="line">bias_add = net.add_elementwise(mm.get_output(<span class="number">0</span>), bias_const.get_output(<span class="number">0</span>), trt.ElementWiseOperation.SUM)</span><br></pre></td></tr></table></figure>
+<p>添加 Relu 激活层：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">relu1 = network.add_activation(<span class="built_in">input</span>=fc1.get_output(<span class="number">0</span>), <span class="built_in">type</span>=trt.ActivationType.RELU)</span><br></pre></td></tr></table></figure><br>添加最后的全连接层，并将该层的输出标记为整个网络的输出：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">fc2_w = weights[<span class="string">&#x27;fc2.weight&#x27;</span>].numpy()</span><br><span class="line">fc2_b = weights[<span class="string">&#x27;fc2.bias&#x27;</span>].numpy()</span><br><span class="line">fc2 = network.add_fully_connected(relu1.get_output(<span class="number">0</span>), ModelData.OUTPUT_SIZE, fc2_w, fc2_b)</span><br><span class="line"></span><br><span class="line">fc2.get_output(<span class="number">0</span>).name = ModelData.OUTPUT_NAME</span><br><span class="line">network.mark_output(tensor=fc2.get_output(<span class="number">0</span>))</span><br></pre></td></tr></table></figure>
+<p>代表 MNIST 模型的网络现已完全构建。请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#build_engine_python">构建引擎</a>和<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#perform_inference_python">执行推理</a>部分，了解如何构建引擎并使用此网络运行推理。</p>
+<h2 id="6-5-Reduced-Precision"><a href="#6-5-Reduced-Precision" class="headerlink" title="6.5. Reduced Precision"></a>6.5. Reduced Precision</h2><h3 id="6-5-1-Network-level-Control-of-Precision"><a href="#6-5-1-Network-level-Control-of-Precision" class="headerlink" title="6.5.1. Network-level Control of Precision"></a>6.5.1. Network-level Control of Precision</h3><p>默认情况下，TensorRT 以 32 位精度工作，但也可以使用 16 位浮点和 8 位量化浮点执行操作。使用较低的精度需要更少的内存并实现更快的计算。</p>
+<p>降低精度支持取决于您的硬件（请参阅NVIDIA TensorRT 支持矩阵中的<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/support-matrix/index.html#hardware-precision-matrix">硬件和精度</a>部分）。您可以查询构建器以检查平台上支持的精度支持：<br><strong>C++</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (builder-&gt;<span class="built_in">platformHasFastFp16</span>()) &#123; … &#125;;</span><br></pre></td></tr></table></figure><br><strong>Python</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> builder.platform_has_fp16:</span><br></pre></td></tr></table></figure></p>
+<p>在构建器配置中设置标志会通知 TensorRT 它可能会选择较低精度的实现：<br><strong>C++</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">config-&gt;<span class="built_in">setFlag</span>(BuilderFlag::kFP16);</span><br></pre></td></tr></table></figure></p>
+<p><strong>Python</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">config.set_flag(trt.BuilderFlag.FP16)</span><br></pre></td></tr></table></figure></p>
+<p>共有三个精度标志：<code>FP16</code>、<code>INT8</code> 和 <code>TF32</code>，它们可以独立启用。请注意，如果 TensorRT 导致整体运行时间较短，或者不存在低精度实现，TensorRT 仍将选择更高精度的内核。</p>
+<p>当 TensorRT 为层选择精度时，它会根据需要自动转换权重以运行层。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/samples/sampleGoogleNet">sampleGoogleNet</a>和<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/samples/sampleMNIST">sampleMNIST</a>提供了使用这些标志的示例。</p>
+<p>虽然使用 <code>FP16</code> 和 <code>TF32</code> 精度相对简单，但使用 <code>INT8</code> 时会有额外的复杂性。有关详细信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#working-with-int8">使用 INT8</a>章节。</p>
+<h3 id="6-5-2-Layer-level-Control-of-Precision"><a href="#6-5-2-Layer-level-Control-of-Precision" class="headerlink" title="6.5.2. Layer-level Control of Precision"></a>6.5.2. Layer-level Control of Precision</h3><p><code>builder-flags</code> 提供了允许的、粗粒度的控制。然而，有时网络的一部分需要更高的动态范围或对数值精度敏感。您可以限制每层的输入和输出类型：<br><strong>C++</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">layer-&gt;<span class="built_in">setPrecision</span>(DataType::kFP16)</span><br></pre></td></tr></table></figure><br><strong>Python</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">layer.precision = trt.fp16</span><br></pre></td></tr></table></figure><br>这为输入和输出提供了首选类型（此处为D<code>ataType::kFP16</code> ）。</p>
+<p>您可以进一步设置图层输出的首选类型：</p>
+<p><strong>C++</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">layer-&gt;<span class="built_in">setOutputType</span>(out_tensor_index, DataType::kFLOAT)</span><br></pre></td></tr></table></figure><br><strong>Python</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">layer.set_output_type(out_tensor_index, trt.fp16)</span><br></pre></td></tr></table></figure></p>
+<p>计算将使用与输入首选相同的浮点类型。大多数 TensorRT 实现具有相同的输入和输出浮点类型；但是，<code>Convolution</code>、<code>Deconvolution</code> 和 <code>FullyConnected</code> 可以支持量化的 <code>INT8</code> 输入和未量化的 <code>FP16</code> 或 <code>FP32</code> 输出，因为有时需要使用来自量化输入的更高精度输出来保持准确性。</p>
+<p>设置精度约束向 TensorRT 提示它应该选择一个输入和输出与首选类型匹配的层实现，如果前一层的输出和下一层的输入与请求的类型不匹配，则插入重新格式化操作。请注意，只有通过构建器配置中的标志启用了这些类型，TensorRT 才能选择具有这些类型的实现。</p>
+<p>默认情况下，TensorRT 只有在产生更高性能的网络时才会选择这样的实现。如果另一个实现更快，TensorRT 会使用它并发出警告。您可以通过首选构建器配置中的类型约束来覆盖此行为。</p>
+<p><em>C++</em><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">config-&gt;<span class="built_in">setFlag</span>(BuilderFlag::kPREFER_PRECISION_CONSTRAINTS)</span><br></pre></td></tr></table></figure></p>
+<p><strong>Python</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">config.set_flag(trt.BuilderFlag.PREFER_PRECISION_CONSTRAINTS)</span><br></pre></td></tr></table></figure></p>
+<p>如果约束是首选的，TensorRT 会服从它们，除非没有具有首选精度约束的实现，在这种情况下，它会发出警告并使用最快的可用实现。</p>
+<p>要将警告更改为错误，请使用<code>OBEY</code>而不是<code>PREFER</code> ：</p>
+<p><strong>C++</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">config-&gt;<span class="built_in">setFlag</span>(BuilderFlag::kOBEY_PRECISION_CONSTRAINTS);</span><br></pre></td></tr></table></figure></p>
+<p><strong>Python</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">config.set_flag(trt.BuilderFlag.OBEY_PRECISION_CONSTRAINTS);</span><br></pre></td></tr></table></figure><br><a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/samples/sampleINT8API">sampleINT8API</a>说明了使用这些 API 降低精度。</p>
+<p>精度约束是可选的 - 您可以查询以确定是否已使用C++ 中的<code>layer-&gt;precisionIsSet()</code>或 Python 中的<code>layer.precision_is_set</code>设置了约束。如果没有设置精度约束，那么从 C++ 中的l<code>ayer-&gt;getPrecision()</code>返回的结果，或者在 Python 中读取精度属性，是没有意义的。输出类型约束同样是可选的。</p>
+<p><code>layer-&gt;getOutput(i)-&gt;setType()</code>和<code>layer-&gt;setOutputType()</code>之间存在区别——前者是一种可选类型，它限制了 TensorRT 将为层选择的实现。后者是强制性的（默认为 FP32）并指定网络输出的类型。如果它们不同，TensorRT 将插入一个强制转换以确保两个规范都得到尊重。因此，如果您为产生网络输出的层调用<code>setOutputType()</code> ，通常还应该将相应的网络输出配置为具有相同的类型。</p>
+<h3 id="6-5-3-Enabling-TF32-Inference-Using-C"><a href="#6-5-3-Enabling-TF32-Inference-Using-C" class="headerlink" title="6.5.3. Enabling TF32 Inference Using C++"></a>6.5.3. Enabling TF32 Inference Using C++</h3><p>TensorRT 默认允许使用 TF32 Tensor Cores。在计算内积时，例如在卷积或矩阵乘法期间，TF32 执行执行以下操作：</p>
+<ul>
+<li>将 FP32 被乘数舍入到 FP16 精度，但保持 FP32 动态范围。</li>
+<li>计算四舍五入的被乘数的精确乘积。</li>
+<li>将乘积累加到 FP32 总和中。</li>
+</ul>
+<p>TF32 Tensor Cores 可以使用 FP32 加速网络，通常不会损失准确性。对于需要高动态范围的权重或激活的模型，它比 FP16 更强大。</p>
+<p>不能保证 TF32 Tensor Cores 会被实际使用，也没有办法强制实现使用它们 - TensorRT 可以随时回退到 FP32，如果平台不支持 TF32，则总是回退。但是，您可以通过清除 TF32 builder 标志来禁用它们。</p>
+<p><strong>C++</strong></p>
+<p><strong>config-&gt;clearFlag(BuilderFlag::kTF32);</strong></p>
+<p><strong>Python</strong></p>
+<p><strong>config.clear_flag(trt.BuilderFlag.TF32)</strong></p>
+<p>尽管设置了 <code>BuilderFlag::kTF32</code> ，但在构建引擎时设置环境变量<code>NVIDIA_TF32_OVERRIDE=0</code>会禁用 <code>TF32</code> 。此环境变量在设置为0时会覆盖 NVIDIA 库的任何默认值或编程配置，因此它们永远不会使用 <strong>TF32 Tensor Cores</strong> 加速 FP32 计算。这只是一个调试工具，NVIDIA 库之外的任何代码都不应更改基于此环境变量的行为。除0以外的任何其他设置都保留供将来使用。</p>
+<h4 id="警告：在引擎运行时将环境变量NVIDIA-TF32-OVERRIDE设置为不同的值可能会导致无法预测的精度-性能影响。引擎运转时最好不要设置。"><a href="#警告：在引擎运行时将环境变量NVIDIA-TF32-OVERRIDE设置为不同的值可能会导致无法预测的精度-性能影响。引擎运转时最好不要设置。" class="headerlink" title="警告：在引擎运行时将环境变量NVIDIA_TF32_OVERRIDE设置为不同的值可能会导致无法预测的精度/性能影响。引擎运转时最好不要设置。"></a>警告：在引擎运行时将环境变量<code>NVIDIA_TF32_OVERRIDE</code>设置为不同的值可能会导致无法预测的精度/性能影响。引擎运转时最好不要设置。</h4><h4 id="注意：除非您的应用程序需要-TF32-提供的更高动态范围，否则-FP16-将是更好的解决方案，因为它几乎总能产生更快的性能。"><a href="#注意：除非您的应用程序需要-TF32-提供的更高动态范围，否则-FP16-将是更好的解决方案，因为它几乎总能产生更快的性能。" class="headerlink" title="注意：除非您的应用程序需要 TF32 提供的更高动态范围，否则 FP16 将是更好的解决方案，因为它几乎总能产生更快的性能。"></a>注意：除非您的应用程序需要 TF32 提供的更高动态范围，否则 <code>FP16</code> 将是更好的解决方案，因为它几乎总能产生更快的性能。</h4><h2 id="6-6-I-O-Formats"><a href="#6-6-I-O-Formats" class="headerlink" title="6.6. I/O Formats"></a>6.6. I/O Formats</h2><p>TensorRT 使用许多不同的数据格式优化网络。为了允许在 TensorRT 和客户端应用程序之间有效传递数据，这些底层数据格式在网络 I/O 边界处公开，即用于标记为网络输入或输出的张量，以及在将数据传入和传出插件时。对于其他张量，TensorRT 选择导致最快整体执行的格式，并可能插入重新格式化以提高性能。</p>
+<p>您可以通过分析可用的 I/O 格式以及对 TensorRT 之前和之后的操作最有效的格式来组装最佳数据管道。</p>
+<p>要指定 I/O 格式，请以位掩码的形式指定一种或多种格式。<br>以下示例将输入张量格式设置为<code>TensorFormat::kHWC8</code> 。请注意，此格式仅适用于<code>DataType::kHALF</code> ，因此必须相应地设置数据类型。</p>
+<p><strong>C++</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> formats = <span class="number">1U</span> &lt;&lt; TensorFormat::kHWC8;</span><br><span class="line">network-&gt;<span class="built_in">getInput</span>(<span class="number">0</span>)-&gt;<span class="built_in">setAllowedFormats</span>(formats);</span><br><span class="line">network-&gt;<span class="built_in">getInput</span>(<span class="number">0</span>)-&gt;<span class="built_in">setType</span>(DataType::kHALF);</span><br></pre></td></tr></table></figure></p>
+<p><strong>Python</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">formats = <span class="number">1</span> &lt;&lt; <span class="built_in">int</span>(tensorrt.TensorFormat.HWC8)</span><br><span class="line">network.get_input(<span class="number">0</span>).allowed_formats = formats</span><br><span class="line">network.get_input(<span class="number">0</span>).dtype = tensorrt.DataType.HALF</span><br></pre></td></tr></table></figure></p>
+<p>通过设置构建器配置标志<code>DIRECT_IO</code> ，可以使 TensorRT 避免在网络边界插入重新格式化。这个标志通常会适得其反，原因有两个：</p>
+<ul>
+<li>如果允许 TensorRT 插入重新格式化，则生成的引擎可能会更慢。重新格式化可能听起来像是浪费工作，但它可以允许最有效的内核耦合。</li>
+<li>如果 TensorRT 在不引入此类重新格式化的情况下无法构建引擎，则构建将失败。故障可能仅发生在某些目标平台上，因为这些平台的内核支持哪些格式。</li>
+</ul>
+<p>该标志的存在是为了希望完全控制重新格式化是否发生在 I/O 边界的用户，例如构建仅在 DLA 上运行而不回退到 GPU 进行重新格式化的引擎。</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/samples/sampleIOFormats">sampleIOFormats</a>说明了如何使用 C++ 指定 IO 格式。</p>
+<p>下表显示了支持的格式。</p>
+<div class="tablenoborder"><a name="reformat-free-network-tensors__table_h4y_l5m_4qb" shape="rect">
+                                 <!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="reformat-free-network-tensors__table_h4y_l5m_4qb" class="table" frame="border" border="1" rules="all">
+                                 <caption><span class="tablecap">Table 1. Supported I/O formats</span></caption>
+                                 <thead class="thead" align="left">
+                                    <tr class="row">
+                                       <th class="entry" valign="top" width="20%" id="d54e3268" rowspan="1" colspan="1">Format</th>
+                                       <th class="entry" valign="top" width="20%" id="d54e3271" rowspan="1" colspan="1"><samp class="ph codeph">kINT32</samp></th>
+                                       <th class="entry" valign="top" width="20%" id="d54e3275" rowspan="1" colspan="1"><samp class="ph codeph">kFLOAT</samp></th>
+                                       <th class="entry" valign="top" width="20%" id="d54e3279" rowspan="1" colspan="1"><samp class="ph codeph">kHALF</samp></th>
+                                       <th class="entry" valign="top" width="20%" id="d54e3283" rowspan="1" colspan="1"><samp class="ph codeph">kINT8</samp></th>
+                                    </tr>
+                                 </thead>
+                                 <tbody class="tbody">
+                                    <tr class="row">
+                                       <td class="entry" valign="top" width="20%" headers="d54e3268" rowspan="1" colspan="1"><samp class="ph codeph">kLINEAR</samp></td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3271" rowspan="1" colspan="1">Only for GPU</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3275" rowspan="1" colspan="1">Supported</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3279" rowspan="1" colspan="1">Supported</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3283" rowspan="1" colspan="1">Supported</td>
+                                    </tr>
+                                    <tr class="row">
+                                       <td class="entry" valign="top" width="20%" headers="d54e3268" rowspan="1" colspan="1"><samp class="ph codeph">kCHW2</samp></td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3271" rowspan="1" colspan="1">N/A</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3275" rowspan="1" colspan="1">N/A</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3279" rowspan="1" colspan="1">Only for GPU</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3283" rowspan="1" colspan="1">N/A</td>
+                                    </tr>
+                                    <tr class="row">
+                                       <td class="entry" valign="top" width="20%" headers="d54e3268" rowspan="1" colspan="1"><samp class="ph codeph">kCHW4</samp></td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3271" rowspan="1" colspan="1">N/A</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3275" rowspan="1" colspan="1">N/A</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3279" rowspan="1" colspan="1">Supported</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3283" rowspan="1" colspan="1">Supported</td>
+                                    </tr>
+                                    <tr class="row">
+                                       <td class="entry" valign="top" width="20%" headers="d54e3268" rowspan="1" colspan="1"><samp class="ph codeph">kHWC8</samp></td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3271" rowspan="1" colspan="1">N/A</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3275" rowspan="1" colspan="1">N/A</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3279" rowspan="1" colspan="1">Only for GPU</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3283" rowspan="1" colspan="1">N/A</td>
+                                    </tr>
+                                    <tr class="row">
+                                       <td class="entry" valign="top" width="20%" headers="d54e3268" rowspan="1" colspan="1"><samp class="ph codeph">kCHW16</samp></td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3271" rowspan="1" colspan="1">N/A</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3275" rowspan="1" colspan="1">N/A</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3279" rowspan="1" colspan="1">Supported</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3283" rowspan="1" colspan="1">N/A</td>
+                                    </tr>
+                                    <tr class="row">
+                                       <td class="entry" valign="top" width="20%" headers="d54e3268" rowspan="1" colspan="1"><samp class="ph codeph">kCHW32</samp></td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3271" rowspan="1" colspan="1">N/A</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3275" rowspan="1" colspan="1">Only for GPU</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3279" rowspan="1" colspan="1">Only for GPU</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3283" rowspan="1" colspan="1">Supported</td>
+                                    </tr>
+                                    <tr class="row">
+                                       <td class="entry" valign="top" width="20%" headers="d54e3268" rowspan="1" colspan="1"><samp class="ph codeph">kDHWC8</samp></td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3271" rowspan="1" colspan="1">N/A</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3275" rowspan="1" colspan="1">N/A</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3279" rowspan="1" colspan="1">Only for GPU</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3283" rowspan="1" colspan="1">N/A</td>
+                                    </tr>
+                                    <tr class="row">
+                                       <td class="entry" valign="top" width="20%" headers="d54e3268" rowspan="1" colspan="1"><samp class="ph codeph">kCDHW32</samp></td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3271" rowspan="1" colspan="1">N/A</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3275" rowspan="1" colspan="1">N/A</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3279" rowspan="1" colspan="1">Only for GPU</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3283" rowspan="1" colspan="1">Only for GPU</td>
+                                    </tr>
+                                    <tr class="row">
+                                       <td class="entry" valign="top" width="20%" headers="d54e3268" rowspan="1" colspan="1"><samp class="ph codeph">kHWC</samp></td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3271" rowspan="1" colspan="1">N/A</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3275" rowspan="1" colspan="1">Only for GPU</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3279" rowspan="1" colspan="1">N/A</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3283" rowspan="1" colspan="1">N/A</td>
+                                    </tr>
+                                    <tr class="row">
+                                       <td class="entry" valign="top" width="20%" headers="d54e3268" rowspan="1" colspan="1"><samp class="ph codeph">kDLA_LINEAR</samp></td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3271" rowspan="1" colspan="1">N/A</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3275" rowspan="1" colspan="1">N/A</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3279" rowspan="1" colspan="1">Only for DLA</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3283" rowspan="1" colspan="1">Only for DLA</td>
+                                    </tr>
+                                    <tr class="row">
+                                       <td class="entry" valign="top" width="20%" headers="d54e3268" rowspan="1" colspan="1"><samp class="ph codeph">kDLA_HWC4</samp></td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3271" rowspan="1" colspan="1">N/A</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3275" rowspan="1" colspan="1">N/A</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3279" rowspan="1" colspan="1">Only for DLA</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3283" rowspan="1" colspan="1">Only for DLA</td>
+                                    </tr>
+                                    <tr class="row">
+                                       <td class="entry" valign="top" width="20%" headers="d54e3268" rowspan="1" colspan="1"><samp class="ph codeph">kHWC16</samp></td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3271" rowspan="1" colspan="1">N/A</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3275" rowspan="1" colspan="1">N/A</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3279" rowspan="1" colspan="1">Only for NVIDIA Ampere GPUs and later</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e3283" rowspan="1" colspan="1">N/A</td>
+                                    </tr>
+                                 </tbody>
+                              </table>
+                           </div>
+
+<p>请注意，对于矢量化格式，通道维度必须补零到矢量大小的倍数。例如，如果输入绑定的维度为[16,3,224,224] 、 <code>kHALF</code>数据类型和<code>kHWC8</code>格式，则绑定缓冲区的实际所需大小将为1<code>6* 8 *224*224*sizeof(half)</code>字节，甚至尽管<code>engine-&gt;getBindingDimension()</code> API 将张量维度返回为<code>[16,3,224,224]</code> 。填充部分中的值（即本例中的C=3,4,…,7 ）必须用零填充。</p>
+<p>有关这些格式的数据在内存中的实际布局方式，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#data-format-desc">数据格式</a>说明。</p>
+<h2 id="6-7-Compatibility-of-Serialized-Engines"><a href="#6-7-Compatibility-of-Serialized-Engines" class="headerlink" title="6.7.Compatibility of Serialized Engines"></a>6.7.Compatibility of Serialized Engines</h2><p>仅当与用于序列化引擎的相同操作系统、CPU 架构、GPU 模型和 TensorRT 版本一起使用时，序列化引擎才能保证正常工作。</p>
+<p>TensorRT 检查引擎的以下属性，如果它们与引擎被序列化的环境不匹配，将无法反序列化：</p>
+<ul>
+<li>TensorRT 的主要、次要、补丁和构建版本</li>
+<li>计算能力（主要和次要版本）</li>
+</ul>
+<p>这确保了在构建阶段选择的内核存在并且可以运行。此外，TensorRT 用于从 cuDNN 和 cuBLAS 中选择和配置内核的 API 不支持跨设备兼容性，因此在构建器配置中禁用这些策略源的使用。<br>TensorRT 还会检查以下属性，如果它们不匹配，则会发出警告：</p>
+<ul>
+<li>全局内存总线带宽</li>
+<li>二级缓存大小</li>
+<li>每个块和每个多处理器的最大共享内存</li>
+<li>纹理对齐要求</li>
+<li>多处理器数量</li>
+<li>GPU 设备是集成的还是分立的</li>
+</ul>
+<p>如果引擎序列化和运行时系统之间的 GPU 时钟速度不同，则从序列化系统中选择的策略对于运行时系统可能不是最佳的，并且可能会导致一些性能下降。</p>
+<p>如果反序列化过程中可用的设备内存小于序列化过程中的数量，反序列化可能会由于内存分配失败而失败。</p>
+<p>在大型设备上构建小型模型时，TensorRT 可能会选择效率较低但可在可用资源上更好地扩展的内核。因此，如果优化单个TensorRT 引擎以在同一架构中的多个设备上使用，最好的方法是在最小的设备上运行构建器。或者，您可以在计算资源有限的大型设备上构建引擎（请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#limit-compute-resources">限制计算资源</a>部分）。</p>
+<h2 id="6-8-Explicit-vs-Implicit-Batch"><a href="#6-8-Explicit-vs-Implicit-Batch" class="headerlink" title="6.8. Explicit vs Implicit Batch"></a>6.8. Explicit vs Implicit Batch</h2><p>TensorRT 支持两种指定网络的模式：显式批处理和隐式批处理。</p>
+<p>在隐式批处理模式下，每个张量都有一个隐式批处理维度，所有其他维度必须具有恒定长度。此模式由 TensoRT 的早期版本使用，现在已弃用，但继续支持以实现向后兼容性。<br>在显式批处理模式下，所有维度都是显式的并且可以是动态的，即它们的长度可以在执行时改变。许多新功能（例如动态形状和循环）仅在此模式下可用。 ONNX 解析器也需要它。</p>
+<p>例如，考虑一个处理 NCHW 格式的具有 3 个通道的大小为 HxW 的 N 个图像的网络。在运行时，输入张量的维度为 [N,3,H,W]。这两种模式在<code>INetworkDefinition</code>指定张量维度的方式上有所不同：</p>
+<ul>
+<li>在显式批处理模式下，网络指定 [N,3,H,W]。</li>
+<li>在隐式批处理模式下，网络仅指定 [3,H,W]。批次维度 N 是隐式的。</li>
+</ul>
+<p>“跨批次对话”的操作无法在隐式批次模式下表达，因为无法在网络中指定批次维度。隐式批处理模式下无法表达的操作示例：</p>
+<ul>
+<li>减少整个批次维度</li>
+<li>重塑批次维度</li>
+<li>用另一个维度转置批次维度</li>
+</ul>
+<p>例外是张量可以在整个批次中广播，通过方法<code>ITensor::setBroadcastAcrossBatch</code>用于网络输入，并通过隐式广播用于其他张量。</p>
+<p>显式批处理模式消除了限制 - 批处理轴是轴 0。显式批处理的更准确术语是“<code>batch oblivious</code>”，因为在这种模式下，TensorRT 对引导轴没有特殊的语义含义，除非特定操作需要. 实际上，在显式批处理模式下，甚至可能没有批处理维度（例如仅处理单个图像的网络），或者可能存在多个长度不相关的批处理维度（例如比较从两个批处理中提取的所有可能对）。</p>
+<p><code>INetworkDefinition</code> 时，必须通过标志指定显式与隐式批处理的选择。这是显式批处理模式的 C++ 代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">IBuilder* builder = ...;</span><br><span class="line">INetworkDefinition* network = builder-&gt;<span class="built_in">createNetworkV2</span>(<span class="number">1U</span> &lt;&lt; <span class="built_in">static_cast</span>&lt;<span class="type">uint32_t</span>&gt;(NetworkDefinitionCreationFlag::kEXPLICIT_BATCH)));</span><br></pre></td></tr></table></figure><br>对于隐式批处理，使用<code>createNetwork</code>或将 0 传递给<code>createNetworkV2</code> 。</p>
+<p>这是显式批处理模式的 Python 代码：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">builder = trt.Builder(...)</span><br><span class="line">builder.create_network(<span class="number">1</span> &lt;&lt; <span class="built_in">int</span>(trt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH)</span><br></pre></td></tr></table></figure><br>对于隐式批处理，省略参数或传递 0。</p>
+<h2 id="6-9-Sparsity"><a href="#6-9-Sparsity" class="headerlink" title="6.9. Sparsity"></a>6.9. Sparsity</h2><p>NVIDIA 安培架构 GPU 支持结构化稀疏性。为了利用该特性获得更高的推理性能，卷积核权重和全连接权重必须满足以下要求：</p>
+<p>对于每个输出通道和内核权重中的每个空间像素，每 4 个输入通道必须至少有 2 个零。换句话说，假设内核权重的形状为[K, C, R, S]和C % 4 == 0 ，那么要求是：<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> k <span class="keyword">in</span> K:</span><br><span class="line">    <span class="keyword">for</span> r <span class="keyword">in</span> R:</span><br><span class="line">        <span class="keyword">for</span> s <span class="keyword">in</span> S:</span><br><span class="line">            <span class="keyword">for</span> c_packed <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, C // <span class="number">4</span>):</span><br><span class="line">                num_zeros(weights[k, c_packed*<span class="number">4</span>:(c_packed+<span class="number">1</span>)*<span class="number">4</span>, r, s]) &gt;= <span class="number">2</span></span><br></pre></td></tr></table></figure><br>要启用稀疏特性，请在构建器配置中设置<code>kSPARSE_WEIGHTS</code>标志，并确保启用 <code>kFP16</code> 或 <code>kINT8</code> 模式。例如</p>
+<p><strong>C++</strong></p>
+<p><strong>config-&gt;setFlag(BuilderFlag::kSPARSE_WEIGHTS);</strong></p>
+<p><strong>Python</strong></p>
+<p><strong>config.set_flag(trt.BuilderFlag.SPARSE_WEIGHTS)</strong></p>
+<p>在构建 TensorRT 引擎时，在 TensorRT 日志的末尾，TensorRT 会报告哪些层包含满足结构稀疏性要求的权重，以及 TensorRT 在哪些层中选择了利用结构化稀疏性的策略。在某些情况下，具有结构化稀疏性的策略可能比正常策略慢，TensorRT 在这些情况下会选择正常策略。以下输出显示了一个显示有关稀疏性信息的 TensorRT 日志示例：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[03/<span class="number">23</span>/<span class="number">2021</span>-<span class="number">00</span>:<span class="number">14</span>:05] [I] [TRT] (Sparsity) Layers eligible <span class="keyword">for</span> sparse math: conv1, conv2, conv3</span><br><span class="line">[03/<span class="number">23</span>/<span class="number">2021</span>-<span class="number">00</span>:<span class="number">14</span>:05] [I] [TRT] (Sparsity) TRT inference plan picked sparse implementation <span class="keyword">for</span> layers: conv2, conv3</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>强制内核权重具有结构化的稀疏模式可能会导致准确性损失。要通过进一步微调恢复丢失的准确性，请参阅<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/apex/tree/master/apex/contrib/sparsity">PyTorch 中的 Automatic SParsity 工具</a>。</p>
+<p>要使用<code>trtexec</code>测量结构化稀疏性的推理性能，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#trtexec">trtexec</a>部分。</p>
+<h2 id="6-10-Empty-Tensors"><a href="#6-10-Empty-Tensors" class="headerlink" title="6.10. Empty Tensors"></a>6.10. Empty Tensors</h2><p>TensorRT 支持空张量。如果张量具有一个或多个长度为零的维度，则它是一个空张量。零长度尺寸通常不会得到特殊处理。如果一条规则适用于长度为 L 的任意正值 L 的维度，它通常也适用于 L=0。</p>
+<p>例如，当沿最后一个轴连接两个维度为 <code>[x,y,z]</code>和 <code>[x,y,w]</code> 的张量时，结果的维度为 <code>[x,y,z+w]</code>，无论 <code>x,y, z，</code>或者 <code>w</code> 为零。</p>
+<p>隐式广播规则保持不变，因为只有单位长度维度对广播是特殊的。例如，给定两个维度为 <code>[1,y,z]</code> 和 <code>[x,1,z]</code> 的张量，它们由<code>IElementWiseLayer</code>计算的总和具有维度<code>[x,y,z]</code>，无论 <code>x、y 或 z</code> 是否为零.</p>
+<p>如果一个引擎绑定是一个空的张量，它仍然需要一个非空的内存地址，并且不同的张量应该有不同的地址。这与C++中每个对象都有唯一地址的规则是一致的，例如<code>new float[0]</code>返回一个非空指针。如果使用可能返回零字节空指针的内存分配器，请改为请求至少一个字节。</p>
+<p>有关空张量的任何每层特殊处理，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#layers">TensorRT 层</a>。</p>
+<h2 id="6-11-Reusing-Input-Buffers"><a href="#6-11-Reusing-Input-Buffers" class="headerlink" title="6.11. Reusing Input Buffers"></a>6.11. Reusing Input Buffers</h2><p>TensorRT 还包括一个可选的 CUDA 事件作为<code>enqueue</code>方法的参数，一旦输入缓冲区可以重用，就会发出信号。这允许应用程序在完成当前推理的同时立即开始重新填充输入缓冲区以进行下一次推理。例如：</p>
+<p><strong>C++</strong></p>
+<p><strong>context-&gt;enqueueV2(&amp;buffers[0], stream, &amp;inputReady);</strong></p>
+<p><strong>Python</strong></p>
+<p><strong>context.execute_async_v2(buffers, stream_ptr, inputReady)</strong></p>
+<h2 id="6-12-Engine-Inspector"><a href="#6-12-Engine-Inspector" class="headerlink" title="6.12. Engine Inspector"></a>6.12. Engine Inspector</h2><p>TensorRT 提供<code>IEngineInspector</code> API 来检查 TensorRT 引擎内部的信息。从反序列化的引擎中调用<code>createEngineInspector()</code>创建引擎<code>inspector</code>，然后调用<code>getLayerInformation()</code>或<code>getEngineInformation() inspector</code> API分别获取引擎中特定层或整个引擎的信息。可以打印出给定引擎的第一层信息，以及引擎的整体信息，如下：</p>
+<p><strong>C++</strong></p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">auto</span> inspector = std::<span class="built_in">unique_ptr</span>&lt;IEngineInspector&gt;(engine-&gt;<span class="built_in">createEngineInspector</span>());</span><br><span class="line">inspector-&gt;<span class="built_in">setExecutionContext</span>(context); <span class="comment">// OPTIONAL</span></span><br><span class="line">std::cout &lt;&lt; inspector-&gt;<span class="built_in">getLayerInformation</span>(<span class="number">0</span>, LayerInformationFormat::kJSON); <span class="comment">// Print the information of the first layer in the engine.</span></span><br><span class="line">std::cout &lt;&lt; inspector-&gt;<span class="built_in">getEngineInformation</span>(LayerInformationFormat::kJSON); <span class="comment">// Print the information of the entire engine.</span></span><br></pre></td></tr></table></figure>
+<p><strong>Python</strong><br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">inspector = engine.create_engine_inspector();</span><br><span class="line">inspector.execution_context = context; <span class="comment"># OPTIONAL</span></span><br><span class="line"><span class="built_in">print</span>(inspector.get_layer_information(<span class="number">0</span>, LayerInformationFormat.JSON); <span class="comment"># Print the information of the first layer in the engine.</span></span><br><span class="line"><span class="built_in">print</span>(inspector.get_engine_information(LayerInformationFormat.JSON); <span class="comment"># Print the information of the entire engine.</span></span><br></pre></td></tr></table></figure></p>
+<p>请注意，引擎/层信息中的详细程度取决于构建引擎时的<code>ProfilingVerbosity</code>构建器配置设置。默认情况下， <code>ProfilingVerbosity</code>设置为<code>kLAYER_NAMES_ONLY</code> ，因此只会打印层名称。如果<code>ProfilingVerbosity</code>设置为<code>kNONE</code> ，则不会打印任何信息；如果设置为<code>kDETAILED</code> ，则会打印详细信息。</p>
+<p><code>getLayerInformation()</code> API 根据<code>ProfilingVerbosity</code>设置打印的层信息的一些示例：</p>
+<p><strong>kLAYER_NAMES_ONLY</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">node_of_gpu_0/res4_0_branch2a_1 + node_of_gpu_0/res4_0_branch2a_bn_1 + node_of_gpu_0/res4_0_branch2a_bn_2</span><br></pre></td></tr></table></figure>
+<p><strong>kDETAILED</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;Name&quot;</span>: <span class="string">&quot;node_of_gpu_0/res4_0_branch2a_1 + node_of_gpu_0/res4_0_branch2a_bn_1 + node_of_gpu_0/res4_0_branch2a_bn_2&quot;</span>,</span><br><span class="line">  <span class="string">&quot;LayerType&quot;</span>: <span class="string">&quot;CaskConvolution&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Inputs&quot;</span>: [</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="string">&quot;Name&quot;</span>: <span class="string">&quot;gpu_0/res3_3_branch2c_bn_3&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Dimensions&quot;</span>: [<span class="number">16</span>,<span class="number">512</span>,<span class="number">28</span>,<span class="number">28</span>],</span><br><span class="line">    <span class="string">&quot;Format/Datatype&quot;</span>: <span class="string">&quot;Thirty-two wide channel vectorized row major Int8 format.&quot;</span></span><br><span class="line">  &#125;],</span><br><span class="line">  <span class="string">&quot;Outputs&quot;</span>: [</span><br><span class="line">  &#123;</span><br><span class="line">    <span class="string">&quot;Name&quot;</span>: <span class="string">&quot;gpu_0/res4_0_branch2a_bn_2&quot;</span>,</span><br><span class="line">    <span class="string">&quot;Dimensions&quot;</span>: [<span class="number">16</span>,<span class="number">256</span>,<span class="number">28</span>,<span class="number">28</span>],</span><br><span class="line">    <span class="string">&quot;Format/Datatype&quot;</span>: <span class="string">&quot;Thirty-two wide channel vectorized row major Int8 format.&quot;</span></span><br><span class="line">  &#125;],</span><br><span class="line">  <span class="string">&quot;ParameterType&quot;</span>: <span class="string">&quot;Convolution&quot;</span>,</span><br><span class="line">  <span class="string">&quot;Kernel&quot;</span>: [<span class="number">1</span>,<span class="number">1</span>],</span><br><span class="line">  <span class="string">&quot;PaddingMode&quot;</span>: <span class="string">&quot;kEXPLICIT_ROUND_DOWN&quot;</span>,</span><br><span class="line">  <span class="string">&quot;PrePadding&quot;</span>: [<span class="number">0</span>,<span class="number">0</span>],</span><br><span class="line">  <span class="string">&quot;PostPadding&quot;</span>: [<span class="number">0</span>,<span class="number">0</span>],</span><br><span class="line">  <span class="string">&quot;Stride&quot;</span>: [<span class="number">1</span>,<span class="number">1</span>],</span><br><span class="line">  <span class="string">&quot;Dilation&quot;</span>: [<span class="number">1</span>,<span class="number">1</span>],</span><br><span class="line">  <span class="string">&quot;OutMaps&quot;</span>: <span class="number">256</span>,</span><br><span class="line">  <span class="string">&quot;Groups&quot;</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="string">&quot;Weights&quot;</span>: &#123;<span class="string">&quot;Type&quot;</span>: <span class="string">&quot;Int8&quot;</span>, <span class="string">&quot;Count&quot;</span>: <span class="number">131072</span>&#125;,</span><br><span class="line">  <span class="string">&quot;Bias&quot;</span>: &#123;<span class="string">&quot;Type&quot;</span>: <span class="string">&quot;Float&quot;</span>, <span class="string">&quot;Count&quot;</span>: <span class="number">256</span>&#125;,</span><br><span class="line">  <span class="string">&quot;AllowSparse&quot;</span>: <span class="number">0</span>,</span><br><span class="line">  <span class="string">&quot;Activation&quot;</span>: <span class="string">&quot;RELU&quot;</span>,</span><br><span class="line">  <span class="string">&quot;HasBias&quot;</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="string">&quot;HasReLU&quot;</span>: <span class="number">1</span>,</span><br><span class="line">  <span class="string">&quot;TacticName&quot;</span>: <span class="string">&quot;sm80_xmma_fprop_implicit_gemm_interleaved_i8i8_i8i32_f32_nchw_vect_c_32kcrs_vect_c_32_nchw_vect_c_32_tilesize256x128x64_stage4_warpsize4x2x1_g1_tensor16x8x32_simple_t1r1s1_epifadd&quot;</span>,</span><br><span class="line">  <span class="string">&quot;TacticValue&quot;</span>: <span class="string">&quot;0x11bde0e1d9f2f35d&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>另外，当引擎使用动态形状构建时，引擎信息中的动态维度将显示为-1 ，并且不会显示张量格式信息，因为这些字段取决于推理阶段的实际形状。要获取特定推理形状的引擎信息，请创建一个<code>IExecutionContext</code> ，将所有输入尺寸设置为所需的形状，然后调用<code>inspector-&gt;setExecutionContext(context)</code> 。设置上下文后，检查器将打印上下文中设置的特定形状的引擎信息。</p>
+<p>trtexec工具提供了<code>--profilingVerbosity</code> 、 <code>--dumpLayerInfo</code>和<code>--exportLayerInfo</code>标志，可用于获取给定引擎的引擎信息。有关详细信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#trtexec">trtexec</a>部分。</p>
+<p>目前，引擎信息中只包含绑定信息和层信息，包括中间张量的维度、精度、格式、策略指标、层类型和层参数。在未来的 TensorRT 版本中，更多信息可能会作为输出 JSON 对象中的新键添加到引擎检查器输出中。还将提供有关检查器输出中的键和字段的更多规范。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/6-TensorRT%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/" title="6-TensorRT高级用法">http://example.com/TensorRT/TensorRT中文版开发手册/6-TensorRT高级用法/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+              <a href="/tags/Tensorrt/" rel="tag"><i class="fa fa-tag"></i> Tensorrt</a>
+              <a href="/tags/DeepLearning/" rel="tag"><i class="fa fa-tag"></i> DeepLearning</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/5-TensorRT%E5%A6%82%E4%BD%95%E5%B7%A5%E4%BD%9C/" rel="prev" title="5-TensorRT如何工作">
+                  <i class="fa fa-chevron-left"></i> 5-TensorRT如何工作
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/7-TensorRT%E4%B8%AD%E7%9A%84INT8/" rel="next" title="7-TensorRT中的INT8">
+                  7-TensorRT中的INT8 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"9ea563d2b2cbdeeb8d9fe7fb2d47781e"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

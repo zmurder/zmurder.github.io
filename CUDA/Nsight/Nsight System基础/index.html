@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="1 简介该笔记参考深入理解 Nsight System 与 Nsight Compute 性能分析优化工具，并结合自己之前使用nsys的经验进行总结。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Nsight System基础">
+<meta property="og:url" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="1 简介该笔记参考深入理解 Nsight System 与 Nsight Compute 性能分析优化工具，并结合自己之前使用nsys的经验进行总结。">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108094547172.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108094619138.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110093911626.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110095755138.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110094904090.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110095430560.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108094952798.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108095058528.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108102505941.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108102524765.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108102701637.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108102831121.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108103621087.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108104106898.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108104330398.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108100056733.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108104941611.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108105532798.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108105855138.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108110154942.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108145528719.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108145644216.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110095229439.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110095309109.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110095342675.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110100027783.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110100633727.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110100905365.png">
+<meta property="og:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110100933022.png">
+<meta property="article:published_time" content="2024-12-01T10:13:44.189Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:44.189Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="GPU">
+<meta property="article:tag" content="Tensorrt">
+<meta property="article:tag" content="Plugin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108094547172.png">
+
+
+<link rel="canonical" href="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/","path":"CUDA/Nsight/Nsight System基础/","title":"Nsight System基础"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>Nsight System基础 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="nav-text">1 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-1-OVERVIEW-OF-PROFILERS-%E6%A6%82%E8%BF%B0"><span class="nav-text">1.1 OVERVIEW OF PROFILERS 概述</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-2-NSIGHT-PRODUCT-FAMILY-%E4%BA%A7%E5%93%81%E5%AE%B6%E6%97%8F"><span class="nav-text">1.2 NSIGHT PRODUCT FAMILY 产品家族</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-3-OVERVIEW-OF-OPTIMIZATION-WORKFLOW-%E4%BC%98%E5%8C%96%E6%B5%81%E7%A8%8B"><span class="nav-text">1.3 OVERVIEW OF OPTIMIZATION WORKFLOW 优化流程</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-NSIGHT-SYSTEMS"><span class="nav-text">2 NSIGHT SYSTEMS</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-Overview-%E7%AE%80%E4%BB%8B"><span class="nav-text">2.1 Overview 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-NSIGHT-SYSTEMS-Key-Features-%E5%85%B3%E9%94%AE%E7%89%B9%E6%80%A7"><span class="nav-text">2.2 NSIGHT SYSTEMS Key Features 关键特性</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-CPU-THREADS-Thread-Activities-CPU%E7%BA%BF%E7%A8%8B%E6%B4%BB%E5%8A%A8"><span class="nav-text">2.3 CPU THREADS Thread Activities CPU线程活动</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-OS-RUNTIME-LIBRARIES-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9Fruntime"><span class="nav-text">2.4 OS RUNTIME LIBRARIES 操作系统runtime</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-CUDA-API%E8%B7%9F%E8%B8%AA"><span class="nav-text">2.5 CUDA API跟踪</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-6-GPU-WORKLOAD"><span class="nav-text">2.6 GPU WORKLOAD</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-7-CORRELATION-TIES-API-TO-GPU-WORKLOAD-kernel%E5%90%AF%E5%8A%A8%E5%92%8C%E6%89%A7%E8%A1%8C%E7%9A%84%E5%85%B3%E8%81%94"><span class="nav-text">2.7 CORRELATION TIES API TO GPU WORKLOAD kernel启动和执行的关联</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-8-NVTX-INSTRUMENTATION"><span class="nav-text">2.8 NVTX INSTRUMENTATION</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-%E4%BD%BF%E7%94%A8nsight-systems%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="nav-text">3 使用nsight systems的例子</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-Where-is-the-bottleneck-for-Encoder"><span class="nav-text">3.1 Where is the bottleneck for Encoder?</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88"><span class="nav-text">3.2 解决方案</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-3-%E6%A1%88%E4%BE%8B2"><span class="nav-text">3.3 案例2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-1-%E5%88%A9%E7%94%A8-Nsight-System%E5%AF%B9%E7%AE%80%E5%8D%95%E7%9A%84%E6%B7%B1%E5%BA%A6%E5%AD%A6%E4%B9%A0%E8%AE%AD%E7%BB%83%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90"><span class="nav-text">3.3.1 利用 Nsight System对简单的深度学习训练神经网络进行性能分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-2-%E5%88%A9%E7%94%A8Nsight-System%E8%BF%9B%E8%A1%8C%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%EF%BC%8C%E8%BF%9B%E8%80%8C%E4%BD%BF%E7%94%A8%E6%B7%B7%E5%90%88%E7%B2%BE%E5%BA%A6%E5%8A%A0%E9%80%9FBERT"><span class="nav-text">3.3.2 利用Nsight System进行性能分析，进而使用混合精度加速BERT</span></a></li><li class="nav-item nav-level-3"><a class="nav-link"><span class="nav-text"> </span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#4-%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98"><span class="nav-text">4 常见问题</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="Nsight System基础 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          Nsight System基础
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:44" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:44+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/CUDA/Nsight/" itemprop="url" rel="index"><span itemprop="name">Nsight</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h1><p>该笔记参考<a target="_blank" rel="noopener" href="https://resources.nvidia.com/ent-gtccn20/gtccn20-CNS20632">深入理解 Nsight System 与 Nsight Compute 性能分析优化工具</a>，并结合自己之前使用nsys的经验进行总结。</p>
+<h2 id="1-1-OVERVIEW-OF-PROFILERS-概述"><a href="#1-1-OVERVIEW-OF-PROFILERS-概述" class="headerlink" title="1.1 OVERVIEW OF PROFILERS 概述"></a>1.1 OVERVIEW OF PROFILERS 概述</h2><p>NVVP Visual Profiler 上一代工具，有图形界面的<br>nvprof the command-line profiler 上一代工具，命令行的</p>
+<p>新一代的：</p>
+<ul>
+<li>Nsight Systems A system-wide performance analysis tool 系统层面的，除了GPU使用还有CPU使用以及CPU和GPU的交互</li>
+<li>Nsight Compute An interactive kernel profiler for CUDA applicationsi，主要是分析CUDA kernel的</li>
+<li>Note that Visual Profiler and nvprof will be deprecated in a future CUDA release<br>We strongly recommend you transfer to Nsight Systems and Nsight Compute</li>
+</ul>
+<h2 id="1-2-NSIGHT-PRODUCT-FAMILY-产品家族"><a href="#1-2-NSIGHT-PRODUCT-FAMILY-产品家族" class="headerlink" title="1.2 NSIGHT PRODUCT FAMILY 产品家族"></a>1.2 NSIGHT PRODUCT FAMILY 产品家族</h2><p>分析流程</p>
+<ul>
+<li>首先使用Nsight Systems从系统层面优化内存传输、不必要的同步等</li>
+<li>如果是cuda compute的程序使用 Nsight Compute来分析优化</li>
+<li>如果是Graphice程序，使用Nsight Graphics来分析优化</li>
+<li>优化后再使用Nsight Systems重新进行系统层面分析并重复重复上面的过程直到性能达到需求</li>
+</ul>
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108094547172.png" class="" title="image-20241108094547172">
+<h2 id="1-3-OVERVIEW-OF-OPTIMIZATION-WORKFLOW-优化流程"><a href="#1-3-OVERVIEW-OF-OPTIMIZATION-WORKFLOW-优化流程" class="headerlink" title="1.3 OVERVIEW OF OPTIMIZATION WORKFLOW 优化流程"></a>1.3 OVERVIEW OF OPTIMIZATION WORKFLOW 优化流程</h2><img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108094619138.png" class="" title="image-20241108094619138">
+<h1 id="2-NSIGHT-SYSTEMS"><a href="#2-NSIGHT-SYSTEMS" class="headerlink" title="2 NSIGHT SYSTEMS"></a>2 NSIGHT SYSTEMS</h1><h2 id="2-1-Overview-简介"><a href="#2-1-Overview-简介" class="headerlink" title="2.1 Overview 简介"></a>2.1 Overview 简介</h2><p>特性</p>
+<ul>
+<li>System-wide application algorithm tuning<ul>
+<li>Focus on the application’s algorithm – a unique perspective</li>
+</ul>
+</li>
+<li>Locate optimization opportunities<ul>
+<li>See gaps of unused CPU and GPU time</li>
+</ul>
+</li>
+<li>Balance your workload across multiple CPUs and GPUs 将任务均匀分布在CPU和GPU上<ul>
+<li>CPU algorithms, utilization, and thread state</li>
+<li>GPU streams, kernels, memory transfers, etc</li>
+</ul>
+</li>
+<li>Support for Linux &amp; Windows, x86-64 &amp; Tegra. Host only for Mac</li>
+</ul>
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110093911626.png" class="" title="image-20230110093911626">
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110095755138.png" class="" title="image-20230110095755138">
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110094904090.png" class="" title="image-20230110094832727">
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110095430560.png" class="" title="image-20230110095430560">
+<h2 id="2-2-NSIGHT-SYSTEMS-Key-Features-关键特性"><a href="#2-2-NSIGHT-SYSTEMS-Key-Features-关键特性" class="headerlink" title="2.2 NSIGHT SYSTEMS Key Features 关键特性"></a>2.2 NSIGHT SYSTEMS Key Features 关键特性</h2><p>使用Nsight Systems可以获取到那些信息呢？</p>
+<ul>
+<li>Compute<ul>
+<li>CUDA API. Kernel launch and execution correlation</li>
+<li>Libraries: cuBLAS, cuDNN, TensorRT  </li>
+<li>OpenACC</li>
+</ul>
+</li>
+<li>Graphics<ul>
+<li>Vulkan, OpenGL, DX11, DX12, DXR, V-sync</li>
+</ul>
+</li>
+<li>OS Thread state and CPU utilization, pthread, file I/O, etc.</li>
+<li>User annotations API (NVTX)</li>
+</ul>
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108094952798.png" class="" title="image-20241108094952798">
+<h2 id="2-3-CPU-THREADS-Thread-Activities-CPU线程活动"><a href="#2-3-CPU-THREADS-Thread-Activities-CPU线程活动" class="headerlink" title="2.3 CPU THREADS Thread Activities CPU线程活动"></a>2.3 CPU THREADS Thread Activities CPU线程活动</h2><ul>
+<li>Get an overview of each thread’s activities<ul>
+<li>Which core the thread is running and the utilization 线程运行在那一个CPU core上，CPU利用率</li>
+<li>CPU state and transition </li>
+<li>OS runtime libraries usage: pthread, file I/O, etc.</li>
+<li>API usage: CUDA, cuDNN, cuBLAS, TensorRT, …</li>
+</ul>
+</li>
+</ul>
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108095058528.png" class="" title="image-20241108095058528">
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108102505941.png" class="" title="image-20241108102505941">
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108102524765.png" class="" title="image-20241108102524765">
+<h2 id="2-4-OS-RUNTIME-LIBRARIES-操作系统runtime"><a href="#2-4-OS-RUNTIME-LIBRARIES-操作系统runtime" class="headerlink" title="2.4 OS RUNTIME LIBRARIES 操作系统runtime"></a>2.4 OS RUNTIME LIBRARIES 操作系统runtime</h2><p>Identify time periods where threads are blocked and the reason，找出CPU等待的原因，可能是信号量、文件IO、互斥锁<br>Locate potentially redundant synchronizations</p>
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108102701637.png" class="" title="image-20241108102701637">
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108102831121.png" class="" title="image-20241108102831121">
+<h2 id="2-5-CUDA-API跟踪"><a href="#2-5-CUDA-API跟踪" class="headerlink" title="2.5 CUDA API跟踪"></a>2.5 CUDA API跟踪</h2><p>Trace CUDA API Calls on OS thread</p>
+<ul>
+<li>See when kernels are dispatched 什么时候kernel被CPU启动的，启动的开销</li>
+<li>See when memory operations are initiated</li>
+<li>Locate the corresponding CUDA workload on GPU</li>
+<li>可以看出memory和kernel是否并行</li>
+</ul>
+<h2 id="2-6-GPU-WORKLOAD"><a href="#2-6-GPU-WORKLOAD" class="headerlink" title="2.6 GPU WORKLOAD"></a>2.6 GPU WORKLOAD</h2><ul>
+<li>See CUDA workloads execution time</li>
+<li>Locate idle GPU times </li>
+<li>See trace of GPU activity <strong>下图蓝色高就是GPU忙;蓝色低就是kernel执行的时间短，可能是大量的短小的kernel执行</strong></li>
+<li>Locate idle GPU times</li>
+</ul>
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108103621087.png" class="" title="image-20241108103621087">
+<h2 id="2-7-CORRELATION-TIES-API-TO-GPU-WORKLOAD-kernel启动和执行的关联"><a href="#2-7-CORRELATION-TIES-API-TO-GPU-WORKLOAD-kernel启动和执行的关联" class="headerlink" title="2.7 CORRELATION TIES API TO GPU WORKLOAD kernel启动和执行的关联"></a>2.7 CORRELATION TIES API TO GPU WORKLOAD kernel启动和执行的关联</h2><p>如下图：kernel的启动是CPU上执行的，GPU上异步执行，可以分析距离是不是kernel lanch的阻塞</p>
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108104106898.png" class="" title="image-20241108104106898">
+<h2 id="2-8-NVTX-INSTRUMENTATION"><a href="#2-8-NVTX-INSTRUMENTATION" class="headerlink" title="2.8 NVTX INSTRUMENTATION"></a>2.8 NVTX INSTRUMENTATION</h2><p>NVIDIA Tools Extension (NVTX) to annotate the timeline with application’s logic<br>Helps understand the profiler’s output in app’s algorithmic context</p>
+<p>开发者添加NVTX标签，理解代码的执行。</p>
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108104330398.png" class="" title="image-20241108104330398">
+<ul>
+<li><p>Include the header<code>“nvToolsExt.h”</code></p>
+</li>
+<li><p>Call the API functions from your source</p>
+</li>
+<li><p>Link the NVTX library on the compiler command line with <code>–lnvToolsExt</code></p>
+</li>
+<li><p>在nsys-ui中勾选 <strong>Collect NVTX trace</strong> 或者使用CLI中的 flag <code>-t nvtx</code></p>
+</li>
+</ul>
+<ul>
+<li>Also supports Python<br>CuPy -&gt; <a target="_blank" rel="noopener" href="https://docs.cupy.dev/en/v9.0.0a1/reference/cuda.html#profiler">https://docs.cupy.dev/en/v9.0.0a1/reference/cuda.html#profiler</a><br>TF -&gt; <a target="_blank" rel="noopener" href="https://developer.nvidia.com/blog/tensorflow-performance-logging-plugin-nvtx-plugins-">https://developer.nvidia.com/blog/tensorflow-performance-logging-plugin-nvtx-plugins-</a><br>tf-public/</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;nvToolsExt.h&quot;</span></span></span><br><span class="line">...</span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">myfunction</span><span class="params">( <span class="type">int</span> n, <span class="type">double</span> * x )</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">nvtxRangePushA</span>(<span class="string">&quot;init_host_data&quot;</span>);</span><br><span class="line">    <span class="comment">//initialize x on host</span></span><br><span class="line">    <span class="built_in">init_host_data</span>(n,x,x_d,y_d);</span><br><span class="line">    <span class="built_in">nvtxRangePop</span>();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108100056733.png" class="" title="image-20241108100056733">
+<h1 id="3-使用nsight-systems的例子"><a href="#3-使用nsight-systems的例子" class="headerlink" title="3 使用nsight systems的例子"></a>3 使用nsight systems的例子</h1><p>下图是一个常用的 transformer结构，以encoder为例子</p>
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108104941611.png" class="" title="image-20241108104941611">
+<h2 id="3-1-Where-is-the-bottleneck-for-Encoder"><a href="#3-1-Where-is-the-bottleneck-for-Encoder" class="headerlink" title="3.1 Where is the bottleneck for Encoder?"></a>3.1 Where is the bottleneck for Encoder?</h2><p>GPU is idle in many time GPU有很多的空闲<br>Reason: kernels are too small -&gt; kernel launch bound 原因就是kernel太小了，造成了 kernel launch bound</p>
+<p>针对one transformer layer有50个kernel来计算，特别是使用11个和kernle来计算layerNorm的过程</p>
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108105532798.png" class="" title="image-20241108105532798">
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108105855138.png" class="" title="image-20241108105855138">
+<h2 id="3-2-解决方案"><a href="#3-2-解决方案" class="headerlink" title="3.2 解决方案"></a>3.2 解决方案</h2><p>解决方案就是减少kernel的数量</p>
+<p>A simple solution: Using TensorFlow XLA to fuse kernel automatically 自动的，有效但是还有一定的局限性，还是存在kernel之间的空隙。50个减少到了24个kernel<br>Become better, but still many idle fraction</p>
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108110154942.png" class="" title="image-20241108110154942">
+<p>进一步的优化，faster transformer来做，减少到了14个kernel，如下图</p>
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108145528719.png" class="" title="image-20241108145528719">
+<p>使用纯cpp的API来实现更好的性能如下图</p>
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20241108145644216.png" class="" title="image-20241108145644216">
+<h2 id="3-3-案例2"><a href="#3-3-案例2" class="headerlink" title="3.3 案例2"></a>3.3 案例2</h2><h3 id="3-3-1-利用-Nsight-System对简单的深度学习训练神经网络进行性能分析"><a href="#3-3-1-利用-Nsight-System对简单的深度学习训练神经网络进行性能分析" class="headerlink" title="3.3.1 利用 Nsight System对简单的深度学习训练神经网络进行性能分析"></a>3.3.1 利用 Nsight System对简单的深度学习训练神经网络进行性能分析</h3><img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110095229439.png" class="" title="image-20230110095229439">
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110095309109.png" class="" title="image-20230110095309109">
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110095342675.png" class="" title="image-20230110095342675">
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110100027783.png" class="" title="image-20230110100027783">
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110100633727.png" class="" title="image-20230110100633727">
+<h3 id="3-3-2-利用Nsight-System进行性能分析，进而使用混合精度加速BERT"><a href="#3-3-2-利用Nsight-System进行性能分析，进而使用混合精度加速BERT" class="headerlink" title="3.3.2 利用Nsight System进行性能分析，进而使用混合精度加速BERT"></a>3.3.2 利用Nsight System进行性能分析，进而使用混合精度加速BERT</h3><img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110100905365.png" class="" title="image-20230110100905365">
+<img src="/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/image-20230110100933022.png" class="" title="image-20230110100933022">
+<h3 id=""><a href="#" class="headerlink" title=" "></a> </h3><h1 id="4-常见问题"><a href="#4-常见问题" class="headerlink" title="4 常见问题"></a>4 常见问题</h1><p>使用命令行分析时需要有对<code>/tmp</code>目录的写权限，否则会报错，参考<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-systems/UserGuide/index.html#general-troubleshooting">General Troubleshooting</a></p>
+<p>我这里使用的挂载和命令如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mount /dev/vblk_ufsb0 /</span><br><span class="line"><span class="built_in">mkdir</span> /tmp /opt /root /opt/nvidia</span><br><span class="line">nsys profile -y 10 -d 50 -w <span class="literal">true</span> -t <span class="string">&quot;cuda,cudnn,osrt,nvtx,nvmedia&quot;</span> -o ./Zyd24 --cuda-memory-usage=<span class="literal">true</span> --accelerator-trace=nvmedia --force-overwrite <span class="literal">true</span> ./zydApp</span><br></pre></td></tr></table></figure>
+<p>距离的指令含义参考<a target="_blank" rel="noopener" href="https://docs.nvidia.com/nsight-systems/UserGuide/index.html#cli-profile-command-switch-options">CLI Profile Command Switch Options</a></p>
+<h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://resources.nvidia.com/ent-gtccn20/gtccn20-CNS20632">深入理解 Nsight System 与 Nsight Compute 性能分析优化工具</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV15P4y1R7VG/?spm_id_from=333.788.recommend_more_video.-1&amp;vd_source=cde2e7b9bca1a7048a13eaf0b48210b6">https://www.bilibili.com/video/BV15P4y1R7VG/?spm_id_from=333.788.recommend_more_video.-1&amp;vd_source=cde2e7b9bca1a7048a13eaf0b48210b6</a> </li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/" title="Nsight System基础">http://example.com/CUDA/Nsight/Nsight System基础/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+              <a href="/tags/Tensorrt/" rel="tag"><i class="fa fa-tag"></i> Tensorrt</a>
+              <a href="/tags/Plugin/" rel="tag"><i class="fa fa-tag"></i> Plugin</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/CUDA/Nsight/Nsight%20Systems%E5%AE%98%E6%96%B9%E5%85%A5%E9%97%A8/" rel="prev" title="Nsight Systems官方入门">
+                  <i class="fa fa-chevron-left"></i> Nsight Systems官方入门
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/CUDA/Nsight/Nsight%20System%E7%BB%8F%E9%AA%8C/" rel="next" title="Nsight System经验">
+                  Nsight System经验 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"56547a0b4de04438c09161e66261ff07"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

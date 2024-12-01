@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="TensorRT中的自定义层">
+<meta property="og:type" content="article">
+<meta property="og:title" content="9-TensorRT中的自定义层">
+<meta property="og:url" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/9-TensorRT%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%82/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="TensorRT中的自定义层">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/9-TensorRT%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%82/rdp.jpg">
+<meta property="article:published_time" content="2024-12-01T10:13:45.401Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.402Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="Tensorrt">
+<meta property="article:tag" content="DeepLearning">
+<meta property="article:tag" content="Plugin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/9-TensorRT%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%82/rdp.jpg">
+
+
+<link rel="canonical" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/9-TensorRT%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%82/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/9-TensorRT%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%82/","path":"TensorRT/TensorRT中文版开发手册/9-TensorRT中的自定义层/","title":"9-TensorRT中的自定义层"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>9-TensorRT中的自定义层 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TensorRT%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%82"><span class="nav-text">TensorRT中的自定义层</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#9-1-Adding-Custom-Layers-Using-The-C-API"><span class="nav-text">9.1. Adding Custom Layers Using The C++ API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#9-1-1-Example-Adding-A-Custom-Layer-With-Dynamic-Shape-Support-Using-C"><span class="nav-text">9.1.1. Example: Adding A Custom Layer With Dynamic Shape Support Using C++</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E8%A6%81%E6%8F%90%E7%A4%BA%EF%BC%9A%E8%A6%86%E7%9B%96%E6%A3%80%E6%9F%A5%E7%B4%A2%E5%BC%95%E5%B0%8F%E4%BA%8Epos%E7%9A%84%E8%BF%9E%E6%8E%A5%E7%9A%84%E6%A0%BC%E5%BC%8F-%E7%B1%BB%E5%9E%8B%EF%BC%8C%E4%BD%86%E7%BB%9D%E4%B8%8D%E8%83%BD%E6%A3%80%E6%9F%A5%E7%B4%A2%E5%BC%95%E5%A4%A7%E4%BA%8Epos%E7%9A%84%E8%BF%9E%E6%8E%A5%E7%9A%84%E6%A0%BC%E5%BC%8F-%E7%B1%BB%E5%9E%8B%E3%80%82%E8%AF%A5%E7%A4%BA%E4%BE%8B%E4%BD%BF%E7%94%A8case-3%E6%9D%A5%E6%A3%80%E6%9F%A5%E8%BF%9E%E6%8E%A5-3-%E5%92%8C%E8%BF%9E%E6%8E%A5-0%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E4%BD%BF%E7%94%A8case-0%E6%9D%A5%E6%A3%80%E6%9F%A5%E8%BF%9E%E6%8E%A5-0-%E5%92%8C%E8%BF%9E%E6%8E%A5-3%E3%80%82"><span class="nav-text">重要提示：覆盖检查索引小于pos的连接的格式&#x2F;类型，但绝不能检查索引大于pos的连接的格式&#x2F;类型。该示例使用case 3来检查连接 3 和连接 0，而不是使用case 0来检查连接 0 和连接 3。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-1-2-Example-Adding-A-Custom-Layer-With-INT8-I-O-Support-Using-C"><span class="nav-text">9.1.2. Example: Adding A Custom Layer With INT8 I&#x2F;O Support Using C++</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E9%87%8D%E8%A6%81%E7%9A%84%EF%BC%9A"><span class="nav-text">重要的：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-2-Adding-Custom-Layers-Using-The-Python-API"><span class="nav-text">9.2. Adding Custom Layers Using The Python API</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#9-2-1-Example-Adding-A-Custom-Layer-To-A-TensorRT-Network-Using-Python"><span class="nav-text">9.2.1. Example: Adding A Custom Layer To A TensorRT Network Using Python</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-3-Using-Custom-Layers-When-Importing-A-Model-With-A-Parser"><span class="nav-text">9.3. Using Custom Layers When Importing A Model With A Parser</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-4-Plugin-API-Description"><span class="nav-text">9.4. Plugin API Description</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#9-4-1-Migrating-Plugins-From-TensorRT-6-x-Or-7-x-To-TensorRT-8-x-x"><span class="nav-text">9.4.1. Migrating Plugins From TensorRT 6.x Or 7.x To TensorRT 8.x.x</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-4-2-IPluginV2-API-Description"><span class="nav-text">9.4.2. IPluginV2 API Description</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A%E5%9F%BA%E4%BA%8EIPluginV2%E7%9A%84%E6%8F%92%E4%BB%B6%E5%9C%A8%E5%BC%95%E6%93%8E%E7%BA%A7%E5%88%AB%E5%85%B1%E4%BA%AB%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E5%9C%A8%E6%89%A7%E8%A1%8C%E4%B8%8A%E4%B8%8B%E6%96%87%E7%BA%A7%E5%88%AB%E5%85%B1%E4%BA%AB%EF%BC%8C%E5%9B%A0%E6%AD%A4%E8%BF%99%E4%BA%9B%E5%8F%AF%E8%83%BD%E8%A2%AB%E5%A4%9A%E4%B8%AA%E7%BA%BF%E7%A8%8B%E5%90%8C%E6%97%B6%E4%BD%BF%E7%94%A8%E7%9A%84%E6%8F%92%E4%BB%B6%E9%9C%80%E8%A6%81%E4%BB%A5%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E7%9A%84%E6%96%B9%E5%BC%8F%E7%AE%A1%E7%90%86%E5%AE%83%E4%BB%AC%E7%9A%84%E8%B5%84%E6%BA%90%E3%80%82%E5%88%9B%E5%BB%BAExecutionContext%E6%97%B6%E4%BC%9A%E5%85%8B%E9%9A%86%E5%9F%BA%E4%BA%8EIPluginV2Ext%E5%92%8C%E6%B4%BE%E7%94%9F%E6%8E%A5%E5%8F%A3%E7%9A%84%E6%8F%92%E4%BB%B6%EF%BC%8C%E5%9B%A0%E6%AD%A4%E8%BF%99%E4%B8%8D%E6%98%AF%E5%BF%85%E9%9C%80%E7%9A%84%E3%80%82"><span class="nav-text">注意：基于IPluginV2的插件在引擎级别共享，而不是在执行上下文级别共享，因此这些可能被多个线程同时使用的插件需要以线程安全的方式管理它们的资源。创建ExecutionContext时会克隆基于IPluginV2Ext和派生接口的插件，因此这不是必需的。</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#9-4-3-IPluginCreator-API-Description"><span class="nav-text">9.4.3. IPluginCreator API Description</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A%E4%BC%A0%E9%80%92%E7%BB%99createPlugin%E5%87%BD%E6%95%B0%E7%9A%84%E6%95%B0%E6%8D%AE%E5%BA%94%E8%AF%A5%E7%94%B1%E8%B0%83%E7%94%A8%E8%80%85%E5%88%86%E9%85%8D%EF%BC%8C%E5%B9%B6%E5%9C%A8%E7%A8%8B%E5%BA%8F%E8%A2%AB%E9%94%80%E6%AF%81%E6%97%B6%E6%9C%80%E7%BB%88%E7%94%B1%E8%B0%83%E7%94%A8%E8%80%85%E9%87%8A%E6%94%BE%E3%80%82-createPlugin%E5%87%BD%E6%95%B0%E8%BF%94%E5%9B%9E%E7%9A%84%E6%8F%92%E4%BB%B6%E5%AF%B9%E8%B1%A1%E7%9A%84%E6%89%80%E6%9C%89%E6%9D%83%E8%A2%AB%E4%BC%A0%E9%80%92%E7%BB%99%E8%B0%83%E7%94%A8%E8%80%85%EF%BC%8C%E5%B9%B6%E4%B8%94%E4%B9%9F%E5%BF%85%E9%A1%BB%E8%A2%AB%E9%94%80%E6%AF%81%E3%80%82"><span class="nav-text">注意：传递给createPlugin函数的数据应该由调用者分配，并在程序被销毁时最终由调用者释放。 createPlugin函数返回的插件对象的所有权被传递给调用者，并且也必须被销毁。</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#9-5-Best-Practices-For-Custom-Layers-Plugin"><span class="nav-text">9.5. Best Practices For Custom Layers Plugin</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/9-TensorRT%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%82/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="9-TensorRT中的自定义层 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          9-TensorRT中的自定义层
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/" itemprop="url" rel="index"><span itemprop="name">TensorRT中文版开发手册</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="TensorRT中的自定义层"><a href="#TensorRT中的自定义层" class="headerlink" title="TensorRT中的自定义层"></a>TensorRT中的自定义层</h1><img src="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/9-TensorRT%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%82/rdp.jpg" class="">
+<p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/zh-cn/developer-program">点击此处加入NVIDIA开发者计划</a></p>
+<p>NVIDIA TensorRT 支持多种类型的层，其功能不断扩展；但是，在某些情况下，支持的层不能满足模型的特定需求。</p>
+<p>您可以通过实现自定义层（通常称为插件）来扩展 TensorRT。</p>
+<h2 id="9-1-Adding-Custom-Layers-Using-The-C-API"><a href="#9-1-Adding-Custom-Layers-Using-The-C-API" class="headerlink" title="9.1. Adding Custom Layers Using The C++ API"></a>9.1. Adding Custom Layers Using The C++ API</h2><p>您可以通过从 TensorRT 的插件基类之一派生来实现自定义层。</p>
+<div class="tablenoborder"><a name="add_custom_layer__table_xkr_fc5_k3b" shape="rect">
+                                 <!-- --></a><table cellpadding="4" cellspacing="0" summary="" id="add_custom_layer__table_xkr_fc5_k3b" class="table" frame="border" border="1" rules="all">
+                                 <caption><span class="tablecap">Table 3. Base classes, ordered from least expressive to most expressive</span></caption>
+                                 <thead class="thead" align="left">
+                                    <tr class="row">
+                                       <th class="entry" valign="top" width="20%" id="d54e8343" rowspan="1" colspan="1">&nbsp;</th>
+                                       <th class="entry" valign="top" width="20%" id="d54e8345" rowspan="1" colspan="1">Introduced in TensorRT version?</th>
+                                       <th class="entry" valign="top" width="20%" id="d54e8348" rowspan="1" colspan="1">Mixed input/output formats/types</th>
+                                       <th class="entry" valign="top" width="20%" id="d54e8351" rowspan="1" colspan="1">Dynamic shapes?</th>
+                                       <th class="entry" valign="top" width="20%" id="d54e8354" rowspan="1" colspan="1">Supports implicit/explicit batch mode?</th>
+                                    </tr>
+                                 </thead>
+                                 <tbody class="tbody">
+                                    <tr class="row">
+                                       <td class="entry" valign="top" width="20%" headers="d54e8343" rowspan="1" colspan="1"><a class="xref" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_plugin_v2_ext.html" target="_blank" shape="rect"><samp class="ph codeph"><u class="ph u">IPluginV2Ext</u></samp></a></td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e8345" rowspan="1" colspan="1">5.1</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e8348" rowspan="1" colspan="1">Limited</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e8351" rowspan="1" colspan="1">No</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e8354" rowspan="1" colspan="1">Implicit batch mode only</td>
+                                    </tr>
+                                    <tr class="row">
+                                       <td class="entry" valign="top" width="20%" headers="d54e8343" rowspan="1" colspan="1"><a class="xref" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_plugin_v2_i_o_ext.html" target="_blank" shape="rect"><samp class="ph codeph"><u class="ph u">IPluginV2IOExt</u></samp></a></td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e8345" rowspan="1" colspan="1">6.0.1</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e8348" rowspan="1" colspan="1">General</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e8351" rowspan="1" colspan="1">No</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e8354" rowspan="1" colspan="1">Implicit batch mode only</td>
+                                    </tr>
+                                    <tr class="row">
+                                       <td class="entry" valign="top" width="20%" headers="d54e8343" rowspan="1" colspan="1"><a class="xref" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/classnvinfer1_1_1_i_plugin_v2_dynamic_ext.html" target="_blank" shape="rect"><samp class="ph codeph"><u class="ph u">IPluginV2DynamicExt</u></samp></a></td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e8345" rowspan="1" colspan="1">6.0.1</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e8348" rowspan="1" colspan="1">General</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e8351" rowspan="1" colspan="1">Yes</td>
+                                       <td class="entry" valign="top" width="20%" headers="d54e8354" rowspan="1" colspan="1">Explicit batch mode only</td>
+                                    </tr>
+                                 </tbody>
+                              </table>
+                           </div>
+
+
+
+<p>为了在网络中使用插件，您必须首先将其注册到 TensorRT 的<code>PluginRegistry</code> （ <a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/api/c_api/classnvinfer1_1_1_i_plugin_registry.html">C++</a> 、 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/api/python_api/infer/Plugin/IPluginRegistry.html">Python</a> ）。不是直接注册插件，而是为插件注册一个工厂类的实例，派生自<code>PluginCreator</code> ( <a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/api/c_api/classnvinfer1_1_1_i_plugin_creator.html">C++</a> , <a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/api/python_api/infer/Plugin/IPluginCreator.html">Python</a> )。插件创建者类还提供有关插件的其他信息：它的名称、版本和插件字段参数。</p>
+<p>您必须从插件的基类之一派生插件类。在支持具有不同类型/格式的输入/输出或具有动态形状的网络方面，它们具有不同的表达能力。下表总结了基类，按从最不具表现力到最具表现力的顺序排列。</p>
+<p>注意：如果插件用于一般用途，请提供 FP32 实现，以使其能够在任何网络上正常运行。</p>
+<p>TensorRT 提供了一个宏<code>REGISTER_TENSORRT_PLUGIN</code> ，它将插件创建者静态注册到注册表中。</p>
+<p>TensorRT 库包含可以加载到您的应用程序中的插件。有关开源插件的列表，请参阅<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/plugin#tensorrt-plugins"><code>GitHub：TensorRT</code></a> 插件。</p>
+<p>注意：</p>
+<ul>
+<li>要在应用程序中使用 TensorRT 插件，必须加载<code>libnvinfer_plugin.so</code>库，并且必须通过在应用程序代码中调用<code>initLibNvInferPlugins</code>来注册所有插件。</li>
+<li>如果您有自己的插件库，则可以包含一个类似的入口点，以便在唯一命名空间下的注册表中注册所有插件。这确保了在构建期间跨不同插件库的插件名称没有冲突。</li>
+</ul>
+<p>有关这些插件的更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/sdk/tensorrt-api/c_api/_nv_infer_plugin_8h.html">NvInferPlugin.h</a>文件以供参考。</p>
+<p>调用<code>IPluginCreator::createPlugin()</code>返回<code>IPluginV2</code>类型的插件对象。您可以使用<code>addPluginV2()</code>将插件添加到 TensorRT 网络，该插件使用给定插件创建网络层。</p>
+<p>例如，您可以将插件层添加到您的网络，如下所示：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Look up the plugin in the registry</span></span><br><span class="line"><span class="keyword">auto</span> creator = <span class="built_in">getPluginRegistry</span>()-&gt;<span class="built_in">getPluginCreator</span>(pluginName, pluginVersion);</span><br><span class="line"><span class="type">const</span> PluginFieldCollection* pluginFC = creator-&gt;<span class="built_in">getFieldNames</span>();</span><br><span class="line"><span class="comment">// Populate the fields parameters for the plugin layer </span></span><br><span class="line">PluginFieldCollection *pluginData = <span class="built_in">parseAndFillFields</span>(pluginFC, layerFields); </span><br><span class="line"><span class="comment">// Create the plugin object using the layerName and the plugin meta data</span></span><br><span class="line">IPluginV2 *pluginObj = creator-&gt;<span class="built_in">createPlugin</span>(layerName, pluginData);</span><br><span class="line"><span class="comment">// Add the plugin to the TensorRT network </span></span><br><span class="line"><span class="keyword">auto</span> layer = network.<span class="built_in">addPluginV2</span>(&amp;inputs[<span class="number">0</span>], <span class="built_in">int</span>(inputs.<span class="built_in">size</span>()), pluginObj);</span><br><span class="line">… (build rest of the network <span class="keyword">and</span> serialize engine)</span><br><span class="line"><span class="comment">// Destroy the plugin object</span></span><br><span class="line">pluginObj-&gt;<span class="built_in">destroy</span>()</span><br><span class="line">… (destroy network, engine, builder)</span><br><span class="line">… (free allocated pluginData)</span><br></pre></td></tr></table></figure>
+<p>注意：</p>
+<ul>
+<li><code>pluginData</code>必须在传递给<code>createPlugin</code>之前在堆上分配<code>PluginField</code>条目。</li>
+<li>前面描述的 <code>createPlugin</code> 方法在堆上创建一个新的插件对象并返回一个指向它的指针。如前所示，确保销毁 <code>pluginObj</code> 以避免内存泄漏。</li>
+</ul>
+<p><code>IPluginV2</code>类型插件的插件类型、插件版本和命名空间（如果存在） 。在反序列化期间，TensorRT 从插件注册表中查找插件创建者并调用<code>IPluginCreator::deserializePlugin()</code> 。在反序列化过程中创建的插件对象由 TensorRT 引擎通过调用<code>IPluginV2::destroy()</code>方法在内部销毁。</p>
+<p><code>IPluginV2</code>类型插件的插件类型、插件版本和命名空间（如果存在）, 在反序列化期间，TensorRT 从插件注册表中查找插件创建者并调用<code>IPluginCreator::deserializePlugin()</code> 。在反序列化期间创建的插件对象由 TensorRT 引擎通过调用<code>IPluginV2::destroy()</code>方法在内部销毁。</p>
+<h3 id="9-1-1-Example-Adding-A-Custom-Layer-With-Dynamic-Shape-Support-Using-C"><a href="#9-1-1-Example-Adding-A-Custom-Layer-With-Dynamic-Shape-Support-Using-C" class="headerlink" title="9.1.1. Example: Adding A Custom Layer With Dynamic Shape Support Using C++"></a>9.1.1. Example: Adding A Custom Layer With Dynamic Shape Support Using C++</h3><p>要支持动态形状，您的插件必须从<code>IPluginV2DynamicExt</code>派生。</p>
+<p>关于这个任务</p>
+<p><code>BarPlugin</code>是一个有两个输入和两个输出的插件，其中：<br>•    第一个输出是第二个输入的拷贝<br>•    第二个输出是两个输入的串联，沿着第一个维度，所有类型/格式必须相同并且是线性格式</p>
+<p>BarPlugin需要按如下方式派生：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">BarPlugin</span> : <span class="keyword">public</span> IPluginV2DynamicExt</span><br><span class="line">&#123;</span><br><span class="line">	...<span class="keyword">override</span> <span class="keyword">virtual</span> methods inherited from IPluginV2DynamicExt.</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>继承的方法都是纯虚方法，所以如果你忘记了，编译器会提醒你。</p>
+<p>受动态形状影响的四种方法是：</p>
+<ul>
+<li>获取输出维度</li>
+<li>支持格式组合</li>
+<li>配置插件</li>
+<li>队列</li>
+</ul>
+<p><code>getOutputDimensions</code>的覆盖根据输入维度返回输出维度的符号表达式。您可以使用传递给<code>getOutputDimensions</code>的<code>IExprBuilder</code>从输入的表达式构建表达式。在示例中，不必为案例 1 构建新表达式，因为第二个输出的维度与第一个输入的维度相同。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="function">DimsExprs <span class="title">BarPlugin::getOutputDimensions</span><span class="params">(<span class="type">int</span> outputIndex, </span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> DimsExprs* inputs, <span class="type">int</span> nbInputs, </span></span></span><br><span class="line"><span class="params"><span class="function">    IExprBuilder&amp; exprBuilder)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">switch</span> (outputIndex)</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0</span>: </span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// First dimension of output is sum of input </span></span><br><span class="line">        <span class="comment">// first dimensions.</span></span><br><span class="line">        <span class="function">DimsExprs <span class="title">output</span><span class="params">(inputs[<span class="number">0</span>])</span></span>;</span><br><span class="line">        output.d[<span class="number">0</span>] = </span><br><span class="line">            exprBuilder.<span class="built_in">operation</span>(DimensionOperation::kSUM, </span><br><span class="line">                inputs[<span class="number">0</span>].d[<span class="number">0</span>], inputs[<span class="number">1</span>].d[<span class="number">0</span>]);</span><br><span class="line">	   <span class="keyword">return</span> output;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">        <span class="keyword">return</span> inputs[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">         <span class="keyword">throw</span> std::<span class="built_in">invalid_argument</span>(“invalid output”);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>supportsFormatCombination</code>的覆盖必须指示是否允许格式组合。接口将输入/输出统一索引为“<code>connections</code>”，从第一个输入的 0 开始，然后依次为其余输入，然后为输出编号。在示例中，输入是<code>connections</code> 0 和 1，输出是<code>connections</code> 2 和 3。</p>
+<p>TensorRT 使用<code>supportsFormatCombination</code>来询问给定的格式/类型组合是否适用于连接，给定的格式/类型用于索引较少的连接。因此，覆盖可以假设较少索引的连接已经过审查，并专注于与索引<code>pos</code>的连接。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">BarPlugin::supportsFormatCombination</span><span class="params">(<span class="type">int</span> pos, <span class="type">const</span> PluginTensorDesc* inOut, <span class="type">int</span> nbInputs, <span class="type">int</span> nbOutputs)</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">assert</span>(<span class="number">0</span> &lt;= pos &amp;&amp; pos &lt; <span class="number">4</span>);</span><br><span class="line">    <span class="type">const</span> <span class="keyword">auto</span>* in = inOut;</span><br><span class="line">    <span class="type">const</span> <span class="keyword">auto</span>* out = inOut + nbInputs;</span><br><span class="line">    <span class="keyword">switch</span> (pos)</span><br><span class="line">    &#123;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">0</span>: <span class="keyword">return</span> in[<span class="number">0</span>].format == TensorFormat::kLINEAR;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">1</span>: <span class="keyword">return</span> in[<span class="number">1</span>].type == in[<span class="number">0</span>].type &amp;&amp;</span><br><span class="line">                   in[<span class="number">0</span>].format == TensorFormat::kLINEAR;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">2</span>: <span class="keyword">return</span> out[<span class="number">0</span>].type == in[<span class="number">0</span>].type &amp;&amp;</span><br><span class="line">                   out[<span class="number">0</span>].format == TensorFormat::kLINEAR;</span><br><span class="line">    <span class="keyword">case</span> <span class="number">3</span>: <span class="keyword">return</span> out[<span class="number">1</span>].type == in[<span class="number">0</span>].type &amp;&amp;</span><br><span class="line">                   out[<span class="number">1</span>].format == TensorFormat::kLINEAR;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">throw</span> std::<span class="built_in">invalid_argument</span>(“invalid connection number”);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这里的局部变量<code>in</code>和<code>out</code>允许通过输入或输出编号而不是连接编号检查<code>inOut</code> 。</p>
+<h4 id="重要提示：覆盖检查索引小于pos的连接的格式-类型，但绝不能检查索引大于pos的连接的格式-类型。该示例使用case-3来检查连接-3-和连接-0，而不是使用case-0来检查连接-0-和连接-3。"><a href="#重要提示：覆盖检查索引小于pos的连接的格式-类型，但绝不能检查索引大于pos的连接的格式-类型。该示例使用case-3来检查连接-3-和连接-0，而不是使用case-0来检查连接-0-和连接-3。" class="headerlink" title="重要提示：覆盖检查索引小于pos的连接的格式/类型，但绝不能检查索引大于pos的连接的格式/类型。该示例使用case 3来检查连接 3 和连接 0，而不是使用case 0来检查连接 0 和连接 3。"></a>重要提示：覆盖检查索引小于<code>pos</code>的连接的格式/类型，但绝不能检查索引大于<code>pos</code>的连接的格式/类型。该示例使用case 3来检查连接 3 和连接 0，而不是使用case 0来检查连接 0 和连接 3。</h4><p>TensorRT 使用<code>configurePlugin</code>在运行时设置插件。这个插件不需要<code>configurePlugin</code>来做任何事情，所以它是一个空操作：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">BarPlugin::configurePlugin</span><span class="params">(</span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> DynamicPluginTensorDesc* in, <span class="type">int</span> nbInputs, </span></span></span><br><span class="line"><span class="params"><span class="function">    <span class="type">const</span> DynamicPluginTensorDesc* out, <span class="type">int</span> nbOutputs)</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果插件需要知道它可能遇到的最小或最大尺寸，它可以检查字段<code>DynamicPluginTensorDesc::min</code>或<code>DynamicPluginTensorDesc::max</code>的任何输入或输出。格式和构建时维度信息可以在<code>DynamicPluginTensorDesc::desc</code>中找到。任何运行时维度都显示为 <code>-1</code>。实际维度提供给<code>BarPlugin::enqueue</code> 。</p>
+<p>最后，重写<code>BarPlugin::enqueue</code>必须完成这项工作。由于形状是动态的，因此 <code>enqueue</code> 会收到一个<code>PluginTensorDesc</code> ，它描述了每个输入和输出的实际尺寸、类型和格式。</p>
+<h3 id="9-1-2-Example-Adding-A-Custom-Layer-With-INT8-I-O-Support-Using-C"><a href="#9-1-2-Example-Adding-A-Custom-Layer-With-INT8-I-O-Support-Using-C" class="headerlink" title="9.1.2. Example: Adding A Custom Layer With INT8 I/O Support Using C++"></a>9.1.2. Example: Adding A Custom Layer With INT8 I/O Support Using C++</h3><p>PoolPlugin是一个插件，用于演示如何为自定义池层扩展 INT8 I/O。推导如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">PoolPlugin</span> : <span class="keyword">public</span> IPluginV2IOExt</span><br><span class="line">&#123;</span><br><span class="line">    ...<span class="keyword">override</span> <span class="keyword">virtual</span> methods inherited from IPluginV2IOExt.</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>大多数纯虚方法对插件来说都是通用的。影响INT8 I/O的主要方法有：</p>
+<ul>
+<li>支持格式组合</li>
+<li>配置插件</li>
+<li>enqueue</li>
+</ul>
+<p><code>supportsFormatCombination</code>的覆盖必须指示允许哪个 INT8 I/O 组合。此接口的用法类似于示例：<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#example3_add_custlay_dynamic">使用 C++ 添加具有动态形状支持的自定义层</a>。在本例中，支持的 I/O 张量格式为线性 <code>CHW</code>，数据类型为<code>FP32</code>、<code>FP16</code> 或 <code>INT8</code>，但 I/O 张量必须具有相同的数据类型。<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">bool</span> <span class="title">PoolPlugin::supportsFormatCombination</span><span class="params">(<span class="type">int</span> pos, <span class="type">const</span> PluginTensorDesc* inOut, <span class="type">int</span> nbInputs, <span class="type">int</span> nbOutputs)</span> <span class="type">const</span> <span class="keyword">override</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="built_in">assert</span>(nbInputs == <span class="number">1</span> &amp;&amp; nbOutputs == <span class="number">1</span> &amp;&amp; pos &lt; nbInputs + nbOutputs);</span><br><span class="line">    <span class="type">bool</span> condition = inOut[pos].format == TensorFormat::kLINEAR;</span><br><span class="line">    condition &amp;= ((inOut[pos].type == DataType::kFLOAT) ||</span><br><span class="line">                  (inOut[pos].type == DataType::kHALF) ||</span><br><span class="line">                  (inOut[pos].type == DataType::kINT8));</span><br><span class="line">    condition &amp;= inOut[pos].type == inOut[<span class="number">0</span>].type;</span><br><span class="line">    <span class="keyword">return</span> condition;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h4 id="重要的："><a href="#重要的：" class="headerlink" title="重要的："></a>重要的：</h4><ul>
+<li>如果 INT8 校准必须与具有 INT8 I/O 插件的网络一起使用，则该插件必须支持 FP32 I/O，因为它被 FP32 校准图使用。</li>
+<li>如果不支持 FP32 I/O 变体或未使用 INT8 校准，则必须明确设置所有必需的 INT8 I/O 张量尺度。</li>
+<li>校准无法确定插件内部张量的动态范围。对量化数据进行操作的插件必须为内部张量计算自己的动态范围。</li>
+</ul>
+<p>TensorRT 调用<code>configurePlugin</code>方法通过<code>PluginTensorDesc</code>将信息传递给插件，这些信息存储为成员变量，序列化和反序列化。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">void</span> <span class="title">PoolPlugin::configurePlugin</span><span class="params">(<span class="type">const</span> PluginTensorDesc* in, <span class="type">int</span> nbInput, <span class="type">const</span> PluginTensorDesc* out, <span class="type">int</span> nbOutput)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    mPoolingParams.mC = mInputDims.d[<span class="number">0</span>];</span><br><span class="line">    mPoolingParams.mH = mInputDims.d[<span class="number">1</span>];</span><br><span class="line">    mPoolingParams.mW = mInputDims.d[<span class="number">2</span>];</span><br><span class="line">    mPoolingParams.mP = mOutputDims.d[<span class="number">1</span>];</span><br><span class="line">    mPoolingParams.mQ = mOutputDims.d[<span class="number">2</span>];</span><br><span class="line">    mInHostScale = in[<span class="number">0</span>].scale &gt;= <span class="number">0.0f</span> ? in[<span class="number">0</span>].scale : <span class="number">-1.0f</span>;</span><br><span class="line">    mOutHostScale = out[<span class="number">0</span>].scale &gt;= <span class="number">0.0f</span> ? out[<span class="number">0</span>].scale : <span class="number">-1.0f</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>每个张量的 INT8 I/O 比例可以从<code>PluginTensorDesc::scale</code>获得。<br>最后，重写<code>UffPoolPluginV2::enqueue</code>必须完成这项工作。它包括一组核心算法，可在运行时通过使用实际批量大小、输入、输出、cuDNN 流和配置的信息来执行自定义层。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="type">int</span> <span class="title">PoolPlugin::enqueue</span><span class="params">(<span class="type">int</span> batchSize, <span class="type">const</span> <span class="type">void</span>* <span class="type">const</span>* inputs, <span class="type">void</span>** outputs, <span class="type">void</span>* workspace, cudaStream_t stream)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    ...</span><br><span class="line">    <span class="built_in">CHECK</span>(<span class="built_in">cudnnPoolingForward</span>(mCudnn, mPoolingDesc, &amp;kONE, mSrcDescriptor, input, &amp;kZERO, mDstDescriptor, output));</span><br><span class="line">    ...</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="9-2-Adding-Custom-Layers-Using-The-Python-API"><a href="#9-2-Adding-Custom-Layers-Using-The-Python-API" class="headerlink" title="9.2. Adding Custom Layers Using The Python API"></a>9.2. Adding Custom Layers Using The Python API</h2><p>尽管 C++ API 是实现自定义层的首选语言，但由于可以访问 CUDA 和 cuDNN 等库，您还可以在 Python 应用程序中使用自定义层。</p>
+<p>您可以使用 C++ API 创建自定义层，在 Python 中使用<code>pybind11</code>打包层，然后将插件加载到 Python 应用程序中。有关更多信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#network_python">在 Python 中创建网络定义</a>。</p>
+<p>相同的自定义层实现可用于 C++ 和 Python。</p>
+<h3 id="9-2-1-Example-Adding-A-Custom-Layer-To-A-TensorRT-Network-Using-Python"><a href="#9-2-1-Example-Adding-A-Custom-Layer-To-A-TensorRT-Network-Using-Python" class="headerlink" title="9.2.1. Example: Adding A Custom Layer To A TensorRT Network Using Python"></a>9.2.1. Example: Adding A Custom Layer To A TensorRT Network Using Python</h3><p>可以使用插件节点将自定义层添加到 Python 中的任何 TensorRT 网络。</p>
+<p>Python API 有一个名为<code>add_plugin_v2</code>的函数，可让您将插件节点添加到网络。以下示例说明了这一点。它创建了一个简单的TensorRT网络，并通过查找TensorRT插件注册表来添加一个 Leaky ReLU 插件节点。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> tensorrt as trt</span><br><span class="line"><span class="keyword">import</span> numpy as np</span><br><span class="line"></span><br><span class="line">TRT_LOGGER = trt.<span class="built_in">Logger</span>()</span><br><span class="line"></span><br><span class="line">trt.<span class="built_in">init_libnvinfer_plugins</span>(TRT_LOGGER, <span class="string">&#x27;&#x27;)</span></span><br><span class="line"><span class="string">PLUGIN_CREATORS = trt.get_plugin_registry().plugin_creator_list</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">def get_trt_plugin(plugin_name):</span></span><br><span class="line"><span class="string">        plugin = None</span></span><br><span class="line"><span class="string">        for plugin_creator in PLUGIN_CREATORS:</span></span><br><span class="line"><span class="string">            if plugin_creator.name == plugin_name:</span></span><br><span class="line"><span class="string">                lrelu_slope_field = trt.PluginField(&quot;neg_slope&quot;, np.array([0.1], dtype=np.float32), trt.PluginFieldType.FLOAT32)</span></span><br><span class="line"><span class="string">                field_collection = trt.PluginFieldCollection([lrelu_slope_field])</span></span><br><span class="line"><span class="string">                plugin = plugin_creator.create_plugin(name=plugin_name, field_collection=field_collection)</span></span><br><span class="line"><span class="string">        return plugin</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">def main():</span></span><br><span class="line"><span class="string">    builder = trt.Builder(TRT_LOGGER) </span></span><br><span class="line"><span class="string">    network = builder.create_network()</span></span><br><span class="line"><span class="string">    config = builder.create_builder_config()</span></span><br><span class="line"><span class="string">    config.max_workspace_size = 2**20</span></span><br><span class="line"><span class="string">    input_layer = network.add_input(name=&quot;input_layer&quot;, dtype=trt.float32, shape=(1, 1))</span></span><br><span class="line"><span class="string">    lrelu = network.add_plugin_v2(inputs=[input_layer], plugin=get_trt_plugin(&quot;LReLU_TRT&quot;))</span></span><br><span class="line"><span class="string">    lrelu.get_output(0).name = &quot;outputs&quot;</span></span><br><span class="line"><span class="string">    network.mark_output(lrelu.get_output(0))</span></span><br></pre></td></tr></table></figure>
+<h2 id="9-3-Using-Custom-Layers-When-Importing-A-Model-With-A-Parser"><a href="#9-3-Using-Custom-Layers-When-Importing-A-Model-With-A-Parser" class="headerlink" title="9.3. Using Custom Layers When Importing A Model With A Parser"></a>9.3. Using Custom Layers When Importing A Model With A Parser</h2><p>ONNX 解析器会自动尝试将无法识别的节点作为插件导入。如果在插件注册表中找到与节点具有相同op_type的插件，则解析器将节点的属性作为插件字段参数转发给插件创建者，以创建插件。默认情况下，解析器使用“1”作为插件版本， “”作为插件命名空间。可以通过在相应的 ONNX 节点中设置<code>plugin_version</code>或<code>plugin_namespace</code>字符串属性来覆盖此行为。</p>
+<p>在某些情况下，您可能希望在将 ONNX 图导入 TensorRT 之前对其进行修改。例如，用插件节点替换一组操作。为此，您可以使用<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/tools/onnx-graphsurgeon">ONNX GraphSurgeon 实用程序</a>。有关如何使用 ONNX-GraphSurgeon 替换子图的详细信息，请参阅<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/tools/onnx-graphsurgeon/examples/08_replacing_a_subgraph">此示例</a>。</p>
+<p>有关更多示例，请参阅<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/main/samples/python/onnx_packnet">onnx_packnet</a>示例。</p>
+<h2 id="9-4-Plugin-API-Description"><a href="#9-4-Plugin-API-Description" class="headerlink" title="9.4. Plugin API Description"></a>9.4. Plugin API Description</h2><p>所有新插件都应从<code>IPluginCreator</code>和使用 C++ API 添加自定义层中描述的插件基类之一派生类。此外，新插件还应调用<code>REGISTER_TENSORRT_PLUGIN(...)</code>宏以将插件注册到 TensorRT 插件注册表或创建等效于<code>initLibNvInferPlugins()</code>的init函数。</p>
+<h3 id="9-4-1-Migrating-Plugins-From-TensorRT-6-x-Or-7-x-To-TensorRT-8-x-x"><a href="#9-4-1-Migrating-Plugins-From-TensorRT-6-x-Or-7-x-To-TensorRT-8-x-x" class="headerlink" title="9.4.1. Migrating Plugins From TensorRT 6.x Or 7.x To TensorRT 8.x.x"></a>9.4.1. Migrating Plugins From TensorRT 6.x Or 7.x To TensorRT 8.x.x</h3><p><code>IPluginV2</code>和<code>IPluginV2Ext</code>以分别向后兼容 TensorRT 5.1 和 6.0.x。但是，新插件应针对<code>IPluginV2DynamicExt</code>或<code>IPluginV2IOExt</code>接口，而旧插件应重构以使用这些接口。</p>
+<p><code>IPluginV2DynamicExt</code>中的新特性如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">virtual</span> DimsExprs <span class="title">getOutputDimensions</span><span class="params">(<span class="type">int</span> outputIndex, <span class="type">const</span> DimsExprs* inputs, <span class="type">int</span> nbInputs, IExprBuilder&amp; exprBuilder)</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="type">bool</span> <span class="title">supportsFormatCombination</span><span class="params">(<span class="type">int</span> pos, <span class="type">const</span> PluginTensorDesc* inOut, <span class="type">int</span> nbInputs, <span class="type">int</span> nbOutputs)</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">configurePlugin</span><span class="params">(<span class="type">const</span> DynamicPluginTensorDesc* in, <span class="type">int</span> nbInputs, <span class="type">const</span> DynamicPluginTensorDesc* out, <span class="type">int</span> nbOutputs)</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="type">size_t</span> <span class="title">getWorkspaceSize</span><span class="params">(<span class="type">const</span> PluginTensorDesc* inputs, <span class="type">int</span> nbInputs, <span class="type">const</span> PluginTensorDesc* outputs, <span class="type">int</span> nbOutputs)</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="type">int</span> <span class="title">enqueue</span><span class="params">(<span class="type">const</span> PluginTensorDesc* inputDesc, <span class="type">const</span> PluginTensorDesc* outputDesc, <span class="type">const</span> <span class="type">void</span>* <span class="type">const</span>* inputs, <span class="type">void</span>* <span class="type">const</span>* outputs, <span class="type">void</span>* workspace, cudaStream_t stream)</span> </span>= <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p><code>IPluginV2IOExt</code>中的新特性如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="type">void</span> <span class="title">configurePlugin</span><span class="params">(<span class="type">const</span> PluginTensorDesc* in, <span class="type">int</span> nbInput, <span class="type">const</span> PluginTensorDesc* out, <span class="type">int</span> nbOutput)</span> </span>= <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">virtual</span> <span class="type">bool</span> <span class="title">supportsFormatCombination</span><span class="params">(<span class="type">int</span> pos, <span class="type">const</span> PluginTensorDesc* inOut, <span class="type">int</span> nbInputs, <span class="type">int</span> nbOutputs)</span> <span class="type">const</span> </span>= <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+<p>迁移到<code>IPluginV2DynamicExt</code>或<code>IPluginV2IOExt</code>的指南：</p>
+<ul>
+<li><code>getOutputDimensions</code>实现给定输入的输出张量维度的表达式。</li>
+<li><code>supportsFormatCombination</code>检查插件是否支持指定输入/输出的格式和数据类型。</li>
+<li><code>configurePlugin</code>模仿<code>IPluginV2Ext</code>中等效的<code>configurePlugin</code>的行为，但接受张量描述符。</li>
+<li><code>getWorkspaceSize</code>和<code>enqueue</code>模仿<code>IPluginV2Ext</code>中等效 API 的行为，但接受张量描述符。</li>
+</ul>
+<p>更多详细信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#ipluginv2">IPluginV2 API</a> 说明中的 API 说明。</p>
+<h3 id="9-4-2-IPluginV2-API-Description"><a href="#9-4-2-IPluginV2-API-Description" class="headerlink" title="9.4.2. IPluginV2 API Description"></a>9.4.2. IPluginV2 API Description</h3><p>以下部分介绍<code>IPluginV2</code>类的功能。要将插件层连接到相邻层并设置输入和输出数据结构，构建器通过调用以下插件方法检查输出的数量及其维度。</p>
+<p><strong><code>getNbOutputs</code></strong></p>
+<p>用于指定输出张量的数量。</p>
+<p><strong><code>getOutputDimensions</code></strong></p>
+<p>用于将输出的维度指定为输入维度的函数。</p>
+<p><strong><code>supportsFormat</code></strong></p>
+<p>用于检查插件是否支持给定的数据格式。</p>
+<p><strong><code>getOutputDataType</code></strong></p>
+<p>用于获取给定索引处输出的数据类型。返回的数据类型必须具有插件支持的格式。</p>
+<p>插件层可以支持四种数据格式，例如：</p>
+<ul>
+<li>NCHW单精度 (FP32)、半精度 (FP16) 和整型 (INT32) 张量</li>
+<li>NC / 2HW2和NHWC8半精度 (FP16) 张量</li>
+</ul>
+<p>格式由<code>PluginFormatType</code>枚举。</p>
+<p>除了输入和输出张量之外，不计算所有数据并且需要内存空间的插件可以使用<code>getWorkspaceSize</code>方法指定额外的内存需求，该方法由构建器调用以确定和预分配暂存空间。</p>
+<p>在构建和推理期间，可能会多次配置和执行插件层。在构建时，为了发现最佳配置，层被配置、初始化、执行和终止。为插件选择最佳格式后，再次配置插件，然后在推理应用程序的生命周期内初始化一次并执行多次，最后在引擎销毁时终止。这些步骤由构建器和引擎使用以下插件方法控制：</p>
+<p><strong><code>configurePlugin</code>(配置插件)</strong></p>
+<p>传达输入和输出的数量、所有输入和输出的维度和数据类型、所有输入和输出的广播信息、选择的插件格式和最大批量大小。此时，插件设置其内部状态并为给定配置选择最合适的算法和数据结构。</p>
+<p><strong><code>initialize</code>(初始化)</strong></p>
+<p>此时配置是已知的，并且正在创建推理引擎，因此插件可以设置其内部数据结构并准备执行。</p>
+<p><strong><code>enqueue</code>(排队)</strong></p>
+<p>封装插件的实际算法和内核调用，并提供运行时批处理大小、指向输入、输出和暂存空间的指针，以及用于内核执行的CUDA流。</p>
+<p><strong><code>terminate</code>(终止)</strong></p>
+<p>引擎上下文被销毁，插件持有的所有资源必须被释放。</p>
+<p><strong><code>clone</code>(克隆)</strong></p>
+<p>每次创建包含此插件层的新构建器、网络或引擎时都会调用它。它必须返回一个带有正确参数的新插件对象。</p>
+<p><strong><code>destroy</code>(销毁)</strong></p>
+<p>用于销毁插件对象和/或每次创建新插件对象时分配的其他内存。每当构建器或网络或引擎被破坏时都会调用它。</p>
+<p><code>`set/getPluginNamespace`(设置/获取插件命名空间)</code></p>
+<p>该方法用于设置该插件对象所属的库命名空间（默认可以是“”）。来自同一个插件库的所有插件对象都应该具有相同的命名空间。</p>
+<p><code>IPluginV2Ext</code>支持可以处理广播输入和输出的插件。此功能需要实现以下方法：</p>
+<p><strong><code>canBroadcastInputAcrossBatch</code></strong></p>
+<p>对每个输入调用此方法，其张量在批次中进行语义广播。如果<code>canBroadcastInputAcrossBatch</code>返回true （意味着插件可以支持广播），则 TensorRT 不会复制输入张量。插件应该在批处理中共享一个副本。如果它返回false ，则 TensorRT 会复制输入张量，使其看起来像一个非广播张量。</p>
+<p><strong><code>isOutputBroadcastAcrossBatch</code></strong></p>
+<p>这为每个输出索引调用。该插件应在给定索引处返回 true 输出，并在整个批次中广播。</p>
+<p><strong><code>IPluginV2IOExt</code></strong><br>这由构建器在<code>initialize()</code>之前调用。它为层提供了基于 I/O PluginTensorDesc和最大批量大小进行算法选择的机会。</p>
+<h4 id="注意：基于IPluginV2的插件在引擎级别共享，而不是在执行上下文级别共享，因此这些可能被多个线程同时使用的插件需要以线程安全的方式管理它们的资源。创建ExecutionContext时会克隆基于IPluginV2Ext和派生接口的插件，因此这不是必需的。"><a href="#注意：基于IPluginV2的插件在引擎级别共享，而不是在执行上下文级别共享，因此这些可能被多个线程同时使用的插件需要以线程安全的方式管理它们的资源。创建ExecutionContext时会克隆基于IPluginV2Ext和派生接口的插件，因此这不是必需的。" class="headerlink" title="注意：基于IPluginV2的插件在引擎级别共享，而不是在执行上下文级别共享，因此这些可能被多个线程同时使用的插件需要以线程安全的方式管理它们的资源。创建ExecutionContext时会克隆基于IPluginV2Ext和派生接口的插件，因此这不是必需的。"></a>注意：基于<code>IPluginV2</code>的插件在引擎级别共享，而不是在执行上下文级别共享，因此这些可能被多个线程同时使用的插件需要以线程安全的方式管理它们的资源。创建<code>ExecutionContext</code>时会克隆基于<code>IPluginV2Ext</code>和派生接口的插件，因此这不是必需的。</h4><h3 id="9-4-3-IPluginCreator-API-Description"><a href="#9-4-3-IPluginCreator-API-Description" class="headerlink" title="9.4.3. IPluginCreator API Description"></a>9.4.3. IPluginCreator API Description</h3><p><code>IPluginCreator</code>类中的以下方法用于从插件注册表中查找和创建适当的插件：</p>
+<p><strong><code>getPluginName</code></strong></p>
+<p><code>IPluginExt::getPluginType</code>的返回值。</p>
+<p><strong><code>getPluginVersion</code></strong><br>返回插件版本。对于所有内部 TensorRT 插件，默认为1 。</p>
+<p><strong><code>getFieldNames</code></strong><br>要成功创建插件，需要了解插件的所有字段参数。此方法返回<code>PluginFieldCollection</code>结构，其中填充了<code>PluginField</code>条目以反映字段名称和<code>PluginFieldType</code> （数据应指向<code>nullptr</code> ）。</p>
+<p><strong><code>createPlugin</code></strong></p>
+<p>此方法用于使用<code>PluginFieldCollection</code>参数创建插件。应填充<code>PluginField</code>条目的数据字段以指向每个插件字段条目的实际数据。</p>
+<h4 id="注意：传递给createPlugin函数的数据应该由调用者分配，并在程序被销毁时最终由调用者释放。-createPlugin函数返回的插件对象的所有权被传递给调用者，并且也必须被销毁。"><a href="#注意：传递给createPlugin函数的数据应该由调用者分配，并在程序被销毁时最终由调用者释放。-createPlugin函数返回的插件对象的所有权被传递给调用者，并且也必须被销毁。" class="headerlink" title="注意：传递给createPlugin函数的数据应该由调用者分配，并在程序被销毁时最终由调用者释放。 createPlugin函数返回的插件对象的所有权被传递给调用者，并且也必须被销毁。"></a>注意：传递给<code>createPlugin</code>函数的数据应该由调用者分配，并在程序被销毁时最终由调用者释放。 <code>createPlugin</code>函数返回的插件对象的所有权被传递给调用者，并且也必须被销毁。</h4><p><strong><code>deserializePlugin</code></strong></p>
+<p>此方法由 TensorRT 引擎根据插件名称和版本在内部调用。它应该返回要用于推理的插件对象。在该函数中创建的插件对象在引擎被销毁时被 TensorRT 引擎销毁。</p>
+<p><strong><code>set/getPluginNamespace</code></strong><br>该方法用于设置此创建者实例所属的命名空间（默认可以是“”）。</p>
+<h2 id="9-5-Best-Practices-For-Custom-Layers-Plugin"><a href="#9-5-Best-Practices-For-Custom-Layers-Plugin" class="headerlink" title="9.5. Best Practices For Custom Layers Plugin"></a>9.5. Best Practices For Custom Layers Plugin</h2><p><strong>调试自定义层问题</strong></p>
+<p>必须释放插件中分配的内存以确保没有内存泄漏。如果在<code>initialize()</code>函数中获取资源，则需要在<code>terminate()</code>函数中释放它们。应该释放所有其他内存分配，最好在插件类析构函数中或在destroy()方法中。<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#add_custom_layer">使用 C++ API 添加自定义层</a>详细概述了这一点，并提供了一些使用插件时的最佳实践说明。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/9-TensorRT%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%82/" title="9-TensorRT中的自定义层">http://example.com/TensorRT/TensorRT中文版开发手册/9-TensorRT中的自定义层/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/Tensorrt/" rel="tag"><i class="fa fa-tag"></i> Tensorrt</a>
+              <a href="/tags/DeepLearning/" rel="tag"><i class="fa fa-tag"></i> DeepLearning</a>
+              <a href="/tags/Plugin/" rel="tag"><i class="fa fa-tag"></i> Plugin</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/8-TensorRT%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E5%BD%A2%E7%8A%B6/" rel="prev" title="8-TensorRT中的动态形状">
+                  <i class="fa fa-chevron-left"></i> 8-TensorRT中的动态形状
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/README/" rel="next" title="README">
+                  README <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"ab2f91e7b6a91e6d5eb30913422c8635"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

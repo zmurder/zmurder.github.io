@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="在TensorRT中使用动态形状(Dynamic Shapes)">
+<meta property="og:type" content="article">
+<meta property="og:title" content="8-TensorRT中的动态形状">
+<meta property="og:url" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/8-TensorRT%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E5%BD%A2%E7%8A%B6/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="在TensorRT中使用动态形状(Dynamic Shapes)">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/8-TensorRT%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E5%BD%A2%E7%8A%B6/rdp.jpg">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/8-TensorRT%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E5%BD%A2%E7%8A%B6/opt-profile.png">
+<meta property="article:published_time" content="2024-12-01T10:13:45.400Z">
+<meta property="article:modified_time" content="2024-12-01T10:13:45.400Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="GPU">
+<meta property="article:tag" content="Tensorrt">
+<meta property="article:tag" content="DeepLearning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/8-TensorRT%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E5%BD%A2%E7%8A%B6/rdp.jpg">
+
+
+<link rel="canonical" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/8-TensorRT%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E5%BD%A2%E7%8A%B6/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/8-TensorRT%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E5%BD%A2%E7%8A%B6/","path":"TensorRT/TensorRT中文版开发手册/8-TensorRT中的动态形状/","title":"8-TensorRT中的动态形状"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>8-TensorRT中的动态形状 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%A8TensorRT%E4%B8%AD%E4%BD%BF%E7%94%A8%E5%8A%A8%E6%80%81%E5%BD%A2%E7%8A%B6-Dynamic-Shapes"><span class="nav-text">在TensorRT中使用动态形状(Dynamic Shapes)</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#8-1-Specifying-Runtime-Dimensions"><span class="nav-text">8.1. Specifying Runtime Dimensions</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A%E8%BE%93%E5%85%A5%E7%9A%84setBindingDimensions%E7%9A%84%E8%BF%94%E5%9B%9E%E5%80%BC%E4%BB%85%E8%A1%A8%E6%98%8E%E4%B8%8E%E4%B8%BA%E8%AF%A5%E8%BE%93%E5%85%A5%E8%AE%BE%E7%BD%AE%E7%9A%84%E4%BC%98%E5%8C%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E7%9B%B8%E5%85%B3%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7%E3%80%82%E6%8C%87%E5%AE%9A%E6%89%80%E6%9C%89%E8%BE%93%E5%85%A5%E7%BB%91%E5%AE%9A%E7%BB%B4%E5%BA%A6%E5%90%8E%EF%BC%8C%E6%82%A8%E5%8F%AF%E4%BB%A5%E9%80%9A%E8%BF%87%E6%9F%A5%E8%AF%A2%E7%BD%91%E7%BB%9C%E8%BE%93%E5%87%BA%E7%BB%91%E5%AE%9A%E7%9A%84%E7%BB%B4%E5%BA%A6%E6%9D%A5%E6%A3%80%E6%9F%A5%E6%95%B4%E4%B8%AA%E7%BD%91%E7%BB%9C%E5%9C%A8%E5%8A%A8%E6%80%81%E8%BE%93%E5%85%A5%E5%BD%A2%E7%8A%B6%E6%96%B9%E9%9D%A2%E6%98%AF%E5%90%A6%E4%B8%80%E8%87%B4%E3%80%82"><span class="nav-text">注意：输入的setBindingDimensions的返回值仅表明与为该输入设置的优化配置文件相关的一致性。指定所有输入绑定维度后，您可以通过查询网络输出绑定的维度来检查整个网络在动态输入形状方面是否一致。</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-2-Optimization-Profiles"><span class="nav-text">8.2. Optimization Profiles</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-2-1-Bindings-For-Multiple-Optimization-Profiles"><span class="nav-text">8.2.1. Bindings For Multiple Optimization Profiles</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-3-Layer-Extensions-For-Dynamic-Shapes"><span class="nav-text">8.3. Layer Extensions For Dynamic Shapes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-4-Restrictions-For-Dynamic-Shapes"><span class="nav-text">8.4. Restrictions For Dynamic Shapes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-5-Execution-Tensors-vs-Shape-Tensors"><span class="nav-text">8.5. Execution Tensors vs. Shape Tensors</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#8-5-1-Formal-Inference-Rules"><span class="nav-text">8.5.1. Formal Inference Rules</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-6-Shape-Tensor-I-O-Advanced"><span class="nav-text">8.6. Shape Tensor I&#x2F;O (Advanced)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#8-7-INT8-Calibration-With-Dynamic-Shapes"><span class="nav-text">8.7. INT8 Calibration With Dynamic Shapes</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%B3%A8%E6%84%8F%EF%BC%9A%E5%A6%82%E6%9E%9C%E6%9C%AA%E8%AE%BE%E7%BD%AE%E6%A0%A1%E5%87%86%E4%BC%98%E5%8C%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%EF%BC%8C%E5%88%99%E4%BD%BF%E7%94%A8%E7%AC%AC%E4%B8%80%E4%B8%AA%E7%BD%91%E7%BB%9C%E4%BC%98%E5%8C%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E4%BD%9C%E4%B8%BA%E6%A0%A1%E5%87%86%E4%BC%98%E5%8C%96%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6%E3%80%82"><span class="nav-text">注意：如果未设置校准优化配置文件，则使用第一个网络优化配置文件作为校准优化配置文件。</span></a></li></ol></li></ol></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">147</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/8-TensorRT%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E5%BD%A2%E7%8A%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="8-TensorRT中的动态形状 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          8-TensorRT中的动态形状
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
+        </span>
+          ，
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/" itemprop="url" rel="index"><span itemprop="name">TensorRT中文版开发手册</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="在TensorRT中使用动态形状-Dynamic-Shapes"><a href="#在TensorRT中使用动态形状-Dynamic-Shapes" class="headerlink" title="在TensorRT中使用动态形状(Dynamic Shapes)"></a>在TensorRT中使用动态形状(Dynamic Shapes)</h1><img src="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/8-TensorRT%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E5%BD%A2%E7%8A%B6/rdp.jpg" class="">
+<p><a target="_blank" rel="noopener" href="https://developer.nvidia.com/zh-cn/developer-program">点击此处加入NVIDIA开发者计划</a></p>
+<p><strong>动态形状(Dynamic Shapes)</strong> 是延迟指定部分或全部张量维度直到运行时的能力。动态形状可以通过 C++ 和 Python 接口使用。<br>以下部分提供了更详细的信息；但是，这里概述了构建具有动态形状的引擎的步骤：</p>
+<p>1.网络定义不得具有隐式批次维度。</p>
+<p><strong>C++</strong></p>
+<p>通过调用创建<code>INetworkDefinition</code><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">IBuilder::<span class="built_in">createNetworkV2</span>(<span class="number">1U</span> &lt;&lt;</span><br><span class="line">        <span class="built_in">static_cast</span>&lt;<span class="type">int</span>&gt;(NetworkDefinitionCreationFlag::kEXPLICIT_BATCH))</span><br></pre></td></tr></table></figure></p>
+<p><strong>Python</strong></p>
+<p>通过调用创建tensorrt.INetworkDefinition<br><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">create_network(<span class="number">1</span> &lt;&lt;</span><br><span class="line">        <span class="built_in">int</span>(tensorrt.NetworkDefinitionCreationFlag.EXPLICIT_BATCH))</span><br></pre></td></tr></table></figure><br>这些调用要求网络没有隐式批处理维度。</p>
+<p>2.<code>-1</code>作为维度的占位符来指定输入张量的每个运行时维度。</p>
+<p>3.指定一个或多个优化配置文件，为具有运行时维度的输入指定允许的维度范围，以及自动调整器将优化的维度。有关详细信息，请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#opt_profiles">优化配置文件</a>。</p>
+<p>4.要使用引擎：</p>
+<ul>
+<li>从引擎创建执行上下文，与没有动态形状的情况相同。</li>
+<li>指定步骤 3 中涵盖输入维度的优化配置文件之一。</li>
+<li>指定执行上下文的输入维度。设置输入维度后，您可以获得TensorRT针对给定输入维度计算的输出维度。</li>
+<li>Enqueue work。</li>
+</ul>
+<h2 id="8-1-Specifying-Runtime-Dimensions"><a href="#8-1-Specifying-Runtime-Dimensions" class="headerlink" title="8.1. Specifying Runtime Dimensions"></a>8.1. Specifying Runtime Dimensions</h2><p>构建网络时，使用<code>-1</code>表示输入张量的运行时维度。例如，要创建一个名为<code>foo</code>的 3D 输入张量，其中最后两个维度在运行时指定，第一个维度在构建时固定，请发出以下命令。</p>
+<p><strong>C++</strong></p>
+<p><code>networkDefinition.addInput(&quot;foo&quot;, DataType::kFLOAT, Dims3(3, -1, -1))</code></p>
+<p><strong>Python</strong></p>
+<p><code>network_definition.add_input(&quot;foo&quot;, trt.float32, (3, -1, -1))</code></p>
+<p>在运行时，您需要在选择优化配置文件后设置输入维度（请参阅<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#opt_profiles">优化配置文件</a>）。设输入<code>foo</code>的<code>bindingIndex</code>为<code>0</code> ，输入的维度为<code>[3,150,250]</code> 。在为前面的示例设置优化配置文件后，您将调用：</p>
+<p><strong>C++</strong></p>
+<p><code>context.setBindingDimensions(0, Dims3(3, 150, 250))</code></p>
+<p><strong>Python</strong></p>
+<p><code>context.set_binding_shape(0, (3, 150, 250))</code></p>
+<p>在运行时，向引擎询问绑定维度会返回用于构建网络的相同维度，这意味着每个运行时维度都会得到<code>-1</code> 。例如：</p>
+<p><strong>C++</strong></p>
+<p><code>engine.getBindingDimensions(0) returns a Dims with dimensions &#123;3, -1, -1&#125;</code></p>
+<p><strong>Python</strong></p>
+<p><code>engine.get_binding_shape(0) returns (3, -1, -1)</code></p>
+<p>要获取特定于每个执行上下文的实际维度，请查询执行上下文：</p>
+<p><strong>C++</strong></p>
+<p><code>context.getBindingDimensions(0) returns a Dims with dimensions &#123;3, 150, 250&#125;.</code></p>
+<p><strong>Python</strong></p>
+<p><code>context.get_binding_shape(0) returns (3, 150, 250).</code></p>
+<h4 id="注意：输入的setBindingDimensions的返回值仅表明与为该输入设置的优化配置文件相关的一致性。指定所有输入绑定维度后，您可以通过查询网络输出绑定的维度来检查整个网络在动态输入形状方面是否一致。"><a href="#注意：输入的setBindingDimensions的返回值仅表明与为该输入设置的优化配置文件相关的一致性。指定所有输入绑定维度后，您可以通过查询网络输出绑定的维度来检查整个网络在动态输入形状方面是否一致。" class="headerlink" title="注意：输入的setBindingDimensions的返回值仅表明与为该输入设置的优化配置文件相关的一致性。指定所有输入绑定维度后，您可以通过查询网络输出绑定的维度来检查整个网络在动态输入形状方面是否一致。"></a>注意：输入的<code>setBindingDimensions</code>的返回值仅表明与为该输入设置的优化配置文件相关的一致性。指定所有输入绑定维度后，您可以通过查询网络输出绑定的维度来检查整个网络在动态输入形状方面是否一致。</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">nvinfer1::Dims out_dim = context-&gt;<span class="built_in">getBindingDimensions</span>(out_index);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (out_dim.nbDims == <span class="number">-1</span>) &#123;</span><br><span class="line">gLogError &lt;&lt; <span class="string">&quot;Invalid network output, this might be caused by inconsistent input shapes.&quot;</span> &lt;&lt; std::endl;</span><br><span class="line"><span class="comment">// abort inference</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="8-2-Optimization-Profiles"><a href="#8-2-Optimization-Profiles" class="headerlink" title="8.2. Optimization Profiles"></a>8.2. Optimization Profiles</h2><p>优化配置文件描述了每个网络输入的维度范围以及自动调谐器将用于优化的维度。使用运行时维度时，您必须在构建时创建至少一个优化配置文件。两个配置文件可以指定不相交或重叠的范围。</p>
+<p>例如，一个配置文件可能指定最小尺寸<code>[3,100,200]</code> ，最大尺寸<code>[3,200,300]</code>和优化尺寸<code>[3,150,250]</code>而另一个配置文件可能指定最小，最大和优化尺寸<code>[3,200,100] ， [3,300,400] ，和[3,250,250]</code> 。</p>
+<p>要创建优化配置文件，首先构造一个<code>IOptimizationProfile</code> 。然后设置最小、优化和最大维度，并将其添加到网络配置中。优化配置文件定义的形状必须为网络定义有效的输入形状。以下是前面提到的第一个配置文件对输入<code>foo</code>的调用：</p>
+<p><strong>C++</strong><br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">IOptimizationProfile* profile = builder.<span class="built_in">createOptimizationProfile</span>();</span><br><span class="line">profile-&gt;<span class="built_in">setDimensions</span>(<span class="string">&quot;foo&quot;</span>, OptProfileSelector::kMIN, <span class="built_in">Dims3</span>(<span class="number">3</span>,<span class="number">100</span>,<span class="number">200</span>);</span><br><span class="line">profile-&gt;<span class="built_in">setDimensions</span>(<span class="string">&quot;foo&quot;</span>, OptProfileSelector::kOPT, <span class="built_in">Dims3</span>(<span class="number">3</span>,<span class="number">150</span>,<span class="number">250</span>);</span><br><span class="line">profile-&gt;<span class="built_in">setDimensions</span>(<span class="string">&quot;foo&quot;</span>, OptProfileSelector::kMAX, <span class="built_in">Dims3</span>(<span class="number">3</span>,<span class="number">200</span>,<span class="number">300</span>);</span><br><span class="line"></span><br><span class="line">config-&gt;<span class="built_in">addOptimizationProfile</span>(profile)</span><br><span class="line"></span><br></pre></td></tr></table></figure></p>
+<p><strong>Python</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">profile = builder.create_optimization_profile();</span><br><span class="line">profile.set_shape(<span class="string">&quot;foo&quot;</span>, (<span class="number">3</span>, <span class="number">100</span>, <span class="number">200</span>), (<span class="number">3</span>, <span class="number">150</span>, <span class="number">250</span>), (<span class="number">3</span>, <span class="number">200</span>, <span class="number">300</span>)) </span><br><span class="line">config.add_optimization_profile(profile)</span><br></pre></td></tr></table></figure>
+<p>在运行时，您需要在设置输入维度之前设置优化配置文件。配置文件按照添加的顺序编号，从0开始。请注意，每个执行上下文必须使用单独的优化配置文件。<br>要选择示例中的第一个优化配置文件，请使用：</p>
+<p><strong>C++</strong><br>调用<code>context.setOptimizationProfileAsync(0, stream)</code></p>
+<p>其中stream是在此上下文中用于后续enqueue()或enqueueV2()调用的 CUDA 流。</p>
+<p><strong>Python</strong><br>设置<code>context.set_optimization_profile_async(0, stream)</code></p>
+<p>如果关联的 CUDA 引擎具有动态输入，则必须使用唯一的配置文件索引至少设置一次优化配置文件，该唯一配置文件索引未被其他未销毁的执行上下文使用。对于为引擎创建的第一个执行上下文，隐式选择配置文件 0。</p>
+<p>可以调用<code>setOptimizationProfileAsync()</code>在配置文件之间切换。它必须在当前上下文中的任何<code>enqueue()</code>或<code>enqueueV2()</code>操作完成后调用。当多个执行上下文同时运行时，允许切换到以前使用但已被具有不同动态输入维度的另一个执行上下文释放的配置文件。</p>
+<p><code>setOptimizationProfileAsync()</code>函数替换了现在已弃用的 API <code>setOptimizationProfile()</code>版本。使用<code>setOptimizationProfile()</code>在优化配置文件之间切换可能会导致后续<code>enqueue()</code>或<code>enqueueV2()</code>操作操作中的 GPU 内存复制操作。要在入队期间避免这些调用，请改用<code>setOptimizationProfileAsync()</code> API。</p>
+<p>在由多个配置文件构建的引擎中，每个配置文件都有单独的绑定索引。第K个配置文件的输入/输出张量的名称附加了<code>[profile K]</code> ，其中K以十进制表示。例如，如果<code>INetworkDefinition</code>的名称为“ <code>foo</code>”，并且<code>bindingIndex</code>指的是优化配置文件中索引为<code>3</code>的张量，则<code>engine.getBindingName ( bindingIndex )</code> 返回“ <code>foo [profile 3]</code> ”。</p>
+<p>同样，如果使用<code>ICudaEngine::getBindingIndex(name)</code>获取第一个配置文件 ( <code>K=0</code>) 之外的配置文件 K 的索引，请将“<code>[profile K]</code>”附加到<code>INetworkDefinition</code>中使用的名称。例如，如果张量在 <code>INetworkDefinition</code> 中被称为“ <code>foo</code> ” ，则<code>engine.getBindingIndex ( “ foo [profile 3] ” )</code>在优化配置文件<code>3</code>中返回张量“ <code>foo</code>”的绑定索引。</p>
+<p>始终省略K=0的后缀。</p>
+<h3 id="8-2-1-Bindings-For-Multiple-Optimization-Profiles"><a href="#8-2-1-Bindings-For-Multiple-Optimization-Profiles" class="headerlink" title="8.2.1. Bindings For Multiple Optimization Profiles"></a>8.2.1. Bindings For Multiple Optimization Profiles</h3><p>考虑一个具有四个输入、一个输出、在<code>IBuilderConfig</code>中具有三个优化配置文件的网络。该引擎有 <code>15</code> 个绑定，每个优化配置文件有 <code>5</code>个，在概念上组织为一个表：</p>
+<img src="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/8-TensorRT%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E5%BD%A2%E7%8A%B6/opt-profile.png" class="">
+<p>每行都是一个配置文件。表中的数字表示绑定索引。第一个配置文件的绑定索引为 0..4，第二个配置文件为 5..9，第三个配置文件为 10..14。</p>
+<p>对于绑定属于第一个配置文件但指定了另一个配置文件的情况，接口具有“自动更正”功能。在这种情况下，TensorRT 会警告错误，然后从同一列中选择正确的绑定索引。</p>
+<p>为了向后半兼容，接口在绑定属于第一个配置文件但指定了另一个配置文件的情况下具有“自动更正”功能。在这种情况下，TensorRT 会警告错误，然后从同一列中选择正确的绑定索引。</p>
+<h2 id="8-3-Layer-Extensions-For-Dynamic-Shapes"><a href="#8-3-Layer-Extensions-For-Dynamic-Shapes" class="headerlink" title="8.3. Layer Extensions For Dynamic Shapes"></a>8.3. Layer Extensions For Dynamic Shapes</h2><p>一些层具有允许指定动态形状信息的可选输入，并且有一个新层IShapeLayer用于在运行时访问张量的形状。此外，一些层允许计算新的形状。下一节将讨论语义细节和限制。以下是与动态形状结合使用时可能有用的内容的摘要。</p>
+<p><code>IShapeLayer</code>输出一个包含输入张量尺寸的一维张量。例如，如果输入张量的维度为<code>[2,3,5,7]</code> ，则输出张量是包含<code>&#123;2,3,5,7&#125;</code>的四元素一维张量。如果输入张量是标量，则它的维度为[] ，输出张量是包含{}的零元素一维张量。</p>
+<p><code>IResizeLayer</code>接受包含所需输出尺寸的可选第二个输入。</p>
+<p><code>IShuffleLayer</code>接受包含重塑尺寸的可选第二个输入。例如，以下网络将张量Y重塑为与X具有相同的维度：</p>
+<p><strong>C++</strong></p>
+<pre><code>auto* reshape = networkDefinition.addShuffle(Y);
+reshape.setInput(1, networkDefintion.addShape(X)-&gt;getOutput(0));
+</code></pre><p><strong>Python</strong></p>
+<pre><code>reshape = network_definition.add_shuffle(y)
+reshape.set_input(1, network_definition.add_shape(X).get_output(0))
+</code></pre><p><code>ISliceLayer</code>接受可选的第二、第三和第四个输入，其中包含开始、大小和步幅。</p>
+<p><code>IConcatenationLayer, IElementWiseLayer, IGatherLayer, IIdentityLayer, and
+        IReduceLayer</code></p>
+<p>可用于对形状进行计算并创建新的形状张量。</p>
+<h2 id="8-4-Restrictions-For-Dynamic-Shapes"><a href="#8-4-Restrictions-For-Dynamic-Shapes" class="headerlink" title="8.4. Restrictions For Dynamic Shapes"></a>8.4. Restrictions For Dynamic Shapes</h2><p>由于层的权重具有固定大小，因此会出现以下层限制：</p>
+<ul>
+<li><code>IConvolutionLayer</code>和<code>IDeconvolutionLayer</code>要求通道维度是构建时常数。</li>
+<li><code>IFullyConnectedLayer</code>要求最后三个维度是构建时常量。</li>
+<li><code>Int8</code>要求通道维度是构建时常数。</li>
+<li>接受额外形状输入的层（ <code>IResizeLayer</code> 、 <code>IShuffleLayer</code> 、 <code>ISliceLayer</code> ）要求额外的形状输入与最小和最大优化配置文件的尺寸以及运行时数据输入的尺寸兼容；否则，它可能导致构建时或运行时错误。</li>
+</ul>
+<p>必须是构建时常量的值不必是 API 级别的常量。 TensorRT 的形状分析器通过进行形状计算的层进行逐个元素的常数传播。常量传播发现一个值是构建时常量就足够了。</p>
+<h2 id="8-5-Execution-Tensors-vs-Shape-Tensors"><a href="#8-5-Execution-Tensors-vs-Shape-Tensors" class="headerlink" title="8.5. Execution Tensors vs. Shape Tensors"></a>8.5. Execution Tensors vs. Shape Tensors</h2><p>使用动态形状的引擎采用两阶段执行策略。</p>
+<ol>
+<li>计算所有张量的形状</li>
+<li>将工作流式传输到 GPU。</li>
+</ol>
+<p>阶段 1 是隐含的，由需求驱动，例如在请求输出维度时。第 2 阶段与之前版本的TensorRT 相同。两阶段执行对动态性施加了一些限制，这些限制对于理解是很重要的。</p>
+<p>关键限制是：</p>
+<ul>
+<li>张量的等级必须在构建时确定。</li>
+<li>张量是执行张量、形状张量或两者兼而有之。归类为形状张量的张量受到限制。</li>
+</ul>
+<p>执行张量是传统的TensorRT张量。形状张量是与形状计算相关的张量。它必须是 <code>0D</code> 或 <code>1D</code>，类型为<code>Int32</code> 、 <code>Float</code>或<code>Bool</code> ，并且其形状必须在构建时可确定。例如，有一个<code>IShapeLayer</code> ，其输出是一维张量，其中包含输入张量的维度。输出是一个形状张量。 <code>IShuffleLayer</code>接受一个可选的第二个输入，可以指定重塑尺寸。第二个输入必须是一个形状张量。</p>
+<p>有些层在它们处理的张量类型方面是“多态的”。例如， <code>IElementWiseLayer</code>可以将两个 <code>INT32</code> 执行张量相加或将两个<code>INT32</code>形状张量相加。张量的类型取决于其最终用途。如果总和用于重塑另一个张量，那么它就是一个“形状张量”。</p>
+<h3 id="8-5-1-Formal-Inference-Rules"><a href="#8-5-1-Formal-Inference-Rules" class="headerlink" title="8.5.1. Formal Inference Rules"></a>8.5.1. Formal Inference Rules</h3><p>TensorRT 用于对张量进行分类的形式推理规则基于类型推理代数。令E表示执行张量， S表示形状张量。</p>
+<p>IActivationLayer具有：</p>
+<p><code>IActivationLayer: E → E</code></p>
+<p>因为它将执行张量作为输入，将执行张量作为输出。 <code>IElementWiseLayer</code>在这方面是多态的，有两个特点:</p>
+<p><code>IElementWiseLayer: S × S → S, E × E → E</code></p>
+<p>为简洁起见，让我们采用约定t是表示任一类张量的变量，并且特征中的所有t都指同一类张量。然后，前面的两个特征可以写成一个单一的多态特征：</p>
+<p><code>IElementWiseLayer: t × t → t</code></p>
+<p>双输入<code>IShuffleLayer</code>有一个形状张量作为第二个输入，并且相对于第一个输入是多态的：</p>
+<p><code>IShuffleLayer (two inputs): t × S → t</code></p>
+<p><code>IConstantLayer</code>没有输入，但可以产生任何一种张量，所以它的特征是：</p>
+<p><code>IConstantLayer: → t</code></p>
+<p><code>IShapeLayer</code>的特征允许所有四种可能的组合E→E 、 E→S 、 S→E和S→S ，因此可以用两个自变量编写：</p>
+<p><code>IShapeLayer: t1 → t2</code></p>
+<p>这是完整的规则集，它也可以作为可以使用哪些层来操纵形状张量的参考：<br><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line">IAssertionLayer: S → </span><br><span class="line">IConcatenationLayer: t × t × ...→ t</span><br><span class="line">IIfConditionalInputLayer: t → t</span><br><span class="line">IIfConditionalOutputLayer: t → t</span><br><span class="line">IConstantLayer: → t</span><br><span class="line">IActivationLayer: t → t</span><br><span class="line">IElementWiseLayer: t × t → t</span><br><span class="line">IFillLayer: S → t</span><br><span class="line">IFillLayer: S × E × E → E </span><br><span class="line">IGatherLayer: t × t → t</span><br><span class="line">IIdentityLayer: t → t</span><br><span class="line">IReduceLayer: t → t</span><br><span class="line">IResizeLayer (one input): E → E</span><br><span class="line">IResizeLayer (two inputs): E × S → E</span><br><span class="line">ISelectLayer: t × t × t → t</span><br><span class="line">IShapeLayer: t1 → t2</span><br><span class="line">IShuffleLayer (one input): t → t</span><br><span class="line">IShuffleLayer (two inputs): t × S → t</span><br><span class="line">ISliceLayer (one input): t → t</span><br><span class="line">ISliceLayer (two inputs): t × S → t</span><br><span class="line">ISliceLayer (three inputs): t × S × S → t</span><br><span class="line">ISliceLayer (four inputs): t × S × S × S → t</span><br><span class="line">IUnaryLayer: t → t</span><br><span class="line">all other layers: E × ... → E × ...</span><br></pre></td></tr></table></figure></p>
+<p>因为输出可以是多个后续层的输入，所以推断的“类型”不是唯一的。例如，一个<code>IConstantLayer</code>可能会馈入一个需要执行张量的用途和另一个需要形状张量的用途。 <code>IConstantLayer</code>的输出被归类为两者，可以在两阶段执行的阶段 1 和阶段 2 中使用。</p>
+<p>在构建时知道形状张量的等级的要求限制了<code>ISliceLayer</code>可用于操纵形状张量的方式。具体来说，如果指定结果大小的第三个参数不是构建时常数，则生成的形状张量的长度在构建时将不再已知，从而打破形状张量对构建时形状的限制.更糟糕的是，它可能被用来重塑另一个张量，打破了在构建时必须知道张量等级的限制。</p>
+<p>可以通过方法<code>ITensor::isShapeTensor()</code>和<code>ITensor::isExecutionTensor ()</code> 方法检查 TensorRT 的推理，它为形状张量返回 <code>true</code>，它为执行张量返回 <code>true</code>。在调用这些方法之前先构建整个网络，因为它们的答案可能会根据添加的张量用途而改变。</p>
+<p>例如，如果一个部分构建的网络将两个张量<code>T1</code>和<code>T2</code>相加来创建张量<code>T3</code>，并且还不需要任何形状张量，则 <code>isShapeTensor()</code>对所有三个张量都返回 <code>false</code>。将<code>IShuffleLayer</code>的第二个输入设置为<code>T3</code>会导致所有三个张量成为形状张量，因为<code>IShuffleLayer</code>要求其第二个可选输入是形状张量，如果<code>IElementWiseLayer</code>的输出是形状张量，那么它的输入也是形状张量。</p>
+<h2 id="8-6-Shape-Tensor-I-O-Advanced"><a href="#8-6-Shape-Tensor-I-O-Advanced" class="headerlink" title="8.6. Shape Tensor I/O (Advanced)"></a>8.6. Shape Tensor I/O (Advanced)</h2><p>有时需要使用形状张量作为网络 I/O 张量。例如，考虑一个仅由<code>IshuffleLayer</code>组成的网络。 TensorRT 推断第二个输入是一个形状张量。 <code>ITensor::isShapeTensor</code>为它返回 true。因为它是一个输入形状张量，所以 TensorRT 需要两件事：</p>
+<ul>
+<li>在构建时：形状张量的优化配置文件值。</li>
+<li>在运行时：形状张量的值。</li>
+</ul>
+<p>输入形状张量的形状在构建时始终是已知的。这是需要描述的值，因为它们可用于指定执行张量的维度。</p>
+<p>可以使用<code>IOptimizationProfile::setShapeValues</code>设置优化配置文件值。类似于必须为具有运行时维度的执行张量提供最小、最大和优化维度的方式，必须在构建时为形状张量提供最小、最大和优化值。</p>
+<p>对应的运行时方法是<code>IExecutionContext::setInputShapeBinding</code> ，它在运行时设置形状张量的值。</p>
+<p>因为“执行张量”与“形状张量”的推断是基于最终用途，所以 TensorRT无法推断网络输出是否为形状张量。您必须通过<code>INetworkDefinition::markOutputForShapes</code>方法告诉它。</p>
+<p>除了让您输出形状信息以进行调试外，此功能对于编写引擎也很有用。例如，考虑构建三个引擎，每个引擎用于子网络 <code>A、B、C</code>，其中从 <code>A 到 B 或 B 到 C</code> 的连接可能涉及形状张量。逆序构建网络：<code>C、B、A</code>。构建网络 C 后，可以使用<code>ITensor::isShapeTensor</code>判断输入是否为形状张量，并使用<code>INetworkDefinition::markOutputForShapes</code>标记网络中对应的输出张量B.然后检查B的哪些输入是形状张量，并在网络A中标记对应的输出张量。</p>
+<p>网络边界处的形状张量必须具有<code>Int32</code>类型。它们不能具有<code>Float</code>或<code>Bool</code>类型。 <code>Bool</code>的一种解决方法是使用<code>Int32</code>作为 I/O 张量，带有 <code>0</code> 和 <code>1</code>，并且：</p>
+<ul>
+<li>通过<code>ElementWiseOperation::kGREATER</code>转换为Bool ，即 <code>x &gt; 0</code>。</li>
+<li>通过<code>ISelectLayer</code>从<code>Bool</code>转换，即 <code>y ? 1：0</code>。</li>
+</ul>
+<h2 id="8-7-INT8-Calibration-With-Dynamic-Shapes"><a href="#8-7-INT8-Calibration-With-Dynamic-Shapes" class="headerlink" title="8.7. INT8 Calibration With Dynamic Shapes"></a>8.7. INT8 Calibration With Dynamic Shapes</h2><p>要为具有动态形状的网络运行 INT8 校准，必须设置校准优化配置文件。使用配置文件的 <code>kOPT</code> 值执行校准。校准输入数据大小必须与此配置文件匹配。</p>
+<p>要创建校准优化配置文件，首先，构造一个<code>IOptimizationProfile</code> ，其方式与创建一般优化配置文件的方式相同。然后将配置文件设置为配置：</p>
+<p><strong>C++</strong></p>
+<p><code>config-&gt;setCalibrationProfile(profile)</code></p>
+<p><strong>Python</strong></p>
+<p><code>config.set_calibration_profile(profile)</code></p>
+<p>校准配置文件必须有效或为<code>nullptr</code> 。 <code>kMIN</code>和<code>kMAX</code>值被<code>kOPT</code>覆盖。要检查当前校准配置文件，请使用I<code>BuilderConfig::getCalibrationProfile</code> 。<br>此方法返回指向当前校准配置文件的指针，如果未设置校准配置文件，则返回 <code>nullptr</code>。为具有动态形状的网络运行校准时， <code>getBatchSize()</code>校准器方法必须返回1 。</p>
+<h4 id="注意：如果未设置校准优化配置文件，则使用第一个网络优化配置文件作为校准优化配置文件。"><a href="#注意：如果未设置校准优化配置文件，则使用第一个网络优化配置文件作为校准优化配置文件。" class="headerlink" title="注意：如果未设置校准优化配置文件，则使用第一个网络优化配置文件作为校准优化配置文件。"></a>注意：如果未设置校准优化配置文件，则使用第一个网络优化配置文件作为校准优化配置文件。</h4>
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/8-TensorRT%E4%B8%AD%E7%9A%84%E5%8A%A8%E6%80%81%E5%BD%A2%E7%8A%B6/" title="8-TensorRT中的动态形状">http://example.com/TensorRT/TensorRT中文版开发手册/8-TensorRT中的动态形状/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/GPU/" rel="tag"><i class="fa fa-tag"></i> GPU</a>
+              <a href="/tags/Tensorrt/" rel="tag"><i class="fa fa-tag"></i> Tensorrt</a>
+              <a href="/tags/DeepLearning/" rel="tag"><i class="fa fa-tag"></i> DeepLearning</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/7-TensorRT%E4%B8%AD%E7%9A%84INT8/" rel="prev" title="7-TensorRT中的INT8">
+                  <i class="fa fa-chevron-left"></i> 7-TensorRT中的INT8
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/9-TensorRT%E4%B8%AD%E7%9A%84%E8%87%AA%E5%AE%9A%E4%B9%89%E5%B1%82/" rel="next" title="9-TensorRT中的自定义层">
+                  9-TensorRT中的自定义层 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"6263dce42fcaa787d74544b340a732bc"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

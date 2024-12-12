@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="1 简介在前面三个TensorRT量化实战课YOLOv7量化的文章中，都是摘抄自CSND。感谢这个网友的无私风险和总结。这里给出CSDN的链接：https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_40672115&#x2F;article&#x2F;details&#x2F;134108526">
+<meta property="og:type" content="article">
+<meta property="og:title" content="TensorRT量化实战经验">
+<meta property="og:url" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="1 简介在前面三个TensorRT量化实战课YOLOv7量化的文章中，都是摘抄自CSND。感谢这个网友的无私风险和总结。这里给出CSDN的链接：https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_40672115&#x2F;article&#x2F;details&#x2F;134108526">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/%E5%8E%9F%E5%A7%8B%E6%A8%A1%E5%9E%8B.bmp">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.bmp">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.1.bmp">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.2.bmp">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.3.bmp">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.4.bmp">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.5.bmp">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.6.bmp">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/best-1733887184468-10.bmp">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/best1.bmp">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.7.bmp">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.8.bmp">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.9.bmp">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/%E6%9C%AA%E5%91%BD%E5%90%8D%E7%BB%98%E5%9B%BE.drawio.svg">
+<meta property="article:published_time" content="2024-12-12T14:36:10.289Z">
+<meta property="article:modified_time" content="2024-12-11T07:10:37.000Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="Tensorrt">
+<meta property="article:tag" content="DeepLearning">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/%E5%8E%9F%E5%A7%8B%E6%A8%A1%E5%9E%8B.bmp">
+
+
+<link rel="canonical" href="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/","path":"TensorRT/TensorRT量化实战经验/","title":"TensorRT量化实战经验"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>TensorRT量化实战经验 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="nav-text">1 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%B8%B8%E8%A7%81%E7%9A%84onnx-op-QDQ%E7%BB%8F%E9%AA%8C"><span class="nav-text">2 常见的onnx op QDQ经验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E7%B1%BB%E4%BC%BCResNet%E7%9A%84%E6%AE%8B%E5%B7%AEadd"><span class="nav-text">2.1 类似ResNet的残差add</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-concat%E8%8A%82%E7%82%B9"><span class="nav-text">2.2 concat节点</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">149</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="TensorRT量化实战经验 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          TensorRT量化实战经验
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2024-12-12 22:36:10" itemprop="dateCreated datePublished" datetime="2024-12-12T22:36:10+08:00">2024-12-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2024-12-11 15:10:37" itemprop="dateModified" datetime="2024-12-11T15:10:37+08:00">2024-12-11</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h1><p>在前面三个TensorRT量化实战课YOLOv7量化的文章中，都是摘抄自CSND。感谢这个网友的无私风险和总结。这里给出CSDN的链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40672115/article/details/134108526">https://blog.csdn.net/qq_40672115/article/details/134108526</a></p>
+<p>但是这个只是一个基础的操作。只做这部分只是将模型中通用的Conv层进行量化，但是其他的层没有做其他的操作，这样会做出来的量化精度可能可以，但是模型速度一般比较慢。查看原因可以发现量化后的QDQ模型可能存在大量的reformat节点。这里就是总结一些加速QDQ的量化经验。</p>
+<h1 id="2-常见的onnx-op-QDQ经验"><a href="#2-常见的onnx-op-QDQ经验" class="headerlink" title="2 常见的onnx op QDQ经验"></a>2 常见的onnx op QDQ经验</h1><p>下面的经验基本上都是解决插入QDQ后速度没有明显提升的问题u。</p>
+<h2 id="2-1-类似ResNet的残差add"><a href="#2-1-类似ResNet的残差add" class="headerlink" title="2.1 类似ResNet的残差add"></a>2.1 类似ResNet的残差add</h2><ul>
+<li><strong>原始onnx模型结构</strong></li>
+</ul>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/%E5%8E%9F%E5%A7%8B%E6%A8%A1%E5%9E%8B.bmp" class="" title="原始模型">
+<ul>
+<li><strong>所有的Conv插入QDQ</strong></li>
+</ul>
+<p>首先，按照“TensorRT量化实战课YOLOv7量化”的方法会将所有Conv层插入QDQ节点如下图</p>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.bmp" class="" title="QDQ1">
+<p><strong>绘制对应的engine结构图</strong>图如下：会发现存在一些FP16的精度，是在残差的链接部分。</p>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.1.bmp" class="" title="QDQ1.1">
+<p>放大看一下细节</p>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.2.bmp" class="" title="QDQ1.2">
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.3.bmp" class="" title="QDQ1.3">
+<p><strong>为什么会出现残差是FP16的精度</strong>？但是另一侧都是INT8的精度？重新看一下我们插入QDQ后的onnx结构图。</p>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.4.bmp" class="" title="QDQ1.4">
+<p><strong>如何解决这个问题呢？</strong>修改Add节点的forward函数，将add的两条线中都插入QDQ节点。具体的方法可以参考NV官方代码 <a target="_blank" rel="noopener" href="https://github.com/NVIDIA-AI-IOT/yolo_deepstream/blob/main/yolov7_qat/quantization/quantize.py">https://github.com/NVIDIA-AI-IOT/yolo_deepstream/blob/main/yolov7_qat/quantization/quantize.py</a></p>
+<p>官方代码只是一个修改yolov7的add节点的方法，我们这里需要根据自己的模型结构修改，但是大体都是一样的，<strong>就是修改原始的模型的add的forward函数，修改为带有QDQ的add的forward函数。这里就是找出原始模型中add的forward，复制出来修改为QDQ版本</strong>，<strong>除了Add节点，其他的节点修改都是类似的操作。</strong></p>
+<p>这里就有两个问题，</p>
+<ul>
+<li><p>我们如何定位原始的add的forward函数源码？</p>
+<p>如果模型不是我们设计的，那我们可以debug来定位。</p>
+</li>
+<li><p>我们如何修改原始add为量化后的add节点？</p>
+<p>这里就需要编写代码找到模型中的所有需要修改的add节点，如下面的代码就是通过下面的代码段找到Bottleneck中的所有add节点。如果不知道Bottleneck这个名字，我们依然可以使用debug来一步一步查看模型结构及名称，找到自己需要修改的模型部分的名称。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> name, bottleneck <span class="keyword">in</span> model.named_modules():</span><br><span class="line">        <span class="keyword">if</span> bottleneck.__class__.__name__ == <span class="string">&quot;Bottleneck&quot;</span>:</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">QuantAdd</span>(torch.nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, quantization</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> quantization:</span><br><span class="line">            self._input0_quantizer = quant_nn.TensorQuantizer(QuantDescriptor(num_bits=<span class="number">8</span>, calib_method=<span class="string">&quot;histogram&quot;</span>))</span><br><span class="line">            self._input1_quantizer = quant_nn.TensorQuantizer(QuantDescriptor(num_bits=<span class="number">8</span>, calib_method=<span class="string">&quot;histogram&quot;</span>))</span><br><span class="line">            self._input0_quantizer._calibrator._torch_hist = <span class="literal">True</span></span><br><span class="line">            self._input1_quantizer._calibrator._torch_hist = <span class="literal">True</span></span><br><span class="line">            self._fake_quant = <span class="literal">True</span></span><br><span class="line">        self.quantization = quantization</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, y</span>):</span><br><span class="line">        <span class="keyword">if</span> self.quantization:</span><br><span class="line">            <span class="comment"># print(f&quot;QAdd &#123;self._input0_quantizer&#125;  &#123;self._input1_quantizer&#125;&quot;)</span></span><br><span class="line">            <span class="keyword">return</span> self._input0_quantizer(x) + self._input1_quantizer(y)</span><br><span class="line">        <span class="keyword">return</span> x + y</span><br><span class="line">    </span><br><span class="line"><span class="comment"># For example: YoloV5 Bottleneck</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bottleneck_quant_forward</span>(<span class="params">self, x</span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&quot;addop&quot;</span>):</span><br><span class="line">        <span class="keyword">return</span> self.addop(x, self.cv2(self.cv1(x))) <span class="keyword">if</span> self.add <span class="keyword">else</span> self.cv2(self.cv1(x))</span><br><span class="line">    <span class="keyword">return</span> x + self.cv2(self.cv1(x)) <span class="keyword">if</span> self.add <span class="keyword">else</span> self.cv2(self.cv1(x))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># For example: YoloV5 Bottleneck</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">replace_bottleneck_forward</span>(<span class="params">model</span>):</span><br><span class="line">    <span class="keyword">for</span> name, bottleneck <span class="keyword">in</span> model.named_modules():</span><br><span class="line">        <span class="keyword">if</span> bottleneck.__class__.__name__ == <span class="string">&quot;Bottleneck&quot;</span>:</span><br><span class="line">            <span class="keyword">if</span> bottleneck.add:</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">hasattr</span>(bottleneck, <span class="string">&quot;addop&quot;</span>):</span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">f&quot;Add QuantAdd to <span class="subst">&#123;name&#125;</span>&quot;</span>)</span><br><span class="line">                    bottleneck.addop = QuantAdd(bottleneck.add)</span><br><span class="line">                bottleneck.__class__.forward = bottleneck_quant_forward</span><br></pre></td></tr></table></figure>
+<p>例如我在另一个模型的结构中就是如下代码，实际是类似的，<code>mmdet.models.backbones.resnext.Bottleneck</code>是我debug找到的名字。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">replace_bottleneck_forward</span>(<span class="params">module, quantization</span>):</span><br><span class="line">    <span class="keyword">for</span> name, child <span class="keyword">in</span> module.named_children():</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(child, mmdet.models.backbones.resnext.Bottleneck):</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">hasattr</span>(child, <span class="string">&quot;addop&quot;</span>):</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&quot;**** Add QuantAdd to <span class="subst">&#123;name&#125;</span>&quot;</span>)</span><br><span class="line">                downsample_flag = <span class="literal">False</span> <span class="comment">#downsample_flag = True</span></span><br><span class="line">                <span class="keyword">if</span> child.downsample == <span class="literal">None</span>:</span><br><span class="line">                    downsample_flag = <span class="literal">False</span></span><br><span class="line">                child.addop = QuantAdd(quantization,downsample_flag) <span class="comment"># downsample_flag=False 残差结构的残差部分有QDQ，另一个不用。可以使conv add relu 融合</span></span><br><span class="line">            <span class="comment"># 将 forward 方法替换为新的 forward 方法</span></span><br><span class="line">            child.__class__.forward = Bottleneck_quant_forward</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># 递归处理子模块</span></span><br><span class="line">            replace_bottleneck_forward(child,quantization)</span><br></pre></td></tr></table></figure>
+<p>根据上述方法，修改我们的模型的add节点为带有QDQ的add，重新生成onnx文件并绘制engine结构图如下：</p>
+<p>从下onnx可以看到我们的add两个分支都有了QDQ节点。</p>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.5.bmp" class="" title="QDQ1.5">
+<p>绘制对应的engine图如下，可以看出add两个分支都是INT8精度了。</p>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.6.bmp" class="" title="QDQ1.6">
+<p>但是到这里还没有完。。。我们对比一下使用trtexec —best参数转换的engine。如下图</p>
+<p>可以看到—best参数转换的engine的层融合和上图不同，上面的图最后一层是<code>PointWise</code>，只融合了add和relu，但是—best融合了conv、add、relu。</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">PointWise</span><br><span class="line">[ONNX Layer: /model/img_backbone/layer1/layer1.1/addop/Add]</span><br><span class="line">[ONNX Layer: /model/img_backbone/layer1/layer1.1/relu3/Relu]</span><br></pre></td></tr></table></figure>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/best-1733887184468-10.bmp" class="" title="best">
+<p>那么如何做到类似—best一样的层融合呢？</p>
+<p>观察一下—best的融合层，在onnx中是如下图。</p>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/best1.bmp" class="" title="best1">
+<p>结合前面博客提到的 <a target="_blank" rel="noopener" href="https://zmurder.github.io/TensorRT/TensorRT中文版开发手册/7-TensorRT中的INT8/?highlight=融合">7-TensorRT中的INT8 | 奔跑的IC</a> 7.4.4. Q/DQ Layer-Placement Recommendations，官方文档<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/archives/tensorrt-803/developer-guide/index.html#qdq-placement-recs">5.3.5.2. Q/DQ Layer-Placement Recommendations</a> 都有提到融合的策略。</p>
+<p>那我需要针对惨差的Add节点修改一下，不能共用官方代码yolov7的QuantAdd了。修改方法如下：</p>
+<ul>
+<li><strong>残差的Add两个分支，只有残差的分支添加QDQ，另一个分支不添加QDQ。</strong></li>
+</ul>
+<p>修改后的代码如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">QuantAdd</span>(torch.nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, quantization,downsample_flag</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> quantization:</span><br><span class="line">            self._input0_quantizer = quant_nn.TensorQuantizer(QuantDescriptor(num_bits=<span class="number">8</span>, calib_method=<span class="string">&quot;max&quot;</span>))</span><br><span class="line">            self._input1_quantizer = quant_nn.TensorQuantizer(QuantDescriptor(num_bits=<span class="number">8</span>, calib_method=<span class="string">&quot;max&quot;</span>))</span><br><span class="line">            self._input0_quantizer._calibrator._torch_hist = <span class="literal">True</span></span><br><span class="line">            self._input1_quantizer._calibrator._torch_hist = <span class="literal">True</span></span><br><span class="line">            self._fake_quant = <span class="literal">True</span></span><br><span class="line">        self.quantization = quantization</span><br><span class="line">        self.downsample_flag = downsample_flag</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, y</span>):</span><br><span class="line">        <span class="comment"># if self.quantization:</span></span><br><span class="line">        <span class="comment">#     return self._input0_quantizer(x) + self._input1_quantizer(y)</span></span><br><span class="line">        <span class="keyword">if</span> self.quantization <span class="keyword">and</span> self.downsample_flag: <span class="comment">#zyd 优化</span></span><br><span class="line">            <span class="comment"># print(f&quot;QAdd &#123;self._input0_quantizer&#125;  &#123;self._input1_quantizer&#125;&quot;)</span></span><br><span class="line">            <span class="keyword">return</span> self._input0_quantizer(x) + self._input1_quantizer(y)</span><br><span class="line">        <span class="keyword">elif</span> self.quantization:</span><br><span class="line">            <span class="keyword">return</span> x + self._input1_quantizer(y) <span class="comment">#走这个分支</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> x + y</span><br></pre></td></tr></table></figure>
+<p>修改后的onnx如下</p>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.7.bmp" class="" title="QDQ1.7">
+<p>对应的engine图如下：可以看出已经和 —best的一致了。至此已经算是优化完成了。</p>
+<p>（可以看到—best和我们下面的图是一致的，但是都有一个Reformat节点，这个节点大大影响了我们的速度，这个reformat节点本来是不应该存在的，但是因为为了利用Tensor core，Tensor对int8 的对齐要求是32 ，参考<a target="_blank" rel="noopener" href="https://zmurder.github.io/TensorRT/TensorRT教程-基于8.6.1/Part5-3-TensorRT性能优化性能优化技巧/?highlight=tensor+core#2-4-Optimizing-for-Tensor-Cores">Part5-3-TensorRT性能优化性能优化技巧 | 奔跑的IC</a>  从trt的日志也可以看出</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Layer(Reformat): Reformatting CopyNode <span class="keyword">for</span> Input Tensor 0 to /model/img_backbone/layer1/layer1.1/conv2/Conv + /model/img_backbone/layer1/layer1.1/relu2/Relu, Tactic: 0x0000000000000000, /model/img_backbone/layer1/layer1.1/relu1/Relu_output_0 (Int8[4,72:32,128,192]) -&gt; Reformatted Input Tensor 0 to /model/img_backbone/layer1/layer1.1/conv2/Conv + /model/img_backbone/layer1/layer1.1/relu2/Relu (Int8[4,72:4,128,192])</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这里就是提示就是72不是32整除的，因此有一个reformat节点，为了充分的利用tensor core（对conv来说 32字节对齐的是C，也就是NCHW中的C需要是32字节对齐）。这个问题可以通过修改网路结构来消除。</p>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.8.bmp" class="" title="QDQ1.8">
+<h2 id="2-2-concat节点"><a href="#2-2-concat节点" class="headerlink" title="2.2 concat节点"></a>2.2 concat节点</h2><p>在官方代码中有一个函数是<code>apply_custom_rules_to_quantizer</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">apply_custom_rules_to_quantizer</span>(<span class="params">model : torch.nn.Module, export_onnx : <span class="type">Callable</span></span>):</span><br><span class="line"></span><br><span class="line">    <span class="comment"># apply rules to graph</span></span><br><span class="line">    export_onnx(model, <span class="string">&quot;quantization-custom-rules-temp.onnx&quot;</span>)</span><br><span class="line">    pairs = find_quantizer_pairs(<span class="string">&quot;quantization-custom-rules-temp.onnx&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> major, sub <span class="keyword">in</span> pairs:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Rules: <span class="subst">&#123;sub&#125;</span> match to <span class="subst">&#123;major&#125;</span>&quot;</span>)</span><br><span class="line">        get_attr_with_path(model, sub)._input_quantizer = get_attr_with_path(model, major)._input_quantizer</span><br><span class="line">    os.remove(<span class="string">&quot;quantization-custom-rules-temp.onnx&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> name, bottleneck <span class="keyword">in</span> model.named_modules():</span><br><span class="line">        <span class="keyword">if</span> bottleneck.__class__.__name__ == <span class="string">&quot;Bottleneck&quot;</span>:</span><br><span class="line">            <span class="keyword">if</span> bottleneck.add:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&quot;Rules: <span class="subst">&#123;name&#125;</span>.add match to <span class="subst">&#123;name&#125;</span>.cv1&quot;</span>)</span><br><span class="line">                major = bottleneck.cv1.conv._input_quantizer</span><br><span class="line">                bottleneck.addop._input0_quantizer = major</span><br><span class="line">                bottleneck.addop._input1_quantizer = major</span><br></pre></td></tr></table></figure>
+<p>其中的函数<code>find_quantizer_pairs</code>定义如下：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">find_quantizer_pairs</span>(<span class="params">onnx_file</span>):</span><br><span class="line"></span><br><span class="line">    model = onnx.load(onnx_file)</span><br><span class="line">    match_pairs = []</span><br><span class="line">    <span class="keyword">for</span> node <span class="keyword">in</span> model.graph.node:   </span><br><span class="line">        <span class="keyword">if</span> node.op_type == <span class="string">&quot;Concat&quot;</span>:</span><br><span class="line">            qnodes = find_all_with_input_node(model, node.output[<span class="number">0</span>])</span><br><span class="line">            major = <span class="literal">None</span></span><br><span class="line">            <span class="keyword">for</span> qnode <span class="keyword">in</span> qnodes:</span><br><span class="line">                <span class="keyword">if</span> qnode.op_type != <span class="string">&quot;QuantizeLinear&quot;</span>:</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                </span><br><span class="line">                conv = find_quantizelinear_conv(model, qnode)</span><br><span class="line">                <span class="keyword">if</span> major <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                    major = find_quantize_conv_name(model, conv.<span class="built_in">input</span>[<span class="number">1</span>])</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    match_pairs.append([major, find_quantize_conv_name(model, conv.<span class="built_in">input</span>[<span class="number">1</span>])])</span><br><span class="line"></span><br><span class="line">                <span class="keyword">for</span> subnode <span class="keyword">in</span> model.graph.node:</span><br><span class="line">                    <span class="keyword">if</span> <span class="built_in">len</span>(subnode.<span class="built_in">input</span>) &gt; <span class="number">0</span> <span class="keyword">and</span> subnode.op_type == <span class="string">&quot;QuantizeLinear&quot;</span> <span class="keyword">and</span> subnode.<span class="built_in">input</span>[<span class="number">0</span>] <span class="keyword">in</span> node.<span class="built_in">input</span>:</span><br><span class="line">                        subconv = find_quantizelinear_conv(model, subnode)</span><br><span class="line">                        match_pairs.append([major, find_quantize_conv_name(model, subconv.<span class="built_in">input</span>[<span class="number">1</span>])])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">elif</span> node.op_type == <span class="string">&quot;MaxPool&quot;</span>:</span><br><span class="line">            qnode = find_with_input_node(model, node.output[<span class="number">0</span>])</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> (qnode <span class="keyword">and</span> qnode.op_type == <span class="string">&quot;QuantizeLinear&quot;</span>):</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">            major = find_quantizelinear_conv(model, qnode)</span><br><span class="line">            major = find_quantize_conv_name(model, major.<span class="built_in">input</span>[<span class="number">1</span>])</span><br><span class="line">            same_input_nodes = find_all_with_input_node(model, node.<span class="built_in">input</span>[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> same_input_node <span class="keyword">in</span> same_input_nodes:</span><br><span class="line">                <span class="keyword">if</span> same_input_node.op_type == <span class="string">&quot;QuantizeLinear&quot;</span>:</span><br><span class="line">                    subconv = find_quantizelinear_conv(model, same_input_node)</span><br><span class="line">                    match_pairs.append([major, find_quantize_conv_name(model, subconv.<span class="built_in">input</span>[<span class="number">1</span>])])</span><br><span class="line">    <span class="keyword">return</span> match_pairs</span><br></pre></td></tr></table></figure>
+<p>这段<code>find_quantizer_pairs</code>代码就是找到一些匹配对，然后使用下面的函数让这些匹配对的QDQ是相同的，也就是scales是相同的。因为一个concat节点只是连接数据，并没有计算，所以concat连接的几个节点scales应该是相同的。可以加速。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> major, sub <span class="keyword">in</span> pairs:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Rules: <span class="subst">&#123;sub&#125;</span> match to <span class="subst">&#123;major&#125;</span>&quot;</span>)</span><br><span class="line">        get_attr_with_path(model, sub)._input_quantizer = get_attr_with_path(model, major)._input_quantizer</span><br></pre></td></tr></table></figure>
+<p>对应如下图可以好理解一些。</p>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.9.bmp" class="" title="QDQ1.9">
+<p>上面的图太不清晰了，画一个示意图解释一下</p>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/%E6%9C%AA%E5%91%BD%E5%90%8D%E7%BB%98%E5%9B%BE.drawio.svg" class="" title="未命名绘图.drawio">
+<h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><ul>
+<li>NV官方yolov PTQ代码：<a target="_blank" rel="noopener" href="https://github.com/NVIDIA-AI-IOT/yolo_deepstream/tree/main/yolov7_qat">yolo_deepstream/yolov7_qat at main · NVIDIA-AI-IOT/yolo_deepstream</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/" title="TensorRT量化实战经验">http://example.com/TensorRT/TensorRT量化实战经验/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/Tensorrt/" rel="tag"><i class="fa fa-tag"></i> Tensorrt</a>
+              <a href="/tags/DeepLearning/" rel="tag"><i class="fa fa-tag"></i> DeepLearning</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/fragment/Win10_11%E4%B8%8B%E5%AE%89%E8%A3%85WSL%E5%B9%B6%E4%BF%AE%E6%94%B9WSL%E9%BB%98%E8%AE%A4%E5%AE%89%E8%A3%85%E7%9B%AE%E5%BD%95%E5%88%B0%E5%85%B6%E4%BB%96%E7%9B%98/" rel="prev" title="Win10_11下安装WSL并修改WSL默认安装目录到其他盘">
+                  <i class="fa fa-chevron-left"></i> Win10_11下安装WSL并修改WSL默认安装目录到其他盘
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2024</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"5eeaaec443083e16dde778844f14014c"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

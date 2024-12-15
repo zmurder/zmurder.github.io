@@ -276,6 +276,110 @@ for major, sub in pairs:
 
 ![未命名绘图.drawio](./TensorRT量化实战经验/未命名绘图.drawio.svg)
 
+## 2.3 MUL节点
+
+首先看一下第一种没有INT8的情况
+
+对应的onnx如下，看上去插入的QDQ都是正确的。
+
+![image-20241215143111289](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\TensorRT量化实战经验\image-20241215143111289.png)
+
+但是绘制对应的engine结构图如下：
+
+![image-20241215143209326](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\TensorRT量化实战经验\image-20241215143209326.png)
+
+如何修改呢？针对上面的情况，在sigmoid前面插入一个QDQ，同时保证下图三个QDQ的值是相同的即可
+
+修改后的如下图onnx
+
+![image-20241215143343284](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\TensorRT量化实战经验\image-20241215143343284.png)
+
+修改后的engine结构图如下：
+
+![image-20241215143523133](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\TensorRT量化实战经验\image-20241215143523133.png)
+
+## 2.4 convTranspose节点
+
+首先看一下我们初步插入QDQ后的onnx结构图，看样子应该没有问题
+
+![image-20241215143732417](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\TensorRT量化实战经验\image-20241215143732417.png)
+
+对应的engine图如下
+
+![image-20241215143820810](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\TensorRT量化实战经验\image-20241215143820810.png)
+
+发现在relu前竟然转换为了FP32精度
+
+如何修改呢？修改方式是删除relu层，修改后的onnx如下：
+
+![image-20241215143940439](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\TensorRT量化实战经验\image-20241215143940439.png)
+
+修改后的engine图对应如下：
+
+![image-20241215144041646](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\TensorRT量化实战经验\image-20241215144041646.png)
+
+## 3 engine结构图的绘制
+
+上面都提到了engine结构图的绘制，之前的博客也提到了enigne结构图如何绘制，这里再重新说明一下
+
+* 在使用trtexec转换onne为engine时添加参数
+
+   `--exportLayerInfo=layer.json --profilingVerbosity=detailed --exportProfile=profile.json`
+
+  例如：
+
+  ```bash
+  $ /usr/src/tensorrt/bin/trtexec --onnx=yolov7.onnx --fp16 --int8 --verbose --saveEngine=yolov7_ptq.engine --workspace=1024000 --warmUp=500 --duration=10  --useCudaGraph --useSpinWait --noDataTransfers --exportLayerInfo=yolov7_ptq_layer.json --profilingVerbosity=detailed --exportProfile=yolov7_ptq_profile.json
+  ```
+
+* we use TensorRT opensource tool: [trt-engine-explorer](https://github.com/NVIDIA/TensorRT/tree/main/tools/experimental/trt-engine-explorer) drawing the enqueue graph of TensorRT. This tool take the trtexec exported layer json information as input. Use the below code to draw the TensorRT-Engine-graph.(edit from `trt-engine-explorer/utils/draw_engine.py`)
+
+  ```python
+  import graphviz
+  from trex import *
+  import argparse
+  import shutil
+  
+  
+  def draw_engine(engine_json_fname: str, engine_profile_fname: str):
+      graphviz_is_installed =  shutil.which("dot") is not None
+      if not graphviz_is_installed:
+          print("graphviz is required but it is not installed.\n")
+          print("To install on Ubuntu:")
+          print("sudo apt --yes install graphviz")
+          exit()
+  
+      plan = EnginePlan(engine_json_fname, engine_profile_fname)
+      formatter = layer_type_formatter
+      display_regions = True
+      expand_layer_details = False
+  
+      graph = to_dot(plan, formatter,
+                  display_regions=display_regions,
+                  expand_layer_details=expand_layer_details)
+      render_dot(graph, engine_json_fname, 'svg')
+  
+  
+  if __name__ == "__main__":
+      parser = argparse.ArgumentParser()
+      parser.add_argument('--layer', help="name of engine JSON file to draw")
+      parser.add_argument('--profile', help="name of profile JSON file to draw")
+      args = parser.parse_args()
+      draw_engine(engine_json_fname=args.layer,engine_profile_fname=args.profile)
+  ```
+
+* draw the graph:
+
+  ```
+  $ python draw_engine.py --layer yolov7_qat_layer.json --profile yolov7_qat_profile.json
+  $ python draw_engine.py --layer yolov7_ptq_layer.json --profile yolov7_ptq_profile.json
+  ```
+
+  we get `yolov7_qat_layer.json.svg` and `yolov7_ptq_layer.json.svg`
+
+
+
 # 附录：
 
 * NV官方yolov PTQ代码：[yolo_deepstream/yolov7_qat at main · NVIDIA-AI-IOT/yolo_deepstream](https://github.com/NVIDIA-AI-IOT/yolo_deepstream/tree/main/yolov7_qat)
+* NV官方的一些建议：https://github.com/NVIDIA-AI-IOT/yolo_deepstream/blob/main/yolov7_qat/doc/Guidance_of_QAT_performance_optimization.md

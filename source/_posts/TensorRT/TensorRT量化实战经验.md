@@ -318,7 +318,19 @@ for major, sub in pairs:
 
 ![image-20241215144041646](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\TensorRT量化实战经验\image-20241215144041646.png)
 
-## 3 engine结构图的绘制
+## 2.5 一些特殊的例子
+
+* Slice 和 Concat 的行为规则相似。TensorRT 会在内部消除 concat/slice 节点（这就是为什么在 SVG 中找不到 concat/slice 节点的原因）。
+
+  因此，在 TensorRT 内部，concat/slice 的输入和输出将合并为一个张量。用户必须确保与同一个 concat/slice 相关的量化和去量化（QDQ）操作保持一致。
+
+* 对于 PWN（Pointwise）节点，用户必须确保输入和输出具有相同的缩放比例（scale）。您可以在 SVG 中检查哪些节点被归类为 PWN 节点，有时它可能是一个单独的 Add 操作，有时则是 Add+Mul 组合。![无标题](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\TensorRT量化实战经验\无标题.png)
+
+* 根据上面的原因，确实应该下图橙色框适当的位置插入 QDQ（量化和去量化)节点，并确保它们都使用相同的缩放比例。这样做可以保证模型转换后的精度，并且确保 TensorRT 在优化过程中能够正确处理这些操作。
+
+![无标题](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\TensorRT量化实战经验\无标题-1734533352621-2.png)
+
+# 3 engine结构图的绘制
 
 上面都提到了engine结构图的绘制，之前的博客也提到了enigne结构图如何绘制，这里再重新说明一下
 

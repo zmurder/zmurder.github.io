@@ -1,10 +1,10 @@
-# 1 cmake简介
+# cmake简介
 
 cmake允许开发者编写一种平台无关的 CMakeList.txt 文件来定制整个编译流程，然后再根据目标用户的平台进一步生成所需的本地化  Makefile 和工程文件，如 Unix 的 Makefile 或 Windows 的 Visual Studio 工程。从而做到“Write once, run everywhere”。
 
 其他的make工具如GNU Make ，QT 的 qmake ，微软的 MSnmake，BSD Make（pmake），Makepp，等等。这些 Make 工具遵循着不同的规范和标准，所执行的 Makefile 格式也千差万别。
 
-## 1.1 编写流程
+##  编写流程
 
 在linux下使用cmake生成makefile并编译的流程如下：
 
@@ -12,14 +12,14 @@ cmake允许开发者编写一种平台无关的 CMakeList.txt 文件来定制整
 * 执行命令 cmake PATH 或者 ccmake PATH 生成 Makefile。其中， PATH 是 CMakeLists.txt 所在的目录。
 * 使用 make 命令进行
 
-## 1.2 编译和源代码分离
+## 编译和源代码分离
 
 * CMake 背后的逻辑思想是编译和源代码分离的原则。 
 * 通常 CMakeLists.txt 是和源代码放在一起的。一般每个子目录下都有一个 CMakeLists.txt 用于组织该目录下的文件。 
 * 子目录的 CMakeLists.txt 自动继承了父目录里的 CMakeLists.txt 所定义的一切宏、变量。这极大地减少了重复的代码。 
 * 而针对具体的平台和配置，我们可以单独创建一个目录，然后在该目录下生成特定平台和配置的工程文件。这样能够做到具体的工程文件不会和源代码文件混搭在一起。 例如后面讲到的交叉编译的例子，会有一个指定工具链等的cmake文件
 
-## 1.3 安装cmake
+## 安装cmake
 
 在官网https://cmake.org/download/下载安转包
 
@@ -45,9 +45,9 @@ CMake suite maintained and supported by Kitware (kitware.com/cmake).
 
 
 
-# 2 cmake简单示例
+# cmake简单示例
 
-## 2.1 编译单个源文件
+## 编译单个源文件
 
 创建一个hello.c文件
 
@@ -93,9 +93,9 @@ ADD_EXECUTABLE(Demo1 hello.c)
 
 ![image-20220629112911740](cmake学习笔记/image-20220629112911740.png)
 
-## 2.2 编译多个源文件
+## 编译多个源文件
 
-### 2.2.1 同一目录多个源文件
+### 同一目录多个源文件
 
 源文件都在一个目录内如下，两个源文件helloc.和fun.c
 
@@ -141,7 +141,7 @@ ADD_EXECUTABLE(Demo2 ${SRC_LIST})
 
 这样，CMake 会将当前目录所有源文件的文件名赋值给变量 DIR_SRCS ，再指示变量 DIR_SRCS 中的源文件需要编译成一个名称为 Demo2 的可执行文件。
 
-### 2.2.2 多个目录，多个源文件
+### 多个目录，多个源文件
 
 目录结构如下
 
@@ -205,7 +205,7 @@ add_library (fun ${DIR_LIB_SRCS})
 
 ![image-20220629135327927](cmake学习笔记/image-20220629135327927.png)
 
-## 2.3 编译库
+## 编译库
 
 目录结构和上面目录多源文件一致，目的是将src的fun文件编译为库
 
@@ -255,7 +255,7 @@ add_library(testlib SHARED ${SOURCES})
 
 ![image-20220629144137867](cmake学习笔记/image-20220629144137867.png)
 
-## 2.4 使用其他库
+## 使用其他库
 
 现在使用上面生成的库libtestlib.so，文件结构如下
 
@@ -297,13 +297,13 @@ TARGET_LINK_LIBRARIES(Demo testlib)
 
 ![image-20220629145748184](cmake学习笔记/image-20220629145748184.png)
 
-## 2.5 交叉编译 
+## 交叉编译 
 
 交叉编译官方说明 https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html#variables-and-properties
 
-### 2.5.1 arm-linux
+###  arm-linux
 
-#### 2.5.1.1. 设置系统和工具链
+####  设置系统和工具链
 
 对于交叉编译，CMake并不知道目标系统是什么，所以需要设置一些CMake变量来告知CMake，
 
@@ -317,7 +317,7 @@ TARGET_LINK_LIBRARIES(Demo testlib)
 
 这些变量可以在调用CMake时通过命令行传递，但是这种做法容易出错，而且用起来不方便，所以CMake提供了工具链文件的方式来传递这些变量信息。
 
-#### 2.5.1.2. 工具链文件
+#### 工具链文件
 
 我们在工程里新建一个文件叫arm_linux_toolchain.cmake，放置位置如下（也可以放在别的地方），
 
@@ -337,7 +337,7 @@ set(CMAKE_CXX_COMPILER ${tools}/bin/arm-linux-gnueabihf-g++)
 
 tools是本人使用的交叉工具链路径，可以根据自己的实际文件来做修改。
 
-#### 2.5.1.3 编译
+####  编译
 
 使用CMake的变量CMAKE_TOOLCHAIN_FILE来指定工具链文件，cd到build目录，然后执行下面的命令，
 
@@ -352,9 +352,9 @@ make
 
 
 
-### 2.5.2 官方的例子
+### 官方的例子
 
-#### 2.5.2.1 Cross Compiling for Linux
+####  Cross Compiling for Linux
 
 ```cmake
 set(CMAKE_SYSTEM_NAME Linux)
@@ -400,7 +400,7 @@ set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)
 
     如果你的工程不仅需要toolchain里面的工具，还有目标平台的附加库。我们还需要为这些依赖包建立一个安装文件夹，例如`/home/ke/install`,同时需要添加这个位置进去`CMAKE_FIND_ROOT_PATH`，之后FIND_XXX()才可以在这些位置进行查找。
 
-#### 2.5.2.2 Cross Compiling for QNX
+#### Cross Compiling for QNX
 
 ```cmake
 set(CMAKE_SYSTEM_NAME QNX)
@@ -415,9 +415,9 @@ set(CMAKE_CXX_COMPILER_TARGET ${arch})
 set(CMAKE_SYSROOT $ENV{QNX_TARGET})
 ```
 
-# 3 cmake使用规则
+# cmake使用规则
 
-## 3.1 从命令行定义全局变量
+## 从命令行定义全局变量
 
 在执行 cmake 指令的时候，可以定义任意多个全局变量。这些全局变量可以直接在CMakeLists.txt 中被使用。这是一项很方便的功能。
 
@@ -429,7 +429,7 @@ $cmake  ..   -DCONFIG=Debug   -DSSE=True
 
 这条指令定义了两个全局变量：`CONFIG` 和 `SSE`，其值分别是"Debug"和"True"。 不要被这两个变量前面的-D 所迷惑。那只是用来告诉 cmake，要定义变量了。
 
-## 3.2 构建类型
+##  构建类型
 
  CMake 为我们提供了四种构建类型： 
 
@@ -450,11 +450,11 @@ $ cmake  -DCMAKE_BUILD_TYPE=Debug
 
 下面是官方的翻译https://link.zhihu.com/?target=https%3A//cmake.org/cmake/help/latest/guide/tutorial/index.html
 
-# 4 cmake官方文档
+# cmake官方文档
 
 CMake 教程提供了一个循序渐进的指南，涵盖了 CMake 帮助解决的常见构建系统问题。了解示例项目中各个主题是如何运作是很有帮助的。教程的文档和示例代码可以在 CMake 源代码的 `Help/guide/tutorial` 目录中找到。每个步骤都有自己的子目录，其中包含可以用作起点的代码。教程示例是渐进的，因此，每个步骤都为前一个步骤提供完整的解决方案。
 
-## 4.1 一个基本的出发点（第一步）
+## 一个基本的出发点（第一步）
 
 最基本的项目是一个从源代码文件构建的可执行文件。对于简单的项目来说，仅需一份包含三行内容的 `CMakeLists.txt` 文件。这将是我们教程的起点。在 `Step1` 文件夹创建一个 `CMakeLists.txt` 文件，内容如下：
 
@@ -470,7 +470,7 @@ add_executable(Tutorial tutorial.cxx)
 
 请注意：在这个实例中，我们使用小写字母在 `CMakeLists.txt` 中书写命令。CMake 支持大写、小写以及大小写混合的命令形式。`tutorial.cxx` 文件的源码在 Step1 目录中，它可以用于计算一个数字的平方根。
 
-## 添加一个版本号和配置的头文件
+### 添加一个版本号和配置的头文件
 
 我们要添加的第一个特性是为可执行文件和项目提供一个版本号。尽管我们可以在源代码中执行这一操作，但是使用 `CMakeLists.txt` 可以提供更大的灵活性。
 
@@ -521,7 +521,7 @@ if (argc < 2) {
   }
 ```
 
-## 指定 C++ 标准
+### 指定 C++ 标准
 
 接下来，让我们通过在 `tutorial.cxx` 中用 `std::stod` 替换 `atof`，来将一些 C++ 11 的特性添加到我们的项目中。同时，删除 `#include <cstdlib>`。
 
@@ -542,7 +542,7 @@ set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 ```
 
-## 构建并测试
+### 构建并测试
 
 运行 `cmake` 可执行文件或是 `cmake-gui` 来配置项目，然后使用你选择的构建工具进行构建。
 
@@ -574,7 +574,7 @@ Tutorial 10
 Tutorial
 ```
 
-## 4.2 添加一个库（第二步）
+## 添加一个库（第二步）
 
 现在我们将向我们的项目中添加一个库。这个库将包含我们自己的计算数字平方根的实现。然后，可执行文件可以使用这个库，而非编译器提供的标准平方根函数。
 
@@ -738,7 +738,7 @@ cmake ../Step2 -DUSE_MYMATH=OFF
 
 哪个函数提供的结果更佳，sqrt 还是 mysqrt ？
 
-## 4.3 为库添加使用要求（第三步）
+## 为库添加使用要求（第三步）
 
 使用要求可以更好地控制库或可执行文件的链接以及 include 内容，同时还可以更好地控制 CMake 内部目标的传递属性。使用使用要求的主要命令有：
 
@@ -836,11 +836,11 @@ target_include_directories(MathFunctions
 
 完成之后，运行 `cmake` 可执行文件或者 `cmake-gui` 来配置项目，然后从构建目录使用你选择的构建工具或者使用 `cmake --build .` 进行构建。
 
-## 4.4 安装并测试（第四步）
+## 安装并测试（第四步）
 
 现在，我们可以开始向我们的项目中添加安装规则和测试支持了。
 
-## 安装规则
+### 安装规则
 
 安装规则十分简单：对于 MathFunctions，我们要安装库和头文件，对于应用程序，我们要安装可执行文件和配置的头文件。
 
@@ -878,7 +878,7 @@ cmake --install . --prefix "/home/myuser/installdir"
 
 导航到安装目录，并验证已安装的 Tutorial 是否运行。
 
-## 测试支持
+### 测试支持
 
 接下来测试我们的应用程序。在顶级 `CMakeLists.txt` 文件的末尾，我们可以启用测试，然后添加一些基本测试以验证应用程序是否正常运行。
 
@@ -920,7 +920,7 @@ do_test(Tutorial 0.0001 "0.0001 is 0.01")
 
 重建应用程序，然后导航到二进制目录并运行 `ctest` 可执行文件：`ctest -N` 和 `ctest -VV`。对于多配置生成器（例如 Visual Studio），必须指定配置类型。例如，要以 Debug 模式运行测试，请从构建目录（而非 Debug 子目录）中使用 `ctest -C Debug -VV`。或者，从 IDE 构建 `RUN_TESTS` 目标。
 
-## 4.5 添加系统自检（第五步）
+## 添加系统自检（第五步）
 
 让我们考虑向我们的项目中添加一些依赖于目标平台可能没有的特性的代码。对于本例，我们将添加一些取决于目标平台是否具有 `log` 和 `exp` 函数的代码。当然，几乎每个平台都具有这些功能，但本教程假设它们并不常见。
 
@@ -972,7 +972,7 @@ endif()
 
 现在哪个函数给出了更好的结果，sqrt 还是 mysqrt？
 
-## 4.6 添加自定义命令和生成的文件（第六步）
+## 添加自定义命令和生成的文件（第六步）
 
 假设，出于本教程的目的，我们决定不再使用平台的 `log` 和 `exp` 函数，而是希望生成一个可在 `mysqrt` 函数中使用的预计算值表。在本节中，我们将在构建过程中创建表，然后将该表编译到我们的应用程序中。
 
@@ -1092,7 +1092,7 @@ cpack --config CPackSourceConfig.cmake
 
 运行在二进制目录中找到的安装程序。然后运行已安装的可执行文件，并验证其是否工作正常。
 
-## 4.8 添加对 Dashboard 的支持（第八步）
+## 添加对 Dashboard 的支持（第八步）
 
 添加将测试结果提交到 Dashboard 的支持非常简单。我们已经在“测试支持”中为我们的项目定义了许多测试。现在，我们只需要运行这些测试并将其提交到 Dashboard 即可。为了包含对 Dashboard 的支持，我们在顶层 `CMakeLists.txt` 中包含了 `CTest` 模块。
 
@@ -1140,7 +1140,7 @@ ctest [-VV] -C Debug -D Experimental
 
 `ctest` 可执行文件将构建和测试项目，并将结果提交到 Kitware 的公共 Dashboard：[https://my.cdash.org/index.php?project=CMakeTutorial](https://link.zhihu.com/?target=https%3A//my.cdash.org/index.php%3Fproject%3DCMakeTutorial)。
 
-## 4.9 混合静态库和动态库（第九步）
+## 混合静态库和动态库（第九步）
 
 在本节中，我们将展示如何使用 `BUILD_SHARED_LIBS` 变量来控制 `add_library()` 的默认行为，并允许控制如何构建没有显式类型（`STATIC`、`SHARED`、`MODULE` 或 `OBJECT`）的库。
 
@@ -1316,7 +1316,7 @@ double DECLSPEC sqrt(double x);
 
 **练习**：我们修改了 `MathFunctions.h` 以使用 dll 导出定义。借助 CMake 文档，您能找到一个帮助模块来简化此过程吗？
 
-## 4.10 添加生成器表达式（第十步）
+## 添加生成器表达式（第十步）
 
 在构建系统生成期间会评估生成器表达式，以生成特定于每个构建配置的信息。
 
@@ -1360,7 +1360,7 @@ target_compile_options(tutorial_compiler_flags INTERFACE
 
 **练习**：修改 `MathFunctions/CMakeLists.txt`，以便所有目标都具有对 `tutorial_compiler_flags` 的 `target_link_libraries()` 调用。
 
-## 4.11 添加导出配置（第十一步）
+## 添加导出配置（第十一步）
 
 在本教程的安装和测试（第四步）中，我们添加了 CMake 的功能，以安装项目的库和头文件。在构建安装程序（第七步）期间，我们添加了打包此信息的功能，以便可以将其分发给其他人。
 
@@ -1459,7 +1459,7 @@ export(EXPORT MathFunctionsTargets
 
 通过此导出调用，我们现在生成一个 `Targets.cmake`，允许在构建目录中配置的 `MathFunctionsConfig.cmake` 由其他项目使用，而无需安装它。
 
-## 4.12 打包调试和发布（第十二步）
+## 打包调试和发布（第十二步）
 
 **注意**：此示例对单配置生成器有效，不适用于多配置生成器（例如 Visual Studio）。
 
@@ -1535,11 +1535,7 @@ cpack --config MultiCPackConfig.cmake
 
 
 
-
-
-
-
-# 5 cmake官方示例
+# cmake官方示例
 
 CMake教程通过一个示例项目, 逐步介绍了CMake构建系统的主要功能, 包括:
 
@@ -1562,9 +1558,7 @@ CMake教程通过一个示例项目, 逐步介绍了CMake构建系统的主要�
 > 2. 本摘要主要关注CMake使用, 一些关于源代码的更改在请查看[CMake教程](https://cmake.org/cmake/help/latest/guide/tutorial/index.html)
 > 3. CMake教程示例代码,下一步的内容都是上一步的结果
 
-## 主要功能摘要
-
-## 5.1. 生成执行程序
+##  生成执行程序
 
 本节示例展示了:
 
@@ -1575,7 +1569,7 @@ CMake教程通过一个示例项目, 逐步介绍了CMake构建系统的主要�
 
 > 注: 本节示例初始代码在示例目录的`Step1`子目录, 成果在`Step2`子目录
 
-#### 核心代码
+### 核心代码
 
 顶层目录的**CMakeLists.txt**内容如下:
 
@@ -1621,7 +1615,7 @@ $ cmake ..
 $ cmake --build .
 ```
 
-## 5.2. 生成库(旧式CMake)
+## 生成库(旧式CMake)
 
 在上一步的基础上, 本节示例展示了:
 
@@ -1633,7 +1627,7 @@ $ cmake --build .
 
 > 注: 本节示例初始代码在示例目录的`Step2`子目录, 成果在`Step3`子目录
 
-#### 生成库
+### 生成库
 
 1. 创建库目录;
 2. 在库目录**CMakeLists.txt**中, 添加生成库命令如下:
@@ -1643,7 +1637,7 @@ $ cmake --build .
 add_library(MathFunctions mysqrt.cxx)
 ```
 
-#### 其它核心代码
+### 其它核心代码
 
 项目**CMakeLists.txt**内容如下:
 
@@ -1693,7 +1687,7 @@ target_include_directories(Tutorial PUBLIC
 #cmakedefine USE_MYMATH
 ```
 
-## 5.3. 生成库(新式CMake)
+## 生成库(新式CMake)
 
 在上一步的基础上, 本节示例展示了:
 
@@ -1705,7 +1699,7 @@ target_include_directories(Tutorial PUBLIC
 
 > 注: 本节示例初始代码在示例目录的`Step3`子目录, 成果在`Step4`子目录
 
-#### 核心代码更改
+### 核心代码更改
 
 **库目录CMakeLists.txt**内容如下:
 
@@ -1757,7 +1751,7 @@ target_include_directories(Tutorial PUBLIC
                            )
 ```
 
-## 5.4. 基于源代码的安装与测试
+## 基于源代码的安装与测试
 
 在上一步的基础上, 本节示例展示了:
 
@@ -1766,7 +1760,7 @@ target_include_directories(Tutorial PUBLIC
 
 > 注: 本节示例初始代码在示例目录的`Step4`子目录, 成果在`Step5`子目录
 
-#### 核心代码更改
+### 核心代码更改
 
 **库目录CMakeLists.txt**变化如下:
 
@@ -1857,7 +1851,7 @@ do_test(Tutorial -25 "-25 is [-nan|nan|0]")
 do_test(Tutorial 0.0001 "0.0001 is 0.01")
 ```
 
-#### 命令行使用示例
+### 命令行使用示例
 
 将调试版**安装**到*D:\Temp2\ttt\debug*
 
@@ -1889,7 +1883,7 @@ $ cmake --build . -- config Release
 $ ctest -C Release [-vv]
 ```
 
-## 5.5. 系统检测
+## 系统检测
 
 在上一步的基础上, 本节示例展示了:
 
@@ -1899,7 +1893,7 @@ $ ctest -C Release [-vv]
 > 注1: 本节示例初始代码在示例目录的`Step5`子目录, 成果在`Step6`子目录
 >  注2: 在win10下测试失败, 没有发现log,exp函数
 
-#### 核心代码更改
+### 核心代码更改
 
 **库目录CMakeLists.txt**变化如下:
 
@@ -1930,7 +1924,7 @@ install(TARGETS MathFunctions DESTINATION lib)
 install(FILES MathFunctions.h DESTINATION include)
 ```
 
-## 5.6. 添加自定义命令以及生成文件
+## 添加自定义命令以及生成文件
 
 在上一步的基础上, 本节示例展示了:
 
@@ -1939,7 +1933,7 @@ install(FILES MathFunctions.h DESTINATION include)
 
 > 注: 本节示例初始代码在示例目录的`Step6`子目录, 成果在`Step7`子目录
 
-#### 核心代码更改
+### 核心代码更改
 
 **库目录CMakeLists.txt**变化如下:
 
@@ -1972,7 +1966,7 @@ install(TARGETS MathFunctions DESTINATION lib)
 install(FILES MathFunctions.h DESTINATION include)
 ```
 
-## 5.7. 构建安装程序
+##  构建安装程序
 
 在上一步的基础上, 本节示例展示了:
 
@@ -1981,7 +1975,7 @@ install(FILES MathFunctions.h DESTINATION include)
 > 注1: 本节示例初始代码在示例目录的`Step7`子目录, 成果在`Step8`子目录
 >  注2: 为测试需要, 在win10上, 首先安装NSIS(Nulsoft Install System).
 
-#### 核心代码更改
+### 核心代码更改
 
 **顶层目录CMakeLists.txt**末尾添加如下内容即可:
 
@@ -1994,7 +1988,7 @@ set(CPACK_PACKAGE_VERSION_MINOR "${Tutorial_VERSION_MINOR}")
 include(CPack)
 ```
 
-#### 命令行使用示例
+### 命令行使用示例
 
 在项目目录下
 
@@ -2010,7 +2004,7 @@ $ cmake --build . --target PACKAGE --config Release
 $ cmake --build . --target PACKAGE --config Debug
 ```
 
-## 5.8. 将测试结果提交到Kitware的公共指示板
+## 将测试结果提交到Kitware的公共指示板
 
 在上一步的基础上, 本节示例展示了:
 
@@ -2018,7 +2012,7 @@ $ cmake --build . --target PACKAGE --config Debug
 
 > 注: 本节示例初始代码在示例目录的`Step8`子目录, 成果在`Step9`子目录
 
-#### 核心代码更改
+### 核心代码更改
 
 **顶层目录CMakeLists.txt**将:
 
@@ -2046,7 +2040,7 @@ set(CTEST_DROP_LOCATION "/submit.php?project=CMakeTutorial")
 set(CTEST_DROP_SITE_CDASH TRUE)
 ```
 
-#### 命令行使用示例
+### 命令行使用示例
 
 在项目目录下
 
@@ -2061,7 +2055,7 @@ $ ctest [-VV] -C Release -D Experimental
 $ ctest [-VV] -C Debug -D Experimental
 ```
 
-## 5.9. 混合静态和共享库
+## 混合静态和共享库
 
 在上一步的基础上, 本节示例展示了:
 
@@ -2072,7 +2066,7 @@ $ ctest [-VV] -C Debug -D Experimental
 
 > 注: 本节示例初始代码在示例目录的`Step9`子目录, 成果在`Step10`子目录
 
-#### 核心代码更改
+### 核心代码更改
 
 **顶层CMakeLists.txt**的起始部分更改为:
 
@@ -2182,7 +2176,7 @@ double DECLSPEC sqrt(double x);
 
 其它对C++代码的修改见[CMake教程](https://cmake.org/cmake/help/latest/guide/tutorial/index.html)
 
-#### 命令行使用示例
+### 命令行使用示例
 
 在项目目录下
 
@@ -2211,7 +2205,7 @@ $ cmake --build .
   Building Custom Rule E:/Help/Other/CMake/CMake_Tutorial/guide/tutorial/Step10/CMakeLists.txt
 ```
 
-## 5.10. 生成器表达式,条件判断
+## 生成器表达式,条件判断
 
 在上一步的基础上, 本节示例展示了:
 
@@ -2223,7 +2217,7 @@ $ cmake --build .
 
 > 注: 本节示例初始代码在示例目录的`Step10`子目录, 成果在`Step11`子目录
 
-#### 核心代码更改
+### 核心代码更改
 
 **顶层CMakeLists.txt**的相应部分:
 
@@ -2254,7 +2248,7 @@ target_compile_options(tutorial_compiler_flags INTERFACE
 target_link_libraries(MakeTable[SqrtLibrary|MathFunctions] PRIVATE[PUBLIC] tutorial_compiler_flags)
 ```
 
-## 5.11. 添加导出配置,以支持find_package
+## 添加导出配置,以支持find_package
 
 在上一步的基础上, 本节示例展示了:
 
@@ -2265,7 +2259,7 @@ target_link_libraries(MakeTable[SqrtLibrary|MathFunctions] PRIVATE[PUBLIC] tutor
 
 > 注: 本节示例初始代码在示例目录的`Step11`子目录, 成果在`Step12`子目录
 
-#### 核心代码更改
+### 核心代码更改
 
 在**MathFunctions/CMakeLists.txt**中增加**EXPORT**:
 
@@ -2335,7 +2329,7 @@ export(EXPORT MathFunctionsTargets
 > 通过这个导出调用，我们现在生成一个`Targets.cmake`，使得在构建目录中配置生成的`MathFunctionsConfig.cmake`可以被其他项目使用，而不需要安装它。
 >  此处未试验, 不理解
 
-## 5.12. 将调试版和发行版打包在一起
+## 将调试版和发行版打包在一起
 
 在上一步的基础上, 本节示例展示了:
 
@@ -2365,11 +2359,11 @@ set_target_properties(Tutorial PROPERTIES DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
 
 # 6 cmake指令参考
 
-## 6.1 cmake_minimum_required
+## cmake_minimum_required
 
 cmake_minimum_required(VERSION 3.10)：指定CMake的最小~最大版本，一般只需指定最小版本。
 
-## 6.2 project
+## project
 
 ```cmake
 形式1：
@@ -2392,7 +2386,7 @@ project(Tutorial VERSION 1.0)：指定项目名称及版本号，初始化项目
 - **HOMEPAGE_URL **：工程主页url
 - **LANGUAGES **：工程使用的语言，默认为C或CXX
 
-## 6.3 工程名称
+## 工程名称
 
 ```cmake
 #只指定工程名（最常用形式）
@@ -2410,7 +2404,7 @@ project(cmaketest )
  - CMAKE_PROJECT_NAME：顶层工程的名称。cmake命令首次调用那个CMakeLists.txt对应工程的名字
 ```
 
-## 6.4 版本号
+## 版本号
 
 ```cmake
  - 指定版本号
@@ -2463,7 +2457,7 @@ PROJECT_VERSION_PATCH = 1
 PROJECT_VERSION_TWEAK = 3
 ```
 
-## 6.5 工程描述
+## 工程描述
 
 ```cmake
 指定工程描述
@@ -2504,7 +2498,7 @@ PROJECT_DESCRIPTION = This is a test project
 -- Generating done
 ```
 
-## 6.6 指定构建工程所需的编程语言
+## 指定构建工程所需的编程语言
 
 ```cmake
 #指定需要的编程语言
@@ -2534,7 +2528,7 @@ No CMAKE_HIP_COMPILER could be found
 1. 如果多次调用了project命令，则`CMAKE_PROJECT_NAME、CMAKE_PROJECT_NAME、CMAKE_PROJECT_DESCRIPTION、CMAKE_PROJECT_HOMEPAGE_URL`等变量是以最后一次调用的project命令为准。
 2. `project`命令需要放置在其他命令调用之前，在`cmake_minimum_required`命令之后。
 
-## 6.7 set
+##  set
 
 ```cmake
 set(<variable> <value>... [PARENT_SCOPE]) #设置普通变量
@@ -2548,7 +2542,7 @@ set(ENV{<variable>} [<value>]) #设置环境变量
 
 下面分别对三种变量的设置进行说明。
 
-### **6.7.1. 设置普通变量**
+### 设置普通变量
 
  **命令格式**：`set`(<variable> <value>... [`PARENT_SCOPE`])
   **命令含义**：将变量`variable`设置为值`<value>...`，变量`variable`的`作用域`为调用`set`命令的函数或者当前目录，如果使用了`PARENT_SCOPE`选项，意味着该变量的作用域会传递到上一层（也就是上一层目录或者当前函数的调用者，如果是函数则传递到函数的调用者，如果是目录则传递到上一层目录），并且在当前作用域该变量不受`带PARENT_SCOPE`选项的`set`命令的影响（如果变量之前没有定义，那么在当前作用域仍然是无定义的；如果之前有定义值，那么值和之前定义的值保持一致）。
@@ -2696,7 +2690,7 @@ set(ENV{<variable>} [<value>]) #设置环境变量
   #>>> in top level, value = hello
   ```
 
-### **6.7.2. 设置缓存条目**
+### 设置缓存条目
 
 **命令格式**：`set`(<variable> <value>... `CACHE` <type> <docstring> [`FORCE`])
   **命令含义**：将缓存条目`variable`设置为值`<value>...`，除非用户进行设置或使用了选项`FORCE`，默认情况下缓存条目的值不会被覆盖。缓存条目可以通过CMAKE的GUI界面的`add entry`按钮来增加。缓存条目的实质为可以跨层级进行传递的变量，类似于全局变量。
@@ -2752,7 +2746,7 @@ set(ENV{<variable>} [<value>]) #设置环境变量
    
    ```
 
-### **6.7.3. 设置环境变量**
+### 设置环境变量
 
 **命令格式**：`set`(`ENV`{<variable>} [<value>])
   **命令含义**：将环境变量设置为值`<value>`（注意没有`...`），接着使用`$ENV{<variable>}`会得到新的值。cmake中的环境变量可以参考：[环境变量](https://links.jianshu.com/go?to=https%3A%2F%2Fcmake.org%2Fcmake%2Fhelp%2Flatest%2Fmanual%2Fcmake-env-variables.7.html%23manual%3Acmake-env-variables(7))。
@@ -2785,7 +2779,7 @@ message (">>> value = $ENV{CMAKE_PREFIX_PATH}")
 
 
 
-## 6.8 add_library
+## add_library
 
 ```cmake
 add_library(libname [SHARED|STATIC|MODULE] [EXCLUDE_FROM_ALL] source1 source2 ... sourceN)
@@ -2795,7 +2789,7 @@ add_library根据源码来生成一个库供他人使用。<name>是个逻辑名
 
 STATIC指静态库，SHARED指动态库，MODULE指在运行期通过类似于dlopen的函数动态加载。
 
-## 6.9 add_subdirectory
+## add_subdirectory
 
 **命令格式**
 
@@ -2951,7 +2945,7 @@ add_library(sub test.cpp)
   
   ```
 
-## 6.10 add_executable
+## add_executable
 
 ```cmake
 # 第一种：Normal Executables
@@ -2968,7 +2962,7 @@ add_executable(<name> ALIAS <target>)
 
 其中<name>是可执行文件的名称，在cmake工程中必须唯一。
 
-## 6.11 configure_file
+## configure_file
 
 ```cmake
 configure_file(input output options)
@@ -3085,7 +3079,7 @@ option(var "use var..." ON) # 实际也可以用cmake -Dvar=ON或者cmake -Dvar=
 
 
 
-## 6.12 option
+## option
 
 ```cmake
 option(<variable> "<help_text>" [value])
@@ -3133,7 +3127,7 @@ option (USE_MYMATH "Use provided math implementation" ON)指令
 
   
 
-## 6.13 link_directories
+## link_directories
 
 ```cmake
 link_directories([AFTER|BEFORE] directory1 [directory2 ...])
@@ -3141,7 +3135,7 @@ link_directories([AFTER|BEFORE] directory1 [directory2 ...])
 
 为链接器添加库的搜索路径，此命令调用之后生成的目标才能生效。link_directories()要放在add_executable()之前。
 
-## 6.14 link_libraries
+## link_libraries
 
 ```cmake
 link_libraries([item1 [item2 [...]]]
@@ -3154,7 +3148,7 @@ link_libraries([item1 [item2 [...]]]
 
 ![image-20220806173224685](cmake学习笔记/image-20220806173224685.png)
 
-## 6.15 target_link_libraries
+## target_link_libraries
 
 ```cmake
 target_link_libraries(<target>
@@ -3174,7 +3168,7 @@ target_link_libraries(<target>
 target_link_libraries(main hello)
 ```
 
-## 6.16 include_directories
+## include_directories
 
 ```cmake
 include_directories([AFTER|BEFORE] [SYSTEM] dir1 [dir2 ...])
@@ -3184,7 +3178,7 @@ include_directories([AFTER|BEFORE] [SYSTEM] dir1 [dir2 ...])
 
 
 
-## 6.17 target_include_directories
+## target_include_directories
 
 ```cmake
 target_include_directories(<target> [SYSTEM] [AFTER|BEFORE]
@@ -3216,7 +3210,7 @@ include_directories(hello-world/world)
 
 当然了，在**最终子目录**的 CMakeLists.txt 文件中，使用 `include_directories()` 和 `target_include_directories()` 的效果是相同的。
 
-## 71.8 include
+## include
 
 ```cmake
 include(<file|module> [OPTIONAL] [RESULT_VARIABLE <VAR>]
@@ -3225,7 +3219,7 @@ include(<file|module> [OPTIONAL] [RESULT_VARIABLE <VAR>]
 
 从指定的文件加载、运行CMake代码。如果指定文件，则直接处理。如果指定module，则寻找module.cmake文件，首先在${CMAKE_MODULE_PATH}中寻找，然后在CMake的module目录中查找。
 
-## 6.19 find_package
+## find_package
 
 ```cmake
 ## 共支持两种模式
@@ -3262,7 +3256,7 @@ find_package(<PackageName> [version] [EXACT] [QUIET]
 
 find_package一般用于加载外部库到项目中，并且会加载库的细节信息。如上find_package有两种模式：Module与Config。
 
-## 6.20 打印编译详细信息
+## 打印编译详细信息
 
 * 方法1
 

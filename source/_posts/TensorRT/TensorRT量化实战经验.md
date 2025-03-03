@@ -282,41 +282,41 @@ for major, sub in pairs:
 
 对应的onnx如下，看上去插入的QDQ都是正确的。
 
-![image-20241215143111289](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\TensorRT量化实战经验\image-20241215143111289.png)
+![image-20241215143111289](./TensorRT量化实战经验/image-20241215143111289.png)
 
 但是绘制对应的engine结构图如下：
 
-![image-20241215143209326](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\TensorRT量化实战经验\image-20241215143209326.png)
+![image-20241215143209326](./TensorRT量化实战经验/image-20241215143209326.png)
 
 如何修改呢？针对上面的情况，在sigmoid前面插入一个QDQ，同时保证下图三个QDQ的值是相同的即可
 
 修改后的如下图onnx
 
-![image-20241215143343284](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\TensorRT量化实战经验\image-20241215143343284.png)
+![image-20241215143343284](./TensorRT量化实战经验/image-20241215143343284.png)
 
 修改后的engine结构图如下：
 
-![image-20241215143523133](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\TensorRT量化实战经验\image-20241215143523133.png)
+![image-20241215143523133](./TensorRT量化实战经验/image-20241215143523133.png)
 
 ## 2.4 convTranspose节点
 
 首先看一下我们初步插入QDQ后的onnx结构图，看样子应该没有问题
 
-![image-20241215143732417](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\TensorRT量化实战经验\image-20241215143732417.png)
+![image-20241215143732417](./TensorRT量化实战经验/image-20241215143732417.png)
 
 对应的engine图如下
 
-![image-20241215143820810](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\TensorRT量化实战经验\image-20241215143820810.png)
+![image-20241215143820810](./TensorRT量化实战经验/image-20241215143820810.png)
 
 发现在relu前竟然转换为了FP32精度
 
 如何修改呢？修改方式是删除relu层，修改后的onnx如下：
 
-![image-20241215143940439](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\TensorRT量化实战经验\image-20241215143940439.png)
+![image-20241215143940439](./TensorRT量化实战经验/image-20241215143940439.png)
 
 修改后的engine图对应如下：
 
-![image-20241215144041646](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\TensorRT量化实战经验\image-20241215144041646.png)
+![image-20241215144041646](./TensorRT量化实战经验/image-20241215144041646.png)
 
 ## 2.5 一些特殊的例子
 
@@ -324,11 +324,11 @@ for major, sub in pairs:
 
   因此，在 TensorRT 内部，concat/slice 的输入和输出将合并为一个张量。用户必须确保与同一个 concat/slice 相关的量化和去量化（QDQ）操作保持一致。
 
-* 对于 PWN（Pointwise）节点，用户必须确保输入和输出具有相同的缩放比例（scale）。您可以在 SVG 中检查哪些节点被归类为 PWN 节点，有时它可能是一个单独的 Add 操作，有时则是 Add+Mul 组合。![无标题](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\TensorRT量化实战经验\无标题.png)
+* 对于 PWN（Pointwise）节点，用户必须确保输入和输出具有相同的缩放比例（scale）。您可以在 SVG 中检查哪些节点被归类为 PWN 节点，有时它可能是一个单独的 Add 操作，有时则是 Add+Mul 组合。![无标题](./TensorRT量化实战经验/无标题.png)
 
 * 根据上面的原因，确实应该下图橙色框适当的位置插入 QDQ（量化和去量化)节点，并确保它们都使用相同的缩放比例。这样做可以保证模型转换后的精度，并且确保 TensorRT 在优化过程中能够正确处理这些操作。
 
-![无标题](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\TensorRT量化实战经验\无标题-1734533352621-2.png)
+![无标题](./TensorRT量化实战经验/无标题-1734533352621-2.png)
 
 # 3 engine结构图的绘制
 

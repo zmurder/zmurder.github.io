@@ -109,7 +109,7 @@ Consider a batch of images with the following dimensions:
 
 To keep the example simple, the image pixel elements are expressed as a sequence of integers, 0, 1, 2, 3, and so on.
 
-![ex-tensor](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\Tensors and Layouts\ex-tensor.png)
+![ex-tensor](./Tensors and Layouts/ex-tensor.png)
 
 In the following subsections, we’ll use the above example to demonstrate the different layout formats.
 
@@ -129,7 +129,7 @@ The above 4D tensor is laid out in the memory in the NCHW format)as below:
 2. Continue with second and subsequent channels until the elements of all the channels are laid out.
 3. Proceed to the next batch (if **N** is > 1).
 
-![nchw](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\Tensors and Layouts\nchw.png)
+![nchw](./Tensors and Layouts/nchw.png)
 
 ##### NHWC Memory Layout[](https://docs.nvidia.com/deeplearning/cudnn/v9.4.0/developer/core-concepts.html#nhwc-memory-layout)
 
@@ -140,13 +140,13 @@ For the NHWC memory layout, the corresponding elements in all the **C** channels
 3. Follow the row-major order of channel 0 and complete all the elements.
 4. Proceed to the next batch (if **N** is > 1).
 
-![nhwc](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\Tensors and Layouts\nhwc.png)
+![nhwc](./Tensors and Layouts/nhwc.png)
 
 ##### NC/32HW32 Memory Layout[](https://docs.nvidia.com/deeplearning/cudnn/v9.4.0/developer/core-concepts.html#nc-32hw32-memory-layout)
 
 The NC/32HW32 is similar to NHWC, with a key difference. For the  NC/32HW32 memory layout, the 64 channels are grouped into two groups of  32 channels each - first group consisting of channels `c0` through `c31`, and the second group consisting of channels `c32` through `c63`. Then each group is laid out using the NHWC format.
 
-![NC32HW32](E:\Work\ZYDStudy\blog\zmurder.github.io\source\_posts\TensorRT\Tensors and Layouts\NC32HW32.png)
+![NC32HW32](./Tensors and Layouts/NC32HW32.png)
 
 For the generalized NC/xHWx layout format, the following observations apply:
 

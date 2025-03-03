@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://example.com/cmake/cmake%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
+    
+    <lastmod>2025-03-03</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://example.com/cmake/cmake%E5%A4%B4%E6%96%87%E4%BB%B6%E8%AE%BE%E5%AE%9A/</loc>
     
     <lastmod>2025-03-03</lastmod>
@@ -237,15 +246,6 @@
   
   <url>
     <loc>http://example.com/fragment/Docker%E5%9F%BA%E7%A1%80/</loc>
-    
-    <lastmod>2024-12-01</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>http://example.com/cmake/cmake%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/</loc>
     
     <lastmod>2024-12-01</lastmod>
     

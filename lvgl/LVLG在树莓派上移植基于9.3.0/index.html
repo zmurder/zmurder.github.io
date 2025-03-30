@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="简介我有一个需求是在树莓派3B+上使用SPI屏幕（ili9341），因为我的树莓派系统是不带桌面的系统，我想编写一个程序显示GUI，因此使用下面的硬件组合">
+<meta property="og:type" content="article">
+<meta property="og:title" content="LVLG在树莓派上移植基于9">
+<meta property="og:url" content="http://example.com/lvgl/LVLG%E5%9C%A8%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8A%E7%A7%BB%E6%A4%8D%E5%9F%BA%E4%BA%8E9.3.0/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="简介我有一个需求是在树莓派3B+上使用SPI屏幕（ili9341），因为我的树莓派系统是不带桌面的系统，我想编写一个程序显示GUI，因此使用下面的硬件组合">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/lvgl/LVLG%E5%9C%A8%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8A%E7%A7%BB%E6%A4%8D%E5%9F%BA%E4%BA%8E9.3.0/LVLG%E5%9C%A8%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8A%E7%A7%BB%E6%A4%8D%E5%9F%BA%E4%BA%8E9.3.0/Center.png">
+<meta property="og:image" content="http://example.com/lvgl/LVLG%E5%9C%A8%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8A%E7%A7%BB%E6%A4%8D%E5%9F%BA%E4%BA%8E9.3.0/LVLG%E5%9C%A8%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8A%E7%A7%BB%E6%A4%8D%E5%9F%BA%E4%BA%8E9.3.0/Center-1743329793331-1.png">
+<meta property="og:image" content="http://example.com/lvgl/LVLG%E5%9C%A8%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8A%E7%A7%BB%E6%A4%8D%E5%9F%BA%E4%BA%8E9.3.0/image-20250330183206135.png">
+<meta property="article:published_time" content="2025-03-30T10:00:41.628Z">
+<meta property="article:modified_time" content="2025-03-30T10:45:44.493Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="cmake">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/lvgl/LVLG%E5%9C%A8%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8A%E7%A7%BB%E6%A4%8D%E5%9F%BA%E4%BA%8E9.3.0/LVLG%E5%9C%A8%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8A%E7%A7%BB%E6%A4%8D%E5%9F%BA%E4%BA%8E9.3.0/Center.png">
+
+
+<link rel="canonical" href="http://example.com/lvgl/LVLG%E5%9C%A8%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8A%E7%A7%BB%E6%A4%8D%E5%9F%BA%E4%BA%8E9.3.0/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/lvgl/LVLG%E5%9C%A8%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8A%E7%A7%BB%E6%A4%8D%E5%9F%BA%E4%BA%8E9.3.0/","path":"lvgl/LVLG在树莓派上移植基于9.3.0/","title":"LVLG在树莓派上移植基于9"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>LVLG在树莓派上移植基于9 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%A0%91%E8%8E%93%E6%B4%BE%E7%9A%84fbtft%E9%A9%B1%E5%8A%A8"><span class="nav-text">树莓派的fbtft驱动</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%93%E5%BC%80SPI"><span class="nav-text">打开SPI</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E8%BD%BD-FBTFT-%E9%A9%B1%E5%8A%A8"><span class="nav-text">加载 FBTFT 驱动</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%A7%BB%E6%A4%8DLVGL9-3-0"><span class="nav-text">移植LVGL9.3.0</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%96%87%E4%BB%B6%E6%8B%B7%E8%B4%9D"><span class="nav-text">文件拷贝</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96LVGL"><span class="nav-text">初始化LVGL</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%A8%8B%E5%BA%8F"><span class="nav-text">测试程序</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-text">附录</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">155</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">27</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">13</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/lvgl/LVLG%E5%9C%A8%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8A%E7%A7%BB%E6%A4%8D%E5%9F%BA%E4%BA%8E9.3.0/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="LVLG在树莓派上移植基于9 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          LVLG在树莓派上移植基于9
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-03-30 18:00:41 / 修改时间：18:45:44" itemprop="dateCreated datePublished" datetime="2025-03-30T18:00:41+08:00">2025-03-30</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/lvgl/" itemprop="url" rel="index"><span itemprop="name">lvgl</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>我有一个需求是在树莓派3B+上使用SPI屏幕（ili9341），因为我的树莓派系统是不带桌面的系统，我想编写一个程序显示GUI，因此使用下面的硬件组合</p>
+<ul>
+<li>树莓派3B+</li>
+<li>SPI屏幕（ili9341）</li>
+</ul>
+<p>软件层面</p>
+<ul>
+<li>UI显示使用LVGL</li>
+<li>屏幕的驱动使用fbtft </li>
+</ul>
+<h1 id="树莓派的fbtft驱动"><a href="#树莓派的fbtft驱动" class="headerlink" title="树莓派的fbtft驱动"></a>树莓派的fbtft驱动</h1><h2 id="打开SPI"><a href="#打开SPI" class="headerlink" title="打开SPI"></a>打开SPI</h2><p>因为我的屏幕是SPI接口的，最新系统的SPI默认还是关闭的，需要在raspi-config中打开，在终端输入 ：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo raspi-config</span><br></pre></td></tr></table></figure>
+<p><img src="./LVLG在树莓派上移植基于9.3.0/Center.png" alt="img"><img src="./LVLG在树莓派上移植基于9.3.0/Center-1743329793331-1.png" alt="img"></p>
+<p>将spi接口enable就好了。</p>
+<h2 id="加载-FBTFT-驱动"><a href="#加载-FBTFT-驱动" class="headerlink" title="加载 FBTFT 驱动"></a>加载 FBTFT 驱动</h2><p>设置设备树覆盖</p>
+<p>我的系统已经默认安装了,内核模块已经存在系统上，因此可以直接加载</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">zyd@raspberrypi:~/ccode $ <span class="built_in">ls</span> /lib/modules/$(<span class="built_in">uname</span> -r)/kernel/drivers/staging/fbtft/</span><br><span class="line">fb_agm1264k-fl.ko.xz  fb_hx8353d.ko.xz  fb_ili9325.ko.xz  fb_ili9486.ko.xz  fb_s6d1121.ko.xz  fb_ssd1331.ko.xz  fbtft.ko.xz       fb_uc1701.ko.xz</span><br><span class="line">fb_bd663474.ko.xz     fb_hx8357d.ko.xz  fb_ili9340.ko.xz  fb_pcd8544.ko.xz  fb_sh1106.ko.xz   fb_ssd1351.ko.xz  fb_tinylcd.ko.xz  fb_upd161704.ko.xz</span><br><span class="line">fb_hx8340bn.ko.xz     fb_ili9163.ko.xz  fb_ili9341.ko.xz  fb_ra8875.ko.xz   fb_ssd1289.ko.xz  fb_st7735r.ko.xz  fb_tls8204.ko.xz</span><br><span class="line">fb_hx8347d.ko.xz      fb_ili9320.ko.xz  fb_ili9481.ko.xz  fb_s6d02a1.ko.xz  fb_ssd1306.ko.xz  fb_st7789v.ko.xz  fb_uc1611.ko.xz</span><br><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo nano /boot/firmware/config.txt</span><br></pre></td></tr></table></figure>
+<p>添加的内容如下，就可以在自启动时加载驱动了</p>
+<figure class="highlight txt"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">dtparam=spi=on</span><br><span class="line">dtoverlay=spi1-2cs</span><br><span class="line"># 添加 FBTFT 设备树覆盖</span><br><span class="line">dtoverlay=fbtft,spi0-0,ili9341,reset_pin=24,dc_pin=23,led_pin=12,rotate=90,speed=16000000,fps=60,bgr=1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<ul>
+<li><code>dtoverlay=fbtft,...</code>: 这个部分表明我们正在应用一个名为<code>fbtft</code>的设备树叠加层，它是一系列用于支持各种小型TFT LCD显示器的驱动程序。</li>
+<li><code>spi0-0</code>: 指定了使用的SPI总线和设备编号。这里的<code>spi0-0</code>意味着连接到第一个SPI总线（<code>spi0</code>）的第一个设备（<code>-0</code>），表示你的显示器是连接在这个特定的SPI通道上的。</li>
+<li><code>ili9341</code>: 显示屏所使用的控制器芯片型号。ILI9341是一种广泛应用于小型TFT LCD显示器的控制器。</li>
+<li><code>reset_pin=24</code>: 定义了与显示器RESET引脚相连的GPIO编号，在这个例子中是GPIO 24。这个引脚用于重置显示模块。</li>
+<li><code>dc_pin=23</code>: 定义了数据/命令(Data/Command)控制引脚对应的GPIO编号，在这里为GPIO 23。此引脚告诉显示器接下来传输的数据是指令还是显示数据。</li>
+<li><code>led_pin=12</code>: 表示背光LED控制引脚对应的GPIO编号，在这里为GPIO 12。你可以通过这个引脚控制LCD背光的开关或亮度。</li>
+<li><code>rotate=90</code>: 设置屏幕的方向，值可以是0、90、180或270，单位是度。这使得你可以根据实际安装方向旋转显示内容。</li>
+<li><code>speed=16000000</code>: 设置SPI通信速度，这里是16MHz。提高这个数值可以加快屏幕刷新速率，但可能不是所有显示器都支持这么高的速度。</li>
+<li><code>fps=60</code>: 设置目标帧率（Frames Per Second），即每秒更新显示的次数。60FPS是一个常见的流畅视频播放帧率。</li>
+<li><code>bgr=1</code>: 这个选项指示驱动程序在将颜色数据发送到显示器之前对其进行转换（从RGB格式转换为BGR格式）。这是因为一些显示器期望接收到的颜色数据顺序与原始数据相反。</li>
+</ul>
+<p>设置完成后重启树莓派，<strong>在/dev/目录下出现: /dev/fb1设备</strong></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">zyd@raspberrypi:~/ccode $ <span class="built_in">ls</span> /dev/fb*</span><br><span class="line">/dev/fb1</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>Framebuffers</strong>：Framebuffer 是操作系统与显示硬件之间的接口。它提供了一种方法，让软件可以直接访问显示内存，而不需要了解底层硬件的具体细节。</li>
+<li><p><strong>设备文件</strong>：在 Linux 系统中，硬件设备通常通过位于 <code>/dev</code> 目录下的特殊文件来访问。对于 framebuffer 设备，这些文件通常命名为 <code>fb0</code>, <code>fb1</code>, <code>fb2</code> 等等，分别对应第一个、第二个、第三个 framebuffer 设备。</p>
+</li>
+<li><p><strong><code>/dev/fb0</code></strong>：通常是默认的主 framebuffer 设备，连接到系统的主显示器（例如 HDMI 输出）。</p>
+</li>
+<li><strong><code>/dev/fb1</code></strong>：是第二个 framebuffer 设备。这可能用于连接额外的显示屏，如你的 TFT 显示屏或其他类型的显示设备。</li>
+</ul>
+<p>我们后面移植LVLG用的显示驱动就是这里的Linux Framebuffer Driver</p>
+<h1 id="移植LVGL9-3-0"><a href="#移植LVGL9-3-0" class="headerlink" title="移植LVGL9.3.0"></a>移植LVGL9.3.0</h1><p>每个版本的LVGL移植还不是特别一致，这里就是版本9.3.0</p>
+<h2 id="文件拷贝"><a href="#文件拷贝" class="headerlink" title="文件拷贝"></a>文件拷贝</h2><p>首先我们从github上下载对应版本的LVGL，下面几个文件是我们需要的。</p>
+<img src="/lvgl/LVLG%E5%9C%A8%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8A%E7%A7%BB%E6%A4%8D%E5%9F%BA%E4%BA%8E9.3.0/image-20250330183206135.png" class="" title="image-20250330183206135">
+<ul>
+<li>在自己的工程中创建lvgl目录，将上图的src文件夹拷贝到lvgl目录下</li>
+<li>拷贝lvgl.h 、lvgl_private.h、lv_version.h到lvgl中，与src同级目录</li>
+<li>拷贝 lv_conf_template.h为 lv_conf.h到项目的根目录。</li>
+</ul>
+<p>拷贝后的文件结构如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">├── CMakeLists.txt</span><br><span class="line">├── lv_conf.h</span><br><span class="line">├── lvgl</span><br><span class="line">│   ├── CMakeLists.txt</span><br><span class="line">│   ├── lvgl.h</span><br><span class="line">│   ├── lvgl_private.h</span><br><span class="line">│   ├── lv_version.h</span><br><span class="line">│   └── src</span><br><span class="line">└── src</span><br><span class="line">    ├── main.c</span><br></pre></td></tr></table></figure>
+<p>我这里是使用的cmake来维护工程的，根据自己的需求编写即可。</p>
+<h2 id="初始化LVGL"><a href="#初始化LVGL" class="headerlink" title="初始化LVGL"></a>初始化LVGL</h2><p>根据官方文档的描述还需要下面的几个步骤</p>
+<ol>
+<li><p>在系统执行的早期调用 <a target="_blank" rel="noopener" href="https://lvgl.100ask.net/master/API/lv_init.html#_CPPv47lv_initv"><code>lv_init()</code></a> 对 LVGL 进行一次初始化。在进行任何其他 LVGL 调用之前，都需要先完成此项操作。</p>
+<p>也就是在main函数中先调用这个函数，很简单。</p>
+</li>
+<li><p>初始化您的驱动程序。</p>
+<p>这里需要根据自己的驱动程序类型来设置了，因为我使用了fbtft，因此直接完成，不需要设置。</p>
+</li>
+<li><p>连接 tick_interface。下面介绍</p>
+</li>
+<li><p>连接 <a target="_blank" rel="noopener" href="https://lvgl.100ask.net/master/intro/add-lvgl-to-your-project/connecting_lvgl.html#display-interface">Display Interface（显示接口）</a>。</p>
+<p>这里我使用的是Linux Framebuffer Driver,因此很简单</p>
+<p>请在lv_conf.h中启用framebuffer驱动程序支持。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">#define LV_USE_LINUX_FBDEV           1</span><br><span class="line">#define LV_LINUX_FBDEV_RENDER_MODE   LV_DISPLAY_RENDER_MODE_PARTIAL</span><br></pre></td></tr></table></figure>
+<p>使用就</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">lv_display_t *disp = lv_linux_fbdev_create();</span><br><span class="line">lv_linux_fbdev_set_file(disp, <span class="string">&quot;/dev/fb1&quot;</span>);</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>连接 <a target="_blank" rel="noopener" href="https://lvgl.100ask.net/master/intro/add-lvgl-to-your-project/connecting_lvgl.html#indev-interface">Input-Device Interface</a>。我暂时没有使用</p>
+</li>
+<li><p>每隔几毫秒调用一次 <code>lv_timer_handler</code>来驱动 LVGL 中与时间相关的任务，以管理 LVGL 定时器。有关不同的实现方式，请参考 :ref:<code>timer_handler()</code> 部分。下面介绍</p>
+</li>
+<li><p>可选）使用 <a target="_blank" rel="noopener" href="https://lvgl.100ask.net/master/API/display/lv_display.html#_CPPv420lv_display_set_themeP12lv_display_tP10lv_theme_t"><code>lv_display_set_theme()</code></a> 设置一个主题。</p>
+</li>
+<li><p>此后，在任何需要使用 LVGL 函数的源文件中包含 “lvgl/lvgl.h” 头文件。 .. _tick_interface:</p>
+</li>
+</ol>
+<p>其中的lv_timer_handler和tick_interface我使用下面来实现,在main函数的while循环中调用</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> LVGL_TICK 5    </span></span><br><span class="line"><span class="keyword">while</span> (<span class="literal">true</span>)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// printf(&quot;while\n&quot;);</span></span><br><span class="line">    delay(LVGL_TICK); <span class="comment">/*Sleep for 5 millisecond*/</span></span><br><span class="line">    lv_task_handler();</span><br><span class="line">    lv_tick_inc(LVGL_TICK); <span class="comment">/*Tell LVGL that 5 milliseconds were elapsed*/</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="测试程序"><a href="#测试程序" class="headerlink" title="测试程序"></a>测试程序</h2><p>至此，就算是移植完成了，编写测试程序如下</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdio.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;stdlib.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;unistd.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;lvgl/lvgl.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> LVGL_TICK 5</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">static</span> <span class="type">void</span> <span class="title function_">event_handler</span><span class="params">(<span class="type">lv_event_t</span>* e)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">lv_event_code_t</span> code = lv_event_get_code(e);</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (code == LV_EVENT_CLICKED)</span><br><span class="line">    &#123;</span><br><span class="line">        LV_LOG_USER(<span class="string">&quot;Clicked&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span> (code == LV_EVENT_VALUE_CHANGED)</span><br><span class="line">    &#123;</span><br><span class="line">        LV_LOG_USER(<span class="string">&quot;Toggled&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="type">void</span> <span class="title function_">lv_example_btn_1</span><span class="params">(<span class="type">void</span>)</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="type">lv_obj_t</span>* label;</span><br><span class="line"></span><br><span class="line">    <span class="type">lv_obj_t</span>* btn1 = lv_btn_create(lv_scr_act());</span><br><span class="line">    lv_obj_add_event_cb(btn1, event_handler, LV_EVENT_ALL, <span class="literal">NULL</span>);</span><br><span class="line">    lv_obj_align(btn1, LV_ALIGN_CENTER, <span class="number">0</span>, <span class="number">-40</span>);</span><br><span class="line"></span><br><span class="line">    label = lv_label_create(btn1);</span><br><span class="line">    lv_label_set_text(label, <span class="string">&quot;Button&quot;</span>);</span><br><span class="line">    lv_obj_center(label);</span><br><span class="line"></span><br><span class="line">    <span class="type">lv_obj_t</span>* btn2 = lv_btn_create(lv_scr_act());</span><br><span class="line">    lv_obj_add_event_cb(btn2, event_handler, LV_EVENT_ALL, <span class="literal">NULL</span>);</span><br><span class="line">    lv_obj_align(btn2, LV_ALIGN_CENTER, <span class="number">0</span>, <span class="number">40</span>);</span><br><span class="line">    lv_obj_add_flag(btn2, LV_OBJ_FLAG_CHECKABLE);</span><br><span class="line">    lv_obj_set_height(btn2, LV_SIZE_CONTENT);</span><br><span class="line"></span><br><span class="line">    label = lv_label_create(btn2);</span><br><span class="line">    lv_label_set_text(label, <span class="string">&quot;Toggle&quot;</span>);</span><br><span class="line">    lv_obj_center(label);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="type">int</span> <span class="title function_">main</span><span class="params">()</span></span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// 初始化LVGL</span></span><br><span class="line">    lv_init();</span><br><span class="line">    <span class="type">lv_display_t</span>* disp = lv_linux_fbdev_create();</span><br><span class="line">    lv_linux_fbdev_set_file(disp, <span class="string">&quot;/dev/fb1&quot;</span>);</span><br><span class="line"></span><br><span class="line">    lv_example_btn_1();</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> (<span class="literal">true</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="comment">// printf(&quot;while\n&quot;);</span></span><br><span class="line">        delay(LVGL_TICK); <span class="comment">/*Sleep for 5 millisecond*/</span></span><br><span class="line">        lv_task_handler();</span><br><span class="line">        lv_tick_inc(LVGL_TICK); <span class="comment">/*Tell LVGL that 5 milliseconds were elapsed*/</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>就可以在屏幕上显示两个按键了。</p>
+<h1 id="附录"><a href="#附录" class="headerlink" title="附录"></a>附录</h1><ul>
+<li><a target="_blank" rel="noopener" href="https://lvgl.100ask.net/master/details/integration/driver/display/fbdev.html">https://lvgl.100ask.net/master/details/integration/driver/display/fbdev.html</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/lvgl/LVLG%E5%9C%A8%E6%A0%91%E8%8E%93%E6%B4%BE%E4%B8%8A%E7%A7%BB%E6%A4%8D%E5%9F%BA%E4%BA%8E9.3.0/" title="LVLG在树莓派上移植基于9">http://example.com/lvgl/LVLG在树莓派上移植基于9.3.0/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/cmake/" rel="tag"><i class="fa fa-tag"></i> cmake</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/cmake/cmake%E5%A4%B4%E6%96%87%E4%BB%B6%E8%AE%BE%E5%AE%9A/" rel="prev" title="cmake头文件设定">
+                  <i class="fa fa-chevron-left"></i> cmake头文件设定
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/lvgl/LVGL%E6%98%BE%E7%A4%BAgif/" rel="next" title="LVGL显示gif">
+                  LVGL显示gif <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"48bb80500d685d244badd9cbfeba0ff1"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

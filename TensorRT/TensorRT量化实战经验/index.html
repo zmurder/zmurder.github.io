@@ -24,12 +24,12 @@
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
      crossorigin="anonymous"></script>
-    <meta name="description" content="1 简介在前面三个TensorRT量化实战课YOLOv7量化的文章中，都是摘抄自CSND。感谢这个网友的无私风险和总结。这里给出CSDN的链接：https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_40672115&#x2F;article&#x2F;details&#x2F;134108526">
+    <meta name="description" content="简介在前面三个TensorRT量化实战课YOLOv7量化的文章中，都是摘抄自CSND。感谢这个网友的无私风险和总结。这里给出CSDN的链接：https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_40672115&#x2F;article&#x2F;details&#x2F;134108526">
 <meta property="og:type" content="article">
 <meta property="og:title" content="TensorRT量化实战经验">
 <meta property="og:url" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/index.html">
 <meta property="og:site_name" content="奔跑的IC">
-<meta property="og:description" content="1 简介在前面三个TensorRT量化实战课YOLOv7量化的文章中，都是摘抄自CSND。感谢这个网友的无私风险和总结。这里给出CSDN的链接：https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_40672115&#x2F;article&#x2F;details&#x2F;134108526">
+<meta property="og:description" content="简介在前面三个TensorRT量化实战课YOLOv7量化的文章中，都是摘抄自CSND。感谢这个网友的无私风险和总结。这里给出CSDN的链接：https:&#x2F;&#x2F;blog.csdn.net&#x2F;qq_40672115&#x2F;article&#x2F;details&#x2F;134108526">
 <meta property="og:locale">
 <meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/%E5%8E%9F%E5%A7%8B%E6%A8%A1%E5%9E%8B.bmp">
 <meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.bmp">
@@ -55,8 +55,9 @@
 <meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/image-20241215144041646.png">
 <meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/%E6%97%A0%E6%A0%87%E9%A2%98.png">
 <meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/%E6%97%A0%E6%A0%87%E9%A2%98-1734533352621-2.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/NV%20%20%20%20%20%20%20.bmp">
 <meta property="article:published_time" content="2024-12-12T14:36:10.289Z">
-<meta property="article:modified_time" content="2024-12-18T15:21:40.821Z">
+<meta property="article:modified_time" content="2025-05-10T08:00:04.750Z">
 <meta property="article:author" content="奔跑的IC">
 <meta property="article:tag" content="git">
 <meta property="article:tag" content="C">
@@ -172,7 +173,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E7%AE%80%E4%BB%8B"><span class="nav-text">1 简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E5%B8%B8%E8%A7%81%E7%9A%84onnx-op-QDQ%E7%BB%8F%E9%AA%8C"><span class="nav-text">2 常见的onnx op QDQ经验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-%E7%B1%BB%E4%BC%BCResNet%E7%9A%84%E6%AE%8B%E5%B7%AEadd"><span class="nav-text">2.1 类似ResNet的残差add</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-concat%E8%8A%82%E7%82%B9"><span class="nav-text">2.2 concat节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-MUL%E8%8A%82%E7%82%B9"><span class="nav-text">2.3 MUL节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-convTranspose%E8%8A%82%E7%82%B9"><span class="nav-text">2.4 convTranspose节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-%E4%B8%80%E4%BA%9B%E7%89%B9%E6%AE%8A%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="nav-text">2.5 一些特殊的例子</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#3-engine%E7%BB%93%E6%9E%84%E5%9B%BE%E7%9A%84%E7%BB%98%E5%88%B6"><span class="nav-text">3 engine结构图的绘制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84onnx-op-QDQ%E7%BB%8F%E9%AA%8C"><span class="nav-text">常见的onnx op QDQ经验</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E4%BC%BCResNet%E7%9A%84%E6%AE%8B%E5%B7%AEadd"><span class="nav-text">类似ResNet的残差add</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#concat%E8%8A%82%E7%82%B9"><span class="nav-text">concat节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MUL%E8%8A%82%E7%82%B9"><span class="nav-text">MUL节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#convTranspose%E8%8A%82%E7%82%B9"><span class="nav-text">convTranspose节点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E7%89%B9%E6%AE%8A%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="nav-text">一些特殊的例子</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#engine%E7%BB%93%E6%9E%84%E5%9B%BE%E7%9A%84%E7%BB%98%E5%88%B6"><span class="nav-text">engine结构图的绘制</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -187,7 +188,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">156</span>
+          <span class="site-state-item-count">157</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -264,7 +265,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2024-12-18 23:21:40" itemprop="dateModified" datetime="2024-12-18T23:21:40+08:00">2024-12-18</time>
+      <time title="修改时间：2025-05-10 16:00:04" itemprop="dateModified" datetime="2025-05-10T16:00:04+08:00">2025-05-10</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -293,10 +294,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h1><p>在前面三个TensorRT量化实战课YOLOv7量化的文章中，都是摘抄自CSND。感谢这个网友的无私风险和总结。这里给出CSDN的链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40672115/article/details/134108526">https://blog.csdn.net/qq_40672115/article/details/134108526</a></p>
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>在前面三个TensorRT量化实战课YOLOv7量化的文章中，都是摘抄自CSND。感谢这个网友的无私风险和总结。这里给出CSDN的链接：<a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_40672115/article/details/134108526">https://blog.csdn.net/qq_40672115/article/details/134108526</a></p>
 <p>但是这个只是一个基础的操作。只做这部分只是将模型中通用的Conv层进行量化，但是其他的层没有做其他的操作，这样会做出来的量化精度可能可以，但是模型速度一般比较慢。查看原因可以发现量化后的QDQ模型可能存在大量的reformat节点。这里就是总结一些加速QDQ的量化经验。</p>
-<h1 id="2-常见的onnx-op-QDQ经验"><a href="#2-常见的onnx-op-QDQ经验" class="headerlink" title="2 常见的onnx op QDQ经验"></a>2 常见的onnx op QDQ经验</h1><p>下面的经验基本上都是解决插入QDQ后速度没有明显提升的问题u。</p>
-<h2 id="2-1-类似ResNet的残差add"><a href="#2-1-类似ResNet的残差add" class="headerlink" title="2.1 类似ResNet的残差add"></a>2.1 类似ResNet的残差add</h2><ul>
+<h1 id="常见的onnx-op-QDQ经验"><a href="#常见的onnx-op-QDQ经验" class="headerlink" title="常见的onnx op QDQ经验"></a>常见的onnx op QDQ经验</h1><p>下面的经验基本上都是解决插入QDQ后速度没有明显提升的问题u。</p>
+<h2 id="类似ResNet的残差add"><a href="#类似ResNet的残差add" class="headerlink" title="类似ResNet的残差add"></a>类似ResNet的残差add</h2><ul>
 <li><strong>原始onnx模型结构</strong></li>
 </ul>
 <img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/%E5%8E%9F%E5%A7%8B%E6%A8%A1%E5%9E%8B.bmp" class="" title="原始模型">
@@ -353,7 +354,7 @@
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Layer(Reformat): Reformatting CopyNode <span class="keyword">for</span> Input Tensor 0 to /model/img_backbone/layer1/layer1.1/conv2/Conv + /model/img_backbone/layer1/layer1.1/relu2/Relu, Tactic: 0x0000000000000000, /model/img_backbone/layer1/layer1.1/relu1/Relu_output_0 (Int8[4,72:32,128,192]) -&gt; Reformatted Input Tensor 0 to /model/img_backbone/layer1/layer1.1/conv2/Conv + /model/img_backbone/layer1/layer1.1/relu2/Relu (Int8[4,72:4,128,192])</span><br><span class="line"></span><br></pre></td></tr></table></figure>
 <p>这里就是提示就是72不是32整除的，因此有一个reformat节点，为了充分的利用tensor core（对conv来说 32字节对齐的是C，也就是NCHW中的C需要是32字节对齐）。这个问题可以通过修改网路结构来消除。</p>
 <img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.8.bmp" class="" title="QDQ1.8">
-<h2 id="2-2-concat节点"><a href="#2-2-concat节点" class="headerlink" title="2.2 concat节点"></a>2.2 concat节点</h2><p>在官方代码中有一个函数是<code>apply_custom_rules_to_quantizer</code></p>
+<h2 id="concat节点"><a href="#concat节点" class="headerlink" title="concat节点"></a>concat节点</h2><p>在官方代码中有一个函数是<code>apply_custom_rules_to_quantizer</code></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">apply_custom_rules_to_quantizer</span>(<span class="params">model : torch.nn.Module, export_onnx : <span class="type">Callable</span></span>):</span><br><span class="line"></span><br><span class="line">    <span class="comment"># apply rules to graph</span></span><br><span class="line">    export_onnx(model, <span class="string">&quot;quantization-custom-rules-temp.onnx&quot;</span>)</span><br><span class="line">    pairs = find_quantizer_pairs(<span class="string">&quot;quantization-custom-rules-temp.onnx&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> major, sub <span class="keyword">in</span> pairs:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Rules: <span class="subst">&#123;sub&#125;</span> match to <span class="subst">&#123;major&#125;</span>&quot;</span>)</span><br><span class="line">        get_attr_with_path(model, sub)._input_quantizer = get_attr_with_path(model, major)._input_quantizer</span><br><span class="line">    os.remove(<span class="string">&quot;quantization-custom-rules-temp.onnx&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> name, bottleneck <span class="keyword">in</span> model.named_modules():</span><br><span class="line">        <span class="keyword">if</span> bottleneck.__class__.__name__ == <span class="string">&quot;Bottleneck&quot;</span>:</span><br><span class="line">            <span class="keyword">if</span> bottleneck.add:</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&quot;Rules: <span class="subst">&#123;name&#125;</span>.add match to <span class="subst">&#123;name&#125;</span>.cv1&quot;</span>)</span><br><span class="line">                major = bottleneck.cv1.conv._input_quantizer</span><br><span class="line">                bottleneck.addop._input0_quantizer = major</span><br><span class="line">                bottleneck.addop._input1_quantizer = major</span><br></pre></td></tr></table></figure>
 <p>其中的函数<code>find_quantizer_pairs</code>定义如下：</p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">find_quantizer_pairs</span>(<span class="params">onnx_file</span>):</span><br><span class="line"></span><br><span class="line">    model = onnx.load(onnx_file)</span><br><span class="line">    match_pairs = []</span><br><span class="line">    <span class="keyword">for</span> node <span class="keyword">in</span> model.graph.node:   </span><br><span class="line">        <span class="keyword">if</span> node.op_type == <span class="string">&quot;Concat&quot;</span>:</span><br><span class="line">            qnodes = find_all_with_input_node(model, node.output[<span class="number">0</span>])</span><br><span class="line">            major = <span class="literal">None</span></span><br><span class="line">            <span class="keyword">for</span> qnode <span class="keyword">in</span> qnodes:</span><br><span class="line">                <span class="keyword">if</span> qnode.op_type != <span class="string">&quot;QuantizeLinear&quot;</span>:</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line">                </span><br><span class="line">                conv = find_quantizelinear_conv(model, qnode)</span><br><span class="line">                <span class="keyword">if</span> major <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                    major = find_quantize_conv_name(model, conv.<span class="built_in">input</span>[<span class="number">1</span>])</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    match_pairs.append([major, find_quantize_conv_name(model, conv.<span class="built_in">input</span>[<span class="number">1</span>])])</span><br><span class="line"></span><br><span class="line">                <span class="keyword">for</span> subnode <span class="keyword">in</span> model.graph.node:</span><br><span class="line">                    <span class="keyword">if</span> <span class="built_in">len</span>(subnode.<span class="built_in">input</span>) &gt; <span class="number">0</span> <span class="keyword">and</span> subnode.op_type == <span class="string">&quot;QuantizeLinear&quot;</span> <span class="keyword">and</span> subnode.<span class="built_in">input</span>[<span class="number">0</span>] <span class="keyword">in</span> node.<span class="built_in">input</span>:</span><br><span class="line">                        subconv = find_quantizelinear_conv(model, subnode)</span><br><span class="line">                        match_pairs.append([major, find_quantize_conv_name(model, subconv.<span class="built_in">input</span>[<span class="number">1</span>])])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">elif</span> node.op_type == <span class="string">&quot;MaxPool&quot;</span>:</span><br><span class="line">            qnode = find_with_input_node(model, node.output[<span class="number">0</span>])</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> (qnode <span class="keyword">and</span> qnode.op_type == <span class="string">&quot;QuantizeLinear&quot;</span>):</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">            major = find_quantizelinear_conv(model, qnode)</span><br><span class="line">            major = find_quantize_conv_name(model, major.<span class="built_in">input</span>[<span class="number">1</span>])</span><br><span class="line">            same_input_nodes = find_all_with_input_node(model, node.<span class="built_in">input</span>[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> same_input_node <span class="keyword">in</span> same_input_nodes:</span><br><span class="line">                <span class="keyword">if</span> same_input_node.op_type == <span class="string">&quot;QuantizeLinear&quot;</span>:</span><br><span class="line">                    subconv = find_quantizelinear_conv(model, same_input_node)</span><br><span class="line">                    match_pairs.append([major, find_quantize_conv_name(model, subconv.<span class="built_in">input</span>[<span class="number">1</span>])])</span><br><span class="line">    <span class="keyword">return</span> match_pairs</span><br></pre></td></tr></table></figure>
@@ -363,7 +364,7 @@
 <img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/QDQ1.9.bmp" class="" title="QDQ1.9">
 <p>上面的图太不清晰了，画一个示意图解释一下</p>
 <img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/%E6%9C%AA%E5%91%BD%E5%90%8D%E7%BB%98%E5%9B%BE.drawio.svg" class="" title="未命名绘图.drawio">
-<h2 id="2-3-MUL节点"><a href="#2-3-MUL节点" class="headerlink" title="2.3 MUL节点"></a>2.3 MUL节点</h2><p>首先看一下第一种没有INT8的情况</p>
+<h2 id="MUL节点"><a href="#MUL节点" class="headerlink" title="MUL节点"></a>MUL节点</h2><p>首先看一下第一种没有INT8的情况</p>
 <p>对应的onnx如下，看上去插入的QDQ都是正确的。</p>
 <img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/image-20241215143111289.png" class="" title="image-20241215143111289">
 <p>但是绘制对应的engine结构图如下：</p>
@@ -373,7 +374,7 @@
 <img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/image-20241215143343284.png" class="" title="image-20241215143343284">
 <p>修改后的engine结构图如下：</p>
 <img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/image-20241215143523133.png" class="" title="image-20241215143523133">
-<h2 id="2-4-convTranspose节点"><a href="#2-4-convTranspose节点" class="headerlink" title="2.4 convTranspose节点"></a>2.4 convTranspose节点</h2><p>首先看一下我们初步插入QDQ后的onnx结构图，看样子应该没有问题</p>
+<h2 id="convTranspose节点"><a href="#convTranspose节点" class="headerlink" title="convTranspose节点"></a>convTranspose节点</h2><p>首先看一下我们初步插入QDQ后的onnx结构图，看样子应该没有问题</p>
 <img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/image-20241215143732417.png" class="" title="image-20241215143732417">
 <p>对应的engine图如下</p>
 <img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/image-20241215143820810.png" class="" title="image-20241215143820810">
@@ -382,7 +383,7 @@
 <img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/image-20241215143940439.png" class="" title="image-20241215143940439">
 <p>修改后的engine图对应如下：</p>
 <img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/image-20241215144041646.png" class="" title="image-20241215144041646">
-<h2 id="2-5-一些特殊的例子"><a href="#2-5-一些特殊的例子" class="headerlink" title="2.5 一些特殊的例子"></a>2.5 一些特殊的例子</h2><ul>
+<h2 id="一些特殊的例子"><a href="#一些特殊的例子" class="headerlink" title="一些特殊的例子"></a>一些特殊的例子</h2><ul>
 <li><p>Slice 和 Concat 的行为规则相似。TensorRT 会在内部消除 concat/slice 节点（这就是为什么在 SVG 中找不到 concat/slice 节点的原因）。</p>
 <p>因此，在 TensorRT 内部，concat/slice 的输入和输出将合并为一个张量。用户必须确保与同一个 concat/slice 相关的量化和去量化（QDQ）操作保持一致。</p>
 </li>
@@ -392,7 +393,9 @@
 </li>
 </ul>
 <img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/%E6%97%A0%E6%A0%87%E9%A2%98-1734533352621-2.png" class="" title="无标题">
-<h1 id="3-engine结构图的绘制"><a href="#3-engine结构图的绘制" class="headerlink" title="3 engine结构图的绘制"></a>3 engine结构图的绘制</h1><p>上面都提到了engine结构图的绘制，之前的博客也提到了enigne结构图如何绘制，这里再重新说明一下</p>
+<p>按照上面的修改后的engine如下</p>
+<img src="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C/NV%20%20%20%20%20%20%20.bmp" class="" title="NV">
+<h1 id="engine结构图的绘制"><a href="#engine结构图的绘制" class="headerlink" title="engine结构图的绘制"></a>engine结构图的绘制</h1><p>上面都提到了engine结构图的绘制，之前的博客也提到了enigne结构图如何绘制，这里再重新说明一下</p>
 <ul>
 <li><p>在使用trtexec转换onne为engine时添加参数</p>
 <p> <code>--exportLayerInfo=layer.json --profilingVerbosity=detailed --exportProfile=profile.json</code></p>

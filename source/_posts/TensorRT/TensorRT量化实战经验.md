@@ -1,14 +1,34 @@
-# 1 简介
+# 简介
 
 在前面三个TensorRT量化实战课YOLOv7量化的文章中，都是摘抄自CSND。感谢这个网友的无私风险和总结。这里给出CSDN的链接：https://blog.csdn.net/qq_40672115/article/details/134108526
 
 但是这个只是一个基础的操作。只做这部分只是将模型中通用的Conv层进行量化，但是其他的层没有做其他的操作，这样会做出来的量化精度可能可以，但是模型速度一般比较慢。查看原因可以发现量化后的QDQ模型可能存在大量的reformat节点。这里就是总结一些加速QDQ的量化经验。
 
-# 2 常见的onnx op QDQ经验
+# 常见的onnx op QDQ经验
 
 下面的经验基本上都是解决插入QDQ后速度没有明显提升的问题u。
 
-## 2.1 类似ResNet的残差add
+## 标准残差
+
+标准的残差结构如下，我们在插入量化节点时，需要在
+
+ QDQ1 + Conv + Residual Add + QDQ2, in this case QDQ1 and QDQ2 do not need to match scale values.
+
+![无标题](./TensorRT量化实战经验/无标题-1747228185930-5.png)
+
+
+
+在下图的绿色框位置插入QDQ就可以保障红框中的conv add relu 融合。另外这两个QDQ的scale 可以是不同的。
+
+![image-20250514212957434](./TensorRT量化实战经验/image-20250514212957434.png)
+
+但是，下图不是一个标准的残差，无法融合conv add
+
+![image-20250514211409759](./TensorRT量化实战经验/image-20250514211409759.png)
+
+
+
+##  类似ResNet的残差add
 
 * **原始onnx模型结构**
 
@@ -194,7 +214,13 @@ Layer(Reformat): Reformatting CopyNode for Input Tensor 0 to /model/img_backbone
 
 ![QDQ1.8](./TensorRT量化实战经验/QDQ1.8.bmp)
 
-## 2.2 concat节点
+### 另一种情况
+
+t if you insert the QDQ in this way, confirm the there QDQ has the same scale otherwise there will be additional reformat here.
+
+![无标题](./TensorRT量化实战经验/无标题-1747230307166-9.png)
+
+##  concat节点
 
 在官方代码中有一个函数是`apply_custom_rules_to_quantizer`
 
@@ -276,7 +302,18 @@ for major, sub in pairs:
 
 ![未命名绘图.drawio](./TensorRT量化实战经验/未命名绘图.drawio.svg)
 
-## 2.3 MUL节点
+
+
+
+
+下面是另外一个concat节点的例子：
+
+ [Concat_1435] concat with [Concat_1430] and [Concat_1416]. that would all be one tensor inside TensorRT is internal represitation.
+Make all The QDQ related with [Concat_1435]& [Concat_1430]&[Concat_1416] the same scale would elimite all the reformats here.
+
+![无标题](./TensorRT量化实战经验/无标题-1747229807828-7.png)
+
+## MUL节点
 
 首先看一下第一种没有INT8的情况
 
@@ -298,7 +335,7 @@ for major, sub in pairs:
 
 ![image-20241215143523133](./TensorRT量化实战经验/image-20241215143523133.png)
 
-## 2.4 convTranspose节点
+## convTranspose节点
 
 首先看一下我们初步插入QDQ后的onnx结构图，看样子应该没有问题
 
@@ -318,7 +355,15 @@ for major, sub in pairs:
 
 ![image-20241215144041646](./TensorRT量化实战经验/image-20241215144041646.png)
 
-## 2.5 一些特殊的例子
+## INT8的速度比INT16还要慢
+
+有的时候量化为INT8不一定比INT16更快，例如下面的ConvTranspose
+
+由于这三个 ConvTranspose 层的输入通道较小 （≤32），预计 FP16 策略将比 INT8 策略更快。因此，您无需为这些层插入 QDQ 节点。 低精度不适用于输入通道太小的 Convs/Deconvs 
+
+![无标题](./TensorRT量化实战经验/无标题-1747227845923-1.png)
+
+## 一些特殊的例子
 
 * Slice 和 Concat 的行为规则相似。TensorRT 会在内部消除 concat/slice 节点（这就是为什么在 SVG 中找不到 concat/slice 节点的原因）。
 
@@ -330,7 +375,23 @@ for major, sub in pairs:
 
 ![无标题](./TensorRT量化实战经验/无标题-1734533352621-2.png)
 
-# 3 engine结构图的绘制
+按照上面的修改后的engine如下
+
+![NV       ](./TensorRT量化实战经验/NV       .bmp)
+
+## PWN算子
+
+PWN（与 Add + Relu 融合）的 In out scale应该相同，也就是说，以下 4 个 QDQ 应该具有相同的 scale。 （图示是错误的例子，应该是相等的才可以，注意add的输入和输出都应该是相等的，in out scale）
+
+![无标题](./TensorRT量化实战经验/无标题-1747228025846-3.png)
+
+## conv共享权重
+
+Please copy the weight for the convs who share the weight with another conv.否则会转换engine失败
+
+![无标题](./TensorRT量化实战经验/无标题-1747230714631-11.png)
+
+# engine结构图的绘制
 
 上面都提到了engine结构图的绘制，之前的博客也提到了enigne结构图如何绘制，这里再重新说明一下
 
@@ -389,7 +450,10 @@ for major, sub in pairs:
 
   we get `yolov7_qat_layer.json.svg` and `yolov7_ptq_layer.json.svg`
 
+## 常量折叠
 
+For the extra op(Cast, Sqrt) after quantization, you can use polygraphy to do constant-fold, then the extra op will be elimicated:
+$ polygraphy surgeon sanitize your_model.onnx -o mod_your_model.onnx --fold-constants
 
 # 附录：
 

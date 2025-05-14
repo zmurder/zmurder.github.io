@@ -1054,7 +1054,7 @@ double mysqrt(double x)
 
 运行 Tutorial 可执行文件，并验证它是否正在使用该表。
 
-## 4.7 构建安装程序（第七步）
+## 构建安装程序（第七步）
 
 接下来，假设我们想将项目分发给其他人，以便他们可以使用它。我们希望在各种平台上提供二进制和源代码分发。这与之前在安装和测试（第四步）中进行的安装有些不同，在安装和测试中，我们安装的是根据源代码构建的二进制文件。在此示例中，我们将构建支持二进制安装和程序包管理功能的安装程序包。为此，我们将使用 CPack 创建特定于平台的安装程序。具体来说，我们需要在顶级 `CMakeLists.txt` 文件的底部添加几行。
 
@@ -1528,12 +1528,6 @@ set(CPACK_INSTALL_CMAKE_PROJECTS
 ```powershell
 cpack --config MultiCPackConfig.cmake
 ```
-
-
-
-
-
-
 
 # cmake官方示例
 
@@ -2351,13 +2345,7 @@ set(CMAKE_DEBUG_POSTFIX d)
 set_target_properties(Tutorial PROPERTIES DEBUG_POSTFIX ${CMAKE_DEBUG_POSTFIX})
 ```
 
-
-
-
-
-
-
-# 6 cmake指令参考
+# cmake指令参考
 
 ## cmake_minimum_required
 

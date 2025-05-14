@@ -1,12 +1,12 @@
-# 1 简介
+#  简介
 
 看了官方的说明文档还是有一点云里雾里，这里说明一些使用nsisght systems过程中的经验之谈。
 
-# 2 CLI
+#  CLI
 
 nsisght systems提供了两种使用方式，一种是命令行 一种是GUI。在PC或者有图形界面的系统上我们可以使用GUI来方便的操作i，但是在一些没有图形界面的系统上我们只能使用CLI（命令行）来进行操作
 
-## 2.1 典型的CLI命令
+## 典型的CLI命令
 
 这里列举一些常用的CLI命令，（需要有root权限）
 
@@ -65,7 +65,7 @@ nsisght systems提供了两种使用方式，一种是命令行 一种是GUI。�
   sudo nsys profile --sampling-frequency=8000 --osrt-threshold=10000 ....
   ```
 
-# 3 系统级的程序调优
+#  系统级的程序调优
 
 * 平衡在CPU和GPU上的工作负载
 * 发现为使用的GPU和CPU时间
@@ -73,7 +73,7 @@ nsisght systems提供了两种使用方式，一种是命令行 一种是GUI。�
 * 发现优化时机
 * 提高应用性能
 
-# 4 在车载平台上使用
+# 在车载平台上使用
 
 **在使用nvidia的drive orin时 我们需要使用与drive os匹配的版本，否则将会出现不可预知的错误。**
 
@@ -95,11 +95,11 @@ mount /dev/vblk_ufs50 /
 mkdir /tmp /opt /opt/nvidia /root
 ```
 
-## 4.1 在HOST上使用Nsight Systems GUI进行分析
+##  在HOST上使用Nsight Systems GUI进行分析
 
 在HOST远程分析我们在orin上运行的程序需要设置orin的ssh 
 
-## 4.2 在设备上使用Nsight Systems CLI进行分析
+## 在设备上使用Nsight Systems CLI进行分析
 
 我们也可以在orin上使用命令行的方式来在本地使用Nsight Systems
 
@@ -136,8 +136,26 @@ sudo nsys start --sennsion=sessname -t cuda,osrt,nvtx --gpu-metrices-device=0 -f
 sudo nsys stop --session=sessname
 ```
 
-# 5 profile告诉了我们什么
+# profile告诉了我们什么
 
 ![Snipaste_2024-07-28_22-38-28](Nsight System经验/Snipaste_2024-07-28_22-38-28.png)
 
 ![image-20240728225223577](Nsight System经验/image-20240728225223577.png)
+
+
+
+# nsys不能抓取到数据
+
+有的时候nsys抓取数据，查看rep文件根本没有对应的cuda信息。那么可以查看一下是不是 /tmp 文件夹没有写入权限或者 太小了。
+
+https://docs.nvidia.com/nsight-systems/UserGuide/index.html
+
+By default, Nsight Systems writes temporary files to `/tmp` directory. If you are using a system that does not allow writing to `/tmp` or where the `/tmp` directory has limited storage you can use the TMPDIR environment variable to set a different location. An example:
+
+```
+TMPDIR=/testdata ./bin/nsys profile -t cuda matrixMul
+```
+
+如果是需要改写 temporary files路径，那么推荐写入到  filesystem为 tmpfs 的路径下。提高性能（临时写入）。
+
+mpfs是什么呢? 其实是一个临时文件系统，驻留在内存中，所以/dev/shm/这个目录不在硬盘上，而是在内存里。因为是在内存里，所以读写非常快，可以提供较高的访问速度。

@@ -1,4 +1,4 @@
-# 1 背景
+# 背景
 
 本文档是记录学习Nvidia官方B站的[视频](https://www.bilibili.com/video/BV1jj411Z7wG?spm_id_from=333.788.videopod.sections&vd_source=cde2e7b9bca1a7048a13eaf0b48210b6)，参考对应的PDF文件 TensorRTTraining-TRT8.6.1-Part5-V1.1.pdf 的记录。对应的官方代码[[trt-samples-for-hackathon-cn\]](https://github.com/NVIDIA/trt-samples-for-hackathon-cn)
 
@@ -14,9 +14,9 @@
 
 这一部分为第五部分，对应上面的常见优化策略
 
-# 2 性能优化技巧
+# 性能优化技巧
 
-## 2.1 General Tips
+##  General Tips
 
 参考https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#optimize-performance
 
@@ -35,7 +35,7 @@
   * 当切换execution context或者改变graph input shape后，TRT可能会有额外的开销
   * 可以尝试禁掉 kEDGE_MASK_CONVOLUTIONS tactic source，或者通过多个execution context切换使用来隐藏overhead
 
-## 2.2 Graph Fusion 图融合
+##  Graph Fusion 图融合
 
 * Graph fusion是非常有效的手段，**TRT内部**支持了丰富的[fusion pattern](https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#fusion-types)，比如经典的conv+bias+relu
 * 如果你发现了通用而且有明显收益的pattern，但是TRT没有fuse，建议发个bug
@@ -44,7 +44,7 @@
 
 ![image-20241107114654759](./Part5-3-TensorRT性能优化性能优化技巧/image-20241107114654759.png)
 
-## 2.3 Optimizing Layer Performance Layer优化
+##  Optimizing Layer Performance Layer优化
 
 参考链接：https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#optimize-layer
 
@@ -112,7 +112,7 @@
 
     C是一个 M×N的矩阵。
 
-## 2.4 Optimizing for Tensor Cores
+##  Optimizing for Tensor Cores
 
 参考链接：https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#optimize-tensor-cores
 
@@ -140,9 +140,37 @@
 
 * 可以设置nsys --gpu-metrics-device all来查看Tensor Core使用情况
 
+## [Tensor Layouts In Memory: NCHW vs NHWC](https://docs.nvidia.com/deeplearning/performance/dl-performance-convolutional/index.html#tensor-layout)
 
+参考[Tensor Layouts In Memory: NCHW vs NHWC](https://docs.nvidia.com/deeplearning/performance/dl-performance-convolutional/index.html#tensor-layout)
 
-## 2.5 Low Precision 低精度
+卷积通常对四维张量进行作： a batch composed of N "images" of C channels of H x W feature maps. 
+
+深度学习框架通常在内存中使用 NCHW 和 NHWC 布局（首字母缩略词列出了内存中从最慢到最快的维度）。布局选择会影响性能，因为为 **Tensor Core 实现的卷积需要 NHWC 布局，并且在 NHWC 中布局输入张量时速度最快**。
+
+NCHW 布局仍然可以由 Tensor Core 进行作，但由于自动转置作而包含一些开销，如图 2 所示。当输入和输出张量较大或所需的计算量较低时（例如，当滤波器大小较小时），转置开销往往更显著。为了最大限度地提高性能，我们建议使用 NHWC 张量布局。
+
+*Figure 2. Kernels that do not  require a transpose (NHWC) perform better than kernels that require one  or more (NCHW). NVIDIA A100-SXM4-80GB, CUDA 11.2, cuDNN 8.1.*
+
+![tc-layout-kernels](./Part5-3-TensorRT性能优化性能优化技巧/tc-layout-kernels.svg)
+
+## [Channels In And Out](https://docs.nvidia.com/deeplearning/performance/dl-performance-convolutional/index.html#channels)
+
+参考[Channels In And Out](https://docs.nvidia.com/deeplearning/performance/dl-performance-convolutional/index.html#channels)
+
+启用 Tensor Core 的要求取决于所使用的 cuDNN 版本。使用 cuDNN v7.6.3  及更高版本，卷积维度将在必要时自动填充以利用 Tensor Core。早期版本的 cuDNN 更严格：将 Tensor Core 与 NHWC  打包数据一起使用需要将 C 和 K 与 TF32 对齐为 4 的倍数，将 FP16 对齐为 8 的倍数，将 16 与 INT8 对齐为 16  的倍数。对于 NCHW 打包的 FP16 数据，通道将自动填充为 8 的倍数，以便启用 Tensor Core。但是，将 NCHW 数据与启用  Tensor Core 的内核一起使用会涉及一些额外的转置成本，这在内存中的 Tensor 布局：NCHW 与 NHWC 中进行了讨论。
+
+另一方面，对于这些早期版本的 cuDNN，自动填充不会对 NHWC 打包的数据启动，因此会选择效率较低的回退内核，该内核不使用 Tensor  Core 。鉴于 C 和 K 能被 8 整除，使用 NHWC 数据的卷积确实比使用 NCHW 数据的卷积表现更好。换句话说，如果某个图层已经与  NCHW 数据一起使用，则会发生自动填充;但是，如果正在使用 NHWC 数据，则选择或填充 C 和 K 为 8 的倍数可以提高性能。
+
+对于 cuDNN v7.6.3 及更高版本，无论数据格式如何，填充都是自动的。填充会增加一些时间，尽管与启用 Tensor Core  的性能增益相比，这种成本通常可以忽略不计。值得注意的是，对于 FP16 选择 C 和 K 是 8  的倍数，或者对于其他数据类型选择等效值，效率最高：对于这些情况，不需要填充。
+
+在某些情况下，通道数很小且不可协商。对于网络中的第一层，通常具有非常小的 C 值（灰度和 RGB 或 YCrCb 图像分别为 1 或  3）。特殊情况的卷积实现可以满足这一需求，特别是对于 C = 4 和 stride 为 2（图 8）。此处显示的数据是使用 cuDNN 8.1  收集的，因此填充是自动的。与 7.6.3 之前的版本相比，从 C = 3 到 C = 4 的性能改进没有那么剧烈，但选择 C = 4  仍然更快，因为不会发生填充。
+
+ 图8.C = 4 的专用内核加快了卷积神经网络中的常见第一层（使用 NHWC 数据）的速度。**选择 C = 4 或 8 的倍数可提供最佳性能。**NVIDIA A100-SXM4-80GB、CUDA 11.2、cuDNN 8.1。
+
+![specialized-kernels](./Part5-3-TensorRT性能优化性能优化技巧/specialized-kernels.svg)
+
+##  Low Precision 低精度
 
 参考：https://www.nvidia.com/en-us/on-demand/session/gtcspring21-s31876/
 
@@ -152,7 +180,7 @@
   * 训练阶段，TensorRT提供了基于PyTorch的INT8量化工具包，帮助生成QAT模型，并维持原有精
   * 模型转换阶段， TensorRT ONNX parser新增了对ONNX QuantizeLinear和DequantizeLinear算子的支持推理阶段，TensorRT 8.0新增了Quantize
 
-## 2.6 Sparsity 稀疏
+## Sparsity 稀疏
 
 参考
 
@@ -171,7 +199,7 @@ https://developer.nvidia.com/blog/accelerating-inference-with-sparsity-using-amp
 
 
 
-## 2.7 Misc 其他
+##  Misc 其他
 
 参考：https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#performance
 

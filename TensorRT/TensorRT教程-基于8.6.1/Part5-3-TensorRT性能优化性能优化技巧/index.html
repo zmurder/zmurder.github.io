@@ -24,19 +24,21 @@
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
      crossorigin="anonymous"></script>
-    <meta name="description" content="1 背景本文档是记录学习Nvidia官方B站的视频，参考对应的PDF文件 TensorRTTraining-TRT8.6.1-Part5-V1.1.pdf 的记录。对应的官方代码[trt-samples-for-hackathon-cn]">
+    <meta name="description" content="背景本文档是记录学习Nvidia官方B站的视频，参考对应的PDF文件 TensorRTTraining-TRT8.6.1-Part5-V1.1.pdf 的记录。对应的官方代码[trt-samples-for-hackathon-cn]">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Part5-3-TensorRT性能优化性能优化技巧">
 <meta property="og:url" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-3-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/index.html">
 <meta property="og:site_name" content="奔跑的IC">
-<meta property="og:description" content="1 背景本文档是记录学习Nvidia官方B站的视频，参考对应的PDF文件 TensorRTTraining-TRT8.6.1-Part5-V1.1.pdf 的记录。对应的官方代码[trt-samples-for-hackathon-cn]">
+<meta property="og:description" content="背景本文档是记录学习Nvidia官方B站的视频，参考对应的PDF文件 TensorRTTraining-TRT8.6.1-Part5-V1.1.pdf 的记录。对应的官方代码[trt-samples-for-hackathon-cn]">
 <meta property="og:locale">
 <meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-3-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/image-20241022204349489.png">
 <meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-3-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/image-20241107114654759.png">
 <meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-3-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/image-20241107145908996.png">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-3-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/tc-layout-kernels.svg">
+<meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-3-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/specialized-kernels.svg">
 <meta property="og:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-3-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/image-20241107161202855.png">
 <meta property="article:published_time" content="2024-12-01T10:13:45.536Z">
-<meta property="article:modified_time" content="2024-12-01T10:13:45.536Z">
+<meta property="article:modified_time" content="2025-05-15T13:38:24.834Z">
 <meta property="article:author" content="奔跑的IC">
 <meta property="article:tag" content="git">
 <meta property="article:tag" content="C">
@@ -44,6 +46,7 @@
 <meta property="article:tag" content="Tensorrt">
 <meta property="article:tag" content="DeepLearning">
 <meta property="article:tag" content="Plugin">
+<meta property="article:tag" content="卷积神经网络">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-3-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/image-20241022204349489.png">
 
@@ -154,7 +157,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#1-%E8%83%8C%E6%99%AF"><span class="nav-text">1 背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#2-%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">2 性能优化技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#2-1-General-Tips"><span class="nav-text">2.1 General Tips</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-2-Graph-Fusion-%E5%9B%BE%E8%9E%8D%E5%90%88"><span class="nav-text">2.2 Graph Fusion 图融合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-3-Optimizing-Layer-Performance-Layer%E4%BC%98%E5%8C%96"><span class="nav-text">2.3 Optimizing Layer Performance Layer优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-4-Optimizing-for-Tensor-Cores"><span class="nav-text">2.4 Optimizing for Tensor Cores</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-5-Low-Precision-%E4%BD%8E%E7%B2%BE%E5%BA%A6"><span class="nav-text">2.5 Low Precision 低精度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-6-Sparsity-%E7%A8%80%E7%96%8F"><span class="nav-text">2.6 Sparsity 稀疏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-7-Misc-%E5%85%B6%E4%BB%96"><span class="nav-text">2.7 Misc 其他</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-text">附录</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%83%8C%E6%99%AF"><span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7"><span class="nav-text">性能优化技巧</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#General-Tips"><span class="nav-text">General Tips</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Graph-Fusion-%E5%9B%BE%E8%9E%8D%E5%90%88"><span class="nav-text">Graph Fusion 图融合</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Optimizing-Layer-Performance-Layer%E4%BC%98%E5%8C%96"><span class="nav-text">Optimizing Layer Performance Layer优化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Optimizing-for-Tensor-Cores"><span class="nav-text">Optimizing for Tensor Cores</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Tensor-Layouts-In-Memory-NCHW-vs-NHWC"><span class="nav-text">Tensor Layouts In Memory: NCHW vs NHWC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Channels-In-And-Out"><span class="nav-text">Channels In And Out</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Low-Precision-%E4%BD%8E%E7%B2%BE%E5%BA%A6"><span class="nav-text">Low Precision 低精度</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Sparsity-%E7%A8%80%E7%96%8F"><span class="nav-text">Sparsity 稀疏</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Misc-%E5%85%B6%E4%BB%96"><span class="nav-text">Misc 其他</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95"><span class="nav-text">附录</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -243,6 +246,13 @@
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-05-15 21:38:24" itemprop="dateModified" datetime="2025-05-15T21:38:24+08:00">2025-05-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
         <i class="far fa-folder"></i>
       </span>
       <span class="post-meta-item-text">分类于</span>
@@ -272,7 +282,7 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="1-背景"><a href="#1-背景" class="headerlink" title="1 背景"></a>1 背景</h1><p>本文档是记录学习Nvidia官方B站的<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1jj411Z7wG?spm_id_from=333.788.videopod.sections&amp;vd_source=cde2e7b9bca1a7048a13eaf0b48210b6">视频</a>，参考对应的PDF文件 TensorRTTraining-TRT8.6.1-Part5-V1.1.pdf 的记录。对应的官方代码<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/trt-samples-for-hackathon-cn">[trt-samples-for-hackathon-cn]</a></p>
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>本文档是记录学习Nvidia官方B站的<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1jj411Z7wG?spm_id_from=333.788.videopod.sections&amp;vd_source=cde2e7b9bca1a7048a13eaf0b48210b6">视频</a>，参考对应的PDF文件 TensorRTTraining-TRT8.6.1-Part5-V1.1.pdf 的记录。对应的官方代码<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/trt-samples-for-hackathon-cn">[trt-samples-for-hackathon-cn]</a></p>
 <p>官方的视频教程基于TensorRT8.6.1版本。但是官方代码没有对应的tag。只有8.4、8.5和截至目前最新的8.10（master分支）。因此我这里参考的都是8.4分支的代码。</p>
 <ul>
 <li>part1 TensorRT简介</li>
@@ -283,7 +293,7 @@
 </ul>
 <img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-3-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/image-20241022204349489.png" class="" title="image-20241022204349489">
 <p>这一部分为第五部分，对应上面的常见优化策略</p>
-<h1 id="2-性能优化技巧"><a href="#2-性能优化技巧" class="headerlink" title="2 性能优化技巧"></a>2 性能优化技巧</h1><h2 id="2-1-General-Tips"><a href="#2-1-General-Tips" class="headerlink" title="2.1 General Tips"></a>2.1 General Tips</h2><p>参考<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#optimize-performance">https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#optimize-performance</a></p>
+<h1 id="性能优化技巧"><a href="#性能优化技巧" class="headerlink" title="性能优化技巧"></a>性能优化技巧</h1><h2 id="General-Tips"><a href="#General-Tips" class="headerlink" title="General Tips"></a>General Tips</h2><p>参考<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#optimize-performance">https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#optimize-performance</a></p>
 <ul>
 <li>Batching<ul>
 <li>增大batch size可以更好的发挥GPU算力，从而达到更高吞吐</li>
@@ -308,14 +318,14 @@
 </ul>
 </li>
 </ul>
-<h2 id="2-2-Graph-Fusion-图融合"><a href="#2-2-Graph-Fusion-图融合" class="headerlink" title="2.2 Graph Fusion 图融合"></a>2.2 Graph Fusion 图融合</h2><ul>
+<h2 id="Graph-Fusion-图融合"><a href="#Graph-Fusion-图融合" class="headerlink" title="Graph Fusion 图融合"></a>Graph Fusion 图融合</h2><ul>
 <li>Graph fusion是非常有效的手段，<strong>TRT内部</strong>支持了丰富的<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#fusion-types">fusion pattern</a>，比如经典的conv+bias+relu</li>
 <li>如果你发现了通用而且有明显收益的pattern，但是TRT没有fuse，建议发个bug</li>
 <li>我们可以通过onnx-graphsurgeon和TRT plugin来<strong>手动</strong>实现graph fusion，比如经典的LayerNorm plugin</li>
 <li>我们可以利用TRT外部的资源，比如<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/cutlass">Cutlass</a>，<a target="_blank" rel="noopener" href="https://github.com/HazyResearch/flash-attention">FlashAttn</a>， <a target="_blank" rel="noopener" href="https://github.com/facebookresearch/xformers">xformer</a>，将kernel implementation封装到TRT plugin</li>
 </ul>
 <img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-3-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/image-20241107114654759.png" class="" title="image-20241107114654759">
-<h2 id="2-3-Optimizing-Layer-Performance-Layer优化"><a href="#2-3-Optimizing-Layer-Performance-Layer优化" class="headerlink" title="2.3 Optimizing Layer Performance Layer优化"></a>2.3 Optimizing Layer Performance Layer优化</h2><p>参考链接：<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#optimize-layer">https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#optimize-layer</a></p>
+<h2 id="Optimizing-Layer-Performance-Layer优化"><a href="#Optimizing-Layer-Performance-Layer优化" class="headerlink" title="Optimizing Layer Performance Layer优化"></a>Optimizing Layer Performance Layer优化</h2><p>参考链接：<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#optimize-layer">https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#optimize-layer</a></p>
 <ul>
 <li><p>Reduce Layer</p>
 <ul>
@@ -355,7 +365,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="2-4-Optimizing-for-Tensor-Cores"><a href="#2-4-Optimizing-for-Tensor-Cores" class="headerlink" title="2.4 Optimizing for Tensor Cores"></a>2.4 Optimizing for Tensor Cores</h2><p>参考链接：<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#optimize-tensor-cores">https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#optimize-tensor-cores</a></p>
+<h2 id="Optimizing-for-Tensor-Cores"><a href="#Optimizing-for-Tensor-Cores" class="headerlink" title="Optimizing for Tensor Cores"></a>Optimizing for Tensor Cores</h2><p>参考链接：<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#optimize-tensor-cores">https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#optimize-tensor-cores</a></p>
 <ul>
 <li><p>使用Tensor Core才能发挥GPU的最大算力，TF32，FP16，INT8，FP8</p>
 </li>
@@ -373,7 +383,20 @@
 <li><p>可以设置nsys —gpu-metrics-device all来查看Tensor Core使用情况</p>
 </li>
 </ul>
-<h2 id="2-5-Low-Precision-低精度"><a href="#2-5-Low-Precision-低精度" class="headerlink" title="2.5 Low Precision 低精度"></a>2.5 Low Precision 低精度</h2><p>参考：<a target="_blank" rel="noopener" href="https://www.nvidia.com/en-us/on-demand/session/gtcspring21-s31876/">https://www.nvidia.com/en-us/on-demand/session/gtcspring21-s31876/</a></p>
+<h2 id="Tensor-Layouts-In-Memory-NCHW-vs-NHWC"><a href="#Tensor-Layouts-In-Memory-NCHW-vs-NHWC" class="headerlink" title="Tensor Layouts In Memory: NCHW vs NHWC"></a><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/performance/dl-performance-convolutional/index.html#tensor-layout">Tensor Layouts In Memory: NCHW vs NHWC</a></h2><p>参考<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/performance/dl-performance-convolutional/index.html#tensor-layout">Tensor Layouts In Memory: NCHW vs NHWC</a></p>
+<p>卷积通常对四维张量进行作： a batch composed of N “images” of C channels of H x W feature maps. </p>
+<p>深度学习框架通常在内存中使用 NCHW 和 NHWC 布局（首字母缩略词列出了内存中从最慢到最快的维度）。布局选择会影响性能，因为为 <strong>Tensor Core 实现的卷积需要 NHWC 布局，并且在 NHWC 中布局输入张量时速度最快</strong>。</p>
+<p>NCHW 布局仍然可以由 Tensor Core 进行作，但由于自动转置作而包含一些开销，如图 2 所示。当输入和输出张量较大或所需的计算量较低时（例如，当滤波器大小较小时），转置开销往往更显著。为了最大限度地提高性能，我们建议使用 NHWC 张量布局。</p>
+<p><em>Figure 2. Kernels that do not  require a transpose (NHWC) perform better than kernels that require one  or more (NCHW). NVIDIA A100-SXM4-80GB, CUDA 11.2, cuDNN 8.1.</em></p>
+<img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-3-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/tc-layout-kernels.svg" class="" title="tc-layout-kernels">
+<h2 id="Channels-In-And-Out"><a href="#Channels-In-And-Out" class="headerlink" title="Channels In And Out"></a><a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/performance/dl-performance-convolutional/index.html#channels">Channels In And Out</a></h2><p>参考<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/performance/dl-performance-convolutional/index.html#channels">Channels In And Out</a></p>
+<p>启用 Tensor Core 的要求取决于所使用的 cuDNN 版本。使用 cuDNN v7.6.3  及更高版本，卷积维度将在必要时自动填充以利用 Tensor Core。早期版本的 cuDNN 更严格：将 Tensor Core 与 NHWC  打包数据一起使用需要将 C 和 K 与 TF32 对齐为 4 的倍数，将 FP16 对齐为 8 的倍数，将 16 与 INT8 对齐为 16  的倍数。对于 NCHW 打包的 FP16 数据，通道将自动填充为 8 的倍数，以便启用 Tensor Core。但是，将 NCHW 数据与启用  Tensor Core 的内核一起使用会涉及一些额外的转置成本，这在内存中的 Tensor 布局：NCHW 与 NHWC 中进行了讨论。</p>
+<p>另一方面，对于这些早期版本的 cuDNN，自动填充不会对 NHWC 打包的数据启动，因此会选择效率较低的回退内核，该内核不使用 Tensor  Core 。鉴于 C 和 K 能被 8 整除，使用 NHWC 数据的卷积确实比使用 NCHW 数据的卷积表现更好。换句话说，如果某个图层已经与  NCHW 数据一起使用，则会发生自动填充;但是，如果正在使用 NHWC 数据，则选择或填充 C 和 K 为 8 的倍数可以提高性能。</p>
+<p>对于 cuDNN v7.6.3 及更高版本，无论数据格式如何，填充都是自动的。填充会增加一些时间，尽管与启用 Tensor Core  的性能增益相比，这种成本通常可以忽略不计。值得注意的是，对于 FP16 选择 C 和 K 是 8  的倍数，或者对于其他数据类型选择等效值，效率最高：对于这些情况，不需要填充。</p>
+<p>在某些情况下，通道数很小且不可协商。对于网络中的第一层，通常具有非常小的 C 值（灰度和 RGB 或 YCrCb 图像分别为 1 或  3）。特殊情况的卷积实现可以满足这一需求，特别是对于 C = 4 和 stride 为 2（图 8）。此处显示的数据是使用 cuDNN 8.1  收集的，因此填充是自动的。与 7.6.3 之前的版本相比，从 C = 3 到 C = 4 的性能改进没有那么剧烈，但选择 C = 4  仍然更快，因为不会发生填充。</p>
+<p> 图8.C = 4 的专用内核加快了卷积神经网络中的常见第一层（使用 NHWC 数据）的速度。<strong>选择 C = 4 或 8 的倍数可提供最佳性能。</strong>NVIDIA A100-SXM4-80GB、CUDA 11.2、cuDNN 8.1。</p>
+<img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-3-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/specialized-kernels.svg" class="" title="specialized-kernels">
+<h2 id="Low-Precision-低精度"><a href="#Low-Precision-低精度" class="headerlink" title="Low Precision 低精度"></a>Low Precision 低精度</h2><p>参考：<a target="_blank" rel="noopener" href="https://www.nvidia.com/en-us/on-demand/session/gtcspring21-s31876/">https://www.nvidia.com/en-us/on-demand/session/gtcspring21-s31876/</a></p>
 <ul>
 <li>使用低精度可以降低memory开销，其中FP16比较成熟，INT8需要PTQ或者QAT来保证精度，TRT接下来的版本会支持FP8</li>
 <li>INT8 QAT<ul>
@@ -383,7 +406,7 @@
 </ul>
 </li>
 </ul>
-<h2 id="2-6-Sparsity-稀疏"><a href="#2-6-Sparsity-稀疏" class="headerlink" title="2.6 Sparsity 稀疏"></a>2.6 Sparsity 稀疏</h2><p>参考</p>
+<h2 id="Sparsity-稀疏"><a href="#Sparsity-稀疏" class="headerlink" title="Sparsity 稀疏"></a>Sparsity 稀疏</h2><p>参考</p>
 <p><a target="_blank" rel="noopener" href="https://www.nvidia.com/en-us/on-demand/session/gtcspring21-s31876/">https://www.nvidia.com/en-us/on-demand/session/gtcspring21-s31876/</a><br><a target="_blank" rel="noopener" href="https://www.nvidia.com/en-us/on-demand/session/gtcspring21-s31552/">https://www.nvidia.com/en-us/on-demand/session/gtcspring21-s31552/</a><br><a target="_blank" rel="noopener" href="https://developer.nvidia.com/blog/accelerating-inference-with-sparsity-using-ampere-and-tensorrt/">https://developer.nvidia.com/blog/accelerating-inference-with-sparsity-using-ampere-and-tensorrt/</a></p>
 <ul>
 <li>TRT8.0支持了结构化稀疏，它是安培架构引入的新特性</li>
@@ -396,7 +419,7 @@
 <li>可以通过trtexec —sparsity=enable/force来快速测试加速效果</li>
 </ul>
 <img src="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-3-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/image-20241107161202855.png" class="" title="image-20241107161202855">
-<h2 id="2-7-Misc-其他"><a href="#2-7-Misc-其他" class="headerlink" title="2.7 Misc 其他"></a>2.7 Misc 其他</h2><p>参考：<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#performance">https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#performance</a></p>
+<h2 id="Misc-其他"><a href="#Misc-其他" class="headerlink" title="Misc 其他"></a>Misc 其他</h2><p>参考：<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#performance">https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#performance</a></p>
 <ul>
 <li>Optimizing Plugins 手动写plugin<ul>
 <li>The performance of plugins depends on the CUDA code performing the plugin operation.</li>
@@ -457,6 +480,7 @@
               <a href="/tags/Tensorrt/" rel="tag"><i class="fa fa-tag"></i> Tensorrt</a>
               <a href="/tags/DeepLearning/" rel="tag"><i class="fa fa-tag"></i> DeepLearning</a>
               <a href="/tags/Plugin/" rel="tag"><i class="fa fa-tag"></i> Plugin</a>
+              <a href="/tags/%E5%8D%B7%E7%A7%AF%E7%A5%9E%E7%BB%8F%E7%BD%91%E7%BB%9C/" rel="tag"><i class="fa fa-tag"></i> 卷积神经网络</a>
           </div>
 
         

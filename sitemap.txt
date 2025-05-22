@@ -1,3 +1,7 @@
+http://example.com/TensorRT/DLA/
+http://example.com/TensorRT/cudaGraph/
+http://example.com/GPU/orin%E7%AE%97%E5%8A%9B%E6%8F%8F%E8%BF%B0/
+http://example.com/Fusion%20360/Day10-%E6%89%8B%E6%9C%BA%E5%A3%B3/
 http://example.com/Fusion%20360/Day9-%E9%92%BB%E5%A4%B4/
 http://example.com/Fusion%20360/Day8-%E8%9E%BA%E4%B8%9D%E8%9E%BA%E7%BA%B9%E5%8A%A8%E7%94%BB/
 http://example.com/Fusion%20360/Day7-%E5%86%B0%E7%9B%92/
@@ -125,7 +129,6 @@ http://example.com/CUDA/%E5%9F%BA%E7%A1%80/2%20cuda_context/
 http://example.com/CUDA/%E5%9F%BA%E7%A1%80/CUDA%E5%B8%B8%E8%A7%81%E9%94%99%E8%AF%AF/
 http://example.com/CUDA/%E5%9F%BA%E7%A1%80/CUDA_Tegra/
 http://example.com/CUDA/%E5%9F%BA%E7%A1%80/cuda-gdb/
-http://example.com/CUDA/%E5%9F%BA%E7%A1%80/cudaGraph/
 http://example.com/CUDA/%E5%9F%BA%E7%A1%80/1%20cuda_API/
 http://example.com/CUDA/Nsight/cudaMemcpyAsync%E8%80%97%E6%97%B6%E5%BC%82%E5%B8%B8/
 http://example.com/CUDA/Nsight/Nsight%20System%E5%9F%BA%E7%A1%80/

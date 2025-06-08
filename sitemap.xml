@@ -2,6 +2,69 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>http://example.com/Fusion%20360/Day26%E4%B8%89%E8%84%9A%E6%9E%B6%E8%81%94%E5%8A%A8%E6%95%88%E6%9E%9C/</loc>
+    
+    <lastmod>2025-06-08</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/Fusion%20360/Day25-%E5%A1%91%E6%80%A7%E5%BB%BA%E6%A8%A1/</loc>
+    
+    <lastmod>2025-06-08</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/Fusion%20360/Day24-%E5%AE%8C%E5%85%A8%E7%BA%A6%E6%9D%9F/</loc>
+    
+    <lastmod>2025-06-08</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/Fusion%20360/Day27-%E6%9D%90%E8%B4%A8%E4%B8%8E%E8%B4%B4%E5%9B%BE/</loc>
+    
+    <lastmod>2025-06-08</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/Fusion%20360/Day23%E7%BA%A6%E6%9D%9F/</loc>
+    
+    <lastmod>2025-06-08</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/Fusion%20360/Day22-%E4%BF%AE%E5%A4%8D%E6%9B%B2%E9%9D%A2%E6%A8%A1%E5%9E%8B/</loc>
+    
+    <lastmod>2025-06-08</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>http://example.com/Fusion%20360/Day21-STL%E5%92%8COBJ%E6%96%87%E4%BB%B6%E8%BD%AC%E6%8D%A2%E5%92%8C%E5%AF%BC%E5%85%A5/</loc>
+    
+    <lastmod>2025-06-08</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>http://example.com/fragment/onnx_graphsurgeon%E7%9A%84%E4%BD%BF%E7%94%A8/</loc>
     
     <lastmod>2025-06-08</lastmod>

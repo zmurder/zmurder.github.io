@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="一个使用onnx_graphsurgeon  的例子融合 ONNX 模型中 ConvTranspose 和 BatchNormalization (BN) 层的函数，这是一个常见的模型优化操作">
+<meta property="og:type" content="article">
+<meta property="og:title" content="onnx_graphsurgeon的使用">
+<meta property="og:url" content="http://example.com/fragment/onnx_graphsurgeon%E7%9A%84%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="一个使用onnx_graphsurgeon  的例子融合 ONNX 模型中 ConvTranspose 和 BatchNormalization (BN) 层的函数，这是一个常见的模型优化操作">
+<meta property="og:locale">
+<meta property="article:published_time" content="2025-06-08T06:18:09.740Z">
+<meta property="article:modified_time" content="2025-06-08T06:22:40.057Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/fragment/onnx_graphsurgeon%E7%9A%84%E4%BD%BF%E7%94%A8/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/fragment/onnx_graphsurgeon%E7%9A%84%E4%BD%BF%E7%94%A8/","path":"fragment/onnx_graphsurgeon的使用/","title":"onnx_graphsurgeon的使用"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>onnx_graphsurgeon的使用 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E4%BD%BF%E7%94%A8onnx-graphsurgeon-%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="nav-text">一个使用onnx_graphsurgeon  的例子</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8F%A6%E4%B8%80%E4%B8%AAonnx-graphsurgeon%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="nav-text">另一个onnx_graphsurgeon的例子</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">176</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/fragment/onnx_graphsurgeon%E7%9A%84%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="onnx_graphsurgeon的使用 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          onnx_graphsurgeon的使用
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-06-08 14:18:09 / 修改时间：14:22:40" itemprop="dateCreated datePublished" datetime="2025-06-08T14:18:09+08:00">2025-06-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/fragment/" itemprop="url" rel="index"><span itemprop="name">fragment</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="一个使用onnx-graphsurgeon-的例子"><a href="#一个使用onnx-graphsurgeon-的例子" class="headerlink" title="一个使用onnx_graphsurgeon  的例子"></a>一个使用onnx_graphsurgeon  的例子</h1><p>融合 ONNX 模型中 <code>ConvTranspose</code> 和 <code>BatchNormalization (BN)</code> 层的函数，这是一个常见的模型优化操作</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> onnx</span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> onnx_graphsurgeon <span class="keyword">as</span> gs</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">fuse_convtranspose_bn</span>(<span class="params">onnx_model_path: <span class="built_in">str</span>, output_path: <span class="built_in">str</span></span>):</span><br><span class="line">    <span class="comment"># Load the ONNX model</span></span><br><span class="line">    graph = gs.import_onnx(onnx.load(onnx_model_path))</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Track nodes to remove</span></span><br><span class="line">    nodes_to_remove = []</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Iterate through nodes to find ConvTranspose -&gt; BN patterns</span></span><br><span class="line">    <span class="keyword">for</span> node <span class="keyword">in</span> graph.nodes:</span><br><span class="line">        <span class="keyword">if</span> node.op == <span class="string">&quot;ConvTranspose&quot;</span>:</span><br><span class="line">            <span class="comment"># Find the next BatchNormalization node</span></span><br><span class="line">            bn_node = <span class="literal">None</span></span><br><span class="line">            <span class="keyword">for</span> output <span class="keyword">in</span> node.outputs:</span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">len</span>(output.outputs) == <span class="number">1</span> <span class="keyword">and</span> output.outputs[<span class="number">0</span>].op == <span class="string">&quot;BatchNormalization&quot;</span>:</span><br><span class="line">                    bn_node = output.outputs[<span class="number">0</span>]</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line">            </span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> bn_node:</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">  </span><br><span class="line">            conv_weight_node = node.inputs[<span class="number">1</span>].inputs[<span class="number">0</span>].inputs[<span class="number">0</span>].inputs[<span class="number">0</span>].inputs[<span class="number">0</span>]  <span class="comment"># ConvTranspose weight is always 2nd input</span></span><br><span class="line">            conv_weight = conv_weight_node.values</span><br><span class="line">            out_channels = conv_weight_node.shape[<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Extract BN parameters</span></span><br><span class="line">            gamma = bn_node.inputs[<span class="number">1</span>].values  <span class="comment"># Scale</span></span><br><span class="line">            beta = bn_node.inputs[<span class="number">2</span>].values   <span class="comment"># Bias</span></span><br><span class="line">            mean = bn_node.inputs[<span class="number">3</span>].values   <span class="comment"># Mean</span></span><br><span class="line">            var = bn_node.inputs[<span class="number">4</span>].values    <span class="comment"># Variance</span></span><br><span class="line">            epsilon = bn_node.attrs.get(<span class="string">&quot;epsilon&quot;</span>, <span class="number">1e-5</span>)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Compute fused weights and biases</span></span><br><span class="line">            scale = gamma / np.sqrt(var + epsilon)</span><br><span class="line">            fused_weight = scale.reshape(<span class="number">1</span>, out_channels, <span class="number">1</span>, <span class="number">1</span>) * conv_weight</span><br><span class="line">            conv_weight_node.values = fused_weight</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Reroute connections to bypass BN</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> consumer <span class="keyword">in</span> bn_node.outputs[<span class="number">0</span>].outputs[:]:  <span class="comment"># Iterate over a copy</span></span><br><span class="line">                consumer.inputs = [node.outputs[<span class="number">0</span>]]</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">            bn_node.outputs.clear()</span><br><span class="line">            graph.nodes.remove(bn_node)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="comment"># Cleanup orphaned nodes/tensors</span></span><br><span class="line">    graph.cleanup()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># Save the fused model</span></span><br><span class="line">    onnx.save(gs.export_onnx(graph), output_path)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># Fuse ConvTranspose-BN</span></span><br><span class="line">fused_model = fuse_convtranspose_bn(<span class="string">&quot;5278080_ec039e076f_seg_ptq_01.onnx&quot;</span>, <span class="string">&quot;fused_model.onnx&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="另一个onnx-graphsurgeon的例子"><a href="#另一个onnx-graphsurgeon的例子" class="headerlink" title="另一个onnx_graphsurgeon的例子"></a>另一个onnx_graphsurgeon的例子</h1><ul>
+<li>删除输入后的第一个 <code>Reshape</code></li>
+<li>合并连续的 <code>Reshape</code> 节点</li>
+<li>修改 <code>Resize</code> 属性和尺寸</li>
+<li>修改输入输出 batch size</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> onnx</span><br><span class="line"><span class="keyword">import</span> onnx_graphsurgeon <span class="keyword">as</span> gs</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> argparse</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">modify_onnx</span>(<span class="params">input_model, output_model=<span class="literal">None</span></span>):</span><br><span class="line">    <span class="keyword">if</span> output_model <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">        filename, ext = os.path.splitext(input_model)</span><br><span class="line">        output_model = <span class="string">f&quot;<span class="subst">&#123;filename&#125;</span>_dla<span class="subst">&#123;ext&#125;</span>&quot;</span></span><br><span class="line">    </span><br><span class="line">    graph = gs.import_onnx(onnx.load(input_model))</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 处理第一个节点是Reshape的情况</span></span><br><span class="line">    removed_reshape = <span class="literal">False</span></span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">len</span>(graph.inputs) &gt; <span class="number">0</span> <span class="keyword">and</span> <span class="built_in">len</span>(graph.nodes) &gt; <span class="number">0</span>:</span><br><span class="line">        <span class="comment"># 找到第一个使用图输入的节点</span></span><br><span class="line">        first_node = <span class="literal">None</span></span><br><span class="line">        <span class="keyword">for</span> node <span class="keyword">in</span> graph.nodes:</span><br><span class="line">            <span class="keyword">if</span> graph.inputs[<span class="number">0</span>] <span class="keyword">in</span> node.inputs:</span><br><span class="line">                first_node = node</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">                </span><br><span class="line">        <span class="comment"># 检查该节点是否为Reshape</span></span><br><span class="line">        <span class="keyword">if</span> first_node <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> first_node.op == <span class="string">&quot;Reshape&quot;</span>:</span><br><span class="line">            reshape_output = first_node.outputs[<span class="number">0</span>]</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 创建新的输入变量，使用reshape输出的形状</span></span><br><span class="line">            new_input = gs.Variable(</span><br><span class="line">                name=graph.inputs[<span class="number">0</span>].name,  <span class="comment"># 保持原始输入名称</span></span><br><span class="line">                dtype=reshape_output.dtype,</span><br><span class="line">                shape=reshape_output.shape</span><br><span class="line">            )</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 将所有使用reshape输出的节点改为使用新输入</span></span><br><span class="line">            <span class="keyword">for</span> node <span class="keyword">in</span> graph.nodes:</span><br><span class="line">                <span class="keyword">for</span> i, inp <span class="keyword">in</span> <span class="built_in">enumerate</span>(node.inputs):</span><br><span class="line">                    <span class="keyword">if</span> inp == reshape_output:</span><br><span class="line">                        node.inputs[i] = new_input</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 更新图的输入</span></span><br><span class="line">            graph.inputs = [new_input] + graph.inputs[<span class="number">1</span>:]</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 删除Reshape节点</span></span><br><span class="line">            graph.nodes.remove(first_node)</span><br><span class="line">            removed_reshape = <span class="literal">True</span></span><br><span class="line">            </span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;已删除第一个Reshape节点，将输入shape设置为 <span class="subst">&#123;new_input.shape&#125;</span>&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 处理连续的Reshape节点</span></span><br><span class="line">    consecutive_reshape_removed = <span class="number">0</span></span><br><span class="line">    reshape_nodes = [node <span class="keyword">for</span> node <span class="keyword">in</span> graph.nodes <span class="keyword">if</span> node.op == <span class="string">&quot;Reshape&quot;</span>]</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 创建从Reshape输出到节点的映射，用于快速查找</span></span><br><span class="line">    output_to_node = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> node <span class="keyword">in</span> graph.nodes:</span><br><span class="line">        <span class="keyword">for</span> inp <span class="keyword">in</span> node.inputs:</span><br><span class="line">            <span class="keyword">if</span> inp.name:</span><br><span class="line">                output_to_node[inp.name] = node</span><br><span class="line">    </span><br><span class="line">    nodes_to_remove = []</span><br><span class="line">    <span class="keyword">for</span> reshape1 <span class="keyword">in</span> reshape_nodes:</span><br><span class="line">        <span class="keyword">if</span> reshape1 <span class="keyword">in</span> nodes_to_remove:</span><br><span class="line">            <span class="keyword">continue</span></span><br><span class="line">            </span><br><span class="line">        reshape1_output = reshape1.outputs[<span class="number">0</span>]</span><br><span class="line">        </span><br><span class="line">        <span class="comment"># 检查reshape1的输出是否连接到另一个reshape节点</span></span><br><span class="line">        <span class="keyword">if</span> reshape1_output.name <span class="keyword">in</span> output_to_node:</span><br><span class="line">            reshape2 = output_to_node[reshape1_output.name]</span><br><span class="line">            <span class="keyword">if</span> reshape2.op == <span class="string">&quot;Reshape&quot;</span> <span class="keyword">and</span> reshape2 <span class="keyword">not</span> <span class="keyword">in</span> nodes_to_remove:</span><br><span class="line">                reshape2_output = reshape2.outputs[<span class="number">0</span>]</span><br><span class="line">                </span><br><span class="line">                <span class="comment"># 获取reshape1的输入和reshape2的输出</span></span><br><span class="line">                reshape1_input = reshape1.inputs[<span class="number">0</span>]</span><br><span class="line">                </span><br><span class="line">                <span class="comment"># 检查reshape1的输入shape和reshape2的输出shape是否相同</span></span><br><span class="line">                <span class="keyword">if</span> reshape1_input.shape == reshape2_output.shape:</span><br><span class="line">                    <span class="comment"># 将所有使用reshape2输出的节点改为使用reshape1的输入</span></span><br><span class="line">                    <span class="keyword">for</span> node <span class="keyword">in</span> graph.nodes:</span><br><span class="line">                        <span class="keyword">for</span> i, inp <span class="keyword">in</span> <span class="built_in">enumerate</span>(node.inputs):</span><br><span class="line">                            <span class="keyword">if</span> inp == reshape2_output:</span><br><span class="line">                                node.inputs[i] = reshape1_input</span><br><span class="line">                    </span><br><span class="line">                    <span class="comment"># 标记这两个reshape节点待删除</span></span><br><span class="line">                    nodes_to_remove.extend([reshape1, reshape2])</span><br><span class="line">                    consecutive_reshape_removed += <span class="number">1</span></span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">f&quot;找到并移除连续Reshape节点: <span class="subst">&#123;reshape1.name&#125;</span> -&gt; <span class="subst">&#123;reshape2.name&#125;</span>&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 从图中删除标记的节点</span></span><br><span class="line">    <span class="keyword">for</span> node <span class="keyword">in</span> nodes_to_remove:</span><br><span class="line">        graph.nodes.remove(node)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> consecutive_reshape_removed &gt; <span class="number">0</span>:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;总共移除了 <span class="subst">&#123;consecutive_reshape_removed&#125;</span> 对连续的Reshape节点&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 修改Resize节点</span></span><br><span class="line">    resize_count = <span class="number">0</span></span><br><span class="line">    target_attrs = &#123;</span><br><span class="line">        <span class="string">&quot;coordinate_transformation_mode&quot;</span>: <span class="string">&quot;asymmetric&quot;</span>,</span><br><span class="line">        <span class="string">&quot;cubic_coeff_a&quot;</span>: -<span class="number">0.75</span>,</span><br><span class="line">        <span class="string">&quot;mode&quot;</span>: <span class="string">&quot;nearest&quot;</span>,</span><br><span class="line">        <span class="string">&quot;nearest_mode&quot;</span>: <span class="string">&quot;floor&quot;</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">for</span> node <span class="keyword">in</span> graph.nodes:</span><br><span class="line">        <span class="keyword">if</span> node.op == <span class="string">&quot;Resize&quot;</span>:</span><br><span class="line">            resize_count += <span class="number">1</span></span><br><span class="line">            node.attrs.update(target_attrs)</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;修改了Resize节点: <span class="subst">&#123;node.name&#125;</span>&quot;</span>)</span><br><span class="line">            </span><br><span class="line">            <span class="comment"># 修改Resize节点的目标尺寸</span></span><br><span class="line">            <span class="comment"># Resize节点通常有4个输入: X, roi, scales, sizes (有时只有前3个)</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">len</span>(node.inputs) &gt;= <span class="number">4</span> <span class="keyword">and</span> node.inputs[<span class="number">3</span>] <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                <span class="comment"># 第4个输入是sizes</span></span><br><span class="line">                sizes = node.inputs[<span class="number">3</span>]</span><br><span class="line">                </span><br><span class="line">                <span class="comment"># 如果sizes是常量，并且它的值可以被访问</span></span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">isinstance</span>(sizes, gs.Constant) <span class="keyword">and</span> sizes.values <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                    sizes_values = sizes.values</span><br><span class="line">                    <span class="keyword">if</span> <span class="built_in">len</span>(sizes_values) &gt; <span class="number">0</span> <span class="keyword">and</span> sizes_values[<span class="number">0</span>] != <span class="number">1</span>:</span><br><span class="line">                        <span class="comment"># 修改第一个维度为1</span></span><br><span class="line">                        old_size = <span class="built_in">int</span>(sizes_values[<span class="number">0</span>])</span><br><span class="line">                        sizes_values[<span class="number">0</span>] = <span class="number">6</span></span><br><span class="line">                        sizes.values = sizes_values</span><br><span class="line">                        <span class="built_in">print</span>(<span class="string">f&quot;  修改了Resize节点 <span class="subst">&#123;node.name&#125;</span> 的目标尺寸batchsize从 <span class="subst">&#123;old_size&#125;</span> 到 6&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;总共修改的Resize节点数: <span class="subst">&#123;resize_count&#125;</span>&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">#haowang comment:  结尾的softmax + tranpose在DLA上run效率很低（FP16 softmax），这里尝试移除可以获得比较大的收益</span></span><br><span class="line">    <span class="comment"># # 查找输出连接到两个Slice节点的tensor</span></span><br><span class="line">    <span class="comment"># tensor_to_slices = &#123;&#125;</span></span><br><span class="line">    <span class="comment"># for node in graph.nodes:</span></span><br><span class="line">    <span class="comment">#     if node.op == &quot;Slice&quot;:</span></span><br><span class="line">    <span class="comment">#         for input_tensor in node.inputs:</span></span><br><span class="line">    <span class="comment">#             if input_tensor.name:</span></span><br><span class="line">    <span class="comment">#                 if input_tensor.name not in tensor_to_slices:</span></span><br><span class="line">    <span class="comment">#                     tensor_to_slices[input_tensor.name] = []</span></span><br><span class="line">    <span class="comment">#                 tensor_to_slices[input_tensor.name].append(node)</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># found_output = False</span></span><br><span class="line">    <span class="comment"># for tensor_name, slice_nodes in tensor_to_slices.items():</span></span><br><span class="line">    <span class="comment">#     if len(slice_nodes) == 2:</span></span><br><span class="line">    <span class="comment">#         # 找到连接到恰好两个Slice节点的tensor</span></span><br><span class="line">    <span class="comment">#         for tensor in graph.tensors().values():</span></span><br><span class="line">    <span class="comment">#             if tensor.name == tensor_name:</span></span><br><span class="line">    <span class="comment">#                 # 设置该tensor为网络的唯一输出</span></span><br><span class="line">    <span class="comment">#                 graph.outputs = [tensor]</span></span><br><span class="line">    <span class="comment">#                 print(f&quot;发现tensor &#x27;&#123;tensor_name&#125;&#x27; 连接到两个Slice节点，已将其设置为网络唯一输出&quot;)</span></span><br><span class="line">    <span class="comment">#                 found_output = True</span></span><br><span class="line">    <span class="comment">#                 break</span></span><br><span class="line">    <span class="comment">#         if found_output:</span></span><br><span class="line">    <span class="comment">#             break</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># if not found_output:</span></span><br><span class="line">    <span class="comment">#     graph.outputs = []</span></span><br><span class="line">        </span><br><span class="line">    <span class="comment"># 修改输入和输出的batchsize为1</span></span><br><span class="line">    batch_modified = <span class="literal">False</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 处理输入tensor</span></span><br><span class="line">    <span class="keyword">for</span> i, inp <span class="keyword">in</span> <span class="built_in">enumerate</span>(graph.inputs):</span><br><span class="line">        <span class="keyword">if</span> inp.shape <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> <span class="built_in">len</span>(inp.shape) &gt; <span class="number">0</span>:</span><br><span class="line">            <span class="comment"># 复制原始shape并修改第一个维度为1</span></span><br><span class="line">            new_shape = <span class="built_in">list</span>(inp.shape)</span><br><span class="line">            <span class="keyword">if</span> new_shape[<span class="number">0</span>] <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> new_shape[<span class="number">0</span>] != <span class="number">6</span>:</span><br><span class="line">                old_shape = new_shape[<span class="number">0</span>]</span><br><span class="line">                new_shape[<span class="number">0</span>] = <span class="number">6</span></span><br><span class="line">                inp.shape = <span class="built_in">tuple</span>(new_shape)</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&quot;输入 &#x27;<span class="subst">&#123;inp.name&#125;</span>&#x27; 的batchsize从 <span class="subst">&#123;old_shape&#125;</span> 修改为 6&quot;</span>)</span><br><span class="line">                batch_modified = <span class="literal">True</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 如果发现了需要设为输出的tensor，就不再处理graph.outputs</span></span><br><span class="line">    <span class="comment"># if not found_output:</span></span><br><span class="line">    <span class="comment">#     # 处理输出tensor</span></span><br><span class="line">    <span class="keyword">for</span> i, out <span class="keyword">in</span> <span class="built_in">enumerate</span>(graph.outputs):</span><br><span class="line">        <span class="keyword">if</span> out.shape <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> <span class="built_in">len</span>(out.shape) &gt; <span class="number">0</span>:</span><br><span class="line">            <span class="comment"># 复制原始shape并修改第一个维度为1</span></span><br><span class="line">            new_shape = <span class="built_in">list</span>(out.shape)</span><br><span class="line">            <span class="keyword">if</span> new_shape[<span class="number">0</span>] <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span> <span class="keyword">and</span> new_shape[<span class="number">0</span>] != <span class="number">1</span>:</span><br><span class="line">                old_shape = new_shape[<span class="number">0</span>]</span><br><span class="line">                new_shape[<span class="number">0</span>] = <span class="number">1</span></span><br><span class="line">                out.shape = <span class="built_in">tuple</span>(new_shape)</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&quot;输出 &#x27;<span class="subst">&#123;out.name&#125;</span>&#x27; 的batchsize从 <span class="subst">&#123;old_shape&#125;</span> 修改为 6&quot;</span>)</span><br><span class="line">                batch_modified = <span class="literal">True</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> batch_modified:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;已完成输入/输出batchsize修改为1&quot;</span>)</span><br><span class="line">        </span><br><span class="line">    <span class="comment"># 清理图</span></span><br><span class="line">    graph.cleanup()</span><br><span class="line">    </span><br><span class="line">    <span class="comment"># 保存修改后的模型</span></span><br><span class="line">    output_onnx = gs.export_onnx(graph)</span><br><span class="line">    onnx.save(output_onnx, output_model)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;修改后的模型保存至: <span class="subst">&#123;output_model&#125;</span>&quot;</span>)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> resize_count, removed_reshape, consecutive_reshape_removed, batch_modified</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    parser = argparse.ArgumentParser(description=<span class="string">&quot;修改ONNX模型&quot;</span>)</span><br><span class="line">    parser.add_argument(<span class="string">&quot;input_model&quot;</span>, <span class="built_in">help</span>=<span class="string">&quot;输入ONNX模型的路径&quot;</span>)</span><br><span class="line">    parser.add_argument(<span class="string">&quot;-o&quot;</span>, <span class="string">&quot;--output_model&quot;</span>, <span class="built_in">help</span>=<span class="string">&quot;保存修改后ONNX模型的路径&quot;</span>, default=<span class="literal">None</span>)</span><br><span class="line">    </span><br><span class="line">    args = parser.parse_args()</span><br><span class="line">    </span><br><span class="line">    resize_count, removed_reshape, consecutive_reshape_removed, batch_modified = modify_onnx(args.input_model, args.output_model)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">if</span> resize_count == <span class="number">0</span> <span class="keyword">and</span> <span class="keyword">not</span> removed_reshape <span class="keyword">and</span> consecutive_reshape_removed == <span class="number">0</span> <span class="keyword">and</span> <span class="keyword">not</span> batch_modified:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;模型未进行任何修改。&quot;</span>)</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/fragment/onnx_graphsurgeon%E7%9A%84%E4%BD%BF%E7%94%A8/" title="onnx_graphsurgeon的使用">http://example.com/fragment/onnx_graphsurgeon的使用/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/Fusion%20360/Day20-%E5%B7%A5%E7%A8%8B%E5%9B%BE/" rel="prev" title="Day20-工程图">
+                  <i class="fa fa-chevron-left"></i> Day20-工程图
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"015a5977da99def6004d84bf910317bf"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

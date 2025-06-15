@@ -355,7 +355,7 @@ kernel的launch会比较大，主要有以下几种情况：
 
 在官方文档 https://developer.nvidia.com/docs/drive/drive-os/6.0.8/public/drive-os-tensorrt/pdf/NVIDIA-TensorRT-8.6.11-API-Reference-for-DRIVE-OS.pdf中，找到一些端倪
 
-下面的函数提到了` IExecutionContext::enqueueV3()`可能会自动的创建辅助流 `auxiliary streams`。也就是说我的模型engine如果存在一些可以并行的模块（没有互相的依赖性），那么TRT会自动的创建多个流来提高并行性。虽然我捕获cudaGraph enqueueV3() 时只是一个流，但是因为我捕获的流依赖TRT自动创建的其他多个流，因此cudaGraph会捕获所有相关的流。因此我才在nsight system中看到一个cudaGraphLaunch对应多个流。这本来就是TRT的优化部分。不用过度操心
+下面的函数提到了` IExecutionContext::enqueueV3()`可能会自动的创建辅助流 `auxiliary streams`。也就是说我的模型engine如果存在一些可以并行的模块（没有互相的依赖性），那么TRT会自动的创建多个流来提高并行性。虽然我捕获cudaGraph enqueueV3() 时只是一个流，但是因为我捕获的流依赖TRT自动创建的其他多个流，因此cudaGraph会捕获所有相关的流。因此我才在nsight system中看到一个cudaGraphLaunch对应多个流。这本来就是TRT的优化部分。不用过度操心。**但是如果有多线程、多stream，最好还是将这个辅助流设置为空。**也就是使用自己的流，不要辅助流。
 
 ![image-20250522221506011](./cudaGraph/image-20250522221506011.png)
 

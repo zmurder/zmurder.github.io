@@ -2,6 +2,108 @@
 
 看了官方的说明文档还是有一点云里雾里，这里说明一些使用nsisght systems过程中的经验之谈。
 
+# 下载与安装
+
+如果是单独安装windows或者是linux下的，可以在官网https://developer.nvidia.com/nsight-systems/get-started下载
+
+可以从https://developer.nvidia.com/tools-downloads 下载历史版本
+
+如果使用的是DRIVE设备，例如orin，那么会在DRIVE OS 中包含（应该是安装cuda时安装的）
+
+需要注意的是，如果你在一个设备上抓取的.nsys-repo文件希望在另一个设备上打开，那么抓取和加载回放的nsys版本需要一致。
+
+## 安装目录
+
+默认的安装目录在`/opt/nvidia/nsight-systems`
+
+如果你安装了多个版本的nsys。那么目录会如下
+
+```bash
+(base) zyd@P7479785A244:/opt/nvidia/nsight-systems$ ls
+2022.4.2  2023.4.4  2024.5.1  2024.7.2
+```
+
+
+
+例如我的一个目录如下
+
+```bash
+(base) zyd@P7479785A244:/opt/nvidia/nsight-systems/2024.5.1/host-linux-x64$ ls
+CrashReporter                    libHostCommon.so               libQt6OpenGL.so.6                             libSshClient.so                     libicui18n.so.71
+DumpTimeline                     libInjectionCommunicator.so    libQt6OpenGLWidgets.so.6                      libStreamSections.so                libicuuc.so.71
+ImportNvtxt                      libInterfaceData.so            libQt6Positioning.so.6                        libSymbolAnalyzerLight.so           libjpeg.so.8
+Mesa                             libInterfaceShared.so          libQt6PrintSupport.so.6                       libSymbolDemangler.so               libnvlog.so
+NVIDIA_SLA.pdf                   libInterfaceSharedBase.so      libQt6Qml.so.6                                libTelemetryQuadDClient.so          libpapi.so.5
+Plugins                          libInterfaceSharedCore.so      libQt6QmlModels.so.6                          libTimelineAssert.so                libparquet.so
+PythonFunctionsTrace             libInterfaceSharedLoggers.so   libQt6Quick.so.6                              libTimelineCommon.so                libparquet.so.500
+QdstrmImporter                   libLinuxPerf.so                libQt6QuickParticles.so.6                     libTimelineUIUtils.so               libparquet.so.500.0.0
+ResolveSymbols                   libNetworkInfo.so              libQt6QuickTest.so.6                          libTimelineWidget.so                libpfm.so.4
+Scripts                          libNsysServerProto.so          libQt6QuickWidgets.so.6                       libarrow.so                         libprotobuf-shared.so
+libAgentAPI.so                   libNvQtGui.so                  libQt6Sensors.so.6                            libarrow.so.500                     libsqlite3.so.0
+libAnalysis.so                   libNvmlWrapper.so              libQt6Sql.so.6                                libarrow.so.500.0.0                 libssh.so
+libAnalysisContainersData.so     libNvtxExtData.so              libQt6StateMachine.so.6                       libboost_atomic.so.1.78.0           libssl.so
+libAnalysisData.so               libNvtxwBackend.so             libQt6Svg.so.6                                libboost_chrono.so.1.78.0           libssl.so.1.1
+libAnalysisProto.so              libProcessLauncher.so          libQt6SvgWidgets.so.6                         libboost_container.so.1.78.0        libstdc++.so.6
+libAppLib.so                     libProtobufComm.so             libQt6Test.so.6                               libboost_date_time.so.1.78.0        nsys-ui
+libAppLibInterfaces.so           libProtobufCommClient.so       libQt6UiTools.so.6                            libboost_filesystem.so.1.78.0       nsys-ui.bin
+libAssert.so                     libProtobufCommProto.so        libQt6WaylandClient.so.6                      libboost_iostreams.so.1.78.0        nsys-ui.desktop.template
+libCommonNsysServer.so           libQt6Charts.so.6              libQt6WaylandCompositor.so.6                  libboost_program_options.so.1.78.0  nsys-ui.png
+libCommonProtoServices.so        libQt6Concurrent.so.6          libQt6WaylandEglClientHwIntegration.so.6      libboost_python310.so.1.78.0        nvlog.config.template
+libCommonProtoStreamSections.so  libQt6Core.so.6                libQt6WaylandEglCompositorHwIntegration.so.6  libboost_regex.so.1.78.0            python
+libCore.so                       libQt6DBus.so.6                libQt6WebChannel.so.6                         libboost_serialization.so.1.78.0    reports
+libCudaDrvApiWrapper.so          libQt6Designer.so.6            libQt6WebEngineCore.so.6                      libboost_system.so.1.78.0           resources
+libDeviceProperty.so             libQt6DesignerComponents.so.6  libQt6WebEngineWidgets.so.6                   libboost_thread.so.1.78.0           rules
+libDevicePropertyProto.so        libQt6Gui.so.6                 libQt6Widgets.so.6                            libboost_timer.so.1.78.0            sqlite3
+libEventSource.so                libQt6Help.so.6                libQt6XcbQpa.so.6                             libcrypto.so                        translations
+libEventsView.so                 libQt6Multimedia.so.6          libQt6Xml.so.6                                libcrypto.so.1.1
+libGenericHierarchy.so           libQt6MultimediaQuick.so.6     libQtPropertyBrowser.so                       libexec
+libGpuInfo.so                    libQt6MultimediaWidgets.so.6   libQuiverContainers.so                        libexporter.so
+libGpuTraits.so                  libQt6Network.so.6             libQuiverEvents.so                            libicudata.so.71
+```
+
+
+
+## 多版本管理
+
+如果安装了多个nsys的版本，那么如果使用命令启动的时候默认的版本是可以选择的
+
+```bash
+(base) zyd@P7479785A244:/opt/nvidia/nsight-systems$ sudo update-alternatives --config nsys-ui
+There are 3 choices for the alternative nsys-ui (providing /usr/local/bin/nsys-ui).
+
+  Selection    Path                                                        Priority   Status
+------------------------------------------------------------
+* 0            /opt/nvidia/nsight-systems/2024.7.2/host-linux-x64/nsys-ui   0         auto mode
+  1            /opt/nvidia/nsight-systems/2023.4.4/host-linux-x64/nsys-ui   0         manual mode
+  2            /opt/nvidia/nsight-systems/2024.5.1/host-linux-x64/nsys-ui   0         manual mode
+  3            /opt/nvidia/nsight-systems/2024.7.2/host-linux-x64/nsys-ui   0         manual mode
+```
+
+### 注册新版本
+
+例如下面的操作：
+
+是针对`nsys-ui`  和 ` nsys` 分别进行注册管理 
+
+```bash
+sudo update-alternatives --install /usr/local/bin/nsys-ui nsys-ui /opt/nvidia/nsight-systems/2024.7.2/host-linux-x64/nsys-ui 100
+sudo update-alternatives --install /usr/local/bin/nsys nsys /opt/nvidia/nsight-systems/2024.7.2/host-linux-x64/nsys 100
+```
+
+### 删除不需要的版本
+
+```bash
+sudo update-alternatives --remove nsys-ui /opt/nvidia/nsight-systems/2024.7.2/host-linux-x64/nsys-ui
+```
+
+### 切换版本
+
+```bash
+sudo update-alternatives --config nsys-ui
+```
+
+
+
 #  CLI
 
 nsisght systems提供了两种使用方式，一种是命令行 一种是GUI。在PC或者有图形界面的系统上我们可以使用GUI来方便的操作i，但是在一些没有图形界面的系统上我们只能使用CLI（命令行）来进行操作

@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="简介一直对cmake的交叉编译有点晕晕的，这里不定期的总结一些交叉编译的内容吧。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="cmake交叉编译">
+<meta property="og:url" content="http://example.com/cmake/cmake%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="简介一直对cmake的交叉编译有点晕晕的，这里不定期的总结一些交叉编译的内容吧。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2025-06-16T13:28:55.390Z">
+<meta property="article:modified_time" content="2025-06-16T14:23:37.827Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="C++">
+<meta property="article:tag" content="cmake">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="http://example.com/cmake/cmake%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/cmake/cmake%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/","path":"cmake/cmake交叉编译/","title":"cmake交叉编译"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>cmake交叉编译 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#cmake%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%E7%9A%84%E4%BE%8B%E5%AD%90"><span class="nav-text">cmake交叉编译的例子</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%85%B3%E4%BA%8Etoolchain-file"><span class="nav-text">关于toolchain file</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#CMAKE-SYSROOT%E4%B8%8ECMAKE-FIND-ROOT-PATH"><span class="nav-text">CMAKE_SYSROOT与CMAKE_FIND_ROOT_PATH</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">186</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">28</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">14</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/cmake/cmake%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="cmake交叉编译 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          cmake交叉编译
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-06-16 21:28:55 / 修改时间：22:23:37" itemprop="dateCreated datePublished" datetime="2025-06-16T21:28:55+08:00">2025-06-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/cmake/" itemprop="url" rel="index"><span itemprop="name">cmake</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>一直对cmake的交叉编译有点晕晕的，这里不定期的总结一些交叉编译的内容吧。</p>
+<h1 id="cmake交叉编译的例子"><a href="#cmake交叉编译的例子" class="headerlink" title="cmake交叉编译的例子"></a>cmake交叉编译的例子</h1><p>这里先说一下目录的结构</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">CMakeLists.txt            sumMatrix_pinned.cu           sumMatrix_unified.cu</span><br><span class="line">arm_orin_toolchain.cmake  sumMatrix_pinned_nocopy.cu    sumMatrix_zerocopy.cu</span><br><span class="line">build.sh*                 sumMatrix_register.cu         x86_toolchain.cmake</span><br><span class="line">sumMatrix.cu              sumMatrix_register_nocopy.cu</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这个是我的测试代码目录，每一个cu文件都需要编译为一个对应的可执行程序。</p>
+<p>我的需求是可以使用cmake控制到底编译为x86版本的程序还是编译为arm版本的程序。</p>
+<p>与cmake相关的是<code>CMakeLists.txt build.sh  x86_toolchain.cmake  arm_orin_toolchain.cmake</code>  </p>
+<p>使用build.sh 来控制使用 <code>x86_toolchain.cmake 还是 arm_orin_toolchain.cmake</code> 来确定编译平台相关内容，<code>CMakeLists.txt</code>确定具体编译的代码。</p>
+<p>可以参考<a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html">https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html</a></p>
+<p>build.sh 如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> [ ! -d <span class="string">&quot;Build&quot;</span> ];<span class="keyword">then</span></span><br><span class="line">    <span class="built_in">mkdir</span> Build</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;Build dir is exist&quot;</span></span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">cd</span> Build</span><br><span class="line"></span><br><span class="line"><span class="comment"># if [ &quot;$1&quot; != &quot;x86&quot; ] &amp;&amp;  [ &quot;$1&quot; != &quot;X86&quot; ]; then</span></span><br><span class="line"><span class="comment"># 	#设置交叉编译的环境变量 否则会出现&quot;The C compiler identification is unknown&quot;的错误</span></span><br><span class="line"><span class="comment"># 	# ORIN_BASE=/media/zyd/VisionPerception40Env/toolChainsQnx710</span></span><br><span class="line"><span class="comment"># 	# ORIN_HOST=$&#123;ORIN_BASE&#125;/host/linux/x86_64</span></span><br><span class="line"><span class="comment"># 	# ORIN_TARGET=$&#123;ORIN_BASE&#125;/target/qnx7</span></span><br><span class="line"><span class="comment"># 	# CUDA_DIR=$&#123;ORIN_BASE&#125;/cudaSafe11.4</span></span><br><span class="line"><span class="comment"># 	CUDA_DIR=/home/zyd/drive/drive-linux/filesystem/targetfs/usr/local/cuda-11.4</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 	# PATH=$&#123;ORIN_HOST&#125;/usr/bin:$&#123;PATH&#125;</span></span><br><span class="line"><span class="comment"># 	# PATH=$&#123;CUDA_DIR&#125;/bin:$&#123;PATH&#125;</span></span><br><span class="line"><span class="comment"># else</span></span><br><span class="line"><span class="comment"># 	CUDA_DIR=/usr/local/cuda</span></span><br><span class="line"><span class="comment"># fi</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># export PATH ORIN_BASE ORIN_HOST ORIN_TARGET CUDA_DIR</span></span><br><span class="line"><span class="comment"># echo &quot;ORIN_BASE=$ORIN_BASE&quot;</span></span><br><span class="line"><span class="comment"># echo &quot;ORIN_HOST=$ORIN_HOST&quot;</span></span><br><span class="line"><span class="comment"># echo &quot;ORIN_TARGET=$ORIN_TARGET&quot;</span></span><br><span class="line"><span class="comment"># echo &quot;CUDA_DIR=$CUDA_DIR&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># echo &quot;PATH = $&#123;PATH&#125;&quot;</span></span><br><span class="line"><span class="keyword">if</span> [ <span class="string">&quot;<span class="variable">$1</span>&quot;</span> = <span class="string">&quot;x86&quot;</span> ] ||  [ <span class="string">&quot;<span class="variable">$2</span>&quot;</span> = <span class="string">&quot;x86&quot;</span> ]; <span class="keyword">then</span></span><br><span class="line">	cmake -DARCH_X86=1 -DCMAKE_TOOLCHAIN_FILE=../x86_toolchain.cmake .. &amp;&amp; make</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">	cmake  -DCMAKE_TOOLCHAIN_FILE=../arm_orin_toolchain.cmake .. &amp;&amp; make</span><br><span class="line"><span class="keyword">fi</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>CMakeLists.txt如下：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># CMake 最低版本号要求</span></span><br><span class="line"><span class="keyword">cmake_minimum_required</span> (VERSION <span class="number">3.16</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 打印编译的具体过程信息</span></span><br><span class="line"><span class="comment"># set(CMAKE_VERBOSE_MAKEFILE ON) </span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 项目信息</span></span><br><span class="line"><span class="keyword">project</span> (hello)</span><br><span class="line"><span class="comment"># project (hello LANGUAGES CUDA CXX)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 功能类似与project (hello LANGUAGES CUDA)</span></span><br><span class="line"><span class="comment"># Enables support for the named languages in CMake</span></span><br><span class="line"><span class="keyword">enable_language</span>(CUDA)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_VERBOSE_MAKEFILE <span class="keyword">ON</span>)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_BUILD_TYPE Debug)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_FLAGS <span class="string">&quot;-Wall&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定头文件目录 PROJECT_SOURCE_DIR: 当前工程的源码路径</span></span><br><span class="line"><span class="keyword">include_directories</span>(../common)</span><br><span class="line"><span class="keyword">include_directories</span>(<span class="variable">$&#123;PROJECT_SOURCE_DIR&#125;</span>)</span><br><span class="line"><span class="comment"># include_directories($ENV&#123;CUDA_DIR&#125;/include)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># message(&quot;TTTTT $ENV&#123;QNX_BASE&#125;/target/qnx7/usr/include&quot;)</span></span><br><span class="line"><span class="comment"># include_directories($ENV&#123;CUDA_DIR&#125;/targets/aarch64-qnx/include)</span></span><br><span class="line"><span class="comment"># include_directories(/media/zyd/VisionPerception40Env/toolChainsQnx710/target/qnx7/usr/include)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># link_directories($ENV&#123;CUDA_DIR&#125;/target/qnx7/usr/lib)</span></span><br><span class="line"><span class="comment"># link_directories($ENV&#123;CUDA_DIR&#125;/targets/aarch64-qnx/lib)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 查找当前目录下的所有源文件</span></span><br><span class="line"><span class="comment"># 并将名称保存到 DIR_SRCS 变量</span></span><br><span class="line"><span class="comment"># aux_source_directory(./ DIR_SRCS)</span></span><br><span class="line"><span class="keyword">set</span>(DIR_SRCS sumMatrix.cu)</span><br><span class="line"></span><br><span class="line"><span class="comment"># message(&quot;DIR_SRCS is $ENV&#123;DIR_SRCS&#125;&quot;)</span></span><br><span class="line"><span class="comment"># 添加 src 子目录</span></span><br><span class="line"><span class="comment"># add_subdirectory(src)</span></span><br><span class="line"><span class="keyword">message</span>(<span class="string">&quot;ARCH_X86 = $&#123;ARCH_X86&#125;&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 指定生成目标</span></span><br><span class="line"><span class="keyword">if</span> (ARCH_X86)</span><br><span class="line">	<span class="keyword">set</span>(PROJECT_NAME <span class="string">&quot;sumMatrixX86&quot;</span>)</span><br><span class="line">	<span class="keyword">message</span>(<span class="string">&quot;PROJECT_NAME = $&#123;PROJECT_NAME&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">else</span>()</span><br><span class="line">	<span class="keyword">set</span>(PROJECT_NAME <span class="string">&quot;sumMatrix&quot;</span>)</span><br><span class="line">	<span class="keyword">message</span>(<span class="string">&quot;PROJECT_NAME = $&#123;PROJECT_NAME&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">endif</span> ()</span><br><span class="line"></span><br><span class="line"><span class="keyword">add_executable</span>(<span class="variable">$&#123;PROJECT_NAME&#125;</span> <span class="variable">$&#123;DIR_SRCS&#125;</span>)</span><br><span class="line"><span class="keyword">add_executable</span>(sumMatrix_register sumMatrix_register.cu)</span><br><span class="line"><span class="keyword">add_executable</span>(sumMatrix_register_nocopy sumMatrix_register_nocopy.cu)</span><br><span class="line"><span class="keyword">add_executable</span>(sumMatrix_pinned sumMatrix_pinned.cu)</span><br><span class="line"><span class="keyword">add_executable</span>(sumMatrix_pinned_nocopy sumMatrix_pinned_nocopy.cu)</span><br><span class="line"><span class="keyword">add_executable</span>(sumMatrix_zerocopy sumMatrix_zerocopy.cu)</span><br><span class="line"><span class="keyword">add_executable</span>(sumMatrix_unified sumMatrix_unified.cu)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 添加链接库</span></span><br><span class="line"><span class="comment"># target_link_libraries(hello fun)</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>arm_orin_toolchain.cmake 如下</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 要为其生成CMake的操作系统的名称</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_SYSTEM_NAME Linux)</span><br><span class="line"><span class="comment"># 目标体系结构的CMake标识符。</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_SYSTEM_PROCESSOR aarch64)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(TOOL_CHAINS <span class="string">&quot;/opt/nvidia/driveos/toolchains&quot;</span>)</span><br><span class="line"><span class="comment"># set(CMAKE_SYSROOT /home/zyd/drive/drive-linux/filesystem/targetfs)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)</span></span><br><span class="line"><span class="comment"># set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)</span></span><br><span class="line"><span class="comment"># set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)</span></span><br><span class="line"><span class="comment"># set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)</span></span><br><span class="line"><span class="comment"># set(CMAKE_STAGING_PREFIX /home/devel/stage)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># include_directories(/media/zyd/VisionPerception40Env/toolChainsQnx710/target/qnx7/usr/include)</span></span><br><span class="line"><span class="keyword">include_directories</span>(/home/zyd/drive/drive-linux/filesystem/targetfs/usr/<span class="keyword">include</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置交叉编译工具链gcc和g++</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_COMPILER <span class="variable">$&#123;TOOL_CHAINS&#125;</span>/aarch64--glibc--stable-<span class="number">2022.03</span>-<span class="number">1</span>/bin/aarch64-linux-gcc)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_COMPILER <span class="variable">$&#123;TOOL_CHAINS&#125;</span>/aarch64--glibc--stable-<span class="number">2022.03</span>-<span class="number">1</span>/bin/aarch64-linux-g++)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CUDA_STANDARD <span class="number">11</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置cuda的编译工具链nvcc</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CUDA_COMPILER <span class="string">&quot;/usr/local/cuda-11.4/bin/nvcc&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置编译选项 源代码反汇编视图用于在源代码和汇编指令级别显示内核的分析结果。为了能够查看内核源代码，您需要使用-lineinfo选项编译代码。如果不使用此编译器选项，则只显示反汇编视图。</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CUDA_FLAGS <span class="string">&quot;-lineinfo&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># cuda的目标架构</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">NOT</span> <span class="keyword">DEFINED</span> CMAKE_CUDA_ARCHITECTURES)</span><br><span class="line">  <span class="keyword">set</span>(CMAKE_CUDA_ARCHITECTURES <span class="number">61</span>)</span><br><span class="line"><span class="keyword">endif</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">include_directories</span>(/home/zyd/drive/drive-linux/filesystem/targetfs/usr/<span class="keyword">include</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># CMAKE_CUDA_HOST_COMPILER会选择编译CUDA语言文件的主机代码时要使用的编译器可执行文件。这映射到nvcc-ccbin选项</span></span><br><span class="line"><span class="comment"># set(CMAKE_CUDA_HOST_COMPILER &quot;$&#123;ORIN_HOST&#125;/usr/bin/aarch64-unknown-nto-qnx7.1.0-g++&quot;)</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CUDA_HOST_COMPILER <span class="string">&quot;$&#123;TOOL_CHAINS&#125;/aarch64--glibc--stable-2022.03-1/bin/aarch64-linux-g++&quot;</span>)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>x86_toolchain.cmake如下：</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CUDA_STANDARD <span class="number">11</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">NOT</span> <span class="keyword">DEFINED</span> CMAKE_CUDA_ARCHITECTURES)</span><br><span class="line">  <span class="keyword">set</span>(CMAKE_CUDA_ARCHITECTURES <span class="number">61</span>)</span><br><span class="line"><span class="keyword">endif</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CUDA_FLAGS <span class="string">&quot;-g -G -gencode arch=compute_61,code=sm_61 -lineinfo --default-stream=per-thread&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h1 id="关于toolchain-file"><a href="#关于toolchain-file" class="headerlink" title="关于toolchain file"></a>关于toolchain file</h1><p>下面是一个交叉编译的 toolchain file</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span>(CMAKE_SYSTEM_NAME Linux)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_SYSTEM_PROCESSOR aarch64)</span><br><span class="line"> </span><br><span class="line"><span class="keyword">set</span>(target_arch aarch64-linux-gnu)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_LIBRARY_ARCHITECTURE <span class="variable">$&#123;target_arch&#125;</span> CACHE <span class="keyword">STRING</span> <span class="string">&quot;&quot;</span> FORCE)</span><br><span class="line"> </span><br><span class="line"><span class="comment"># Configure cmake to look for libraries, include directories and</span></span><br><span class="line"><span class="comment"># packages inside the target root prefix.</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH <span class="string">&quot;/usr/$&#123;target_arch&#125;&quot;</span>)</span><br><span class="line"> </span><br><span class="line"><span class="comment"># needed to avoid doing some more strict compiler checks that</span></span><br><span class="line"><span class="comment"># are failing when cross-compiling</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_TRY_COMPILE_TARGET_TYPE STATIC_LIBRARY)</span><br><span class="line"> </span><br><span class="line"><span class="comment"># specify the toolchain programs</span></span><br><span class="line"><span class="keyword">find_program</span>(CMAKE_C_COMPILER <span class="variable">$&#123;target_arch&#125;</span>-gcc)</span><br><span class="line"><span class="keyword">find_program</span>(CMAKE_CXX_COMPILER <span class="variable">$&#123;target_arch&#125;</span>-g++)</span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">NOT</span> CMAKE_C_COMPILER <span class="keyword">OR</span> <span class="keyword">NOT</span> CMAKE_CXX_COMPILER)</span><br><span class="line">    <span class="keyword">message</span>(FATAL_ERROR <span class="string">&quot;Can&#x27;t find suitable C/C++ cross compiler for $&#123;target_arch&#125;&quot;</span>)</span><br><span class="line"><span class="keyword">endif</span>()</span><br><span class="line"> </span><br><span class="line"><span class="keyword">set</span>(CMAKE_AR <span class="variable">$&#123;target_arch&#125;</span>-ar CACHE FILEPATH <span class="string">&quot;&quot;</span> FORCE)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_RANLIB <span class="variable">$&#123;target_arch&#125;</span>-ranlib)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_LINKER <span class="variable">$&#123;target_arch&#125;</span>-ld)</span><br><span class="line"> </span><br><span class="line"><span class="comment"># Not all shared libraries dependencies are instaled in host machine.</span></span><br><span class="line"><span class="comment"># Make sure linker doesn&#x27;t complain.</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_EXE_LINKER_FLAGS_INIT -Wl,--allow-shlib-undefined)</span><br><span class="line"> </span><br><span class="line"><span class="comment"># instruct nvcc to use our cross-compiler</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CUDA_FLAGS <span class="string">&quot;-ccbin $&#123;CMAKE_CXX_COMPILER&#125; -Xcompiler -fPIC&quot;</span> CACHE <span class="keyword">STRING</span> <span class="string">&quot;&quot;</span> FORCE)</span><br></pre></td></tr></table></figure>
+<p>这样使用</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">~/src$ <span class="built_in">cd</span> build</span><br><span class="line">~/src/build$ cmake -DCMAKE_TOOLCHAIN_FILE=~/Toolchain-eldk-ppc74xx.cmake ..</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+<p>这个toolchain file有些是必须的有些不是必须的</p>
+<p>必须的设置如下：</p>
+<ul>
+<li><p><code>CMAKE_SYSTEM_NAME</code>：设置目标系统类型（如 Linux, WindowsCE, Android 等）</p>
+</li>
+<li><p><code>CMAKE_SYSTEM_PROCESSOR</code>：设置目标处理器架构（如 aarch64, arm, x86_64）</p>
+<ul>
+<li><p>如何知道应该写为什么呢？可以在目标架构上执行<code>uname -m</code> 输出就类似 <code>aarch64</code></p>
+</li>
+<li><p>| 目标架构                 | 推荐设置 <code>CMAKE_SYSTEM_PROCESSOR</code> 为 |<br>| ———————————— | —————————————————— |<br>| x86 (32-bit)             | <code>i686</code>, <code>i386</code>, <code>x86</code>                |<br>| x86_64 (64-bit)          | <code>x86_64</code>                             |<br>| ARM 32-bit (e.g., ARMv7) | <code>arm</code>, <code>armv7l</code>                      |<br>| ARM 64-bit (AArch64)     | <code>aarch64</code>, <code>arm64</code>                   |<br>| MIPS                     | <code>mips</code>, <code>mips64</code>                     |<br>| PowerPC                  | <code>powerpc</code>, <code>ppc64</code>                   |</p>
+</li>
+</ul>
+</li>
+<li><p>CMAKE_C_COMPILER:  顾名思义，即C语言编译器，这里可以将变量设置成完整路径或者文件名，设置成完整路径有一个好处就是CMake会去这个路径下去寻找编译相关的其他工具比如linker,binutils等，如果你写的文件名带有arm-elf等等前缀，CMake会识别到并且去寻找相关的交叉编译器。</p>
+</li>
+<li>CMAKE_CXX_COMPILER: 同上，此时代表的是C++编译器。</li>
+</ul>
+<p>非必须的如下：</p>
+<ul>
+<li>CMAKE_FIND_ROOT_PATH:  代表了一系列的相关文件夹路径的根路径的变更，比如你设置了/opt/arm/,所有的Find_xxx.cmake都会优先根据这个路径下的/usr/lib,/lib等进行查找，然后才会去你自己的/usr/lib和/lib进行查找，如果你有一些库是不被包含在/opt/arm里面的，你也可以显示指定多个值给CMAKE_FIND_ROOT_PATH,比如</li>
+</ul>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set(CMAKE_FIND_ROOT_PATH /opt/arm /opt/inst)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>CMAKE_FIND_ROOT_PATH_MODE_PROGRAM:  对FIND_PROGRAM()起作用，有三种取值，NEVER,ONLY,BOTH,第一个表示不在你CMAKE_FIND_ROOT_PATH下进行查找，第二个表示只在这个路径下查找，第三个表示先查找这个路径，再查找全局路径，对于这个变量来说，一般都是调用宿主机的程序，所以一般都设置成NEVER</li>
+<li>CMAKE_FIND_ROOT_PATH_MODE_LIBRARY: 对FIND_LIBRARY()起作用，表示在链接的时候的库的相关选项，因此这里需要设置成ONLY来保证我们的库是在交叉环境中找的.</li>
+<li>CMAKE_FIND_ROOT_PATH_MODE_INCLUDE:  对FIND_PATH()和FIND_FILE()起作用，一般来说也是ONLY,如果你想改变，一般也是在相关的FIND命令中增加option来改变局部设置，有NO_CMAKE_FIND_ROOT_PATH,ONLY_CMAKE_FIND_ROOT_PATH,BOTH_CMAKE_FIND_ROOT_PATH</li>
+</ul>
+<h2 id="CMAKE-SYSROOT与CMAKE-FIND-ROOT-PATH"><a href="#CMAKE-SYSROOT与CMAKE-FIND-ROOT-PATH" class="headerlink" title="CMAKE_SYSROOT与CMAKE_FIND_ROOT_PATH"></a>CMAKE_SYSROOT与CMAKE_FIND_ROOT_PATH</h2><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 设置 sysroot 路径</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_SYSROOT <span class="string">&quot;/opt/toolchain/aarch64-linux-gnu/sysroot&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置查找根路径（这里包含了 sysroot 和其他可能的库路径）</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH <span class="variable">$&#123;CMAKE_SYSROOT&#125;</span> /home/user/mylibs)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 控制查找行为</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)   <span class="comment"># 不在 root path 中查找可执行程序</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)    <span class="comment"># 库文件只在 root path 中查找</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)    <span class="comment"># 头文件只在 root path 中查找</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)    <span class="comment"># 包配置文件只在 root path 中查找</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong><code>CMAKE_SYSROOT</code></strong>：主要用于编译器和链接器，告诉它们目标平台的标准库和头文件在哪里。 只能在toolchain file中设置</li>
+<li><strong><code>CMAKE_FIND_ROOT_PATH</code></strong>：是一个更广泛的查找路径集合，不仅包含 <code>CMAKE_SYSROOT</code>，还可以包含其他你需要查找的路径。</li>
+<li><strong>配合使用</strong>：通过设置 <code>CMAKE_FIND_ROOT_PATH_MODE_*</code> 变量，可以精确控制 CMake 如何在这些路径中查找不同的资源。</li>
+</ul>
+<p>但是问题来了，有的时候我并没有设置CMAKE_SYSROOT，那么交叉编译联接的头文件和库文件是怎么知道使用的是arm版本呢？</p>
+<p>例如下面的toolchain file .</p>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 要为其生成CMake的操作系统的名称</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_SYSTEM_NAME Linux)</span><br><span class="line"><span class="comment"># 目标体系结构的CMake标识符。</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_SYSTEM_PROCESSOR aarch64)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(TOOL_CHAINS <span class="string">&quot;/opt/nvidia/driveos/toolchains&quot;</span>)</span><br><span class="line"><span class="comment"># set(CMAKE_SYSROOT /home/zyd/drive/drive-linux/filesystem/targetfs)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># set(CMAKE_FIND_ROOT_PATH_MODE_PROGRAM NEVER)</span></span><br><span class="line"><span class="comment"># set(CMAKE_FIND_ROOT_PATH_MODE_LIBRARY ONLY)</span></span><br><span class="line"><span class="comment"># set(CMAKE_FIND_ROOT_PATH_MODE_INCLUDE ONLY)</span></span><br><span class="line"><span class="comment"># set(CMAKE_FIND_ROOT_PATH_MODE_PACKAGE ONLY)</span></span><br><span class="line"><span class="comment"># set(CMAKE_STAGING_PREFIX /home/devel/stage)</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># include_directories(/media/zyd/VisionPerception40Env/toolChainsQnx710/target/qnx7/usr/include)</span></span><br><span class="line"><span class="keyword">include_directories</span>(/home/zyd/drive/drive-linux/filesystem/targetfs/usr/<span class="keyword">include</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置交叉编译工具链gcc和g++</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_C_COMPILER <span class="variable">$&#123;TOOL_CHAINS&#125;</span>/aarch64--glibc--stable-<span class="number">2022.03</span>-<span class="number">1</span>/bin/aarch64-linux-gcc)</span><br><span class="line"><span class="keyword">set</span>(CMAKE_CXX_COMPILER <span class="variable">$&#123;TOOL_CHAINS&#125;</span>/aarch64--glibc--stable-<span class="number">2022.03</span>-<span class="number">1</span>/bin/aarch64-linux-g++)</span><br><span class="line"></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CUDA_STANDARD <span class="number">11</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 配置cuda的编译工具链nvcc</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CUDA_COMPILER <span class="string">&quot;/usr/local/cuda-11.4/bin/nvcc&quot;</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 设置编译选项 源代码反汇编视图用于在源代码和汇编指令级别显示内核的分析结果。为了能够查看内核源代码，您需要使用-lineinfo选项编译代码。如果不使用此编译器选项，则只显示反汇编视图。</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CUDA_FLAGS <span class="string">&quot;-lineinfo&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment"># cuda的目标架构</span></span><br><span class="line"><span class="keyword">if</span>(<span class="keyword">NOT</span> <span class="keyword">DEFINED</span> CMAKE_CUDA_ARCHITECTURES)</span><br><span class="line">  <span class="keyword">set</span>(CMAKE_CUDA_ARCHITECTURES <span class="number">61</span>)</span><br><span class="line"><span class="keyword">endif</span>()</span><br><span class="line"></span><br><span class="line"><span class="keyword">include_directories</span>(/home/zyd/drive/drive-linux/filesystem/targetfs/usr/<span class="keyword">include</span>)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># CMAKE_CUDA_HOST_COMPILER会选择编译CUDA语言文件的主机代码时要使用的编译器可执行文件。这映射到nvcc-ccbin选项</span></span><br><span class="line"><span class="comment"># set(CMAKE_CUDA_HOST_COMPILER &quot;$&#123;ORIN_HOST&#125;/usr/bin/aarch64-unknown-nto-qnx7.1.0-g++&quot;)</span></span><br><span class="line"><span class="keyword">set</span>(CMAKE_CUDA_HOST_COMPILER <span class="string">&quot;$&#123;TOOL_CHAINS&#125;/aarch64--glibc--stable-2022.03-1/bin/aarch64-linux-g++&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>只要你的交叉编译器正确配置了 <code>-sysroot</code> 或默认指向目标平台的 sysroot，那么像 <code>&lt;stdlib.h&gt;</code> 这样的系统头文件会从交叉编译器所使用的 <strong>目标平台的 sysroot 中加载</strong>，而不是主机上的。</p>
+<p>当你使用交叉编译器（如 <code>aarch64-linux-gnu-gcc</code>）时，这个编译器本身已经配置好了对目标平台的支持，包括：</p>
+<ul>
+<li>默认的系统头文件路径（如 <code>/usr/aarch64-linux-gnu/include/</code>）；</li>
+<li>默认的库路径（如 <code>/usr/aarch64-linux-gnu/lib/</code>）；</li>
+</ul>
+<p>这些路径是硬编码在交叉编译器中的，或者通过 <code>-sysroot</code> 自动传递的。</p>
+<ul>
+<li><p>编译器本身就已经配置好了默认的系统头文件路径和库路径。你可以通过以下命令查看它默认搜索哪些路径：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aarch64-buildroot-linux-gnu-gcc -E -v -x c++ -</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>如何确认当前编译器是否会使用正确的 sysroot</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aarch64-buildroot-linux-gnu-gcc -print-sysroot</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>看编译器使用的库路径，你可以运行</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">aarch64-buildroot-linux-gnu-gcc -print-search-dirs</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>例如我的交叉编译gcc输出如下</p>
+<p>可以看出，编译器自己已经设置了—with-sysroot 还有头文件和库文件的路径</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">root@P7479785A244:/home/zyd<span class="comment"># /opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/aarch64-buildroot-linux-gnu-gcc -E -v -x c++ -</span></span><br><span class="line">Using built-in specs.</span><br><span class="line">COLLECT_GCC=/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/aarch64-buildroot-linux-gnu-gcc.br_real</span><br><span class="line">Target: aarch64-buildroot-linux-gnu</span><br><span class="line">Configured with: ./configure --prefix=/sources/build/build --sysconfdir=/sources/build/build/etc --enable-static --target=aarch64-buildroot-linux-gnu --with-sysroot=/sources/build/build/aarch64-buildroot-linux-gnu/sysroot --enable-__cxa_atexit --with-gnu-ld --disable-libssp --disable-multilib --disable-decimal-float --with-gmp=/sources/build/build --with-mpc=/sources/build/build --with-mpfr=/sources/build/build --with-pkgversion=<span class="string">&#x27;Buildroot 2020.08&#x27;</span> --with-bugurl=http://bugs.buildroot.net/ --without-zstd --disable-libquadmath --disable-libquadmath-support --enable-tls --enable-threads --without-isl --without-cloog --with-abi=lp64 --with-cpu=cortex-a53 --enable-languages=c,c++,fortran --with-build-time-tools=/sources/build/build/aarch64-buildroot-linux-gnu/bin --enable-shared --enable-libgomp</span><br><span class="line">Thread model: posix</span><br><span class="line">gcc version 9.3.0 (Buildroot 2020.08) </span><br><span class="line">COLLECT_GCC_OPTIONS=<span class="string">&#x27;-E&#x27;</span> <span class="string">&#x27;-v&#x27;</span> <span class="string">&#x27;-mcpu=cortex-a53&#x27;</span> <span class="string">&#x27;-mlittle-endian&#x27;</span> <span class="string">&#x27;-mabi=lp64&#x27;</span></span><br><span class="line"> /opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../libexec/gcc/aarch64-buildroot-linux-gnu/9.3.0/cc1plus -E -quiet -v -iprefix /opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/ -isysroot /opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/aarch64-buildroot-linux-gnu/sysroot -D_GNU_SOURCE - -mcpu=cortex-a53 -mlittle-endian -mabi=lp64</span><br><span class="line">ignoring duplicate directory <span class="string">&quot;/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../lib/gcc/../../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/../../../../aarch64-buildroot-linux-gnu/include/c++/9.3.0&quot;</span></span><br><span class="line">ignoring duplicate directory <span class="string">&quot;/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../lib/gcc/../../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/../../../../aarch64-buildroot-linux-gnu/include/c++/9.3.0/aarch64-buildroot-linux-gnu&quot;</span></span><br><span class="line">ignoring duplicate directory <span class="string">&quot;/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../lib/gcc/../../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/../../../../aarch64-buildroot-linux-gnu/include/c++/9.3.0/backward&quot;</span></span><br><span class="line">ignoring duplicate directory <span class="string">&quot;/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../lib/gcc/../../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/include&quot;</span></span><br><span class="line">ignoring nonexistent directory <span class="string">&quot;/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/aarch64-buildroot-linux-gnu/sysroot/usr/local/include&quot;</span></span><br><span class="line">ignoring duplicate directory <span class="string">&quot;/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../lib/gcc/../../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/include-fixed&quot;</span></span><br><span class="line">ignoring duplicate directory <span class="string">&quot;/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../lib/gcc/../../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/../../../../aarch64-buildroot-linux-gnu/include&quot;</span></span><br><span class="line"><span class="comment">#include &quot;...&quot; search starts here:</span></span><br><span class="line"><span class="comment">#include &lt;...&gt; search starts here:</span></span><br><span class="line"> /opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/../../../../aarch64-buildroot-linux-gnu/include/c++/9.3.0</span><br><span class="line"> /opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/../../../../aarch64-buildroot-linux-gnu/include/c++/9.3.0/aarch64-buildroot-linux-gnu</span><br><span class="line"> /opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/../../../../aarch64-buildroot-linux-gnu/include/c++/9.3.0/backward</span><br><span class="line"> /opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/include</span><br><span class="line"> /opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/include-fixed</span><br><span class="line"> /opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/../../../../aarch64-buildroot-linux-gnu/include</span><br><span class="line"> /opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/aarch64-buildroot-linux-gnu/sysroot/usr/include</span><br><span class="line">End of search list.</span><br><span class="line">^C</span><br><span class="line">root@P7479785A244:/home/zyd<span class="comment"># /opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/aarch64-buildroot-linux-gnu-gcc -print-sysroot</span></span><br><span class="line">/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/aarch64-buildroot-linux-gnu/sysroot</span><br><span class="line">root@P7479785A244:/home/zyd<span class="comment"># /opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/aarch64-buildroot-linux-gnu-gcc -print-search-dirs</span></span><br><span class="line">install: /opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/</span><br><span class="line">programs: =/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../libexec/gcc/aarch64-buildroot-linux-gnu/9.3.0/:/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../libexec/gcc/:/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/../../../../aarch64-buildroot-linux-gnu/bin/aarch64-buildroot-linux-gnu/9.3.0/:/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/../../../../aarch64-buildroot-linux-gnu/bin/</span><br><span class="line">libraries: =/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/:/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../lib/gcc/:/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/../../../../aarch64-buildroot-linux-gnu/lib/aarch64-buildroot-linux-gnu/9.3.0/:/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/../../../../aarch64-buildroot-linux-gnu/lib/../lib64/:/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/aarch64-buildroot-linux-gnu/sysroot/lib/aarch64-buildroot-linux-gnu/9.3.0/:/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/aarch64-buildroot-linux-gnu/sysroot/lib/../lib64/:/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/aarch64-buildroot-linux-gnu/sysroot/usr/lib/aarch64-buildroot-linux-gnu/9.3.0/:/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/aarch64-buildroot-linux-gnu/sysroot/usr/lib/../lib64/:/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/../lib/gcc/aarch64-buildroot-linux-gnu/9.3.0/../../../../aarch64-buildroot-linux-gnu/lib/:/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/aarch64-buildroot-linux-gnu/sysroot/lib/:/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/aarch64-buildroot-linux-gnu/sysroot/usr/lib/</span><br></pre></td></tr></table></figure>
+<h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><ul>
+<li>Cmake官方：<a target="_blank" rel="noopener" href="https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html">https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html</a></li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/cmake/cmake%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/" title="cmake交叉编译">http://example.com/cmake/cmake交叉编译/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C++</a>
+              <a href="/tags/cmake/" rel="tag"><i class="fa fa-tag"></i> cmake</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/TensorRT/CPU%E4%B8%8EGPU%E5%86%85%E5%AD%98/" rel="prev" title="CPU与GPU内存">
+                  <i class="fa fa-chevron-left"></i> CPU与GPU内存
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"95a8d3153345c183d211f0bab28b2876"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

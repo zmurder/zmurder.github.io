@@ -8,6 +8,10 @@
 
 下面的经验基本上都是解决插入QDQ后速度没有明显提升的问题u。
 
+## SVG中的reformat
+
+在SVG图中搜索QDQ，就可以的到所有的因为QDQ引入的reformat节点
+
 ## 标准残差
 
 标准的残差结构如下，我们在插入量化节点时，需要在
@@ -221,6 +225,8 @@ t if you insert the QDQ in this way, confirm the there QDQ has the same scale ot
 ![无标题](./TensorRT量化实战经验/无标题-1747230307166-9.png)
 
 ##  concat节点
+
+concat穿透：结合之前的“带有QDQ的onnx用trtexec转engine日日志分析”可以看出concat后面的Q会被穿透到concat上面。
 
 在官方代码中有一个函数是`apply_custom_rules_to_quantizer`
 

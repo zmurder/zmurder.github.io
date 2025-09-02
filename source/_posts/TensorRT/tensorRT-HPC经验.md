@@ -15,6 +15,8 @@
 如果是使用trtexec构建engine
 
 * **在构建engine的时候使用trtexec的选项--maxAuxStreams=N 设置为--maxAuxStreams=0 即可。**
+* 模型小kernel比较多的时候，aux stream用default（7）会比0快
+* optlevel=4和aux stream对最终测出的性能有影响，optlevel=4一般是性能更好，aux stream只在少数情况下性能更好
 
 在我们多线程，多stream的程序中，最好是可以手动控制stream。因此这里设置为0最好。
 

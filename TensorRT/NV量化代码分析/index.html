@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 6.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+  <meta name="msvalidate.01" content="7EC20DBC74B004C2782077570E15C280">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha256-Z1K5uhUaJXA7Ll0XrZ/0JhX4lAtZFpT6jkKrEDT0drU=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"example.com","root":"/","images":"/images","scheme":"Mist","darkmode":false,"version":"8.14.2","exturl":false,"sidebar":{"position":"left","display":"always","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
+     crossorigin="anonymous"></script>
+    <meta name="description" content="简介针对NV的qat量化代码进行分析，主要针对如何插入QDQ节点进行说明，模型的qat训练暂时先不讨论，持续更新，看到哪里写道哪里">
+<meta property="og:type" content="article">
+<meta property="og:title" content="NV量化代码分析">
+<meta property="og:url" content="http://example.com/TensorRT/NV%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="奔跑的IC">
+<meta property="og:description" content="简介针对NV的qat量化代码进行分析，主要针对如何插入QDQ节点进行说明，模型的qat训练暂时先不讨论，持续更新，看到哪里写道哪里">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/TensorRT/NV%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/Snipaste_2025-06-26_10-38-14.bmp">
+<meta property="article:published_time" content="2025-09-02T12:37:51.226Z">
+<meta property="article:modified_time" content="2025-06-26T07:38:41.000Z">
+<meta property="article:author" content="奔跑的IC">
+<meta property="article:tag" content="git">
+<meta property="article:tag" content="C">
+<meta property="article:tag" content="Tensorrt">
+<meta property="article:tag" content="Plugin">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/TensorRT/NV%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/Snipaste_2025-06-26_10-38-14.bmp">
+
+
+<link rel="canonical" href="http://example.com/TensorRT/NV%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-Hans","comments":true,"permalink":"http://example.com/TensorRT/NV%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/","path":"TensorRT/NV量化代码分析/","title":"NV量化代码分析"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>NV量化代码分析 | 奔跑的IC</title>
+  
+
+
+
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">奔跑的IC</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-reorder fa-fw"></i>文章列表</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup"><div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off" maxlength="80"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close" role="button">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div class="search-result-container no-result">
+  <div class="search-result-icon">
+    <i class="fa fa-spinner fa-pulse fa-5x"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%AE%80%E4%BB%8B"><span class="nav-text">简介</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="nav-text">整体流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BB%E8%A6%81%E6%B5%81%E7%A8%8B"><span class="nav-text">主要流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96%EF%BC%9Aquantize-initialize"><span class="nav-text">初始化：quantize.initialize()</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8A%A0%E8%BD%BD%E6%A8%A1%E5%9E%8B"><span class="nav-text">加载模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%BF%E6%8D%A2%E8%87%AA%E5%8A%A8%E5%8C%B9%E9%85%8D%E7%9A%84%E9%87%8F%E5%8C%96%E6%A8%A1%E5%9D%97"><span class="nav-text">替换自动匹配的量化模块</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9B%BF%E6%8D%A2%E8%87%AA%E5%AE%9A%E4%B9%89%E7%9A%84%E9%87%8F%E5%8C%96%E6%A8%A1%E5%9D%97"><span class="nav-text">替换自定义的量化模块</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%98%E6%96%B9%E5%AE%9E%E4%BE%8B%E5%86%99%E6%B3%95"><span class="nav-text">官方实例写法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%8F%A6%E5%A4%96%E4%B8%80%E7%A7%8D%E5%86%99%E6%B3%95"><span class="nav-text">另外一种写法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94"><span class="nav-text">对比</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%86%E6%9E%90%E9%87%8F%E5%8C%96%E8%8A%82%E7%82%B9%E6%98%AF%E5%90%A6%E5%90%88%E7%90%86"><span class="nav-text">分析量化节点是否合理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%87%8F%E5%8C%96%E6%A8%A1%E5%9E%8B%E6%A0%A1%E5%87%86"><span class="nav-text">量化模型校准</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%95%8F%E6%84%9F%E5%B1%82%E5%88%86%E6%9E%90"><span class="nav-text">敏感层分析</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%A5%E8%AF%86%E7%82%B9"><span class="nav-text">知识点</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#PER-TENSOR%E4%B8%8EPER-CHANNEL%E9%87%8F%E5%8C%96"><span class="nav-text">PER_TENSOR与PER_CHANNEL量化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%B1%BB%E7%9A%84%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB"><span class="nav-text">类的继承关系</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#QuantConv2d"><span class="nav-text">QuantConv2d</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QuantMixin"><span class="nav-text">QuantMixin</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TensorQuantizer"><span class="nav-text">TensorQuantizer</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#QuantDescriptor"><span class="nav-text">QuantDescriptor</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="奔跑的IC"
+      src="/images/zyd.gif">
+  <p class="site-author-name" itemprop="name">奔跑的IC</p>
+  <div class="site-description" itemprop="description">死磕牛角的IT农民工</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">190</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">29</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="cc-license animated" itemprop="license">
+    <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" class="cc-opacity" rel="noopener" target="_blank"><img src="https://cdnjs.cloudflare.com/ajax/libs/creativecommons-vocabulary/2020.11.3/assets/license_badges/small/by_nc_sa.svg" alt="Creative Commons"></a>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/NV%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="NV量化代码分析 | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          NV量化代码分析
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-09-02 20:37:51" itemprop="dateCreated datePublished" datetime="2025-09-02T20:37:51+08:00">2025-09-02</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-06-26 15:38:41" itemprop="dateModified" datetime="2025-06-26T15:38:41+08:00">2025-06-26</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
+        </span>
+    </span>
+
+  
+    <span class="post-meta-item" title="阅读次数" id="busuanzi_container_page_pv">
+      <span class="post-meta-item-icon">
+        <i class="far fa-eye"></i>
+      </span>
+      <span class="post-meta-item-text">阅读次数：</span>
+      <span id="busuanzi_value_page_pv"></span>
+    </span>
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>针对NV的qat量化代码进行分析，主要针对如何插入QDQ节点进行说明，模型的qat训练暂时先不讨论，持续更新，看到哪里写道哪里</p>
+<p>结合之前量化相关的博客食用更佳。</p>
+<h1 id="整体流程"><a href="#整体流程" class="headerlink" title="整体流程"></a>整体流程</h1><p>NV有两份代码可以参考：</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/NVIDIA-AI-IOT/yolo_deepstream/blob/main/yolov7_qat/scripts/qat-yolov5.py">https://github.com/NVIDIA-AI-IOT/yolo_deepstream/blob/main/yolov7_qat/scripts/qat-yolov5.py</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/NVIDIA-AI-IOT/Lidar_AI_Solution/blob/master/CUDA-BEVFusion/qat/ptq.py">https://github.com/NVIDIA-AI-IOT/Lidar_AI_Solution/blob/master/CUDA-BEVFusion/qat/ptq.py</a></li>
+</ul>
+<p>两个代码实现方式略有不同，可以对比一下对量化代码有一个更加深入的理解。</p>
+<p>这里针对地一个代码进行一个整体流程的介绍，目前我使用的就是这套修改的</p>
+<h2 id="主要流程"><a href="#主要流程" class="headerlink" title="主要流程"></a>主要流程</h2><p>下面代码解释了主要的插入QDQ的流程：</p>
+<ul>
+<li>初始化：quantize.initialize()</li>
+<li>加载模型：model   = load_yolov5s_model(weight, device)</li>
+<li>替换自定义的量化模块：quantize.replace_bottleneck_forward(model)</li>
+<li>替换自动匹配的量化模块：quantize.replace_to_quantization_module(model)</li>
+<li>分析量化节点是否合理：quantize.apply_custom_rules_to_quantizer</li>
+<li>量化模型校准：quantize.calibrate_model(model, train_dataloader, device)</li>
+<li>敏感层分析：Sensitive analysis</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">cmd_quantize</span>(<span class="params">weight, cocodir, device, ignore_policy, save_ptq, save_qat, supervision_stride, iters, eval_origin, eval_ptq</span>):</span><br><span class="line">    quantize.initialize()</span><br><span class="line">    </span><br><span class="line">    model   = load_yolov5s_model(weight, device)</span><br><span class="line">    train_dataloader = create_coco_train_dataloader(cocodir)</span><br><span class="line">    val_dataloader   = create_coco_val_dataloader(cocodir)</span><br><span class="line">    quantize.replace_bottleneck_forward(model)</span><br><span class="line">    quantize.replace_to_quantization_module(model, ignore_policy=ignore_policy)</span><br><span class="line">    quantize.apply_custom_rules_to_quantizer(model, export_onnx)</span><br><span class="line">    quantize.calibrate_model(model, train_dataloader, device)</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p>再加上敏感层分析</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">cmd_sensitive_analysis</span>(<span class="params">weight, device, cocodir, summary_save, num_image</span>):</span><br><span class="line">    ...</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;Sensitive analysis by each layer...&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">0</span>, <span class="built_in">len</span>(model.model)):</span><br><span class="line">        layer = model.model[i]</span><br><span class="line">        <span class="keyword">if</span> quantize.have_quantizer(layer):</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;Quantization disable model.<span class="subst">&#123;i&#125;</span>&quot;</span>)</span><br><span class="line">            quantize.disable_quantization(layer).apply()</span><br><span class="line">            ap = evaluate_coco(model, val_dataloader)</span><br><span class="line">            summary.append([ap, <span class="string">f&quot;model.<span class="subst">&#123;i&#125;</span>&quot;</span>])</span><br><span class="line">            quantize.enable_quantization(layer).apply()</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;ignore model.<span class="subst">&#123;i&#125;</span> because it is <span class="subst">&#123;<span class="built_in">type</span>(layer)&#125;</span>&quot;</span>)</span><br><span class="line">	....</span><br><span class="line">    </span><br></pre></td></tr></table></figure>
+<p>我觉的更好的敏感层分析代码在<a target="_blank" rel="noopener" href="https://github.com/NVIDIA-AI-IOT/Lidar_AI_Solution/blob/master/CUDA-BEVFusion/qat/lean/quantize.p">https://github.com/NVIDIA-AI-IOT/Lidar_AI_Solution/blob/master/CUDA-BEVFusion/qat/lean/quantize.p</a></p>
+<p>我实际参考就是这个，如下</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">def build_sensitivity_profile(model, data_loader_val, dataset_val, eval_model_callback : Callable = None):</span><br><span class="line">    quant_layer_names = []</span><br><span class="line">    for name, module in model.named_modules():</span><br><span class="line">        if name.endswith(&quot;_quantizer&quot;):</span><br><span class="line">            print(&#x27;use quant layer:&#123;&#125;&#x27;,name)</span><br><span class="line">            module.disable()</span><br><span class="line">            layer_name = name.replace(&quot;._input_quantizer&quot;, &quot;&quot;).replace(&quot;._weight_quantizer&quot;, &quot;&quot;)</span><br><span class="line">            if layer_name not in quant_layer_names:</span><br><span class="line">                quant_layer_names.append(layer_name)</span><br><span class="line">    for i, quant_layer in enumerate(quant_layer_names):</span><br><span class="line">        print(&quot;Enable&quot;, quant_layer)</span><br><span class="line">        for name, module in model.named_modules():</span><br><span class="line">            if name.endswith(&quot;_quantizer&quot;) and quant_layer in name:</span><br><span class="line">                module.enable()</span><br><span class="line">                print(F&quot;&#123;name:40&#125;: &#123;module&#125;&quot;)</span><br><span class="line">        with torch.no_grad():</span><br><span class="line">            eval_model_callback(model,data_loader_val, dataset_val) </span><br><span class="line">        for name, module in model.named_modules():</span><br><span class="line">            if name.endswith(&quot;_quantizer&quot;) and quant_layer in name:</span><br><span class="line">                module.disable()</span><br><span class="line">                print(F&quot;&#123;name:40&#125;: &#123;module&#125;&quot;)</span><br></pre></td></tr></table></figure>
+<h2 id="初始化：quantize-initialize"><a href="#初始化：quantize-initialize" class="headerlink" title="初始化：quantize.initialize()"></a>初始化：quantize.initialize()</h2><p>代码如下</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">initialize</span>():</span><br><span class="line">    quant_desc_input = QuantDescriptor(calib_method=<span class="string">&quot;histogram&quot;</span>)<span class="comment">#max or histogram   other methods are all hisogram based. Default &quot;max&quot;.</span></span><br><span class="line">    quant_nn.QuantConv2d.set_default_quant_desc_input(quant_desc_input)</span><br><span class="line">    quant_nn.QuantMaxPool2d.set_default_quant_desc_input(quant_desc_input)</span><br><span class="line">    quant_nn.QuantLinear.set_default_quant_desc_input(quant_desc_input)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">#quant_desc_input = QuantDescriptor(calib_method=&quot;max&quot;)#[&quot;max&quot;, &quot;histogram&quot;]</span></span><br><span class="line">    <span class="comment">#quant_desc_weight = QuantDescriptor(calib_method=&quot;max&quot;)#[&quot;max&quot;, &quot;histogram&quot;]</span></span><br><span class="line">    <span class="comment">#quant_nn.QuantConv2d.set_default_quant_desc_input(quant_desc_input)</span></span><br><span class="line">    <span class="comment">#quant_nn.QuantConv2d.set_default_quant_desc_weight(quant_desc_weight)</span></span><br><span class="line">    </span><br><span class="line">    quant_logging.set_verbosity(quant_logging.ERROR)</span><br></pre></td></tr></table></figure>
+<p>上面的代码主要就是设置了针对QuantConv2d、QuantMaxPool2d、QuantLinear的input的QuantDescriptor，全部设置为calib_method=”histogram”。</p>
+<ul>
+<li><p>calib_method可以设置为max or histogram   other methods are all hisogram based. Default “max”. 也就是校准的方法。校准方法有什么用？在后面量化模型校准再呼应上讲解。</p>
+<ul>
+<li>什么时候需要调整calib_method呢？可以根据量化的精度或者层的数据分布决定，在量化精度不好的情况下可以修改测试。</li>
+<li>histogram 还细分为几个method：entropy、mse、percentile。如何设置呢？<ul>
+<li>如果这里设置的calib_method=”histogram”，那么在量化模型校准时，需要设置的参数load_calib_amax实现指定method是entropy、mse、percentile其中的一个</li>
+<li>如果这里设置的calib_method=”max”，那么在量化模型校准时，load_calib_amax默认值就行，或者指定method为max</li>
+</ul>
+</li>
+<li>注：如果希望改变整体的量化方法，就在这里修改。如果是希望整体都是max，但是部分是histogram，我还没有测试如何实现。</li>
+</ul>
+</li>
+<li><p>set_default_quant_desc_input方法设置了input的quant_desc为quant_desc_input。也就是只有input的calib_method=”histogram”</p>
+</li>
+<li>其实除了set_default_quant_desc_input 还有一个方法为set_default_quant_desc_weight。也就是可以单独的指定input和weightQuantDescriptor。可以参考pytorch_quantization/nn/modules/_utils.py<ul>
+<li>set_default_quant_desc_input 设置输入的QuantDescriptor</li>
+<li>set_default_quant_desc_weight 设置权重的QuantDescriptor</li>
+</ul>
+</li>
+</ul>
+<p>例如我下面QuantConv2d设置的QuantDescriptor都是max</p>
+<img src="/TensorRT/NV%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/Snipaste_2025-06-26_10-38-14.bmp" class="" title="Snipaste_2025-06-26_10-38-14">
+<h2 id="加载模型"><a href="#加载模型" class="headerlink" title="加载模型"></a>加载模型</h2><p>没什么讲解的，就是加载原始的pth模型而已。这时的模型是原始的，我们需要在这个模型上添加QDQ节点。</p>
+<h2 id="替换自动匹配的量化模块"><a href="#替换自动匹配的量化模块" class="headerlink" title="替换自动匹配的量化模块"></a>替换自动匹配的量化模块</h2><p>调用官方的replace_to_quantization_module(model)函数就可以了。不需要修改</p>
+<p>作用就是替换自动匹配的算子为量化版本的算子，例如conv2d-&gt;QuantConv2d</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">transfer_torch_to_quantization</span>(<span class="params">nninstance: torch.nn.Module, quantmodule</span>):</span><br><span class="line"></span><br><span class="line">    quant_instance = quantmodule.__new__(quantmodule)</span><br><span class="line">    <span class="keyword">for</span> k, val <span class="keyword">in</span> <span class="built_in">vars</span>(nninstance).items():</span><br><span class="line">        <span class="built_in">setattr</span>(quant_instance, k, val)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self</span>):</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(self, QuantAdaptiveAvgPool2d):</span><br><span class="line">            quant_desc_input = quant_nn_utils.pop_quant_desc_in_kwargs(self.__class__, input_only=<span class="literal">True</span>)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            quant_desc_input, quant_desc_weight = quant_nn_utils.pop_quant_desc_in_kwargs(self.__class__)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(self, quant_nn_utils.QuantInputMixin):</span><br><span class="line">            self.init_quantizer(quant_desc_input)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Turn on torch_hist to enable higher calibration speeds</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(self._input_quantizer._calibrator, calib.HistogramCalibrator):</span><br><span class="line">                self._input_quantizer._calibrator._torch_hist = <span class="literal">True</span></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            self.init_quantizer(quant_desc_input, quant_desc_weight)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># Turn on torch_hist to enable higher calibration speeds</span></span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(self._input_quantizer._calibrator, calib.HistogramCalibrator):</span><br><span class="line">                self._input_quantizer._calibrator._torch_hist = <span class="literal">True</span></span><br><span class="line">                self._weight_quantizer._calibrator._torch_hist = <span class="literal">True</span></span><br><span class="line"></span><br><span class="line">    __init__(quant_instance)</span><br><span class="line">    <span class="keyword">return</span> quant_instance</span><br><span class="line"><span class="keyword">def</span> <span class="title function_">replace_to_quantization_module</span>(<span class="params">model: torch.nn.Module, ignore_policy: <span class="type">Union</span>[<span class="built_in">str</span>, <span class="type">List</span>[<span class="built_in">str</span>], <span class="type">Callable</span>] = <span class="literal">None</span></span>):</span><br><span class="line"></span><br><span class="line">    module_dict = &#123;&#125;</span><br><span class="line">    <span class="keyword">for</span> entry <span class="keyword">in</span> quant_modules._DEFAULT_QUANT_MAP:</span><br><span class="line">        module = <span class="built_in">getattr</span>(entry.orig_mod, entry.mod_name)</span><br><span class="line">        module_dict[<span class="built_in">id</span>(module)] = entry.replace_mod</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">recursive_and_replace_module</span>(<span class="params">module, prefix=<span class="string">&quot;&quot;</span></span>):</span><br><span class="line">        <span class="keyword">if</span> module <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;[WARNING] Module at &#x27;<span class="subst">&#123;prefix&#125;</span>&#x27; is None, skipping...&quot;</span>)</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        <span class="keyword">for</span> name <span class="keyword">in</span> module._modules:</span><br><span class="line">            submodule = module._modules[name]</span><br><span class="line">            path = name <span class="keyword">if</span> prefix == <span class="string">&quot;&quot;</span> <span class="keyword">else</span> prefix + <span class="string">&quot;.&quot;</span> + name</span><br><span class="line">            recursive_and_replace_module(submodule, path)</span><br><span class="line"></span><br><span class="line">            submodule_id = <span class="built_in">id</span>(<span class="built_in">type</span>(submodule))</span><br><span class="line">            <span class="keyword">if</span> submodule_id <span class="keyword">in</span> module_dict:</span><br><span class="line">                ignored = quantization_ignore_match(ignore_policy, path)</span><br><span class="line">                <span class="keyword">if</span> ignored:</span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">f&quot;Quantization: <span class="subst">&#123;path&#125;</span> has ignored.&quot;</span>)</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">                module._modules[name] = transfer_torch_to_quantization(submodule, module_dict[submodule_id])</span><br><span class="line"></span><br><span class="line">    recursive_and_replace_module(model)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>自动替换的算子参考参考 pytorch_quantization/quant_modules.py</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">_DEFAULT_QUANT_MAP = [_quant_entry(torch.nn, <span class="string">&quot;Conv1d&quot;</span>, quant_nn.QuantConv1d),</span><br><span class="line">                      _quant_entry(torch.nn, <span class="string">&quot;Conv2d&quot;</span>, quant_nn.QuantConv2d),</span><br><span class="line">                      _quant_entry(torch.nn, <span class="string">&quot;Conv3d&quot;</span>, quant_nn.QuantConv3d),</span><br><span class="line">                      _quant_entry(torch.nn, <span class="string">&quot;ConvTranspose1d&quot;</span>, quant_nn.QuantConvTranspose1d),</span><br><span class="line">                      _quant_entry(torch.nn, <span class="string">&quot;ConvTranspose2d&quot;</span>, quant_nn.QuantConvTranspose2d),</span><br><span class="line">                      _quant_entry(torch.nn, <span class="string">&quot;ConvTranspose3d&quot;</span>, quant_nn.QuantConvTranspose3d),</span><br><span class="line">                      _quant_entry(torch.nn, <span class="string">&quot;Linear&quot;</span>, quant_nn.QuantLinear),</span><br><span class="line">                      _quant_entry(torch.nn, <span class="string">&quot;LSTM&quot;</span>, quant_nn.QuantLSTM),</span><br><span class="line">                      _quant_entry(torch.nn, <span class="string">&quot;LSTMCell&quot;</span>, quant_nn.QuantLSTMCell),</span><br><span class="line">                      _quant_entry(torch.nn, <span class="string">&quot;AvgPool1d&quot;</span>, quant_nn.QuantAvgPool1d),</span><br><span class="line">                      _quant_entry(torch.nn, <span class="string">&quot;AvgPool2d&quot;</span>, quant_nn.QuantAvgPool2d),</span><br><span class="line">                      _quant_entry(torch.nn, <span class="string">&quot;AvgPool3d&quot;</span>, quant_nn.QuantAvgPool3d),</span><br><span class="line">                      _quant_entry(torch.nn, <span class="string">&quot;AdaptiveAvgPool1d&quot;</span>, quant_nn.QuantAdaptiveAvgPool1d),</span><br><span class="line">                      _quant_entry(torch.nn, <span class="string">&quot;AdaptiveAvgPool2d&quot;</span>, quant_nn.QuantAdaptiveAvgPool2d),</span><br><span class="line">                      _quant_entry(torch.nn, <span class="string">&quot;AdaptiveAvgPool3d&quot;</span>, quant_nn.QuantAdaptiveAvgPool3d),]</span><br></pre></td></tr></table></figure>
+<p>经过上面的函数，模型中所有的算子，只要有对应量化版本的都会自动替换。</p>
+<h2 id="替换自定义的量化模块"><a href="#替换自定义的量化模块" class="headerlink" title="替换自定义的量化模块"></a>替换自定义的量化模块</h2><p>为什么要有这个步骤？因为算子自动替换为量化算子的不能满足自己的所有情况，例如<a target="_blank" rel="noopener" href="https://zmurder.github.io/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C">https://zmurder.github.io/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E7%BB%8F%E9%AA%8C</a> 中提到的残差部分，也就是add算子是不是需要插入QDQ。这些是需要手动实现的。也就需要自己实现一个QuantAdd</p>
+<p>如何实现呢？</p>
+<p>通过修改替换原始模型这部分的forward函数实现！</p>
+<ul>
+<li>找模型原始的这部分的forward函数，依葫芦画瓢，重新写一个bottleneck_quant_forward</li>
+<li>将原始的forward修改为自己重新的  bottleneck.<strong>class</strong>.forward = bottleneck_quant_forward</li>
+<li>同时给这部分添加一个属性“addop” ，bottleneck.addop = QuantAdd(bottleneck.add) 这个就是在自己修改的bottleneck_quant_forward中调用addop。就实现了替换。</li>
+<li>编写实现QuantAdd  我们参考官方代码依葫芦画瓢即可。</li>
+<li>可以看到这里也使用到了QuantDescriptor。</li>
+</ul>
+<h3 id="官方实例写法"><a href="#官方实例写法" class="headerlink" title="官方实例写法"></a>官方实例写法</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">QuantAdd</span>(torch.nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, quantization</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> quantization:</span><br><span class="line">            self._input0_quantizer = quant_nn.TensorQuantizer(QuantDescriptor(num_bits=<span class="number">8</span>, calib_method=<span class="string">&quot;histogram&quot;</span>))</span><br><span class="line">            self._input1_quantizer = quant_nn.TensorQuantizer(QuantDescriptor(num_bits=<span class="number">8</span>, calib_method=<span class="string">&quot;histogram&quot;</span>))</span><br><span class="line">            self._input0_quantizer._calibrator._torch_hist = <span class="literal">True</span></span><br><span class="line">            self._input1_quantizer._calibrator._torch_hist = <span class="literal">True</span></span><br><span class="line">            self._fake_quant = <span class="literal">True</span></span><br><span class="line">        self.quantization = quantization</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, y</span>):</span><br><span class="line">        <span class="keyword">if</span> self.quantization:</span><br><span class="line">            <span class="comment"># print(f&quot;QAdd &#123;self._input0_quantizer&#125;  &#123;self._input1_quantizer&#125;&quot;)</span></span><br><span class="line">            <span class="keyword">return</span> self._input0_quantizer(x) + self._input1_quantizer(y)</span><br><span class="line">        <span class="keyword">return</span> x + y</span><br><span class="line">    </span><br><span class="line"><span class="comment"># For example: YoloV5 Bottleneck</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">bottleneck_quant_forward</span>(<span class="params">self, x</span>):</span><br><span class="line">    <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&quot;addop&quot;</span>):</span><br><span class="line">        <span class="keyword">return</span> self.addop(x, self.cv2(self.cv1(x))) <span class="keyword">if</span> self.add <span class="keyword">else</span> self.cv2(self.cv1(x))</span><br><span class="line">    <span class="keyword">return</span> x + self.cv2(self.cv1(x)) <span class="keyword">if</span> self.add <span class="keyword">else</span> self.cv2(self.cv1(x))</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># For example: YoloV5 Bottleneck</span></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">replace_bottleneck_forward</span>(<span class="params">model</span>):</span><br><span class="line">    <span class="keyword">for</span> name, module <span class="keyword">in</span> model.named_modules():</span><br><span class="line">        <span class="keyword">if</span> module.__class__.__name__ == <span class="string">&quot;Bottleneck&quot;</span>: <span class="comment"># 模型中所有的这个名字的都被替换</span></span><br><span class="line">        <span class="comment">#if isinstance(module, mmdet.models.backbones.resnext.Bottleneck):#更精细的控制，之替换backbone中的Bottleneck</span></span><br><span class="line">            <span class="keyword">if</span> bottleneck.add:</span><br><span class="line">                <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">hasattr</span>(bottleneck, <span class="string">&quot;addop&quot;</span>):</span><br><span class="line">                    <span class="built_in">print</span>(<span class="string">f&quot;Add QuantAdd to <span class="subst">&#123;name&#125;</span>&quot;</span>)</span><br><span class="line">                    bottleneck.addop = QuantAdd(bottleneck.add)</span><br><span class="line">                bottleneck.__class__.forward = bottleneck_quant_forward</span><br></pre></td></tr></table></figure>
+<p>例如我们可以写一个QuantConcat</p>
+<p>参考<a target="_blank" rel="noopener" href="https://github.com/NVIDIA-AI-IOT/Lidar_AI_Solution/blob/master/CUDA-BEVFusion/qat/lean/quantize.py#L45">Lidar_AI_Solution/CUDA-BEVFusion/qat/lean/quantize.py at master · NVIDIA-AI-IOT/Lidar_AI_Solution</a></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">QuantConcat</span>(torch.nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, quantization =<span class="literal">True</span></span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> quantization:</span><br><span class="line">            self._input_quantizer = quant_nn.TensorQuantizer(QuantDescriptor(num_bits=<span class="number">8</span>, calib_method=<span class="string">&quot;histogram&quot;</span>))</span><br><span class="line">            self._input_quantizer._calibrator._torch_hist = <span class="literal">True</span></span><br><span class="line">            self._fake_quant = <span class="literal">True</span></span><br><span class="line">        self.quantization = quantization</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x,  y</span>):</span><br><span class="line">        <span class="keyword">if</span> self.quantization:</span><br><span class="line">            <span class="keyword">return</span> torch.cat([self._input_quantizer(x), self._input_quantizer(y)], dim=<span class="number">1</span>)</span><br><span class="line">        <span class="keyword">return</span> torch.cat([x, y], dim=<span class="number">1</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="另外一种写法"><a href="#另外一种写法" class="headerlink" title="另外一种写法"></a>另外一种写法</h3><p>还是以QuantAdd为例</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">QuantAdd</span>(torch.nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, quantization, downsample_flag</span>):</span><br><span class="line">        <span class="built_in">super</span>().__init__()</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> quantization:</span><br><span class="line">            self._input0_quantizer = quant_nn.TensorQuantizer(QuantDescriptor(num_bits=<span class="number">8</span>, calib_method=<span class="string">&quot;max&quot;</span>))</span><br><span class="line">            self._input1_quantizer = quant_nn.TensorQuantizer(QuantDescriptor(num_bits=<span class="number">8</span>, calib_method=<span class="string">&quot;max&quot;</span>))</span><br><span class="line">            self._input0_quantizer._calibrator._torch_hist = <span class="literal">True</span></span><br><span class="line">            self._input1_quantizer._calibrator._torch_hist = <span class="literal">True</span></span><br><span class="line">            self._fake_quant = <span class="literal">True</span></span><br><span class="line">        self.quantization = quantization</span><br><span class="line">        self.downsample_flag = downsample_flag</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">forward</span>(<span class="params">self, x, y</span>):</span><br><span class="line">        <span class="comment"># if self.quantization:</span></span><br><span class="line">        <span class="comment">#     return self._input0_quantizer(x) + self._input1_quantizer(y)</span></span><br><span class="line">        <span class="keyword">if</span> self.quantization <span class="keyword">and</span> self.downsample_flag:  <span class="comment">#  优化 add两个输入都加QDQ还是只有一个输入加QDQ</span></span><br><span class="line">            <span class="comment"># print(f&quot;QAdd &#123;self._input0_quantizer&#125;  &#123;self._input1_quantizer&#125;&quot;)</span></span><br><span class="line">            <span class="keyword">return</span> self._input0_quantizer(x) + self._input1_quantizer(y)</span><br><span class="line">        <span class="keyword">elif</span> self.quantization:</span><br><span class="line">            <span class="keyword">return</span> x + self._input1_quantizer(y)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> x + y</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">Bottleneck_quant_forward</span>(<span class="params">self, x</span>):</span><br><span class="line">    <span class="comment"># /data/users/zhaoyidong/code/parking3d/mmmultitask/bak/mmdetection/mmdet/models/backbones/resnet.py</span></span><br><span class="line">    <span class="string">&quot;&quot;&quot;Forward function.&quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">_inner_forward</span>(<span class="params">x</span>):</span><br><span class="line">        identity = x</span><br><span class="line">        out = self.conv1(x)</span><br><span class="line">        out = self.norm1(out)</span><br><span class="line">        <span class="keyword">if</span> model_pruning:</span><br><span class="line">            out = self.relu(out)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            out = self.relu1(out)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.with_plugins:</span><br><span class="line">            out = self.forward_plugin(out, self.after_conv1_plugin_names)</span><br><span class="line"></span><br><span class="line">        out = self.conv2(out)</span><br><span class="line">        out = self.norm2(out)</span><br><span class="line">        <span class="keyword">if</span> model_pruning:</span><br><span class="line">            out = self.relu(out)</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            out = self.relu2(out)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.with_plugins:</span><br><span class="line">            out = self.forward_plugin(out, self.after_conv2_plugin_names)</span><br><span class="line"></span><br><span class="line">        out = self.conv3(out)</span><br><span class="line">        out = self.norm3(out)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> self.with_plugins:</span><br><span class="line">            out = self.forward_plugin(out, self.after_conv3_plugin_names)</span><br><span class="line">        <span class="keyword">if</span> self.downsample <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">            identity = self.downsample(x)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">hasattr</span>(self, <span class="string">&quot;addop&quot;</span>):</span><br><span class="line">            <span class="keyword">return</span> self.addop(out, identity)</span><br><span class="line">        out += identity</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> out</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> self.with_cp <span class="keyword">and</span> x.requires_grad:</span><br><span class="line">        out = cp.checkpoint(_inner_forward, x)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        out = _inner_forward(x)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> model_pruning:</span><br><span class="line">        out = self.relu(out)</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        out = self.relu3(out)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> out</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">replace_bottleneck_forward</span>(<span class="params">module, quantization</span>):</span><br><span class="line">    <span class="keyword">for</span> name, child <span class="keyword">in</span> module.named_children():</span><br><span class="line">        <span class="comment"># print(f&quot;child=&#123;child&#125; type(child)=&#123;type(child)&#125;&quot;)</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(child, mmdet.models.backbones.resnext.Bottleneck):</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> <span class="built_in">hasattr</span>(child, <span class="string">&quot;addop&quot;</span>):</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">f&quot;**** Add QuantAdd to <span class="subst">&#123;name&#125;</span>&quot;</span>)</span><br><span class="line">                downsample_flag = <span class="literal">False</span>  <span class="comment"># downsample_flag = True</span></span><br><span class="line">                <span class="keyword">if</span> child.downsample == <span class="literal">None</span>:</span><br><span class="line">                    downsample_flag = <span class="literal">False</span></span><br><span class="line">                child.addop = QuantAdd(quantization, downsample_flag)  <span class="comment"># downsample_flag=False 残差结构的残差部分有QDQ，另一个不用。可以使conv add relu 融合</span></span><br><span class="line">            <span class="comment"># 将 forward 方法替换为新的 forward 方法</span></span><br><span class="line">            child.__class__.forward = Bottleneck_quant_forward</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># 递归处理子模块</span></span><br><span class="line">            replace_bottleneck_forward(child, quantization)</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<h3 id="对比"><a href="#对比" class="headerlink" title="对比"></a>对比</h3><p>官方的写法</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">replace_bottleneck_forward</span>(<span class="params">model</span>):</span><br><span class="line">    <span class="keyword">for</span> name, module <span class="keyword">in</span> model.named_modules():</span><br><span class="line">        <span class="keyword">if</span> module.__class__.__name__ == <span class="string">&quot;Bottleneck&quot;</span>: <span class="comment"># 模型中所有的这个名字的都被替换</span></span><br><span class="line">        <span class="comment">#if isinstance(module, mmdet.models.backbones.resnext.Bottleneck):#更精细的控制，之替换backbone中的Bottleneck</span></span><br><span class="line">        ....</span><br><span class="line">        </span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用 <code>named_modules()</code> 遍历整个模型，查找所有名为 <code>&quot;Bottleneck&quot;</code> 的模块。如果有不同的部分（例如backbone 和 neck）都有<code>&quot;Bottleneck&quot;</code> 的模块，但是希望只控制backbone中的，那么不能使用<code>if bottleneck.__class__.__name__ == &quot;Bottleneck&quot;:</code>来匹配了。</li>
+<li>因为 <code>Concat</code> 可能出现在模型任意位置（比如 neck 或 head 中），所以需要用 <code>named_modules()</code> 来覆盖所有可能位置。</li>
+</ul>
+<p><strong>结论</strong>：适用于全局搜索某一类模块（无论嵌套几层），适合 <code>Bottleneck</code> 这种分布较广的模块。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">replace_bottleneck_forward</span>(<span class="params">module, quantization</span>):</span><br><span class="line">    <span class="keyword">for</span> name, child <span class="keyword">in</span> module.named_children():</span><br><span class="line">        <span class="comment"># print(f&quot;child=&#123;child&#125; type(child)=&#123;type(child)&#125;&quot;)</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(child, Bottleneck):</span><br><span class="line">            <span class="comment"># 替换 Bottleneck 的 forward，并添加 QuantAdd</span></span><br><span class="line">            ...</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="comment"># 递归处理子模块</span></span><br><span class="line">            replace_bottleneck_forward(child, quantization)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>使用 <code>named_children()</code> 处理当前模块下的每个子模块；</li>
+<li>如果不是 <code>Bottleneck</code>，就递归进入子模块继续查找；</li>
+</ul>
+<p>首先。这两个函数目前都传入的是整个模型，其实可以传入模型的一个模块。例如官方的参考<a target="_blank" rel="noopener" href="https://github.com/NVIDIA-AI-IOT/Lidar_AI_Solution/blob/master/CUDA-BEVFusion/qat/lean/quantize.py#L167">Lidar_AI_Solution/CUDA-BEVFusion/qat/lean/quantize.py at master · NVIDIA-AI-IOT/Lidar_AI_Solution</a></p>
+<p>传入的是就是<code>model_camera_branch.backbone</code>只是模型的backbone部分，那么就只是处理这一部分了。</p>
+<p>我理解那一种都可以，只要能精细控制自己需要修改的即可。</p>
+<h2 id="分析量化节点是否合理"><a href="#分析量化节点是否合理" class="headerlink" title="分析量化节点是否合理"></a>分析量化节点是否合理</h2><p>在实现了所有的算子都量化完成后，可以对比一下使用trtexec  —best 生成的最快的模型的engine结构图，和自己量化生成的onnx的结构图。对比一下是不是基本上相同的，例如算子融合和算子的精度。如果不同，针对修改（一般是通过替换自定义的量化模块，重新编写forward实现）</p>
+<p>具体绘制engine结构图的方法参考<a target="_blank" rel="noopener" href="https://zmurder.github.io/TensorRT/TensorRT量化实战经验/?highlight=svg#engine结构图的绘制">TensorRT量化实战经验 | 奔跑的IC</a></p>
+<p>对应best和量化模型的trtexec命令参考如下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#--best</span></span><br><span class="line">/usr/src/tensorrt/bin/trtexec --onnx=test.onnx --saveEngine=test_int8.engine --int8 --fp16 --verbose --dumpLayerInfo --dumpProfile --profilingVerbosity=detailed  --exportLayerInfo=test_int8_layer.json --exportProfile=test_int8_profile.json --exportTimes=test_int8_time.json  &gt;test_int8.log 2&gt;&amp;1</span><br><span class="line"></span><br><span class="line"><span class="comment">#qdq模型</span></span><br><span class="line">/usr/src/tensorrt/bin/trtexec  --onnx=test_qdq.onnx --saveEngine=test_qdq.engine  --int8 --fp16 --verbose --dumpLayerInfo --dumpProfile --profilingVerbosity=detailed  --exportLayerInfo=test_qdq_layer.json --exportProfile=test_qdq_profile.json --exportTimes=test_qdq_time.json &gt;test_qdq.log 2&gt;&amp;1</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>其中可能遇到的是一些节点的scalse必须是相同的，tensorrt才能进行层融合，是qdq的模型达到best的速度融合效果。</p>
+<p>在模型经过校准后，节点的scales几乎都是不同的，这就需要指定那些节点的scalse应该是相同的，调用函数<code>apply_custom_rules_to_quantizer</code>,参考官方即可。官方实际上实现了一般的Concat节点前后的scalse匹配相等的操作，参考<a target="_blank" rel="noopener" href="https://zmurder.github.io/TensorRT/TensorRT量化实战经验/?highlight=concat#concat节点">TensorRT量化实战经验 | 奔跑的IC</a></p>
+<p>但是有的模型比较负载，不一定可以所有的concat节点都可以自动处理正确，所以在下面<code>find_quantizer_pairs</code>函数中我添加了几个手动匹配的</p>
+<p>例如手动匹配的</p>
+<p><code>match_pairs.append([&#39;model.img_backbone.stage1.1.final_conv.conv&#39;,&#39;model.img_backbone.stage1.1.blocks.0.addop&#39;])</code></p>
+<p>然后在下面代码中设置scales相等</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">major = get_attr_with_path(model, major)._input_quantizer</span><br><span class="line">         get_attr_with_path(model, sub)._input0_quantizer = major</span><br><span class="line">         get_attr_with_path(model, sub)._input1_quantizer = major</span><br><span class="line">     <span class="keyword">else</span>:</span><br><span class="line">         get_attr_with_path(model, sub)._input_quantizer = get_attr_with_path(model, major)._input_quantizer</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">find_quantizer_pairs</span>(<span class="params">onnx_file</span>):</span><br><span class="line"></span><br><span class="line">    model = onnx.load(onnx_file)</span><br><span class="line">    match_pairs = []</span><br><span class="line">    <span class="keyword">for</span> node <span class="keyword">in</span> model.graph.node:</span><br><span class="line">        <span class="keyword">if</span> node.op_type == <span class="string">&quot;Concat&quot;</span>:</span><br><span class="line">            qnodes = find_all_with_input_node(model, node.output[<span class="number">0</span>])</span><br><span class="line">            major = <span class="literal">None</span></span><br><span class="line">            <span class="keyword">for</span> qnode <span class="keyword">in</span> qnodes:</span><br><span class="line">                <span class="keyword">if</span> qnode.op_type != <span class="string">&quot;QuantizeLinear&quot;</span>:</span><br><span class="line">                    <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">                conv = find_quantizelinear_conv(model, qnode)</span><br><span class="line">                <span class="keyword">if</span> major <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">                    major = find_quantize_conv_name(model, conv.<span class="built_in">input</span>[<span class="number">1</span>])</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    match_pairs.append([major, find_quantize_conv_name(model, conv.<span class="built_in">input</span>[<span class="number">1</span>])])</span><br><span class="line"></span><br><span class="line">                <span class="keyword">for</span> subnode <span class="keyword">in</span> model.graph.node:</span><br><span class="line">                    <span class="keyword">if</span> <span class="built_in">len</span>(subnode.<span class="built_in">input</span>) &gt; <span class="number">0</span> <span class="keyword">and</span> subnode.op_type == <span class="string">&quot;QuantizeLinear&quot;</span> <span class="keyword">and</span> subnode.<span class="built_in">input</span>[<span class="number">0</span>] <span class="keyword">in</span> node.<span class="built_in">input</span>:</span><br><span class="line">                        subconv = find_quantizelinear_conv(model, subnode)</span><br><span class="line">                        match_pairs.append([major, find_quantize_conv_name(model, subconv.<span class="built_in">input</span>[<span class="number">1</span>])])</span><br><span class="line"></span><br><span class="line">        <span class="keyword">elif</span> node.op_type == <span class="string">&quot;MaxPool&quot;</span>:</span><br><span class="line">            qnode = find_with_input_node(model, node.output[<span class="number">0</span>])</span><br><span class="line">            <span class="keyword">if</span> <span class="keyword">not</span> (qnode <span class="keyword">and</span> qnode.op_type == <span class="string">&quot;QuantizeLinear&quot;</span>):</span><br><span class="line">                <span class="keyword">continue</span></span><br><span class="line"></span><br><span class="line">            major = find_quantizelinear_conv(model, qnode)</span><br><span class="line">            major = find_quantize_conv_name(model, major.<span class="built_in">input</span>[<span class="number">1</span>])</span><br><span class="line">            same_input_nodes = find_all_with_input_node(model, node.<span class="built_in">input</span>[<span class="number">0</span>])</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> same_input_node <span class="keyword">in</span> same_input_nodes:</span><br><span class="line">                <span class="keyword">if</span> same_input_node.op_type == <span class="string">&quot;QuantizeLinear&quot;</span>:</span><br><span class="line">                    subconv = find_quantizelinear_conv(model, same_input_node)</span><br><span class="line">                    match_pairs.append([major, find_quantize_conv_name(model, subconv.<span class="built_in">input</span>[<span class="number">1</span>])])</span><br><span class="line">                    </span><br><span class="line">    <span class="comment">#下面是手动指定匹配</span></span><br><span class="line">    match_pairs.append([<span class="string">&quot;model.img_neck.top_down_layers.0.main_conv.conv&quot;</span>, <span class="string">&quot;model.img_neck.bottom_up_layers.1.main_conv.conv&quot;</span>])</span><br><span class="line">    match_pairs.append([<span class="string">&quot;model.img_neck.top_down_layers.0.main_conv.conv&quot;</span>, <span class="string">&quot;model.det2d_neck.bottom_up_layers.1.main_conv.conv&quot;</span>])</span><br><span class="line">    </span><br><span class="line">    match_pairs.append([<span class="string">&quot;model.img_neck.top_down_layers.1.main_conv.conv&quot;</span>, <span class="string">&quot;model.img_neck.bottom_up_layers.0.main_conv.conv&quot;</span>])</span><br><span class="line">    match_pairs.append([<span class="string">&quot;model.det2d_neck.bottom_up_layers.0.main_conv.conv&quot;</span>, <span class="string">&quot;model.det2d_neck.top_down_layers.1.main_conv.conv&quot;</span>])</span><br><span class="line"></span><br><span class="line">    match_pairs.append([<span class="string">&#x27;model.img_backbone.stage1.1.final_conv.conv&#x27;</span>,<span class="string">&#x27;model.img_backbone.stage1.1.oneop&#x27;</span>])</span><br><span class="line">    match_pairs.append([<span class="string">&#x27;model.img_backbone.stage2.1.final_conv.conv&#x27;</span>,<span class="string">&#x27;model.img_backbone.stage2.1.oneop&#x27;</span>])</span><br><span class="line">    match_pairs.append([<span class="string">&#x27;model.img_backbone.stage3.1.final_conv.conv&#x27;</span>,<span class="string">&#x27;model.img_backbone.stage3.1.oneop&#x27;</span>])</span><br><span class="line">    match_pairs.append([<span class="string">&#x27;model.img_backbone.stage4.1.final_conv.conv&#x27;</span>,<span class="string">&#x27;model.img_backbone.stage4.1.oneop&#x27;</span>])</span><br><span class="line"></span><br><span class="line">    match_pairs.append([<span class="string">&#x27;model.img_backbone.stage1.1.final_conv.conv&#x27;</span>,<span class="string">&#x27;model.img_backbone.stage1.1.blocks.0.addop&#x27;</span>])</span><br><span class="line">    match_pairs.append([<span class="string">&#x27;model.img_backbone.stage2.1.final_conv.conv&#x27;</span>,<span class="string">&#x27;model.img_backbone.stage2.1.blocks.0.addop&#x27;</span>])</span><br><span class="line">    match_pairs.append([<span class="string">&#x27;model.img_backbone.stage2.1.final_conv.conv&#x27;</span>,<span class="string">&#x27;model.img_backbone.stage2.1.blocks.1.addop&#x27;</span>])</span><br><span class="line">    match_pairs.append([<span class="string">&#x27;model.img_backbone.stage3.1.final_conv.conv&#x27;</span>,<span class="string">&#x27;model.img_backbone.stage3.1.blocks.0.addop&#x27;</span>])</span><br><span class="line">    match_pairs.append([<span class="string">&#x27;model.img_backbone.stage3.1.final_conv.conv&#x27;</span>,<span class="string">&#x27;model.img_backbone.stage3.1.blocks.1.addop&#x27;</span>])</span><br><span class="line">    match_pairs.append([<span class="string">&#x27;model.img_backbone.stage4.1.final_conv.conv&#x27;</span>,<span class="string">&#x27;model.img_backbone.stage4.1.blocks.0.addop&#x27;</span>])</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> match_pairs</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">apply_custom_rules_to_quantizer</span>(<span class="params">model: torch.nn.Module, export_onnx: <span class="type">Callable</span></span>):</span><br><span class="line">    <span class="comment"># apply rules to graph</span></span><br><span class="line">    export_onnx(model, <span class="string">&quot;quantization-custom-rules-temp.onnx&quot;</span>)</span><br><span class="line">    pairs = find_quantizer_pairs(<span class="string">&quot;quantization-custom-rules-temp.onnx&quot;</span>)</span><br><span class="line">    <span class="keyword">for</span> major, sub <span class="keyword">in</span> pairs:</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">f&quot;Rules: <span class="subst">&#123;sub&#125;</span> match to <span class="subst">&#123;major&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">if</span> sub <span class="keyword">in</span> [</span><br><span class="line">            <span class="string">&quot;model.img_backbone.stage1.1.blocks.0.addop&quot;</span>,</span><br><span class="line">            <span class="string">&quot;model.img_backbone.stage2.1.blocks.0.addop&quot;</span>,</span><br><span class="line">            <span class="string">&quot;model.img_backbone.stage2.1.blocks.1.addop&quot;</span>,</span><br><span class="line">            <span class="string">&quot;model.img_backbone.stage3.1.blocks.0.addop&quot;</span>,</span><br><span class="line">            <span class="string">&quot;model.img_backbone.stage3.1.blocks.1.addop&quot;</span>,</span><br><span class="line">            <span class="string">&quot;model.img_backbone.stage4.1.blocks.0.addop&quot;</span>,</span><br><span class="line">        ]:</span><br><span class="line"></span><br><span class="line">            major = get_attr_with_path(model, major)._input_quantizer</span><br><span class="line">            get_attr_with_path(model, sub)._input0_quantizer = major</span><br><span class="line">            get_attr_with_path(model, sub)._input1_quantizer = major</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            get_attr_with_path(model, sub)._input_quantizer = get_attr_with_path(model, major)._input_quantizer</span><br><span class="line">    os.remove(<span class="string">&quot;quantization-custom-rules-temp.onnx&quot;</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="量化模型校准"><a href="#量化模型校准" class="headerlink" title="量化模型校准"></a>量化模型校准</h2><p>通过上面几步。我们设置了量化方法，替换了量化算子、替换自定义的量化算子、下面就是加载数据集进行量化校准了，也就是计算scales值。</p>
+<p>使用官方的代码，几乎不用修改</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">calibrate_model</span>(<span class="params">model : torch.nn.Module, dataloader, device, num_batch=<span class="number">25</span></span>):</span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">compute_amax</span>(<span class="params">model, **kwargs</span>):</span><br><span class="line">        <span class="keyword">for</span> name, module <span class="keyword">in</span> model.named_modules():</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(module, quant_nn.TensorQuantizer):</span><br><span class="line">                <span class="keyword">if</span> module._calibrator <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                    <span class="keyword">if</span> <span class="built_in">isinstance</span>(module._calibrator, calib.MaxCalibrator):</span><br><span class="line">                        module.load_calib_amax()</span><br><span class="line">                    <span class="keyword">else</span>:</span><br><span class="line">                        module.load_calib_amax(**kwargs)</span><br><span class="line"></span><br><span class="line">                    module._amax = module._amax.to(device)</span><br><span class="line">        </span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">collect_stats</span>(<span class="params">model, data_loader, device, num_batch=<span class="number">200</span></span>):</span><br><span class="line">        <span class="string">&quot;&quot;&quot;Feed data to the network and collect statistics&quot;&quot;&quot;</span></span><br><span class="line">        <span class="comment"># Enable calibrators</span></span><br><span class="line">        model.<span class="built_in">eval</span>()</span><br><span class="line">        <span class="keyword">for</span> name, module <span class="keyword">in</span> model.named_modules():</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(module, quant_nn.TensorQuantizer):</span><br><span class="line">                <span class="keyword">if</span> module._calibrator <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                    module.disable_quant()</span><br><span class="line">                    module.enable_calib()</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    module.disable()</span><br><span class="line"></span><br><span class="line">        <span class="comment"># Feed data to the network for collecting stats</span></span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            <span class="keyword">for</span> i, datas <span class="keyword">in</span> tqdm(<span class="built_in">enumerate</span>(data_loader), total=num_batch, desc=<span class="string">&quot;Collect stats for calibrating&quot;</span>):</span><br><span class="line">                imgs = datas[<span class="number">0</span>].to(device, non_blocking=<span class="literal">True</span>).<span class="built_in">float</span>() / <span class="number">255.0</span></span><br><span class="line">                model(imgs)</span><br><span class="line"></span><br><span class="line">                <span class="keyword">if</span> i &gt;= num_batch:</span><br><span class="line">                    <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># Disable calibrators</span></span><br><span class="line">        <span class="keyword">for</span> name, module <span class="keyword">in</span> model.named_modules():</span><br><span class="line">            <span class="keyword">if</span> <span class="built_in">isinstance</span>(module, quant_nn.TensorQuantizer):</span><br><span class="line">                <span class="keyword">if</span> module._calibrator <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                    module.enable_quant()</span><br><span class="line">                    module.disable_calib()</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    module.enable()</span><br><span class="line"></span><br><span class="line">    collect_stats(model, dataloader, device, num_batch=num_batch)</span><br><span class="line">    compute_amax(model, method=<span class="string">&quot;mse&quot;</span>)</span><br><span class="line">    <span class="comment">#computeArgMax(model, method=&quot;percentile&quot;,percentile=99.999)# calib_method=&quot;histogram&quot; 时必须设置method</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>这里有一个地方需要注意，就是最后一行<code>compute_amax(model, method=&quot;mse&quot;)</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">compute_amax</span>(<span class="params">model, **kwargs</span>):</span><br><span class="line">    <span class="keyword">for</span> name, module <span class="keyword">in</span> model.named_modules():</span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">isinstance</span>(module, quant_nn.TensorQuantizer):</span><br><span class="line">            <span class="keyword">if</span> module._calibrator <span class="keyword">is</span> <span class="keyword">not</span> <span class="literal">None</span>:</span><br><span class="line">                <span class="keyword">if</span> <span class="built_in">isinstance</span>(module._calibrator, calib.MaxCalibrator):</span><br><span class="line">                    module.load_calib_amax()</span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    module.load_calib_amax(**kwargs)</span><br></pre></td></tr></table></figure>
+<p>判断_calibrator：这个就是我们设置的<code>QuantDescriptor</code>相关，例如在<code>quantize.initialize()</code>设置的和<code>QuantAdd</code>中设置的<code>QuantDescriptor</code>的calib_method，分为<code>max和histogram</code></p>
+<ul>
+<li><code>MaxCalibrator</code>时 调用<code>module.load_calib_amax()</code></li>
+<li>其他（也就是HistogramCalibrator时）调用<code>module.load_calib_amax(**kwargs)</code>，同时有<em>*参数传入</em>，我们就是在这里指定calib_method=”histogram” 时的method，如果设置method=”percentile” 我们还可以设置百分比 percentile=99.999（默认是99.99）, <code>omputeArgMax(model, method=&quot;percentile&quot;,percentile=99.999)</code></li>
+</ul>
+<h2 id="敏感层分析"><a href="#敏感层分析" class="headerlink" title="敏感层分析"></a>敏感层分析</h2><p>参考官方代码如下即可</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">def</span> <span class="title function_">build_sensitivity_profile</span>(<span class="params">model, data_loader_val, dataset_val, eval_model_callback : <span class="type">Callable</span> = <span class="literal">None</span></span>):</span><br><span class="line">    quant_layer_names = []</span><br><span class="line">    <span class="keyword">for</span> name, module <span class="keyword">in</span> model.named_modules():</span><br><span class="line">        <span class="keyword">if</span> name.endswith(<span class="string">&quot;_quantizer&quot;</span>):</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">&#x27;use quant layer:&#123;&#125;&#x27;</span>,name)</span><br><span class="line">            module.disable()</span><br><span class="line">            layer_name = name.replace(<span class="string">&quot;._input_quantizer&quot;</span>, <span class="string">&quot;&quot;</span>).replace(<span class="string">&quot;._weight_quantizer&quot;</span>, <span class="string">&quot;&quot;</span>)</span><br><span class="line">            <span class="keyword">if</span> layer_name <span class="keyword">not</span> <span class="keyword">in</span> quant_layer_names:</span><br><span class="line">                quant_layer_names.append(layer_name)</span><br><span class="line">    <span class="keyword">for</span> i, quant_layer <span class="keyword">in</span> <span class="built_in">enumerate</span>(quant_layer_names):</span><br><span class="line">        <span class="built_in">print</span>(<span class="string">&quot;Enable&quot;</span>, quant_layer)</span><br><span class="line">        <span class="keyword">for</span> name, module <span class="keyword">in</span> model.named_modules():</span><br><span class="line">            <span class="keyword">if</span> name.endswith(<span class="string">&quot;_quantizer&quot;</span>) <span class="keyword">and</span> quant_layer <span class="keyword">in</span> name:</span><br><span class="line">                module.enable()</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">F&quot;<span class="subst">&#123;name:<span class="number">40</span>&#125;</span>: <span class="subst">&#123;module&#125;</span>&quot;</span>)</span><br><span class="line">        <span class="keyword">with</span> torch.no_grad():</span><br><span class="line">            eval_model_callback(model,data_loader_val, dataset_val) </span><br><span class="line">        <span class="keyword">for</span> name, module <span class="keyword">in</span> model.named_modules():</span><br><span class="line">            <span class="keyword">if</span> name.endswith(<span class="string">&quot;_quantizer&quot;</span>) <span class="keyword">and</span> quant_layer <span class="keyword">in</span> name:</span><br><span class="line">                module.disable()</span><br><span class="line">                <span class="built_in">print</span>(<span class="string">F&quot;<span class="subst">&#123;name:<span class="number">40</span>&#125;</span>: <span class="subst">&#123;module&#125;</span>&quot;</span>)</span><br></pre></td></tr></table></figure>
+<p>主要就是通过一个节点一个节点的打开量化，计算精度。然后关闭这个节点的量化，打开下一节点的量化重新计算精度。就这样每次只打开一个节点的量化计算精度，看看那一个是敏感层，后面都分析完成后，将敏感层不量化即可保证和原始模型几乎下相同的精度了。</p>
+<h1 id="知识点"><a href="#知识点" class="headerlink" title="知识点"></a>知识点</h1><h2 id="PER-TENSOR与PER-CHANNEL量化"><a href="#PER-TENSOR与PER-CHANNEL量化" class="headerlink" title="PER_TENSOR与PER_CHANNEL量化"></a>PER_TENSOR与PER_CHANNEL量化</h2><p>先说结论。默认情况，以QuantConv2d为例子</p>
+<ul>
+<li>input：QUANT_DESC_8BIT_PER_TENSOR</li>
+<li>weight：QUANT_DESC_8BIT_CONV2D_WEIGHT_PER_CHANNEL</li>
+</ul>
+<p>也就是说input是per_tensor 为单位量化，因为输入是一个整体，一个整体一个量化scalse 合理</p>
+<p>weight是per_channel 量化的，也就是每个通道计算一个scalse。精度可以更好。</p>
+<h2 id="类的继承关系"><a href="#类的继承关系" class="headerlink" title="类的继承关系"></a>类的继承关系</h2><p>在官方pytorch_quantization代码中，梳理了部分的继承关系如下：</p>
+<h3 id="QuantConv2d"><a href="#QuantConv2d" class="headerlink" title="QuantConv2d"></a>QuantConv2d</h3><p><code>QuantConv2d</code> 继承自 <code>_QuantConvNd</code>，<code>_QuantConvNd</code> 又继承自 <code>QuantMixin</code> 类。</p>
+<p>其中<code>QuantDescriptor = ScaledQuantDescriptor</code></p>
+<h3 id="QuantMixin"><a href="#QuantMixin" class="headerlink" title="QuantMixin"></a>QuantMixin</h3><p><code>QuantMixin</code>有以下方法</p>
+<ul>
+<li><p><code>set_default_quant_desc_weight()</code></p>
+</li>
+<li><p><code>set_default_quant_desc_input()</code></p>
+<ul>
+<li>这两个函数的参数都是<code>QuantDescriptor</code>，使用方法如下</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">quant_desc_input = QuantDescriptor(calib_method=<span class="string">&quot;histogram&quot;</span>)<span class="comment">#[&quot;max&quot;, &quot;histogram&quot;]</span></span><br><span class="line">quant_desc_weight = QuantDescriptor(calib_method=<span class="string">&quot;histogram&quot;</span>)<span class="comment">#[&quot;max&quot;, &quot;histogram&quot;]</span></span><br><span class="line">quant_nn.QuantConv2d.set_default_quant_desc_input(quant_desc_input)</span><br><span class="line">quant_nn.QuantConv2d.set_default_quant_desc_weight(quant_desc_weight)</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>init_quantizer(self, quant_desc_input, quant_desc_weight, num_layers=None):</code>中</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> num_layers <span class="keyword">is</span> <span class="literal">None</span>:</span><br><span class="line">          self._input_quantizer = TensorQuantizer(quant_desc_input)</span><br><span class="line">          self._weight_quantizer = TensorQuantizer(quant_desc_weight)</span><br><span class="line">      <span class="keyword">else</span>:</span><br><span class="line">          self._input_quantizers = nn.ModuleList([TensorQuantizer(quant_desc_input) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(num_layers)])</span><br><span class="line">          self._weight_quantizers = nn.ModuleList([TensorQuantizer(quant_desc_weight) <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(num_layers)])</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="TensorQuantizer"><a href="#TensorQuantizer" class="headerlink" title="TensorQuantizer"></a>TensorQuantizer</h3><p><code>TensorQuantizer</code></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">TensorQuantizer</span>(nn.Module):</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, quant_desc=QuantDescriptor(<span class="params"></span>), disabled=<span class="literal">False</span>, if_quant=<span class="literal">True</span>, if_clip=<span class="literal">False</span>, if_calib=<span class="literal">False</span></span>):</span><br><span class="line">        ...</span><br><span class="line">        <span class="keyword">if</span> quant_desc.calib_method == <span class="string">&quot;histogram&quot;</span>:</span><br><span class="line">            logging.info(<span class="string">&quot;Creating histogram calibrator&quot;</span>)</span><br><span class="line">            self._calibrator = calib.HistogramCalibrator(</span><br><span class="line">                num_bits=self._num_bits, axis=self._axis, unsigned=self._unsigned)</span><br><span class="line">        <span class="keyword">elif</span> quant_desc.calib_method == <span class="string">&quot;max&quot;</span>:</span><br><span class="line">            logging.info(<span class="string">&quot;Creating Max calibrator&quot;</span>)</span><br><span class="line">            self._calibrator = calib.MaxCalibrator(num_bits=self._num_bits, axis=self._axis, unsigned=self._unsigned)</span><br><span class="line">        ...</span><br></pre></td></tr></table></figure>
+<p>根据不同的<code>calib_method</code>来设置了<code>_calibrator</code>为<code>HistogramCalibrator</code>或者<code>MaxCalibrator</code></p>
+<p>上面的初始化用到了<code>quant_desc=QuantDescriptor()</code>用的都是默认的</p>
+<p>在看一下<code>QuantDescriptor</code></p>
+<h3 id="QuantDescriptor"><a href="#QuantDescriptor" class="headerlink" title="QuantDescriptor"></a>QuantDescriptor</h3><p>上面提到了QuantDescriptor = ScaledQuantDescriptor</p>
+<p>因此看一下ScaledQuantDescriptor 有下面代码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ScaledQuantDescriptor</span>():</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">__init__</span>(<span class="params">self, num_bits=<span class="number">8</span>, name=<span class="literal">None</span>, **kwargs</span>):</span><br><span class="line">    ...</span><br><span class="line">    self._calib_method = kwargs.pop(<span class="string">&#x27;calib_method&#x27;</span>, <span class="string">&quot;max&quot;</span>)</span><br><span class="line">    ...</span><br></pre></td></tr></table></figure>
+<p>可以看出设置了默认的<code>calib_method</code>为<code>max</code></p>
+<h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><ul>
+<li>NV官方量化代码<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/NVIDIA-AI-IOT/yolo_deepstream/blob/main/yolov7_qat/scripts/qat-yolov5.py">https://github.com/NVIDIA-AI-IOT/yolo_deepstream/blob/main/yolov7_qat/scripts/qat-yolov5.py</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/NVIDIA-AI-IOT/Lidar_AI_Solution/blob/master/CUDA-BEVFusion/qat/ptq.py">https://github.com/NVIDIA-AI-IOT/Lidar_AI_Solution/blob/master/CUDA-BEVFusion/qat/ptq.py</a></li>
+</ul>
+</li>
+</ul>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          
+
+<div class="post-copyright">
+<ul>
+  <li class="post-copyright-author">
+      <strong>本文作者： </strong>奔跑的IC
+  </li>
+  <li class="post-copyright-link">
+      <strong>本文链接：</strong>
+      <a href="http://example.com/TensorRT/NV%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/" title="NV量化代码分析">http://example.com/TensorRT/NV量化代码分析/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fab fa-fw fa-creative-commons"></i>BY-NC-SA</a> 许可协议。转载请注明出处！
+  </li>
+</ul>
+</div>
+
+          <div class="post-tags">
+              <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+              <a href="/tags/C/" rel="tag"><i class="fa fa-tag"></i> C</a>
+              <a href="/tags/Tensorrt/" rel="tag"><i class="fa fa-tag"></i> Tensorrt</a>
+              <a href="/tags/Plugin/" rel="tag"><i class="fa fa-tag"></i> Plugin</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/esp32/3-esp32%E6%8E%A7%E5%88%B6ws2812/" rel="prev" title="3-esp32控制ws2812">
+                  <i class="fa fa-chevron-left"></i> 3-esp32控制ws2812
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments gitalk-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2025</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">奔跑的IC</span>
+</div>
+<div class="busuanzi-count">
+    <span class="post-meta-item" id="busuanzi_container_site_uv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-user"></i>
+      </span>
+      <span class="site-uv" title="总访客量">
+        <span id="busuanzi_value_site_uv"></span>
+      </span>
+    </span>
+    <span class="post-meta-item" id="busuanzi_container_site_pv">
+      <span class="post-meta-item-icon">
+        <i class="fa fa-eye"></i>
+      </span>
+      <span class="site-pv" title="总访问量">
+        <span id="busuanzi_value_site_pv"></span>
+      </span>
+    </span>
+</div><script color="0,0,255" opacity="0.5" zIndex="-1" count="99" src="https://lib.baomitu.com/canvas-nest.js/1.0.1/canvas-nest.js"></script>
+
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+  
+
+  <script class="next-config" data-name="enableMath" type="application/json">true</script><script class="next-config" data-name="mathjax" type="application/json">{"enable":true,"tags":"none","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-mml-chtml.js","integrity":"sha256-MASABpB4tYktI2Oitl4t+78w/lyA+D7b/s9GEP0JOGI="}}</script>
+<script src="/js/third-party/math/mathjax.js"></script>
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"zmurder","repo":"zmurder.github.io","client_id":"cf2343f27b6c29efe0bc","client_secret":"3268a1fa92706c7358d5421f88f76a0f7ada3188","admin_user":"zmurder","distraction_free_mode":true,"proxy":"https://strong-caramel-969805.netlify.app/github_access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.8.0/gitalk.min.js","integrity":"sha256-MVK9MGD/XJaGyIghSVrONSnoXoGh3IFxLw0zfvzpxR4="},"path_md5":"5282b146f3ecfae7f0bb7c5b1281746b"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
+
+</body>
+</html>

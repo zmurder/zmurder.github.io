@@ -434,3 +434,5 @@ libraries: =/opt/nvidia/driveos/toolchains/aarch64--glibc--stable-2022.03-1/bin/
 # 附录：
 
 * Cmake官方：https://cmake.org/cmake/help/latest/manual/cmake-toolchains.7.html
+* toolchain file的例子：https://docs.nvidia.com/vpi/sample_cross_aarch64.html
+* 博客 ：[CMake交叉编译配置](https://www.cnblogs.com/rickyk/p/3875334.html)

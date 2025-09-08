@@ -361,6 +361,56 @@ Make all The QDQ related with [Concat_1435]& [Concat_1430]&[Concat_1416] the sam
 
 ![image-20241215144041646](./TensorRT量化实战经验/image-20241215144041646.png)
 
+
+
+## convTranspose的量化bug1
+
+在convTranpose 时，scale 的维度默认设置在 axis=0。实际上这是不正确的。TRT9.2以前对convTranspose的scale计算会存在问题。可以在initialie函数时单独设置一下。这个bug在后面的tensorRT中已经修复了。可以查看
+自己代码参考 https://zmurder.github.io/TensorRT/NV%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/?highlight=def+initialize%28%29
+
+```python
+def initialize():
+    '''
+    可以在这里设置整体的例如是Conv2d 的 input 和weight 的校准方法。
+    默认有两种参数max 和 histogram   other methods are all hisogram based. Default "max".
+    '''
+    # quant_desc_input = QuantDescriptor(calib_method="max")#["max", "histogram"]
+    # quant_desc_weight = QuantDescriptor(calib_method="max")#["max", "histogram"]
+    quant_desc_input = QuantDescriptor(calib_method="histogram")#["max", "histogram"]
+    quant_desc_weight = QuantDescriptor(calib_method="histogram")#["max", "histogram"]
+    quant_nn.QuantConv2d.set_default_quant_desc_input(quant_desc_input)
+    # quant_nn.QuantConv2d.set_default_quant_desc_weight(quant_desc_weight)
+    quant_nn.QuantMaxPool2d.set_default_quant_desc_input(quant_desc_input)
+    quant_nn.QuantAdaptiveAvgPool2d.set_default_quant_desc_input(quant_desc_input)
+    quant_nn.QuantLinear.set_default_quant_desc_input(quant_desc_input)
+    
+    #针对convTranspose的单独设置。
+    quant_convtranspose_desc_weight = QuantDescriptor(num_bits=8, axis=(1))
+    quant_nn.QuantConvTranspose1d.set_default_quant_desc_weight(quant_convtranspose_desc_weight)
+    quant_nn.QuantConvTranspose2d.set_default_quant_desc_weight(quant_convtranspose_desc_weight)
+    quant_nn.QuantConvTranspose3d.set_default_quant_desc_weight(quant_convtranspose_desc_weight)
+```
+
+官方的修复如下（截至日期2025.09.08）
+
+![image-20250908212758273](./TensorRT量化实战经验/image-20250908212758273.png)
+
+![image-20250908212919623](./TensorRT量化实战经验/image-20250908212919623.png)
+
+
+
+正确的如下
+
+![无标题](./TensorRT量化实战经验/无标题-1757338504525-1.png)
+
+## ConvTranspose 量化bug2
+
+TRT-8.6有一个已知的问题，在QDQ模式下ConvTranspose不能与BN融合
+
+正确的如下图
+
+![无标题](./TensorRT量化实战经验/无标题-1757338537764-3.png)
+
 ## INT8的速度比INT16还要慢
 
 有的时候量化为INT8不一定比INT16更快，例如下面的ConvTranspose

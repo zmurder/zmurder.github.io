@@ -24,20 +24,23 @@
 
 <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8693861384618000"
      crossorigin="anonymous"></script>
-    <meta name="description" content="修改在进行PTQ量化时，出现TypeError: _output_padding() missing 1 required positional argument: ‘num_spatial_dims’报错">
+    <meta name="description" content="修改1在进行PTQ量化时，出现TypeError: _output_padding() missing 1 required positional argument: ‘num_spatial_dims’报错">
 <meta property="og:type" content="article">
 <meta property="og:title" content="pytorch_quantization问题修改">
 <meta property="og:url" content="http://example.com/TensorRT/pytorch_quantization%E9%97%AE%E9%A2%98%E4%BF%AE%E6%94%B9/index.html">
 <meta property="og:site_name" content="奔跑的IC">
-<meta property="og:description" content="修改在进行PTQ量化时，出现TypeError: _output_padding() missing 1 required positional argument: ‘num_spatial_dims’报错">
+<meta property="og:description" content="修改1在进行PTQ量化时，出现TypeError: _output_padding() missing 1 required positional argument: ‘num_spatial_dims’报错">
 <meta property="og:locale">
+<meta property="og:image" content="http://example.com/TensorRT/pytorch_quantization%E9%97%AE%E9%A2%98%E4%BF%AE%E6%94%B9/image-20250908214246922.png">
+<meta property="og:image" content="http://example.com/TensorRT/pytorch_quantization%E9%97%AE%E9%A2%98%E4%BF%AE%E6%94%B9/image-20250908214509076.png">
 <meta property="article:published_time" content="2025-05-10T07:53:57.195Z">
-<meta property="article:modified_time" content="2025-05-10T07:57:02.055Z">
+<meta property="article:modified_time" content="2025-09-08T13:45:43.112Z">
 <meta property="article:author" content="奔跑的IC">
 <meta property="article:tag" content="git">
 <meta property="article:tag" content="C">
 <meta property="article:tag" content="Tensorrt">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/TensorRT/pytorch_quantization%E9%97%AE%E9%A2%98%E4%BF%AE%E6%94%B9/image-20250908214246922.png">
 
 
 <link rel="canonical" href="http://example.com/TensorRT/pytorch_quantization%E9%97%AE%E9%A2%98%E4%BF%AE%E6%94%B9/">
@@ -146,7 +149,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9"><span class="nav-text">修改</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%AE%E6%94%B91"><span class="nav-text">修改1</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%AE%E6%94%B92"><span class="nav-text">修改2</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%99%84%E5%BD%95%EF%BC%9A"><span class="nav-text">附录：</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -230,9 +233,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2025-05-10 15:53:57 / 修改时间：15:57:02" itemprop="dateCreated datePublished" datetime="2025-05-10T15:53:57+08:00">2025-05-10</time>
+      <time title="创建时间：2025-05-10 15:53:57" itemprop="dateCreated datePublished" datetime="2025-05-10T15:53:57+08:00">2025-05-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-09-08 21:45:43" itemprop="dateModified" datetime="2025-09-08T21:45:43+08:00">2025-09-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -261,10 +270,15 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="修改"><a href="#修改" class="headerlink" title="修改"></a>修改</h1><p>在进行PTQ量化时，出现TypeError: _output_padding() missing 1 required positional argument: ‘num_spatial_dims’报错 </p>
+        <h1 id="修改1"><a href="#修改1" class="headerlink" title="修改1"></a>修改1</h1><p>在进行PTQ量化时，出现TypeError: _output_padding() missing 1 required positional argument: ‘num_spatial_dims’报错 </p>
 <p>这个错误是官方的<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/tree/release/8.4/tools/pytorch-quantization/pytorch_quantization">pytorch_quantization</a>有bug导致的。目前我是在tensorRT8.4版本下的安装的pytorch_quantization库。</p>
 <p>需要进行的修改如下：</p>
 <p><strong>lib/python3.10/site-packages/pytorch_quantization/nn/modules/quant_conv.py</strong><br> change <strong>output_padding = self._output_padding(input, output_size, self.stride, self.padding, self.kernel_size)</strong><br> to <strong>output_padding = self._output_padding(input, output_size, self.stride, self.padding, self.kernel_size, 2)</strong></p>
+<p>备注：最新的tensorrt官方已经修改了（记录日期2025.09.08），如下图</p>
+<img src="/TensorRT/pytorch_quantization%E9%97%AE%E9%A2%98%E4%BF%AE%E6%94%B9/image-20250908214246922.png" class="" title="image-20250908214246922">
+<h1 id="修改2"><a href="#修改2" class="headerlink" title="修改2"></a>修改2</h1><p>在进行插入QDQ敏感层分析时，逐层打开（单独打开一层的QDQ）进行精度计算。会报错，因此需要修改如下</p>
+<p>pytorch-quantization/pytorch_quantization/nn/modules/tensor_quantizer.py中def load_calib_amax(self, <em>args, *</em>kwargs):修改如下</p>
+<img src="/TensorRT/pytorch_quantization%E9%97%AE%E9%A2%98%E4%BF%AE%E6%94%B9/image-20250908214509076.png" class="" title="image-20250908214509076">
 <h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><ul>
 <li><a target="_blank" rel="noopener" href="https://github.com/meituan/YOLOv6/issues/811">https://github.com/meituan/YOLOv6/issues/811</a></li>
 </ul>

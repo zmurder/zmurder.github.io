@@ -45,13 +45,26 @@
 
 ```bash
 trtexec --loadEngine=apa_lidarfreespace_u2nettp_v6_20240628_int8_0711.engine  --warmUp=5000  --iterations=2000 --verbose --dumpProfile  --dumpLayerInfo --profilingVerbosity=detailed
-
 ```
+
+
+
+加载engine并执行输入的尺寸：
 
 ```bash
 /usr/src/tensorrt/bin/trtexec --loadEngine=apa_LidarOD_centerpoint-pillar_v0_20241007_s_FP16.engine --shapes=voxels:20000x20x4,num_points:20000,coors:20000x4
  --warmUp=0 --duration=0 --iterations=200 
 ```
+
+
+
+指定输入：
+
+```bash
+/usr/src/tensorrt/bin/trtexec --loadEngine=od4h_20250822.engine --loadInputs=image_tensors:img_cuda_ptr.bin,feat_points:feat_points.bin,depth_points:depth_points.bin --shapes=image_tensors:4x3x512x768
+```
+
+
 
 # DLA相关指令
 

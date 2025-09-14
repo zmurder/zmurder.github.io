@@ -425,7 +425,7 @@ TRT-8.6有一个已知的问题，在QDQ模式下ConvTranspose不能与BN融合
 
   因此，在 TensorRT 内部，concat/slice 的输入和输出将合并为一个张量。用户必须确保与同一个 concat/slice 相关的量化和去量化（QDQ）操作保持一致。
 
-* 对于 PWN（Pointwise）节点，用户必须确保输入和输出具有相同的缩放比例（scale）。您可以在 SVG 中检查哪些节点被归类为 PWN 节点，有时它可能是一个单独的 Add 操作，有时则是 Add+Mul 组合。![无标题](./TensorRT量化实战经验/无标题.png)
+* 对于 PWN（Pointwise）节点，用户必须确保输入和输出具有相同的缩放比例（scale）（对于ReLU、Add等PointWise操作，输入和输出的scale**无需强制对齐**。心思路是验证插入的Q/DQ节点能否与相邻的卷积（Conv）+ 激活（Act）操作完全融合。若单个融合后的卷积节点存在多个具有不同量化尺度的Q/DQ节点，则无法合并，这会导致额外的重新量化操作（Reformatting QDQ）和无意义的延迟开销。）。您可以在 SVG 中检查哪些节点被归类为 PWN 节点，有时它可能是一个单独的 Add 操作，有时则是 Add+Mul 组合。![无标题](./TensorRT量化实战经验/无标题.png)
 
 * 根据上面的原因，确实应该下图橙色框适当的位置插入 QDQ（量化和去量化)节点，并确保它们都使用相同的缩放比例。这样做可以保证模型转换后的精度，并且确保 TensorRT 在优化过程中能够正确处理这些操作。
 
@@ -510,6 +510,23 @@ Please copy the weight for the convs who share the weight with another conv.否�
 
 For the extra op(Cast, Sqrt) after quantization, you can use polygraphy to do constant-fold, then the extra op will be elimicated:
 $ polygraphy surgeon sanitize your_model.onnx -o mod_your_model.onnx --fold-constants
+
+# QAT训练
+
+* 初始lr（经验值为1~5%原始训练lr，对于orin multitask可以直接使用5e-6
+
+*  \- - lr_config ，可以删去warm_up的选项(QAT微调时无需warm up)，同时减小min_lr，否则学习率变化过小。
+
+  ```bash   lr_config = dict(
+     policy='CosineAnnealing',
+     \# warmup='linear',
+     by_epoch=False,
+     \# warmup_iters=100,
+     \# warmup_ratio=0.1,
+     min_lr=1e-7)
+  ```
+
+  
 
 # 附录：
 

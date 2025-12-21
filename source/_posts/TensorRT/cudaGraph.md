@@ -359,6 +359,63 @@ kernel的launch会比较大，主要有以下几种情况：
 
 ![image-20250522221506011](./cudaGraph/image-20250522221506011.png)
 
+# DLA 与Cuda Graph
+
+dla模型不能用cudagraph capture的话会失败。
+
+# cuda graph capture失败的几种情况
+
+当一个stream在capture期间，以下操作会导致capture失败：
+
+1. 对该stream进行同步（cudaStreamSynchronize）
+2. 隐含stream同步的操作（对context、device进行同步，都会强制内部包含的全部stream进行同步，如果其中有stream处在graph capture状态，就会报错）
+3. 如果当前graph capture的stream是blocking stream（一般创建stream时建议使用cudaStreamNonBlocking，不建议使用cudaStreamDefault），则涉及null stream的操作都不可用，例如cudaMalloc
+4. 对该stream上面record的event进行的状态查询、同步操作
+
+## 捕获失败后再次捕获方式
+
+```c++
+int retryCount = 0;
+const int maxRetries = 3;
+while (retryCount < maxRetries) {
+    BALOGI("start capture attempt {}", (retryCount + 1));
+    mIpmFreespaceContext->enqueueV2(mIpmFreespaceDeviceBuffers.data(), mIpmFreespaceStream, nullptr);
+    CHECK_CUDA(cudaGraphCreate(&mFsdGraph, 0));
+    /* CudaGraphBeginCapture */
+    CHECK_CUDA(cudaStreamBeginCapture(mIpmFreespaceStream, cudaStreamCaptureModeThreadLocal));
+    mIpmFreespaceContext->enqueueV2(mIpmFreespaceDeviceBuffers.data(), mIpmFreespaceStream, nullptr);
+    /* CudaGraphEndCapture */
+    cudaError_t endErr = cudaStreamEndCapture(mIpmFreespaceStream, &mFsdGraph);
+    if (endErr == cudaSuccess) {
+        BALOGI("capture succeed, attempt {}", (retryCount + 1));
+        CHECK_CUDA(cudaGraphInstantiate(&mFsdGraphExec, mFsdGraph, nullptr, nullptr, 0));
+        cudaGraphNode_t *nodes = NULL;
+        size_t numNodes = 0;
+        CHECK_CUDA(cudaGraphGetNodes(mFsdGraph, nodes, &numNodes));
+        BALOGI("Num of nodes in the graph {}",numNodes);
+        if (mFsdGraph != nullptr) {
+         CHECK_CUDA(cudaGraphDestroy(mFsdGraph));
+            mFsdGraph = nullptr;
+        }
+        return;
+        } else {
+        BALOGE("capture attempt {}, failed: {}", (retryCount + 1), cudaGetErrorString(endErr));
+        cudaGetLastError();
+         if (mFsdGraph != nullptr) {
+            CHECK_CUDA(cudaGraphDestroy(mFsdGraph));
+            mFsdGraph = nullptr;
+        }
+        CHECK_CUDA(cudaStreamSynchronize(mIpmFreespaceStream));
+        CHECK_CUDA(cudaStreamDestroy(mIpmFreespaceStream));
+        CHECK_CUDA(cudaStreamCreateWithPriority(&mIpmFreespaceStream, cudaStreamNonBlocking, fsd_stream_priority_));
+        retryCount++;
+        std::this_thread::sleep_for(std::chrono::milliseconds(5 * retryCount));
+    }
+}
+```
+
+
+
 # 附录：
 
 * 官方文档：[3.2.8.7. CUDA Graphs](https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#cuda-graphs)

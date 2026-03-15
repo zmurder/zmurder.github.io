@@ -358,6 +358,12 @@ trtexec --onnx=v9_nearestqdq_noqdq.onnx --calib=v9_nearestqdq_precision_config_c
 
 # nsight_systems指令
 
+```bash
+TMPDIR=/datatemp /target-linux-tegra-armv8/nsys profile -o multitask_profile --force-overwrite=true -t cuda,osrt,nvtx --gpuctxsw true  -e CUDA_DEVICE_MAX_CONNECTION=32 --gpu-metrics-device=0 -d 10 -y 21 --accelerator-trace=tegra-accelerators --cuda-graph-trace=node ./test
+```
+
+
+
 ## 使用nsys指令和trtexec结合分析engine推理
 
 ```bash
@@ -488,3 +494,13 @@ trtexec --onnx=test.onnx --saveEngine=test_dla.engine --int8 --useDLACore=0 --al
  /algdata/zyd/nsight_systems/2022.3.2/target-linux-tegra-armv8/nsys profile --accelerator-trace=nvmedia --trace=cuda,nvtx,cublas,cudla,cusparse,cudnn,nvmedia --force-overwrite true -o /algdata/zyd/DLATest/Lidar/test_layerPercision_dla.engine trtexec --loadEngine=/algdata/zyd/DLATest/Lidar/test_layerPercision_dla.engine --iterations=10 --idleTime=50 --duration=0 --useSpinWait
 
  https://github.com/NVIDIA-AI-IOT/cuDLA-samples/blob/main/export/README.md
+
+
+
+# cuda内存泄露检测
+
+```bash
+compute-sanitizer —tool memcheck —leak-check full ./your_app
+```
+
+ compute-sanitizer就在cuda 安装包里板子上/usr/local/cuda/bin/里没有的话 就去编译环境里/usr/local/cuda-targets/aarch64-linux-gnu/bin下面找找

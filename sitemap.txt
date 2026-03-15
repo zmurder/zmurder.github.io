@@ -1,3 +1,4 @@
+http://example.com/GPU/wsl2%E9%85%8D%E7%BD%AEcuda%E5%92%8Ctorch/
 http://example.com/git/git%E5%9F%BA%E7%A1%80/
 http://example.com/TensorRT/trtexec%E7%9A%84%E4%B8%80%E4%BA%9B%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4/
 http://example.com/TensorRT/cudaGraph/

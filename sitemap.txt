@@ -1,3 +1,5 @@
+http://example.com/esp32/ESP32-S3%E5%BC%80%E5%8F%91%E6%9D%BF%E7%83%A7%E5%BD%95/
+http://example.com/CLAUDE/
 http://example.com/esp32/4-esp32%E4%B8%B2%E5%8F%A3%E4%B8%8Evcode%E5%A6%82%E4%BD%95debug/
 http://example.com/CUDA/Nsight/Nsight%20System%E7%BB%8F%E9%AA%8C/
 http://example.com/Fusion%20360/Day21-STL%E5%92%8COBJ%E6%96%87%E4%BB%B6%E8%BD%AC%E6%8D%A2%E5%92%8C%E5%AF%BC%E5%85%A5/

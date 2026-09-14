@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">195</span>
+          <span class="site-state-item-count">268</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9Apytorch/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/esp32/2-vscode%E5%88%9B%E5%BB%BAESP-IDF%E9%A1%B9%E7%9B%AE/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9Apytorch/" class="post-title-link" itemprop="url">TensorRT量化实战课YOLOv7量化：pytorch</a>
+          <a href="/esp32/2-vscode%E5%88%9B%E5%BB%BAESP-IDF%E9%A1%B9%E7%9B%AE/" class="post-title-link" itemprop="url">2-vscode创建ESP-IDF项目</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,315 +224,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
-<li><ul>
-<li><a href="#_1">前言</a></li>
-<li><a href="#1__15">1. 课程介绍</a></li>
-<li><a href="#2_pytorch_quantization_36">2. pytorch_quantization</a></li>
-<li><ul>
-<li><a href="#21_initialize_54">2.1 initialize函数</a></li>
-<li><a href="#22_tensor_quant_88">2.2 tensor_quant模块</a></li>
-<li><a href="#23_TensorQuantizer_132">2.3 TensorQuantizer类</a></li>
-<li><a href="#24_QuantDescriptor_168">2.4 QuantDescriptor类</a></li>
-<li><a href="#25_calib_196">2.5 calib模块</a></li>
-</ul>
-</li>
-<li><a href="#_215">总结</a></li>
-</ul>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9Apytorch/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%BA%8C)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/zyd.gif">
-      <meta itemprop="name" content="奔跑的IC">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="奔跑的IC">
-      <meta itemprop="description" content="死磕牛角的IT农民工">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 奔跑的IC">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%BA%8C)/" class="post-title-link" itemprop="url">TensorRT量化实战课YOLOv7量化：YOLOv7-PTQ量化(二)</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
-<li><ul>
-<li><a href="#_2">注意事项</a></li>
-<li><a href="#20231119_4">一、2023/11/19更新</a></li>
-<li><a href="#20231227_8">二、2023/12/27更新</a></li>
-<li><a href="#_11">前言</a></li>
-<li><a href="#1_YOLOv7PTQ_24">1. YOLOv7-PTQ量化流程</a></li>
-<li><a href="#2__74">2. 模型标定</a></li>
-<li><a href="#3__505">3. 敏感层分析</a></li>
-<li><a href="#4_PTQ_1078">4. PTQ量化</a></li>
-<li><a href="#_1596">总结</a></li>
-</ul>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%BA%8C)/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/zyd.gif">
-      <meta itemprop="name" content="奔跑的IC">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="奔跑的IC">
-      <meta itemprop="description" content="死磕牛角的IT农民工">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 奔跑的IC">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/" class="post-title-link" itemprop="url">TensorRT量化实战课YOLOv7量化：YOLOv7-PTQ量化(一)</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-folder"></i>
-      </span>
-      <span class="post-meta-item-text">分类于</span>
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
-        </span>
-    </span>
-
-  
-</div>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-          <h1 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h1><ul>
-<li><ul>
-<li><a href="#_2">注意事项</a></li>
-<li><a href="#2023115_3">一、2023/11/5更新</a></li>
-<li><a href="#_6">前言</a></li>
-<li><a href="#1_YOLOv7PTQ_19">1. YOLOv7-PTQ量化流程</a></li>
-<li><a href="#2__69">2. 准备工作</a></li>
-<li><a href="#3_QDQ_306">3. 插入QDQ节点</a></li>
-<li><ul>
-<li><a href="#31_QDQ_308">3.1 自动插入QDQ节点</a></li>
-<li><a href="#32_QDQ_630">3.2 手动插入QDQ节点</a></li>
-<li><a href="#33_initialize_833">3.3 手动initialize</a></li>
-</ul>
-</li>
-<li><a href="#_872">总结</a></li>
-</ul>
-</li>
-</ul>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/TensorRT/TensorRT%E9%87%8F%E5%8C%96%E5%AE%9E%E6%88%98%E8%AF%BEYOLOv7%E9%87%8F%E5%8C%96%EF%BC%9AYOLOv7-PTQ%E9%87%8F%E5%8C%96(%E4%B8%80)/#more" rel="contents">
-                阅读全文 &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-
-    <footer class="post-footer">
-        <div class="post-eof"></div>
-      
-    </footer>
-  </article>
-</div>
-
-
-
-
-    
-
-
-<div class="post-block">
-  
-  
-
-  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-3-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/zyd.gif">
-      <meta itemprop="name" content="奔跑的IC">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="奔跑的IC">
-      <meta itemprop="description" content="死磕牛角的IT农民工">
-    </span>
-
-    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="undefined | 奔跑的IC">
-      <meta itemprop="description" content="">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          <a href="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-3-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/" class="post-title-link" itemprop="url">Part5-3-TensorRT性能优化性能优化技巧</a>
-        </h2>
-
-        <div class="post-meta-container">
-          <div class="post-meta">
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar"></i>
-      </span>
-      <span class="post-meta-item-text">发表于</span>
-
-      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+      <time title="创建时间：2025-07-12 16:57:31" itemprop="dateCreated datePublished" datetime="2025-07-12T16:57:31+08:00">2025-07-12</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-05-15 21:38:24" itemprop="dateModified" datetime="2025-05-15T21:38:24+08:00">2025-05-15</time>
+      <time title="修改时间：2026-04-19 23:02:37" itemprop="dateModified" datetime="2026-04-19T23:02:37+08:00">2026-04-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -540,11 +239,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8-6-1/" itemprop="url" rel="index"><span itemprop="name">TensorRT教程-基于8.6.1</span></a>
+          <a href="/categories/esp32/" itemprop="url" rel="index"><span itemprop="name">esp32</span></a>
         </span>
     </span>
 
@@ -558,10 +253,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>本文档是记录学习Nvidia官方B站的<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1jj411Z7wG?spm_id_from=333.788.videopod.sections&amp;vd_source=cde2e7b9bca1a7048a13eaf0b48210b6">视频</a>，参考对应的PDF文件 TensorRTTraining-TRT8.6.1-Part5-V1.1.pdf 的记录。对应的官方代码<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/trt-samples-for-hackathon-cn">[trt-samples-for-hackathon-cn]</a></p>
+          <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>上一篇搬运了官方的例子使用vscode搭建ESP32开发环境，这一篇依然是搬运官方的文档创建一个新的工程。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-3-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%8A%80%E5%B7%A7/#more" rel="contents">
+              <a class="btn" href="/esp32/2-vscode%E5%88%9B%E5%BB%BAESP-IDF%E9%A1%B9%E7%9B%AE/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -592,7 +287,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-2-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/esp32/1-vscode%E6%90%AD%E5%BB%BA%E5%BC%80%E5%8F%91esp32%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -610,7 +305,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-2-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/" class="post-title-link" itemprop="url">Part5-2-TensorRT性能优化性能分析工具</a>
+          <a href="/esp32/1-vscode%E6%90%AD%E5%BB%BA%E5%BC%80%E5%8F%91esp32%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/" class="post-title-link" itemprop="url">1-vscode搭建开发esp32开发环境</a>
         </h2>
 
         <div class="post-meta-container">
@@ -621,7 +316,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+      <time title="创建时间：2025-07-12 16:24:21" itemprop="dateCreated datePublished" datetime="2025-07-12T16:24:21+08:00">2025-07-12</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-04-19 23:02:37" itemprop="dateModified" datetime="2026-04-19T23:02:37+08:00">2026-04-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -629,11 +331,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8-6-1/" itemprop="url" rel="index"><span itemprop="name">TensorRT教程-基于8.6.1</span></a>
+          <a href="/categories/esp32/" itemprop="url" rel="index"><span itemprop="name">esp32</span></a>
         </span>
     </span>
 
@@ -647,10 +345,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="1-背景"><a href="#1-背景" class="headerlink" title="1 背景"></a>1 背景</h1><p>本文档是记录学习Nvidia官方B站的<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1jj411Z7wG?spm_id_from=333.788.videopod.sections&amp;vd_source=cde2e7b9bca1a7048a13eaf0b48210b6">视频</a>，参考对应的PDF文件 TensorRTTraining-TRT8.6.1-Part5-V1.1.pdf 的记录。对应的官方代码<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/trt-samples-for-hackathon-cn">[trt-samples-for-hackathon-cn]</a></p>
+          <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>参考官方的流程使用vscode开发esp32，先搭建vscode的esp32开发环境。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-2-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%80%A7%E8%83%BD%E5%88%86%E6%9E%90%E5%B7%A5%E5%85%B7/#more" rel="contents">
+              <a class="btn" href="/esp32/1-vscode%E6%90%AD%E5%BB%BA%E5%BC%80%E5%8F%91esp32%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -681,7 +379,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/Fusion%20360/Day21-STL%E5%92%8COBJ%E6%96%87%E4%BB%B6%E8%BD%AC%E6%8D%A2%E5%92%8C%E5%AF%BC%E5%85%A5/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -699,7 +397,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">Part5-1-TensorRT性能优化概述</a>
+          <a href="/Fusion%20360/Day21-STL%E5%92%8COBJ%E6%96%87%E4%BB%B6%E8%BD%AC%E6%8D%A2%E5%92%8C%E5%AF%BC%E5%85%A5/" class="post-title-link" itemprop="url">Day21-STL和OBJ文件转换和导入</a>
         </h2>
 
         <div class="post-meta-container">
@@ -710,7 +408,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+      <time title="创建时间：2025-07-06 16:56:00" itemprop="dateCreated datePublished" datetime="2025-07-06T16:56:00+08:00">2025-07-06</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-04-13 22:12:07" itemprop="dateModified" datetime="2026-04-13T22:12:07+08:00">2026-04-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -718,11 +423,11 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
+          <a href="/categories/Fusion-360/" itemprop="url" rel="index"><span itemprop="name">Fusion 360</span></a>
         </span>
           ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8-6-1/" itemprop="url" rel="index"><span itemprop="name">TensorRT教程-基于8.6.1</span></a>
+          <a href="/categories/Fusion-360/Fusion-360/" itemprop="url" rel="index"><span itemprop="name">Fusion 360</span></a>
         </span>
     </span>
 
@@ -736,10 +441,13 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="1-背景"><a href="#1-背景" class="headerlink" title="1 背景"></a>1 背景</h1><p>本文档是记录学习Nvidia官方B站的<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1jj411Z7wG?spm_id_from=333.788.videopod.sections&amp;vd_source=cde2e7b9bca1a7048a13eaf0b48210b6">视频</a>，参考对应的PDF文件 TensorRTTraining-TRT8.6.1-Part5-V1.1.pdf 的记录。对应的官方代码<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/trt-samples-for-hackathon-cn">[trt-samples-for-hackathon-cn]</a></p>
+          <h1 id="新的操作"><a href="#新的操作" class="headerlink" title="新的操作"></a>新的操作</h1><ul>
+<li>打开stl格式的文件：插入-插入网格</li>
+<li>网格选项中：修改-转换网格-操作：基础特征</li>
+</ul>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part5-1-TensorRT%E6%80%A7%E8%83%BD%E4%BC%98%E5%8C%96%E6%A6%82%E8%BF%B0/#more" rel="contents">
+              <a class="btn" href="/Fusion%20360/Day21-STL%E5%92%8COBJ%E6%96%87%E4%BB%B6%E8%BD%AC%E6%8D%A2%E5%92%8C%E5%AF%BC%E5%85%A5/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -770,7 +478,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part4-TensorRT%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/cmake/cmake%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -788,7 +496,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part4-TensorRT%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/" class="post-title-link" itemprop="url">Part4-TensorRT高级用法</a>
+          <a href="/cmake/cmake%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/" class="post-title-link" itemprop="url">cmake交叉编译</a>
         </h2>
 
         <div class="post-meta-container">
@@ -799,7 +507,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+      <time title="创建时间：2025-06-16 21:28:55" itemprop="dateCreated datePublished" datetime="2025-06-16T21:28:55+08:00">2025-06-16</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-04-19 23:02:37" itemprop="dateModified" datetime="2026-04-19T23:02:37+08:00">2026-04-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -807,11 +522,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8-6-1/" itemprop="url" rel="index"><span itemprop="name">TensorRT教程-基于8.6.1</span></a>
+          <a href="/categories/cmake/" itemprop="url" rel="index"><span itemprop="name">cmake</span></a>
         </span>
     </span>
 
@@ -825,10 +536,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="1-背景"><a href="#1-背景" class="headerlink" title="1 背景"></a>1 背景</h1><p>本文档是记录学习Nvidia官方B站的<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1jj411Z7wG?spm_id_from=333.788.videopod.sections&amp;vd_source=cde2e7b9bca1a7048a13eaf0b48210b6">视频</a>，参考对应的PDF文件 TensorRTTraining-TRT8.6.1-Part5-V1.1.pdf 的记录。对应的官方代码<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/trt-samples-for-hackathon-cn">[trt-samples-for-hackathon-cn]</a></p>
+          <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>一直对cmake的交叉编译有点晕晕的，这里不定期的总结一些交叉编译的内容吧。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part4-TensorRT%E9%AB%98%E7%BA%A7%E7%94%A8%E6%B3%95/#more" rel="contents">
+              <a class="btn" href="/cmake/cmake%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -859,7 +570,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part2-TensorRT%E5%BC%80%E5%8F%91%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/CPU%E4%B8%8EGPU%E5%86%85%E5%AD%98/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -877,7 +588,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part2-TensorRT%E5%BC%80%E5%8F%91%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7/" class="post-title-link" itemprop="url">Part2-TensorRT开发辅助工具</a>
+          <a href="/TensorRT/CPU%E4%B8%8EGPU%E5%86%85%E5%AD%98/" class="post-title-link" itemprop="url">CPU与GPU内存</a>
         </h2>
 
         <div class="post-meta-container">
@@ -888,7 +599,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+      <time title="创建时间：2025-06-15 22:42:21" itemprop="dateCreated datePublished" datetime="2025-06-15T22:42:21+08:00">2025-06-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-04-19 23:02:37" itemprop="dateModified" datetime="2026-04-19T23:02:37+08:00">2026-04-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -897,10 +615,6 @@
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
           <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8-6-1/" itemprop="url" rel="index"><span itemprop="name">TensorRT教程-基于8.6.1</span></a>
         </span>
     </span>
 
@@ -914,10 +628,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="1-背景"><a href="#1-背景" class="headerlink" title="1 背景"></a>1 背景</h1><p>本文档是记录学习Nvidia官方B站的<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1jj411Z7wG?spm_id_from=333.788.videopod.sections&amp;vd_source=cde2e7b9bca1a7048a13eaf0b48210b6">视频</a>，参考对应的PDF文件 TensorRTTraining-TRT8.6.1-Part5-V1.1.pdf 的记录。对应的官方代码<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/trt-samples-for-hackathon-cn">[trt-samples-for-hackathon-cn]</a></p>
+          <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>这一节主要讲一下我们使用CPU与GPU交互的CPU内存的申请使用和具体的区别。测试平台为orin</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part2-TensorRT%E5%BC%80%E5%8F%91%E8%BE%85%E5%8A%A9%E5%B7%A5%E5%85%B7/#more" rel="contents">
+              <a class="btn" href="/TensorRT/CPU%E4%B8%8EGPU%E5%86%85%E5%AD%98/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -948,7 +662,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/tensorRT-HPC%E7%BB%8F%E9%AA%8C/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -966,7 +680,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/" class="post-title-link" itemprop="url">Part1-TensorRT简介</a>
+          <a href="/TensorRT/tensorRT-HPC%E7%BB%8F%E9%AA%8C/" class="post-title-link" itemprop="url">tensorRT-HPC经验</a>
         </h2>
 
         <div class="post-meta-container">
@@ -977,7 +691,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+      <time title="创建时间：2025-06-15 21:45:12" itemprop="dateCreated datePublished" datetime="2025-06-15T21:45:12+08:00">2025-06-15</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-04-19 23:02:37" itemprop="dateModified" datetime="2026-04-19T23:02:37+08:00">2026-04-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -986,10 +707,6 @@
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
           <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8-6-1/" itemprop="url" rel="index"><span itemprop="name">TensorRT教程-基于8.6.1</span></a>
         </span>
     </span>
 
@@ -1003,10 +720,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="1-背景"><a href="#1-背景" class="headerlink" title="1 背景"></a>1 背景</h1><p>本文档是记录学习Nvidia官方B站的<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV1jj411Z7wG?spm_id_from=333.788.videopod.sections&amp;vd_source=cde2e7b9bca1a7048a13eaf0b48210b6">视频</a>，参考对应的PDF文件 TensorRTTraining-TRT8.6.1-Part5-V1.1.pdf 的记录。对应的官方代码<a target="_blank" rel="noopener" href="https://github.com/NVIDIA/trt-samples-for-hackathon-cn">[trt-samples-for-hackathon-cn]</a></p>
+          <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>这里总结一些经常使用到的HPC的经验。便于后期对照查询使用</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/TensorRT/TensorRT%E6%95%99%E7%A8%8B-%E5%9F%BA%E4%BA%8E8.6.1/Part1-TensorRT%E7%AE%80%E4%BB%8B/#more" rel="contents">
+              <a class="btn" href="/TensorRT/tensorRT-HPC%E7%BB%8F%E9%AA%8C/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1037,7 +754,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/Fusion%20360/Day23%E7%BA%A6%E6%9D%9F/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -1055,7 +772,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/" class="post-title-link" itemprop="url">TensorRT快速开始</a>
+          <a href="/Fusion%20360/Day23%E7%BA%A6%E6%9D%9F/" class="post-title-link" itemprop="url">Day23约束</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1065,8 +782,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+      <time title="创建时间：2025-06-08 21:32:17 / 修改时间：21:33:24" itemprop="dateCreated datePublished" datetime="2025-06-08T21:32:17+08:00">2025-06-08</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1074,7 +792,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
+          <a href="/categories/Fusion-360/" itemprop="url" rel="index"><span itemprop="name">Fusion 360</span></a>
         </span>
     </span>
 
@@ -1088,10 +806,258 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h1><p>翻译官方 <a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/quick-start-guide/index.html">Quick Start Guide</a></p>
+          
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/Fusion%20360/Day22-%E4%BF%AE%E5%A4%8D%E6%9B%B2%E9%9D%A2%E6%A8%A1%E5%9E%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/Fusion%20360/Day22-%E4%BF%AE%E5%A4%8D%E6%9B%B2%E9%9D%A2%E6%A8%A1%E5%9E%8B/" class="post-title-link" itemprop="url">Day22-修复曲面模型</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-06-08 21:32:17 / 修改时间：21:33:06" itemprop="dateCreated datePublished" datetime="2025-06-08T21:32:17+08:00">2025-06-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Fusion-360/" itemprop="url" rel="index"><span itemprop="name">Fusion 360</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/Fusion%20360/Day25-%E5%A1%91%E6%80%A7%E5%BB%BA%E6%A8%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/Fusion%20360/Day25-%E5%A1%91%E6%80%A7%E5%BB%BA%E6%A8%A1/" class="post-title-link" itemprop="url">Day25-塑性建模</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2025-06-08 21:32:17 / 修改时间：22:16:35" itemprop="dateCreated datePublished" datetime="2025-06-08T21:32:17+08:00">2025-06-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Fusion-360/" itemprop="url" rel="index"><span itemprop="name">Fusion 360</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>根据B站的视频30天学会fusion 360 .这里针对每一个图纸的重点做一个记录。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/TensorRT/TensorRT%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B/#more" rel="contents">
+              <a class="btn" href="/Fusion%20360/Day25-%E5%A1%91%E6%80%A7%E5%BB%BA%E6%A8%A1/#more" rel="contents">
+                阅读全文 &raquo;
+              </a>
+            </div>
+          <!--/noindex-->
+        
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="http://example.com/Fusion%20360/Day26%E4%B8%89%E8%84%9A%E6%9E%B6%E8%81%94%E5%8A%A8%E6%95%88%E6%9E%9C/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/zyd.gif">
+      <meta itemprop="name" content="奔跑的IC">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="奔跑的IC">
+      <meta itemprop="description" content="死磕牛角的IT农民工">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | 奔跑的IC">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/Fusion%20360/Day26%E4%B8%89%E8%84%9A%E6%9E%B6%E8%81%94%E5%8A%A8%E6%95%88%E6%9E%9C/" class="post-title-link" itemprop="url">Day26三脚架联动效果</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-06-08 21:32:17" itemprop="dateCreated datePublished" datetime="2025-06-08T21:32:17+08:00">2025-06-08</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-06-09 00:02:33" itemprop="dateModified" datetime="2025-06-09T00:02:33+08:00">2025-06-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/Fusion-360/" itemprop="url" rel="index"><span itemprop="name">Fusion 360</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>根据B站的视频30天学会fusion 360 .这里针对每一个图纸的重点做一个记录。</p>
+          <!--noindex-->
+            <div class="post-button">
+              <a class="btn" href="/Fusion%20360/Day26%E4%B8%89%E8%84%9A%E6%9E%B6%E8%81%94%E5%8A%A8%E6%95%88%E6%9E%9C/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1115,7 +1081,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/10/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/8/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><span class="page-number current">9</span><a class="page-number" href="/page/10/">10</a><span class="space">&hellip;</span><a class="page-number" href="/page/27/">27</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/10/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

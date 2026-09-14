@@ -155,7 +155,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">195</span>
+          <span class="site-state-item-count">268</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -195,7 +195,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-1%20CUDA%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/10-TensorRT%E4%B8%AD%E7%9A%84%E5%BE%AA%E7%8E%AF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -213,7 +213,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-1%20CUDA%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">4-1 CUDA内存模型概述</a>
+          <a href="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/10-TensorRT%E4%B8%AD%E7%9A%84%E5%BE%AA%E7%8E%AF/" class="post-title-link" itemprop="url">10-TensorRT中的循环</a>
         </h2>
 
         <div class="post-meta-container">
@@ -224,7 +224,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-04-19 23:02:37" itemprop="dateModified" datetime="2026-04-19T23:02:37+08:00">2026-04-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -232,11 +239,11 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
         </span>
           ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+          <a href="/categories/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/" itemprop="url" rel="index"><span itemprop="name">TensorRT中文版开发手册</span></a>
         </span>
     </span>
 
@@ -250,10 +257,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="第4章-全局内存"><a href="#第4章-全局内存" class="headerlink" title="第4章 全局内存"></a>第4章 全局内存</h1><p>在上一章中，你已经了解了线程是如何在GPU中执行的，以及如何通过操作线程束来优化核函数性能。但是，核函数性能并不是只和线程束的执行有关。回忆一下第3章的内容，在3.3.2节中，把一个线程块最里面一层的维度设为线程束大小的一半，这导致内存负载效率的大幅下降。这种性能损失不能用线程束调度或并行性来解释，造成这种性能损失的真正原因是较差的全局内存访问模式</p>
+          <h1 id="TensorRT中的循环"><a href="#TensorRT中的循环" class="headerlink" title="TensorRT中的循环"></a>TensorRT中的循环</h1><img src="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/10-TensorRT%E4%B8%AD%E7%9A%84%E5%BE%AA%E7%8E%AF/rdp.jpg" class>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/4-1%20CUDA%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/#more" rel="contents">
+              <a class="btn" href="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/10-TensorRT%E4%B8%AD%E7%9A%84%E5%BE%AA%E7%8E%AF/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -284,7 +291,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E4%B8%8Eonnx/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -302,7 +309,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/" class="post-title-link" itemprop="url">3-4 避免分支分化</a>
+          <a href="/TensorRT/TensorRT%E4%B8%8Eonnx/" class="post-title-link" itemprop="url">TensorRT与onnx</a>
         </h2>
 
         <div class="post-meta-container">
@@ -313,7 +320,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-04-19 23:02:37" itemprop="dateModified" datetime="2026-04-19T23:02:37+08:00">2026-04-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -321,11 +335,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
         </span>
     </span>
 
@@ -339,10 +349,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="3-4-避免分支分化"><a href="#3-4-避免分支分化" class="headerlink" title="3.4 避免分支分化"></a>3.4 避免分支分化</h1><p><strong>线程束中的条件执行可能引起线程束分化</strong>，这会导致内核性能变差。通过重新组织数据的获取模式，可以减少或避免线程束分化。在本节里，将会以并行归约为例，介绍避免分支分化的基本技术。</p>
+          <h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h1><p>这里汇总了一些tensorRT与ONNX的关系和常用的一些转换工具。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-4%20%E9%81%BF%E5%85%8D%E5%88%86%E6%94%AF%E5%88%86%E5%8C%96/#more" rel="contents">
+              <a class="btn" href="/TensorRT/TensorRT%E4%B8%8Eonnx/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -373,7 +383,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-3%20%E5%B9%B6%E8%A1%8C%E6%80%A7%E7%9A%84%E8%A1%A8%E7%8E%B0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/1-%E7%AE%80%E4%BB%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -391,7 +401,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-3%20%E5%B9%B6%E8%A1%8C%E6%80%A7%E7%9A%84%E8%A1%A8%E7%8E%B0/" class="post-title-link" itemprop="url">3-3 并行性的表现</a>
+          <a href="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/1-%E7%AE%80%E4%BB%8B/" class="post-title-link" itemprop="url">1-简介</a>
         </h2>
 
         <div class="post-meta-container">
@@ -402,7 +412,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-04-19 23:02:37" itemprop="dateModified" datetime="2026-04-19T23:02:37+08:00">2026-04-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -410,11 +427,11 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
         </span>
           ，
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+          <a href="/categories/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/" itemprop="url" rel="index"><span itemprop="name">TensorRT中文版开发手册</span></a>
         </span>
     </span>
 
@@ -428,10 +445,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="3-3-并行性的表现"><a href="#3-3-并行性的表现" class="headerlink" title="3.3 并行性的表现"></a>3.3 并行性的表现</h1><p>为更好地理解线程束执行的本质，将使用不同的执行配置分析下述的sumMatrixOn-GPU2D核函数。<strong>使用不同的网格/块的维数组并使用nvprof配置指标来分析</strong>。</p>
+          <h1 id="1-手册简介"><a href="#1-手册简介" class="headerlink" title="1.手册简介"></a>1.手册简介</h1><p><img src="../2-TensorRT的能力/rdp.jpg" alt></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-3%20%E5%B9%B6%E8%A1%8C%E6%80%A7%E7%9A%84%E8%A1%A8%E7%8E%B0/#more" rel="contents">
+              <a class="btn" href="/TensorRT/TensorRT%E4%B8%AD%E6%96%87%E7%89%88%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C/1-%E7%AE%80%E4%BB%8B/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -462,7 +479,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/2-4%20%E8%AE%BE%E5%A4%87%E7%AE%A1%E7%90%86/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT-plugin/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -480,7 +497,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/2-4%20%E8%AE%BE%E5%A4%87%E7%AE%A1%E7%90%86/" class="post-title-link" itemprop="url">2-4 设备管理</a>
+          <a href="/TensorRT/TensorRT-plugin/" class="post-title-link" itemprop="url">TensorRT-plugin</a>
         </h2>
 
         <div class="post-meta-container">
@@ -491,7 +508,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-04-19 23:02:37" itemprop="dateModified" datetime="2026-04-19T23:02:37+08:00">2026-04-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -499,11 +523,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
         </span>
     </span>
 
@@ -517,10 +537,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="2-4-设备管理"><a href="#2-4-设备管理" class="headerlink" title="2.4 设备管理"></a>2.4 设备管理</h1><p>在本节，你将通过以下两种方法学习查询和管理GPU设备：</p>
+          <h1 id="1-Plugin简介"><a href="#1-Plugin简介" class="headerlink" title="1 Plugin简介"></a>1 Plugin简介</h1><p>网络模型就是很多层组成的，tensorRT基本上比较经典的层比如，卷积，反卷积，全连接，RNN，softmax等，在tensorRT中都是有对应的实现方式的，tensorRT是可以直接解析的。但是由于现在深度学习技术发展日新月异，各种不同结构的自定义层（比如：STN）层出不穷，所以tensorRT是不可能全部支持当前存在的所有层的。那对于这些自定义的层该怎么办？</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/2-4%20%E8%AE%BE%E5%A4%87%E7%AE%A1%E7%90%86/#more" rel="contents">
+              <a class="btn" href="/TensorRT/TensorRT-plugin/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -551,7 +571,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/TensorRT%20INT8%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -569,7 +589,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/" class="post-title-link" itemprop="url">3-1 CUDA执行模型概述</a>
+          <a href="/TensorRT/TensorRT%20INT8%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/" class="post-title-link" itemprop="url">TensorRT INT8量化代码</a>
         </h2>
 
         <div class="post-meta-container">
@@ -580,7 +600,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -588,11 +608,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
         </span>
     </span>
 
@@ -606,10 +622,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="3-1-CUDA执行模型概述"><a href="#3-1-CUDA执行模型概述" class="headerlink" title="3.1 CUDA执行模型概述"></a>3.1 CUDA执行模型概述</h1><p>前面使用了不同的block和grid来配置核函数，可以看出性能是有差异的，但是为什么会存在差异，如何选择最合适的参数呢？这一章就是解释这些内容。</p>
+          <h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h1><p>在之前的文章中<code>7-TensorRT中的INT8</code>介绍了TensorRT的量化理论基础，这里就根据理论实现相关的代码</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-1%20CUDA%E6%89%A7%E8%A1%8C%E6%A8%A1%E5%9E%8B%E6%A6%82%E8%BF%B0/#more" rel="contents">
+              <a class="btn" href="/TensorRT/TensorRT%20INT8%E9%87%8F%E5%8C%96%E4%BB%A3%E7%A0%81/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -640,7 +656,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/Calibration%20file/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -658,7 +674,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/" class="post-title-link" itemprop="url">3-2 理解线程束执行的本质</a>
+          <a href="/TensorRT/Calibration%20file/" class="post-title-link" itemprop="url">Calibration file</a>
         </h2>
 
         <div class="post-meta-container">
@@ -669,7 +685,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -677,11 +693,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
         </span>
     </span>
 
@@ -695,10 +707,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="3-2-理解线程束执行的本质"><a href="#3-2-理解线程束执行的本质" class="headerlink" title="3.2 理解线程束执行的本质"></a>3.2 理解线程束执行的本质</h1><p>启动内核时，从软件的角度你看到了什么？对于你来说，在内核中似乎所有的线程都是并行地运行的。在逻辑上这是正确的，<strong>但从硬件的角度来看，不是所有线程在物理上都可以同时并行地执行</strong>。本章已经提到了把32个线程划分到一个执行单元中的概念：线程束。</p>
+          <h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h1><p>我们在使用Tensorrt的隐形量化时，需要生成一个cache文件，用于onnx生成engine文件使用。如果我们使用<code>trtexec</code>来将onnx文件生成为和我们的GPU相关的隐形量化后的engine文件时需要参数 参考<a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/archives/tensorrt-861/developer-guide/index.html#trtexec-serialized-engine">A.2.1.2. Serialized Engine Generation</a>   <a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/archives/tensorrt-861/developer-guide/index.html#trtexec-flags">A.2.1.4. Commonly Used Command-line Flags</a>  </p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/3-2%20%E7%90%86%E8%A7%A3%E7%BA%BF%E7%A8%8B%E6%9D%9F%E6%89%A7%E8%A1%8C%E7%9A%84%E6%9C%AC%E8%B4%A8/#more" rel="contents">
+              <a class="btn" href="/TensorRT/Calibration%20file/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -729,7 +741,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/2-3%20%E7%BB%84%E7%BB%87%E5%B9%B6%E8%A1%8C%E7%BA%BF%E7%A8%8B/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/QAT/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -747,7 +759,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/2-3%20%E7%BB%84%E7%BB%87%E5%B9%B6%E8%A1%8C%E7%BA%BF%E7%A8%8B/" class="post-title-link" itemprop="url">2-3 组织并行线程</a>
+          <a href="/TensorRT/QAT/" class="post-title-link" itemprop="url">QAT</a>
         </h2>
 
         <div class="post-meta-container">
@@ -758,7 +770,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-04-19 23:02:37" itemprop="dateModified" datetime="2026-04-19T23:02:37+08:00">2026-04-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -766,11 +785,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
         </span>
     </span>
 
@@ -784,10 +799,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="2-3-组织并行线程"><a href="#2-3-组织并行线程" class="headerlink" title="2.3 组织并行线程"></a>2.3 组织并行线程</h1><p>从前面的例子可以看出，如果使用了合适的网格和块大小来正确地组织线程，那么可以对内核性能产生很大的影响。在向量加法的例子中，为了实现最佳性能我们调整了块的大小，并基于块大小和向量数据大小计算出了网格大小。<br>现在通过一个矩阵加法的例子来进一步说明这一点。</p>
+          <h1 id="附录："><a href="#附录：" class="headerlink" title="附录："></a>附录：</h1><p>for QDQ documents and how tensorrt process QDQ nodes, pls ref our developer guide: <a target="_blank" rel="noopener" href="https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#work-with-qat-networks">https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html#work-with-qat-networks</a><br> And TensorRT provide a tool to do PTQ and QAT in pytorch: <a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/blob/release/8.5/tools/pytorch-quantization/examples/torchvision/classification_flow.py">https://github.com/NVIDIA/TensorRT/blob/release/8.5/tools/pytorch-quantization/examples/torchvision/classification_flow.py</a><br> Besides, our team develop a sample to guide how to got best perf on Yolov7: <a target="_blank" rel="noopener" href="https://github.com/NVIDIA-AI-IOT/yolo_deepstream/tree/main/yolov7_qat">https://github.com/NVIDIA-AI-IOT/yolo_deepstream/tree/main/yolov7_qat</a><br> And the QDQ best placement guide is here: <a target="_blank" rel="noopener" href="https://github.com/NVIDIA-AI-IOT/yolo_deepstream/blob/main/yolov7_qat/doc/Guidance_of_QAT_performance_optimization.md">https://github.com/NVIDIA-AI-IOT/yolo_deepstream/blob/main/yolov7_qat/doc/Guidance_of_QAT_performance_optimization.md</a></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/2-3%20%E7%BB%84%E7%BB%87%E5%B9%B6%E8%A1%8C%E7%BA%BF%E7%A8%8B/#more" rel="contents">
+              <a class="btn" href="/TensorRT/QAT/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -818,7 +833,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/2-2%20%E7%BB%99%E6%A0%B8%E5%87%BD%E6%95%B0%E8%AE%A1%E6%97%B6/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/TensorRT/Polygraphy/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -836,7 +851,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/2-2%20%E7%BB%99%E6%A0%B8%E5%87%BD%E6%95%B0%E8%AE%A1%E6%97%B6/" class="post-title-link" itemprop="url">2-2 给核函数计时</a>
+          <a href="/TensorRT/Polygraphy/" class="post-title-link" itemprop="url">Polygraphy</a>
         </h2>
 
         <div class="post-meta-container">
@@ -847,7 +862,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-04-19 23:02:37" itemprop="dateModified" datetime="2026-04-19T23:02:37+08:00">2026-04-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -855,11 +877,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+          <a href="/categories/TensorRT/" itemprop="url" rel="index"><span itemprop="name">TensorRT</span></a>
         </span>
     </span>
 
@@ -873,10 +891,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h2 id="2-2-给核函数计时"><a href="#2-2-给核函数计时" class="headerlink" title="2.2 给核函数计时"></a>2.2 给核函数计时</h2><h3 id="2-2-1-用CPU计时器计时"><a href="#2-2-1-用CPU计时器计时" class="headerlink" title="2.2.1 用CPU计时器计时"></a>2.2.1 用CPU计时器计时</h3>
+          <h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h1><p>翻译自官网 <a target="_blank" rel="noopener" href="https://github.com/NVIDIA/TensorRT/blob/main/tools/Polygraphy/README.md">https://github.com/NVIDIA/TensorRT/blob/main/tools/Polygraphy/README.md</a></p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/2-2%20%E7%BB%99%E6%A0%B8%E5%87%BD%E6%95%B0%E8%AE%A1%E6%97%B6/#more" rel="contents">
+              <a class="btn" href="/TensorRT/Polygraphy/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -907,7 +925,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/10-1%20CUDA%20C%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/Linux/Linux%20shell%E9%87%8D%E5%AE%9A%E5%90%91/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -925,7 +943,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/10-1%20CUDA%20C%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B/" class="post-title-link" itemprop="url">10-1 CUDA C开发过程</a>
+          <a href="/Linux/Linux%20shell%E9%87%8D%E5%AE%9A%E5%90%91/" class="post-title-link" itemprop="url">Linux shell重定向</a>
         </h2>
 
         <div class="post-meta-container">
@@ -936,7 +954,7 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -944,11 +962,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+          <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
         </span>
     </span>
 
@@ -962,10 +976,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="10-1-CUDA-C的开发过程"><a href="#10-1-CUDA-C的开发过程" class="headerlink" title="10.1 CUDA C的开发过程"></a>10.1 CUDA C的开发过程</h1><p>了解GPU内存和执行模型抽象有助于更好地控制大规模并行GPU环境。这样，创建映射到抽象二维或三维网格的应用子域就变得很正常了，并且可以使核函数像串行一样表示。重点关注高级区域分解和内存层次结构存储管理的内容，就不会被创建和销毁线程的烦琐细节所妨碍了。</p>
+          <h1 id="1-简介"><a href="#1-简介" class="headerlink" title="1 简介"></a>1 简介</h1><p>在 Linux 的 shell 中，重定向是将命令的输入和输出重定向到不同的位置（如文件、设备或其他命令）。这使得 shell 可以灵活地处理数据流和日志记录。重定向主要涉及以下几种类型：标准输入（stdin）、标准输出（stdout）和标准错误输出（stderr）。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/10-1%20CUDA%20C%E5%BC%80%E5%8F%91%E8%BF%87%E7%A8%8B/#more" rel="contents">
+              <a class="btn" href="/Linux/Linux%20shell%E9%87%8D%E5%AE%9A%E5%90%91/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -996,7 +1010,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="http://example.com/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/10-3%20CUDA%E8%B0%83%E8%AF%95/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/Linux/Linux%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1crontab/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/zyd.gif">
@@ -1014,7 +1028,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/10-3%20CUDA%E8%B0%83%E8%AF%95/" class="post-title-link" itemprop="url">10-3 CUDA调试</a>
+          <a href="/Linux/Linux%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1crontab/" class="post-title-link" itemprop="url">Linux定时任务crontab</a>
         </h2>
 
         <div class="post-meta-container">
@@ -1025,7 +1039,14 @@
       </span>
       <span class="post-meta-item-text">发表于</span>
 
-      <time title="创建时间：2024-12-01 18:13:43" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:43+08:00">2024-12-01</time>
+      <time title="创建时间：2024-12-01 18:13:45" itemprop="dateCreated datePublished" datetime="2024-12-01T18:13:45+08:00">2024-12-01</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-04-19 23:02:37" itemprop="dateModified" datetime="2026-04-19T23:02:37+08:00">2026-04-19</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -1033,11 +1054,7 @@
       </span>
       <span class="post-meta-item-text">分类于</span>
         <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/" itemprop="url" rel="index"><span itemprop="name">CUDA</span></a>
-        </span>
-          ，
-        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-          <a href="/categories/CUDA/CUDA-C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">CUDA C编程权威指南笔记</span></a>
+          <a href="/categories/Linux/" itemprop="url" rel="index"><span itemprop="name">Linux</span></a>
         </span>
     </span>
 
@@ -1051,10 +1068,10 @@
     
     
     <div class="post-body" itemprop="articleBody">
-          <h1 id="10-3-CUDA调试"><a href="#10-3-CUDA调试" class="headerlink" title="10.3 CUDA调试"></a>10.3 CUDA调试</h1><p>分为两个部分，内核调试和内存调试。</p>
+          <h1 id="2-定时任务调用串口"><a href="#2-定时任务调用串口" class="headerlink" title="2 定时任务调用串口"></a>2 定时任务调用串口</h1><p>有一个需求是在定时任务中调用一个程序usart操作串口。程序usart操作的串口是<code>/dev/ttyUSB0</code>。</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/CUDA/CUDA%20C%E7%BC%96%E7%A8%8B%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97%E7%AC%94%E8%AE%B0/10-3%20CUDA%E8%B0%83%E8%AF%95/#more" rel="contents">
+              <a class="btn" href="/Linux/Linux%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1crontab/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -1078,7 +1095,7 @@
 
 
   <nav class="pagination">
-    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/18/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><span class="page-number current">19</span><a class="page-number" href="/page/20/">20</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/20/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" title="上一页" aria-label="上一页" href="/page/18/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/18/">18</a><span class="page-number current">19</span><a class="page-number" href="/page/20/">20</a><span class="space">&hellip;</span><a class="page-number" href="/page/27/">27</a><a class="extend next" rel="next" title="下一页" aria-label="下一页" href="/page/20/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 </div>

@@ -27152,4 +27152,264 @@ reshape.set_input(1, network_definition.add_shape(X).get_output(0))
         <tag>C</tag>
       </tags>
   </entry>
+  <entry>
+    <title>SSH隧道</title>
+    <url>/Linux/SSH%E9%9A%A7%E9%81%93/</url>
+    <content><![CDATA[<h1 id="1-背景"><a href="#1-背景" class="headerlink" title="1 背景"></a>1 背景</h1><p>现有三台机器，网络关系如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>机器</th>
+<th>地址</th>
+<th>SSH 端口</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>本地 PC</td>
+<td>-</td>
+<td>-</td>
+<td>开发机（Windows）</td>
+</tr>
+<tr>
+<td>服务器</td>
+<td>10.0.206.124</td>
+<td>32354</td>
+<td>远程 Linux 服务器</td>
+</tr>
+<tr>
+<td>台架</td>
+<td>10.13.193.69</td>
+<td>31936</td>
+<td>测试台架，运行 SSH 服务</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>连通性：</p>
+<ul>
+<li>本地 PC → 服务器：可以，<code>ssh -p 32354 root@10.0.206.124</code></li>
+<li>本地 PC → 台架：可以，<code>ssh -p 31936 &lt;台架用户名&gt;@10.13.193.69</code></li>
+<li>服务器 → 台架：<strong>不可以</strong>，服务器路由不到台架所在的网段</li>
+</ul>
+<p>现在的需求是：在服务器上操作台架。台架不能被服务器直接访问，怎么办？</p>
+<h1 id="2-解决方案"><a href="#2-解决方案" class="headerlink" title="2 解决方案"></a>2 解决方案</h1><p>核心思路：在本地 PC 上建立一条 SSH <strong>远程转发</strong>隧道，把服务器的 <code>54321</code> 端口映射到台架的 <code>31936</code> 端口。之后在服务器上访问自己的 <code>127.0.0.1:54321</code>，流量就会经本地 PC 中转，最终到达台架。</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">服务器 10.0.206.124            本地 PC                   台架 10.13.193.69</span><br><span class="line">访问 127.0.0.1:54321  ──SSH隧道──►  跳板  ──直接 TCP──►  10.13.193.69:31936</span><br></pre></td></tr></table></figure>
+<h2 id="2-1-在本地-PC-上建立隧道"><a href="#2-1-在本地-PC-上建立隧道" class="headerlink" title="2.1 在本地 PC 上建立隧道"></a>2.1 在本地 PC 上建立隧道</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh -N -o ServerAliveInterval=15 -o ServerAliveCountMax=8 -R 54321:10.13.193.69:31936 -p 32354 -i <span class="string">&quot;C:\Users\username\.ssh\id_rsa_6v_a3&quot;</span> root@10.0.206.124</span><br></pre></td></tr></table></figure>
+<p>命令保持运行，隧道就保持有效。各参数作用如下：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>-N</code></td>
+<td>不执行远程命令，只做端口转发</td>
+</tr>
+<tr>
+<td><code>-o ServerAliveInterval=15</code></td>
+<td>每 15 秒向服务器发送一次保活探测</td>
+</tr>
+<tr>
+<td><code>-o ServerAliveCountMax=8</code></td>
+<td>连续 8 次探测无响应就断开（约 120 秒）</td>
+</tr>
+<tr>
+<td><code>-R 54321:10.13.193.69:31936</code></td>
+<td>让服务器监听 54321，流量经本地 PC 转发到台架的 31936</td>
+</tr>
+<tr>
+<td><code>-p 32354</code></td>
+<td>登录服务器的 SSH 端口</td>
+</tr>
+<tr>
+<td><code>-i &quot;C:\Users\username\.ssh\id_rsa_6v_a3&quot;</code></td>
+<td>登录服务器使用的私钥文件</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>注意 <code>-p</code> 是小写，指定的是 SSH 端口；<code>scp</code> 中对应的参数是大写 <code>-P</code>。私钥路径不要漏掉 <code>.ssh</code> 前面的反斜杠，常见错误是写成 <code>C:\Users\username.ssh\...</code>，这样指向的是另一个目录。</p>
+<h2 id="2-2-在服务器上访问台架"><a href="#2-2-在服务器上访问台架" class="headerlink" title="2.2 在服务器上访问台架"></a>2.2 在服务器上访问台架</h2><p>隧道建立后，在服务器上这样连接台架：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh -p 54321 &lt;台架用户名&gt;@127.0.0.1</span><br></pre></td></tr></table></figure>
+<p>传输文件：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">scp -P 54321 local_file &lt;台架用户名&gt;@127.0.0.1:/tmp/</span><br></pre></td></tr></table></figure>
+<p>必须连 <code>127.0.0.1</code>，不能连台架的 IP。服务器访问台架 IP 依然是不通的，能连的只有服务器本机的 <code>54321</code> 端口。</p>
+<p>也可以写进服务器上的 <code>~/.ssh/config</code>，把隧道端口当成一台“别名主机”：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">Host bench</span><br><span class="line">    HostName 127.0.0.1</span><br><span class="line">    Port 54321</span><br><span class="line">    User &lt;台架用户名&gt;</span><br></pre></td></tr></table></figure>
+<p>之后在服务器上 <code>ssh bench</code> 即可。</p>
+<h2 id="2-3-方案为什么能成立"><a href="#2-3-方案为什么能成立" class="headerlink" title="2.3 方案为什么能成立"></a>2.3 方案为什么能成立</h2><p>关键在于 <code>-R</code> 的语法：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">-R [bind_address:]port:host:hostport</span><br></pre></td></tr></table></figure>
+<p>其中 <code>host:hostport</code>（这里是 <code>10.13.193.69:31936</code>）是由<strong>本地 PC 去解析和连接</strong>的，不是在服务器上连接。所以服务器能不能访问台架并不重要，只要本地 PC 能访问台架，隧道就能通。本地 PC 在这里扮演的是跳板机的角色。</p>
+<h1 id="3-原理：远程转发-R"><a href="#3-原理：远程转发-R" class="headerlink" title="3 原理：远程转发 -R"></a>3 原理：远程转发 <code>-R</code></h1><h2 id="3-1-数据流向"><a href="#3-1-数据流向" class="headerlink" title="3.1 数据流向"></a>3.1 数据流向</h2><p>以本次命令 <code>-R 54321:10.13.193.69:31936</code> 为例，一条连接完整经过以下几步：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">[服务器] 应用 ──► 127.0.0.1:54321</span><br><span class="line">                        │</span><br><span class="line">                        │ ① 服务器 sshd 接受连接</span><br><span class="line">                        ▼</span><br><span class="line">                SSH 隧道（已建立的 SSH 连接）</span><br><span class="line">                        │</span><br><span class="line">                        │ ② 流量沿隧道回到本地 PC 的 ssh 客户端</span><br><span class="line">                        ▼</span><br><span class="line">[本地 PC] ssh 客户端 ──► ③ 主动连接 10.13.193.69:31936</span><br><span class="line">                        │</span><br><span class="line">                        ▼</span><br><span class="line">[台架] sshd :31936</span><br></pre></td></tr></table></figure>
+<p>从各方的视角看：</p>
+<ul>
+<li>服务器只是在访问自己的 <code>127.0.0.1:54321</code>，它并不需要知道台架的存在；</li>
+<li>台架看到的连接来自本地 PC；</li>
+<li>本地 PC 是中间的跳板，负责把两边接起来。</li>
+</ul>
+<h2 id="3-2-保活参数"><a href="#3-2-保活参数" class="headerlink" title="3.2 保活参数"></a>3.2 保活参数</h2><p><code>ServerAliveInterval</code> 和 <code>ServerAliveCountMax</code> 是客户端的探活设置：</p>
+<ul>
+<li><code>ServerAliveInterval=15</code>：每 15 秒向服务器发送一次保活探测；</li>
+<li><code>ServerAliveCountMax=8</code>：连续 8 次探测没有响应，就认为连接已经断开并退出。</li>
+</ul>
+<p>也就是最多约 <code>15 × 8 = 120</code> 秒无响应后，ssh 会主动结束。</p>
+<p>为什么要设置：本地 PC 和服务器之间通常隔着 NAT 或防火墙，长时间没有数据的 TCP 连接会被中间设备悄悄回收，表现就是“隧道看起来还在，实际已经不通了”。定时发送保活报文可以让连接保持活跃，也能让 ssh 及时发现死连接。</p>
+<p>注意区分：<code>ServerAlive*</code> 是客户端探活，对应的服务端参数是 <code>ClientAlive*</code>。</p>
+<h2 id="3-3-监听地址与-GatewayPorts"><a href="#3-3-监听地址与-GatewayPorts" class="headerlink" title="3.3 监听地址与 GatewayPorts"></a>3.3 监听地址与 GatewayPorts</h2><p>默认情况下，<code>-R</code> 只在服务器的回环地址上监听，这是 sshd 出于安全考虑的默认行为。在服务器上可以看到：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ss -lntp | grep 54321</span><br><span class="line">LISTEN 0  128  127.0.0.1:54321  0.0.0.0:*  <span class="built_in">users</span>:((&quot;sshd&quot;,pid=xxx,fd=xxx))</span><br></pre></td></tr></table></figure>
+<p><code>127.0.0.1:54321</code> 表示只有服务器本机能使用这条隧道，其他机器连不上。</p>
+<p>如果确实需要让服务器所在网段的其他机器也能使用，需要修改服务器的 <code>/etc/ssh/sshd_config</code>：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">GatewayPorts yes</span><br></pre></td></tr></table></figure>
+<p>重启 sshd 后，用下面的形式显式指定监听所有地址：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh -R 0.0.0.0:54321:10.13.193.69:31936 ...</span><br><span class="line"><span class="comment"># 或</span></span><br><span class="line">ssh -R <span class="string">&#x27;*:54321:10.13.193.69:31936&#x27;</span> ...</span><br></pre></td></tr></table></figure>
+<p>但大多数场景（包括本次）只需要服务器自己用，保持默认的回环监听即可，暴露面越小越安全。</p>
+<h2 id="3-4-常见的失败原因"><a href="#3-4-常见的失败原因" class="headerlink" title="3.4 常见的失败原因"></a>3.4 常见的失败原因</h2><ul>
+<li><strong><code>remote port forwarding failed for listen port 54321</code></strong>：服务器上 54321 已被占用，或者 sshd 配置了 <code>AllowTcpForwarding no</code>；</li>
+<li><strong>服务器上连 54321 被拒绝</strong>：本地 PC 的 ssh 进程已经退出，或隧道没有建立成功（用 <code>ssh -v</code> 可以看到 <code>remote forward success for: listen 54321</code>）；</li>
+<li><strong>连上了但马上断开</strong>：本地 PC 到台架不通，或台架防火墙拦截。可以先在本地 PC 上直接 <code>ssh -p 31936 &lt;台架用户名&gt;@10.13.193.69</code> 验证；</li>
+<li><strong><code>bind: Permission denied</code></strong>：非 root 用户绑定 1024 以下端口需要权限，换一个高位端口即可。</li>
+</ul>
+<p>另外，如果希望端口转发失败时 ssh 直接退出，而不是留下一条“看起来正常”的登录会话，可以加上：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">-o ExitOnForwardFailure=<span class="built_in">yes</span></span><br></pre></td></tr></table></figure>
+<h1 id="4-SSH-的其他转发方式与应用场景"><a href="#4-SSH-的其他转发方式与应用场景" class="headerlink" title="4 SSH 的其他转发方式与应用场景"></a>4 SSH 的其他转发方式与应用场景</h1><p>SSH 隧道本质是把其他 TCP 连接封装在一条已经建立的 SSH 连接里传输。对外看只是普通的 SSH 流量，里面跑的可以是 SSH、HTTP、数据库等任意 TCP 协议。除了上面用到的 <code>-R</code>，SSH 还提供 <code>-L</code> 和 <code>-D</code> 两种转发方式。</p>
+<h2 id="4-1-L-本地转发"><a href="#4-1-L-本地转发" class="headerlink" title="4.1 -L 本地转发"></a>4.1 <code>-L</code> 本地转发</h2><p>语法：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">-L [bind_address:]port:host:hostport</span><br></pre></td></tr></table></figure>
+<p>含义：在<strong>本地</strong>监听 <code>port</code>，本地收到的连接通过 SSH 服务器转发到 <code>host:hostport</code>。与 <code>-R</code> 相反，这里的 <code>host:hostport</code> 是由<strong>服务器侧连接</strong>的。</p>
+<p>假设情况反过来：服务器能访问台架，本地 PC 访问不到台架，那么在本地 PC 上执行：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh -N -L 54321:10.13.193.69:31936 -p 32354 root@10.0.206.124</span><br></pre></td></tr></table></figure>
+<p>之后在本地 PC 上执行 <code>ssh -p 54321 &lt;台架用户名&gt;@127.0.0.1</code>，就相当于访问台架。</p>
+<p><code>-L</code> 更常见的用法是访问服务器内网的服务。例如服务器本机跑了一个 Web 服务，端口 80：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh -N -L 8080:127.0.0.1:80 -p 32354 root@10.0.206.124</span><br></pre></td></tr></table></figure>
+<p>本地浏览器访问 <code>http://127.0.0.1:8080</code> 就能看到服务器的页面。注意这里的 <code>127.0.0.1</code> 是相对于服务器解析的，指的是服务器自己。</p>
+<p>一句话概括：<code>-L</code> 是“把远端网络拉到本地”。</p>
+<h2 id="4-2-D-动态转发"><a href="#4-2-D-动态转发" class="headerlink" title="4.2 -D 动态转发"></a>4.2 <code>-D</code> 动态转发</h2><p>语法：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">-D [bind_address:]port</span><br></pre></td></tr></table></figure>
+<p>在本地监听一个 SOCKS5 代理端口：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh -N -D 1080 -p 32354 root@10.0.206.124</span><br></pre></td></tr></table></figure>
+<p>这条命令在本地 <code>127.0.0.1:1080</code> 起了一个 SOCKS5 代理。任何把流量交给这个代理的程序，其连接都会经 SSH 服务器发出，而目标地址由程序在运行时通过 SOCKS 协议告诉代理，不需要在命令行里写死 <code>host:hostport</code>。</p>
+<p>使用方式：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># curl 走代理</span></span><br><span class="line">curl --socks5 127.0.0.1:1080 http://intranet.example.com</span><br><span class="line"></span><br><span class="line"><span class="comment"># Linux 下让任意程序走代理</span></span><br><span class="line">proxychains4 curl http://intranet.example.com</span><br></pre></td></tr></table></figure>
+<p>浏览器中把代理设置为 SOCKS5、地址 <code>127.0.0.1</code>、端口 <code>1080</code> 即可。</p>
+<p>与 <code>-L</code> 的区别：<code>-L</code> 一次只能把本地一个端口映射到一个固定目标；<code>-D</code> 只开一个端口，却能代理到服务器能访问的任意地址，目标由每个连接动态指定。可以把它理解为“目标可变的 <code>-L</code>”。</p>
+<p>OpenSSH 7.6 及以上版本还支持远程动态转发 <code>-R 1080</code>（不带目标地址），在远端开一个 SOCKS 代理，效果与 <code>-D</code> 镜像。</p>
+<h2 id="4-3-三者的区别与联系"><a href="#4-3-三者的区别与联系" class="headerlink" title="4.3 三者的区别与联系"></a>4.3 三者的区别与联系</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>对比项</th>
+<th><code>-L</code> 本地转发</th>
+<th><code>-R</code> 远程转发</th>
+<th><code>-D</code> 动态转发</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>监听端</td>
+<td>本地</td>
+<td>远端（SSH 服务器）</td>
+<td>本地</td>
+</tr>
+<tr>
+<td>目标地址</td>
+<td>命令行写死</td>
+<td>命令行写死</td>
+<td>不写死，由 SOCKS 请求决定</td>
+</tr>
+<tr>
+<td>目标由谁连接</td>
+<td>服务器</td>
+<td>本地</td>
+<td>服务器</td>
+</tr>
+<tr>
+<td>承载协议</td>
+<td>任意 TCP</td>
+<td>任意 TCP</td>
+<td>SOCKS5 代理</td>
+</tr>
+<tr>
+<td>典型场景</td>
+<td>通过跳板机访问内网服务</td>
+<td>把本地/内网服务暴露给远端</td>
+<td>让程序整体走服务器的网络出口</td>
+</tr>
+<tr>
+<td>一句话</td>
+<td>把远端拉到本地</td>
+<td>把本地推到远端</td>
+<td>本地开一个能去远端的代理</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>三者的联系：</p>
+<ul>
+<li>底层都复用同一条 SSH 连接，靠 SSH 的通道（channel）多路复用同时承载多个转发；</li>
+<li><code>-L</code> 和 <code>-R</code> 是一对镜像：同一组映射，在哪一端执行决定了监听端和目标端的角色；</li>
+<li><code>-D</code> 可以看作 <code>-L</code> 的动态版本：只监听一个端口，但目标由 SOCKS 协议在运行时决定，一个端口服务所有地址；</li>
+<li>三个参数可以同时出现在一条命令里，也可以重复使用（例如同时开多条 <code>-L</code> 或 <code>-R</code>）。</li>
+</ul>
+<h2 id="4-4-如何选择"><a href="#4-4-如何选择" class="headerlink" title="4.4 如何选择"></a>4.4 如何选择</h2><div class="table-container">
+<table>
+<thead>
+<tr>
+<th>需求</th>
+<th>选择</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>服务器要访问本地 PC 或本地 PC 能到达的地址</td>
+<td><code>-R</code></td>
+</tr>
+<tr>
+<td>本地要访问服务器或服务器内网的服务</td>
+<td><code>-L</code></td>
+</tr>
+<tr>
+<td>让浏览器、程序整体走服务器的网络出口</td>
+<td><code>-D</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>回到本次场景：台架的服务地址是固定的 <code>10.13.193.69:31936</code>，所以用 <code>-R</code> 最直接。如果希望服务器能访问“本地 PC 能到达的任意地址”，则可以改用远程动态转发 <code>-R 1080</code>，在服务器上把它当作 SOCKS5 代理使用。</p>
+<h1 id="5-实用技巧"><a href="#5-实用技巧" class="headerlink" title="5 实用技巧"></a>5 实用技巧</h1><h2 id="5-1-后台运行"><a href="#5-1-后台运行" class="headerlink" title="5.1 后台运行"></a>5.1 后台运行</h2><p>Linux / macOS 上可以加 <code>-f</code> 让 ssh 转入后台：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh -f -N -R 54321:10.13.193.69:31936 ...</span><br></pre></td></tr></table></figure>
+<p>Windows 自带 OpenSSH 的部分版本不支持 <code>-f</code>，更稳妥的做法是单独开一个终端窗口，或者用任务计划程序在登录时启动。需要断线自动重连时，Linux 下可以用 <code>autossh</code>：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">autossh -M 0 -N -o ServerAliveInterval=15 -o ServerAliveCountMax=8 \</span><br><span class="line">    -R 54321:10.13.193.69:31936 -p 32354 root@10.0.206.124</span><br></pre></td></tr></table></figure>
+<p><code>-M 0</code> 表示不使用 autossh 自己的监控端口，而依赖 SSH 的 <code>ServerAlive*</code> 参数判断连接状态。</p>
+<h2 id="5-2-调试"><a href="#5-2-调试" class="headerlink" title="5.2 调试"></a>5.2 调试</h2><p>加 <code>-v</code> 可以看到转发是否成功：</p>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ssh -v -N -R 54321:10.13.193.69:31936 ...</span><br></pre></td></tr></table></figure>
+<p>关键日志：</p>
+<figure class="highlight text"><table><tr><td class="code"><pre><span class="line">debug1: remote forward success for: listen 54321, connect 10.13.193.69:31936</span><br></pre></td></tr></table></figure>
+<p>出现 <code>remote forward failure</code> 时，结合前面的失败原因逐项排查。</p>
+<h2 id="5-3-安全提醒"><a href="#5-3-安全提醒" class="headerlink" title="5.3 安全提醒"></a>5.3 安全提醒</h2><ul>
+<li>隧道一旦建立，能访问服务器 <code>54321</code> 的人就等价于能访问台架，注意服务器上的账户权限和访问控制；</li>
+<li>不要随意开启 <code>GatewayPorts yes</code>，默认只监听回环地址是最安全的；</li>
+<li>使用密钥认证，不要图省事使用弱密码；</li>
+<li>隧道只应该开给需要的端口，转发范围越小越好。</li>
+</ul>
+<h1 id="6-参考"><a href="#6-参考" class="headerlink" title="6 参考"></a>6 参考</h1><ul>
+<li><a href="https://man.openbsd.org/ssh">ssh(1) - OpenBSD manual pages</a></li>
+<li><a href="https://man.openbsd.org/sshd_config">sshd_config(5) - OpenBSD manual pages</a></li>
+<li><a href="https://www.ruanyifeng.com/blog/2011/12/ssh_port_forwarding.html">SSH 端口转发 - 阮一峰的网络日志</a></li>
+</ul>
+<font color="white">这是一篇优秀的博客，必须推荐。</font>
+]]></content>
+      <categories>
+        <category>Linux</category>
+      </categories>
+      <tags>
+        <tag>C</tag>
+      </tags>
+  </entry>
 </search>
